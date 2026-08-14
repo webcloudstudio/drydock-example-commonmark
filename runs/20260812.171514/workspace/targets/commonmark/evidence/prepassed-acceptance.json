@@ -1,0 +1,14 @@
+{
+  "prepassed": [
+    "cli-documentation-content",
+    "cli-documentation-verification",
+    "cli-errors-stdout-integrity",
+    "cli-errors-success-contract",
+    "cli-utf8",
+    "conformance-assets-inline-scope",
+    "conformance-assets-leaf-scope",
+    "render-inline-escaping",
+    "render-normalization-specials",
+    "render-normalization-suite"
+  ]
+}

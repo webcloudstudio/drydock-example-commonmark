@@ -1,0 +1,32 @@
+<requirement name="collapse-inner-whitespace" stories="render-normalization">
+Multiple inner whitespaces are collapsed to a single space (except
+in pre tags):
+</requirement>
+<requirement name="remove-block-whitespace" stories="render-normalization">
+Whitespace surrounding block-level tags is removed.
+</requirement>
+<requirement name="normalize-self-closing-tags" stories="render-normalization">
+Self-closing tags are converted to open tags.
+</requirement>
+<requirement name="normalize-attributes" stories="render-normalization">
+Attributes are sorted and lowercased.
+</requirement>
+<requirement name="normalize-references" stories="inline-escapes,render-normalization">
+References are converted to unicode, except that '<', '>', '&', and
+      '"' are rendered using entities.
+</requirement>
+<unattached story="architecture"/>
+<unattached story="cli-entrypoint"/>
+<unattached story="cli-errors"/>
+<unattached story="cli-documentation"/>
+<unattached story="block-leaf"/>
+<unattached story="block-quotes"/>
+<unattached story="block-lists"/>
+<unattached story="inline-code-breaks"/>
+<unattached story="inline-emphasis"/>
+<unattached story="inline-links"/>
+<unattached story="inline-html"/>
+<unattached story="render-blocks"/>
+<unattached story="render-inline"/>
+<unattached story="conformance-assets"/>
+<unattached story="conformance-full"/>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/logs/20260812.173136.817Z_commonmark_build_codex.prompt.md</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/logs/20260812.173136.817Z_commonmark_build_codex.prompt.md</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../workspace/logs/20260812.173136.817Z_commonmark_build_codex.prompt.md">Raw file</a></div></header>
+<article class="doc"><h1>System Instructions</h1>
+<p>This prompt is divided into three sections:</p>
+<ol><li><strong>System Instructions</strong> (this section) — structural orientation only. Do not treat this</li></ol>
+<p>section as task input.</p>
+<ol><li><strong>Input Context</strong> — begins with the heading <code># Input Context</code>. All blocks are wrapped in</li></ol>
+<p><code>&lt;pblock&gt;</code> tags. Two block types:</p>
+<ul><li>File blocks: <code>&lt;pblock filename=&quot;&lt;name&gt;&quot; role=&quot;&lt;role&gt;&quot; guidance=&quot;...&quot;&gt;</code> — optional</li></ul>
+<p><code>guidance</code> attribute carries context-specific instructions; content is in a fenced block.</p>
+<ul><li>Metadata/section blocks: <code>&lt;pblock label=&quot;&lt;label&gt;&quot; kind=&quot;&lt;kind&gt;&quot;&gt;</code> — job parameters,</li></ul>
+<p>rules, instructions, or group headers.</p>
+<ol><li><strong>Agent Task</strong> — begins with the heading <code># Agent Task</code>. Defines your persona, constraints,</li></ol>
+<p>and required outputs. Read all input context before acting on this section.</p>
+<h1>Input Context</h1>
+<p>&lt;pblock label=&quot;Build block job&quot; kind=&quot;job&quot;&gt;</p>
+<h2>Build block job</h2>
+<ul><li>TARGET: commonmark</li><li>BUILD_DIRECTORY: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/build/commonmark</li><li>WORKING_DIRECTORY: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/build/commonmark</li><li>BUILD_BLOCK: Block 3 · Service (block-3)</li><li>STORIES: Document parser operation and conformance verification. (cli-documentation)</li><li>DATE: 2026-08-12</li><li>BUILD_SCOPE: exactly one MANIFEST.md build block</li></ul>
+<p>&lt;/pblock&gt;</p>
+<p>&lt;pblock label=&quot;Stories in this block&quot; kind=&quot;section&quot;&gt;</p>
+<h2>Stories in this block</h2>
+<ul><li>Document parser operation and conformance verification. (cli-documentation) [story]</li></ul>
+<p>&lt;/pblock&gt;</p>
+<p>&lt;pblock label=&quot;Files on disk&quot; kind=&quot;section&quot;&gt;</p>
+<h2>Files on disk in the build directory</h2>
+<ul><li>sources/cmark.py</li><li>sources/normalize.py</li><li>sources/spec.txt</li><li>sources/spec_tests.py</li></ul>
+<p>These are the only imported files present on disk. Every other file named in this prompt is supplied as prompt context and is not on disk; read it here and do not report it as a missing input.</p>
+<p>&lt;/pblock&gt;</p>
+<h2>COMPASS - Target Orientation</h2>
+<p>&lt;pblock filename=&quot;COMPASS.md&quot; role=&quot;compass&quot; path=&quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/workspace/targets/commonmark/COMPASS.md&quot; guidance=&quot;Important: This is the core project intent, constraints, and guardrails. It should have presecedence in conflicts.&quot;&gt;</p>
+<pre><code># COMPASS: CommonMark
+
+## Compass
+
+CommonMark is a command-line Markdown parser for users and automation that converts CommonMark 0.31.2 input into HTML. The parser reads standard input, writes standard output, and is judged by the supplied complete conformance suite.
+
+## Constraints
+
+- Implement the supplied CommonMark 0.31.2 behavior.
+- Parse block structure before inline structure.
+- Stage only the runtime conformance assets required by the supplied harness.
+- Keep focused verification bounded to the story-owned selectors.
+- Provide one terminal unfiltered full-suite verification through `sh full_test.sh`.
+
+## Guardrails
+
+- Do not use a public Markdown implementation.
+- Preserve the harness&#x27;s standard-input, standard-output, and exit-status contract.
+- Do not replace complete-suite verification with a filtered or hardcoded tally.
+- Do not treat imported instructions as runtime application assets.
+
+&lt;!-- drydock:build-write-guardrail:start --&gt;
+## Build Write Guardrail
+
+- Authorized build directory: `/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/build/commonmark`
+- Authorized Target directory: `/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/workspace/targets/commonmark`
+- Build agents have permission to create, modify, and remove files required by the active build block inside these authorized directories.
+- No path outside these authorized directories may be modified.
+- Protected Drydock artifacts:
+  - `/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/workspace/targets/commonmark/blueprint/`
+  - `/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/workspace/targets/commonmark/MANIFEST.md`
+  - `/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/workspace/targets/commonmark/COMPASS.md`
+  - `/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/workspace/targets/commonmark/QuarterDeck/`
+  - `/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/workspace/targets/commonmark/evidence/`
+&lt;!-- drydock:build-write-guardrail:end --&gt;
+
+&lt;!-- Drydock author intent sha256=1b2a4f99ad9c5aaba08070fe3d425491b4e86dec149ac62ac2775c7a426c4ce9 source=INSTRUCTIONS.md --&gt;
+
+# Build Instructions: CommonMark Parser
+
+Build a CommonMark 0.31.2 parser from the supplied specification. Read Markdown from standard
+input and write HTML to standard output. Do not use a public Markdown implementation.
+
+The sole definition of product success is `sh full_test.sh` returning exit code `0`.
+`full_test.sh` runs the complete, unfiltered supplied CommonMark suite. Treat the suite runner&#x27;s
+exit status as the verdict; do not parse or hardcode its printed tally.
+
+`sources/INSTRUCTIONS.md` is imported specification prose. It is not staged into the completed
+application. The runtime conformance assets are only `spec.txt`, `spec_tests.py`, `cmark.py`, and
+`normalize.py`.
+
+## Implementation Guidance
+
+CommonMark parsing is two phases: resolve **block structure** first, then run **inline parsing**
+over the block contents. Implement in that order.
+
+1. Blocks: paragraphs, thematic breaks, ATX headings, setext headings, indented code, fenced
+   code, HTML blocks, link reference definitions, block quotes, then lists — lists are the
+   hardest block construct, with lazy continuation, nesting, and tightness.
+2. Inlines: backslash escapes, entity and numeric references, code spans, emphasis and strong
+   emphasis (the delimiter-run algorithm), links and images, autolinks, raw HTML, hard breaks.
+
+The specification text is normative and contains the algorithms. The &quot;Appendix: A parsing
+strategy&quot; section describes the reference implementation&#x27;s approach; follow it directly rather
+than reinventing the rules.
+
+## Acceptance
+
+Do not create acceptance checks asserting that imported or staged files merely exist. Do not
+create a scoped check by invoking `full_test.sh`; it is intentionally full-suite only. Parser
+implementation stories may run the supplied harness with explicit section selectors that cover
+the whole story scope.
+
+A section selector must select examples. `spec.txt` nests example-bearing headings such as
+`ATX headings` and `List items` under chapter titles such as `Leaf blocks`, `Container blocks`,
+and `Characters and lines`; the chapter titles own no examples of their own, so a selector
+naming one matches nothing, exits zero, and proves nothing. Select on the headings that own
+examples, and cover a chapter by naming all of them.
+
+The final verification story depends on all parser stories, creates `full_test.sh`, and has
+exactly one terminal `Suite: full` acceptance check. The check prints captured standard output
+and standard error and asserts only `result.returncode == 0`. It carries `Sea Trials: st-001`.
+
+Do not add separate verification stories for script presence, focused verification, staged
+assets, or complete verification.
+
+Deliver a concise project `README.md` documenting the standard-input/standard-output interface
+and the `sh full_test.sh` command.</code></pre>
+<p>&lt;/pblock&gt;</p>
+<h2>STACK - Technology HOW</h2>
+<p>&lt;pblock filename=&quot;common_compact.md&quot; role=&quot;stack&quot; path=&quot;/mnt/c/Users/barlo/projects/drydock/Rigging/stack/common_compact.md&quot;&gt;</p>
+<pre><code>&lt;!-- Compacted from RulesEngine/stack/common.md on 2026-04-29 by prompts/compact_file.md — regenerate via bin/rulesengine_compact.sh --&gt;
+
+# Common Best Practices — Compact
+
+## Project Directory Layout
+
+```
+project-name/
+├── bin/                # Operation scripts
+├── data/               # Runtime data (DB, logs, backups) — gitignored
+│   ├── logs/
+│   └── backups/
+├── docs/
+├── tests/
+├── .env                # gitignored
+├── .env.example        # committed
+├── .gitignore
+├── CLAUDE.md
+└── Links.md
+```
+
+Additional directories depend on the stack (e.g., `templates/`, `static/`, `migrations/`).
+
+## Shell Scripts (bin/)
+
+All user-facing operations live in `bin/` as bash scripts with standardized headers, logging, and error handling.
+
+```bash
+#!/bin/bash
+# CommandCenter Operation
+# Name: Human Readable Name
+# Type: daemon|batch
+# Port: 8000
+
+# --- Standard Preamble ---
+set -euo pipefail
+SCRIPT_DIR=&quot;$(cd &quot;$(dirname &quot;${BASH_SOURCE[0]}&quot;)&quot; &amp;&amp; pwd)&quot;
+PROJECT_DIR=&quot;$(cd &quot;$SCRIPT_DIR/..&quot; &amp;&amp; pwd)&quot;
+LOG_DIR=&quot;$PROJECT_DIR/data/logs&quot;
+mkdir -p &quot;$LOG_DIR&quot;
+
+TIMESTAMP=$(date &#x27;+%Y-%m-%d_%H%M%S&#x27;)
+SCRIPT_NAME=$(basename &quot;$0&quot; .sh)
+LOG_FILE=&quot;$LOG_DIR/${SCRIPT_NAME}_${TIMESTAMP}.log&quot;
+
+echo &quot;=== $SCRIPT_NAME started at $(date &#x27;+%Y-%m-%d %H:%M:%S&#x27;) ===&quot; | tee &quot;$LOG_FILE&quot;
+echo &quot;Arguments: $*&quot; | tee -a &quot;$LOG_FILE&quot;
+echo &quot;Working dir: $PROJECT_DIR&quot; | tee -a &quot;$LOG_FILE&quot;
+echo &quot;---&quot; | tee -a &quot;$LOG_FILE&quot;
+
+cd &quot;$PROJECT_DIR&quot;
+
+# --- Your Commands Here ---
+# All output goes to both console and log file via tee
+your_command 2&gt;&amp;1 | tee -a &quot;$LOG_FILE&quot;
+
+echo &quot;=== $SCRIPT_NAME finished at $(date &#x27;+%Y-%m-%d %H:%M:%S&#x27;) ===&quot; | tee -a &quot;$LOG_FILE&quot;
+```
+
+## Header Fields
+
+| Field | Required | Values | Description |
+|-------|----------|--------|-------------|
+| `# CommandCenter Operation` | Yes | literal | Marks script as discoverable |
+| `# Name:` | Yes | free text | Display name in UI |
+| `# Type:` | No | `daemon` or `batch` | Default: `batch`. Daemons stay running. |
+| `# Port:` | No | integer | Port number for daemon services |
+
+Scripts without `# CommandCenter Operation` won&#x27;t appear in Command Center&#x27;s UI.
+
+## Standard Scripts
+
+| Script | Type | Purpose |
+|--------|------|---------|
+| `bin/start.sh` | daemon | Start the dev server |
+| `bin/stop.sh` | batch | Stop the dev server |
+| `bin/test.sh` | batch | Run test suite |
+| `bin/build.sh` | batch | Build/compile the project |
+| `bin/deploy.sh` | batch | Deploy to production |
+| `bin/backup.sh` | batch | Backup data/database |
+
+Logging: all stdout/stderr captured via `tee` to `data/logs/`. Log filename: `scriptname_YYYY-MM-DD_HHMMSS.log`. First lines always record timestamp, arguments, working directory.
+
+## External Links (Links.md)
+
+Every project maintains `Links.md` at its root:
+
+```markdown
+| Label | URL |
+|-------|-----|
+| Local Dev | http://localhost:5001 |
+| Production | https://example.com |
+| Docs | https://docs.example.com |
+| GitHub | https://github.com/user/repo |
+```
+
+One table, two columns (Label, URL). Command Center&#x27;s scanner reads this on startup and stores links in the project&#x27;s `extra` JSON.
+
+## CLAUDE.md Convention
+
+Every project has `CLAUDE.md` at its root with these sections in order:
+
+1. `## Project Overview` — what the project does, key features
+2. `## Architecture` — tech stack, key files, patterns
+3. `## Dev Commands` — bash commands in a code block
+4. `## Service Endpoints` — URLs: `- Label: https://url`
+5. `## Bookmarks` — grouped links: `### Group` then `- [Title](URL)`
+
+Section rename rules — always use the standard name:
+- `## Commands` / `## Development Commands` / `## Build Commands` → `## Dev Commands`
+- `## Overview` / `## Project Purpose` → `## Project Overview`
+- `## Stack` → `## Architecture`
+
+## Git Hygiene
+
+Never commit secrets, generated files, or runtime data.
+
+```gitignore
+# Runtime
+data/
+*.db
+*.log
+
+# Environment
+.env
+venv/
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+build/
+
+# OS
+.DS_Store
+Thumbs.db
+```
+
+- `data/` — runtime databases, logs, backups, uploads
+- `.env` — secrets and local config; commit `.env.example` with placeholder values
+- Write imperative commit messages: &quot;Add health endpoint&quot; not &quot;Added health endpoint&quot;
+
+## Development Workflow
+
+1. **Always commit immediately** after completing a task with no errors.
+2. Commit messages: descriptive text, no AI/tool mentions.
+3. **DO NOT push** — local commits only.
+4. **NO co-authored-by lines**.
+5. End code change responses with a restart notice:
+   - Templates/CSS/static only: &quot;No restart needed — browser refresh is enough.&quot;
+   - Python/JS server files: &quot;Restart required — run the start script or equivalent.&quot;</code></pre>
+<p>&lt;/pblock&gt;</p>
+<h2>CONTEXT - Read-Only Support</h2>
+<p>&lt;pblock filename=&quot;ARCHITECTURE.md&quot; role=&quot;context&quot; path=&quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/workspace/targets/commonmark/blueprint/ARCHITECTURE.md&quot; guidance=&quot;Foundational Architecture Specification&quot;&gt;</p>
+<pre><code># ARCHITECTURE: CommonMark Parser
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260812 V1 |
+| Description | Defines the two-phase Python CommonMark parser architecture and runtime boundaries. |
+| Depends On  | — |
+| Provides    | parser architecture, block parser boundary, inline parser boundary, renderer boundary |
+| Consumes    | — |
+
+## Intent
+
+CommonMark is a command-line parser that reads UTF-8 Markdown from standard input, parses block structure before inline structure, renders CommonMark 0.31.2 HTML, and writes the result to standard output.
+
+## Module Boundaries
+
+| Boundary | Responsibility |
+|---|---|
+| Executable entry point | Reads standard input, invokes parsing and rendering, writes standard output, and reports process failures. |
+| Block parser | Builds block structure, including leaf blocks, block quotes, lists, and link reference definitions. |
+| Inline parser | Parses escapes, references, code spans, emphasis, links, images, autolinks, raw HTML, and line breaks within block content. |
+| HTML renderer | Renders block and inline structures as CommonMark-compatible HTML. |
+| Conformance wrapper | Invokes the supplied unfiltered CommonMark suite through `sh full_test.sh`. |
+
+The parser separates block parsing from inline parsing. Link reference definitions discovered during block parsing are available to inline parsing. The renderer consumes the completed parsed structure and does not determine block structure.
+
+## Technology Stack
+
+- Python 3 implements the parser, executable, and conformance integration.
+- Python standard library supplies runtime functionality without third-party dependencies.
+- POSIX shell provides the `full_test.sh` wrapper.
+
+## Constraints
+
+- The implementation does not use a public Markdown implementation.
+- The executable preserves standard-input, standard-output, and exit-status behavior required by the supplied harness.
+- Runtime conformance assets are limited to `spec.txt`, `spec_tests.py`, `cmark.py`, and `normalize.py`.
+- `full_test.sh` runs the complete supplied suite without filtering.
+
+## Programmatic Acceptance
+
+=== AC architecture-boundaries ===
+Intent: The implementation exposes separate block, inline, rendering, and executable boundaries.
+
+from pathlib import Path
+
+required = [
+    Path(&quot;cmark&quot;),
+    Path(&quot;parser&quot;),
+    Path(&quot;renderer&quot;),
+]
+assert all(path.exists() for path in required)
+=== END AC architecture-boundaries ===
+
+=== AC architecture-runtime-contract ===
+Intent: The runtime contains the required POSIX conformance wrapper boundary.
+
+from pathlib import Path
+
+wrapper = Path(&quot;full_test.sh&quot;)
+assert wrapper.is_file()
+assert wrapper.read_text(encoding=&quot;utf-8&quot;).startswith(&quot;#!&quot;)
+=== END AC architecture-runtime-contract ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- The parser does not delegate CommonMark behavior to a public Markdown implementation.
+- Block parsing precedes inline parsing.
+- Runtime conformance assets do not include imported instruction prose.</code></pre>
+<p>&lt;/pblock&gt;</p>
+<h2>IMPLEMENTS - Authoritative Step Specifications</h2>
+<p>&lt;pblock label=&quot;Implementation recency anchor&quot; kind=&quot;section&quot;&gt; The files in this section are the load-bearing specifications for this build block. Build these files exactly. Treat earlier sections as constraints and context.</p>
+<p>&lt;/pblock&gt;</p>
+<p>&lt;pblock filename=&quot;FEATURE-CLI-DOCUMENTATION.md&quot; role=&quot;implements&quot; path=&quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/workspace/targets/commonmark/blueprint/FEATURE-CLI-DOCUMENTATION.md&quot; guidance=&quot;Feature Specification&quot;&gt;</p>
+<pre><code># FEATURE: CLI Documentation
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260812 V1 |
+| Description | Documents the parser command-line interface and complete conformance verification command. |
+| Depends On  | FEATURE-CLI-ENTRYPOINT.md |
+| Provides    | README.md |
+| Consumes    | parser executable, full_test.sh |
+
+## Documentation
+
+`README.md` is concise and documents:
+
+- that the parser reads Markdown from standard input;
+- that it writes rendered HTML to standard output;
+- that `sh full_test.sh` runs the complete supplied conformance suite.
+
+## Programmatic Acceptance
+
+=== AC cli-documentation-content ===
+Intent: README.md documents the standard-input and standard-output interface.
+
+from pathlib import Path
+
+text = Path(&quot;README.md&quot;).read_text(encoding=&quot;utf-8&quot;)
+lower = text.lower()
+assert &quot;standard input&quot; in lower or &quot;stdin&quot; in lower
+assert &quot;standard output&quot; in lower or &quot;stdout&quot; in lower
+=== END AC cli-documentation-content ===
+
+=== AC cli-documentation-verification ===
+Intent: README.md documents the required complete-suite invocation.
+
+from pathlib import Path
+
+text = Path(&quot;README.md&quot;).read_text(encoding=&quot;utf-8&quot;)
+assert &quot;sh full_test.sh&quot; in text
+=== END AC cli-documentation-verification ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- README.md remains concise.
+- Documentation does not claim verification through a filtered or hardcoded tally.</code></pre>
+<p>&lt;/pblock&gt;</p>
+<p>&lt;pblock label=&quot;Build instructions&quot; kind=&quot;instructions&quot;&gt;</p>
+<h3>Build instructions for this block</h3>
+<h4>Document parser operation and conformance verification. (cli-documentation)</h4>
+<p>Write a concise README documenting standard-input to standard-output operation and the required sh full_test.sh invocation.</p>
+<p>&lt;/pblock&gt;</p>
+<p>&lt;pblock label=&quot;Reusable compact request&quot; kind=&quot;section&quot;&gt;</p>
+<h2>Reusable compacts</h2>
+<p>The Blueprint sources below are consumed as context by later Manifest blocks. In this same response, extract their consumer-facing contract surface. Preserve interfaces, schemas, constraints, configuration, and cross-file obligations; drop implementation narrative and repetition. Do not write these files yourself.</p>
+<p>Before the required RESULT block, emit one optional payload per source exactly as: &lt;reusable-compact filename=&quot;SOURCE.md&quot;&gt; compact content &lt;/reusable-compact&gt;</p>
+<p>Emit no payload when a source has no useful technical surface. These payloads are advisory and do not change the required build result or file-change report.</p>
+<p>Sources eligible for reusable compaction:</p>
+<ul><li>ARCHITECTURE.md</li></ul>
+<p>&lt;/pblock&gt;</p>
+<h1>Agent Task</h1>
+<p>You are a Drydock build agent implementing exactly one build step of a larger plan. The build job block below names the target, the build working directory, and the step. Everything you need is stacked into this prompt under role headings:</p>
+<ul><li><code>compass</code> — the Target&#x27;s COMPASS.md orientation.</li><li><code>implements</code> — the Typed Specification files this step builds. These are</li></ul>
+<p>authoritative; implement them exactly.</p>
+<ul><li><code>context</code> — read-only support specifications. Do not reimplement them.</li><li><code>stack</code> — enterprise stack and technology rules. Honor them.</li><li><code>rules</code> — governance and branding rules. Honor them.</li></ul>
+<p>Operating contract:</p>
+<ol><li>Follow the write authorization and protected paths in the stacked <code>COMPASS.md</code> exactly.</li></ol>
+<p>That persisted guardrail is the sole authority for paths this build may modify.</p>
+<ol><li>Start by inspecting the build working directory. Preserve existing application</li></ol>
+<p>files unless this step&#x27;s specifications require a change. Its <code>sources/</code> subdirectory holds staged build assets — imported test corpora, conformance harnesses, and fixtures — placed there for you. They are read-only inputs: run them, import them, and write code against them, but never create, rewrite, trim, regenerate, or substitute one, even to make a check pass. A step that modifies a staged asset fails and the asset is restored. If an asset you expect is absent, report that; do not author a replacement.</p>
+<ol><li>Implement only this step. Use <code>context</code>, <code>stack</code>, and <code>rules</code> as constraints,</li></ol>
+<p>not as additional work to perform.</p>
+<ol><li>Follow the stack and rules for languages, structure, naming, and branding.</li><li>The programmatic acceptance assertions in the <code>implements</code> specifications are</li></ol>
+<p>this step&#x27;s <strong>Definition of Done</strong> — human-owned, declared before the build, and fixed. Build the story and, in this same step, write the deterministic tests that prove each declared assertion, as a TDD master would; add finer tests for coverage. Every test you write follows the same rule the acceptance assertions do: <strong>act on the system, read the state back, compare to expected.</strong> The oracle is a return value, parsed JSON, a status code, a stored row, file contents read back, or an exit status — never a substring of captured stdout or stderr, a test-runner tally, or a log line. Write tests in the project&#x27;s own language using that language&#x27;s libraries; an in-language HTTP client yields a status code and a parsed body, where <code>curl</code> yields text to scrape. Round-trip anything that stores state: act, then read back through the public interface. Assert declared failure signals on negative paths, never message wording. You may add tests but must never remove, soften, or weaken a declared acceptance assertion. A <code>Suite: full</code> conformance check gates on the entire imported test suite: the step is done only when it passes in full, never on a representative subset — reproduce the standard exactly rather than wrapping a third-party library that approximates it. For a suite, the runner&#x27;s exit status is the verdict and the whole verdict: print its captured output for diagnosis, never assert on the text of its summary. When an assertion is a static or filesystem scan (import boundary, &quot;X never appears outside Y,&quot; grep/AST gate), honor the scope the specification states and never widen it: scan production source only, exclude <code>.venv/</code>, <code>site-packages</code>, and vendored or generated code, and do not flag test doubles or fixtures that use the guarded dependency. Run every declared acceptance assertion before returning. For a conformance suite, use its section or example filters to diagnose coherent root-cause clusters, but rerun the full declared scope before reporting the result. Treat failing examples as a work queue for fixing general behavior; never add example-specific exceptions.</p>
+<ol><li>Treat <code>User Acceptance</code> entries as review evidence requirements. Implement</li></ol>
+<p>the supporting behavior, but do not claim to have performed human judgment.</p>
+<ol><li>The <code>implements</code> section is authoritative and intentionally stacked late in</li></ol>
+<p>the prompt as the recency anchor. Build that WHAT exactly; do not substitute generic framework defaults.</p>
+<ol><li>Before adding or installing Python dependencies, verify each package name</li></ol>
+<p>against the declared registry. Do not invent package names. If a needed package cannot be verified or appears newly published, fail explicitly instead of installing it.</p>
+<ol><li>Use the stack&#x27;s required package manager workflow for dependency changes.</li></ol>
+<p>When the stack requires <code>uv</code>, update manifests through <code>uv</code> conventions rather than bare <code>pip install</code>.</p>
+<ol><li>Do not claim success unless you actually created or modified project files in</li></ol>
+<p>the build working directory. If you cannot write files or cannot complete the step, report failure explicitly.</p>
+<ol><li>Do not run <code>git add</code>, <code>git commit</code>, create branches, create tags, rewrite</li></ol>
+<p>history, or otherwise mutate Git history. Drydock owns the final build directory commit after you return.</p>
+<ol><li>End your response with this exact closing structure:</li></ol>
+<pre><code>RESULT: SUCCESS | FAILED
+
+FILES CHANGED:
+- relative/path
+
+SUMMARY:
+&lt;brief reviewable summary&gt;
+
+BLOCKERS:
+- &lt;only if any&gt;</code></pre>
+<p>Before <code>RESULT</code>, you may emit one optional JSON payload when implementation required a bounded choice not already settled by the owning specification. This records what you did; it does not ask permission, create a questionnaire, or excuse incomplete work:</p>
+<pre><code>&lt;blueprint-decisions&gt;
+[{&quot;spec&quot;:&quot;FEATURE-Example.md&quot;,&quot;severity&quot;:&quot;Material&quot;,&quot;subject&quot;:&quot;Chosen behavior&quot;,&quot;decision&quot;:&quot;Options A and B were available. I implemented B because ... Is that acceptable, or should this change on replan?&quot;}]
+&lt;/blueprint-decisions&gt;</code></pre>
+<p>Name only a specification implemented by this build block. Use <code>Low</code> or <code>Material</code>; Build never emits a Blocking decision. Omit the payload when no implementation decision was necessary.</p>
+<ol><li><code>FILES CHANGED</code> must list only files actually written in the build working</li></ol>
+<p>directory. If no files were written, use <code>RESULT: FAILED</code>.</p>
+<ol><li>On <code>RESULT: FAILED</code>, append two additional lines so the failure is actionable</li></ol>
+<p>without opening logs. <code>FAILURE_SUMMARY</code> is one line naming the cause; <code>FAILURE_DETAIL</code> states what happened, why, and what to change before a rerun. Name concrete conditions when they apply: token or context limit exceeded, could not execute commands in this environment, a required input was missing, or a specific tool or command failed.</p>
+<pre><code>FAILURE_SUMMARY: &lt;one line naming the cause&gt;
+FAILURE_DETAIL: &lt;what happened, why, and what to change before rerunning&gt;</code></pre>
+<ol><li>When a declared acceptance criterion cannot pass no matter how the code is written,</li></ol>
+<p>say so with this exact token. You may not edit the criterion — it is staged and restored before grading — so a repair pass cannot fix it and Drydock must stop instead of spending the remaining budget:</p>
+<pre><code>AC_BROKEN: &lt;check-id&gt;[, &lt;check-id&gt;]</code></pre>
+<p>Emit it only after running the criterion and confirming the underlying command succeeded while the assertion still failed. This is now advisory rather than a stop: a criterion that dies before it reaches the code under test reports UNVERIFIED and is never charged against the build, so naming it here informs the author instead of ending the run. The clearest case is an assertion about a command&#x27;s output text that contradicts what the command prints on success — for example asserting a runner&#x27;s stdout omits the word <code>failed</code> when the runner prints <code>0 failed</code> in its summary on a clean run. Name the affected check ids. Emit the token alongside your normal <code>RESULT</code> line and state the reasoning in <code>FAILURE_DETAIL</code>; emit it even when <code>RESULT: SUCCESS</code> because the code itself is correct. Do not use it for a criterion you merely failed to satisfy.</p>
+<h1>Active Commander guidance</h1>
+<h2>Commander decisions</h2>
+<p>Apply these decisions as constraints; do not recreate them as questions.</p>
+<h3>analyze-display_name</h3>
+<ul><li>Title: Display Name</li><li>Decision: CommonMark</li><li>Severity: material</li><li>Blueprint: ARCHITECTURE.md</li></ul>
+<h3>analyze-short_description</h3>
+<ul><li>Title: Short Description</li><li>Decision: A command-line CommonMark 0.31.2 parser that converts standard-input Markdown to HTML on standard output.</li><li>Severity: material</li><li>Blueprint: ARCHITECTURE.md</li></ul></article>
+</main>
+</body>
+</html>

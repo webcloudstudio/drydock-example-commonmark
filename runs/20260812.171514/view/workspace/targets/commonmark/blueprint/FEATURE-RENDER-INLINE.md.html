@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-RENDER-INLINE.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-RENDER-INLINE.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-RENDER-INLINE.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Inline HTML Rendering</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260812 V1</td></tr><tr><td>Description</td><td>Defines HTML rendering for parsed inline nodes and inline source constructs.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md, FEATURE-RENDER-BLOCKS.md</td></tr><tr><td>Provides</td><td>inline HTML renderer</td></tr><tr><td>Consumes</td><td>inline parser</td></tr></tbody></table></div>
+<h2>Rendering Contract</h2>
+<ul><li>Text escapes HTML-significant characters.</li><li>Emphasis and strong emphasis render as <code>&lt;em&gt;</code> and <code>&lt;strong&gt;</code>.</li><li>Code spans render as escaped <code>&lt;code&gt;</code> content.</li><li>Links render escaped <code>href</code> and optional <code>title</code> attributes.</li><li>Images render escaped <code>src</code>, plain-text <code>alt</code>, and optional <code>title</code>.</li><li>Hard breaks render as <code>&lt;br /&gt;</code>; soft breaks preserve permitted line-break semantics.</li><li>Autolinks and raw HTML preserve the required HTML representation.</li><li>Entity references render as their corresponding characters, with HTML escaping where required.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC render-inline-suite ===<br>Intent: Inline HTML rendering passes the complete owned conformance scope.<br>Suite: scoped<br>Requires: executable=python3; scope=test</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, &quot;^(Characters and lines|Backslash escapes|Entity and numeric character references|Code spans|Emphasis and strong emphasis|Links|Images|Autolinks|Raw HTML|Hard line breaks|Soft line breaks|Textual content)$&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC render-inline-suite ===</p>
+<p>=== AC render-inline-escaping ===<br>Intent: Inline rendering escapes text and code while preserving links, images, and raw HTML.<br>Suite: scoped<br>Requires: executable=python3; scope=test</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, &quot;^(Code spans|Links|Images|Autolinks|Raw HTML|Hard line breaks|Soft line breaks)$&quot;], capture_output=True, text=True, ) assert result.returncode == 0 === END AC render-inline-escaping ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Renderer output is derived from parsed inline nodes and never from test-result text.</li><li>User text cannot inject markup except through valid raw HTML constructs.</li></ul></article>
+</main>
+</body>
+</html>

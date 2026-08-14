@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-2.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-2.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-2.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 2 · Service (block-2)</h1>
+<ul><li>block type: block</li><li>date: 2026-08-12</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 9298</li><li>execution id: 20260812.172907.171Z-75e402c6</li></ul>
+<h2>Stories built</h2>
+<ul><li>Implement the standard-input and standard-output parser entry point. (cli-entrypoint) [story]</li><li>Define deterministic parser process errors and exit behavior. (cli-errors) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1263)</li><li>implements: FEATURE-CLI-ENTRYPOINT.md (SP 459)</li><li>context: cmark.py (SP 339)</li><li>context: normalize.py (SP 1631)</li><li>context: ARCHITECTURE.md (SP 749)</li><li>stack: common_compact.md (SP 1179)</li><li>stack: python_compact.md (SP 1534)</li><li>implements: FEATURE-CLI-ERRORS.md (SP 448)</li><li>context: spec_tests.py (SP 1609)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>cmark</li><li>parser/<strong>init</strong>.py</li><li>parser/blocks.py</li><li>parser/inlines.py</li><li>renderer/html.py</li><li>test_cli.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: cli-stdin-stdout (FEATURE-CLI-ENTRYPOINT.md)</li></ul>
+<p>intent: The executable renders Markdown supplied through standard input and exits successfully. return code: 1 stdout: &lt;p&gt;# Hello&lt;/p&gt; &lt;p&gt;world&lt;/p&gt; stderr: Traceback (most recent call last): File &quot;cli-stdin-stdout.py&quot;, line 13, in &lt;module&gt; assert result.stdout == &quot;&lt;h1&gt;Hello&lt;/h1&gt;\n&lt;p&gt;world&lt;/p&gt;\n&quot; ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>GREEN (prepassed): cli-utf8 (FEATURE-CLI-ENTRYPOINT.md)</li></ul>
+<p>intent: The executable accepts UTF-8 Markdown and emits UTF-8 HTML. return code: 0</p>
+<ul><li>GREEN (prepassed): cli-errors-success-contract (FEATURE-CLI-ERRORS.md)</li></ul>
+<p>intent: A successful invocation returns zero and keeps diagnostics off standard error. return code: 0</p>
+<ul><li>GREEN (prepassed): cli-errors-stdout-integrity (FEATURE-CLI-ERRORS.md)</li></ul>
+<p>intent: The executable emits a complete HTML document result without diagnostic text in standard output. return code: 0</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: cli-stdin-stdout (FEATURE-CLI-ENTRYPOINT.md)</li></ul>
+<p>intent: The executable renders Markdown supplied through standard input and exits successfully. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: &lt;h1&gt;Hello&lt;/h1&gt; &lt;p&gt;world&lt;/p&gt;</p>
+<ul><li>PASS: cli-utf8 (FEATURE-CLI-ENTRYPOINT.md)</li></ul>
+<p>intent: The executable accepts UTF-8 Markdown and emits UTF-8 HTML. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0</p>
+<ul><li>PASS: cli-errors-success-contract (FEATURE-CLI-ERRORS.md)</li></ul>
+<p>intent: A successful invocation returns zero and keeps diagnostics off standard error. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0</p>
+<ul><li>PASS: cli-errors-stdout-integrity (FEATURE-CLI-ERRORS.md)</li></ul>
+<p>intent: The executable emits a complete HTML document result without diagnostic text in standard output. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0</p>
+<h2>Build summary</h2>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>cmark</li><li>parser/blocks.py</li><li>parser/<strong>init</strong>.py</li><li>parser/inlines.py</li><li>renderer/html.py</li><li>test_cli.py</li></ul>
+<p>SUMMARY: Implemented standard-input/output CLI handling, UTF-8 validation, deterministic stderr error reporting, heading and paragraph separation, and CLI regression tests.</p>
+<p>Verification: 8 tests passed.</p>
+<p>BLOCKERS:</p>
+<ul><li>None</li></ul></article>
+</main>
+</body>
+</html>

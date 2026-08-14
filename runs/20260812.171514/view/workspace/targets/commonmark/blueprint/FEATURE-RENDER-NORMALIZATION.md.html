@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-RENDER-NORMALIZATION.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-RENDER-NORMALIZATION.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-RENDER-NORMALIZATION.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Normalized HTML Output</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260812 V1</td></tr><tr><td>Description</td><td>Defines URL, title, attribute, entity, and special-character output compatibility with the supplied harness.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md, FEATURE-RENDER-INLINE.md</td></tr><tr><td>Provides</td><td>normalized URL output, normalized title output, normalized attribute output</td></tr><tr><td>Consumes</td><td>block HTML renderer, inline HTML renderer</td></tr></tbody></table></div>
+<h2>Output Rules</h2>
+<ul><li>URLs preserve valid percent escapes and encode required spaces, Unicode characters, and backslashes.</li><li>Titles and attribute values are HTML-escaped.</li><li>Attribute output is deterministic and preserves required source semantics.</li><li>Entity and numeric references are normalized consistently with the supplied harness.</li><li>Special characters use the required HTML entities.</li><li>Normalization compatibility does not alter code-block whitespace or raw HTML semantics.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC render-normalization-suite ===<br>Intent: URL, title, attribute, entity, and special-character rendering passes its complete conformance scope.<br>Suite: scoped<br>Requires: executable=python3; scope=test</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, &quot;^(Links|Images|Autolinks|Raw HTML|Entity and numeric character references)$&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC render-normalization-suite ===</p>
+<p>=== AC render-normalization-specials ===<br>Intent: Normalized output preserves URL escaping, title escaping, attribute semantics, and special characters.<br>Suite: scoped<br>Requires: executable=python3; scope=test</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, &quot;^(Links|Images|Autolinks|Raw HTML|Entity and numeric character references)$&quot;], capture_output=True, text=True, ) assert result.returncode == 0 === END AC render-normalization-specials ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Output normalization is deterministic and does not use a hardcoded pass tally.</li><li>The supplied normalizer is used only as a comparison aid; its output is never the acceptance oracle.</li></ul></article>
+</main>
+</body>
+</html>

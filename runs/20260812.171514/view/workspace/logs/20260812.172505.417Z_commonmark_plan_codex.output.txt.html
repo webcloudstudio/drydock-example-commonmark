@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/logs/20260812.172505.417Z_commonmark_plan_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/logs/20260812.172505.417Z_commonmark_plan_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../workspace/logs/20260812.172505.417Z_commonmark_plan_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>&lt;artifact name=&quot;FEATURE-CLI-ENTRYPOINT.md&quot;&gt;
+# FEATURE: CLI Entry Point
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260812 V1 |
+| Description | Provides the executable standard-input and standard-output CommonMark interface. |
+| Depends On  | ARCHITECTURE.md |
+| Provides    | parser executable |
+| Consumes    | parser core, HTML renderer |
+
+## Questions
+
+- None.
+
+## Workflow
+
+The executable reads UTF-8 Markdown from standard input. It parses block structure before inline structure, renders the resulting document as HTML, and writes only rendered HTML to standard output. A successful invocation exits with status `0`.
+
+The executable is named `cmark` and is invokable from the build directory as `./cmark`. It supports the supplied harness&#x27;s program invocation contract.
+
+## Programmatic Acceptance
+
+Requires: executable=cmark; scope=test
+
+=== AC cli-stdin-stdout ===
+Intent: The executable renders Markdown supplied through standard input and exits successfully.
+
+import subprocess
+
+result = subprocess.run(
+    [&quot;./cmark&quot;],
+    input=&quot;# Hello\n\nworld\n&quot;,
+    capture_output=True,
+    text=True,
+    encoding=&quot;utf-8&quot;,
+)
+print(result.stdout)
+print(result.stderr, file=__import__(&quot;sys&quot;).stderr)
+assert result.returncode == 0
+assert result.stdout == &quot;&lt;h1&gt;Hello&lt;/h1&gt;\n&lt;p&gt;world&lt;/p&gt;\n&quot;
+=== END AC cli-stdin-stdout ===
+
+=== AC cli-utf8 ===
+Intent: The executable accepts UTF-8 Markdown and emits UTF-8 HTML.
+
+import subprocess
+
+result = subprocess.run(
+    [&quot;./cmark&quot;],
+    input=&quot;cafe\n&quot;,
+    capture_output=True,
+    text=True,
+    encoding=&quot;utf-8&quot;,
+)
+assert result.returncode == 0
+assert result.stdout == &quot;&lt;p&gt;cafe&lt;/p&gt;\n&quot;
+=== END AC cli-utf8 ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Markdown input is read from standard input.
+- Rendered HTML is written to standard output.
+- The executable does not write diagnostics into standard output during successful parsing.
+&lt;/artifact&gt;
+</pre></article>
+</main>
+</body>
+</html>

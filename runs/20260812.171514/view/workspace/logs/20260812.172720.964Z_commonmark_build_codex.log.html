@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/logs/20260812.172720.964Z_commonmark_build_codex.log</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/logs/20260812.172720.964Z_commonmark_build_codex.log</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../workspace/logs/20260812.172720.964Z_commonmark_build_codex.log">Raw file</a></div></header>
+<article class="doc"><pre>Drydock 0.1.8  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Build: commonmark
+scope: entire project
+frontier: architecture
+
+LLM BUILD: Block 1 · Foundational [block-1]
+  stories: Define parser architecture and module boundaries. [architecture]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  tokens: cached=227,072 (90% hit) · uncached=26,578 · out=3,593
+acceptance: call 1 · 2/2 AC passed
+built: architecture — closed/verified · execution 20260812.172723.109Z-4a4db6be
+acceptance: 1 criterion flagged as doubtful by static analysis — graded anyway, review the authoring
+
+LLM BUILD: Block 2 · Service [block-2]
+  stories: Implement the standard-input and standard-output parser entry point. [cli-entrypoint], Define deterministic parser process errors and exit behavior. [cli-errors]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  tokens: cached=237,312 (87% hit) · uncached=34,830 · out=5,007
+acceptance: call 1 · 4/4 AC passed
+built: cli-entrypoint — closed/verified · execution 20260812.172907.171Z-75e402c6
+
+LLM BUILD: Block 3 · Service [block-3]
+  stories: Document parser operation and conformance verification. [cli-documentation]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  tokens: cached=251,136 (90% hit) · uncached=27,559 · out=2,974
+acceptance: call 1 · 2/2 AC passed
+built: cli-documentation — closed/verified · execution 20260812.173136.817Z-ccf9b16e
+
+LLM BUILD: Block 4 · Service [block-4]
+  stories: Parse CommonMark leaf blocks. [block-leaf]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  tokens: cached=2,941,696 (96% hit) · uncached=123,607 · out=13,686
+acceptance: call 1 · 0/2 AC passed · failed: leaf-blocks-primary, leaf-blocks-secondary
+
+LLM BUILD: Block 4 · Service [block-4]
+  stories: Parse CommonMark leaf blocks. [block-leaf]
+  call: 2 of up to 7 · automatic repair 1 of 6 · codex/gpt-5.6-luna
+  failing: leaf-blocks-primary, leaf-blocks-secondary
+  tokens: cached=5,427,712 (96% hit) · uncached=247,367 · out=19,005
+acceptance: call 2 · 1/2 AC passed · failed: leaf-blocks-secondary (80/82 cases)
+
+LLM BUILD: Block 4 · Service [block-4]
+  stories: Parse CommonMark leaf blocks. [block-leaf]
+  call: 3 of up to 7 · automatic repair 2 of 6 · codex/gpt-5.6-luna
+  failing: leaf-blocks-secondary (80/82 cases)
+  tokens: cached=1,637,120 (94% hit) · uncached=112,665 · out=5,264
+acceptance: call 3 · 2/2 AC passed
+built: block-leaf — closed/verified · execution 20260812.175353.221Z-bce07ac2
+
+LLM BUILD: Block 5 · Service [block-5]
+  stories: Parse nested block quotes and lazy continuation. [block-quotes]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  tokens: cached=1,685,248 (93% hit) · uncached=129,563 · out=4,972
+WARNING: override waived acceptance-authorization for FEATURE-BLOCK-QUOTES.md#block-quotes-basic: undeclared executable=
+
+Traceback (most recent call last):
+  File  discovered during acceptance
+acceptance: call 1 · 0/2 AC passed · failed: block-quotes-basic, block-quotes-continuation
+
+LLM BUILD: Block 5 · Service [block-5]
+  stories: Parse nested block quotes and lazy continuation. [block-quotes]
+  call: 2 of up to 7 · automatic repair 1 of 6 · codex/gpt-5.6-luna
+  failing: block-quotes-basic, block-quotes-continuation
+  tokens: cached=596,224 (86% hit) · uncached=97,121 · out=1,954
+acceptance: call 2 · 2/2 AC passed
+built: block-quotes — closed/verified · execution 20260812.180554.909Z-291b7948
+
+LLM BUILD: Block 6 · Service [block-6]
+  stories: Parse CommonMark list items and list structure. [block-lists]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  tokens: cached=5,598,976 (97% hit) · uncached=150,618 · out=17,991
+acceptance: call 1 · 2/2 AC passed
+built: block-lists — closed/verified · execution 20260812.180817.999Z-c4c95ab1
+
+LLM BUILD: Block 7 · Service [block-7]
+  stories: Parse escapes and character references. [inline-escapes]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  tokens: cached=3,090,176 (96% hit) · uncached=131,975 · out=13,931
+acceptance: call 1 · 2/2 AC passed
+built: inline-escapes — closed/verified · execution 20260812.181916.284Z-375bff7f
+
+LLM BUILD: Block 8 · Service [block-8]
+  stories: Parse code spans and line breaks. [inline-code-breaks]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  tokens: cached=1,683,200 (94% hit) · uncached=115,234 · out=7,601
+acceptance: call 1 · 2/2 AC passed
+built: inline-code-breaks — closed/verified · execution 20260812.182602.995Z-d9e470df
+
+LLM BUILD: Block 9 · Service [block-9]
+  stories: Parse emphasis and strong emphasis using delimiter rules. [inline-emphasis]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  tokens: cached=2,642,432 (96% hit) · uncached=116,326 · out=8,714
+acceptance: call 1 · 2/2 AC passed
+built: inline-emphasis — closed/verified · execution 20260812.183141.501Z-327e3cd9
+
+LLM BUILD: Block 10 · Service [block-10]
+  stories: Parse links and images. [inline-links]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  tokens: cached=6,357,504 (97% hit) · uncached=172,438 · out=15,585
+acceptance: call 1 · 0/2 AC passed · failed: inline-links-suite (89/112 cases), inline-links-boundaries
+
+LLM BUILD: Block 10 · Service [block-10]
+  stories: Parse links and images. [inline-links]
+  call: 2 of up to 7 · automatic repair 1 of 6 · codex/gpt-5.6-luna
+  failing: inline-links-suite (89/112 cases), inline-links-boundaries
+  tokens: cached=7,594,240 (98% hit) · uncached=178,385 · out=15,326
+acceptance: call 2 · 0/2 AC passed · failed: inline-links-suite (111/112 cases), inline-links-boundaries
+
+LLM BUILD: Block 10 · Service [block-10]
+  stories: Parse links and images. [inline-links]
+  call: 3 of up to 7 · automatic repair 2 of 6 · codex/gpt-5.6-luna
+  failing: inline-links-suite (111/112 cases), inline-links-boundaries
+  tokens: cached=2,350,080 (95% hit) · uncached=110,964 · out=4,078
+acceptance: call 3 · 2/2 AC passed
+built: inline-links — closed/verified · execution 20260812.190933.972Z-21d3a70b
+
+LLM BUILD: Block 11 · Service [block-11]
+  stories: Parse autolinks and raw HTML. [inline-html]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  tokens: cached=5,359,872 (97% hit) · uncached=147,979 · out=13,990
+acceptance: call 1 · 0/2 AC passed · failed: inline-html-suite (29/40 cases), inline-html-malformed
+
+LLM BUILD: Block 11 · Service [block-11]
+  stories: Parse autolinks and raw HTML. [inline-html]
+  call: 2 of up to 7 · automatic repair 1 of 6 · codex/gpt-5.6-luna
+  failing: inline-html-suite (29/40 cases), inline-html-malformed
+  tokens: cached=3,671,808 (96% hit) · uncached=137,648 · out=9,153
+acceptance: call 2 · 2/2 AC passed
+built: inline-html — closed/verified · execution 20260812.192510.439Z-440a9e4a
+
+LLM BUILD: Block 12 · Service [block-12]
+  stories: Render parsed block structure as CommonMark HTML. [render-blocks]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  tokens: cached=8,008,192 (98% hit) · uncached=167,513 · out=11,472
+acceptance: call 1 · 2/2 AC passed
+built: render-blocks — closed/verified · execution 20260812.193447.205Z-ae61ce2f
+
+LLM BUILD: Block 13 · Service [block-13]
+  stories: Render parsed inline structure as CommonMark HTML. [render-inline]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  tokens: cached=6,867,456 (98% hit) · uncached=156,258 · out=11,420
+acceptance: call 1 · 2/2 AC passed
+built: render-inline — closed/verified · execution 20260812.195515.700Z-2ada7bab
+
+LLM BUILD: Block 14 · Service [block-14]
+  stories: Normalize URL, title, attribute, and special-character output. [render-normalization]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  tokens: cached=3,258,368 (93% hit) · uncached=235,578 · out=6,931
+acceptance: call 1 · 2/2 AC passed
+built: render-normalization — closed/verified · execution 20260812.201030.919Z-78ba460e
+
+LLM BUILD: Block 15 · Service [block-15]
+  stories: Stage and exercise the supplied conformance harness within bounded story scopes. [conformance-assets]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  tokens: cached=5,254,144 (97% hit) · uncached=136,329 · out=9,999
+acceptance: call 1 · 2/2 AC passed
+built: conformance-assets — closed/verified · execution 20260812.202011.429Z-4d350914
+
+LLM BUILD: Block 16 · Service [block-16]
+  stories: Run the complete supplied CommonMark conformance suite. [conformance-full]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  tokens: cached=2,983,424 (96% hit) · uncached=115,347 · out=7,314
+acceptance: call 1 · 1/1 AC passed
+built: conformance-full — closed/verified · execution 20260812.203419.805Z-d8525ecc
+
+result: 17 built, 0 failed, 0 unchanged
+elapsed: 3 hours 17 minutes 30 seconds
+
+---- OVERRIDE SUMMARY (2 gates bypassed) ----
+  story-question             block-quotes — Authorize block-quotes-basic test tooling
+  acceptance-authorization   FEATURE-BLOCK-QUOTES.md#block-quotes-basic — undeclared executable=
+
+Traceback (most recent call last):
+  File  discovered during acceptance
+This run is not governed: the waived gates were never answered.
+</pre></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/test_conformance_assets.py</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/test_conformance_assets.py</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../build/commonmark/test_conformance_assets.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Bounded verification contracts for the staged conformance harness.&quot;&quot;&quot;
+
+import subprocess
+import sys
+
+
+LEAF_SCOPE = (
+    &quot;^(Thematic breaks|ATX headings|Setext headings|Indented code blocks|&quot;
+    &quot;Fenced code blocks|HTML blocks|Link reference definitions|Paragraphs|&quot;
+    &quot;Blank lines)$&quot;
+)
+INLINE_SCOPE = (
+    &quot;^(Code spans|Emphasis and strong emphasis|Links|Images|Autolinks|&quot;
+    &quot;Raw HTML|Hard line breaks|Soft line breaks)$&quot;
+)
+
+
+def run_scope(pattern: str) -&gt; subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [
+            sys.executable,
+            &quot;spec_tests.py&quot;,
+            &quot;--spec&quot;,
+            &quot;spec.txt&quot;,
+            &quot;--program&quot;,
+            &quot;./program&quot;,
+            &quot;--pattern&quot;,
+            pattern,
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+
+def test_leaf_conformance_scope() -&gt; None:
+    result = run_scope(LEAF_SCOPE)
+
+    print(result.stdout)
+    print(result.stderr, file=sys.stderr)
+    assert result.returncode == 0
+
+
+def test_inline_conformance_scope() -&gt; None:
+    result = run_scope(INLINE_SCOPE)
+
+    print(result.stdout)
+    print(result.stderr, file=sys.stderr)
+    assert result.returncode == 0
+</pre></article>
+</main>
+</body>
+</html>

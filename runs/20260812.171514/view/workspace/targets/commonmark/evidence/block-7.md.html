@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-7.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-7.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-7.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 7 · Service (block-7)</h1>
+<ul><li>block type: block</li><li>date: 2026-08-12</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 57659</li><li>execution id: 20260812.181916.284Z-375bff7f</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse escapes and character references. (inline-escapes) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1263)</li><li>implements: FEATURE-INLINE-ESCAPES.md (SP 396)</li><li>context: spec.txt (SP 51527)</li><li>context: spec_tests.py (SP 1609)</li><li>context: ARCHITECTURE_compact.md (SP 116)</li><li>stack: common_compact.md (SP 1179)</li><li>stack: python_compact.md (SP 1534)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>parser/blocks.py</li><li>renderer/html.py</li><li>test_inline_escapes.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: inline-escapes (FEATURE-INLINE-ESCAPES.md)</li></ul>
+<p>intent: The implementation passes punctuation escape and escape-context conformance examples. return code: 1 stdout: Example 12 (lines 489-493) Backslash escapes \!\&quot;\#\$\%\&amp;\&#x27;\(\)\*\+\,\-\.\/\:\;\&lt;\=\&gt;\?\@\[\\\]\^\_\`\{\|\}\~</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;!&amp;quot;#$%&amp;amp;&#x27;()*+,-./:;&amp;lt;=&amp;gt;?@[\]^_<code>{|}~&lt;/p&gt; +&lt;p&gt;!&quot;#$%&amp;amp;&#x27;()*+,-./:;&amp;lt;=&amp;gt;?@[\]^_</code>{|}~&lt;/p&gt;</p>
+<p>Example 14 (lines 509-529) Backslash escapes \<em>not emphasized</em> \&lt;br/&gt; not a tag \<a href="/foo">not a link</a> \<code>not code</code> 1\. not a list \* not a list \# not a heading \[foo]: /url &quot;not a reference&quot; \&amp;ouml; not a character entity</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>not emphasized</em> &amp;lt;br/&amp;gt; not a tag <a href="/foo">not a link</a> <code>not code</code> 1. not a list * not a list # not a heading [foo]: /url &amp;quot;not a reference&amp;quot; &amp;amp;ouml; not a character entity&lt;/p&gt; +&lt;p&gt;<em>not emphasized</em> &amp;lt;br/&amp;gt; not a tag <a href="/foo">not a link</a> <code>not code</code> 1. not a list * not a list # not a heading [foo]: /url &amp;quot;not a reference&amp;quot; \ö not a character entity&lt;/p&gt;</p>
+<p>Example 17 (lines 555-559) Backslash escapes <code>\[\`</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;\[\<code>&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;&lt;code&gt;[</code>&lt;/code&gt;&lt;/p&gt;</p>
+<p>Example 20 (lines 580-584) Backslash escapes &lt;https://example.com?find=\*&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;https://example.com?find=%5C*&quot;&gt;https://example.com?find=\<em>&lt;/a&gt;&lt;/p&gt; +&lt;https: example.com?find=&quot;\</em>&quot;&gt;</p>
+<p>Example 22 (lines 597-601) Backslash escapes [foo](/bar\* &quot;ti\*tle&quot;)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/bar*&quot; title=&quot;ti*tle&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo](/bar* &amp;quot;ti*tle&amp;quot;)&lt;/p&gt;</p>
+<p>Example 24 (lines 613-620) Backslash escapes <code>foo\+bar foo</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;pre&gt;&lt;code class=&quot;language-foo+bar&quot;&gt;foo +&lt;pre&gt;&lt;code class=&quot;language-foo\+bar&quot;&gt;foo &lt;/code&gt;&lt;/pre&gt;</p>
+<p>7 passed, 6 failed, 0 errored, 642 skipped stderr: Traceback (most recent call last): File &quot;inline-escapes.py&quot;, line 10, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: character-references (FEATURE-INLINE-ESCAPES.md)</li></ul>
+<p>intent: The implementation passes named, decimal, hexadecimal, invalid, and contextual character-reference examples. return code: 1 stdout: Example 28 (lines 690-700) Entity and numeric character references &amp;nbsp &amp;x; &amp;#; &amp;#x; &amp;#87654321; &amp;#abcdef0; &amp;ThisIsNotDefined; &amp;hi?;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;amp;nbsp &amp;amp;x; &amp;amp;#; &amp;amp;#x; &amp;amp;#87654321; &amp;amp;#abcdef0; &amp;amp;ThisIsNotDefined; &amp;amp;hi?;&lt;/p&gt; +&lt;p&gt;&amp;amp;x; &amp;amp;#; &amp;amp;#x; � &amp;amp;#abcdef0; &amp;amp;ThisIsNotDefined; &amp;amp;hi?;&lt;/p&gt;</p>
+<p>Example 29 (lines 707-711) Entity and numeric character references &amp;copy</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;amp;copy&lt;/p&gt; +&lt;p&gt;©&lt;/p&gt;</p>
+<p>Example 32 (lines 735-739) Entity and numeric character references [foo](/f&amp;ouml;&amp;ouml; &quot;f&amp;ouml;&amp;ouml;&quot;)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/f%C3%B6%C3%B6&quot; title=&quot;föö&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo](/föö &amp;quot;föö&amp;quot;)&lt;/p&gt;</p>
+<p>Example 33 (lines 742-748) Entity and numeric character references [foo]</p>
+<p>[foo]: /f&amp;ouml;&amp;ouml; &quot;f&amp;ouml;&amp;ouml;&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/f%C3%B6%C3%B6&quot; title=&quot;föö&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/f%C3%B6%C3%B6&quot; title=&quot;f&amp;amp;ouml;&amp;amp;ouml;&quot;&gt;foo&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 34 (lines 751-758) Entity and numeric character references <code>f&amp;ouml;&amp;ouml; foo</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;pre&gt;&lt;code class=&quot;language-föö&quot;&gt;foo +&lt;pre&gt;&lt;code class=&quot;language-f&amp;amp;ouml;&amp;amp;ouml;&quot;&gt;foo &lt;/code&gt;&lt;/pre&gt;</p>
+<p>Example 35 (lines 764-768) Entity and numeric character references <code>f&amp;ouml;&amp;ouml;</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;f&amp;amp;ouml;&amp;amp;ouml;&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;&lt;code&gt;föö&lt;/code&gt;&lt;/p&gt;</p>
+<p>Example 37 (lines 783-789) Entity and numeric character references &amp;#42;foo&amp;#42; <em>foo</em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>foo</em> &lt;em&gt;foo&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo&lt;/em&gt; &lt;em&gt;foo&lt;/em&gt;&lt;/p&gt;</p>
+<p>10 passed, 7 failed, 0 errored, 638 skipped stderr: Traceback (most recent call last): File &quot;character-references.py&quot;, line 10, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: inline-escapes (FEATURE-INLINE-ESCAPES.md)</li></ul>
+<p>intent: The implementation passes punctuation escape and escape-context conformance examples. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: 13 passed, 0 failed, 0 errored, 642 skipped</p>
+<ul><li>PASS: character-references (FEATURE-INLINE-ESCAPES.md)</li></ul>
+<p>intent: The implementation passes named, decimal, hexadecimal, invalid, and contextual character-reference examples. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: 17 passed, 0 failed, 0 errored, 638 skipped</p>
+<h2>Agent self-report (advisory)</h2>
+<p>The build agent declared a failure. This is advisory only; the programmatic acceptance above is the authority for this block&#x27;s outcome.</p>
+<ul><li>summary: Full CommonMark suite remains failing outside inline escapes.</li><li>detail:</li></ul>
+<p>Scoped escape/reference checks pass, but the complete suite fails in Tabs and Thematic breaks cases; fix block parsing before rerunning.</p>
+<h2>Build summary</h2>
+<p>RESULT: FAILED</p>
+<p>FILES CHANGED:</p>
+<ul><li>renderer/html.py</li><li>parser/blocks.py</li><li>test_inline_escapes.py</li></ul>
+<p>SUMMARY: Implemented punctuation escapes and named/numeric character references. Both declared scoped acceptances and focused tests pass.</p>
+<p>BLOCKERS:</p>
+<ul><li><code>sh full_test.sh</code> fails on pre-existing tab/list/thematic-break behavior outside this story.</li></ul>
+<p>FAILURE_SUMMARY: Full CommonMark suite remains failing outside inline escapes.<br>FAILURE_DETAIL: Scoped escape/reference checks pass, but the complete suite fails in Tabs and Thematic breaks cases; fix block parsing before rerunning.</p></article>
+</main>
+</body>
+</html>

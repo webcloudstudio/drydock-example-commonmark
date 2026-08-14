@@ -1,0 +1,59 @@
+Drydock 0.1.8  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Next: (no actionable steps — all done or blocked)
+
+Blueprint: commonmark
+Target: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/workspace/targets/commonmark
+Rows: <state> <type>  <Name>  [<id>]   — pass [<id>] to --step
+
+Block: Build Block 1 · Foundational  [block-1]   — 1/1 stories done
+  [done]    story  Define parser architecture and module boundaries.  [architecture]
+
+Block: Build Block 2 · Service  [block-2]   — 2/2 stories done
+  [done]    story  Implement the standard-input and standard-output parser entry point.  [cli-entrypoint]
+  [done]    story  Define deterministic parser process errors and exit behavior.  [cli-errors]
+
+Block: Build Block 3 · Service  [block-3]   — 1/1 stories done
+  [done]    story  Document parser operation and conformance verification.  [cli-documentation]
+
+Block: Build Block 4 · Service  [block-4]   — 1/1 stories done
+  [done]    story  Parse CommonMark leaf blocks.  [block-leaf]
+
+Block: Build Block 5 · Service  [block-5]   — 0/1 stories done
+  [QUESTIONS] story  Parse nested block quotes and lazy continuation.  [block-quotes]
+
+Block: Build Block 6 · Service  [block-6]   — 1/1 stories done
+  [done]    story  Parse CommonMark list items and list structure.  [block-lists]
+
+Block: Build Block 7 · Service  [block-7]   — 1/1 stories done
+  [done]    story  Parse escapes and character references.  [inline-escapes]
+
+Block: Build Block 8 · Service  [block-8]   — 1/1 stories done
+  [done]    story  Parse code spans and line breaks.  [inline-code-breaks]
+
+Block: Build Block 9 · Service  [block-9]   — 1/1 stories done
+  [done]    story  Parse emphasis and strong emphasis using delimiter rules.  [inline-emphasis]
+
+Block: Build Block 10 · Service  [block-10]   — 1/1 stories done
+  [done]    story  Parse links and images.  [inline-links]
+
+Block: Build Block 11 · Service  [block-11]   — 1/1 stories done
+  [done]    story  Parse autolinks and raw HTML.  [inline-html]
+
+Block: Build Block 12 · Service  [block-12]   — 1/1 stories done
+  [done]    story  Render parsed block structure as CommonMark HTML.  [render-blocks]
+
+Block: Build Block 13 · Service  [block-13]   — 1/1 stories done
+  [done]    story  Render parsed inline structure as CommonMark HTML.  [render-inline]
+
+Block: Build Block 14 · Service  [block-14]   — 1/1 stories done
+  [done]    story  Normalize URL, title, attribute, and special-character output.  [render-normalization]
+
+Block: Build Block 15 · Service  [block-15]   — 1/1 stories done
+  [done]    story  Stage and exercise the supplied conformance harness within bounded story scopes.  [conformance-assets]
+
+Block: Build Block 16 · Service  [block-16]   — 1/1 stories done
+  [done]    story  Run the complete supplied CommonMark conformance suite.  [conformance-full]
+
+Steps: 17 total — 16 done, 0 in review, 0 pending, 1 blocked by questions, 0 failed (94% complete)
+Buildable now: (none)
+Build score evidence: none

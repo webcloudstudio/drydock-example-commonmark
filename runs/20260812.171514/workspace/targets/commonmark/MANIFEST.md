@@ -1,0 +1,416 @@
+# MANIFEST: commonmark
+updated:     2026-08-12T17:25:19+00:00
+state:       approved
+blocks:      16
+planning_feedback: |
+  analyze-display_name applied ARCHITECTURE.md
+  analyze-short_description applied ARCHITECTURE.md
+
+applied: ARCHITECTURE.md=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,ARCHITECTURE_compact.md=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,FEATURE-BLOCK-LEAF.md=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,FEATURE-BLOCK-LISTS.md=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,FEATURE-BLOCK-QUOTES.md=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,FEATURE-CLI-DOCUMENTATION.md=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,FEATURE-CLI-ENTRYPOINT.md=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,FEATURE-CLI-ERRORS.md=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,FEATURE-CONFORMANCE-ASSETS.md=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,FEATURE-CONFORMANCE-FULL.md=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,FEATURE-INLINE-CODE-BREAKS.md=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,FEATURE-INLINE-EMPHASIS.md=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,FEATURE-INLINE-ESCAPES.md=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,FEATURE-INLINE-HTML.md=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,FEATURE-INLINE-LINKS.md=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,FEATURE-RENDER-BLOCKS.md=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,FEATURE-RENDER-INLINE.md=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,FEATURE-RENDER-NORMALIZATION.md=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,cmark.py=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,common.md=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,normalize.py=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,python.md=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,spec.txt=fbe2a3c24923687cda7ed5bbd2ac5533856697d6,spec_tests.py=fbe2a3c24923687cda7ed5bbd2ac5533856697d6
+applied_specs: |
+  ARCHITECTURE.md sha256=4401f1eb6d106328681e1aa590de8dce5877d0b58de586bde20e42052098f6e8 commit=- applied_by=block-3 applied_at=2026-08-12T17:33:18+00:00 build_sha256=4695d3d84dbe278f22cf5c27acbb2f9f96d4f02820379bfbfca4b69269583bf7
+  ARCHITECTURE_compact.md sha256=bcec65f2c03cbb08aa5bf8fbe9f0b50cc38f2d0c2bd92eef5e81c5744f2945e9 commit=- applied_by=block-16 applied_at=2026-08-12T20:44:28+00:00 build_sha256=bcec65f2c03cbb08aa5bf8fbe9f0b50cc38f2d0c2bd92eef5e81c5744f2945e9
+  FEATURE-BLOCK-LEAF.md sha256=69393c5bf78de24835f6f862515e26d73a93fd0383682f1e8c008736e0695c01 commit=- applied_by=block-4 applied_at=2026-08-12T17:58:23+00:00 build_sha256=c35bed1d4fa912136f4207c709f6cd7132efbd8ab50265e3c1c98871389ccca8
+  FEATURE-BLOCK-LISTS.md sha256=0fa8812c7d0d818aee243cf4c81abd2be7429bfdede2e091e9f548b70f3cb0b1 commit=- applied_by=block-6 applied_at=2026-08-12T18:18:53+00:00 build_sha256=dcaea140da76ddfb0d67b1a87d3427954b12a9e64c2b30fee74403d748ae9acd
+  FEATURE-BLOCK-QUOTES.md sha256=b6ac7a638c09fc7b5217f114f6baed320fbc6bd9f389750e44db1064d2e33814 commit=- applied_by=block-5 applied_at=2026-08-12T18:07:21+00:00 build_sha256=7effcc700cab858528d798dbc43c6de70334031dccb5afc06cec0578e39ed81c
+  FEATURE-CLI-DOCUMENTATION.md sha256=ed5144a7bf2569dd627a0cb49c479d0ac2a847e00b2ec49d2dff1c7177f46bce commit=- applied_by=block-3 applied_at=2026-08-12T17:33:18+00:00 build_sha256=45f57547cc00809f6b2cdd84da134d432386b87810bb9a989f642413905c935f
+  FEATURE-CLI-ENTRYPOINT.md sha256=cb0c4b83b3cbd14ea453dc0da1f667e20ea9e7992ba34d89de29e37a26375afa commit=- applied_by=block-2 applied_at=2026-08-12T17:31:13+00:00 build_sha256=8f608673703233be7fa94b28e2cab6811781aee457be1a419fdcc743587ac0bb
+  FEATURE-CLI-ERRORS.md sha256=d58cdf3ee85bf27266f8608585d1f76a8b07ce2c3978a97585f7872b82a9c88d commit=- applied_by=block-2 applied_at=2026-08-12T17:31:13+00:00 build_sha256=00226a42bd815366142e43637f03bfb5dad5f1cabedd070ed5790c7fd31e46bb
+  FEATURE-CONFORMANCE-ASSETS.md sha256=6acc5bc2ec09ed238e4dedd1238a2a7e3e18671c0a54389fae4d1d519cc404c6 commit=- applied_by=block-15 applied_at=2026-08-12T20:31:25+00:00 build_sha256=8e45529a0cad28620a71b1641a68d40a51971500afce3bfb8f6c972f1af67bbf
+  FEATURE-CONFORMANCE-FULL.md sha256=d36d0b7c90e1f944aedffc2291b12bf02a2a607e495db34d21cf4b457db4abcb commit=- applied_by=block-16 applied_at=2026-08-12T20:44:28+00:00 build_sha256=232739df66237b0717c2966a80006bdfa895c265dca9b8b68432b4d1bd65ac7a
+  FEATURE-INLINE-CODE-BREAKS.md sha256=a7b092fb449fa302838aa982aad7cecbd1d5249c6ba69f81007e9278788986fd commit=- applied_by=block-8 applied_at=2026-08-12T18:30:38+00:00 build_sha256=95c5d0055dad5e2deb5d40eea7e6015dd074e0f5f10d8868412a19e031232f8b
+  FEATURE-INLINE-EMPHASIS.md sha256=5985e9df3d570261c003d1848b3bd478a0d3273d6be0a53fae636b5cce5c8ec0 commit=- applied_by=block-9 applied_at=2026-08-12T18:40:44+00:00 build_sha256=2fe5d54d63cfd7f05ff7b4e42d3d510f7dba20ac2c0a752ffaa8f3a0ad166bff
+  FEATURE-INLINE-ESCAPES.md sha256=8ec32f9ba38ed7e0e2257c0032028b77cb07a9c949d45f97b611c95c5e74b6b3 commit=- applied_by=block-7 applied_at=2026-08-12T18:25:39+00:00 build_sha256=157c42a3a910d8130ae92cc0ad5c09e345f16a4024a48d5605fd48ecee75f37b
+  FEATURE-INLINE-HTML.md sha256=5cb9080fd1c36517fbe77657958fe238d0b9a99e9555c60d1487e5b94327d050 commit=- applied_by=block-11 applied_at=2026-08-12T19:31:25+00:00 build_sha256=7c12b0b68e7fe96ec49300859118d27db0bbfb0af5383060a6d0b18365ed2657
+  FEATURE-INLINE-LINKS.md sha256=86acb4d516a957475e0a0374ccfdde6e8790780dd9891dc1044de28b6902c4b6 commit=- applied_by=block-10 applied_at=2026-08-12T19:16:58+00:00 build_sha256=f478a29b8a510f401e621b5ca74d60f656e437b3e27416fdee43330fa6af592a
+  FEATURE-RENDER-BLOCKS.md sha256=f46dd6caf74723ed69dbefe05207fe8fbc1021681ad74916a847bc387d528b16 commit=- applied_by=block-12 applied_at=2026-08-12T19:51:29+00:00 build_sha256=1230d794ef7eee23c1bc7d730f6c4e4fe05ddbb24dcfe672f122cf391537a140
+  FEATURE-RENDER-INLINE.md sha256=8661afd65ac99a20ac2d1aac8af6abc175a328fa5077e67f27c58b316d888bcd commit=- applied_by=block-13 applied_at=2026-08-12T20:08:56+00:00 build_sha256=77f7a2b822ce8dc8a8d532119f4ddad0b73597122a916f871fee86ead90c60dd
+  FEATURE-RENDER-NORMALIZATION.md sha256=6410e420559625eea23da704a5ad73434e902deefd803657c916687c8aa6bf71 commit=- applied_by=block-14 applied_at=2026-08-12T20:18:17+00:00 build_sha256=472719add837f2b05319b60f1c0b95b3a376be657245adfa542a41a0d3442e8f
+  cmark.py sha256=c5fb45e7c64fd7670b2a3c49a151e46f4af9d0ad3004bedb37ecf9cdc34d2f00 commit=- applied_by=block-16 applied_at=2026-08-12T20:44:28+00:00 build_sha256=c5fb45e7c64fd7670b2a3c49a151e46f4af9d0ad3004bedb37ecf9cdc34d2f00
+  normalize.py sha256=94a9dd253907e3dab7c02fc11e934f06112dcf0f3804255d09d732c8c7c4b5f4 commit=- applied_by=block-16 applied_at=2026-08-12T20:44:28+00:00 build_sha256=94a9dd253907e3dab7c02fc11e934f06112dcf0f3804255d09d732c8c7c4b5f4
+  spec.txt sha256=43fad3e0ac5190a3b0bc6a41f7b1a853201a26ec2e6b74871f5d96239a8c34cf commit=- applied_by=block-16 applied_at=2026-08-12T20:44:28+00:00 build_sha256=43fad3e0ac5190a3b0bc6a41f7b1a853201a26ec2e6b74871f5d96239a8c34cf
+  spec_tests.py sha256=9db1ea4a3ee79c5ec74eebc09c5985eb252427e8d9d19ef45e5cc3f2ae410855 commit=- applied_by=block-16 applied_at=2026-08-12T20:44:28+00:00 build_sha256=9db1ea4a3ee79c5ec74eebc09c5985eb252427e8d9d19ef45e5cc3f2ae410855
+
+## story 1: Define parser architecture and module boundaries.
+id:           architecture
+evidence: evidence/block-1.md
+summary:      Define parser architecture and module boundaries.
+type:         foundational
+kind:         capability
+phase:        1
+block:        1
+implements:   ARCHITECTURE.md
+scope:        both
+instructions: |
+  Define the Python module boundaries for a two-phase CommonMark parser, HTML renderer, executable entry point, and POSIX conformance wrapper. Record the approved technology stack and prohibit public Markdown implementations.
+stack:        common.md, python.md
+stack_mode:   builder
+size:         7037
+provides:     parser architecture, block parser boundary, inline parser boundary, renderer boundary
+acceptance:   yes
+state: closed/verified
+
+## story 2: Implement the standard-input and standard-output parser entry point.
+id: cli-entrypoint
+evidence: evidence/block-2.md
+summary: Implement the standard-input and standard-output parser entry point.
+type: service
+kind: capability
+phase: 1
+block: 2
+implements: FEATURE-CLI-ENTRYPOINT.md
+covers: CLI-001
+context: cmark.py, normalize.py, ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 5722
+provides: parser executable
+consumes: parser core, HTML renderer
+instructions: Implement the executable that reads UTF-8 Markdown from standard input, parses blocks before inlines, and writes rendered HTML to standard output. Preserve the harness invocation contract.
+acceptance: yes
+depends: architecture
+state: closed/verified
+scope: target
+
+## story 3: Define deterministic parser process errors and exit behavior.
+id: cli-errors
+finding: ADVISORY: acceptance criterion may be mis-authored: cli-errors-stdout-integrity — static analysis doubts these assertions; they were graded normally. Review the authoring in the Blueprint specification.
+evidence: evidence/block-2.md
+summary: Define deterministic parser process errors and exit behavior.
+type: service
+kind: capability
+phase: 1
+block: 2
+implements: FEATURE-CLI-ERRORS.md
+covers: CLI-002
+context: spec_tests.py, ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 5343
+provides: parser error behavior
+consumes: parser executable
+instructions: Implement deterministic operational failure handling, nonzero exit behavior, and stdout integrity for invalid process conditions. Keep diagnostics on stderr.
+acceptance: yes
+depends: cli-entrypoint
+state: closed/verified
+scope: target
+
+## story 4: Document parser operation and conformance verification.
+id: cli-documentation
+evidence: evidence/block-3.md
+summary: Document parser operation and conformance verification.
+type: service
+kind: capability
+phase: 1
+block: 3
+implements: FEATURE-CLI-DOCUMENTATION.md
+covers: CLI-003
+context: ARCHITECTURE_compact.md
+stack: common.md
+stack_mode: consumer
+size: 2092
+instructions: Write a concise README documenting standard-input to standard-output operation and the required sh full_test.sh invocation.
+acceptance: yes
+depends: cli-entrypoint
+state: closed/verified
+scope: target
+
+## story 5: Parse CommonMark leaf blocks.
+id: block-leaf
+evidence: evidence/block-4.md
+summary: Parse CommonMark leaf blocks.
+type: service
+kind: capability
+phase: 2
+block: 4
+implements: FEATURE-BLOCK-LEAF.md
+covers: BLOCK-001
+context: spec.txt, spec_tests.py, ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 57009
+budget: over-target
+provides: leaf block parser
+consumes: parser executable
+instructions: Implement thematic breaks, ATX and setext headings, indented and fenced code blocks, HTML blocks, paragraphs, and link reference definitions according to CommonMark 0.31.2.
+acceptance: yes
+depends: cli-entrypoint
+state: closed/verified
+scope: target
+
+## story 6: Parse nested block quotes and lazy continuation.
+id: block-quotes
+summary: Parse nested block quotes and lazy continuation.
+type: service
+kind: capability
+phase: 2
+block: 5
+implements: FEATURE-BLOCK-QUOTES.md
+covers: BLOCK-002
+context: spec.txt, spec_tests.py, ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 56877
+budget: over-target
+provides: block quote parser
+consumes: leaf block parser
+instructions: Implement block quote markers, nesting, blank lines, lazy paragraph continuation, and all contained block structure.
+acceptance: yes
+depends: block-leaf
+state: blocked/questions
+evidence: evidence/block-5.md
+scope: target
+
+## story 7: Parse CommonMark list items and list structure.
+id: block-lists
+evidence: evidence/block-6.md
+summary: Parse CommonMark list items and list structure.
+type: service
+kind: capability
+phase: 2
+block: 6
+implements: FEATURE-BLOCK-LISTS.md
+covers: BLOCK-003
+context: spec.txt, spec_tests.py, ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 56945
+budget: over-target
+provides: list parser
+consumes: leaf block parser, block quote parser
+instructions: Implement bullet and ordered lists, nesting, lazy continuation, empty items, marker indentation, delimiter changes, and tight versus loose rendering metadata.
+acceptance: yes
+depends: block-quotes
+state: closed/verified
+scope: target
+
+## story 8: Parse escapes and character references.
+id: inline-escapes
+evidence: evidence/block-7.md
+summary: Parse escapes and character references.
+type: service
+kind: capability
+phase: 3
+block: 7
+implements: FEATURE-INLINE-ESCAPES.md
+covers: INLINE-001
+context: spec.txt, spec_tests.py, ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 56814
+budget: over-target
+provides: escape parser, character reference parser
+consumes: block parser
+instructions: Implement punctuation escapes, named entities, decimal and hexadecimal references, invalid-code-point replacement, and context restrictions.
+acceptance: yes
+depends: block-lists
+state: closed/verified
+scope: target
+
+## story 9: Parse code spans and line breaks.
+id: inline-code-breaks
+evidence: evidence/block-8.md
+summary: Parse code spans and line breaks.
+type: service
+kind: capability
+phase: 3
+block: 8
+implements: FEATURE-INLINE-CODE-BREAKS.md
+covers: INLINE-002
+context: spec.txt, spec_tests.py, ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 56809
+budget: over-target
+provides: code span parser, hard break parser, soft break parser
+consumes: block parser
+instructions: Implement delimiter-length code spans, code-span normalization, hard breaks, soft breaks, and trailing-space behavior.
+acceptance: yes
+depends: block-lists
+state: closed/verified
+scope: target
+
+## story 10: Parse emphasis and strong emphasis using delimiter rules.
+id: inline-emphasis
+evidence: evidence/block-9.md
+summary: Parse emphasis and strong emphasis using delimiter rules.
+type: service
+kind: capability
+phase: 3
+block: 9
+implements: FEATURE-INLINE-EMPHASIS.md
+covers: INLINE-003
+context: spec.txt, spec_tests.py, ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 56836
+budget: over-target
+provides: emphasis parser, strong emphasis parser
+consumes: block parser, code span parser
+instructions: Implement delimiter runs, flanking rules, intraword restrictions, nesting, precedence, and the modulo-three constraints for emphasis and strong emphasis.
+acceptance: yes
+depends: inline-code-breaks
+state: closed/verified
+scope: target
+
+## story 11: Parse links and images.
+id: inline-links
+evidence: evidence/block-10.md
+summary: Parse links and images.
+type: service
+kind: capability
+phase: 3
+block: 10
+implements: FEATURE-INLINE-LINKS.md
+covers: INLINE-004
+context: spec.txt, spec_tests.py, ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 57041
+budget: over-target
+provides: link parser, image parser, reference resolver
+consumes: block parser, inline parser
+instructions: Implement inline, full-reference, collapsed-reference, and shortcut links; nested image descriptions; balanced destinations; titles; and reference definition precedence.
+acceptance: yes
+depends: inline-emphasis
+state: closed/verified
+scope: target
+
+## story 12: Parse autolinks and raw HTML.
+id: inline-html
+evidence: evidence/block-11.md
+summary: Parse autolinks and raw HTML.
+type: service
+kind: capability
+phase: 3
+block: 11
+implements: FEATURE-INLINE-HTML.md
+covers: INLINE-005
+context: spec.txt, spec_tests.py, ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 56902
+budget: over-target
+provides: autolink parser, raw HTML parser
+consumes: block parser, inline parser
+instructions: Implement URI and email autolinks plus raw HTML tags, comments, declarations, processing instructions, and CDATA while preserving raw markup.
+acceptance: yes
+depends: inline-links
+state: closed/verified
+scope: target
+
+## story 13: Render parsed block structure as CommonMark HTML.
+id: render-blocks
+evidence: evidence/block-12.md
+summary: Render parsed block structure as CommonMark HTML.
+type: service
+kind: capability
+phase: 4
+block: 12
+implements: FEATURE-RENDER-BLOCKS.md
+covers: RENDER-001
+context: spec.txt, spec_tests.py, normalize.py, ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 58606
+budget: over-target
+provides: block HTML renderer
+consumes: block parser, inline parser
+instructions: Render headings, paragraphs, thematic breaks, code blocks, block quotes, lists, list tightness, and escaped block content with required CommonMark HTML structure.
+acceptance: yes
+depends: inline-html
+state: closed/verified
+scope: target
+
+## story 14: Render parsed inline structure as CommonMark HTML.
+id: render-inline
+evidence: evidence/block-13.md
+summary: Render parsed inline structure as CommonMark HTML.
+type: service
+kind: capability
+phase: 4
+block: 13
+implements: FEATURE-RENDER-INLINE.md
+covers: RENDER-002
+context: spec.txt, spec_tests.py, normalize.py, ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 58642
+budget: over-target
+provides: inline HTML renderer
+consumes: inline parser
+instructions: Render text, links, images, code, emphasis, strong emphasis, breaks, entities, and raw HTML with required escaping and preservation rules.
+acceptance: yes
+depends: render-blocks
+state: closed/verified
+scope: target
+
+## story 15: Normalize URL, title, attribute, and special-character output.
+id: render-normalization
+evidence: evidence/block-14.md
+summary: Normalize URL, title, attribute, and special-character output.
+type: service
+kind: integration
+phase: 4
+block: 14
+implements: FEATURE-RENDER-NORMALIZATION.md
+covers: RENDER-003
+context: spec.txt, spec_tests.py, normalize.py, ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 58645
+budget: over-target
+provides: normalized URL output, normalized title output, normalized attribute output
+consumes: block HTML renderer, inline HTML renderer
+instructions: Ensure URL escaping, title escaping, attribute ordering and escaping, entity handling, and special-character output match the supplied harness expectations.
+acceptance: yes
+depends: render-inline
+state: closed/verified
+scope: target
+
+## story 16: Stage and exercise the supplied conformance harness within bounded story scopes.
+id: conformance-assets
+evidence: evidence/block-15.md
+summary: Stage and exercise the supplied conformance harness within bounded story scopes.
+type: service
+kind: test harness
+phase: 4
+block: 15
+implements: FEATURE-CONFORMANCE-ASSETS.md
+covers: VERIFY-001, VERIFY-002
+context: spec.txt, spec_tests.py, cmark.py, normalize.py, ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 59085
+budget: over-target
+provides: staged conformance assets, bounded conformance verification
+consumes: parser executable
+instructions: Stage only spec.txt, spec_tests.py, cmark.py, and normalize.py at the runtime paths required by the harness. Add bounded selector-based verification for the implementation stories without invoking an unfiltered suite.
+acceptance: yes
+depends: render-normalization
+state: closed/verified
+scope: both
+
+## story 17: Run the complete supplied CommonMark conformance suite.
+id: conformance-full
+evidence: evidence/block-16.md
+summary: Run the complete supplied CommonMark conformance suite.
+type: service
+kind: test harness
+phase: 5
+block: 16
+implements: FEATURE-CONFORMANCE-FULL.md
+covers: VERIFY-003
+accepts: st-001
+context: spec.txt, spec_tests.py, cmark.py, normalize.py, ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 58814
+budget: over-target
+provides: full_test.sh, complete conformance verification
+consumes: parser executable, staged conformance assets
+instructions: Create full_test.sh as a POSIX-compatible wrapper for the complete unfiltered supplied suite. The terminal acceptance runs sh full_test.sh with Suite: full, prints captured output and error, and asserts only exit status zero. It carries Sea Trials: st-001.
+acceptance: yes
+depends: cli-entrypoint, cli-errors, cli-documentation, block-leaf, block-quotes, block-lists, inline-escapes, inline-code-breaks, inline-emphasis, inline-links, inline-html, render-blocks, render-inline, render-normalization, conformance-assets
+state: closed/verified
+scope: target

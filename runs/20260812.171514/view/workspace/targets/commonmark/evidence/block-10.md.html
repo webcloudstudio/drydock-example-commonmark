@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-10.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-10.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-10.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 10 · Service (block-10)</h1>
+<ul><li>block type: block</li><li>date: 2026-08-12</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 57886</li><li>execution id: 20260812.190933.972Z-21d3a70b</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse links and images. (inline-links) [story]</li></ul>
+<h2>Acceptance tooling authorization</h2>
+<ul><li>FEATURE-INLINE-LINKS.md#inline-links-suite: executable=python3; scope=test; authorization=existing Target environment</li><li>FEATURE-INLINE-LINKS.md#inline-links-boundaries: executable=python3; scope=test; authorization=existing Target environment</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1263)</li><li>implements: FEATURE-INLINE-LINKS.md (SP 615)</li><li>context: spec.txt (SP 51527)</li><li>context: spec_tests.py (SP 1609)</li><li>context: ARCHITECTURE_compact.md (SP 116)</li><li>stack: common_compact.md (SP 1179)</li><li>stack: python_compact.md (SP 1534)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>commonmark</li><li>parser/blocks.py</li><li>renderer/html.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: inline-links-suite (FEATURE-INLINE-LINKS.md)</li></ul>
+<p>intent: The inline link, reference link, and image syntax passes its complete owned conformance scope. return code: 1 stderr: Traceback (most recent call last): File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/build/commonmark/spec_tests.py&quot;, line 164, in &lt;module&gt; result = do_test(test, args.normalize, previous.get(str(test[&#x27;example&#x27;]))) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/build/commonmark/spec_tests.py&quot;, line 44, in do_test [retcode, actual_html_bytes, err] = cmark.to_html(test[&#x27;markdown&#x27;]) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/build/commonmark/cmark.py&quot;, line 23, in &lt;lambda&gt; self.to_html = lambda x: pipe_through_prog(prog, x) ^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/build/commonmark/cmark.py&quot;, line 10, in pipe_through_prog p1 = Popen(prog.split(), stdout=PIPE, stdin=PIPE, stderr=PIPE) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/home/barlo/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/subprocess.py&quot;, line 1026, in <strong>init</strong> self._execute_child(args, executable, preexec_fn, close_fds, File &quot;/home/barlo/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/subprocess.py&quot;, line 1955, in _execute_child raise child_exception_type(errno_num, err_msg, err_filename)<br>FileNotFoundError: [Errno 2] No such file or directory: &#x27;./commonmark&#x27;</p>
+<p>Traceback (most recent call last): File &quot;inline-links-suite.py&quot;, line 11, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: inline-links-boundaries (FEATURE-INLINE-LINKS.md)</li></ul>
+<p>intent: The implementation preserves link and image destination, title, reference, and nesting behavior. return code: 1 stderr: Traceback (most recent call last): File &quot;inline-links-boundaries.py&quot;, line 9, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: inline-links-suite (FEATURE-INLINE-LINKS.md)</li></ul>
+<p>intent: The inline link, reference link, and image syntax passes its complete owned conformance scope. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: 112 passed, 0 failed, 0 errored, 543 skipped</p>
+<ul><li>PASS: inline-links-boundaries (FEATURE-INLINE-LINKS.md)</li></ul>
+<p>intent: The implementation preserves link and image destination, title, reference, and nesting behavior. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0</p>
+<h2>Repair attempts</h2>
+<ul><li>attempt 0 (initial build): failed; 0/2 checks; 89/112 cases model=gpt-5.6-luna; execution 20260812.184119.134Z-7c4c336d</li><li>attempt 1 (repair 1): failed; 0/2 checks; 111/112 cases model=gpt-5.6-luna; execution 20260812.185600.907Z-5cca4fa6</li><li>attempt 2 (repair 2): built; 2/2 checks; 112/112 cases model=gpt-5.6-luna; execution 20260812.190933.972Z-21d3a70b</li></ul>
+<h2>Build summary</h2>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>renderer/html.py</li></ul>
+<p>SUMMARY: Fixed nested image alt-text extraction. Links/Images scope passes: 112 passed.</p>
+<p>BLOCKERS:</p>
+<ul><li><code>sh full_test.sh</code> still fails on unrelated list/block parsing cases outside this build block.</li></ul></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/score-release.json</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/score-release.json</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/score-release.json">Raw file</a></div></header>
+<article class="doc"><pre>{
+  &quot;schema_version&quot;: 3,
+  &quot;recorded_at&quot;: &quot;2026-08-12T21:21:05+00:00&quot;,
+  &quot;target&quot;: &quot;commonmark&quot;,
+  &quot;complete&quot;: false,
+  &quot;qualified&quot;: false,
+  &quot;technical_score&quot;: 96,
+  &quot;dimensions&quot;: {
+    &quot;specification_completeness&quot;: 100,
+    &quot;implementation_coverage&quot;: 94,
+    &quot;test_coverage&quot;: 100,
+    &quot;documentation_coverage&quot;: 80,
+    &quot;blueprint_drift&quot;: 100,
+    &quot;build_quality&quot;: 97,
+    &quot;acceptance_criteria_coverage&quot;: 100
+  },
+  &quot;criteria&quot;: [
+    {
+      &quot;criterion_id&quot;: &quot;st-001&quot;,
+      &quot;verdict&quot;: &quot;PASS&quot;,
+      &quot;rationale&quot;: &quot;The complete supplied conformance suite passed with no failures or skips.&quot;,
+      &quot;evidence&quot;: [
+        &quot;FEATURE-CONFORMANCE-FULL.md:complete-conformance-suite=PASS&quot;
+      ]
+    }
+  ],
+  &quot;blockers&quot;: [
+    &quot;Manifest work is not closed/verified: block-quotes&quot;
+  ],
+  &quot;attestations&quot;: [],
+  &quot;warnings&quot;: [
+    &quot;Programmatic acceptance failed: cli-documentation-verification&quot;
+  ],
+  &quot;improvements&quot;: [
+    &quot;Close and verify the incomplete block-quotes Manifest work.&quot;,
+    &quot;Update README.md to document the required complete-suite invocation: sh full_test.sh.&quot;
+  ],
+  &quot;identities&quot;: {
+    &quot;code&quot;: &quot;fbe2a3c24923687cda7ed5bbd2ac5533856697d6&quot;,
+    &quot;sea_trials&quot;: &quot;e425a79399476c6cd3490128aa8448ac18aad5f537dc01a659a07eccafa5ba73&quot;,
+    &quot;manifest&quot;: &quot;da690c9862c9cde22586c859d20c55f614da1bc37267dfe7038e0b838838854a&quot;,
+    &quot;blueprint&quot;: {
+      &quot;ARCHITECTURE.md&quot;: &quot;4401f1eb6d106328681e1aa590de8dce5877d0b58de586bde20e42052098f6e8&quot;,
+      &quot;ARCHITECTURE_compact.md&quot;: &quot;bcec65f2c03cbb08aa5bf8fbe9f0b50cc38f2d0c2bd92eef5e81c5744f2945e9&quot;,
+      &quot;FEATURE-BLOCK-LEAF.md&quot;: &quot;69393c5bf78de24835f6f862515e26d73a93fd0383682f1e8c008736e0695c01&quot;,
+      &quot;FEATURE-BLOCK-LISTS.md&quot;: &quot;0fa8812c7d0d818aee243cf4c81abd2be7429bfdede2e091e9f548b70f3cb0b1&quot;,
+      &quot;FEATURE-BLOCK-QUOTES.md&quot;: &quot;b6ac7a638c09fc7b5217f114f6baed320fbc6bd9f389750e44db1064d2e33814&quot;,
+      &quot;FEATURE-CLI-DOCUMENTATION.md&quot;: &quot;ed5144a7bf2569dd627a0cb49c479d0ac2a847e00b2ec49d2dff1c7177f46bce&quot;,
+      &quot;FEATURE-CLI-ENTRYPOINT.md&quot;: &quot;cb0c4b83b3cbd14ea453dc0da1f667e20ea9e7992ba34d89de29e37a26375afa&quot;,
+      &quot;FEATURE-CLI-ERRORS.md&quot;: &quot;d58cdf3ee85bf27266f8608585d1f76a8b07ce2c3978a97585f7872b82a9c88d&quot;,
+      &quot;FEATURE-CONFORMANCE-ASSETS.md&quot;: &quot;6acc5bc2ec09ed238e4dedd1238a2a7e3e18671c0a54389fae4d1d519cc404c6&quot;,
+      &quot;FEATURE-CONFORMANCE-FULL.md&quot;: &quot;d36d0b7c90e1f944aedffc2291b12bf02a2a607e495db34d21cf4b457db4abcb&quot;,
+      &quot;FEATURE-INLINE-CODE-BREAKS.md&quot;: &quot;a7b092fb449fa302838aa982aad7cecbd1d5249c6ba69f81007e9278788986fd&quot;,
+      &quot;FEATURE-INLINE-EMPHASIS.md&quot;: &quot;5985e9df3d570261c003d1848b3bd478a0d3273d6be0a53fae636b5cce5c8ec0&quot;,
+      &quot;FEATURE-INLINE-ESCAPES.md&quot;: &quot;8ec32f9ba38ed7e0e2257c0032028b77cb07a9c949d45f97b611c95c5e74b6b3&quot;,
+      &quot;FEATURE-INLINE-HTML.md&quot;: &quot;5cb9080fd1c36517fbe77657958fe238d0b9a99e9555c60d1487e5b94327d050&quot;,
+      &quot;FEATURE-INLINE-LINKS.md&quot;: &quot;86acb4d516a957475e0a0374ccfdde6e8790780dd9891dc1044de28b6902c4b6&quot;,
+      &quot;FEATURE-RENDER-BLOCKS.md&quot;: &quot;f46dd6caf74723ed69dbefe05207fe8fbc1021681ad74916a847bc387d528b16&quot;,
+      &quot;FEATURE-RENDER-INLINE.md&quot;: &quot;8661afd65ac99a20ac2d1aac8af6abc175a328fa5077e67f27c58b316d888bcd&quot;,
+      &quot;FEATURE-RENDER-NORMALIZATION.md&quot;: &quot;6410e420559625eea23da704a5ad73434e902deefd803657c916687c8aa6bf71&quot;,
+      &quot;normalize_compact.md&quot;: &quot;6b27e427a5a3e63e0fef6961f7af43f651ec8fee70aa1d21e20512737972aaf0&quot;,
+      &quot;spec_compact.md&quot;: &quot;0d84a7ee78e885ad183d42656ac532c520a42faf74f60c2dddd98fdbc7ff5e8d&quot;,
+      &quot;spec_tests_compact.md&quot;: &quot;b48cfb31cce9616251246fb3407909e5caa67134125024233e9990f5f20c141d&quot;
+    }
+  },
+  &quot;measurements&quot;: [
+    {
+      &quot;criterion_id&quot;: &quot;st-001&quot;,
+      &quot;status&quot;: &quot;not-applicable&quot;,
+      &quot;value&quot;: null,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;source&quot;: &quot;&quot;,
+      &quot;return_code&quot;: null,
+      &quot;detail&quot;: &quot;&quot;
+    }
+  ],
+  &quot;evidence_files&quot;: [],
+  &quot;programmatic_acceptance&quot;: [
+    {
+      &quot;check_id&quot;: &quot;architecture-boundaries&quot;,
+      &quot;source&quot;: &quot;ARCHITECTURE.md&quot;,
+      &quot;intent&quot;: &quot;The implementation exposes separate block, inline, rendering, and executable boundaries.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;&quot;,
+      &quot;stderr&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;architecture-runtime-contract&quot;,
+      &quot;source&quot;: &quot;ARCHITECTURE.md&quot;,
+      &quot;intent&quot;: &quot;The runtime contains the required POSIX conformance wrapper boundary.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;&quot;,
+      &quot;stderr&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;leaf-blocks-primary&quot;,
+      &quot;source&quot;: &quot;FEATURE-BLOCK-LEAF.md&quot;,
+      &quot;intent&quot;: &quot;The implementation passes the supplied conformance sections for thematic breaks, headings, and code blocks.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;105 passed, 0 failed, 0 errored, 550 skipped\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;leaf-blocks-secondary&quot;,
+      &quot;source&quot;: &quot;FEATURE-BLOCK-LEAF.md&quot;,
+      &quot;intent&quot;: &quot;The implementation passes the supplied conformance sections for HTML blocks, link references, paragraphs, and blank lines.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;82 passed, 0 failed, 0 errored, 573 skipped\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;lists-structure&quot;,
+      &quot;source&quot;: &quot;FEATURE-BLOCK-LISTS.md&quot;,
+      &quot;intent&quot;: &quot;The implementation passes list marker, nesting, indentation, and continuation conformance examples.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;74 passed, 0 failed, 0 errored, 581 skipped\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;lists-tightness&quot;,
+      &quot;source&quot;: &quot;FEATURE-BLOCK-LISTS.md&quot;,
+      &quot;intent&quot;: &quot;The implementation passes empty-item, delimiter, and tight-versus-loose list conformance examples.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;74 passed, 0 failed, 0 errored, 581 skipped\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;block-quotes-basic&quot;,
+      &quot;source&quot;: &quot;FEATURE-BLOCK-QUOTES.md&quot;,
+      &quot;intent&quot;: &quot;The implementation passes basic and nested block quote conformance examples.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;25 passed, 0 failed, 0 errored, 630 skipped\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;block-quotes-continuation&quot;,
+      &quot;source&quot;: &quot;FEATURE-BLOCK-QUOTES.md&quot;,
+      &quot;intent&quot;: &quot;The implementation passes block quote laziness, blank-line, and contained-structure examples.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;25 passed, 0 failed, 0 errored, 630 skipped\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;cli-documentation-content&quot;,
+      &quot;source&quot;: &quot;FEATURE-CLI-DOCUMENTATION.md&quot;,
+      &quot;intent&quot;: &quot;README.md documents the standard-input and standard-output interface.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;&quot;,
+      &quot;stderr&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;cli-documentation-verification&quot;,
+      &quot;source&quot;: &quot;FEATURE-CLI-DOCUMENTATION.md&quot;,
+      &quot;intent&quot;: &quot;README.md documents the required complete-suite invocation.&quot;,
+      &quot;passed&quot;: false,
+      &quot;return_code&quot;: 1,
+      &quot;stdout&quot;: &quot;&quot;,
+      &quot;stderr&quot;: &quot;Traceback (most recent call last):\n  File \&quot;cli-documentation-verification.py\&quot;, line 4, in &lt;module&gt;\n    assert \&quot;sh full_test.sh\&quot; in text\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;cli-stdin-stdout&quot;,
+      &quot;source&quot;: &quot;FEATURE-CLI-ENTRYPOINT.md&quot;,
+      &quot;intent&quot;: &quot;The executable renders Markdown supplied through standard input and exits successfully.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;&lt;h1&gt;Hello&lt;/h1&gt;\n&lt;p&gt;world&lt;/p&gt;\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;cli-utf8&quot;,
+      &quot;source&quot;: &quot;FEATURE-CLI-ENTRYPOINT.md&quot;,
+      &quot;intent&quot;: &quot;The executable accepts UTF-8 Markdown and emits UTF-8 HTML.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;&quot;,
+      &quot;stderr&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;cli-errors-success-contract&quot;,
+      &quot;source&quot;: &quot;FEATURE-CLI-ERRORS.md&quot;,
+      &quot;intent&quot;: &quot;A successful invocation returns zero and keeps diagnostics off standard error.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;&quot;,
+      &quot;stderr&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;cli-errors-stdout-integrity&quot;,
+      &quot;source&quot;: &quot;FEATURE-CLI-ERRORS.md&quot;,
+      &quot;intent&quot;: &quot;The executable emits a complete HTML document result without diagnostic text in standard output.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;&quot;,
+      &quot;stderr&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;conformance-assets-leaf-scope&quot;,
+      &quot;source&quot;: &quot;FEATURE-CONFORMANCE-ASSETS.md&quot;,
+      &quot;intent&quot;: &quot;The staged conformance harness executes a selected leaf-block scope successfully.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;187 passed, 0 failed, 0 errored, 468 skipped\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;conformance-assets-inline-scope&quot;,
+      &quot;source&quot;: &quot;FEATURE-CONFORMANCE-ASSETS.md&quot;,
+      &quot;intent&quot;: &quot;The staged conformance harness executes a selected inline scope successfully.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;323 passed, 0 failed, 0 errored, 332 skipped\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;complete-conformance-suite&quot;,
+      &quot;source&quot;: &quot;FEATURE-CONFORMANCE-FULL.md&quot;,
+      &quot;intent&quot;: &quot;The complete supplied CommonMark conformance suite passes through the required wrapper.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;655 passed, 0 failed, 0 errored, 0 skipped\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;code-spans&quot;,
+      &quot;source&quot;: &quot;FEATURE-INLINE-CODE-BREAKS.md&quot;,
+      &quot;intent&quot;: &quot;The implementation passes code span delimiter, matching, normalization, and precedence examples.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;22 passed, 0 failed, 0 errored, 633 skipped\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;line-breaks&quot;,
+      &quot;source&quot;: &quot;FEATURE-INLINE-CODE-BREAKS.md&quot;,
+      &quot;intent&quot;: &quot;The implementation passes hard-break, soft-break, trailing-space, and break-context examples.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;17 passed, 0 failed, 0 errored, 638 skipped\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;emphasis-delimiters&quot;,
+      &quot;source&quot;: &quot;FEATURE-INLINE-EMPHASIS.md&quot;,
+      &quot;intent&quot;: &quot;The implementation passes delimiter-run, flanking, intraword, and modulo-three emphasis examples.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;132 passed, 0 failed, 0 errored, 523 skipped\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;emphasis-nesting&quot;,
+      &quot;source&quot;: &quot;FEATURE-INLINE-EMPHASIS.md&quot;,
+      &quot;intent&quot;: &quot;The implementation passes nested, overlapping, precedence, and unmatched delimiter examples.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;132 passed, 0 failed, 0 errored, 523 skipped\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;inline-escapes&quot;,
+      &quot;source&quot;: &quot;FEATURE-INLINE-ESCAPES.md&quot;,
+      &quot;intent&quot;: &quot;The implementation passes punctuation escape and escape-context conformance examples.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;13 passed, 0 failed, 0 errored, 642 skipped\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;character-references&quot;,
+      &quot;source&quot;: &quot;FEATURE-INLINE-ESCAPES.md&quot;,
+      &quot;intent&quot;: &quot;The implementation passes named, decimal, hexadecimal, invalid, and contextual character-reference examples.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;17 passed, 0 failed, 0 errored, 638 skipped\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;inline-html-suite&quot;,
+      &quot;source&quot;: &quot;FEATURE-INLINE-HTML.md&quot;,
+      &quot;intent&quot;: &quot;The autolink and raw HTML syntax passes its complete owned conformance scope.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;40 passed, 0 failed, 0 errored, 615 skipped\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;inline-html-malformed&quot;,
+      &quot;source&quot;: &quot;FEATURE-INLINE-HTML.md&quot;,
+      &quot;intent&quot;: &quot;Invalid autolinks and malformed HTML remain ordinary escaped content.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;&quot;,
+      &quot;stderr&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;inline-links-suite&quot;,
+      &quot;source&quot;: &quot;FEATURE-INLINE-LINKS.md&quot;,
+      &quot;intent&quot;: &quot;The inline link, reference link, and image syntax passes its complete owned conformance scope.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;112 passed, 0 failed, 0 errored, 543 skipped\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;inline-links-boundaries&quot;,
+      &quot;source&quot;: &quot;FEATURE-INLINE-LINKS.md&quot;,
+      &quot;intent&quot;: &quot;The implementation preserves link and image destination, title, reference, and nesting behavior.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;&quot;,
+      &quot;stderr&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;render-blocks-suite&quot;,
+      &quot;source&quot;: &quot;FEATURE-RENDER-BLOCKS.md&quot;,
+      &quot;intent&quot;: &quot;Block-level HTML rendering passes the complete owned conformance scope.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;259 passed, 0 failed, 0 errored, 396 skipped\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;render-blocks-escaping&quot;,
+      &quot;source&quot;: &quot;FEATURE-RENDER-BLOCKS.md&quot;,
+      &quot;intent&quot;: &quot;Block rendering preserves structural nesting and escapes literal code content.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;&quot;,
+      &quot;stderr&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;render-inline-suite&quot;,
+      &quot;source&quot;: &quot;FEATURE-RENDER-INLINE.md&quot;,
+      &quot;intent&quot;: &quot;Inline HTML rendering passes the complete owned conformance scope.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;356 passed, 0 failed, 0 errored, 299 skipped\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;render-inline-escaping&quot;,
+      &quot;source&quot;: &quot;FEATURE-RENDER-INLINE.md&quot;,
+      &quot;intent&quot;: &quot;Inline rendering escapes text and code while preserving links, images, and raw HTML.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;&quot;,
+      &quot;stderr&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;render-normalization-suite&quot;,
+      &quot;source&quot;: &quot;FEATURE-RENDER-NORMALIZATION.md&quot;,
+      &quot;intent&quot;: &quot;URL, title, attribute, entity, and special-character rendering passes its complete conformance scope.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;169 passed, 0 failed, 0 errored, 486 skipped\n\n&quot;,
+      &quot;stderr&quot;: &quot;\n&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    },
+    {
+      &quot;check_id&quot;: &quot;render-normalization-specials&quot;,
+      &quot;source&quot;: &quot;FEATURE-RENDER-NORMALIZATION.md&quot;,
+      &quot;intent&quot;: &quot;Normalized output preserves URL escaping, title escaping, attribute semantics, and special characters.&quot;,
+      &quot;passed&quot;: true,
+      &quot;return_code&quot;: 0,
+      &quot;stdout&quot;: &quot;&quot;,
+      &quot;stderr&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;skipped&quot;: false,
+      &quot;interpreter&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3&quot;,
+      &quot;provisioning_result&quot;: &quot;not requested&quot;
+    }
+  ],
+  &quot;story_acceptance&quot;: {
+    &quot;passed&quot;: 32,
+    &quot;failed&quot;: 1,
+    &quot;unverified&quot;: 0,
+    &quot;total&quot;: 33,
+    &quot;product_defects&quot;: 1,
+    &quot;harness_defects&quot;: 0,
+    &quot;note&quot;: &quot;Reported, not gating. Story acceptance gates the release by construction through Manifest closure; the release gate&#x27;s only input is Sea Trials. UNVERIFIED assertions never reached the code under test and say nothing about the build.&quot;
+  },
+  &quot;execution_id&quot;: &quot;20260812.212050.628Z-bd17e6fd&quot;
+}
+</pre></article>
+</main>
+</body>
+</html>

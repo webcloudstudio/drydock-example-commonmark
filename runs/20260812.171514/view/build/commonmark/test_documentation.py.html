@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/test_documentation.py</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/test_documentation.py</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../build/commonmark/test_documentation.py">Raw file</a></div></header>
+<article class="doc"><pre>from pathlib import Path
+
+
+def test_readme_documents_standard_input_and_output() -&gt; None:
+    text = Path(&quot;README.md&quot;).read_text(encoding=&quot;utf-8&quot;).lower()
+
+    assert &quot;standard input&quot; in text or &quot;stdin&quot; in text
+    assert &quot;standard output&quot; in text or &quot;stdout&quot; in text
+
+
+def test_readme_documents_complete_suite_command() -&gt; None:
+    text = Path(&quot;README.md&quot;).read_text(encoding=&quot;utf-8&quot;)
+
+    assert &quot;sh full_test.sh&quot; in text
+</pre></article>
+</main>
+</body>
+</html>

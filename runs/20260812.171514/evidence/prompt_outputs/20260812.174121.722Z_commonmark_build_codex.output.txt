@@ -1,0 +1,26 @@
+<reusable-compact filename="spec.txt">
+CommonMark 0.31.2 conformance corpus covering block parsing, inline parsing, links, HTML, and rendering rules. The parser must resolve block structure before inline structure; reference definitions are collected globally and do not render.
+</reusable-compact>
+
+<reusable-compact filename="spec_tests.py">
+Conformance harness invokes `CMark.to_html`, optionally normalizes HTML, filters examples by section regex, and uses process exit status as the verdict. It accepts `--spec`, `--program`, `--pattern`, `--number`, and related diagnostic options.
+</reusable-compact>
+
+RESULT: FAILED
+
+FILES CHANGED:
+- parser/blocks.py
+- renderer/html.py
+- cmark.py
+- normalize.py
+- spec_tests.py
+- spec.txt
+
+SUMMARY:
+Primary leaf-block acceptance passes 105/105. Local tests pass 10/10. Secondary acceptance passes 80/82, with two remaining multiline/escaped reference-definition failures.
+
+BLOCKERS:
+- Escaped reference labels and reference definitions containing blank-line-separated multiline titles still fail conformance.
+
+FAILURE_SUMMARY: Secondary leaf-block conformance has two failing examples.
+FAILURE_DETAIL: The parser passes thematic breaks, headings, code blocks, HTML blocks, paragraphs, and most reference definitions, but examples 196 and 199 still fail for escaped labels and invalid multiline titles spanning blank lines. Further parser work is required.

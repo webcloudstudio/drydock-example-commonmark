@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-9.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-9.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-9.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 9 · Service (block-9)</h1>
+<ul><li>block type: block</li><li>date: 2026-08-12</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 57681</li><li>execution id: 20260812.183141.501Z-327e3cd9</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse emphasis and strong emphasis using delimiter rules. (inline-emphasis) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1263)</li><li>implements: FEATURE-INLINE-EMPHASIS.md (SP 414)</li><li>context: spec.txt (SP 51527)</li><li>context: spec_tests.py (SP 1609)</li><li>context: ARCHITECTURE_compact.md (SP 116)</li><li>stack: common_compact.md (SP 1179)</li><li>stack: python_compact.md (SP 1534)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>renderer/html.py</li><li>test_inline_emphasis.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: emphasis-delimiters (FEATURE-INLINE-EMPHASIS.md)</li></ul>
+<p>intent: The implementation passes delimiter-run, flanking, intraword, and modulo-three emphasis examples. return code: 1 stdout: Example 356 (lines 6369-6382) Emphasis and strong emphasis *$*alpha.</p>
+<p>*£*bravo.</p>
+<p>*€*charlie.</p>
+<p>*𞋿*delta.</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;*$<em>alpha.&lt;/p&gt;&lt;p&gt;</em>£<em>bravo.&lt;/p&gt;&lt;p&gt;</em>€<em>charlie.&lt;/p&gt;&lt;p&gt;</em>𞋿*delta.&lt;/p&gt; +&lt;p&gt;&lt;em&gt;$&lt;/em&gt;alpha.&lt;/p&gt;&lt;p&gt;&lt;em&gt;£&lt;/em&gt;bravo.&lt;/p&gt;&lt;p&gt;&lt;em&gt;€&lt;/em&gt;charlie.&lt;/p&gt;&lt;p&gt;&lt;em&gt;𞋿&lt;/em&gt;delta.&lt;/p&gt;</p>
+<p>Example 357 (lines 6387-6391) Emphasis and strong emphasis foo*bar*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo&lt;em&gt;bar&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;foo*bar*&lt;/p&gt;</p>
+<p>Example 358 (lines 6394-6398) Emphasis and strong emphasis 5*6*78</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;5&lt;em&gt;6&lt;/em&gt;78&lt;/p&gt; +&lt;p&gt;5*6*78&lt;/p&gt;</p>
+<p>Example 370 (lines 6511-6515) Emphasis and strong emphasis *(*foo)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;*(*foo)&lt;/p&gt; +&lt;p&gt;&lt;em&gt;(&lt;/em&gt;foo)&lt;/p&gt;</p>
+<p>Example 371 (lines 6521-6525) Emphasis and strong emphasis *(<em>foo</em>)*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;(&lt;em&gt;foo&lt;/em&gt;)&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;(&lt;/em&gt;foo*)*&lt;/p&gt;</p>
+<p>Example 374 (lines 6553-6557) Emphasis and strong emphasis _(_foo)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;_(_foo)&lt;/p&gt; +&lt;p&gt;&lt;em&gt;(&lt;/em&gt;foo)&lt;/p&gt;</p>
+<p>Example 375 (lines 6562-6566) Emphasis and strong emphasis _(_foo_)_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;(&lt;em&gt;foo&lt;/em&gt;)&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;(&lt;/em&gt;foo_)_&lt;/p&gt;</p>
+<p>Example 376 (lines 6571-6575) Emphasis and strong emphasis _foo_bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;_foo_bar&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;bar&lt;/p&gt;</p>
+<p>Example 377 (lines 6578-6582) Emphasis and strong emphasis _пристаням_стремятся</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;_пристаням_стремятся&lt;/p&gt; +&lt;p&gt;&lt;em&gt;пристаням&lt;/em&gt;стремятся&lt;/p&gt;</p>
+<p>Example 378 (lines 6585-6589) Emphasis and strong emphasis _foo_bar_baz_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo_bar_baz&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;bar_baz_&lt;/p&gt;</p>
+<p>Example 382 (lines 6626-6630) Emphasis and strong emphasis a<strong>&quot;foo&quot;</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;a<strong>&amp;quot;foo&amp;quot;</strong>&lt;/p&gt; +&lt;p&gt;a&lt;strong&gt;&amp;quot;foo&amp;quot;&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 387 (lines 6674-6678) Emphasis and strong emphasis a<strong>&quot;foo&quot;</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;a<strong>&amp;quot;foo&amp;quot;</strong>&lt;/p&gt; +&lt;p&gt;a&lt;strong&gt;&amp;quot;foo&amp;quot;&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 388 (lines 6683-6687) Emphasis and strong emphasis foo<strong>bar</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo<strong>bar</strong>&lt;/p&gt; +&lt;p&gt;foo&lt;strong&gt;bar&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 390 (lines 6697-6701) Emphasis and strong emphasis пристаням<strong>стремятся</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;пристаням<strong>стремятся</strong>&lt;/p&gt; +&lt;p&gt;пристаням&lt;strong&gt;стремятся&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 391 (lines 6704-6708) Emphasis and strong emphasis <strong>foo, __bar</strong>, baz__</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo, &lt;strong&gt;bar&lt;/strong&gt;, baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo, <strong>bar&lt;/strong&gt;, baz</strong>&lt;/p&gt;</p>
+<p>Example 393 (lines 6728-6732) Emphasis and strong emphasis **foo bar **</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;**foo bar **&lt;/p&gt; +&lt;p&gt;*&lt;em&gt;foo bar *&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 394 (lines 6741-6745) Emphasis and strong emphasis <strong>(</strong>foo)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<strong>(</strong>foo)&lt;/p&gt; +&lt;p&gt;*&lt;em&gt;(&lt;/em&gt;*foo)&lt;/p&gt;</p>
+<p>Example 402 (lines 6817-6821) Emphasis and strong emphasis <strong>foo</strong>bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<strong>foo</strong>bar&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo&lt;/strong&gt;bar&lt;/p&gt;</p>
+<p>Example 403 (lines 6824-6828) Emphasis and strong emphasis <strong>пристаням</strong>стремятся</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<strong>пристаням</strong>стремятся&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;пристаням&lt;/strong&gt;стремятся&lt;/p&gt;</p>
+<p>Example 404 (lines 6831-6835) Emphasis and strong emphasis <strong>foo</strong>bar<strong>baz</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo<strong>bar</strong>baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo&lt;/strong&gt;bar&lt;strong&gt;baz&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 409 (lines 6880-6884) Emphasis and strong emphasis _foo _bar_ baz_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo &lt;em&gt;bar&lt;/em&gt; baz&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo _bar&lt;/em&gt; baz_&lt;/p&gt;</p>
+<p>Example 410 (lines 6887-6891) Emphasis and strong emphasis __foo_ bar_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;&lt;em&gt;foo&lt;/em&gt; bar&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;__foo_ bar_&lt;/p&gt;</p>
+<p>Example 411 (lines 6894-6898) Emphasis and strong emphasis *foo *bar**</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo &lt;em&gt;bar&lt;/em&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo <em>bar&lt;/em&gt;</em>&lt;/p&gt;</p>
+<p>Example 414 (lines 6931-6935) Emphasis and strong emphasis *foo**bar*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo**bar&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;&lt;em&gt;bar&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 415 (lines 6944-6948) Emphasis and strong emphasis <strong><em>foo</strong> bar</em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;&lt;strong&gt;foo&lt;/strong&gt; bar&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;&lt;em&gt;foo&lt;/strong&gt; bar&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 418 (lines 6969-6973) Emphasis and strong emphasis foo<strong>*bar</strong>*baz</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo&lt;em&gt;&lt;strong&gt;bar&lt;/strong&gt;&lt;/em&gt;baz&lt;/p&gt; +&lt;p&gt;foo&lt;strong&gt;&lt;em&gt;bar&lt;/strong&gt;&lt;/em&gt;baz&lt;/p&gt;</p>
+<p>Example 419 (lines 6975-6979) Emphasis and strong emphasis foo<strong>*</strong><em>bar<strong></em></strong>****baz</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo&lt;strong&gt;&lt;strong&gt;&lt;strong&gt;bar&lt;/strong&gt;&lt;/strong&gt;&lt;/strong&gt;<strong><em>baz&lt;/p&gt; +&lt;p&gt;foo&lt;strong&gt;</em>&lt;em&gt;&lt;/strong&gt;bar&lt;strong&gt;&lt;/em&gt;&lt;em&gt;&lt;/strong&gt;&lt;/em&gt;</strong>baz&lt;/p&gt;</p>
+<p>Example 420 (lines 6984-6988) Emphasis and strong emphasis *foo <strong>bar <em>baz</em> bim</strong> bop*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo &lt;strong&gt;bar &lt;em&gt;baz&lt;/em&gt; bim&lt;/strong&gt; bop&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo &lt;strong&gt;bar <em>baz&lt;/em&gt; bim&lt;/strong&gt; bop</em>&lt;/p&gt;</p>
+<p>Example 427 (lines 7046-7050) Emphasis and strong emphasis <strong>foo __bar</strong> baz__</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;strong&gt;bar&lt;/strong&gt; baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo <strong>bar&lt;/strong&gt; baz</strong>&lt;/p&gt;</p>
+<p>Example 428 (lines 7053-7057) Emphasis and strong emphasis <strong>__foo</strong> bar__</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;&lt;strong&gt;foo&lt;/strong&gt; bar&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<strong>foo&lt;/strong&gt; bar</strong>&lt;/p&gt;</p>
+<p>Example 429 (lines 7060-7064) Emphasis and strong emphasis <strong>foo **bar</strong>**</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;strong&gt;bar&lt;/strong&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo <em>&lt;em&gt;bar&lt;/strong&gt;&lt;/em&gt;</em>&lt;/p&gt;</p>
+<p>Example 431 (lines 7074-7078) Emphasis and strong emphasis <strong>foo*bar*baz</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo&lt;em&gt;bar&lt;/em&gt;baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo*bar*baz&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 433 (lines 7088-7092) Emphasis and strong emphasis <strong>foo <em>bar</strong></em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;em&gt;bar&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo &lt;em&gt;bar&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 434 (lines 7097-7103) Emphasis and strong emphasis <strong>foo *bar **baz</strong> bim* bop**</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;em&gt;bar &lt;strong&gt;baz&lt;/strong&gt; bim&lt;/em&gt; bop&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo &lt;em&gt;bar <em>&lt;/em&gt;baz&lt;/strong&gt; bim</em> bop**&lt;/p&gt;</p>
+<p>Example 440 (lines 7146-7150) Emphasis and strong emphasis foo <em>_</em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;em&gt;_&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;foo <em>_</em>&lt;/p&gt;</p>
+<p>Example 443 (lines 7167-7171) Emphasis and strong emphasis foo <strong>_</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;strong&gt;_&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;foo <strong>_</strong>&lt;/p&gt;</p>
+<p>Example 446 (lines 7192-7196) Emphasis and strong emphasis <strong>*foo</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;*&lt;strong&gt;foo&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;*foo&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 452 (lines 7237-7241) Emphasis and strong emphasis foo _*_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;em&gt;*&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;foo _*_&lt;/p&gt;</p>
+<p>Example 455 (lines 7258-7262) Emphasis and strong emphasis foo <strong>*</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;strong&gt;<em>&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;foo <strong></em></strong>&lt;/p&gt;</p>
+<p>Example 456 (lines 7265-7269) Emphasis and strong emphasis __foo_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;_&lt;em&gt;foo&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;__foo_&lt;/p&gt;</p>
+<p>Example 458 (lines 7283-7287) Emphasis and strong emphasis <strong>_foo</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;_&lt;strong&gt;foo&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;_foo&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 459 (lines 7290-7294) Emphasis and strong emphasis ____foo_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<strong>_&lt;em&gt;foo&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;</strong>__foo_&lt;/p&gt;</p>
+<p>Example 463 (lines 7321-7325) Emphasis and strong emphasis <em>_foo_</em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;&lt;em&gt;foo&lt;/em&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;<em>&lt;em&gt;foo&lt;/em&gt;</em>&lt;/p&gt;</p>
+<p>Example 465 (lines 7335-7339) Emphasis and strong emphasis _*foo*_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;&lt;em&gt;foo&lt;/em&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;_*foo*_&lt;/p&gt;</p>
+<p>Example 466 (lines 7345-7349) Emphasis and strong emphasis <strong>**foo</strong>**</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<em>&lt;em&gt;foo&lt;/strong&gt;&lt;/em&gt;</em>&lt;/p&gt;</p>
+<p>Example 467 (lines 7352-7356) Emphasis and strong emphasis <strong>__foo</strong>__</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<strong>foo&lt;/strong&gt;</strong>&lt;/p&gt;</p>
+<p>Example 468 (lines 7363-7367) Emphasis and strong emphasis <strong>*</strong><em>foo<strong></em></strong>*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;&lt;strong&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/strong&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<em>&lt;em&gt;&lt;/strong&gt;foo&lt;strong&gt;&lt;/em&gt;</em>&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 469 (lines 7372-7376) Emphasis and strong emphasis <strong><em>foo</strong></em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;&lt;em&gt;foo&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 470 (lines 7379-7383) Emphasis and strong emphasis <strong>_</strong>foo<strong>_</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;&lt;strong&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<strong>_foo&lt;/strong&gt;</strong>_&lt;/p&gt;</p>
+<p>Example 473 (lines 7404-7408) Emphasis and strong emphasis <strong>foo **bar baz</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;**foo &lt;strong&gt;bar baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo **bar baz&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 474 (lines 7411-7415) Emphasis and strong emphasis *foo <em>bar baz</em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;*foo &lt;em&gt;bar baz&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo *bar baz&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 475 (lines 7420-7424) Emphasis and strong emphasis <em><a href="/url">bar</em></a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>&lt;a href=&quot;/url&quot;&gt;bar</em>&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;&lt;a href=&quot;/url&quot;&gt;bar&lt;/em&gt;&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 476 (lines 7427-7431) Emphasis and strong emphasis _foo <a href="/url">bar_</a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;_foo &lt;a href=&quot;/url&quot;&gt;bar_&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo &lt;a href=&quot;/url&quot;&gt;bar&lt;/em&gt;&lt;/a&gt;&lt;/p&gt;</p>
+<p>79 passed, 53 failed, 0 errored, 523 skipped stderr: Traceback (most recent call last): File &quot;emphasis-delimiters.py&quot;, line 10, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: emphasis-nesting (FEATURE-INLINE-EMPHASIS.md)</li></ul>
+<p>intent: The implementation passes nested, overlapping, precedence, and unmatched delimiter examples. return code: 1 stdout: Example 356 (lines 6369-6382) Emphasis and strong emphasis *$*alpha.</p>
+<p>*£*bravo.</p>
+<p>*€*charlie.</p>
+<p>*𞋿*delta.</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;*$<em>alpha.&lt;/p&gt;&lt;p&gt;</em>£<em>bravo.&lt;/p&gt;&lt;p&gt;</em>€<em>charlie.&lt;/p&gt;&lt;p&gt;</em>𞋿*delta.&lt;/p&gt; +&lt;p&gt;&lt;em&gt;$&lt;/em&gt;alpha.&lt;/p&gt;&lt;p&gt;&lt;em&gt;£&lt;/em&gt;bravo.&lt;/p&gt;&lt;p&gt;&lt;em&gt;€&lt;/em&gt;charlie.&lt;/p&gt;&lt;p&gt;&lt;em&gt;𞋿&lt;/em&gt;delta.&lt;/p&gt;</p>
+<p>Example 357 (lines 6387-6391) Emphasis and strong emphasis foo*bar*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo&lt;em&gt;bar&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;foo*bar*&lt;/p&gt;</p>
+<p>Example 358 (lines 6394-6398) Emphasis and strong emphasis 5*6*78</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;5&lt;em&gt;6&lt;/em&gt;78&lt;/p&gt; +&lt;p&gt;5*6*78&lt;/p&gt;</p>
+<p>Example 370 (lines 6511-6515) Emphasis and strong emphasis *(*foo)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;*(*foo)&lt;/p&gt; +&lt;p&gt;&lt;em&gt;(&lt;/em&gt;foo)&lt;/p&gt;</p>
+<p>Example 371 (lines 6521-6525) Emphasis and strong emphasis *(<em>foo</em>)*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;(&lt;em&gt;foo&lt;/em&gt;)&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;(&lt;/em&gt;foo*)*&lt;/p&gt;</p>
+<p>Example 374 (lines 6553-6557) Emphasis and strong emphasis _(_foo)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;_(_foo)&lt;/p&gt; +&lt;p&gt;&lt;em&gt;(&lt;/em&gt;foo)&lt;/p&gt;</p>
+<p>Example 375 (lines 6562-6566) Emphasis and strong emphasis _(_foo_)_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;(&lt;em&gt;foo&lt;/em&gt;)&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;(&lt;/em&gt;foo_)_&lt;/p&gt;</p>
+<p>Example 376 (lines 6571-6575) Emphasis and strong emphasis _foo_bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;_foo_bar&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;bar&lt;/p&gt;</p>
+<p>Example 377 (lines 6578-6582) Emphasis and strong emphasis _пристаням_стремятся</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;_пристаням_стремятся&lt;/p&gt; +&lt;p&gt;&lt;em&gt;пристаням&lt;/em&gt;стремятся&lt;/p&gt;</p>
+<p>Example 378 (lines 6585-6589) Emphasis and strong emphasis _foo_bar_baz_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo_bar_baz&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;bar_baz_&lt;/p&gt;</p>
+<p>Example 382 (lines 6626-6630) Emphasis and strong emphasis a<strong>&quot;foo&quot;</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;a<strong>&amp;quot;foo&amp;quot;</strong>&lt;/p&gt; +&lt;p&gt;a&lt;strong&gt;&amp;quot;foo&amp;quot;&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 387 (lines 6674-6678) Emphasis and strong emphasis a<strong>&quot;foo&quot;</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;a<strong>&amp;quot;foo&amp;quot;</strong>&lt;/p&gt; +&lt;p&gt;a&lt;strong&gt;&amp;quot;foo&amp;quot;&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 388 (lines 6683-6687) Emphasis and strong emphasis foo<strong>bar</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo<strong>bar</strong>&lt;/p&gt; +&lt;p&gt;foo&lt;strong&gt;bar&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 390 (lines 6697-6701) Emphasis and strong emphasis пристаням<strong>стремятся</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;пристаням<strong>стремятся</strong>&lt;/p&gt; +&lt;p&gt;пристаням&lt;strong&gt;стремятся&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 391 (lines 6704-6708) Emphasis and strong emphasis <strong>foo, __bar</strong>, baz__</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo, &lt;strong&gt;bar&lt;/strong&gt;, baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo, <strong>bar&lt;/strong&gt;, baz</strong>&lt;/p&gt;</p>
+<p>Example 393 (lines 6728-6732) Emphasis and strong emphasis **foo bar **</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;**foo bar **&lt;/p&gt; +&lt;p&gt;*&lt;em&gt;foo bar *&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 394 (lines 6741-6745) Emphasis and strong emphasis <strong>(</strong>foo)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<strong>(</strong>foo)&lt;/p&gt; +&lt;p&gt;*&lt;em&gt;(&lt;/em&gt;*foo)&lt;/p&gt;</p>
+<p>Example 402 (lines 6817-6821) Emphasis and strong emphasis <strong>foo</strong>bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<strong>foo</strong>bar&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo&lt;/strong&gt;bar&lt;/p&gt;</p>
+<p>Example 403 (lines 6824-6828) Emphasis and strong emphasis <strong>пристаням</strong>стремятся</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<strong>пристаням</strong>стремятся&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;пристаням&lt;/strong&gt;стремятся&lt;/p&gt;</p>
+<p>Example 404 (lines 6831-6835) Emphasis and strong emphasis <strong>foo</strong>bar<strong>baz</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo<strong>bar</strong>baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo&lt;/strong&gt;bar&lt;strong&gt;baz&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 409 (lines 6880-6884) Emphasis and strong emphasis _foo _bar_ baz_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo &lt;em&gt;bar&lt;/em&gt; baz&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo _bar&lt;/em&gt; baz_&lt;/p&gt;</p>
+<p>Example 410 (lines 6887-6891) Emphasis and strong emphasis __foo_ bar_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;&lt;em&gt;foo&lt;/em&gt; bar&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;__foo_ bar_&lt;/p&gt;</p>
+<p>Example 411 (lines 6894-6898) Emphasis and strong emphasis *foo *bar**</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo &lt;em&gt;bar&lt;/em&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo <em>bar&lt;/em&gt;</em>&lt;/p&gt;</p>
+<p>Example 414 (lines 6931-6935) Emphasis and strong emphasis *foo**bar*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo**bar&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;&lt;em&gt;bar&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 415 (lines 6944-6948) Emphasis and strong emphasis <strong><em>foo</strong> bar</em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;&lt;strong&gt;foo&lt;/strong&gt; bar&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;&lt;em&gt;foo&lt;/strong&gt; bar&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 418 (lines 6969-6973) Emphasis and strong emphasis foo<strong>*bar</strong>*baz</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo&lt;em&gt;&lt;strong&gt;bar&lt;/strong&gt;&lt;/em&gt;baz&lt;/p&gt; +&lt;p&gt;foo&lt;strong&gt;&lt;em&gt;bar&lt;/strong&gt;&lt;/em&gt;baz&lt;/p&gt;</p>
+<p>Example 419 (lines 6975-6979) Emphasis and strong emphasis foo<strong>*</strong><em>bar<strong></em></strong>****baz</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo&lt;strong&gt;&lt;strong&gt;&lt;strong&gt;bar&lt;/strong&gt;&lt;/strong&gt;&lt;/strong&gt;<strong><em>baz&lt;/p&gt; +&lt;p&gt;foo&lt;strong&gt;</em>&lt;em&gt;&lt;/strong&gt;bar&lt;strong&gt;&lt;/em&gt;&lt;em&gt;&lt;/strong&gt;&lt;/em&gt;</strong>baz&lt;/p&gt;</p>
+<p>Example 420 (lines 6984-6988) Emphasis and strong emphasis *foo <strong>bar <em>baz</em> bim</strong> bop*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo &lt;strong&gt;bar &lt;em&gt;baz&lt;/em&gt; bim&lt;/strong&gt; bop&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo &lt;strong&gt;bar <em>baz&lt;/em&gt; bim&lt;/strong&gt; bop</em>&lt;/p&gt;</p>
+<p>Example 427 (lines 7046-7050) Emphasis and strong emphasis <strong>foo __bar</strong> baz__</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;strong&gt;bar&lt;/strong&gt; baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo <strong>bar&lt;/strong&gt; baz</strong>&lt;/p&gt;</p>
+<p>Example 428 (lines 7053-7057) Emphasis and strong emphasis <strong>__foo</strong> bar__</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;&lt;strong&gt;foo&lt;/strong&gt; bar&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<strong>foo&lt;/strong&gt; bar</strong>&lt;/p&gt;</p>
+<p>Example 429 (lines 7060-7064) Emphasis and strong emphasis <strong>foo **bar</strong>**</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;strong&gt;bar&lt;/strong&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo <em>&lt;em&gt;bar&lt;/strong&gt;&lt;/em&gt;</em>&lt;/p&gt;</p>
+<p>Example 431 (lines 7074-7078) Emphasis and strong emphasis <strong>foo*bar*baz</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo&lt;em&gt;bar&lt;/em&gt;baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo*bar*baz&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 433 (lines 7088-7092) Emphasis and strong emphasis <strong>foo <em>bar</strong></em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;em&gt;bar&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo &lt;em&gt;bar&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 434 (lines 7097-7103) Emphasis and strong emphasis <strong>foo *bar **baz</strong> bim* bop**</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;em&gt;bar &lt;strong&gt;baz&lt;/strong&gt; bim&lt;/em&gt; bop&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo &lt;em&gt;bar <em>&lt;/em&gt;baz&lt;/strong&gt; bim</em> bop**&lt;/p&gt;</p>
+<p>Example 440 (lines 7146-7150) Emphasis and strong emphasis foo <em>_</em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;em&gt;_&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;foo <em>_</em>&lt;/p&gt;</p>
+<p>Example 443 (lines 7167-7171) Emphasis and strong emphasis foo <strong>_</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;strong&gt;_&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;foo <strong>_</strong>&lt;/p&gt;</p>
+<p>Example 446 (lines 7192-7196) Emphasis and strong emphasis <strong>*foo</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;*&lt;strong&gt;foo&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;*foo&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 452 (lines 7237-7241) Emphasis and strong emphasis foo _*_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;em&gt;*&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;foo _*_&lt;/p&gt;</p>
+<p>Example 455 (lines 7258-7262) Emphasis and strong emphasis foo <strong>*</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;strong&gt;<em>&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;foo <strong></em></strong>&lt;/p&gt;</p>
+<p>Example 456 (lines 7265-7269) Emphasis and strong emphasis __foo_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;_&lt;em&gt;foo&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;__foo_&lt;/p&gt;</p>
+<p>Example 458 (lines 7283-7287) Emphasis and strong emphasis <strong>_foo</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;_&lt;strong&gt;foo&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;_foo&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 459 (lines 7290-7294) Emphasis and strong emphasis ____foo_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<strong>_&lt;em&gt;foo&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;</strong>__foo_&lt;/p&gt;</p>
+<p>Example 463 (lines 7321-7325) Emphasis and strong emphasis <em>_foo_</em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;&lt;em&gt;foo&lt;/em&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;<em>&lt;em&gt;foo&lt;/em&gt;</em>&lt;/p&gt;</p>
+<p>Example 465 (lines 7335-7339) Emphasis and strong emphasis _*foo*_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;&lt;em&gt;foo&lt;/em&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;_*foo*_&lt;/p&gt;</p>
+<p>Example 466 (lines 7345-7349) Emphasis and strong emphasis <strong>**foo</strong>**</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<em>&lt;em&gt;foo&lt;/strong&gt;&lt;/em&gt;</em>&lt;/p&gt;</p>
+<p>Example 467 (lines 7352-7356) Emphasis and strong emphasis <strong>__foo</strong>__</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<strong>foo&lt;/strong&gt;</strong>&lt;/p&gt;</p>
+<p>Example 468 (lines 7363-7367) Emphasis and strong emphasis <strong>*</strong><em>foo<strong></em></strong>*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;&lt;strong&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/strong&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<em>&lt;em&gt;&lt;/strong&gt;foo&lt;strong&gt;&lt;/em&gt;</em>&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 469 (lines 7372-7376) Emphasis and strong emphasis <strong><em>foo</strong></em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;&lt;em&gt;foo&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 470 (lines 7379-7383) Emphasis and strong emphasis <strong>_</strong>foo<strong>_</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;&lt;strong&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<strong>_foo&lt;/strong&gt;</strong>_&lt;/p&gt;</p>
+<p>Example 473 (lines 7404-7408) Emphasis and strong emphasis <strong>foo **bar baz</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;**foo &lt;strong&gt;bar baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo **bar baz&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 474 (lines 7411-7415) Emphasis and strong emphasis *foo <em>bar baz</em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;*foo &lt;em&gt;bar baz&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo *bar baz&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 475 (lines 7420-7424) Emphasis and strong emphasis <em><a href="/url">bar</em></a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>&lt;a href=&quot;/url&quot;&gt;bar</em>&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;&lt;a href=&quot;/url&quot;&gt;bar&lt;/em&gt;&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 476 (lines 7427-7431) Emphasis and strong emphasis _foo <a href="/url">bar_</a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;_foo &lt;a href=&quot;/url&quot;&gt;bar_&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo &lt;a href=&quot;/url&quot;&gt;bar&lt;/em&gt;&lt;/a&gt;&lt;/p&gt;</p>
+<p>79 passed, 53 failed, 0 errored, 523 skipped stderr: Traceback (most recent call last): File &quot;emphasis-nesting.py&quot;, line 10, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: emphasis-delimiters (FEATURE-INLINE-EMPHASIS.md)</li></ul>
+<p>intent: The implementation passes delimiter-run, flanking, intraword, and modulo-three emphasis examples. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: 132 passed, 0 failed, 0 errored, 523 skipped</p>
+<ul><li>PASS: emphasis-nesting (FEATURE-INLINE-EMPHASIS.md)</li></ul>
+<p>intent: The implementation passes nested, overlapping, precedence, and unmatched delimiter examples. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: 132 passed, 0 failed, 0 errored, 523 skipped</p>
+<h2>Build summary</h2>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>renderer/html.py</li><li>test_inline_emphasis.py</li></ul>
+<p>SUMMARY: Implemented delimiter-run emphasis and strong-emphasis parsing, including nesting, flanking, intraword rules, modulo-three constraints, and overlap precedence. Focused suite passes: 132/132 examples; regression tests pass.</p>
+<p>BLOCKERS:</p>
+<ul><li>Full suite still has pre-existing block-parser failures unrelated to emphasis.</li></ul></article>
+</main>
+</body>
+</html>

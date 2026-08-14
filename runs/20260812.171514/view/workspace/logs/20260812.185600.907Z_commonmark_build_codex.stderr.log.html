@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/logs/20260812.185600.907Z_commonmark_build_codex.stderr.log</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/logs/20260812.185600.907Z_commonmark_build_codex.stderr.log</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../workspace/logs/20260812.185600.907Z_commonmark_build_codex.stderr.log">Raw file</a></div></header>
+<article class="doc"><pre>2026-08-12T18:57:42.283510Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/build/commonmark/renderer/html.py:
+        if not image and cursor and text[cursor - 1] == &quot;\\&quot;):
+2026-08-12T18:58:12.344607Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/build/commonmark/renderer/html.py:
+    for label, (url, title) in refs.items() if allow_links else ():
+        token = f&quot;\ue100{len(reference_tokens)}\ue101&quot;
+        attr = f&#x27; title=&quot;{escape(_decode_references(title), quote=True)}&quot;&#x27; if title is not None else &quot;&quot;
+        href = escape(quote(_decode_references(unescape(url)), safe=&quot;/%#?:@-._~!$&amp;&#x27;()*+,;=&quot;, quote=True)
+        pattern = re.compile(r&quot;\[((?:\\.|[^\]])+)\](?![(/\[])&quot;, re.I)
+
+        def replace_shortcut(match: re.Match[str], *, expected: str = label, html: str = f&#x27;&lt;a href=&quot;{href}&quot;{attr}&#x27;&gt;&#x27;) -&gt; str:
+            raw_label = re.sub(r&quot;\\([!\&quot;#$%&amp;&#x27;()*+,\-./:;&lt;=&gt;?@\[\\\]^_`{|}~])&quot;, r&quot;\1&quot;, match.group(1))
+            if raw_label.casefold().strip() != expected:
+                return match.group(0)
+            reference_tokens[token] = html + _inline(_restore_references(match.group(1), reference_tokens), refs) + &quot;&lt;/a&gt;&quot;
+            return token
+
+        text = pattern.sub(replace_shortcut, text)
+2026-08-12T18:58:35.252773Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/build/commonmark/renderer/html.py:
+    if allow_links:
+        result = re.sub(r&quot;!\[([^\]]*)\]\(([^)\s]+)(?:\s+(?:[\&quot;&#x27;]|&amp;quot;)(.*?)(?:[\&quot;&#x27;]|&amp;quot;))?\)&quot;, lambda m: f&#x27;&lt;img src=&quot;{escape(quote(_decode_references(unescape(restore(m.group(2)))), safe=&quot;/%#?:@-._~!$&amp;\&#x27;()*+,;=&quot;, quote=True)}&quot; alt=&quot;{escape(re.sub(r&quot;&lt;[^&gt;]+&gt;&quot;, &quot;&quot;, restore(m.group(1))), quote=True)}&quot;&#x27; + (f&#x27; title=&quot;{escape(_decode_references(unescape(restore(m.group(3)))), quote=True)}&quot;&#x27; if m.group(3) else &#x27;&#x27;) + &quot; /&gt;&quot;, result)
+        result = re.sub(r&quot;\[([^\]\n]+)\]\(([^)\s]+)(?:\s+(?:[\&quot;&#x27;]|&amp;quot;)(.*?)(?:[\&quot;&#x27;]|&amp;quot;))?\)&quot;, lambda m: f&#x27;&lt;a href=&quot;{escape(quote(_decode_references(unescape(restore(m.group(2)))), safe=&quot;/%#?:@-._~!$&amp;\&#x27;()*+,;=&quot;, quote=True)}&quot;&#x27; + (f&#x27; title=&quot;{escape(_decode_references(unescape(restore(m.group(3)))), quote=True)}&quot;&#x27; if m.group(3) else &#x27;&#x27;) + f&#x27;&gt;{_inline(restore(m.group(1)), refs)}&lt;/a&gt;&#x27;, result)
+</pre></article>
+</main>
+</body>
+</html>

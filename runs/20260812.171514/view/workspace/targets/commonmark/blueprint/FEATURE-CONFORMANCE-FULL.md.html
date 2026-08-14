@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-CONFORMANCE-FULL.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-CONFORMANCE-FULL.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-CONFORMANCE-FULL.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Complete Conformance Verification</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260812 V1</td></tr><tr><td>Description</td><td>Runs the complete supplied CommonMark conformance suite through a POSIX wrapper.</td></tr><tr><td>Depends On</td><td>FEATURE-CONFORMANCE-ASSETS.md, FEATURE-RENDER-NORMALIZATION.md</td></tr><tr><td>Provides</td><td>full_test.sh, complete conformance verification</td></tr><tr><td>Consumes</td><td>parser executable, staged conformance assets</td></tr></tbody></table></div>
+<h2>Workflow</h2>
+<p><code>full_test.sh</code> is a repository-local POSIX shell wrapper. It invokes the staged <code>spec_tests.py</code> harness with <code>spec.txt</code>, <code>cmark.py</code>, and <code>normalize.py</code> available at their required runtime paths. It runs the complete suite without a section selector or test-number filter.</p>
+<p>The wrapper preserves the harness exit status. A zero exit status means the complete suite passed. A nonzero exit status means verification failed.</p>
+<h2>Programmatic Acceptance</h2>
+<p>Requires: executable=sh; scope=test</p>
+<p>=== AC complete-conformance-suite ===<br>Intent: The complete supplied CommonMark conformance suite passes through the required wrapper.<br>Suite: full<br>Sea Trials: st-001</p>
+<p>import subprocess</p>
+<p>result = subprocess.run( [&quot;sh&quot;, &quot;full_test.sh&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=<strong>import</strong>(&quot;sys&quot;).stderr) assert result.returncode == 0 === END AC complete-conformance-suite ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li><code>full_test.sh</code> runs the supplied suite without filtering.</li><li>The suite runner&#x27;s exit status is the sole acceptance verdict.</li><li>The wrapper does not parse or hardcode the suite tally.</li></ul></article>
+</main>
+</body>
+</html>

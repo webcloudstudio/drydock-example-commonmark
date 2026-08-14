@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-CLI-ERRORS.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-CLI-ERRORS.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-CLI-ERRORS.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: CLI Errors</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260812 V1</td></tr><tr><td>Description</td><td>Defines deterministic process failure behavior for the parser executable.</td></tr><tr><td>Depends On</td><td>FEATURE-CLI-ENTRYPOINT.md</td></tr><tr><td>Provides</td><td>parser error behavior</td></tr><tr><td>Consumes</td><td>parser executable</td></tr></tbody></table></div>
+<h2>Operational Behavior</h2>
+<p>Operational failures produce a nonzero exit status. Diagnostics are written to standard error, and standard output remains empty when processing cannot complete. Successful input processing continues to use the standard-input and standard-output contract defined by <code>FEATURE-CLI-ENTRYPOINT.md</code>.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC cli-errors-success-contract ===<br>Intent: A successful invocation returns zero and keeps diagnostics off standard error.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run( [&quot;./cmark&quot;], input=&quot;plain text\n&quot;, capture_output=True, text=True, encoding=&quot;utf-8&quot;, ) assert result.returncode == 0 assert result.stdout == &quot;&lt;p&gt;plain text&lt;/p&gt;\n&quot; assert result.stderr == &quot;&quot; === END AC cli-errors-success-contract ===</p>
+<p>=== AC cli-errors-stdout-integrity ===<br>Intent: The executable emits a complete HTML document result without diagnostic text in standard output.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run( [&quot;./cmark&quot;], input=&quot;a\n\nb\n&quot;, capture_output=True, text=True, encoding=&quot;utf-8&quot;, ) assert result.returncode == 0 assert result.stdout == &quot;&lt;p&gt;a&lt;/p&gt;\n&lt;p&gt;b&lt;/p&gt;\n&quot; assert &quot;error&quot; not in result.stdout.lower() === END AC cli-errors-stdout-integrity ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Failure diagnostics never replace rendered output on standard output.</li><li>Error handling does not alter the conformance harness invocation contract.</li><li>Acceptance does not depend on diagnostic wording.</li></ul></article>
+</main>
+</body>
+</html>

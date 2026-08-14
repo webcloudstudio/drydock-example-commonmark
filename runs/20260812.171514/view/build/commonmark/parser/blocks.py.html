@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/parser/blocks.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/parser/blocks.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/parser/blocks.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Deterministic CommonMark leaf-block parsing.&quot;&quot;&quot;
+from dataclasses import dataclass
+import re
+from html.entities import html5
+
+@dataclass(frozen=True)
+class Block:
+    kind: str
+    text: str = &quot;&quot;
+    level: int = 0
+    info: str = &quot;&quot;
+    items: tuple[tuple[str, bool], ...] = ()
+    tight: bool = True
+
+@dataclass(frozen=True)
+class Document:
+    blocks: tuple[Block, ...]
+    link_references: dict[str, tuple[str, str | None]]
+
+_FENCE = re.compile(r&quot;^( {0,3})(`{3,}|~{3,})([^\r\n]*)$&quot;)
+_ATX = re.compile(r&quot;^( {0,3})(#{1,6})(?:[ \t]+(.*?)\s*|[ \t]*)$&quot;)
+_REF = re.compile(r&quot;^ {0,3}\[((?:\\.|[^\]])+)\]:[ \t]*(?:&lt;([^&gt;\r\n]*)&gt;|([^&lt;\s][^\s]*))(?:[ \t]+(?:\&quot;((?:\\.|[^\&quot;\\])*)\&quot;|&#x27;((?:\\.|[^&#x27;\\])*)&#x27;|\(((?:\\.|[^)\\])*)\)))?[ \t]*$&quot;)
+
+
+def _expand_structural_indent(line: str) -&gt; str:
+    &quot;&quot;&quot;Expand tabs used before block content, retaining tabs in text.&quot;&quot;&quot;
+    column = 0
+    index = 0
+    while index &lt; len(line) and line[index] in &quot; \t&quot;:
+        if line[index] == &quot;\t&quot;:
+            width = 4 - (column % 4)
+            column += width
+        else:
+            column += 1
+        index += 1
+    return &quot; &quot; * column + line[index:]
+
+
+def _indent_width(text: str, start: int = 0) -&gt; int:
+    column = start
+    for character in text:
+        if character == &quot;\t&quot;:
+            column += 4 - (column % 4)
+        else:
+            column += 1
+    return column - start
+
+
+def _quote_content(line: str) -&gt; str:
+    match = re.match(r&quot;^( {0,3})&gt;(.*)$&quot;, line)
+    if not match:
+        return line
+    indent, remainder = match.groups()
+    if remainder.startswith(&quot; &quot;):
+        return remainder[1:]
+    if remainder.startswith(&quot;\t&quot;):
+        width = _indent_width(remainder[: len(remainder) - len(remainder.lstrip(&quot; \t&quot;))], len(indent) + 1)
+        leading = remainder[: len(remainder) - len(remainder.lstrip(&quot; \t&quot;))]
+        return &quot; &quot; * (width - 1) + remainder[len(leading):]
+    return remainder
+
+def _thematic(line: str) -&gt; bool:
+    s = line.lstrip(&quot; &quot;)
+    if len(line) - len(s) &gt; 3 or not s: return False
+    s = s.rstrip(&quot; \t&quot;)
+    chars = s.replace(&quot; &quot;, &quot;&quot;).replace(&quot;\t&quot;, &quot;&quot;)
+    return bool(chars) and chars[0] in &quot;-_ *&quot; and chars[0] != &quot; &quot; and len(chars) &gt;= 3 and all(c == chars[0] for c in chars)
+
+def _label(label: str) -&gt; str:
+    return &quot; &quot;.join(label.casefold().split())
+
+def _unescape(value: str) -&gt; str:
+    return re.sub(r&quot;\\([!\&quot;#$%&amp;&#x27;()*+,\-./:;&lt;=&gt;?@\[\\\]^_`{|}~])&quot;, r&quot;\1&quot;, value)
+
+def _decode_info(value: str) -&gt; str:
+    def replace(match: re.Match[str]) -&gt; str:
+        token = match.group(0)
+        if token.startswith(&quot;&amp;#x&quot;) or token.startswith(&quot;&amp;#X&quot;):
+            return chr(int(token[3:-1], 16))
+        if token.startswith(&quot;&amp;#&quot;):
+            return chr(int(token[2:-1], 10))
+        return html5.get(token[1:], token)
+    return re.sub(r&quot;&amp;(?:#[0-9]{1,7}|#x[0-9A-Fa-f]{1,6}|#X[0-9A-Fa-f]{1,6}|[A-Za-z][A-Za-z0-9]{1,31});&quot;, replace, value)
+
+
+def _quote_lazy_continuation(line: str, inner: list[str]) -&gt; bool:
+    &quot;&quot;&quot;Return whether an unmarked line can lazily continue a quote paragraph.&quot;&quot;&quot;
+    if not inner or not inner[-1].strip():
+        return False
+    if re.match(r&quot;^ {0,3}(?:`{3,}|~{3,})&quot;, inner[-1]):
+        return False
+    if re.match(r&quot;^ {0,3}&gt;&quot;, line):
+        return False
+    if _thematic(line):
+        return False
+    if re.match(r&quot;^ {0,3}(?:`{3,}|~{3,})[^`\n]*$&quot;, line):
+        return False
+    if re.match(r&quot;^ {0,3}#{1,6}(?:[ \t]|$)&quot;, line):
+        return False
+    if re.match(r&quot;^ {0,3}(?:[-+*](?:[ \t]|$)|\d{1,9}[.)](?:[ \t]|$))&quot;, line):
+        return False
+    if re.match(r&quot;^ {0,3}&lt;/?(?:address|article|aside|base|blockquote|body|div|h[1-6]|head|header|hr|html|li|main|nav|ol|p|section|table|td|th|title|tr|ul)(?:[ \t]|&gt;|/&gt;)&quot;, line, re.I):
+        return False
+    # Four spaces can only be lazy text when they could not begin an
+    # indented code block in the quote&#x27;s current paragraph.  A list marker
+    # at that indentation is the CommonMark example of this case.
+    if len(line) - len(line.lstrip(&quot; &quot;)) &gt;= 4:
+        return bool(re.match(r&quot;^ {4}(?:[-+*](?:[ \t]|$)|\d{1,9}[.)](?:[ \t]|$))&quot;, line))
+    return True
+
+def parse_blocks(markdown: str) -&gt; Document:
+    lines = markdown.replace(&quot;\r\n&quot;, &quot;\n&quot;).replace(&quot;\r&quot;, &quot;\n&quot;).split(&quot;\n&quot;)
+    if lines and lines[-1] == &quot;&quot;: lines.pop()
+    source_lines = lines[:]
+    lines = [_expand_structural_indent(line) for line in lines]
+    blocks: list[Block] = []; refs: dict[str, tuple[str, str | None]] = {}; paragraph: list[str] = []; i = 0
+    def flush() -&gt; None:
+        nonlocal paragraph
+        if paragraph:
+            blocks.append(Block(&quot;paragraph&quot;, &quot;\n&quot;.join(x.lstrip(&quot; \t&quot;) if n == 0 else x for n, x in enumerate(paragraph)).rstrip(&quot; \t&quot;))); paragraph = []
+    while i &lt; len(lines):
+        line = lines[i]
+        if not line.strip(): flush(); i += 1; continue
+        if re.match(r&quot;^ {0,3}&gt;&quot;, line):
+            flush(); inner = []
+            raw_quote = []
+            while i &lt; len(lines):
+                if re.match(r&quot;^ {0,3}&gt;&quot;, lines[i]):
+                    raw_quote.append(lines[i]); inner.append(_expand_structural_indent(_quote_content(lines[i]))); i += 1
+                    continue
+                if not lines[i].strip() or not _quote_lazy_continuation(lines[i], inner):
+                    break
+                raw_quote.append(lines[i]); inner.append(re.sub(r&quot;^ {0,3}&gt;[ \t]?&quot;, &quot;&quot;, lines[i])); i += 1
+            for n, raw in enumerate(raw_quote):
+                if not re.match(r&quot;^ {0,3}&gt;&quot;, raw) and re.match(r&quot;^ {0,3}(=+|-+)[ \t]*$&quot;, inner[n]):
+                    inner[n] = &quot;\\&quot; + inner[n].lstrip()
+            nested = parse_blocks(&quot;\n&quot;.join(inner)); refs.update(nested.link_references); blocks.append(Block(&quot;blockquote&quot;, &quot;\n&quot;.join(inner))); continue
+        # A setext underline has precedence over a thematic break when it
+        # follows paragraph text.
+        if paragraph and re.match(r&quot;^ {0,3}(=+|-+)[ \t]*$&quot;, line):
+            blocks.append(Block(&quot;heading&quot;, &quot;\n&quot;.join(paragraph).strip(&quot; \t&quot;), 1 if line.lstrip().startswith(&quot;=&quot;) else 2)); paragraph = []; i += 1; continue
+        if _thematic(line): flush(); blocks.append(Block(&quot;thematic_break&quot;)); i += 1; continue
+        list_match = re.match(r&quot;^( {0,3})([-+*])([ \t]+|$)(.*)$&quot;, line) or re.match(r&quot;^( {0,3})(\d{1,9})([.)])([ \t]+|$)(.*)$&quot;, line)
+        list_content = (list_match.group(5) if list_match.group(2).isdigit() else list_match.group(4)) if list_match else &quot;&quot;
+        if list_match and (not paragraph or (list_content.strip() and (list_match.group(2).isdigit() and list_match.group(2) == &quot;1&quot; or not list_match.group(2).isdigit()))):
+            if paragraph:
+                flush()
+            ordered = list_match.group(2).isdigit()
+            delimiter = list_match.group(3) if ordered else list_match.group(2)
+            first_number = int(list_match.group(2)) if ordered else 1
+            items: list[tuple[str, bool]] = []
+            while i &lt; len(lines):
+                current = (re.match(r&quot;^( {0,3})([-+*])([ \t]+|$)(.*)$&quot;, lines[i]) if not ordered
+                           else re.match(r&quot;^( {0,3})(\d{1,9})&quot; + re.escape(delimiter) + r&quot;([ \t]+|$)(.*)$&quot;, lines[i]))
+                if not current or (not ordered and current.group(2) != delimiter) or (not ordered and _thematic(lines[i]) and current.group(2) != &quot;-&quot;):
+                    break
+                indent = len(current.group(1)); marker_width = len(current.group(2)) + (1 if ordered else 0)
+                gap = current.group(3)
+                gap_width = min(_indent_width(gap, indent + marker_width), 4) if gap else 1
+                body_indent = indent + marker_width + gap_width
+                body = [&quot; &quot; * max(0, _indent_width(gap, indent + marker_width) - 1) + current.group(4)]; i += 1; had_blank = False; separated = False; blank_outer = False
+                while i &lt; len(lines):
+                    next_item = re.match(r&quot;^( {0,3})([-+*]|\d{1,9}[.)])([ \t]+|$)(.*)$&quot;, lines[i])
+                    if next_item and len(next_item.group(1)) &lt; body_indent:
+                        separated = had_blank
+                        break
+                    raw = lines[i]
+                    if not raw.strip():
+                        if not body[0].strip():
+                            had_blank = True; i += 1; continue
+                        had_blank = True; body.append(&quot;&quot;)
+                    elif not raw.startswith((&quot; &quot;, &quot;\t&quot;)) and _thematic(raw):
+                        break
+                    elif not body[0].strip() and had_blank:
+                        break
+                    elif body[0].startswith(&quot;    &quot;) and had_blank:
+                        body.append(raw[3:])
+                    elif raw.expandtabs(4).startswith(&quot; &quot; * body_indent):
+                        body.append(raw[body_indent:])
+                    elif len(raw) - len(raw.lstrip(&quot; &quot;)) &gt;= 4 and re.match(r&quot;^ *(?:[-+*]|\d{1,9}[.)])(?:[ \t]|$)&quot;, raw):
+                        if re.match(r&quot;^ *\d{1,9}[.)](?:[ \t]|$)&quot;, raw):
+                            break
+                        body.append(&quot;\\&quot; + raw.lstrip(&quot; &quot;))
+                    elif had_blank and len(raw) - len(raw.lstrip(&quot; \t&quot;)) &lt; body_indent:
+                        if body[0].startswith(&quot;    &quot;):
+                            body.append(raw[3:])
+                        else:
+                            break
+                    elif raw.startswith((&quot; &quot;, &quot;\t&quot;)):
+                        body.append(raw.lstrip(&quot; \t&quot;))
+                    else:
+                        body.append(raw)
+                    i += 1
+                while body and not body[-1].strip(): body.pop()
+                text = &quot;\n&quot;.join(body)
+                direct = parse_blocks(text).blocks if text else ()
+                nested_lists = [b for b in direct if b.kind in {&quot;bullet_list&quot;, &quot;ordered_list&quot;}]
+                body_lines = text.splitlines()
+                first_blank = next((n for n, value in enumerate(body_lines) if not value.strip()), len(body_lines))
+                first_nested = next((n for n, value in enumerate(body_lines) if re.match(r&quot;^[-+*] |^\d{1,9}[.)] &quot;, value)), len(body_lines))
+                direct_loose = had_blank and len(direct) &gt; 1 and (
+                    not nested_lists
+                    or direct[-1].kind == &quot;paragraph&quot;
+                    or (any(nested.tight for nested in nested_lists) and first_blank &lt; first_nested)
+                )
+                code_only = len(direct) == 1 and direct[0].kind in {&quot;fenced_code&quot;, &quot;indented_code&quot;}
+                has_list = any(b.kind in {&quot;bullet_list&quot;, &quot;ordered_list&quot;} for b in direct)
+                separated = separated and (not has_list or bool(re.match(r&quot;^(?:[-+*]|\d{1,9}[.)])(?:[ \t]|$)&quot;, text.splitlines()[-1] if text else &quot;&quot;)))
+                items.append((text, direct_loose or (separated and not code_only)))
+            blocks.append(Block(&quot;ordered_list&quot; if ordered else &quot;bullet_list&quot;, level=first_number, items=tuple(items), tight=not any(x[1] for x in items))); continue
+        fence = _FENCE.match(line)
+        if fence:
+            flush(); indent, marker, rest = fence.groups(); info = rest.strip()
+            if marker[0] == &quot;`&quot; and &quot;`&quot; in info: paragraph.append(line); i += 1; continue
+            content: list[str] = []; i += 1
+            while i &lt; len(lines):
+                if re.match(r&quot;^ {0,3}&quot; + re.escape(marker[0]) + r&quot;{&quot; + str(len(marker)) + r&quot;,}[ \t]*$&quot;, lines[i]): i += 1; break
+                raw = source_lines[i]
+                if indent:
+                    raw = raw[min(len(indent), len(raw) - len(raw.lstrip(&quot; &quot;))):]
+                content.append(raw); i += 1
+            blocks.append(Block(&quot;fenced_code&quot;, &quot;\n&quot;.join(content) + (&quot;\n&quot; if content else &quot;&quot;), info=_unescape(_decode_info(info.split()[0])) if info else &quot;&quot;)); continue
+        if paragraph and (re.match(r&quot;^ {4}&quot;, line) or line.startswith(&quot;\t&quot;)):
+            paragraph.append(line[4:] if line.startswith(&quot;    &quot;) else line[1:] if line.startswith(&quot;\t&quot;) else line); i += 1; continue
+        if re.match(r&quot;^ {4}&quot;, line) or line.startswith(&quot;\t&quot;):
+            flush(); content = []
+            while i &lt; len(lines) and (not lines[i].strip() or re.match(r&quot;^ {4}&quot;, lines[i]) or lines[i].startswith(&quot;\t&quot;)):
+                content.append(lines[i][4:] if lines[i].startswith(&quot;    &quot;) else lines[i][1:] if lines[i].startswith(&quot;\t&quot;) else &quot;&quot;); i += 1
+            while content and not content[-1]: content.pop()
+            blocks.append(Block(&quot;indented_code&quot;, &quot;\n&quot;.join(content) + &quot;\n&quot;)); continue
+        atx = _ATX.match(line)
+        if atx:
+            flush(); text = (atx.group(3) or &quot;&quot;).strip(&quot; \t&quot;); text = re.sub(r&quot;(?:^|[ \t])+#+[ \t]*$&quot;, &quot;&quot;, text).strip(&quot; \t&quot;)
+            blocks.append(Block(&quot;heading&quot;, text, len(atx.group(2)))); i += 1; continue
+        if paragraph and re.match(r&quot;^ {0,3}(=+|-+)[ \t]*$&quot;, line):
+            marker = line.strip(); blocks.append(Block(&quot;heading&quot;, &quot;\n&quot;.join(paragraph).strip(&quot; \t&quot;), 1 if marker[0] == &quot;=&quot; else 2)); paragraph = []; i += 1; continue
+        ref = _REF.match(line)
+        loose_ref = re.match(r&quot;^ {0,3}\[([^\]\n]+)\]:[ \t]*$&quot;, line)
+        if not paragraph and line.startswith(&quot;[&quot;) and &quot;]:&quot; not in line and &quot;]&quot; not in line:
+            j = i
+            label_lines = []
+            while j &lt; len(lines) and &quot;]:&quot; not in lines[j] and j &lt; i + 10:
+                label_lines.append(lines[j].strip()); j += 1
+            if j &lt; len(lines) and &quot;]:&quot; in lines[j]:
+                prefix, rest = lines[j].split(&quot;]:&quot;, 1)
+                label = &quot; &quot;.join(label_lines + [prefix]).strip()
+                candidate = &quot;[&quot; + label.lstrip(&quot;[&quot;).strip() + &quot;]:&quot; + rest
+                candidate_match = _REF.match(candidate)
+                if candidate_match and not re.search(r&quot;(?&lt;!\\)\[&quot;, candidate_match.group(1)):
+                    destination = candidate_match.group(2) if candidate_match.group(2) is not None else candidate_match.group(3) or &quot;&quot;
+                    title = next((candidate_match.group(x) for x in (4, 5, 6) if candidate_match.group(x) is not None), None)
+                    refs.setdefault(_label(candidate_match.group(1)), (_unescape(destination), _unescape(title) if title is not None else None)); i = j + 1; continue
+        multiline_title = re.match(r&quot;^ {0,3}\[((?:\\.|[^\]])+)\]:[ \t]*(&lt;[^&gt;]*&gt;|[^&lt;\s][^\s]*)[ \t]+([\&quot;&#x27;])((?:.*))$&quot;, line)
+        if not paragraph and multiline_title and multiline_title.group(3) not in multiline_title.group(4):
+            quote_char = multiline_title.group(3)
+            title_parts = [multiline_title.group(4)]
+            cursor = i + 1
+            closed = False
+            while cursor &lt; len(lines):
+                # A blank line terminates a reference definition; the
+                # title cannot span it. Leave the lines for normal parsing.
+                if not lines[cursor].strip():
+                    break
+                title_parts.append(lines[cursor])
+                if quote_char in lines[cursor]:
+                    closed = True
+                    cursor += 1
+                    break
+                cursor += 1
+            if closed:
+                destination = multiline_title.group(2).strip(&quot;&lt;&gt;&quot;)
+                refs.setdefault(_label(multiline_title.group(1)), (_unescape(destination), _unescape(&quot;\n&quot;.join(title_parts).rsplit(quote_char, 1)[0])))
+                i = cursor
+                continue
+        nested_title = re.match(r&quot;^ {0,3}\[((?:\\.|[^\]])+)\]:[ \t]*(&lt;[^&gt;]*&gt;|[^&lt;\s][^\s]*)[ \t]+([&#x27;\&quot;])(.*)\3[ \t]*$&quot;, line)
+        if not paragraph and nested_title:
+            destination = nested_title.group(2).strip(&quot;&lt;&gt;&quot;)
+            refs.setdefault(_label(nested_title.group(1)), (_unescape(destination), _unescape(nested_title.group(4)))); i += 1; continue
+        continued_title = re.match(r&quot;^ {0,3}\[((?:\\.|[^\]])+)\]:[ \t]*(&lt;[^&gt;]*&gt;|[^&lt;\s][^\s]*)[ \t]*$&quot;, line)
+        if not paragraph and continued_title and i + 1 &lt; len(lines):
+            tm = re.match(r&quot;^[ \t]*([&#x27;\&quot;])(.*)\1[ \t]*$&quot;, lines[i + 1])
+            if tm:
+                refs.setdefault(_label(continued_title.group(1)), (_unescape(continued_title.group(2).strip(&quot;&lt;&gt;&quot;)), _unescape(tm.group(2)))); i += 2; continue
+        if loose_ref and not paragraph and i + 1 &lt; len(lines):
+            destination_line = lines[i + 1].strip()
+            destination_match = re.match(r&quot;(?:&lt;([^&gt;]+)&gt;|([^\s]+))(?:[ \t]+(?:\&quot;([^\&quot;]*)\&quot;|&#x27;([^&#x27;]*)&#x27;|\(([^)]*)\)))?$&quot;, destination_line)
+            if destination_match:
+                destination = destination_match.group(1) if destination_match.group(1) is not None else destination_match.group(2) or &quot;&quot;
+                title = next((destination_match.group(x) for x in (3, 4, 5) if destination_match.group(x) is not None), None)
+                consumed = 2
+                if title is None and i + 2 &lt; len(lines):
+                    title_match = re.match(r&quot;^[ \t]*(?:\&quot;([^\&quot;]*)\&quot;|&#x27;([^&#x27;]*)&#x27;|\(([^)]*)\))[ \t]*$&quot;, lines[i + 2])
+                    if title_match: title = next((title_match.group(x) for x in (1, 2, 3) if title_match.group(x) is not None), None); consumed = 3
+                refs.setdefault(_label(loose_ref.group(1)), (destination, title)); i += consumed; continue
+        if ref and not paragraph and not re.search(r&quot;(?&lt;!\\)\[&quot;, ref.group(1)):
+            destination = ref.group(2) if ref.group(2) is not None else ref.group(3) or &quot;&quot;
+            title = next((ref.group(x) for x in (4, 5, 6) if ref.group(x) is not None), None)
+            refs.setdefault(_label(ref.group(1)), (_unescape(destination), _unescape(title) if title is not None else None)); i += 1; continue
+        if i + 1 &lt; len(lines) and re.match(r&quot;^ {0,3}(=+|-+)[ \t]*$&quot;, lines[i + 1]) and line.strip() and not paragraph and not line.lstrip().startswith((&quot;&gt;&quot;, &quot;- &quot;, &quot;* &quot;, &quot;+ &quot;)):
+            blocks.append(Block(&quot;heading&quot;, line.strip(&quot; \t&quot;), 1 if &quot;=&quot; in lines[i + 1] else 2)); i += 2; continue
+        stripped = line.lstrip()
+        html_start = re.match(r&quot;&lt;(?:pre|script|style|textarea)(?:\s|&gt;|$)|&lt;!--|&lt;\?|&lt;!\[CDATA\[|&lt;![A-Za-z]|&lt;/?(?:address|article|aside|base|blockquote|body|div|h[1-6]|head|header|hr|html|li|main|nav|ol|p|section|table|td|th|title|tr|ul)(?:\s|&gt;|/&gt;)&quot;, stripped, re.I)
+        complete_tag = re.match(
+            r&#x27;&#x27;&#x27;&lt;/?[A-Za-z][A-Za-z0-9-]*(?:[ \t]+[A-Za-z_:][A-Za-z0-9_.:-]*(?:[ \t]*=[ \t]*(?:&quot;[^&quot;]*&quot;|&#x27;[^&#x27;]*&#x27;|[^ \t\r\n&quot;&#x27;=&lt;&gt;`]+))?)*[ \t]*/?&gt;\s*$&#x27;&#x27;&#x27;,
+            stripped,
+        ) if &quot;://&quot; not in stripped else None
+        if stripped.startswith(&quot;&lt;/&quot;) and not re.match(r&quot;&lt;/[A-Za-z][A-Za-z0-9-]*[ \t]*&gt;&quot;, stripped):
+            complete_tag = None
+        partial_tag = bool(
+            complete_tag is None
+            and &quot;&gt;&quot; not in stripped
+            and re.match(
+                r&quot;&lt;/?(?:address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|nav|noframes|ol|optgroup|option|p|param|search|section|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul)\b&quot;,
+                stripped,
+                re.I,
+            )
+        )
+        if len(line) - len(stripped) &lt;= 3 and (html_start or (complete_tag and not paragraph) or partial_tag):
+            flush(); content = [line]; i += 1
+            if partial_tag:
+                while i &lt; len(lines) and lines[i].strip():
+                    content.append(lines[i]); i += 1
+                blocks.append(Block(&quot;html&quot;, &quot;\n&quot;.join(content))); continue
+            if html_start and re.match(r&quot;&lt;(?:pre|script|style|textarea)&quot;, stripped, re.I):
+                tag = re.match(r&quot;&lt;\s*(pre|script|style|textarea)&quot;, stripped, re.I).group(1)
+                while i &lt; len(lines) and not re.search(r&quot;&lt;/&quot; + tag + r&quot;\s*&gt;&quot;, &quot;\n&quot;.join(content), re.I): content.append(lines[i]); i += 1
+                if i &lt; len(lines) and not re.search(r&quot;&lt;/&quot; + tag + r&quot;\s*&gt;&quot;, &quot;\n&quot;.join(content), re.I): content.append(lines[i]); i += 1
+            elif stripped.startswith(&quot;&lt;!--&quot;) and &quot;--&gt;&quot; in stripped:
+                pass
+            elif (stripped.startswith(&quot;&lt;!--&quot;) and &quot;--&gt;&quot; not in stripped) or stripped.startswith(&quot;&lt;?&quot;) or stripped.startswith(&quot;&lt;![CDATA[&quot;) or re.match(r&quot;&lt;![A-Za-z]&quot;, stripped):
+                end = &quot;--&gt;&quot; if stripped.startswith(&quot;&lt;!--&quot;) else &quot;?&gt;&quot; if stripped.startswith(&quot;&lt;?&quot;) else &quot;]] &gt;&quot;.replace(&quot; &quot;, &quot;&quot;) if stripped.startswith(&quot;&lt;![CDATA[&quot;) else &quot;&gt;&quot;
+                while i &lt; len(lines) and end not in &quot;\n&quot;.join(content): content.append(lines[i]); i += 1
+            else:
+                while i &lt; len(lines) and lines[i].strip(): content.append(lines[i]); i += 1
+            blocks.append(Block(&quot;html&quot;, &quot;\n&quot;.join(content))); continue
+        paragraph.append(line); i += 1
+    flush(); return Document(tuple(blocks), refs)
+</pre></article>
+</main>
+</body>
+</html>

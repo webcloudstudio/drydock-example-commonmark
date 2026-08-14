@@ -1,0 +1,10 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- renderer/html.py
+
+SUMMARY:
+Fixed inline autolinks, raw HTML validation, malformed markup escaping, attribute scanning, and special HTML comments. Both acceptance checks pass: 40 passed, 0 failed.
+
+BLOCKERS:
+- None

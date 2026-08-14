@@ -1,0 +1,10 @@
+{"command": "drydock init commonmark", "time": "2026-08-12 17:15", "target": "commonmark", "return_code": 0}
+{"command": "drydock import commonmark /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/sources --format markdown", "time": "2026-08-12 17:15", "target": "commonmark", "return_code": 0}
+{"command": "drydock analyze commonmark", "time": "2026-08-12 17:16", "target": "commonmark", "return_code": 0}
+{"command": "drydock plan commonmark --override", "time": "2026-08-12 17:27", "target": "commonmark", "return_code": 0}
+{"command": "drydock build status commonmark", "time": "2026-08-12 17:27", "target": "commonmark", "return_code": 0}
+{"command": "drydock build commonmark --override --repair-attempts 6", "time": "2026-08-12 20:44", "target": "commonmark", "return_code": 0}
+{"command": "drydock build status commonmark", "time": "2026-08-12 20:44", "target": "commonmark", "return_code": 0}
+{"command": "drydock score ac commonmark", "time": "2026-08-12 21:06", "target": "commonmark", "return_code": 1}
+{"command": "drydock score build commonmark", "time": "2026-08-12 21:06", "target": "build", "return_code": 0}
+{"command": "drydock score release commonmark", "time": "2026-08-12 21:21", "target": "commonmark", "return_code": 1}

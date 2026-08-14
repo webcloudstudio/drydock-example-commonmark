@@ -1,0 +1,18 @@
+<reusable-compact filename="spec.txt">
+CommonMark 0.31.2 defines block-first parsing, nested block quotes, lazy paragraph continuation, and HTML rendering.
+</reusable-compact>
+
+<reusable-compact filename="spec_tests.py">
+The harness runs selected sections via `--pattern`, invokes the supplied program through stdin/stdout, and uses process exit status as the conformance verdict.
+</reusable-compact>
+
+RESULT: SUCCESS
+
+FILES CHANGED:
+- program
+
+SUMMARY:
+Added the missing executable compatibility entry point. Both block-quote acceptance checks pass; focused tests pass 14/14.
+
+BLOCKERS:
+- None

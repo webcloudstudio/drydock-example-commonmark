@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/test_inline_emphasis.py</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/test_inline_emphasis.py</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../build/commonmark/test_inline_emphasis.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Regression tests for delimiter-run emphasis parsing.&quot;&quot;&quot;
+
+import subprocess
+
+
+def render(markdown: str) -&gt; str:
+    result = subprocess.run(
+        [&quot;./program&quot;], input=markdown, text=True, capture_output=True, check=True
+    )
+    return result.stdout
+
+
+def test_nested_emphasis_and_strong_emphasis() -&gt; None:
+    assert render(&quot;*foo **bar** baz*\n&quot;) == &quot;&lt;p&gt;&lt;em&gt;foo &lt;strong&gt;bar&lt;/strong&gt; baz&lt;/em&gt;&lt;/p&gt;\n&quot;
+    assert render(&quot;**foo *bar* baz**\n&quot;) == &quot;&lt;p&gt;&lt;strong&gt;foo &lt;em&gt;bar&lt;/em&gt; baz&lt;/strong&gt;&lt;/p&gt;\n&quot;
+
+
+def test_intraword_rules_and_modulo_three() -&gt; None:
+    assert render(&quot;foo*bar* and foo_bar_\n&quot;) == &quot;&lt;p&gt;foo&lt;em&gt;bar&lt;/em&gt; and foo_bar_&lt;/p&gt;\n&quot;
+    assert render(&quot;*foo**bar**baz*\n&quot;) == &quot;&lt;p&gt;&lt;em&gt;foo&lt;strong&gt;bar&lt;/strong&gt;baz&lt;/em&gt;&lt;/p&gt;\n&quot;
+
+
+def test_overlapping_spans_use_the_first_opener() -&gt; None:
+    assert render(&quot;*foo _bar* baz_\n&quot;) == &quot;&lt;p&gt;&lt;em&gt;foo _bar&lt;/em&gt; baz_&lt;/p&gt;\n&quot;
+</pre></article>
+</main>
+</body>
+</html>

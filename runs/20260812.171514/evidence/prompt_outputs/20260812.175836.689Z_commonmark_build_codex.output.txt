@@ -1,0 +1,22 @@
+<reusable-compact filename="spec.txt">
+CommonMark 0.31.2 normative Markdown-to-HTML behavior. Parse block structure before inline structure; support block quotes with nesting, lazy continuation, blank-line separation, and contained blocks. Conformance examples are embedded under section headings.
+</reusable-compact>
+
+<reusable-compact filename="spec_tests.py">
+Conformance harness accepts `--spec`, `--program`, and optional `--pattern`; invokes the program with Markdown on stdin, compares normalized HTML, and exits nonzero for failures or errors. Full-suite verdict is determined solely by process exit status.
+</reusable-compact>
+
+RESULT: FAILED
+
+FILES CHANGED:
+- parser/blocks.py
+- test_block_quotes.py
+
+SUMMARY:
+Implemented nested block quotes, lazy continuation handling, blank-separated quote boundaries, and quoted code/fence termination. Block quote conformance passes: 25/25. Focused tests pass: 14/14.
+
+BLOCKERS:
+- The required full suite still fails in pre-existing areas outside this build block: 414 passed, 241 failed.
+
+FAILURE_SUMMARY: Full CommonMark suite has 241 failures outside block-quote scope.
+FAILURE_DETAIL: Block-quote acceptance passes, but `sh full_test.sh` exits 241 because leaf blocks, lists, inlines, links, images, and HTML behavior remain incomplete. Subsequent build blocks must address those failures.

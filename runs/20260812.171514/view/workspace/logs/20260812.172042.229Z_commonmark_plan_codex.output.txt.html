@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/logs/20260812.172042.229Z_commonmark_plan_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/logs/20260812.172042.229Z_commonmark_plan_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../workspace/logs/20260812.172042.229Z_commonmark_plan_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>=== FEATURE-BLOCK-QUOTES.md ===
+# FEATURE: Block Quotes
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260812 V1 |
+| Description | Defines nested CommonMark block quote parsing and lazy continuation behavior. |
+| Depends On  | FEATURE-BLOCK-LEAF.md |
+| Provides    | block quote parser |
+| Consumes    | leaf block parser |
+
+## Questions
+
+- None.
+
+## Workflow
+
+The parser recognizes block quote markers with up to three leading spaces, optionally followed by a space. It supports empty quotes, nested quotes, quoted headings, paragraphs, lists, code blocks, blank lines, and lazy continuation lines. Block quote boundaries follow CommonMark 0.31.2 consecutiveness and interruption rules.
+
+## Programmatic Acceptance
+
+Requires: executable=python3; scope=test
+
+=== AC block-quotes-basic ===
+Intent: The implementation passes basic and nested block quote conformance examples.
+Suite: scoped
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, r&quot;^(Block quotes)$&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC block-quotes-basic ===
+
+=== AC block-quotes-continuation ===
+Intent: The implementation passes block quote laziness, blank-line, and contained-structure examples.
+Suite: scoped
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, r&quot;^(Block quotes)$&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC block-quotes-continuation ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- The parser performs block parsing before inline parsing.
+- The implementation does not use a public Markdown implementation.
+
+=== END FEATURE-BLOCK-QUOTES.md ===
+=== FEATURE-BLOCK-LISTS.md ===
+# FEATURE: List Items and Lists
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260812 V1 |
+| Description | Defines CommonMark bullet and ordered list parsing, nesting, and tightness behavior. |
+| Depends On  | FEATURE-BLOCK-LEAF.md, FEATURE-BLOCK-QUOTES.md |
+| Provides    | list parser |
+| Consumes    | leaf block parser, block quote parser |
+
+## Questions
+
+- None.
+
+## Workflow
+
+The parser recognizes bullet markers and ordered markers with up to three leading spaces and one to four following spaces. It supports nested lists, continuation paragraphs, lazy continuation, empty items, indented content, mixed block contents, delimiter changes, ordered starts, and tight or loose list rendering metadata. Lists and items follow CommonMark 0.31.2 marker, indentation, interruption, and blank-line rules.
+
+## Programmatic Acceptance
+
+Requires: executable=python3; scope=test
+
+=== AC lists-structure ===
+Intent: The implementation passes list marker, nesting, indentation, and continuation conformance examples.
+Suite: scoped
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, r&quot;^(List items|Lists)$&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC lists-structure ===
+
+=== AC lists-tightness ===
+Intent: The implementation passes empty-item, delimiter, and tight-versus-loose list conformance examples.
+Suite: scoped
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, r&quot;^(List items|Lists)$&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC lists-tightness ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- The parser does not treat thematic breaks as list items when both interpretations are possible.
+- List tightness is derived from blank-line structure and contained blocks, not from output text.
+
+=== END FEATURE-BLOCK-LISTS.md ===
+=== FEATURE-INLINE-ESCAPES.md ===
+# FEATURE: Inline Escapes and Character References
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260812 V1 |
+| Description | Defines CommonMark punctuation escapes and named and numeric character references. |
+| Depends On  | FEATURE-BLOCK-LISTS.md |
+| Provides    | escape parser, character reference parser |
+| Consumes    | block parser |
+
+## Questions
+
+- None.
+
+## Programmatic Acceptance
+
+Requires: executable=python3; scope=test
+
+=== AC inline-escapes ===
+Intent: The implementation passes punctuation escape and escape-context conformance examples.
+Suite: scoped
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, r&quot;^(Backslash escapes)$&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC inline-escapes ===
+
+=== AC character-references ===
+Intent: The implementation passes named, decimal, hexadecimal, invalid, and contextual character-reference examples.
+Suite: scoped
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, r&quot;^(Entity and numeric character references)$&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC character-references ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- U+0000 is replaced with U+FFFD.
+- Escapes and references do not replace structural block markers.
+
+=== END FEATURE-INLINE-ESCAPES.md ===
+=== FEATURE-INLINE-CODE-BREAKS.md ===
+# FEATURE: Inline Code Spans and Line Breaks
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260812 V1 |
+| Description | Defines CommonMark code span normalization and hard and soft line break parsing. |
+| Depends On  | FEATURE-BLOCK-LISTS.md |
+| Provides    | code span parser, hard break parser, soft break parser |
+| Consumes    | block parser |
+
+## Questions
+
+- None.
+
+## Programmatic Acceptance
+
+Requires: executable=python3; scope=test
+
+=== AC code-spans ===
+Intent: The implementation passes code span delimiter, matching, normalization, and precedence examples.
+Suite: scoped
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, r&quot;^(Code spans)$&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC code-spans ===
+
+=== AC line-breaks ===
+Intent: The implementation passes hard-break, soft-break, trailing-space, and break-context examples.
+Suite: scoped
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, r&quot;^(Hard line breaks|Soft line breaks)$&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC line-breaks ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Hard breaks are not generated at the end of a block.
+- Code spans treat their contents literally and do not parse escapes or references.
+
+=== END FEATURE-INLINE-CODE-BREAKS.md ===
+=== FEATURE-INLINE-EMPHASIS.md ===
+# FEATURE: Emphasis and Strong Emphasis
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260812 V1 |
+| Description | Defines CommonMark delimiter-run parsing for emphasis and strong emphasis. |
+| Depends On  | FEATURE-INLINE-CODE-BREAKS.md |
+| Provides    | emphasis parser, strong emphasis parser |
+| Consumes    | block parser, code span parser |
+
+## Questions
+
+- None.
+
+## Programmatic Acceptance
+
+Requires: executable=python3; scope=test
+
+=== AC emphasis-delimiters ===
+Intent: The implementation passes delimiter-run, flanking, intraword, and modulo-three emphasis examples.
+Suite: scoped
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, r&quot;^(Emphasis and strong emphasis)$&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC emphasis-delimiters ===
+
+=== AC emphasis-nesting ===
+Intent: The implementation passes nested, overlapping, precedence, and unmatched delimiter examples.
+Suite: scoped
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, r&quot;^(Emphasis and strong emphasis)$&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC emphasis-nesting ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Intraword underscore emphasis is prohibited according to CommonMark delimiter rules.
+- Code spans, links, images, and HTML tags retain precedence over emphasis parsing.
+
+=== END FEATURE-INLINE-EMPHASIS.md ===</pre></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,15 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- renderer/html.py
+- parser/blocks.py
+- test_inline_escapes.py
+
+SUMMARY:
+Implemented punctuation escapes and named/numeric character references. Both declared scoped acceptances and focused tests pass.
+
+BLOCKERS:
+- `sh full_test.sh` fails on pre-existing tab/list/thematic-break behavior outside this story.
+
+FAILURE_SUMMARY: Full CommonMark suite remains failing outside inline escapes.
+FAILURE_DETAIL: Scoped escape/reference checks pass, but the complete suite fails in Tabs and Thematic breaks cases; fix block parsing before rerunning.

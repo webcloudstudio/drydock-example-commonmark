@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/logs/20260812.173325.448Z_commonmark_build_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/logs/20260812.173325.448Z_commonmark_build_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../workspace/logs/20260812.173325.448Z_commonmark_build_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>RESULT: FAILED
+
+FILES CHANGED:
+- parser/blocks.py
+- renderer/html.py
+
+SUMMARY:
+Implemented leaf-block parsing and renderer support. Primary acceptance improved to 97/105 examples, but 8 leaf examples still fail; secondary acceptance was not passing.
+
+BLOCKERS:
+- Remaining failures involve nested containers, multiline code spans, and advanced HTML/reference-definition semantics.
+
+FAILURE_SUMMARY: Scoped conformance checks remain failing.
+FAILURE_DETAIL: The implementation does not yet satisfy all declared leaf-block acceptance examples; further parser work is required before rerunning this build block.</pre></article>
+</main>
+</body>
+</html>

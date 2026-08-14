@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-INLINE-ESCAPES.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-INLINE-ESCAPES.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-INLINE-ESCAPES.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Inline Escapes and Character References</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260812 V1</td></tr><tr><td>Description</td><td>Defines CommonMark punctuation escapes and named and numeric character references.</td></tr><tr><td>Depends On</td><td>FEATURE-BLOCK-LISTS.md</td></tr><tr><td>Provides</td><td>escape parser, character reference parser</td></tr><tr><td>Consumes</td><td>block parser</td></tr></tbody></table></div>
+<h2>Programmatic Acceptance</h2>
+<p>Requires: executable=python3; scope=test</p>
+<p>=== AC inline-escapes ===<br>Intent: The implementation passes punctuation escape and escape-context conformance examples.<br>Suite: scoped</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, r&quot;^(Backslash escapes)$&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC inline-escapes ===</p>
+<p>=== AC character-references ===<br>Intent: The implementation passes named, decimal, hexadecimal, invalid, and contextual character-reference examples.<br>Suite: scoped</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, r&quot;^(Entity and numeric character references)$&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC character-references ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>U+0000 is replaced with U+FFFD.</li><li>Escapes and references do not replace structural block markers.</li></ul></article>
+</main>
+</body>
+</html>

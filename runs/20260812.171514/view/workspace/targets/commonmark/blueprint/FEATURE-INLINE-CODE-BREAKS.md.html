@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-INLINE-CODE-BREAKS.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-INLINE-CODE-BREAKS.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-INLINE-CODE-BREAKS.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Inline Code Spans and Line Breaks</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260812 V1</td></tr><tr><td>Description</td><td>Defines CommonMark code span normalization and hard and soft line break parsing.</td></tr><tr><td>Depends On</td><td>FEATURE-BLOCK-LISTS.md</td></tr><tr><td>Provides</td><td>code span parser, hard break parser, soft break parser</td></tr><tr><td>Consumes</td><td>block parser</td></tr></tbody></table></div>
+<h2>Programmatic Acceptance</h2>
+<p>Requires: executable=python3; scope=test</p>
+<p>=== AC code-spans ===<br>Intent: The implementation passes code span delimiter, matching, normalization, and precedence examples.<br>Suite: scoped</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, r&quot;^(Code spans)$&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC code-spans ===</p>
+<p>=== AC line-breaks ===<br>Intent: The implementation passes hard-break, soft-break, trailing-space, and break-context examples.<br>Suite: scoped</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, r&quot;^(Hard line breaks|Soft line breaks)$&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC line-breaks ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Hard breaks are not generated at the end of a block.</li><li>Code spans treat their contents literally and do not parse escapes or references.</li></ul></article>
+</main>
+</body>
+</html>

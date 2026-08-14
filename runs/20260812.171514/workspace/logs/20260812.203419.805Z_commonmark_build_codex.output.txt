@@ -1,0 +1,11 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- full_test.sh
+- parser/blocks.py
+
+SUMMARY:
+Added the complete-suite wrapper and fixed tab-stop handling. The full CommonMark conformance suite passes.
+
+BLOCKERS:
+- None

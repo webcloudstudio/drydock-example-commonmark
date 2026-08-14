@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/logs/20260812.191803.834Z_commonmark_build_codex.stderr.log</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/logs/20260812.191803.834Z_commonmark_build_codex.stderr.log</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../workspace/logs/20260812.191803.834Z_commonmark_build_codex.stderr.log">Raw file</a></div></header>
+<article class="doc"><pre>2026-08-12T19:19:27.620136Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/build/commonmark/renderer/html.py:
+        tag = re.match(r&quot;&lt;(?:https?://|mailto:)[^&gt;]+&gt;|&lt;/?[A-Za-z][A-Za-z0-9-]*(?:[ \t\r\n]+[^&lt;&gt;]*)?/?&gt;&quot;, text[pos:], re.S)
+        if tag:
+            value = tag.group(0)
+            if value.startswith(&quot;&lt;&quot;) and re.match(r&quot;&lt;(?:https?://|mailto:)[^&gt;]+&gt;$&quot;, value):
+                uri = value[1:-1]
+                for escaped_key, escaped_value in escaped.items():
+                    uri = uri.replace(escaped_key, &quot;\\&quot; + escaped_value)
+                html_value = f&#x27;&lt;a href=&quot;{escape(quote(uri, safe=&quot;/%#?:@-._~!$&amp;\&#x27;()*+,;=&quot;, quote=True))}&quot;&gt;{escape(uri, quote=False)}&lt;/a&gt;&#x27;
+            else:
+                html_value = value
+            out.append(plain(text[:pos])); out.append(protect(html_value))
+            text = text[pos + len(value):]
+            pos = 0
+            continue
+2026-08-12T19:19:39.551335Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/build/commonmark/renderer/html.py:
+        tag = re.match(r&quot;&lt;(?:https?://|mailto:)[^&gt;]+&gt;|&lt;/?[A-Za-z][A-Za-z0-9-]*(?:[ \t\r\n]+[^&lt;&gt;]*)?/?&gt;&quot;, text[pos:], re.S)
+        if tag:
+            value = tag.group(0)
+            if value.startswith(&quot;&lt;&quot;) and re.match(r&quot;&lt;(?:https?://|mailto:)[^&gt;]+&gt;$&quot;, value):
+                uri = value[1:-1]
+                for escaped_key, escaped_value in escaped.items():
+                    uri = uri.replace(escaped_key, &quot;\\&quot; + escaped_value)
+                html_value = f&#x27;&lt;a href=&quot;{escape(quote(uri, safe=&quot;/%#?:@-._~!$&amp;\&#x27;()*+,;=&quot;, quote=True))}&quot;&gt;{escape(uri, quote=False)}&lt;/a&gt;&#x27;
+            else:
+                html_value = value
+            out.append(plain(text[:pos])); out.append(protect(html_value))
+            text = text[pos + len(value):]
+            pos = 0
+            continue
+2026-08-12T19:19:55.412998Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/build/commonmark/renderer/html.py:
+            value = tag.group(0)
+            if value.startswith(&quot;&lt;&quot;) and re.match(r&quot;&lt;(?:https?://|mailto:)[^&gt;]+&gt;$&quot;, value):
+                uri = value[1:-1]
+                for escaped_key, escaped_value in escaped.items():
+                    uri = uri.replace(escaped_key, &quot;\\&quot; + escaped_value)
+                html_value = f&#x27;&lt;a href=&quot;{escape(quote(uri, safe=&quot;/%#?:@-._~!$&amp;\&#x27;()*+,;=&quot;, quote=True))}&quot;&gt;{escape(uri, quote=False)}&lt;/a&gt;&#x27;
+            else:
+                html_value = value
+            out.append(plain(text[:pos])); out.append(protect(html_value))
+            text = text[pos + len(value):]
+2026-08-12T19:21:12.593449Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/build/commonmark/parser/blocks.py:
+        complete_tag = re.match(r&quot;&lt;/?[A-Za-z][^&gt;]*&gt;\s*$&quot;, stripped) if &quot;き://&quot; not in stripped else None
+        partial_tag = re.match(r&quot;&lt;[A-Za-z][^&gt;]*$&quot;, stripped) and i + 1 &lt; len(lines) and re.match(r&quot;^\s*&gt;&quot;, lines[i + 1])
+</pre></article>
+</main>
+</body>
+</html>

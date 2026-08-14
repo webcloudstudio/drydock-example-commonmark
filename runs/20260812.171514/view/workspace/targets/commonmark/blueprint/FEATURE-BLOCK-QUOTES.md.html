@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-BLOCK-QUOTES.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-BLOCK-QUOTES.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-BLOCK-QUOTES.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Block Quotes</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260812 V1</td></tr><tr><td>Description</td><td>Defines nested CommonMark block quote parsing and lazy continuation behavior.</td></tr><tr><td>Depends On</td><td>FEATURE-BLOCK-LEAF.md</td></tr><tr><td>Provides</td><td>block quote parser</td></tr><tr><td>Consumes</td><td>leaf block parser</td></tr></tbody></table></div>
+<h2>Workflow</h2>
+<p>The parser recognizes block quote markers with up to three leading spaces, optionally followed by a space. It supports empty quotes, nested quotes, quoted headings, paragraphs, lists, code blocks, blank lines, and lazy continuation lines. Block quote boundaries follow CommonMark 0.31.2 consecutiveness and interruption rules.</p>
+<h2>Programmatic Acceptance</h2>
+<p>Requires: executable=python3; scope=test</p>
+<p>=== AC block-quotes-basic ===<br>Intent: The implementation passes basic and nested block quote conformance examples.<br>Suite: scoped</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, r&quot;^(Block quotes)$&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC block-quotes-basic ===</p>
+<p>=== AC block-quotes-continuation ===<br>Intent: The implementation passes block quote laziness, blank-line, and contained-structure examples.<br>Suite: scoped</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, r&quot;^(Block quotes)$&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC block-quotes-continuation ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>The parser performs block parsing before inline parsing.</li><li>The implementation does not use a public Markdown implementation.</li></ul></article>
+</main>
+</body>
+</html>

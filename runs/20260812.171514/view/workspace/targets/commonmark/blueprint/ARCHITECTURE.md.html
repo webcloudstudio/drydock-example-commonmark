@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/ARCHITECTURE.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/ARCHITECTURE.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/ARCHITECTURE.md">Raw file</a></div></header>
+<article class="doc"><h1>ARCHITECTURE: CommonMark Parser</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260812 V1</td></tr><tr><td>Description</td><td>Defines the two-phase Python CommonMark parser architecture and runtime boundaries.</td></tr><tr><td>Depends On</td><td>—</td></tr><tr><td>Provides</td><td>parser architecture, block parser boundary, inline parser boundary, renderer boundary</td></tr><tr><td>Consumes</td><td>—</td></tr></tbody></table></div>
+<h2>Intent</h2>
+<p>CommonMark is a command-line parser that reads UTF-8 Markdown from standard input, parses block structure before inline structure, renders CommonMark 0.31.2 HTML, and writes the result to standard output.</p>
+<h2>Module Boundaries</h2>
+<div class="scroll"><table><thead><tr><th>Boundary</th><th>Responsibility</th></tr></thead><tbody><tr><td>Executable entry point</td><td>Reads standard input, invokes parsing and rendering, writes standard output, and reports process failures.</td></tr><tr><td>Block parser</td><td>Builds block structure, including leaf blocks, block quotes, lists, and link reference definitions.</td></tr><tr><td>Inline parser</td><td>Parses escapes, references, code spans, emphasis, links, images, autolinks, raw HTML, and line breaks within block content.</td></tr><tr><td>HTML renderer</td><td>Renders block and inline structures as CommonMark-compatible HTML.</td></tr><tr><td>Conformance wrapper</td><td>Invokes the supplied unfiltered CommonMark suite through <code>sh full_test.sh</code>.</td></tr></tbody></table></div>
+<p>The parser separates block parsing from inline parsing. Link reference definitions discovered during block parsing are available to inline parsing. The renderer consumes the completed parsed structure and does not determine block structure.</p>
+<h2>Technology Stack</h2>
+<ul><li>Python 3 implements the parser, executable, and conformance integration.</li><li>Python standard library supplies runtime functionality without third-party dependencies.</li><li>POSIX shell provides the <code>full_test.sh</code> wrapper.</li></ul>
+<h2>Constraints</h2>
+<ul><li>The implementation does not use a public Markdown implementation.</li><li>The executable preserves standard-input, standard-output, and exit-status behavior required by the supplied harness.</li><li>Runtime conformance assets are limited to <code>spec.txt</code>, <code>spec_tests.py</code>, <code>cmark.py</code>, and <code>normalize.py</code>.</li><li><code>full_test.sh</code> runs the complete supplied suite without filtering.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC architecture-boundaries ===<br>Intent: The implementation exposes separate block, inline, rendering, and executable boundaries.</p>
+<p>from pathlib import Path</p>
+<p>required = [ Path(&quot;cmark&quot;), Path(&quot;parser&quot;), Path(&quot;renderer&quot;), ] assert all(path.exists() for path in required) === END AC architecture-boundaries ===</p>
+<p>=== AC architecture-runtime-contract ===<br>Intent: The runtime contains the required POSIX conformance wrapper boundary.</p>
+<p>from pathlib import Path</p>
+<p>wrapper = Path(&quot;full_test.sh&quot;) assert wrapper.is_file() assert wrapper.read_text(encoding=&quot;utf-8&quot;).startswith(&quot;#!&quot;) === END AC architecture-runtime-contract ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>The parser does not delegate CommonMark behavior to a public Markdown implementation.</li><li>Block parsing precedes inline parsing.</li><li>Runtime conformance assets do not include imported instruction prose.</li></ul></article>
+</main>
+</body>
+</html>

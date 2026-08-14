@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-BLOCK-LISTS.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-BLOCK-LISTS.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-BLOCK-LISTS.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: List Items and Lists</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260812 V1</td></tr><tr><td>Description</td><td>Defines CommonMark bullet and ordered list parsing, nesting, and tightness behavior.</td></tr><tr><td>Depends On</td><td>FEATURE-BLOCK-LEAF.md, FEATURE-BLOCK-QUOTES.md</td></tr><tr><td>Provides</td><td>list parser</td></tr><tr><td>Consumes</td><td>leaf block parser, block quote parser</td></tr></tbody></table></div>
+<h2>Workflow</h2>
+<p>The parser recognizes bullet markers and ordered markers with up to three leading spaces and one to four following spaces. It supports nested lists, continuation paragraphs, lazy continuation, empty items, indented content, mixed block contents, delimiter changes, ordered starts, and tight or loose list rendering metadata. Lists and items follow CommonMark 0.31.2 marker, indentation, interruption, and blank-line rules.</p>
+<h2>Programmatic Acceptance</h2>
+<p>Requires: executable=python3; scope=test</p>
+<p>=== AC lists-structure ===<br>Intent: The implementation passes list marker, nesting, indentation, and continuation conformance examples.<br>Suite: scoped</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, r&quot;^(List items|Lists)$&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC lists-structure ===</p>
+<p>=== AC lists-tightness ===<br>Intent: The implementation passes empty-item, delimiter, and tight-versus-loose list conformance examples.<br>Suite: scoped</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, r&quot;^(List items|Lists)$&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC lists-tightness ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>The parser does not treat thematic breaks as list items when both interpretations are possible.</li><li>List tightness is derived from blank-line structure and contained blocks, not from output text.</li></ul></article>
+</main>
+</body>
+</html>

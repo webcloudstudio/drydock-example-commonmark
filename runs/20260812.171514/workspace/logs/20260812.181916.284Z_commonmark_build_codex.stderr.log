@@ -1,0 +1,5 @@
+2026-08-12T18:21:38.757071Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/build/commonmark/parser/blocks.py:
+            blocks.append(Block("fenced_code", "\n".join(content) + ("\n" if content else ""), info=info.split()[0] if info else "")); continue
+2026-08-12T18:21:57.495443Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/build/commonmark/renderer/html.py:
+        attr = f' title="{escape(title, quote=True)}"' if title is not None else ""
+        href = escape(quote(unescape(url), safe="/%#?:@-._~!$&\'()*+,;="), quote=True)

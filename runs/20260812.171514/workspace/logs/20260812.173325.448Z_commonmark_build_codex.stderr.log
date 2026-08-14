@@ -1,0 +1,10 @@
+2026-08-12T17:34:49.311164Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to read /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/renderer/html.py: No such file or directory (os error 2)
+2026-08-12T17:39:22.825681Z ERROR codex_core::tools::router: error=exec_command failed for `/bin/bash -lc "set +e
+python3 sources/spec_tests.py --spec sources/spec.txt --program ./cmark --pattern 'Thematic breaks|ATX headings|Setext headings|Indented code blocks|Fenced code blocks' >/tmp/primary.out 2>&1; p="'$?
+python3 sources/spec_tests.py --spec sources/spec.txt --program ./cmark --pattern '"'HTML blocks|Link reference definitions|Paragraphs|Blank lines' >/tmp/secondary.out 2>&1; s="'$?
+python3 -m pytest -q >/tmp/pytest.out 2>&1; t=$?
+printf '"'primary=%s secondary=%s pytest=%s\\n' \""'$p" "$s" "$t"
+tail -3 /tmp/secondary.out
+printf '"'\\n--- changed ---\\n'
+git diff --name-only -- parser renderer
+exit 0"`: CreateProcess { message: "Rejected(\"Failed to create unified exec process: No such file or directory (os error 2)\")" }

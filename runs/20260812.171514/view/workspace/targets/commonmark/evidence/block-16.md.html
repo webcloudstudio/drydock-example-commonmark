@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-16.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-16.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-16.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 16 · Service (block-16)</h1>
+<ul><li>block type: block</li><li>date: 2026-08-12</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 59659</li><li>execution id: 20260812.203419.805Z-d8525ecc</li></ul>
+<h2>Stories built</h2>
+<ul><li>Run the complete supplied CommonMark conformance suite. (conformance-full) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1263)</li><li>implements: FEATURE-CONFORMANCE-FULL.md (SP 397)</li><li>context: spec.txt (SP 51527)</li><li>context: spec_tests.py (SP 1609)</li><li>context: cmark.py (SP 339)</li><li>context: normalize.py (SP 1631)</li><li>context: ARCHITECTURE_compact.md (SP 116)</li><li>stack: common_compact.md (SP 1179)</li><li>stack: python_compact.md (SP 1534)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>full_test.sh</li><li>parser/blocks.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: complete-conformance-suite (FEATURE-CONFORMANCE-FULL.md)</li></ul>
+<p>intent: The complete supplied CommonMark conformance suite passes through the required wrapper. return code: 1 stdout: Example 2 (lines 362-367) Tabs foo	baz		bim</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1 @@ -&lt;pre&gt;&lt;code&gt;foo	baz		bim -&lt;/code&gt;&lt;/pre&gt; +&lt;p&gt;foo baz bim&lt;/p&gt;</p>
+<p>Example 4 (lines 382-393) Tabs</p>
+<ul><li>foo</li></ul>
+<p>bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 5 (lines 395-407) Tabs</p>
+<ul><li>foo</li></ul>
+<p>bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;pre&gt;&lt;code&gt;  bar -&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 6 (lines 418-425) Tabs &gt;		foo</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;blockquote&gt;&lt;pre&gt;&lt;code&gt;  foo +&lt;blockquote&gt;&lt;pre&gt;&lt;code&gt;foo &lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;</p>
+<p>Example 7 (lines 427-436) Tabs</p>
+<ul><li>foo</li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;ul&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt;  foo +&lt;ul&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt;   foo &lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 9 (lines 448-464) Tabs</p>
+<ul><li>foo<ul><li>bar</li></ul><ul><li>baz</li></ul></li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;foo&lt;ul&gt;&lt;li&gt;bar&lt;ul&gt;&lt;li&gt;baz&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;foo&lt;ul&gt;&lt;li&gt;bar baz&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>649 passed, 6 failed, 0 errored, 0 skipped stderr: Traceback (most recent call last): File &quot;complete-conformance-suite.py&quot;, line 10, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: complete-conformance-suite (FEATURE-CONFORMANCE-FULL.md)</li></ul>
+<p>intent: The complete supplied CommonMark conformance suite passes through the required wrapper. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: 655 passed, 0 failed, 0 errored, 0 skipped</p>
+<h2>Build summary</h2>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>full_test.sh</li><li>parser/blocks.py</li></ul>
+<p>SUMMARY: Added the complete-suite wrapper and fixed tab-stop handling. The full CommonMark conformance suite passes.</p>
+<p>BLOCKERS:</p>
+<ul><li>None</li></ul></article>
+</main>
+</body>
+</html>

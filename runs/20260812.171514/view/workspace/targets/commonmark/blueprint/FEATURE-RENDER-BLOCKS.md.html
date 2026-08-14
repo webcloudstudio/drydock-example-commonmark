@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-RENDER-BLOCKS.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-RENDER-BLOCKS.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-RENDER-BLOCKS.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Block HTML Rendering</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260812 V1</td></tr><tr><td>Description</td><td>Defines HTML rendering for parsed block structure and block-level content.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md, FEATURE-BLOCK-LISTS.md, FEATURE-INLINE-HTML.md</td></tr><tr><td>Provides</td><td>block HTML renderer</td></tr><tr><td>Consumes</td><td>block parser, inline parser</td></tr></tbody></table></div>
+<h2>Rendering Contract</h2>
+<ul><li>Paragraphs render as <code>&lt;p&gt;</code> elements except for paragraphs in tight lists.</li><li>ATX and setext headings render as <code>&lt;h1&gt;</code> through <code>&lt;h6&gt;</code>.</li><li>Thematic breaks render as <code>&lt;hr /&gt;</code>.</li><li>Indented and fenced code render as escaped <code>&lt;pre&gt;&lt;code&gt;</code> content.</li><li>Block quotes render as <code>&lt;blockquote&gt;</code>.</li><li>Ordered and unordered lists preserve nesting, start values, item boundaries, and tightness.</li><li>Raw HTML blocks remain unescaped.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC render-blocks-suite ===<br>Intent: Block-level HTML rendering passes the complete owned conformance scope.<br>Suite: scoped<br>Requires: executable=python3; scope=test</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, &quot;^(Thematic breaks|ATX headings|Setext headings|Indented code blocks|Fenced code blocks|HTML blocks|Paragraphs|Blank lines|Block quotes|List items|Lists)$&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC render-blocks-suite ===</p>
+<p>=== AC render-blocks-escaping ===<br>Intent: Block rendering preserves structural nesting and escapes literal code content.<br>Suite: scoped<br>Requires: executable=python3; scope=test</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, &quot;^(Indented code blocks|Fenced code blocks|Block quotes|List items|Lists)$&quot;], capture_output=True, text=True, ) assert result.returncode == 0 === END AC render-blocks-escaping ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Block rendering never treats captured test output as a correctness oracle.</li><li>Literal code content is escaped while raw HTML blocks remain preserved.</li></ul></article>
+</main>
+</body>
+</html>

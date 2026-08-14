@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-INLINE-HTML.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-INLINE-HTML.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-INLINE-HTML.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Autolinks and Raw HTML</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260812 V1</td></tr><tr><td>Description</td><td>Defines URI and email autolinks and preservation of raw HTML inline constructs.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md, FEATURE-INLINE-LINKS.md</td></tr><tr><td>Provides</td><td>autolink parser, raw HTML parser</td></tr><tr><td>Consumes</td><td>block parser, inline parser</td></tr></tbody></table></div>
+<h2>Behavior</h2>
+<ul><li>Absolute URI autolinks become links whose labels preserve the source URI.</li><li>Valid email autolinks become <code>mailto:</code> links.</li><li>HTML tags, comments, declarations, processing instructions, and CDATA are preserved as raw HTML.</li><li>Invalid autolinks and malformed HTML-like text remain escaped text.</li><li>Backslash escapes do not apply inside autolinks or raw HTML.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC inline-html-suite ===<br>Intent: The autolink and raw HTML syntax passes its complete owned conformance scope.<br>Suite: scoped<br>Requires: executable=python3; scope=test</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, &quot;^(Autolinks|Raw HTML)$&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC inline-html-suite ===</p>
+<p>=== AC inline-html-malformed ===<br>Intent: Invalid autolinks and malformed HTML remain ordinary escaped content.<br>Suite: scoped<br>Requires: executable=python3; scope=test</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, &quot;^(Autolinks|Raw HTML)$&quot;], capture_output=True, text=True, ) assert result.returncode == 0 === END AC inline-html-malformed ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Raw HTML is preserved only when it satisfies the CommonMark inline grammar.</li><li>The parser does not execute or fetch HTML or URI content.</li></ul></article>
+</main>
+</body>
+</html>

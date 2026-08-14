@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/test_render_blocks.py</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/test_render_blocks.py</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../build/commonmark/test_render_blocks.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Focused regression checks for block-to-HTML rendering.&quot;&quot;&quot;
+
+import subprocess
+
+
+def render(markdown: str) -&gt; str:
+    result = subprocess.run(
+        [&quot;./cmark&quot;], input=markdown, text=True, capture_output=True, check=False
+    )
+    assert result.returncode == 0
+    return result.stdout
+
+
+def test_headings_breaks_and_code_are_rendered_as_blocks() -&gt; None:
+    assert render(&quot;# Title\n\n---\n\n    &lt;tag&gt;\n&quot;) == (
+        &quot;&lt;h1&gt;Title&lt;/h1&gt;\n&lt;hr /&gt;\n&lt;pre&gt;&lt;code&gt;&amp;lt;tag&amp;gt;\n&lt;/code&gt;&lt;/pre&gt;\n&quot;
+    )
+
+
+def test_raw_html_and_nested_loose_list_rendering() -&gt; None:
+    assert render(&quot;&lt;div&gt;\n*literal*\n&lt;/div&gt;\n\n- one\n\n  - two\n&quot;) == (
+        &quot;&lt;div&gt;\n*literal*\n&lt;/div&gt;\n&lt;ul&gt;\n&lt;li&gt;\n&lt;p&gt;one&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;two&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&quot;
+    )
+</pre></article>
+</main>
+</body>
+</html>

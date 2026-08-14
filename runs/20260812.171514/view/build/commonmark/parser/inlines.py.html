@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/parser/inlines.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/parser/inlines.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/parser/inlines.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Inline-structure parsing boundary.&quot;&quot;&quot;
+
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True)
+class InlineText:
+    &quot;&quot;&quot;Inline content ready for the renderer.&quot;&quot;&quot;
+
+    text: str
+
+
+def parse_inlines(block: object, link_references: dict[str, str]) -&gt; InlineText:
+    &quot;&quot;&quot;Parse inline structure after block parsing has completed.&quot;&quot;&quot;
+
+    del link_references
+    text = block.text if hasattr(block, &quot;text&quot;) else str(block)
+    return InlineText(text=text)
+</pre></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-8.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-8.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-8.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 8 · Service (block-8)</h1>
+<ul><li>block type: block</li><li>date: 2026-08-12</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 57654</li><li>execution id: 20260812.182602.995Z-d9e470df</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse code spans and line breaks. (inline-code-breaks) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1263)</li><li>implements: FEATURE-INLINE-CODE-BREAKS.md (SP 396)</li><li>context: spec.txt (SP 51527)</li><li>context: spec_tests.py (SP 1609)</li><li>context: ARCHITECTURE_compact.md (SP 116)</li><li>stack: common_compact.md (SP 1179)</li><li>stack: python_compact.md (SP 1534)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>renderer/html.py</li><li>test_inline_code_breaks.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: code-spans (FEATURE-INLINE-CODE-BREAKS.md)</li></ul>
+<p>intent: The implementation passes code span delimiter, matching, normalization, and precedence examples. return code: 1 stdout: Example 332 (lines 5929-5933) Code spans <code></code><code></code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;``&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;&lt;code&gt; &lt;/code&gt;&lt;code&gt; &lt;/code&gt;&lt;/p&gt;</p>
+<p>Example 333 (lines 5937-5941) Code spans <code></code><code></code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt; `` &lt;/code&gt;&lt;/p&gt; +&lt;p&gt;&lt;code&gt; &lt;/code&gt;&lt;code&gt; &lt;/code&gt;&lt;/p&gt;</p>
+<p>Example 340 (lines 6012-6016) Code spans <code>foo\</code>bar`</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;foo\&lt;/code&gt;bar<code>&lt;/p&gt; +&lt;p&gt;&lt;code&gt;foo\</code>bar&lt;/code&gt;&lt;/p&gt;</p>
+<p>Example 342 (lines 6029-6033) Code spans <code>foo</code><code>bar</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;foo `` bar&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;&lt;code&gt;foo&lt;/code&gt;&lt;code&gt;bar&lt;/code&gt;&lt;/p&gt;</p>
+<p>Example 343 (lines 6041-6045) Code spans *foo<code>*</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>foo&lt;code&gt;</em>&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo&lt;code&gt;&lt;/em&gt;&lt;/code&gt;&lt;/p&gt;</p>
+<p>Example 344 (lines 6050-6054) Code spans [not a <code>link](/foo</code>)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="/foo&amp;lt;/code&amp;gt;">not a &lt;code&gt;link</a>&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/foo%3C/code%3E&quot;&gt;not a &lt;code&gt;link&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 345 (lines 6060-6064) Code spans <code>&lt;a href=&quot;</code>&quot;&gt;`</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;&amp;lt;a href=&amp;quot;&lt;/code&gt;&amp;quot;&amp;gt;<code>&lt;/p&gt; +&lt;p&gt;&lt;code&gt;&amp;lt;a href=&quot;&lt;/code&gt;&amp;quot;&amp;gt;</code>&lt;/p&gt;</p>
+<p>Example 349 (lines 6097-6101) Code spans <code>`foo</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<code>`foo</code>&lt;/p&gt; +&lt;p&gt;&lt;code&gt;`foo&lt;/code&gt;&lt;/p&gt;</p>
+<p>Example 351 (lines 6113-6117) Code spans <code>foo</code><code>bar</code>`</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<code>foo&lt;code&gt;bar&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;&lt;code&gt;foo&lt;/code&gt;&lt;code&gt;bar&lt;/code&gt;</code>&lt;/p&gt;</p>
+<p>13 passed, 9 failed, 0 errored, 633 skipped stderr: Traceback (most recent call last): File &quot;code-spans.py&quot;, line 10, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: line-breaks (FEATURE-INLINE-CODE-BREAKS.md)</li></ul>
+<p>intent: The implementation passes hard-break, soft-break, trailing-space, and break-context examples. return code: 1 stdout: Example 639 (lines 9285-9291) Hard line breaks foo bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo&lt;br&gt;bar&lt;/p&gt; +&lt;p&gt;foo&lt;br&gt; bar&lt;/p&gt;</p>
+<p>Example 640 (lines 9294-9300) Hard line breaks foo\ bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo&lt;br&gt;bar&lt;/p&gt; +&lt;p&gt;foo&lt;br&gt; bar&lt;/p&gt;</p>
+<p>Example 645 (lines 9344-9350) Hard line breaks &lt;a href=&quot;foo bar&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;p&gt;&lt;a href=&quot;foo +&lt;p&gt;&lt;a href=&quot;foo&amp;lt;br /&amp;gt; bar&quot;&gt;&lt;/p&gt;</p>
+<p>Example 646 (lines 9353-9359) Hard line breaks &lt;a href=&quot;foo\ bar&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;p&gt;&lt;a href=&quot;foo\ +&lt;p&gt;&lt;a href=&quot;foo&amp;lt;br /&amp;gt; bar&quot;&gt;&lt;/p&gt;</p>
+<p>13 passed, 4 failed, 0 errored, 638 skipped stderr: Traceback (most recent call last): File &quot;line-breaks.py&quot;, line 10, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: code-spans (FEATURE-INLINE-CODE-BREAKS.md)</li></ul>
+<p>intent: The implementation passes code span delimiter, matching, normalization, and precedence examples. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: 22 passed, 0 failed, 0 errored, 633 skipped</p>
+<ul><li>PASS: line-breaks (FEATURE-INLINE-CODE-BREAKS.md)</li></ul>
+<p>intent: The implementation passes hard-break, soft-break, trailing-space, and break-context examples. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: 17 passed, 0 failed, 0 errored, 638 skipped</p>
+<h2>Build summary</h2>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>renderer/html.py</li><li>test_inline_code_breaks.py</li></ul>
+<p>SUMMARY: Implemented code-span delimiter matching, normalization, precedence, hard breaks, soft breaks, and HTML-tag protection. Added regression tests.</p>
+<p>Scoped checks pass: 22/22 and 17/17. Full suite still has unrelated pre-existing block parser failures.</p>
+<p>BLOCKERS:</p>
+<ul><li>Full <code>sh full_test.sh</code> does not pass due to tab/list/setext block parsing failures outside this story.</li></ul></article>
+</main>
+</body>
+</html>

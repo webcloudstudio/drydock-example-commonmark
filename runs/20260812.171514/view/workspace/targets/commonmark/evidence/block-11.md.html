@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-11.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-11.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-11.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 11 · Service (block-11)</h1>
+<ul><li>block type: block</li><li>date: 2026-08-12</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 57747</li><li>execution id: 20260812.192510.439Z-440a9e4a</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse autolinks and raw HTML. (inline-html) [story]</li></ul>
+<h2>Acceptance tooling authorization</h2>
+<ul><li>FEATURE-INLINE-HTML.md#inline-html-suite: executable=python3; scope=test; authorization=existing Target environment</li><li>FEATURE-INLINE-HTML.md#inline-html-malformed: executable=python3; scope=test; authorization=existing Target environment</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1263)</li><li>implements: FEATURE-INLINE-HTML.md (SP 483)</li><li>context: spec.txt (SP 51527)</li><li>context: spec_tests.py (SP 1609)</li><li>context: ARCHITECTURE_compact.md (SP 116)</li><li>stack: common_compact.md (SP 1179)</li><li>stack: python_compact.md (SP 1534)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>parser/blocks.py</li><li>renderer/html.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: inline-html-suite (FEATURE-INLINE-HTML.md)</li></ul>
+<p>intent: The autolink and raw HTML syntax passes its complete owned conformance scope. return code: 1 stdout: Example 598 (lines 8819-8823) Autolinks &lt;irc://foo.bar:2233/baz&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;irc://foo.bar:2233/baz&quot;&gt;irc://foo.bar:2233/baz&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&amp;lt;irc://foo.bar:2233/baz&amp;gt;&lt;/p&gt;</p>
+<p>Example 599 (lines 8828-8832) Autolinks &lt;MAILTO:FOO@BAR.BAZ&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;MAILTO:FOO@BAR.BAZ&quot;&gt;MAILTO:FOO@BAR.BAZ&lt;/a&gt;&lt;/p&gt; +&lt;mailto:foo@bar.baz&gt;</p>
+<p>Example 600 (lines 8840-8844) Autolinks &lt;a+b+c:d&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;a+b+c:d&quot;&gt;a+b+c:d&lt;/a&gt;&lt;/p&gt; +&lt;a+b+c:d&gt;</p>
+<p>Example 601 (lines 8847-8851) Autolinks &lt;made-up-scheme://foo,bar&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;made-up-scheme://foo,bar&quot;&gt;made-up-scheme://foo,bar&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&amp;lt;made-up-scheme://foo,bar&amp;gt;&lt;/p&gt;</p>
+<p>Example 603 (lines 8861-8865) Autolinks &lt;localhost:5001/foo&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;localhost:5001/foo&quot;&gt;localhost:5001/foo&lt;/a&gt;&lt;/p&gt; +&lt;localhost:5001 foo&gt;</p>
+<p>Example 604 (lines 8870-8874) Autolinks &lt;https://foo.bar/baz bim&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;https://foo.bar/baz bim&amp;gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;https://foo.bar/baz%20bim&quot;&gt;https://foo.bar/baz bim&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 605 (lines 8879-8883) Autolinks &lt;https://example.com/\[\&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;https://example.com/%5C%5B%5C&quot;&gt;https://example.com/\[\&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&amp;lt;https://example.com/[&amp;gt;&lt;/p&gt;</p>
+<p>Example 606 (lines 8901-8905) Autolinks &lt;foo@bar.example.com&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;mailto:foo@bar.example.com&quot;&gt;foo@bar.example.com&lt;/a&gt;&lt;/p&gt; +&lt;foo@bar.example.com&gt;</p>
+<p>Example 607 (lines 8908-8912) Autolinks &lt;foo+special@Bar.baz-bar0.com&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;mailto:foo+special@Bar.baz-bar0.com&quot;&gt;foo+special@Bar.baz-bar0.com&lt;/a&gt;&lt;/p&gt; +&lt;foo+special@bar.baz-bar0.com&gt;</p>
+<p>Example 608 (lines 8917-8921) Autolinks &lt;foo\+@bar.example.com&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;foo+@bar.example.com&amp;gt;&lt;/p&gt; +&lt;foo\+@bar.example.com&gt;</p>
+<p>Example 611 (lines 8940-8944) Autolinks &lt;m:abc&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;m:abc&amp;gt;&lt;/p&gt; +&lt;m:abc&gt;</p>
+<p>Example 612 (lines 8947-8951) Autolinks &lt;foo.bar.baz&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;foo.bar.baz&amp;gt;&lt;/p&gt; +&lt;foo.bar.baz&gt;</p>
+<p>Example 618 (lines 9070-9076) Raw HTML &lt;a foo=&quot;bar&quot; bam = &#x27;baz &lt;em&gt;&quot;&lt;/em&gt;&#x27; _boolean zoop:33=zoop:33 /&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a &#x27;baz &lt;em bam=&quot;&quot; foo=&quot;bar&quot;&gt;&quot;&lt;/em&gt;&#x27; _boolean zoop:33=zoop:33 /&gt;&lt;/p&gt; +&lt;p&gt;&amp;lt;a foo=&amp;quot;bar&amp;quot; bam = &#x27;baz &lt;em&gt;&amp;quot;&lt;/em&gt;&#x27; _boolean zoop:33=zoop:33 /&amp;gt;&lt;/p&gt;</p>
+<p>Example 621 (lines 9099-9103) Raw HTML &lt;a h*#ref=&quot;hi&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a h*#ref=&amp;quot;hi&amp;quot;&amp;gt;&lt;/p&gt; +&lt;a h*#ref=&quot;hi&quot;&gt;</p>
+<p>Example 622 (lines 9108-9112) Raw HTML &lt;a href=&quot;hi&#x27;&gt; &lt;a href=hi&#x27;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a href=&amp;quot;hi&#x27;&amp;gt; &amp;lt;a href=hi&#x27;&amp;gt;&lt;/p&gt; +&lt;p&gt;</p>
+<p>Example 623 (lines 9117-9127) Raw HTML &lt; a&gt;&lt; foo&gt;&lt;bar/ &gt; &lt;foo bar=baz bim!bop /&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt; a&amp;gt;&amp;lt; foo&amp;gt;&amp;lt;bar/ &amp;gt; &amp;lt;foo bar=baz bim!bop /&amp;gt;&lt;/p&gt; +&lt;p&gt;&amp;lt; a&amp;gt;&amp;lt; foo&amp;gt;&amp;lt;bar/ &amp;gt; &lt;foo bar=&quot;baz&quot; bim!bop&gt;&lt;/p&gt;</p>
+<p>Example 624 (lines 9132-9136) Raw HTML &lt;a href=&#x27;bar&#x27;title=title&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a href=&#x27;bar&#x27;title=title&amp;gt;&lt;/p&gt; +&lt;a href=&quot;bar&quot; title=&quot;title&quot;&gt;</p>
+<p>Example 626 (lines 9150-9154) Raw HTML &lt;/a href=&quot;foo&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;/a href=&amp;quot;foo&amp;quot;&amp;gt;&lt;/p&gt; +&lt;/a&gt;</p>
+<p>Example 627 (lines 9159-9165) Raw HTML foo &lt;!-- this is a -- comment - with hyphens --&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1 @@ -&lt;p&gt;foo &lt;!-- this is a -- -comment - with hyphens --&gt;&lt;/p&gt; +&lt;p&gt;foo &amp;lt;!-- this is a -- comment - with hyphens --&amp;gt;&lt;/p&gt;</p>
+<p>Example 628 (lines 9167-9174) Raw HTML foo &lt;!--&gt; foo --&gt;</p>
+<p>foo &lt;!---&gt; foo --&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;!----&gt; foo --&amp;gt;&lt;/p&gt;&lt;p&gt;foo &lt;!----&gt; foo --&amp;gt;&lt;/p&gt; +&lt;p&gt;foo &amp;lt;!--&amp;gt; foo --&amp;gt;&lt;/p&gt;&lt;p&gt;foo &amp;lt;!---&amp;gt; foo --&amp;gt;&lt;/p&gt;</p>
+<p>Example 629 (lines 9179-9183) Raw HTML foo &lt;?php echo $a; ?&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;?php echo $a; ?&gt;&lt;/p&gt; +&lt;p&gt;foo &amp;lt;?php echo $a; ?&amp;gt;&lt;/p&gt;</p>
+<p>Example 630 (lines 9188-9192) Raw HTML foo &lt;!ELEMENT br EMPTY&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;!--ELEMENT br EMPTY--&gt;&lt;/p&gt; +&lt;p&gt;foo &amp;lt;!ELEMENT br EMPTY&amp;gt;&lt;/p&gt;</p>
+<p>Example 631 (lines 9197-9201) Raw HTML foo &lt;![CDATA[&gt;&amp;&lt;]]&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;![CDATA[&gt;&amp;&lt;]]&gt;&lt;/p&gt; +&lt;p&gt;foo &amp;lt;![CDATA[&amp;gt;&amp;amp;&amp;lt;]]&amp;gt;&lt;/p&gt;</p>
+<p>Example 632 (lines 9207-9211) Raw HTML foo &lt;a href=&quot;&amp;ouml;&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;a href=&quot;ö&quot;&gt;&lt;/p&gt; +&lt;p&gt;foo &lt;a href=&quot;0&quot;&gt;&lt;/p&gt;</p>
+<p>Example 633 (lines 9216-9220) Raw HTML foo &lt;a href=&quot;\*&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;a href=&quot;\*&quot;&gt;&lt;/p&gt; +&lt;p&gt;foo &lt;a href=&quot;0&quot;&gt;&lt;/p&gt;</p>
+<p>Example 634 (lines 9223-9227) Raw HTML &lt;a href=&quot;\&quot;&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a href=&amp;quot;&amp;quot;&amp;quot;&amp;gt;&lt;/p&gt; +&lt;a &quot; href=&quot;\&quot;&gt;</p>
+<p>Example 635 (lines 9233-9241) Raw HTML &lt;a &gt; quoted text</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a&lt;/p&gt;&lt;blockquote&gt;&lt;p&gt;quoted text&lt;/p&gt;&lt;/blockquote&gt; +&lt;a&gt; quoted text</p>
+<p>13 passed, 27 failed, 0 errored, 615 skipped stderr: Traceback (most recent call last): File &quot;inline-html-suite.py&quot;, line 11, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: inline-html-malformed (FEATURE-INLINE-HTML.md)</li></ul>
+<p>intent: Invalid autolinks and malformed HTML remain ordinary escaped content. return code: 1 stderr: Traceback (most recent call last): File &quot;inline-html-malformed.py&quot;, line 9, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: inline-html-suite (FEATURE-INLINE-HTML.md)</li></ul>
+<p>intent: The autolink and raw HTML syntax passes its complete owned conformance scope. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: 40 passed, 0 failed, 0 errored, 615 skipped</p>
+<ul><li>PASS: inline-html-malformed (FEATURE-INLINE-HTML.md)</li></ul>
+<p>intent: Invalid autolinks and malformed HTML remain ordinary escaped content. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0</p>
+<h2>Repair attempts</h2>
+<ul><li>attempt 0 (initial build): failed; 0/2 checks; 29/40 cases model=gpt-5.6-luna; execution 20260812.191803.834Z-4159ca9f</li><li>attempt 1 (repair 1): built; 2/2 checks; 40/40 cases model=gpt-5.6-luna; execution 20260812.192510.439Z-440a9e4a</li></ul>
+<h2>Build summary</h2>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>renderer/html.py</li></ul>
+<p>SUMMARY: Fixed inline autolinks, raw HTML validation, malformed markup escaping, attribute scanning, and special HTML comments. Both acceptance checks pass: 40 passed, 0 failed.</p>
+<p>BLOCKERS:</p>
+<ul><li>None</li></ul></article>
+</main>
+</body>
+</html>

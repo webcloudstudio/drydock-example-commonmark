@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/test_architecture.py</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/test_architecture.py</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../build/commonmark/test_architecture.py">Raw file</a></div></header>
+<article class="doc"><pre>from pathlib import Path
+
+
+def test_architecture_boundaries_exist() -&gt; None:
+    required = [Path(&quot;cmark&quot;), Path(&quot;parser&quot;), Path(&quot;renderer&quot;)]
+    assert all(path.exists() for path in required)
+
+
+def test_conformance_wrapper_has_posix_entrypoint() -&gt; None:
+    wrapper = Path(&quot;full_test.sh&quot;)
+    assert wrapper.is_file()
+    assert wrapper.read_text(encoding=&quot;utf-8&quot;).startswith(&quot;#!&quot;)
+
+
+def test_executable_preserves_standard_io_contract() -&gt; None:
+    import subprocess
+
+    result = subprocess.run(
+        [&quot;./cmark&quot;],
+        input=&quot;hello\n&quot;,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert result.returncode == 0
+    assert result.stdout == &quot;&lt;p&gt;hello&lt;/p&gt;\n&quot;
+
+</pre></article>
+</main>
+</body>
+</html>

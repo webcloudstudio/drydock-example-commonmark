@@ -1,0 +1,378 @@
+=== FEATURE-INLINE-LINKS.md ===
+# FEATURE: Inline Links and Images
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260812 V1 |
+| Description | Parses inline links, reference links, and images according to CommonMark 0.31.2. |
+| Depends On  | FEATURE-INLINE-EMPHASIS.md |
+| Provides    | link parser, image parser, reference resolver |
+| Consumes    | block parser, inline parser |
+
+## Questions
+
+- None.
+
+## Purpose
+
+This capability parses inline, full-reference, collapsed-reference, and shortcut links, including nested image descriptions.
+
+## Behavior
+
+- Parse balanced and escaped link destinations.
+- Parse quoted and parenthesized titles.
+- Resolve definitions case-insensitively using Unicode case folding.
+- Give the first duplicate reference definition precedence.
+- Parse images with plain-text alt content.
+- Prevent nested links while permitting links in image descriptions.
+- Preserve hard and soft line breaks inside link content.
+
+## Programmatic Acceptance
+
+=== AC inline-links ===
+Intent: The links and images conformance sections pass.
+Suite: scoped
+Requires: executable=python3; scope=test
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, "spec_tests.py", "--spec", "spec.txt", "--program", "./program",
+     "--pattern", "^(Links|Images)$"],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC inline-links ===
+
+=== AC reference-links ===
+Intent: Reference link definitions and precedence pass.
+Suite: scoped
+Requires: executable=python3; scope=test
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, "spec_tests.py", "--spec", "spec.txt", "--program", "./program",
+     "--pattern", "^(Link reference definitions|Links|Images)$"],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC reference-links ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Do not use a public Markdown implementation.
+- Do not treat malformed link syntax as a valid link.
+
+=== END FEATURE-INLINE-LINKS.md ===
+=== FEATURE-INLINE-HTML.md ===
+# FEATURE: Autolinks and Raw HTML
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260812 V1 |
+| Description | Parses URI autolinks, email autolinks, and raw HTML constructs according to CommonMark 0.31.2. |
+| Depends On  | FEATURE-INLINE-LINKS.md |
+| Provides    | autolink parser, raw HTML parser |
+| Consumes    | block parser, inline parser |
+
+## Questions
+
+- None.
+
+## Purpose
+
+This capability recognizes URI and email autolinks and preserves valid raw HTML tags and declarations.
+
+## Behavior
+
+- Parse absolute URI autolinks with valid schemes.
+- Parse valid email autolinks as `mailto:` links.
+- Preserve valid open and closing tags, comments, declarations, processing instructions, and CDATA.
+- Escape malformed HTML-like text.
+- Preserve raw HTML inside both paragraphs and HTML blocks.
+- Do not apply Markdown escapes inside raw HTML or autolinks.
+
+## Programmatic Acceptance
+
+=== AC autolinks ===
+Intent: URI and email autolink conformance sections pass.
+Suite: scoped
+Requires: executable=python3; scope=test
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, "spec_tests.py", "--spec", "spec.txt", "--program", "./program",
+     "--pattern", "^Autolinks$"],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC autolinks ===
+
+=== AC raw-html ===
+Intent: Raw HTML conformance sections pass.
+Suite: scoped
+Requires: executable=python3; scope=test
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, "spec_tests.py", "--spec", "spec.txt", "--program", "./program",
+     "--pattern", "^(HTML blocks|Raw HTML)$"],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC raw-html ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Preserve valid raw markup without Markdown interpretation.
+- Escape malformed HTML-like text.
+
+=== END FEATURE-INLINE-HTML.md ===
+=== FEATURE-RENDER-BLOCKS.md ===
+# FEATURE: Block HTML Rendering
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260812 V1 |
+| Description | Renders parsed CommonMark block structure as conforming HTML. |
+| Depends On  | FEATURE-INLINE-HTML.md |
+| Provides    | block HTML renderer |
+| Consumes    | block parser, inline parser |
+
+## Questions
+
+- None.
+
+## Rendering Contract
+
+Render block nodes using CommonMark HTML conventions:
+
+- Paragraphs use `<p>` except for paragraphs in tight lists.
+- Headings use `<h1>` through `<h6>`.
+- Thematic breaks use `<hr />`.
+- Code blocks use escaped `<pre><code>` content.
+- Fenced code info strings produce language classes.
+- Block quotes use `<blockquote>`.
+- Lists use `<ul>` or `<ol>`, including ordered start attributes.
+- Loose and tight list rendering follows parsed list metadata.
+- Raw HTML blocks remain unescaped.
+
+## Programmatic Acceptance
+
+=== AC block-rendering ===
+Intent: Leaf block and container block rendering conformance passes.
+Suite: scoped
+Requires: executable=python3; scope=test
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, "spec_tests.py", "--spec", "spec.txt", "--program", "./program",
+     "--pattern", "^(Thematic breaks|ATX headings|Setext headings|Indented code blocks|Fenced code blocks|HTML blocks|Paragraphs|Blank lines)$"],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC block-rendering ===
+
+=== AC-container-rendering ===
+Intent: Block quote and list HTML rendering conformance passes.
+Suite: scoped
+Requires: executable=python3; scope=test
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, "spec_tests.py", "--spec", "spec.txt", "--program", "./program",
+     "--pattern", "^(Block quotes|List items|Lists)$"],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC-container-rendering ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Escape literal block text and code content.
+- Preserve raw HTML blocks.
+- Do not replace complete-suite verification with selected tally assertions.
+
+=== END FEATURE-RENDER-BLOCKS.md ===
+=== FEATURE-RENDER-INLINE.md ===
+# FEATURE: Inline HTML Rendering
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260812 V1 |
+| Description | Renders parsed inline nodes as conforming HTML with required escaping and preservation. |
+| Depends On  | FEATURE-RENDER-BLOCKS.md |
+| Provides    | inline HTML renderer |
+| Consumes    | inline parser |
+
+## Questions
+
+- None.
+
+## Rendering Contract
+
+- Escape text characters required for HTML output.
+- Render emphasis and strong emphasis with `<em>` and `<strong>`.
+- Render links with escaped `href` and optional `title`.
+- Render images with escaped `src`, plain-text `alt`, and optional `title`.
+- Render code spans with escaped literal content.
+- Render hard breaks as `<br />`.
+- Preserve raw HTML and autolinks.
+- Render entities and numeric references as the required character output.
+
+## Programmatic Acceptance
+
+=== AC-inline-rendering ===
+Intent: Inline syntax rendering conformance passes.
+Suite: scoped
+Requires: executable=python3; scope=test
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, "spec_tests.py", "--spec", "spec.txt", "--program", "./program",
+     "--pattern", "^(Backslash escapes|Entity and numeric character references|Code spans|Emphasis and strong emphasis|Links|Images|Autolinks|Raw HTML)$"],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC-inline-rendering ===
+
+=== AC-break-rendering ===
+Intent: Hard and soft line break rendering conformance passes.
+Suite: scoped
+Requires: executable=python3; scope=test
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, "spec_tests.py", "--spec", "spec.txt", "--program", "./program",
+     "--pattern", "^(Hard line breaks|Soft line breaks)$"],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC-break-rendering ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Do not escape valid raw HTML.
+- Do not use captured output text as an acceptance oracle.
+
+=== END FEATURE-RENDER-INLINE.md ===
+=== FEATURE-RENDER-NORMALIZATION.md ===
+# FEATURE: Rendered URL and Attribute Normalization
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260812 V1 |
+| Description | Produces normalized URLs, titles, attributes, and special-character output expected by the supplied harness. |
+| Depends On  | FEATURE-RENDER-INLINE.md |
+| Provides    | normalized URL output, normalized title output, normalized attribute output |
+| Consumes    | block HTML renderer, inline HTML renderer |
+
+## Questions
+
+- None.
+
+## Normalization Contract
+
+- Percent-encode URL characters required by the supplied CommonMark examples.
+- Preserve existing URL escapes.
+- Escape titles and attribute values for HTML.
+- Preserve significant URL, source, title, and alt attributes.
+- Emit the HTML structure expected by the supplied normalizer.
+- Preserve special characters and replacement characters according to CommonMark 0.31.2.
+
+## Programmatic Acceptance
+
+=== AC-normalized-output ===
+Intent: URL, title, attribute, and special-character conformance passes.
+Suite: scoped
+Requires: executable=python3; scope=test
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, "spec_tests.py", "--spec", "spec.txt", "--program", "./program",
+     "--pattern", "^(Links|Images|Autolinks|Raw HTML|Entity and numeric character references)$"],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC-normalized-output ===
+
+=== AC-special-characters ===
+Intent: Escaping and special-character output conformance passes.
+Suite: scoped
+Requires: executable=python3; scope=test
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, "spec_tests.py", "--spec", "spec.txt", "--program", "./program",
+     "--pattern", "^(Backslash escapes|Code spans|Hard line breaks|Soft line breaks)$"],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC-special-characters ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Preserve URL-escaped sequences.
+- Do not assert on conformance runner tallies or captured output text.
+- The complete unfiltered suite remains exclusively owned by the terminal verification story.
+
+=== END FEATURE-RENDER-NORMALIZATION.md ===

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-INLINE-EMPHASIS.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-INLINE-EMPHASIS.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-INLINE-EMPHASIS.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Emphasis and Strong Emphasis</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260812 V1</td></tr><tr><td>Description</td><td>Defines CommonMark delimiter-run parsing for emphasis and strong emphasis.</td></tr><tr><td>Depends On</td><td>FEATURE-INLINE-CODE-BREAKS.md</td></tr><tr><td>Provides</td><td>emphasis parser, strong emphasis parser</td></tr><tr><td>Consumes</td><td>block parser, code span parser</td></tr></tbody></table></div>
+<h2>Programmatic Acceptance</h2>
+<p>Requires: executable=python3; scope=test</p>
+<p>=== AC emphasis-delimiters ===<br>Intent: The implementation passes delimiter-run, flanking, intraword, and modulo-three emphasis examples.<br>Suite: scoped</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, r&quot;^(Emphasis and strong emphasis)$&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC emphasis-delimiters ===</p>
+<p>=== AC emphasis-nesting ===<br>Intent: The implementation passes nested, overlapping, precedence, and unmatched delimiter examples.<br>Suite: scoped</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, r&quot;^(Emphasis and strong emphasis)$&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC emphasis-nesting ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Intraword underscore emphasis is prohibited according to CommonMark delimiter rules.</li><li>Code spans, links, images, and HTML tags retain precedence over emphasis parsing.</li></ul></article>
+</main>
+</body>
+</html>

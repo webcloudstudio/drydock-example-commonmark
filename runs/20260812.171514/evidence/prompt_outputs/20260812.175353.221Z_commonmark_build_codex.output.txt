@@ -1,0 +1,11 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- parser/blocks.py
+- renderer/html.py
+
+SUMMARY:
+Fixed escaped reference labels and invalid multiline titles crossing blank lines. Leaf primary and secondary acceptance checks pass; pytest passes.
+
+BLOCKERS:
+- Full suite still has failures in out-of-scope inline/container features.

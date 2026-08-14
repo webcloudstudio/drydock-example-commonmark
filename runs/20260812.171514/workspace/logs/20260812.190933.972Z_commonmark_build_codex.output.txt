@@ -1,0 +1,10 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- renderer/html.py
+
+SUMMARY:
+Fixed nested image alt-text extraction. Links/Images scope passes: 112 passed.
+
+BLOCKERS:
+- `sh full_test.sh` still fails on unrelated list/block parsing cases outside this build block.

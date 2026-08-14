@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/test_inline_escapes.py</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/test_inline_escapes.py</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../build/commonmark/test_inline_escapes.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Focused conformance tests for inline escapes and character references.&quot;&quot;&quot;
+
+import subprocess
+
+
+def render(markdown: str) -&gt; subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [&quot;./cmark&quot;], input=markdown, text=True, encoding=&quot;utf-8&quot;,
+        capture_output=True, check=False,
+    )
+
+
+def test_punctuation_escapes_are_literal() -&gt; None:
+    result = render(r&quot;\*not emphasized* \[not a link](/url) \&amp;ouml;&quot;)
+    assert result.returncode == 0
+    assert result.stdout == &quot;&lt;p&gt;*not emphasized* [not a link](/url) &amp;amp;ouml;&lt;/p&gt;\n&quot;
+
+
+def test_references_decode_only_in_normal_inline_text() -&gt; None:
+    result = render(&quot;&amp;copy; &amp;#35; &amp;#X22; &amp;#0; `&amp;copy;`\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout == &#x27;&lt;p&gt;© # &amp;quot; � &lt;code&gt;&amp;amp;copy;&lt;/code&gt;&lt;/p&gt;\n&#x27;
+
+
+def test_fenced_info_string_decodes_references_and_escapes() -&gt; None:
+    result = render(r&#x27;&#x27;&#x27;``` f&amp;ouml;\+bar
+text
+```
+&#x27;&#x27;&#x27;)
+    assert result.returncode == 0
+    assert result.stdout == &#x27;&lt;pre&gt;&lt;code class=&quot;language-fö+bar&quot;&gt;text\n&lt;/code&gt;&lt;/pre&gt;\n&#x27;
+</pre></article>
+</main>
+</body>
+</html>

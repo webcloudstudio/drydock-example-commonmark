@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-CONFORMANCE-ASSETS.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-CONFORMANCE-ASSETS.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-CONFORMANCE-ASSETS.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Conformance Assets</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260812 V1</td></tr><tr><td>Description</td><td>Stages the supplied CommonMark conformance assets and supports bounded verification.</td></tr><tr><td>Depends On</td><td>FEATURE-RENDER-NORMALIZATION.md</td></tr><tr><td>Provides</td><td>staged conformance assets, bounded conformance verification</td></tr><tr><td>Consumes</td><td>parser executable</td></tr></tbody></table></div>
+<h2>Workflow</h2>
+<p>The build stages only <code>spec.txt</code>, <code>spec_tests.py</code>, <code>cmark.py</code>, and <code>normalize.py</code> at the runtime paths required by the supplied harness. <code>INSTRUCTIONS.md</code> remains planning context and is not staged.</p>
+<p>Bounded verification invokes <code>spec_tests.py</code> with explicit section selectors. It never invokes an unfiltered suite. The harness uses the parser executable through its standard-input and standard-output contract.</p>
+<h2>Staged Assets</h2>
+<div class="scroll"><table><thead><tr><th>Source</th><th>Runtime destination</th></tr></thead><tbody><tr><td><code>sources/spec.txt</code></td><td><code>spec.txt</code></td></tr><tr><td><code>sources/spec_tests.py</code></td><td><code>spec_tests.py</code></td></tr><tr><td><code>sources/cmark.py</code></td><td><code>cmark.py</code></td></tr><tr><td><code>sources/normalize.py</code></td><td><code>normalize.py</code></td></tr></tbody></table></div>
+<h2>Programmatic Acceptance</h2>
+<p>Requires: executable=python3; scope=test</p>
+<p>=== AC conformance-assets-leaf-scope ===<br>Intent: The staged conformance harness executes a selected leaf-block scope successfully.<br>Suite: scoped</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, &quot;^(Thematic breaks|ATX headings|Setext headings|Indented code blocks|Fenced code blocks|HTML blocks|Link reference definitions|Paragraphs|Blank lines)$&quot;, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC conformance-assets-leaf-scope ===</p>
+<p>=== AC conformance-assets-inline-scope ===<br>Intent: The staged conformance harness executes a selected inline scope successfully.<br>Suite: scoped</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;spec_tests.py&quot;, &quot;--spec&quot;, &quot;spec.txt&quot;, &quot;--program&quot;, &quot;./program&quot;, &quot;--pattern&quot;, &quot;^(Code spans|Emphasis and strong emphasis|Links|Images|Autolinks|Raw HTML|Hard line breaks|Soft line breaks)$&quot;, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC conformance-assets-inline-scope ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Only the four required conformance assets are staged.</li><li>Bounded checks use explicit example-bearing section selectors.</li><li>The complete unfiltered suite is reserved for the terminal verification story.</li></ul></article>
+</main>
+</body>
+</html>

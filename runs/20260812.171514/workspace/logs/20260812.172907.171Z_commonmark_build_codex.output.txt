@@ -1,0 +1,17 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- cmark
+- parser/blocks.py
+- parser/__init__.py
+- parser/inlines.py
+- renderer/html.py
+- test_cli.py
+
+SUMMARY:
+Implemented standard-input/output CLI handling, UTF-8 validation, deterministic stderr error reporting, heading and paragraph separation, and CLI regression tests.
+
+Verification: 8 tests passed.
+
+BLOCKERS:
+- None

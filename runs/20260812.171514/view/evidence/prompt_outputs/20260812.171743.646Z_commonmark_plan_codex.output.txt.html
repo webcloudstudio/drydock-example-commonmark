@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20260812.171743.646Z_commonmark_plan_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20260812.171743.646Z_commonmark_plan_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20260812.171743.646Z_commonmark_plan_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>=== ARCHITECTURE.md ===
+# ARCHITECTURE: CommonMark Parser
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260812 V1 |
+| Description | Defines the two-phase Python CommonMark parser architecture and runtime boundaries. |
+| Depends On  | — |
+| Provides    | parser architecture, block parser boundary, inline parser boundary, renderer boundary |
+| Consumes    | — |
+
+## Questions
+
+- None.
+
+## Intent
+
+CommonMark is a command-line parser that reads UTF-8 Markdown from standard input, parses block structure before inline structure, renders CommonMark 0.31.2 HTML, and writes the result to standard output.
+
+## Module Boundaries
+
+| Boundary | Responsibility |
+|---|---|
+| Executable entry point | Reads standard input, invokes parsing and rendering, writes standard output, and reports process failures. |
+| Block parser | Builds block structure, including leaf blocks, block quotes, lists, and link reference definitions. |
+| Inline parser | Parses escapes, references, code spans, emphasis, links, images, autolinks, raw HTML, and line breaks within block content. |
+| HTML renderer | Renders block and inline structures as CommonMark-compatible HTML. |
+| Conformance wrapper | Invokes the supplied unfiltered CommonMark suite through `sh full_test.sh`. |
+
+The parser separates block parsing from inline parsing. Link reference definitions discovered during block parsing are available to inline parsing. The renderer consumes the completed parsed structure and does not determine block structure.
+
+## Technology Stack
+
+- Python 3 implements the parser, executable, and conformance integration.
+- Python standard library supplies runtime functionality without third-party dependencies.
+- POSIX shell provides the `full_test.sh` wrapper.
+
+## Constraints
+
+- The implementation does not use a public Markdown implementation.
+- The executable preserves standard-input, standard-output, and exit-status behavior required by the supplied harness.
+- Runtime conformance assets are limited to `spec.txt`, `spec_tests.py`, `cmark.py`, and `normalize.py`.
+- `full_test.sh` runs the complete supplied suite without filtering.
+
+## Programmatic Acceptance
+
+=== AC architecture-boundaries ===
+Intent: The implementation exposes separate block, inline, rendering, and executable boundaries.
+
+from pathlib import Path
+
+required = [
+    Path(&quot;cmark&quot;),
+    Path(&quot;parser&quot;),
+    Path(&quot;renderer&quot;),
+]
+assert all(path.exists() for path in required)
+=== END AC architecture-boundaries ===
+
+=== AC architecture-runtime-contract ===
+Intent: The runtime contains the required POSIX conformance wrapper boundary.
+
+from pathlib import Path
+
+wrapper = Path(&quot;full_test.sh&quot;)
+assert wrapper.is_file()
+assert wrapper.read_text(encoding=&quot;utf-8&quot;).startswith(&quot;#!&quot;)
+=== END AC architecture-runtime-contract ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- The parser does not delegate CommonMark behavior to a public Markdown implementation.
+- Block parsing precedes inline parsing.
+- Runtime conformance assets do not include imported instruction prose.
+
+=== END ARCHITECTURE.md ===
+=== FEATURE-CLI-ENTRYPOINT.md ===
+# FEATURE: CLI Entry Point
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260812 V1 |
+| Description | Provides the executable standard-input and standard-output CommonMark interface. |
+| Depends On  | ARCHITECTURE.md |
+| Provides    | parser executable |
+| Consumes    | parser core, HTML renderer |
+
+## Questions
+
+- None.
+
+## Workflow
+
+The executable reads UTF-8 Markdown from standard input. It parses block structure before inline structure, renders the resulting document as HTML, and writes only rendered HTML to standard output. A successful invocation exits with status `0`.
+
+The executable is named `cmark` and is invokable from the build directory as `./cmark`. It supports the supplied harness&#x27;s program invocation contract.
+
+## Programmatic Acceptance
+
+Requires: executable=cmark; scope=test
+
+=== AC cli-stdin-stdout ===
+Intent: The executable renders Markdown supplied through standard input and exits successfully.
+
+import subprocess
+
+result = subprocess.run(
+    [&quot;./cmark&quot;],
+    input=&quot;# Hello\n\nworld\n&quot;,
+    capture_output=True,
+    text=True,
+    encoding=&quot;utf-8&quot;,
+)
+print(result.stdout)
+print(result.stderr, file=__import__(&quot;sys&quot;).stderr)
+assert result.returncode == 0
+assert result.stdout == &quot;&lt;h1&gt;Hello&lt;/h1&gt;\n&lt;p&gt;world&lt;/p&gt;\n&quot;
+=== END AC cli-stdin-stdout ===
+
+=== AC cli-utf8 ===
+Intent: The executable accepts UTF-8 Markdown and emits UTF-8 HTML.
+
+import subprocess
+
+result = subprocess.run(
+    [&quot;./cmark&quot;],
+    input=&quot;café\n&quot;,
+    capture_output=True,
+    text=True,
+    encoding=&quot;utf-8&quot;,
+)
+assert result.returncode == 0
+assert result.stdout == &quot;&lt;p&gt;café&lt;/p&gt;\n&quot;
+=== END AC cli-utf8 ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Markdown input is read from standard input.
+- Rendered HTML is written to standard output.
+- The executable does not write diagnostics into standard output during successful parsing.
+
+=== END FEATURE-CLI-ENTRYPOINT.md ===
+=== FEATURE-CLI-ERRORS.md ===
+# FEATURE: CLI Errors
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260812 V1 |
+| Description | Defines deterministic process failure behavior for the parser executable. |
+| Depends On  | FEATURE-CLI-ENTRYPOINT.md |
+| Provides    | parser error behavior |
+| Consumes    | parser executable |
+
+## Questions
+
+- None.
+
+## Operational Behavior
+
+Operational failures produce a nonzero exit status. Diagnostics are written to standard error, and standard output remains empty when processing cannot complete. Successful input processing continues to use the standard-input and standard-output contract defined by `FEATURE-CLI-ENTRYPOINT.md`.
+
+## Programmatic Acceptance
+
+=== AC cli-errors-success-contract ===
+Intent: A successful invocation returns zero and keeps diagnostics off standard error.
+
+import subprocess
+
+result = subprocess.run(
+    [&quot;./cmark&quot;],
+    input=&quot;plain text\n&quot;,
+    capture_output=True,
+    text=True,
+    encoding=&quot;utf-8&quot;,
+)
+assert result.returncode == 0
+assert result.stdout == &quot;&lt;p&gt;plain text&lt;/p&gt;\n&quot;
+assert result.stderr == &quot;&quot;
+=== END AC cli-errors-success-contract ===
+
+=== AC cli-errors-stdout-integrity ===
+Intent: The executable emits a complete HTML document result without diagnostic text in standard output.
+
+import subprocess
+
+result = subprocess.run(
+    [&quot;./cmark&quot;],
+    input=&quot;a\n\nb\n&quot;,
+    capture_output=True,
+    text=True,
+    encoding=&quot;utf-8&quot;,
+)
+assert result.returncode == 0
+assert result.stdout == &quot;&lt;p&gt;a&lt;/p&gt;\n&lt;p&gt;b&lt;/p&gt;\n&quot;
+assert &quot;error&quot; not in result.stdout.lower()
+=== END AC cli-errors-stdout-integrity ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Failure diagnostics never replace rendered output on standard output.
+- Error handling does not alter the conformance harness invocation contract.
+- Acceptance does not depend on diagnostic wording.
+
+=== END FEATURE-CLI-ERRORS.md ===
+=== FEATURE-CLI-DOCUMENTATION.md ===
+# FEATURE: CLI Documentation
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260812 V1 |
+| Description | Documents the parser command-line interface and complete conformance verification command. |
+| Depends On  | FEATURE-CLI-ENTRYPOINT.md |
+| Provides    | README.md |
+| Consumes    | parser executable, full_test.sh |
+
+## Questions
+
+- None.
+
+## Documentation
+
+`README.md` is concise and documents:
+
+- that the parser reads Markdown from standard input;
+- that it writes rendered HTML to standard output;
+- that `sh full_test.sh` runs the complete supplied conformance suite.
+
+## Programmatic Acceptance
+
+=== AC cli-documentation-content ===
+Intent: README.md documents the standard-input and standard-output interface.
+
+from pathlib import Path
+
+text = Path(&quot;README.md&quot;).read_text(encoding=&quot;utf-8&quot;)
+lower = text.lower()
+assert &quot;standard input&quot; in lower or &quot;stdin&quot; in lower
+assert &quot;standard output&quot; in lower or &quot;stdout&quot; in lower
+=== END AC cli-documentation-content ===
+
+=== AC cli-documentation-verification ===
+Intent: README.md documents the required complete-suite invocation.
+
+from pathlib import Path
+
+text = Path(&quot;README.md&quot;).read_text(encoding=&quot;utf-8&quot;)
+assert &quot;sh full_test.sh&quot; in text
+=== END AC cli-documentation-verification ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- README.md remains concise.
+- Documentation does not claim verification through a filtered or hardcoded tally.
+
+=== END FEATURE-CLI-DOCUMENTATION.md ===
+=== FEATURE-BLOCK-LEAF.md ===
+# FEATURE: Leaf Block Parser
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260812 V1 |
+| Description | Parses CommonMark leaf blocks and link reference definitions. |
+| Depends On  | FEATURE-CLI-ENTRYPOINT.md |
+| Provides    | leaf block parser |
+| Consumes    | parser executable |
+
+## Questions
+
+- None.
+
+## Scope
+
+The parser recognizes CommonMark 0.31.2 leaf blocks:
+
+- thematic breaks;
+- ATX headings;
+- setext headings;
+- indented code blocks;
+- fenced code blocks;
+- HTML blocks;
+- paragraphs;
+- link reference definitions.
+
+Leaf parsing occurs before inline parsing. Link reference definitions are collected for later resolution and do not render as visible blocks.
+
+## Programmatic Acceptance
+
+Suite: scoped
+Requires: executable=python3; scope=test
+
+=== AC leaf-blocks-primary ===
+Intent: The implementation passes the supplied conformance sections for thematic breaks, headings, and code blocks.
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [
+        sys.executable,
+        &quot;spec_tests.py&quot;,
+        &quot;--spec&quot;,
+        &quot;spec.txt&quot;,
+        &quot;--program&quot;,
+        &quot;./cmark&quot;,
+        &quot;--pattern&quot;,
+        &quot;Thematic breaks|ATX headings|Setext headings|Indented code blocks|Fenced code blocks&quot;,
+    ],
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC leaf-blocks-primary ===
+
+=== AC leaf-blocks-secondary ===
+Intent: The implementation passes the supplied conformance sections for HTML blocks, link references, paragraphs, and blank lines.
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [
+        sys.executable,
+        &quot;spec_tests.py&quot;,
+        &quot;--spec&quot;,
+        &quot;spec.txt&quot;,
+        &quot;--program&quot;,
+        &quot;./cmark&quot;,
+        &quot;--pattern&quot;,
+        &quot;HTML blocks|Link reference definitions|Paragraphs|Blank lines&quot;,
+    ],
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC leaf-blocks-secondary ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Leaf blocks are parsed before inline constructs.
+- Code blocks preserve literal content and do not parse inline syntax.
+- Link reference definitions are not emitted as visible HTML blocks.
+- Verification uses the supplied harness with selectors that match example-bearing sections.
+
+=== END FEATURE-BLOCK-LEAF.md ===</pre></article>
+</main>
+</body>
+</html>

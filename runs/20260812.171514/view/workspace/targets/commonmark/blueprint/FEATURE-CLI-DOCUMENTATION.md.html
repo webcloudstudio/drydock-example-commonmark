@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-CLI-DOCUMENTATION.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-CLI-DOCUMENTATION.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-CLI-DOCUMENTATION.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: CLI Documentation</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260812 V1</td></tr><tr><td>Description</td><td>Documents the parser command-line interface and complete conformance verification command.</td></tr><tr><td>Depends On</td><td>FEATURE-CLI-ENTRYPOINT.md</td></tr><tr><td>Provides</td><td>README.md</td></tr><tr><td>Consumes</td><td>parser executable, full_test.sh</td></tr></tbody></table></div>
+<h2>Documentation</h2>
+<p><code>README.md</code> is concise and documents:</p>
+<ul><li>that the parser reads Markdown from standard input;</li><li>that it writes rendered HTML to standard output;</li><li>that <code>sh full_test.sh</code> runs the complete supplied conformance suite.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC cli-documentation-content ===<br>Intent: README.md documents the standard-input and standard-output interface.</p>
+<p>from pathlib import Path</p>
+<p>text = Path(&quot;README.md&quot;).read_text(encoding=&quot;utf-8&quot;) lower = text.lower() assert &quot;standard input&quot; in lower or &quot;stdin&quot; in lower assert &quot;standard output&quot; in lower or &quot;stdout&quot; in lower === END AC cli-documentation-content ===</p>
+<p>=== AC cli-documentation-verification ===<br>Intent: README.md documents the required complete-suite invocation.</p>
+<p>from pathlib import Path</p>
+<p>text = Path(&quot;README.md&quot;).read_text(encoding=&quot;utf-8&quot;) assert &quot;sh full_test.sh&quot; in text === END AC cli-documentation-verification ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>README.md remains concise.</li><li>Documentation does not claim verification through a filtered or hardcoded tally.</li></ul></article>
+</main>
+</body>
+</html>

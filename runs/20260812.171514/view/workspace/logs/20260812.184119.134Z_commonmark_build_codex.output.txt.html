@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/logs/20260812.184119.134Z_commonmark_build_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/logs/20260812.184119.134Z_commonmark_build_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../workspace/logs/20260812.184119.134Z_commonmark_build_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>RESULT: FAILED
+
+FILES CHANGED:
+- commonmark
+- renderer/html.py
+
+SUMMARY:
+Added the expected executable and implemented balanced link/image parsing. Focused tests still fail on nested-link and edge-case precedence behavior.
+
+BLOCKERS:
+- Inline-links scope is not passing.
+- Full suite remains failing on existing block-parser cases.
+
+FAILURE_SUMMARY: Link parser regression remains.
+
+FAILURE_DETAIL: Legacy inline substitutions still conflict with the new scanner, producing incorrect nested-link and reference-link output. Reconcile or replace the fallback substitutions before rerunning.</pre></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,8 @@
+Drydock 0.1.8  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Source: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/sources
+Target: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/workspace/targets/commonmark/blueprint/sources/
+INSTRUCTIONS.md
+cmark.py
+normalize.py
+spec.txt
+spec_tests.py
