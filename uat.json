@@ -8,13 +8,16 @@
     "sources/spec.txt",
     "sources/spec_tests.py",
     "sources/cmark.py",
-    "sources/normalize.py"
+    "sources/normalize.py",
+    "sources/full_test.sh"
   ],
   "updates": [],
   "sea_trials": "inputs/SEA_TRIALS.md",
   "technology_stack": "inputs/TECHNOLOGY_STACK.md",
-  "test_command": [
-    "sh",
-    "full_test.sh"
-  ]
+  "acceptance": {
+    "full": [
+      "sh",
+      "sources/full_test.sh"
+    ]
+  }
 }

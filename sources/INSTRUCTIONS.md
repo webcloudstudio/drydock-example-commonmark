@@ -3,13 +3,28 @@
 Build a CommonMark 0.31.2 parser from the supplied specification. The parser reads Markdown from
 standard input and writes HTML to standard output. Do not use a public Markdown implementation.
 
-Product acceptance is `sh full_test.sh` returning exit code `0`. The script runs the complete,
-unfiltered supplied CommonMark suite. Its exit status is the verdict; do not parse or hardcode its
-printed tally.
+The deliverable is an executable named `commonmark` at the application root.
 
 `sources/INSTRUCTIONS.md` is imported specification prose. It is not staged into the completed
-application. The runtime conformance assets are only `spec.txt`, `spec_tests.py`, `cmark.py`, and
-`normalize.py`.
+application. The runtime conformance assets are only `spec.txt`, `spec_tests.py`, `cmark.py`,
+`normalize.py`, and `full_test.sh`.
+
+## Run Harness
+
+`sources/full_test.sh` is the single scoring entry point. It is supplied, not authored: it is
+staged verbatim into the build directory alongside the other imported assets, and `drydock uat`
+runs `sh sources/full_test.sh` from the completed application root and takes its exit code and
+output as the score. It runs the complete, unfiltered supplied CommonMark suite against
+`./commonmark`.
+
+The interface check is deliberately separate from the conformance run so that a missing
+executable and a genuine conformance failure are distinguishable in the evidence.
+
+**The scoring assets are read-only.** `sources/full_test.sh`, `sources/spec_tests.py`,
+`sources/cmark.py`, `sources/normalize.py`, and `sources/spec.txt` are hash-verified against the
+import and restored before grading, so a modification is reported as tampering rather than
+honored. Do not write to them. Build `./commonmark` so that the supplied entry point succeeds;
+changing the entry point is not a repair.
 
 Create a concise project `README.md` describing the standard-input/standard-output interface.
 README content is not an acceptance criterion and does not require a documentation story.
@@ -39,11 +54,10 @@ headings` or `List items`. Chapter headings such as `Leaf blocks`, `Container bl
 Create one terminal verification story that:
 
 - depends on every parser implementation story;
-- creates `full_test.sh` as a POSIX-compatible wrapper for the unfiltered suite;
 - contains the only `Suite: full` acceptance check;
-- runs `sh full_test.sh`, prints captured standard output and standard error, and asserts only
-  `result.returncode == 0`; and
+- runs `sh sources/full_test.sh`, prints captured standard output and standard error, and asserts
+  only `result.returncode == 0`; and
 - carries `Sea Trials: st-001`.
 
-Do not invoke `full_test.sh` from scoped checks. Do not create file-presence or staged-asset
-acceptance checks, or additional verification stories.
+Do not author `full_test.sh`; it is supplied. Do not invoke it from scoped checks. Do not create
+file-presence or staged-asset acceptance checks, or additional verification stories.

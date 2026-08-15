@@ -1,3 +1,4 @@
 archive/
 *.swp
 *.swo
+__pycache__/
