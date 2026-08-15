@@ -11,8 +11,12 @@
 <header class="fileheader"><div class="kind">Project document</div><h1>sources/INSTRUCTIONS.md</h1><div class="filenav"><a href="../../index.html">&larr; Report</a><a href="../../sources/INSTRUCTIONS.md">Raw file</a></div></header>
 <article class="doc"><h1>Build Instructions: CommonMark Parser</h1>
 <p>Build a CommonMark 0.31.2 parser from the supplied specification. The parser reads Markdown from standard input and writes HTML to standard output. Do not use a public Markdown implementation.</p>
-<p>Product acceptance is <code>sh full_test.sh</code> returning exit code <code>0</code>. The script runs the complete, unfiltered supplied CommonMark suite. Its exit status is the verdict; do not parse or hardcode its printed tally.</p>
-<p><code>sources/INSTRUCTIONS.md</code> is imported specification prose. It is not staged into the completed application. The runtime conformance assets are only <code>spec.txt</code>, <code>spec_tests.py</code>, <code>cmark.py</code>, and <code>normalize.py</code>.</p>
+<p>The deliverable is an executable named <code>commonmark</code> at the application root.</p>
+<p><code>sources/INSTRUCTIONS.md</code> is imported specification prose. It is not staged into the completed application. The runtime conformance assets are only <code>spec.txt</code>, <code>spec_tests.py</code>, <code>cmark.py</code>, <code>normalize.py</code>, and <code>full_test.sh</code>.</p>
+<h2>Run Harness</h2>
+<p><code>sources/full_test.sh</code> is the single scoring entry point. It is supplied, not authored: it is staged verbatim into the build directory alongside the other imported assets, and <code>drydock uat</code> runs <code>sh sources/full_test.sh</code> from the completed application root and takes its exit code and output as the score. It runs the complete, unfiltered supplied CommonMark suite against <code>./commonmark</code>.</p>
+<p>The interface check is deliberately separate from the conformance run so that a missing executable and a genuine conformance failure are distinguishable in the evidence.</p>
+<p><strong>The scoring assets are read-only.</strong> <code>sources/full_test.sh</code>, <code>sources/spec_tests.py</code>, <code>sources/cmark.py</code>, <code>sources/normalize.py</code>, and <code>sources/spec.txt</code> are hash-verified against the import and restored before grading, so a modification is reported as tampering rather than honored. Do not write to them. Build <code>./commonmark</code> so that the supplied entry point succeeds; changing the entry point is not a repair.</p>
 <p>Create a concise project <code>README.md</code> describing the standard-input/standard-output interface. README content is not an acceptance criterion and does not require a documentation story.</p>
 <h2>Implementation Guidance</h2>
 <p>CommonMark parsing is two phases: resolve <strong>block structure</strong> first, then run <strong>inline parsing</strong> over the block contents. Implement in that order.</p>
@@ -24,10 +28,10 @@
 <h2>Acceptance</h2>
 <p>Parser implementation stories may run <code>spec_tests.py</code> with explicit section selectors covering the story&#x27;s complete scope. A selector must name headings that own examples, such as <code>ATX headings</code> or <code>List items</code>. Chapter headings such as <code>Leaf blocks</code>, <code>Container blocks</code>, and <code>Characters and lines</code> own no examples; selecting them can exit zero without testing anything.</p>
 <p>Create one terminal verification story that:</p>
-<ul><li>depends on every parser implementation story;</li><li>creates <code>full_test.sh</code> as a POSIX-compatible wrapper for the unfiltered suite;</li><li>contains the only <code>Suite: full</code> acceptance check;</li><li>runs <code>sh full_test.sh</code>, prints captured standard output and standard error, and asserts only</li></ul>
-<p><code>result.returncode == 0</code>; and</p>
+<ul><li>depends on every parser implementation story;</li><li>contains the only <code>Suite: full</code> acceptance check;</li><li>runs <code>sh sources/full_test.sh</code>, prints captured standard output and standard error, and asserts</li></ul>
+<p>only <code>result.returncode == 0</code>; and</p>
 <ul><li>carries <code>Sea Trials: st-001</code>.</li></ul>
-<p>Do not invoke <code>full_test.sh</code> from scoped checks. Do not create file-presence or staged-asset acceptance checks, or additional verification stories.</p></article>
+<p>Do not author <code>full_test.sh</code>; it is supplied. Do not invoke it from scoped checks. Do not create file-presence or staged-asset acceptance checks, or additional verification stories.</p></article>
 </main>
 </body>
 </html>

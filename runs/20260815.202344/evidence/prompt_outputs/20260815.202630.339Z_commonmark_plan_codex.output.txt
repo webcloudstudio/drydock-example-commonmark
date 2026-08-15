@@ -1,0 +1,498 @@
+=== BEGIN ARTIFACT ARCHITECTURE.md ===
+# ARCHITECTURE: CommonMark Parser
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260815 V1 |
+| Description | Defines the executable boundary and standard-library architecture for the CommonMark parser. |
+| Depends On  | — |
+| Provides    | executable commonmark |
+| Consumes    | — |
+
+## Questions
+
+- None.
+
+## Intent
+
+The application is a command-line CommonMark 0.31.2 parser. The executable `commonmark` reads UTF-8 Markdown from standard input and writes rendered HTML to standard output.
+
+## Boundaries
+
+| Module | Responsibility |
+|---|---|
+| `commonmark` | Executable process boundary, UTF-8 stream handling, and exit status. |
+| Parser implementation | Block parsing, link-reference collection, inline parsing, and HTML rendering. |
+| `sources/` | Supplied immutable conformance assets used only by verification. |
+
+Block structure is resolved before inline structure. Link-reference definitions collected during block parsing are available to inline parsing.
+
+## Technology Stack
+
+- Python 3 for the executable and parser.
+- Python standard library only at runtime.
+- POSIX shell for the supplied conformance harness.
+
+## Technical Decisions
+
+- Do not use a public Markdown implementation or third-party runtime dependency.
+- Preserve the executable name and standard-input/standard-output contract.
+- Replace U+0000 with U+FFFD according to the CommonMark specification.
+- Keep supplied scoring assets unchanged.
+
+## Programmatic Acceptance
+
+=== AC interface-executable ===
+Intent: The application root contains an executable named commonmark.
+
+import os
+
+path = "commonmark"
+assert os.path.isfile(path)
+assert os.access(path, os.X_OK)
+=== END AC interface-executable ===
+
+=== AC interface-process ===
+Intent: The executable accepts standard input and terminates successfully.
+
+import subprocess
+
+source = "interface probe\n"
+result = subprocess.run(
+    ["./commonmark"],
+    input=source,
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr)
+assert result.returncode == 0
+=== END AC interface-process ===
+
+=== AC interface-utf8 ===
+Intent: The executable accepts UTF-8 input and terminates successfully.
+
+import subprocess
+
+source = "UTF-8 interface probe\n"
+result = subprocess.run(
+    ["./commonmark"],
+    input=source,
+    capture_output=True,
+    text=True,
+    encoding="utf-8",
+)
+print(result.stdout)
+print(result.stderr)
+assert result.returncode == 0
+=== END AC interface-utf8 ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Do not modify supplied conformance assets.
+- Do not add a public Markdown implementation as a dependency.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Block-Leafs.md ===
+# FEATURE: Block Leafs
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260815 V1 |
+| Description | Parses CommonMark leaf blocks and collects link reference definitions. |
+| Depends On  | ARCHITECTURE.md |
+| Provides    | leaf block parsing, link reference definitions |
+| Consumes    | executable commonmark |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the leaf-block portion of CommonMark block parsing before inline rendering.
+
+## Scope
+
+The parser handles:
+
+- thematic breaks;
+- ATX and setext headings;
+- indented and fenced code blocks;
+- HTML blocks;
+- paragraphs and blank lines;
+- link reference definitions, including normalization and first-definition precedence.
+
+Leaf blocks must preserve raw inline content for later parsing. Code and raw HTML content must remain literal where required by the specification.
+
+## Programmatic Acceptance
+
+=== AC block-leafs-conformance ===
+Intent: The implementation passes every supplied conformance example owned by leaf-block parsing.
+
+import subprocess
+import sys
+
+pattern = (
+    r"^(Thematic breaks|ATX headings|Setext headings|Indented code blocks|"
+    r"Fenced code blocks|HTML blocks|Link reference definitions|Paragraphs|Blank lines)$"
+)
+result = subprocess.run(
+    [
+        sys.executable,
+        "sources/spec_tests.py",
+        "--program",
+        "./commonmark",
+        "--spec",
+        "sources/spec.txt",
+        "--pattern",
+        pattern,
+    ],
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC block-leafs-conformance ===
+
+=== AC block-leafs-interface ===
+Intent: Leaf parsing remains reachable through the required executable interface.
+
+import subprocess
+
+source = "# heading\n\n    code\n"
+result = subprocess.run(
+    ["./commonmark"],
+    input=source,
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr)
+assert result.returncode == 0
+=== END AC block-leafs-interface ===
+
+=== AC block-leafs-reference-input ===
+Intent: Link-reference-definition input is accepted through the executable interface.
+
+import subprocess
+
+source = "[label]: /destination\n\n[label]\n"
+result = subprocess.run(
+    ["./commonmark"],
+    input=source,
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr)
+assert result.returncode == 0
+=== END AC block-leafs-reference-input ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Build block structure before inline parsing.
+- Do not modify `sources/spec.txt`, `sources/spec_tests.py`, `sources/cmark.py`, or `sources/normalize.py`.
+- Do not interpret code blocks or HTML blocks as ordinary inline content.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Block-Quotes.md ===
+# FEATURE: Block Quotes
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260815 V1 |
+| Description | Parses nested CommonMark block quotes with lazy continuation and contained blocks. |
+| Depends On  | ARCHITECTURE.md, FEATURE-Block-Leafs.md |
+| Provides    | block quote parsing |
+| Consumes    | executable commonmark, leaf block parsing |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement block quote containers and their interaction with leaf blocks.
+
+## Scope
+
+Support block quote markers with optional indentation, nested quotes, empty quotes, blank lines, separation of consecutive quotes, lazy paragraph continuation, and contained headings, paragraphs, code blocks, thematic breaks, HTML blocks, references, and lists.
+
+Block quote parsing must preserve the distinction between marker-required lines and lazy continuation lines.
+
+## Programmatic Acceptance
+
+=== AC block-quotes-conformance ===
+Intent: The implementation passes every supplied conformance example owned by block quotes.
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [
+        sys.executable,
+        "sources/spec_tests.py",
+        "--program",
+        "./commonmark",
+        "--spec",
+        "sources/spec.txt",
+        "--pattern",
+        r"^Block quotes$",
+    ],
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC block-quotes-conformance ===
+
+=== AC block-quotes-interface ===
+Intent: A block quote document is accepted through the executable interface.
+
+import subprocess
+
+source = "> quoted text\n"
+result = subprocess.run(
+    ["./commonmark"],
+    input=source,
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr)
+assert result.returncode == 0
+=== END AC block-quotes-interface ===
+
+=== AC block-quotes-nested-input ===
+Intent: Nested block quote input is accepted through the executable interface.
+
+import subprocess
+
+source = "> > nested\n> continuation\n"
+result = subprocess.run(
+    ["./commonmark"],
+    input=source,
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr)
+assert result.returncode == 0
+=== END AC block-quotes-nested-input ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Preserve lazy continuation semantics.
+- Do not allow unmarked block constructs to become quoted unless the specification permits laziness.
+- Do not modify supplied conformance assets.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Block-Lists.md ===
+# FEATURE: Block Lists
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260815 V1 |
+| Description | Parses CommonMark lists, list items, nesting, continuation, and tightness. |
+| Depends On  | ARCHITECTURE.md, FEATURE-Block-Leafs.md, FEATURE-Block-Quotes.md |
+| Provides    | list parsing, list-item parsing, list tightness |
+| Consumes    | executable commonmark, leaf block parsing, block quote parsing |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement bullet and ordered list containers and their list-item block content.
+
+## Scope
+
+Support bullet markers, ordered markers and start numbers, marker widths, indentation, nested lists, list interruption, lazy continuation, empty items, mixed block content, delimiter changes, blank-line handling, and tight versus loose rendering.
+
+List-item parsing must compose with block quotes and all leaf blocks while preserving the list's marker type and tightness rules.
+
+## Programmatic Acceptance
+
+=== AC lists-conformance ===
+Intent: The implementation passes every supplied conformance example owned by list items and lists.
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [
+        sys.executable,
+        "sources/spec_tests.py",
+        "--program",
+        "./commonmark",
+        "--spec",
+        "sources/spec.txt",
+        "--pattern",
+        r"^(List items|Lists)$",
+    ],
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC lists-conformance ===
+
+=== AC lists-interface ===
+Intent: A bullet list is accepted through the executable interface.
+
+import subprocess
+
+source = "- one\n- two\n"
+result = subprocess.run(
+    ["./commonmark"],
+    input=source,
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr)
+assert result.returncode == 0
+=== END AC lists-interface ===
+
+=== AC lists-nested-input ===
+Intent: Nested and ordered list input is accepted through the executable interface.
+
+import subprocess
+
+source = "1. one\n   - nested\n"
+result = subprocess.run(
+    ["./commonmark"],
+    input=source,
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr)
+assert result.returncode == 0
+=== END AC lists-nested-input ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Preserve list marker type, ordered start number, nesting, and tightness semantics.
+- Do not treat thematic breaks as list items when CommonMark gives the thematic break precedence.
+- Do not modify supplied conformance assets.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Inline-Basics.md ===
+# FEATURE: Inline Basics
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260815 V1 |
+| Description | Parses CommonMark escapes, entities, code spans, line breaks, and literal text. |
+| Depends On  | ARCHITECTURE.md, FEATURE-Block-Leafs.md, FEATURE-Block-Quotes.md, FEATURE-Block-Lists.md |
+| Provides    | inline escapes, entity references, code spans, hard breaks, soft breaks |
+| Consumes    | executable commonmark, block structure |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the foundational inline constructs used by all later inline features.
+
+## Scope
+
+Support ASCII punctuation backslash escapes, HTML named and numeric character references, U+0000 replacement, code spans with delimiter matching and whitespace normalization, hard breaks from trailing spaces or backslashes, soft breaks, and literal textual content.
+
+Escapes, entities, and line breaks must obey their context restrictions in code spans, code blocks, autolinks, and raw HTML.
+
+## Programmatic Acceptance
+
+=== AC inline-basics-conformance ===
+Intent: The implementation passes every supplied conformance example owned by foundational inline parsing.
+
+import subprocess
+import sys
+
+pattern = (
+    r"^(Backslash escapes|Entity and numeric character references|Code spans|"
+    r"Hard line breaks|Soft line breaks|Textual content)$"
+)
+result = subprocess.run(
+    [
+        sys.executable,
+        "sources/spec_tests.py",
+        "--program",
+        "./commonmark",
+        "--spec",
+        "sources/spec.txt",
+        "--pattern",
+        pattern,
+    ],
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC inline-basics-conformance ===
+
+=== AC inline-basics-interface ===
+Intent: Inline source containing escapes, entities, code, and line breaks is accepted through the executable interface.
+
+import subprocess
+
+source = r"escaped \* text &amp; `code`  " + "\n" + "next\n"
+result = subprocess.run(
+    ["./commonmark"],
+    input=source,
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr)
+assert result.returncode == 0
+=== END AC inline-basics-interface ===
+
+=== AC inline-basics-unicode-input ===
+Intent: UTF-8 inline text is accepted through the executable interface.
+
+import subprocess
+
+source = "Unicode café\n"
+result = subprocess.run(
+    ["./commonmark"],
+    input=source,
+    capture_output=True,
+    text=True,
+    encoding="utf-8",
+)
+print(result.stdout)
+print(result.stderr)
+assert result.returncode == 0
+=== END AC inline-basics-unicode-input ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Do not apply escapes or entity references inside code spans or code blocks.
+- Preserve literal text and internal spaces.
+- Do not modify supplied conformance assets.
+=== END ARTIFACT ===

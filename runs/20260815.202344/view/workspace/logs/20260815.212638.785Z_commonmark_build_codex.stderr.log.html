@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/logs/20260815.212638.785Z_commonmark_build_codex.stderr.log</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/logs/20260815.212638.785Z_commonmark_build_codex.stderr.log</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../workspace/logs/20260815.212638.785Z_commonmark_build_codex.stderr.log">Raw file</a></div></header>
+<article class="doc"><pre>2026-08-15T21:28:03.034243Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/build/commonmark/commonmark:
+        # Capture simple inline links before escaping their destination and
+        # title.  This preserves the distinction between a literal quote
+        # delimiter and an entity such as &amp;quot;.
+        def early_link(match):
+            image=bool(match.group(1)); label=match.group(3); body=match.group(4).strip(); title=None
+            title_match=re.match(r&#x27;^(.*?)[ \t]+([&quot;\&#x27;])(.*?)\2$&#x27;,body)
+            if title_match: body=title_match.group(1); title=title_match.group(3)
+            dest=body
+            if dest.startswith(&#x27;&lt;&#x27;) and dest.endswith(&#x27;&gt;&#x27;): dest=dest[1:-1]
+            unescape=lambda value: re.sub(r&#x27;\\([!&quot;#$%&amp;\&#x27;()*+,-./:;&lt;=&gt;?@\[\\\]^_`{|}~])&#x27;,r&#x27;\1&#x27;,html.unescape(value))
+            dest=quote(unescape(dest),safe=&quot;/%:@?&amp;=+$,;#-_.!~*&#x27;()&quot;)
+            if &#x27;`&#x27; in label or &#x27;&amp;quot;&#x27; in body:
+                return match.group(0)
+            if image:
+                alt=re.sub(r&#x27;[*_`]&#x27;,&#x27;&#x27;,unescape(label))
+                rendered=&#x27;&lt;img src=&quot;&#x27;+html.escape(dest,quote=True)+&#x27;&quot; alt=&quot;&#x27;+html.escape(alt,quote=True)+&#x27;&quot;&#x27;
+            else:
+                rendered=&#x27;&lt;a href=&quot;&#x27;+html.escape(dest,quote=True)+&#x27;&quot;&#x27;
+            if title is not None:
+                rendered+=&#x27; title=&quot;&#x27;+html.escape(unescape(title),quote=True)+&#x27;&quot;&#x27;
+            if image: rendered+=&#x27; /&gt;&#x27;
+            else: rendered+=&#x27;&gt;&#x27;+self.inline(label)+&#x27;&lt;/a&gt;&#x27;
+            return hold(rendered)
+        text=re.sub(r&#x27;(?&lt;!\\)(!?)(\[([^\]]*)\])\((&lt;[^&gt;\n]*&gt;|[^)\n]*)\)&#x27;, early_link, text)
+</pre></article>
+</main>
+</body>
+</html>

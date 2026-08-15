@@ -1,0 +1,7 @@
+2026-08-15T20:37:41.709913Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/build/commonmark/commonmark:
+    def parse_reference(rest):
+        rest=rest.strip(' \t\n')
+2026-08-15T20:37:57.576700Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/build/commonmark/commonmark:
+                    item=[mm.group(2)]; i+=1
+                    while i<n and lines[i].strip() and not re.match(r' {0,3}([-+*]|\d+[.)])[ \t]+',lines[i]):
+                        item.append(re.sub(r'^ {2,4}','',lines[i])); i+=1

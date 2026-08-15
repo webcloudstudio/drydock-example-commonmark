@@ -1,0 +1,14 @@
+Drydock 0.1.8  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Drydock status — commonmark / commonmark
+
+  Target          /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/workspace/targets/commonmark
+  Phase           Implement
+  State           0/9 verified  ·  9 pending
+  Metadata        planned · approved
+  Sources         6 imported · 9 authored blueprint files
+  Analysis        Questions · 9 stories · 1 question · 0 blockers
+  Review          No blockers · 1 questionnaire
+  Blueprint       ✓  0 errors · 0 warnings
+  Plan            approved · 0/9 verified  pending 9 · implemented 0 · failed 0
+  Frontier        interface-001: Provide the executable standard-input/standard-output interface.
+  Next step       drydock build commonmark  (frontier: Provide the executable standard-input/standard-output interface.)

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20260815.202821.443Z_commonmark_lineage_attribute_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20260815.202821.443Z_commonmark_lineage_attribute_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20260815.202821.443Z_commonmark_lineage_attribute_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>&lt;requirement name=&quot;standard-io-executable&quot; stories=&quot;interface-001&quot;&gt;
+The parser reads Markdown from standard input and writes HTML to standard output.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;parse-block-structure&quot; stories=&quot;block-001,block-002,block-003&quot;&gt;
+Blocks: paragraphs, thematic breaks, ATX headings, setext headings, indented code, fenced code, HTML blocks, link reference definitions, block quotes, then lists — lists are the hardest block construct, with lazy continuation, nesting, and tightness.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;parse-inline-contents&quot; stories=&quot;inline-001,inline-002,inline-003,inline-004&quot;&gt;
+Inlines: backslash escapes, entity and numeric references, code spans, emphasis and strong emphasis (the delimiter-run algorithm), links and images, autolinks, raw HTML, hard breaks.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;run-full-conformance-suite&quot; stories=&quot;verify-001&quot;&gt;
+Create one terminal verification story that:
+
+- depends on every parser implementation story;
+- contains the only `Suite: full` acceptance check;
+- runs `sh sources/full_test.sh`, prints captured standard output and standard error, and asserts only `result.returncode == 0`; and
+- carries `Sea Trials: st-001`.
+&lt;/requirement&gt;</pre></article>
+</main>
+</body>
+</html>

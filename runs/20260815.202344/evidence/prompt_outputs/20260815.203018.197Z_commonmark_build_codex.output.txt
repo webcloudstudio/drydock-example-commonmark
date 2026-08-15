@@ -1,0 +1,24 @@
+<reusable-compact filename="ARCHITECTURE.md">
+Executable `commonmark` reads UTF-8 Markdown from stdin and writes HTML to stdout. Python 3 standard library only; replace NUL with U+FFFD. Preserve executable name and immutable `sources/` assets.
+</reusable-compact>
+
+<reusable-compact filename="cmark.py">
+Support contract: parser process accepts UTF-8 stdin, returns exit code 0 with UTF-8 HTML on stdout, and reports failures through nonzero exit status/stderr.
+</reusable-compact>
+
+RESULT: FAILED
+
+FILES CHANGED:
+- commonmark
+- README.md
+- tests/test_interface.py
+
+SUMMARY:
+Implemented the executable stdin/stdout interface and self-contained Python parser. Interface probes pass. Full conformance result: 352 passed, 303 failed, 0 errored, 0 skipped.
+
+BLOCKERS:
+- Full CommonMark 0.31.2 conformance is not yet satisfied.
+
+FAILURE_SUMMARY: Supplied full conformance suite has 303 failures.
+
+FAILURE_DETAIL: The executable runs successfully, but block parsing and inline edge cases—especially nested lists, HTML blocks, delimiter rules, and autolinks—still differ from the supplied specification. These behaviors require further parser implementation before rerunning the full suite.

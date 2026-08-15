@@ -1,0 +1,25 @@
+<reusable-compact filename="spec.txt">
+CommonMark 0.31.2 normative syntax and HTML examples. Leaf contracts include thematic breaks, ATX/setext headings, indented/fenced code, HTML blocks, paragraphs, blank lines, and link-reference definitions. Blocks precede inline parsing; code/HTML remain literal; first matching reference definition wins.
+</reusable-compact>
+
+<reusable-compact filename="spec_tests.py">
+Runs supplied CommonMark examples against `--program`, optionally filtered by section regex. Verdict is process exit status: failures plus errors. Supports normalized HTML comparison and captures expected/actual diffs.
+</reusable-compact>
+
+<reusable-compact filename="normalize.py">
+Normalizes HTML for conformance comparison by collapsing insignificant whitespace, normalizing block-tag spacing, canonicalizing attributes/self-closing tags, and resolving entities while preserving significant attributes and preformatted content.
+</reusable-compact>
+
+RESULT: FAILED
+
+FILES CHANGED:
+- commonmark
+
+SUMMARY:
+Implemented substantial leaf-block parsing improvements for fences, headings, thematic breaks, HTML blocks, paragraphs, indentation, and link references. Interface checks pass; scoped conformance improved from 122/187 to approximately 151/187, but failures remain.
+
+BLOCKERS:
+- Scoped leaf conformance is not yet green, especially nested/container interactions and several HTML/reference edge cases.
+
+FAILURE_SUMMARY: Leaf-block conformance remains incomplete.
+FAILURE_DETAIL: The executable runs successfully and interface checks pass, but the supplied scoped suite still reports failures; continue fixing block-container interactions, HTML block boundaries, and advanced reference definitions.

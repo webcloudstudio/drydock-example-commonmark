@@ -1,0 +1,13 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- [commonmark](/mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/build/commonmark/commonmark)
+
+SUMMARY:
+Implemented recursive list parsing, nesting, lazy continuation, ordered starts, empty items, delimiter grouping, and tight/loose rendering. Scoped conformance improved to 73/74 passing.
+
+BLOCKERS:
+- One List items/Lists example remains failing: example 328 loose-list rendering.
+
+FAILURE_SUMMARY: Scoped list conformance is not fully passing.
+FAILURE_DETAIL: Example 328 still renders outer list paragraphs without `<p>` wrappers; adjust loose-list detection for blank-separated outer siblings without regressing blank-line handling inside nested lists or code blocks.

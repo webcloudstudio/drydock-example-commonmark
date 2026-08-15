@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a0071d-ee4f-7603-bc5a-6c1d746f796f"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"<requirement name=\"run-cmark-tests\" stories=\"verify-001\">\nRun cmark tests.\n</requirement>\n<unattached story=\"interface-001\"/>\n<unattached story=\"block-001\"/>\n<unattached story=\"block-002\"/>\n<unattached story=\"block-003\"/>\n<unattached story=\"inline-001\"/>\n<unattached story=\"inline-002\"/>\n<unattached story=\"inline-003\"/>\n<unattached story=\"inline-004\"/>"}}
+{"type":"turn.completed","usage":{"input_tokens":14015,"cached_input_tokens":8960,"cache_write_input_tokens":0,"output_tokens":619,"reasoning_output_tokens":516}}

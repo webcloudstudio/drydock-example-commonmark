@@ -1,0 +1,10 @@
+Drydock 0.1.8  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Target - committed project workspace git store
+Source: /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/sources
+Target: /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/workspace/targets/commonmark/blueprint/sources/
+INSTRUCTIONS.md
+cmark.py
+full_test.sh
+normalize.py
+spec.txt
+spec_tests.py

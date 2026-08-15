@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-5.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-5.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-5.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 5 · Service (block-5)</h1>
+<ul><li>block type: block</li><li>date: 2026-08-15</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 60153</li><li>execution id: 20260815.212047.230Z-4bb9dec8</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse escapes, entities, code spans, line breaks, and literal text. (inline-001) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1455)</li><li>implements: FEATURE-Inline-Basics.md (SP 694)</li><li>context: spec.txt (SP 51527)</li><li>context: spec_tests.py (SP 1609)</li><li>context: cmark.py (SP 339)</li><li>context: normalize.py (SP 1631)</li><li>context: ARCHITECTURE_compact.md (SP 87)</li><li>stack: common_compact.md (SP 1179)</li><li>stack: python_compact.md (SP 1534)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>README.md</li><li>commonmark</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: inline-basics-conformance (FEATURE-Inline-Basics.md)</li></ul>
+<p>intent: The implementation passes every supplied conformance example owned by foundational inline parsing. return code: 1 stdout: Example 14 (lines 509-529) Backslash escapes \<em>not emphasized</em> \&lt;br/&gt; not a tag \<a href="/foo">not a link</a> \<code>not code</code> 1\. not a list \* not a list \# not a heading \[foo]: /url &quot;not a reference&quot; \&amp;ouml; not a character entity</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>not emphasized</em> &amp;lt;br/&amp;gt; not a tag <a href="/foo">not a link</a> <code>not code</code> 1. not a list * not a list # not a heading [foo]: /url &amp;quot;not a reference&amp;quot; &amp;amp;ouml; not a character entity&lt;/p&gt; +&lt;p&gt;<em>not emphasized</em> \&lt;br&gt; not a tag <a href="/foo">not a link</a> \&lt;code&gt;not code&lt;/code&gt; 1. not a list * not a list # not a heading [foo]: /url &amp;quot;not a reference&amp;quot; &amp;amp;ouml; not a character entity&lt;/p&gt;</p>
+<p>Example 20 (lines 580-584) Backslash escapes &lt;https://example.com?find=\*&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;https://example.com?find=%5C*&quot;&gt;https://example.com?find=\<em>&lt;/a&gt;&lt;/p&gt; +&lt;https: example.com?find=&quot;\</em>&quot;&gt;</p>
+<p>Example 22 (lines 597-601) Backslash escapes [foo](/bar\* &quot;ti\*tle&quot;)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/bar*&quot; title=&quot;ti*tle&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo](/bar* &amp;quot;ti*tle&amp;quot;)&lt;/p&gt;</p>
+<p>Example 28 (lines 690-700) Entity and numeric character references &amp;nbsp &amp;x; &amp;#; &amp;#x; &amp;#87654321; &amp;#abcdef0; &amp;ThisIsNotDefined; &amp;hi?;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;amp;nbsp &amp;amp;x; &amp;amp;#; &amp;amp;#x; &amp;amp;#87654321; &amp;amp;#abcdef0; &amp;amp;ThisIsNotDefined; &amp;amp;hi?;&lt;/p&gt; +&lt;p&gt;&amp;amp;x; &amp;amp;#; &amp;amp;#x; � &amp;amp;#abcdef0; &amp;ThisIsNotDefined; &amp;amp;hi?;&lt;/p&gt;</p>
+<p>Example 29 (lines 707-711) Entity and numeric character references &amp;copy</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;amp;copy&lt;/p&gt; +&lt;p&gt;©&lt;/p&gt;</p>
+<p>Example 30 (lines 717-721) Entity and numeric character references &amp;MadeUpEntity;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;amp;MadeUpEntity;&lt;/p&gt; +&lt;p&gt;&amp;MadeUpEntity;&lt;/p&gt;</p>
+<p>Example 32 (lines 735-739) Entity and numeric character references [foo](/f&amp;ouml;&amp;ouml; &quot;f&amp;ouml;&amp;ouml;&quot;)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/f%C3%B6%C3%B6&quot; title=&quot;föö&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo](/föö &amp;quot;föö&amp;quot;)&lt;/p&gt;</p>
+<p>Example 33 (lines 742-748) Entity and numeric character references [foo]</p>
+<p>[foo]: /f&amp;ouml;&amp;ouml; &quot;f&amp;ouml;&amp;ouml;&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/f%C3%B6%C3%B6&quot; title=&quot;föö&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/f&amp;amp;ouml;&amp;amp;ouml;&quot; title=&quot;f&amp;amp;ouml;&amp;amp;ouml;&quot;&gt;foo&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 37 (lines 783-789) Entity and numeric character references &amp;#42;foo&amp;#42; <em>foo</em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>foo</em> &lt;em&gt;foo&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo&lt;/em&gt; &lt;em&gt;foo&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 332 (lines 5929-5933) Code spans <code></code><code></code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;``&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;&lt;code&gt; &lt;/code&gt;&lt;code&gt; &lt;/code&gt;&lt;/p&gt;</p>
+<p>Example 333 (lines 5937-5941) Code spans <code></code><code></code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt; `` &lt;/code&gt;&lt;/p&gt; +&lt;p&gt;&lt;code&gt; &lt;/code&gt;&lt;code&gt; &lt;/code&gt;&lt;/p&gt;</p>
+<p>Example 342 (lines 6029-6033) Code spans <code>foo</code><code>bar</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;foo `` bar&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;&lt;code&gt;foo&lt;/code&gt;&lt;code&gt;bar&lt;/code&gt;&lt;/p&gt;</p>
+<p>Example 345 (lines 6060-6064) Code spans <code>&lt;a href=&quot;</code>&quot;&gt;`</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;&amp;lt;a href=&amp;quot;&lt;/code&gt;&amp;quot;&amp;gt;<code>&lt;/p&gt; +&lt;p&gt;&lt;code&gt;&amp;lt;a href=&quot;&lt;/code&gt;&amp;quot;&amp;gt;</code>&lt;/p&gt;</p>
+<p>Example 346 (lines 6069-6073) Code spans &lt;a href=&quot;<code>&quot;&gt;</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;<code>&quot;&gt;</code>&lt;/p&gt; +&lt;p&gt;&amp;lt;a href=&amp;quot;&lt;code&gt;&quot;&amp;gt;&lt;/code&gt;&lt;/p&gt;</p>
+<p>Example 348 (lines 6087-6091) Code spans &lt;https://foo.bar.<code>baz&gt;</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;https://foo.bar.%60baz&quot;&gt;https://foo.bar.<code>baz&lt;/a&gt;</code>&lt;/p&gt; +&lt;p&gt;&amp;lt;https://foo.bar.&lt;code&gt;baz&amp;gt;&lt;/code&gt;&lt;/p&gt;</p>
+<p>Example 349 (lines 6097-6101) Code spans <code>`foo</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<code>`foo</code>&lt;/p&gt; +&lt;p&gt;&lt;code&gt;`foo&lt;/code&gt;&lt;/p&gt;</p>
+<p>Example 351 (lines 6113-6117) Code spans <code>foo</code><code>bar</code>`</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<code>foo&lt;code&gt;bar&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;&lt;code&gt;foo&lt;/code&gt;&lt;code&gt;bar&lt;/code&gt;</code>&lt;/p&gt;</p>
+<p>Example 639 (lines 9285-9291) Hard line breaks foo bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo&lt;br&gt;bar&lt;/p&gt; +&lt;p&gt;foo&lt;br&gt; bar&lt;/p&gt;</p>
+<p>Example 640 (lines 9294-9300) Hard line breaks foo\ bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo&lt;br&gt;bar&lt;/p&gt; +&lt;p&gt;foo&lt;br&gt; bar&lt;/p&gt;</p>
+<p>Example 644 (lines 9334-9339) Hard line breaks <code>code\ span</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;code\ span&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;&lt;code&gt;code&amp;lt;br /&amp;gt; span&lt;/code&gt;&lt;/p&gt;</p>
+<p>Example 646 (lines 9353-9359) Hard line breaks &lt;a href=&quot;foo\ bar&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1 @@ -&lt;p&gt;&lt;a href=&quot;foo\ -bar&quot;&gt;&lt;/p&gt; +&lt;p&gt;</p>
+<p>51 passed, 21 failed, 0 errored, 583 skipped stderr: Traceback (most recent call last): File &quot;inline-basics-conformance.py&quot;, line 24, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>GREEN (prepassed): inline-basics-interface (FEATURE-Inline-Basics.md)</li></ul>
+<p>intent: Inline source containing escapes, entities, code, and line breaks is accepted through the executable interface. return code: 0 stdout: &lt;p&gt;escaped * text &amp;amp; &lt;code&gt;code&lt;/code&gt;&lt;br /&gt; next&lt;/p&gt;</p>
+<ul><li>GREEN (prepassed): inline-basics-unicode-input (FEATURE-Inline-Basics.md)</li></ul>
+<p>intent: UTF-8 inline text is accepted through the executable interface. return code: 0 stdout: &lt;p&gt;Unicode café&lt;/p&gt;</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: inline-basics-conformance (FEATURE-Inline-Basics.md)</li></ul>
+<p>intent: The implementation passes every supplied conformance example owned by foundational inline parsing. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: 72 passed, 0 failed, 0 errored, 583 skipped</p>
+<ul><li>PASS: inline-basics-interface (FEATURE-Inline-Basics.md)</li></ul>
+<p>intent: Inline source containing escapes, entities, code, and line breaks is accepted through the executable interface. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: &lt;p&gt;escaped * text &amp;amp; &lt;code&gt;code&lt;/code&gt;&lt;br /&gt; next&lt;/p&gt;</p>
+<ul><li>PASS: inline-basics-unicode-input (FEATURE-Inline-Basics.md)</li></ul>
+<p>intent: UTF-8 inline text is accepted through the executable interface. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: &lt;p&gt;Unicode café&lt;/p&gt;</p>
+<h2>Repair attempts</h2>
+<ul><li>attempt 0 (initial build): failed; 2/3 checks; 67/72 cases model=gpt-5.6-luna; execution 20260815.211228.205Z-3700ff81</li><li>attempt 1 (repair 1): built; 3/3 checks; 72/72 cases model=gpt-5.6-luna; execution 20260815.212047.230Z-4bb9dec8</li></ul>
+<h2>Build summary</h2>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>commonmark</li><li>README.md</li></ul>
+<p>SUMMARY: Fixed inline link titles, entity handling, quote escaping, and code-span precedence. Scoped conformance passes: 72/72. Interface and Unicode checks pass.</p>
+<p>BLOCKERS:</p>
+<ul><li>None</li></ul></article>
+</main>
+</body>
+</html>

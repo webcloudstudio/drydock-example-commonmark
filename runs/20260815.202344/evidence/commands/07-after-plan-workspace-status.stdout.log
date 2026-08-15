@@ -1,0 +1,17 @@
+Drydock 0.1.8  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Drydock status — workspace
+
+Target: commonmark
+   Phase:     Implement
+   State:     0/9 verified  ·  9 pending
+   Detail:    6 imported · 9 authored · metadata planned
+   Analysis:  Questions · 9 stories · 1 questions · 0 blockers
+   Plan:      approved · 0/9 verified · 9 pending
+   Review:    BLOCKERS.md none · 1 questionnaires
+   Next Step: drydock build commonmark  (frontier: Provide the executable standard-input/standard-output interface.)
+   8-15:      ✅  drydock build status commonmark
+   8-15:      ✅  drydock plan commonmark --override
+   8-15:      ✅  drydock analyze commonmark
+   8-15:      ✅  drydock import commonmark /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/sources --format markdown
+   8-15:      ✅  drydock init commonmark
+

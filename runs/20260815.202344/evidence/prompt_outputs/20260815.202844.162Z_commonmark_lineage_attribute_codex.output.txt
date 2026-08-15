@@ -1,0 +1,7 @@
+<requirement name="convert-markdown-to-html" stories="block-001,block-002,block-003,inline-001,inline-002,inline-003,inline-004">
+markdown = cmark.cmark_markdown_to_html
+</requirement>
+<requirement name="provide-program-interface" stories="interface-001">
+self.to_html = lambda x: pipe_through_prog(prog, x)
+</requirement>
+<unattached story="verify-001"/>

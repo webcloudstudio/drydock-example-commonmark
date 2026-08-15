@@ -1,0 +1,92 @@
+Drydock 0.1.8  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Build: commonmark
+scope: entire project
+frontier: interface-001
+
+LLM BUILD: Block 1 · Foundational [block-1]
+  stories: Provide the executable standard-input/standard-output interface. [interface-001]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  Completed CODEX/gpt-5.6-luna (build)  rc=0
+acceptance: call 1 · 3/3 AC passed
+built: interface-001 — closed/verified · execution 20260815.203018.197Z-421d690d
+
+LLM BUILD: Block 2 · Service [block-2]
+  stories: Parse CommonMark leaf blocks and link reference definitions. [block-001]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  Completed CODEX/gpt-5.6-luna (build)  rc=0
+acceptance: call 1 · 2/3 AC passed · failed: block-leafs-conformance (163/187 cases)
+
+LLM BUILD: Block 2 · Service [block-2]
+  stories: Parse CommonMark leaf blocks and link reference definitions. [block-001]
+  call: 2 of up to 7 · automatic repair 1 of 6 · codex/gpt-5.6-luna
+  failing: block-leafs-conformance (163/187 cases)
+  Completed CODEX/gpt-5.6-luna (build)  rc=0
+acceptance: call 2 · 3/3 AC passed
+built: block-001 — closed/verified · execution 20260815.204259.896Z-c16cfcc8
+
+LLM BUILD: Block 3 · Service [block-3]
+  stories: Parse nested block quotes and their contained blocks. [block-002]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  Completed CODEX/gpt-5.6-luna (build)  rc=0
+acceptance: call 1 · 3/3 AC passed
+built: block-002 — closed/verified · execution 20260815.205717.604Z-d66dc106
+
+LLM BUILD: Block 4 · Service [block-4]
+  stories: Parse lists, list items, nesting, laziness, and tightness. [block-003]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  Completed CODEX/gpt-5.6-luna (build)  rc=0
+acceptance: call 1 · 2/3 AC passed · failed: lists-conformance (73/74 cases)
+
+LLM BUILD: Block 4 · Service [block-4]
+  stories: Parse lists, list items, nesting, laziness, and tightness. [block-003]
+  call: 2 of up to 7 · automatic repair 1 of 6 · codex/gpt-5.6-luna
+  failing: lists-conformance (73/74 cases)
+  Completed CODEX/gpt-5.6-luna (build)  rc=0
+acceptance: call 2 · 3/3 AC passed
+built: block-003 — closed/verified · execution 20260815.210928.719Z-4a50798b
+
+LLM BUILD: Block 5 · Service [block-5]
+  stories: Parse escapes, entities, code spans, line breaks, and literal text. [inline-001]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  Completed CODEX/gpt-5.6-luna (build)  rc=0
+acceptance: call 1 · 2/3 AC passed · failed: inline-basics-conformance (67/72 cases)
+
+LLM BUILD: Block 5 · Service [block-5]
+  stories: Parse escapes, entities, code spans, line breaks, and literal text. [inline-001]
+  call: 2 of up to 7 · automatic repair 1 of 6 · codex/gpt-5.6-luna
+  failing: inline-basics-conformance (67/72 cases)
+  Completed CODEX/gpt-5.6-luna (build)  rc=0
+acceptance: call 2 · 3/3 AC passed
+built: inline-001 — closed/verified · execution 20260815.212047.230Z-4bb9dec8
+
+LLM BUILD: Block 6 · Service [block-6]
+  stories: Parse emphasis and strong emphasis with the delimiter-run algorithm. [inline-002]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  Completed CODEX/gpt-5.6-luna (build)  rc=0
+acceptance: call 1 · 1/1 AC passed
+built: inline-002 — closed/verified · execution 20260815.212354.816Z-a92e138b
+
+LLM BUILD: Block 7 · Service [block-7]
+  stories: Parse inline and reference links together with images. [inline-003]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  Completed CODEX/gpt-5.6-luna (build)  rc=0
+acceptance: call 1 · 1/1 AC passed
+built: inline-003 — closed/verified · execution 20260815.212638.785Z-cc3019ff
+
+LLM BUILD: Block 8 · Service [block-8]
+  stories: Parse autolinks and raw HTML inline constructs. [inline-004]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  Completed CODEX/gpt-5.6-luna (build)  rc=0
+acceptance: call 1 · 1/1 AC passed
+built: inline-004 — closed/verified · execution 20260815.213333.614Z-4f0372e7
+
+LLM BUILD: Block 9 · Service [block-9]
+  stories: Run the complete supplied CommonMark conformance suite. [verify-001]
+  call: 1 of up to 7 · initial build · codex/gpt-5.6-luna
+  Completed CODEX/gpt-5.6-luna (build)  rc=0
+acceptance: call 1 · 0/1 AC passed · skipped: complete-conformance
+built: verify-001 — closed/verified · execution 20260815.213833.039Z-c3a972ed
+
+result: 9 built, 0 failed, 0 unchanged
+elapsed: 1 hour 13 minutes 18 seconds
+Target - committed project workspace git store

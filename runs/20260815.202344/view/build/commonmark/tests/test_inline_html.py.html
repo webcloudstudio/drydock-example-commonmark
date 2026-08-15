@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_inline_html.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_inline_html.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_inline_html.py">Raw file</a></div></header>
+<article class="doc"><pre>import subprocess
+from pathlib import Path
+
+
+ROOT = Path(__file__).parents[1]
+
+
+def render(source: str) -&gt; subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [str(ROOT / &quot;commonmark&quot;)],
+        input=source,
+        capture_output=True,
+        text=True,
+        encoding=&quot;utf-8&quot;,
+    )
+
+
+def test_uri_and_email_autolinks_render_as_links():
+    result = render(&quot;&lt;https://example.com?q=1&amp;x=2&gt;\n&lt;foo+special@Bar.example&gt;\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout == (
+        &#x27;&lt;p&gt;&lt;a href=&quot;https://example.com?q=1&amp;amp;x=2&quot;&gt;&#x27;
+        &quot;https://example.com?q=1&amp;amp;x=2&lt;/a&gt;\n&quot;
+        &#x27;&lt;a href=&quot;mailto:foo+special@Bar.example&quot;&gt;&#x27;
+        &quot;foo+special@Bar.example&lt;/a&gt;&lt;/p&gt;\n&quot;
+    )
+
+
+def test_invalid_autolinks_remain_escaped_text():
+    result = render(&quot;&lt;foo.bar.baz&gt;\n&lt;foo\\+@bar.example&gt;\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout == (
+        &quot;&lt;p&gt;&amp;lt;foo.bar.baz&amp;gt;\n&quot;
+        &quot;&amp;lt;foo+@bar.example&amp;gt;&lt;/p&gt;\n&quot;
+    )
+
+
+def test_valid_raw_html_is_preserved_but_malformed_tags_are_escaped():
+    result = render(&#x27;before &lt;responsive-image src=&quot;foo.jpg&quot; /&gt; after\n&lt;a h*#ref=&quot;hi&quot;&gt;\n&#x27;)
+    assert result.returncode == 0
+    assert result.stdout == (
+        &#x27;&lt;p&gt;before &lt;responsive-image src=&quot;foo.jpg&quot; /&gt; after\n&#x27;
+        &quot;&amp;lt;a h*#ref=&amp;quot;hi&amp;quot;&amp;gt;&lt;/p&gt;\n&quot;
+    )
+</pre></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Inline-Links-Images.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Inline-Links-Images.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Inline-Links-Images.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Inline Links and Images</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260815 V1</td></tr><tr><td>Description</td><td>Parse CommonMark inline links, reference links, and images with destinations, titles, and label resolution.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md, FEATURE-Block-Leafs.md, FEATURE-Inline-Basics.md</td></tr><tr><td>Provides</td><td>inline links, reference links, images</td></tr><tr><td>Consumes</td><td>executable commonmark, link reference definitions, inline basics</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement inline and reference links and images using the document-wide link reference map produced during block parsing.</p>
+<h2>Behavior</h2>
+<ul><li>Parse inline links and images with empty or nonempty destinations and optional titles.</li><li>Parse full-reference, collapsed-reference, and shortcut links and images.</li><li>Normalize labels using case folding and whitespace normalization.</li><li>Support escaped and balanced brackets, escaped destinations and titles, entity references, nested image descriptions, and first-definition precedence.</li><li>Prevent links from containing links while preserving permitted nested image behavior.</li><li>Render links with <code>&lt;a&gt;</code> and images with <code>&lt;img&gt;</code> using plain-text image alt content.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC links-images-conformance ===<br>Intent: The implementation passes every supplied conformance example owned by links and images.<br>Suite: scoped</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, r&quot;^(Links|Images)$&quot;, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC links-images-conformance ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not use a public Markdown implementation.</li><li>Preserve document-wide reference-definition precedence.</li><li>Do not modify supplied conformance assets.</li></ul></article>
+</main>
+</body>
+</html>

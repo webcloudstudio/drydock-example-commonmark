@@ -1,0 +1,14 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- commonmark
+
+SUMMARY:
+Implemented inline scanning for escapes, entities, code spans, hard/soft breaks, autolinks, and literal text. Scoped conformance improved to 67/72 examples.
+
+BLOCKERS:
+- 5 scoped conformance examples still fail, mainly inline-link quote handling and one code-span boundary.
+- `pytest` could not locate the supplied test path in this environment.
+
+FAILURE_SUMMARY: Inline-basics conformance remains incomplete.
+FAILURE_DETAIL: The parser still mishandles quoted inline-link titles and one backtick precedence case; fix these before rerunning the scoped acceptance check.

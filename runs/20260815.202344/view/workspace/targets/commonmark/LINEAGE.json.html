@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/LINEAGE.json</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/LINEAGE.json</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../workspace/targets/commonmark/LINEAGE.json">Raw file</a></div></header>
+<article class="doc"><pre>{
+  &quot;version&quot;: 1,
+  &quot;import&quot;: {
+    &quot;root&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/sources&quot;,
+    &quot;format&quot;: &quot;markdown&quot;
+  },
+  &quot;sources&quot;: {
+    &quot;INSTRUCTIONS.md&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;f6f0fb4&quot;,
+          &quot;date&quot;: &quot;2026-08-15&quot;,
+          &quot;hash&quot;: &quot;10b172786a92ad4dc012e88358cf96fcead95bcd919f2677df3a03405782fb0a&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;standard-io-executable&quot;,
+              &quot;text&quot;: &quot;The parser reads Markdown from standard input and writes HTML to standard output.&quot;,
+              &quot;stories&quot;: [
+                &quot;interface-001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-block-structure&quot;,
+              &quot;text&quot;: &quot;Blocks: paragraphs, thematic breaks, ATX headings, setext headings, indented code, fenced code, HTML blocks, link reference definitions, block quotes, then lists \u2014 lists are the hardest block construct, with lazy continuation, nesting, and tightness.&quot;,
+              &quot;stories&quot;: [
+                &quot;block-001&quot;,
+                &quot;block-002&quot;,
+                &quot;block-003&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-inline-contents&quot;,
+              &quot;text&quot;: &quot;Inlines: backslash escapes, entity and numeric references, code spans, emphasis and strong emphasis (the delimiter-run algorithm), links and images, autolinks, raw HTML, hard breaks.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline-001&quot;,
+                &quot;inline-002&quot;,
+                &quot;inline-003&quot;,
+                &quot;inline-004&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;run-full-conformance-suite&quot;,
+              &quot;text&quot;: &quot;Create one terminal verification story that:\n\n- depends on every parser implementation story;\n- contains the only `Suite: full` acceptance check;\n- runs `sh sources/full_test.sh`, prints captured standard output and standard error, and asserts only `result.returncode == 0`; and\n- carries `Sea Trials: st-001`.&quot;,
+              &quot;stories&quot;: [
+                &quot;verify-001&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;cmark.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;f6f0fb4&quot;,
+          &quot;date&quot;: &quot;2026-08-15&quot;,
+          &quot;hash&quot;: &quot;c5fb45e7c64fd7670b2a3c49a151e46f4af9d0ad3004bedb37ecf9cdc34d2f00&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;convert-markdown-to-html&quot;,
+              &quot;text&quot;: &quot;markdown = cmark.cmark_markdown_to_html&quot;,
+              &quot;stories&quot;: [
+                &quot;block-001&quot;,
+                &quot;block-002&quot;,
+                &quot;block-003&quot;,
+                &quot;inline-001&quot;,
+                &quot;inline-002&quot;,
+                &quot;inline-003&quot;,
+                &quot;inline-004&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;provide-program-interface&quot;,
+              &quot;text&quot;: &quot;self.to_html = lambda x: pipe_through_prog(prog, x)&quot;,
+              &quot;stories&quot;: [
+                &quot;interface-001&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;full_test.sh&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;f6f0fb4&quot;,
+          &quot;date&quot;: &quot;2026-08-15&quot;,
+          &quot;hash&quot;: &quot;5b634a1c78117313283acceda8faad9de02b594e54949439c73697b058941a93&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;provide-stdio-interface&quot;,
+              &quot;text&quot;: &quot;The deliverable is an executable named commonmark that reads UTF-8 Markdown on stdin\nand writes HTML to stdout.&quot;,
+              &quot;stories&quot;: [
+                &quot;interface-001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;pass-complete-commonmark-suite&quot;,
+              &quot;text&quot;: &quot;The suite runs unfiltered: no --pattern, no --number, no selector of any kind. spec_tests.py\nexits with failed + errored, so exit 0 means the complete CommonMark 0.31.2 suite passed.&quot;,
+              &quot;stories&quot;: [
+                &quot;block-001&quot;,
+                &quot;block-002&quot;,
+                &quot;block-003&quot;,
+                &quot;inline-001&quot;,
+                &quot;inline-002&quot;,
+                &quot;inline-003&quot;,
+                &quot;inline-004&quot;,
+                &quot;verify-001&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;normalize.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;f6f0fb4&quot;,
+          &quot;date&quot;: &quot;2026-08-15&quot;,
+          &quot;hash&quot;: &quot;94a9dd253907e3dab7c02fc11e934f06112dcf0f3804255d09d732c8c7c4b5f4&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;collapse-whitespace&quot;,
+              &quot;text&quot;: &quot;Multiple inner whitespaces are collapsed to a single space (except\nin pre tags):&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;remove-block-whitespace&quot;,
+              &quot;text&quot;: &quot;Whitespace surrounding block-level tags is removed.&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;normalize-self-closing-tags&quot;,
+              &quot;text&quot;: &quot;Self-closing tags are converted to open tags.&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;normalize-attributes&quot;,
+              &quot;text&quot;: &quot;Attributes are sorted and lowercased.&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;convert-references&quot;,
+              &quot;text&quot;: &quot;References are converted to unicode, except that &#x27;&lt;&#x27;, &#x27;&gt;&#x27;, &#x27;&amp;&#x27;, and\n&#x27;\&quot;&#x27; are rendered using entities.&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;preserve-cdata&quot;,
+              &quot;text&quot;: &quot;We work around HTMLParser&#x27;s limitations parsing CDATA\nby breaking the input into chunks and passing CDATA chunks\nthrough verbatim.&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;return-original-on-error&quot;,
+              &quot;text&quot;: &quot;return html  # on error, return unnormalized HTML&quot;,
+              &quot;stories&quot;: []
+            }
+          ]
+        }
+      ]
+    },
+    &quot;spec.txt&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;f6f0fb4&quot;,
+          &quot;date&quot;: &quot;2026-08-15&quot;,
+          &quot;hash&quot;: &quot;43fad3e0ac5190a3b0bc6a41f7b1a853201a26ec2e6b74871f5d96239a8c34cf&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;parse-leaf-blocks&quot;,
+              &quot;text&quot;: &quot;This section describes the different kinds of leaf block that make up a Markdown document.&quot;,
+              &quot;stories&quot;: [
+                &quot;block-001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-link-reference-definitions&quot;,
+              &quot;text&quot;: &quot;A link reference definition consists of a link label, optionally preceded by up to three spaces of indentation, followed by a colon (`:`), optional spaces or tabs (including up to one line ending), a link destination, optional spaces or tabs (including up to one line ending), and an optional link title, which if it is present must be separated from the link destination by spaces or tabs.&quot;,
+              &quot;stories&quot;: [
+                &quot;block-001&quot;,
+                &quot;inline-003&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-block-quotes&quot;,
+              &quot;text&quot;: &quot;The following rules define block quotes:&quot;,
+              &quot;stories&quot;: [
+                &quot;block-002&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-lists&quot;,
+              &quot;text&quot;: &quot;A list is a sequence of one or more list items of the same type.&quot;,
+              &quot;stories&quot;: [
+                &quot;block-003&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-inline-basics&quot;,
+              &quot;text&quot;: &quot;Any ASCII punctuation character may be backslash-escaped.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline-001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-emphasis&quot;,
+              &quot;text&quot;: &quot;The following rules define emphasis and strong emphasis:&quot;,
+              &quot;stories&quot;: [
+                &quot;inline-002&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-links-and-images&quot;,
+              &quot;text&quot;: &quot;There are two basic kinds of links in Markdown. In inline links the destination and title are given immediately after the link text. In reference links the destination and title are defined elsewhere in the document.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline-003&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-html-and-autolinks&quot;,
+              &quot;text&quot;: &quot;Autolinks are absolute URIs and email addresses inside `&lt;` and `&gt;`.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline-004&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-raw-html&quot;,
+              &quot;text&quot;: &quot;Text between `&lt;` and `&gt;` that looks like an HTML tag is parsed as a raw HTML tag and will be rendered in HTML without escaping.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline-004&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;run-conformance-tests&quot;,
+              &quot;text&quot;: &quot;These are intended to double as conformance tests.&quot;,
+              &quot;stories&quot;: [
+                &quot;verify-001&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;spec_tests.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;f6f0fb4&quot;,
+          &quot;date&quot;: &quot;2026-08-15&quot;,
+          &quot;hash&quot;: &quot;9db1ea4a3ee79c5ec74eebc09c5985eb252427e8d9d19ef45e5cc3f2ae410855&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;run-cmark-tests&quot;,
+              &quot;text&quot;: &quot;Run cmark tests.&quot;,
+              &quot;stories&quot;: [
+                &quot;verify-001&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+</pre></article>
+</main>
+</body>
+</html>

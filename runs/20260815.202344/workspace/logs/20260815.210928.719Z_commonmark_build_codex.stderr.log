@@ -1,0 +1,8 @@
+2026-08-15T21:09:51.626713Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/build/commonmark/commonmark:
+                    content=self.blocks(item).strip()
+                    if not list_loose:
+                        content=self._remove_top_paragraph_tags(content)
+                    elif content.startswith('<p>') and '<ul>' in content and not re.search(r'</ul>.*<p>', content, re.S):
+                        content=re.sub(r'^<p>(.*?)</p>', r'\1', content, count=1, flags=re.S)
+                    rendered.append('<li>'+content+'</li>'); continue
+2026-08-15T21:10:09.025584Z ERROR codex_core::tools::router: error=failed to parse function arguments: missing field `session_id` at line 1 column 58

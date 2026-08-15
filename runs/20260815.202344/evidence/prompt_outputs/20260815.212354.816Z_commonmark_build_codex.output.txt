@@ -1,0 +1,11 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark
+- tests/test_interface.py
+
+SUMMARY:
+Implemented delimiter-run emphasis parsing with nesting, Unicode flanking rules, unmatched markers, and multiple-of-three handling. Scoped conformance: 132 passed. Project tests: 7 passed.
+
+BLOCKERS:
+- None

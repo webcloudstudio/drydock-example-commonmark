@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-8.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-8.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-8.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 8 · Service (block-8)</h1>
+<ul><li>block type: block</li><li>date: 2026-08-15</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 59901</li><li>execution id: 20260815.213333.614Z-4f0372e7</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse autolinks and raw HTML inline constructs. (inline-004) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1455)</li><li>implements: FEATURE-Inline-HTML-Autolinks.md (SP 466)</li><li>context: spec.txt (SP 51527)</li><li>context: spec_tests.py (SP 1609)</li><li>context: cmark.py (SP 339)</li><li>context: normalize.py (SP 1631)</li><li>context: ARCHITECTURE_compact.md (SP 87)</li><li>stack: common_compact.md (SP 1179)</li><li>stack: python_compact.md (SP 1534)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>commonmark</li><li>tests/test_inline_html.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: html-autolinks-conformance (FEATURE-Inline-HTML-Autolinks.md)</li></ul>
+<p>intent: The implementation passes every supplied conformance example owned by autolinks and raw HTML. return code: 1 stdout: Example 606 (lines 8901-8905) Autolinks &lt;foo@bar.example.com&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;mailto:foo@bar.example.com&quot;&gt;foo@bar.example.com&lt;/a&gt;&lt;/p&gt; +&lt;foo@bar.example.com&gt;</p>
+<p>Example 607 (lines 8908-8912) Autolinks &lt;foo+special@Bar.baz-bar0.com&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;mailto:foo+special@Bar.baz-bar0.com&quot;&gt;foo+special@Bar.baz-bar0.com&lt;/a&gt;&lt;/p&gt; +&lt;foo+special@bar.baz-bar0.com&gt;</p>
+<p>Example 608 (lines 8917-8921) Autolinks &lt;foo\+@bar.example.com&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;foo+@bar.example.com&amp;gt;&lt;/p&gt; +&lt;foo\+@bar.example.com&gt;</p>
+<p>Example 612 (lines 8947-8951) Autolinks &lt;foo.bar.baz&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;foo.bar.baz&amp;gt;&lt;/p&gt; +&lt;foo.bar.baz&gt;</p>
+<p>Example 621 (lines 9099-9103) Raw HTML &lt;a h*#ref=&quot;hi&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a h*#ref=&amp;quot;hi&amp;quot;&amp;gt;&lt;/p&gt; +&lt;a h*#ref=&quot;hi&quot;&gt;</p>
+<p>Example 622 (lines 9108-9112) Raw HTML &lt;a href=&quot;hi&#x27;&gt; &lt;a href=hi&#x27;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a href=&amp;quot;hi&#x27;&amp;gt; &amp;lt;a href=hi&#x27;&amp;gt;&lt;/p&gt; +&lt;p&gt;</p>
+<p>Example 623 (lines 9117-9127) Raw HTML &lt; a&gt;&lt; foo&gt;&lt;bar/ &gt; &lt;foo bar=baz bim!bop /&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt; a&amp;gt;&amp;lt; foo&amp;gt;&amp;lt;bar/ &amp;gt; &amp;lt;foo bar=baz bim!bop /&amp;gt;&lt;/p&gt; +&lt;p&gt;&amp;lt; a&amp;gt;&amp;lt; foo&amp;gt;&amp;lt;bar/ &amp;gt; &lt;foo bar=&quot;baz&quot; bim!bop&gt;&lt;/p&gt;</p>
+<p>Example 624 (lines 9132-9136) Raw HTML &lt;a href=&#x27;bar&#x27;title=title&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a href=&#x27;bar&#x27;title=title&amp;gt;&lt;/p&gt; +&lt;a href=&quot;bar&quot; title=&quot;title&quot;&gt;</p>
+<p>Example 626 (lines 9150-9154) Raw HTML &lt;/a href=&quot;foo&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;/a href=&amp;quot;foo&amp;quot;&amp;gt;&lt;/p&gt; +&lt;/a&gt;</p>
+<p>Example 628 (lines 9167-9174) Raw HTML foo &lt;!--&gt; foo --&gt;</p>
+<p>foo &lt;!---&gt; foo --&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;!----&gt; foo --&amp;gt;&lt;/p&gt;&lt;p&gt;foo &lt;!----&gt; foo --&amp;gt;&lt;/p&gt; +&lt;p&gt;foo &lt;!----&gt; foo --&gt;&lt;/p&gt;&lt;p&gt;foo &lt;!----&gt; foo --&gt;&lt;/p&gt;</p>
+<p>Example 634 (lines 9223-9227) Raw HTML &lt;a href=&quot;\&quot;&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a href=&amp;quot;&amp;quot;&amp;quot;&amp;gt;&lt;/p&gt; +&lt;a &quot; href=&quot;\&quot;&gt;</p>
+<p>29 passed, 11 failed, 0 errored, 615 skipped stderr: Traceback (most recent call last): File &quot;html-autolinks-conformance.py&quot;, line 20, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: html-autolinks-conformance (FEATURE-Inline-HTML-Autolinks.md)</li></ul>
+<p>intent: The implementation passes every supplied conformance example owned by autolinks and raw HTML. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: 40 passed, 0 failed, 0 errored, 615 skipped</p>
+<h2>Build summary</h2>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>commonmark</li><li>tests/test_inline_html.py</li></ul>
+<p>SUMMARY: Implemented strict URI/email autolinks and raw HTML parsing. Scoped suite: 40 passed. Full conformance harness and focused tests passed.</p>
+<p>BLOCKERS:</p>
+<ul><li>None</li></ul></article>
+</main>
+</body>
+</html>

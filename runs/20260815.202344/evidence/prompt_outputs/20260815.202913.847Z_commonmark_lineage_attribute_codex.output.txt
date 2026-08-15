@@ -1,0 +1,34 @@
+<requirement name="collapse-whitespace" stories="">
+Multiple inner whitespaces are collapsed to a single space (except
+in pre tags):
+</requirement>
+<requirement name="remove-block-whitespace" stories="">
+Whitespace surrounding block-level tags is removed.
+</requirement>
+<requirement name="normalize-self-closing-tags" stories="">
+Self-closing tags are converted to open tags.
+</requirement>
+<requirement name="normalize-attributes" stories="">
+Attributes are sorted and lowercased.
+</requirement>
+<requirement name="convert-references" stories="">
+References are converted to unicode, except that '<', '>', '&', and
+'"' are rendered using entities.
+</requirement>
+<requirement name="preserve-cdata" stories="">
+We work around HTMLParser's limitations parsing CDATA
+by breaking the input into chunks and passing CDATA chunks
+through verbatim.
+</requirement>
+<requirement name="return-original-on-error" stories="">
+return html  # on error, return unnormalized HTML
+</requirement>
+<unattached story="interface-001"/>
+<unattached story="block-001"/>
+<unattached story="block-002"/>
+<unattached story="block-003"/>
+<unattached story="inline-001"/>
+<unattached story="inline-002"/>
+<unattached story="inline-003"/>
+<unattached story="inline-004"/>
+<unattached story="verify-001"/>

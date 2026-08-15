@@ -1,0 +1,18 @@
+Drydock 0.1.8  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Drydock status — commonmark / commonmark
+
+  Target          /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/workspace/targets/commonmark
+  Phase           Implement
+  State           0/9 verified  ·  0 pending
+  Metadata        built · complete
+  Sources         6 imported · 9 authored blueprint files
+  Analysis        Questions · 9 stories · 1 question · 0 blockers
+  Review          No blockers · 1 questionnaire
+  Blueprint       ⚠  0 errors · 4 warnings
+    ⚠  Naming conventions: Unexpected file name: cmark_compact.md
+    ⚠  Naming conventions: Unexpected file name: normalize_compact.md
+    ⚠  Naming conventions: Unexpected file name: spec_compact.md
+    ⚠  Naming conventions: Unexpected file name: spec_tests_compact.md
+  Plan            approved · 0/9 verified  pending 0 · implemented 0 · failed 0
+  Frontier        (none)
+  Next step       drydock build commonmark

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20260815.202734.774Z_commonmark_plan_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20260815.202734.774Z_commonmark_plan_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20260815.202734.774Z_commonmark_plan_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>=== BEGIN ARTIFACT FEATURE-Inline-Emphasis.md ===
+# FEATURE: Inline Emphasis
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260815 V1 |
+| Description | Parse CommonMark emphasis and strong emphasis using the delimiter-run algorithm. |
+| Depends On  | ARCHITECTURE.md, FEATURE-Inline-Basics.md |
+| Provides    | emphasis parsing, strong-emphasis parsing |
+| Consumes    | executable commonmark, block structure, inline basics |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement emphasis and strong emphasis after block parsing and basic inline tokenization.
+
+## Behavior
+
+- Apply the CommonMark delimiter-run algorithm for `*`, `_`, `**`, and `__`.
+- Enforce intraword, Unicode whitespace, Unicode punctuation, and multiple-of-three rules.
+- Support nested emphasis, strong emphasis, unmatched delimiters, and precedence with code spans, links, images, and HTML.
+- Render emphasis as `&lt;em&gt;` and strong emphasis as `&lt;strong&gt;`.
+
+## Programmatic Acceptance
+
+=== AC emphasis-conformance ===
+Intent: The implementation passes every supplied conformance example owned by emphasis and strong emphasis.
+Suite: scoped
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [
+        sys.executable,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;,
+        &quot;./commonmark&quot;,
+        &quot;--spec&quot;,
+        &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;,
+        r&quot;^Emphasis and strong emphasis$&quot;,
+    ],
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC emphasis-conformance ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Do not use a public Markdown implementation.
+- Preserve block-before-inline parsing.
+- Do not modify supplied conformance assets.
+
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Inline-Links-Images.md ===
+# FEATURE: Inline Links and Images
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260815 V1 |
+| Description | Parse CommonMark inline links, reference links, and images with destinations, titles, and label resolution. |
+| Depends On  | ARCHITECTURE.md, FEATURE-Block-Leafs.md, FEATURE-Inline-Basics.md |
+| Provides    | inline links, reference links, images |
+| Consumes    | executable commonmark, link reference definitions, inline basics |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement inline and reference links and images using the document-wide link reference map produced during block parsing.
+
+## Behavior
+
+- Parse inline links and images with empty or nonempty destinations and optional titles.
+- Parse full-reference, collapsed-reference, and shortcut links and images.
+- Normalize labels using case folding and whitespace normalization.
+- Support escaped and balanced brackets, escaped destinations and titles, entity references, nested image descriptions, and first-definition precedence.
+- Prevent links from containing links while preserving permitted nested image behavior.
+- Render links with `&lt;a&gt;` and images with `&lt;img&gt;` using plain-text image alt content.
+
+## Programmatic Acceptance
+
+=== AC links-images-conformance ===
+Intent: The implementation passes every supplied conformance example owned by links and images.
+Suite: scoped
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [
+        sys.executable,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;,
+        &quot;./commonmark&quot;,
+        &quot;--spec&quot;,
+        &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;,
+        r&quot;^(Links|Images)$&quot;,
+    ],
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC links-images-conformance ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Do not use a public Markdown implementation.
+- Preserve document-wide reference-definition precedence.
+- Do not modify supplied conformance assets.
+
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Inline-HTML-Autolinks.md ===
+# FEATURE: Inline HTML and Autolinks
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260815 V1 |
+| Description | Parse CommonMark URI autolinks, email autolinks, and raw HTML constructs. |
+| Depends On  | ARCHITECTURE.md, FEATURE-Block-Leafs.md, FEATURE-Inline-Basics.md |
+| Provides    | URI autolinks, email autolinks, raw HTML |
+| Consumes    | executable commonmark, block structure, inline basics |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement inline autolinks and raw HTML while preserving their precedence over ordinary text and emphasis.
+
+## Behavior
+
+- Parse absolute URI autolinks and valid email autolinks.
+- Render URI autolinks as links to their URI and email autolinks with `mailto:` destinations.
+- Recognize valid open and closing tags, comments, processing instructions, declarations, and CDATA sections.
+- Preserve valid raw HTML without Markdown interpretation inside the raw construct.
+- Reject malformed tags and autolinks as literal escaped text.
+- Respect precedence with code spans, links, images, and emphasis.
+
+## Programmatic Acceptance
+
+=== AC html-autolinks-conformance ===
+Intent: The implementation passes every supplied conformance example owned by autolinks and raw HTML.
+Suite: scoped
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [
+        sys.executable,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;,
+        &quot;./commonmark&quot;,
+        &quot;--spec&quot;,
+        &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;,
+        r&quot;^(Autolinks|Raw HTML)$&quot;,
+    ],
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC html-autolinks-conformance ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Do not use a public Markdown implementation.
+- Preserve raw HTML exactly where the specification requires it.
+- Do not modify supplied conformance assets.
+
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Conformance-Verification.md ===
+# FEATURE: Conformance Verification
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20260815 V1 |
+| Description | Verify the completed parser against the complete supplied CommonMark 0.31.2 conformance suite. |
+| Depends On  | ARCHITECTURE.md, FEATURE-Block-Leafs.md, FEATURE-Block-Quotes.md, FEATURE-Block-Lists.md, FEATURE-Inline-Basics.md, FEATURE-Inline-Emphasis.md, FEATURE-Inline-Links-Images.md, FEATURE-Inline-HTML-Autolinks.md |
+| Provides    | complete CommonMark conformance verification |
+| Consumes    | executable commonmark, all parser capabilities |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Provide the terminal verification step for the completed command-line parser.
+
+## Behavior
+
+- Stage `spec.txt`, `spec_tests.py`, `cmark.py`, `normalize.py`, and `full_test.sh` unchanged.
+- Run `sh sources/full_test.sh` from the completed application root.
+- Treat the supplied scoring entry point&#x27;s exit status as the verification result.
+- Keep the suite unfiltered and terminal.
+
+## Programmatic Acceptance
+
+=== AC complete-conformance ===
+Intent: The completed parser passes the complete unfiltered supplied CommonMark conformance suite.
+Suite: full
+
+import subprocess
+
+result = subprocess.run(
+    [&quot;sh&quot;, &quot;sources/full_test.sh&quot;],
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC complete-conformance ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- This is the only full-suite acceptance check.
+- Do not filter, skip, reinterpret, or modify the supplied scoring assets.
+- Do not modify the supplied scoring entry point.
+
+=== END ARTIFACT ===</pre></article>
+</main>
+</body>
+</html>

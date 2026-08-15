@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-3.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-3.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-3.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 3 · Service (block-3)</h1>
+<ul><li>block type: block</li><li>date: 2026-08-15</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 60029</li><li>execution id: 20260815.205717.604Z-d66dc106</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse nested block quotes and their contained blocks. (block-002) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1455)</li><li>implements: FEATURE-Block-Quotes.md (SP 607)</li><li>context: spec.txt (SP 51527)</li><li>context: spec_tests.py (SP 1609)</li><li>context: cmark.py (SP 339)</li><li>context: normalize.py (SP 1631)</li><li>context: ARCHITECTURE_compact.md (SP 87)</li><li>stack: common_compact.md (SP 1179)</li><li>stack: python_compact.md (SP 1534)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>commonmark</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: block-quotes-conformance (FEATURE-Block-Quotes.md)</li></ul>
+<p>intent: The implementation passes every supplied conformance example owned by block quotes. return code: 1 stdout: Example 235 (lines 3798-3808) Block quotes &gt; bar baz &gt; foo</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;blockquote&gt;&lt;p&gt;bar baz foo&lt;/p&gt;&lt;/blockquote&gt; +&lt;blockquote&gt;&lt;p&gt;bar baz&lt;/p&gt;&lt;/blockquote&gt;&lt;blockquote&gt;&lt;p&gt;foo&lt;/p&gt;&lt;/blockquote&gt;</p>
+<p>Example 238 (lines 3860-3870) Block quotes &gt;     foo bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1,3 +1,3 @@ &lt;blockquote&gt;&lt;pre&gt;&lt;code&gt;foo -&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;&lt;pre&gt;&lt;code&gt;bar -&lt;/code&gt;&lt;/pre&gt; +bar +&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;</p>
+<p>Example 239 (lines 3873-3883) Block quotes &gt; <code>foo</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1,2 @@ -&lt;blockquote&gt;&lt;pre&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;&lt;p&gt;foo&lt;/p&gt;&lt;pre&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt; +&lt;blockquote&gt;&lt;pre&gt;&lt;code&gt;foo +&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;&lt;pre&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;</p>
+<p>Example 244 (lines 3946-3957) Block quotes &gt; foo</p>
+<p>&gt; bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;blockquote&gt;&lt;p&gt;foo&lt;/p&gt;&lt;/blockquote&gt;&lt;blockquote&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/blockquote&gt; +&lt;blockquote&gt;&lt;p&gt;foo&lt;/p&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/blockquote&gt;</p>
+<p>Example 253 (lines 4081-4095) Block quotes &gt;&gt;&gt; foo &gt; bar &gt;&gt;baz</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;blockquote&gt;&lt;blockquote&gt;&lt;blockquote&gt;&lt;p&gt;foo bar baz&lt;/p&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;&lt;/blockquote&gt; +&lt;blockquote&gt;&lt;blockquote&gt;&lt;blockquote&gt;&lt;p&gt;foo bar&lt;/p&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;&lt;blockquote&gt;&lt;p&gt;baz&lt;/p&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;</p>
+<p>Example 254 (lines 4103-4115) Block quotes &gt;     code</p>
+<p>&gt;    not code</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ &lt;blockquote&gt;&lt;pre&gt;&lt;code&gt;code -&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;&lt;blockquote&gt;&lt;p&gt;not code&lt;/p&gt;&lt;/blockquote&gt; +&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;not code&lt;/p&gt;&lt;/blockquote&gt;</p>
+<p>19 passed, 6 failed, 0 errored, 630 skipped stderr: Traceback (most recent call last): File &quot;block-quotes-conformance.py&quot;, line 20, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>GREEN (prepassed): block-quotes-interface (FEATURE-Block-Quotes.md)</li></ul>
+<p>intent: A block quote document is accepted through the executable interface. return code: 0 stdout: &lt;blockquote&gt; &lt;p&gt;quoted text&lt;/p&gt;</p>
+<p>&lt;/blockquote&gt;</p>
+<ul><li>GREEN (prepassed): block-quotes-nested-input (FEATURE-Block-Quotes.md)</li></ul>
+<p>intent: Nested block quote input is accepted through the executable interface. return code: 0 stdout: &lt;blockquote&gt; &lt;blockquote&gt; &lt;p&gt;nested continuation&lt;/p&gt;</p>
+<p>&lt;/blockquote&gt;</p>
+<p>&lt;/blockquote&gt;</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: block-quotes-conformance (FEATURE-Block-Quotes.md)</li></ul>
+<p>intent: The implementation passes every supplied conformance example owned by block quotes. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: 25 passed, 0 failed, 0 errored, 630 skipped</p>
+<ul><li>PASS: block-quotes-interface (FEATURE-Block-Quotes.md)</li></ul>
+<p>intent: A block quote document is accepted through the executable interface. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: &lt;blockquote&gt; &lt;p&gt;quoted text&lt;/p&gt; &lt;/blockquote&gt;</p>
+<ul><li>PASS: block-quotes-nested-input (FEATURE-Block-Quotes.md)</li></ul>
+<p>intent: Nested block quote input is accepted through the executable interface. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: &lt;blockquote&gt; &lt;blockquote&gt; &lt;p&gt;nested continuation&lt;/p&gt; &lt;/blockquote&gt; &lt;/blockquote&gt;</p>
+<h2>Build summary</h2>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>commonmark</li></ul>
+<p>SUMMARY: Implemented nested block quotes, lazy continuation boundaries, blank-line separation, and contained block parsing. Block quote suite: 25 passed. Interface probes passed.</p>
+<p>BLOCKERS:</p>
+<ul><li>None.</li></ul></article>
+</main>
+</body>
+</html>

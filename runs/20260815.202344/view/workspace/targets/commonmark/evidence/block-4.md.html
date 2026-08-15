@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-4.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-4.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-4.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 4 · Service (block-4)</h1>
+<ul><li>block type: block</li><li>date: 2026-08-15</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 60056</li><li>execution id: 20260815.210928.719Z-4a50798b</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse lists, list items, nesting, laziness, and tightness. (block-003) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1455)</li><li>implements: FEATURE-Block-Lists.md (SP 627)</li><li>context: spec.txt (SP 51527)</li><li>context: spec_tests.py (SP 1609)</li><li>context: cmark.py (SP 339)</li><li>context: normalize.py (SP 1631)</li><li>context: ARCHITECTURE_compact.md (SP 87)</li><li>stack: common_compact.md (SP 1179)</li><li>stack: python_compact.md (SP 1534)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>commonmark</li><li>tests/test_interface.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: lists-conformance (FEATURE-Block-Lists.md)</li></ul>
+<p>intent: The implementation passes every supplied conformance example owned by list items and lists. return code: 1 stdout: Example 257 (lines 4212-4221) List items</p>
+<ul><li>one</li></ul>
+<p>two</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;one&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;two&lt;/p&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;one&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;two&lt;/p&gt;</p>
+<p>Example 259 (lines 4238-4248) List items</p>
+<ul><li>one</li></ul>
+<p>two</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1 @@ -&lt;ul&gt;&lt;li&gt;one&lt;/li&gt;&lt;/ul&gt;&lt;pre&gt;&lt;code&gt; two -&lt;/code&gt;&lt;/pre&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;one&lt;/p&gt;&lt;p&gt;two&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 262 (lines 4300-4313) List items &gt;&gt;- one &gt;&gt; &gt;  &gt; two</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;blockquote&gt;&lt;blockquote&gt;&lt;ul&gt;&lt;li&gt;one&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;two&lt;/p&gt;&lt;/blockquote&gt;&lt;/blockquote&gt; +&lt;blockquote&gt;&lt;blockquote&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;one&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;two&lt;/p&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;</p>
+<p>Example 267 (lines 4399-4405) List items</p>
+<ol><li>ok</li></ol>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ol start=&quot;123456789&quot;&gt;&lt;li&gt;ok&lt;/li&gt;&lt;/ol&gt; +&lt;ol&gt;&lt;li&gt;ok&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 268 (lines 4408-4412) List items</p>
+<ol><li>not ok</li></ol>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;1234567890. not ok&lt;/p&gt; +&lt;ol&gt;&lt;li&gt;not ok&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 270 (lines 4426-4432) List items</p>
+<ol><li>ok</li></ol>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ol start=&quot;3&quot;&gt;&lt;li&gt;ok&lt;/li&gt;&lt;/ol&gt; +&lt;ol start=&quot;003&quot;&gt;&lt;li&gt;ok&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 273 (lines 4477-4489) List items</p>
+<ol><li>foo</li></ol>
+<p>bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;ol start=&quot;10&quot;&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;pre&gt;&lt;code&gt;bar +&lt;ol&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;pre&gt;&lt;code&gt;  bar &lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 275 (lines 4511-4527) List items</p>
+<ol><li>indented code</li></ol>
+<p>paragraph</p>
+<p>more code</p>
+<p>--- expected HTML +++ actual HTML @@ -1,3 +1,2 @@ -&lt;ol&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt;indented code -&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;paragraph&lt;/p&gt;&lt;pre&gt;&lt;code&gt;more code -&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ol&gt; +&lt;ol&gt;&lt;li&gt;&lt;p&gt;indented code&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;paragraph&lt;/p&gt;&lt;pre&gt;&lt;code&gt;   more code +&lt;/code&gt;&lt;/pre&gt;</p>
+<p>Example 276 (lines 4533-4549) List items</p>
+<ol><li>indented code</li></ol>
+<p>paragraph</p>
+<p>more code</p>
+<p>--- expected HTML +++ actual HTML @@ -1,3 +1,2 @@ -&lt;ol&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt; indented code -&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;paragraph&lt;/p&gt;&lt;pre&gt;&lt;code&gt;more code -&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ol&gt; +&lt;ol&gt;&lt;li&gt;&lt;p&gt;indented code&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;paragraph&lt;/p&gt;&lt;pre&gt;&lt;code&gt;   more code +&lt;/code&gt;&lt;/pre&gt;</p>
+<p>Example 278 (lines 4570-4579) List items</p>
+<ul><li>foo</li></ul>
+<p>bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;bar&lt;/p&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;bar&lt;/p&gt;</p>
+<p>Example 280 (lines 4614-4635) List items - foo - <code>bar</code> - baz</p>
+<p>--- expected HTML +++ actual HTML @@ -1,3 +1,2 @@ -&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt;bar -&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt;baz -&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;h2&gt;- foo&lt;/h2&gt;&lt;pre&gt;&lt;code&gt;bar +&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;- baz&lt;/p&gt;</p>
+<p>Example 281 (lines 4640-4647) List items</p>
+<ul><li></li></ul>
+<p>foo</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;foo&lt;/p&gt;</p>
+<p>Example 282 (lines 4654-4663) List items -</p>
+<p>foo</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;foo&lt;/p&gt; +&lt;p&gt;-&lt;/p&gt;&lt;p&gt;foo&lt;/p&gt;</p>
+<p>Example 283 (lines 4668-4678) List items</p>
+<ul><li>foo</li></ul>
+<p>-</p>
+<ul><li>bar</li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;- - bar&lt;/p&gt;</p>
+<p>Example 284 (lines 4683-4693) List items</p>
+<ul><li>foo</li><li></li><li>bar</li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 285 (lines 4698-4708) List items</p>
+<ol><li>foo</li></ol>
+<p>2.</p>
+<ol><li>bar</li></ol>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ol&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ol&gt; +&lt;ol&gt;&lt;li&gt;foo&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;2. 3. bar&lt;/p&gt;</p>
+<p>Example 286 (lines 4713-4719) List items *</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;p&gt;*&lt;/p&gt;</p>
+<p>Example 288 (lines 4745-4764) List items</p>
+<ol><li>A paragraph</li></ol>
+<p>with two lines.</p>
+<p>indented code</p>
+<p>&gt; A block quote.</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;indented code +&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt; indented code &lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;&lt;p&gt;A block quote.&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 289 (lines 4769-4788) List items</p>
+<ol><li>A paragraph</li></ol>
+<p>with two lines.</p>
+<p>indented code</p>
+<p>&gt; A block quote.</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;indented code +&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;  indented code &lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;&lt;p&gt;A block quote.&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 290 (lines 4793-4812) List items</p>
+<ol><li>A paragraph</li></ol>
+<p>with two lines.</p>
+<p>indented code</p>
+<p>&gt; A block quote.</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;indented code +&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;   indented code &lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;&lt;p&gt;A block quote.&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 292 (lines 4847-4866) List items</p>
+<ol><li>A paragraph</li></ol>
+<p>with two lines.</p>
+<p>indented code</p>
+<p>&gt; A block quote.</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,4 @@ -&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;indented code -&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;&lt;p&gt;A block quote.&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;/ol&gt; +&lt;ol&gt;&lt;li&gt;A paragraph&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;      indented code +</p>
+<ul><li>&amp;gt; A block quote.</li></ul>
+<p>+&lt;/code&gt;&lt;/pre&gt;</p>
+<p>Example 293 (lines 4871-4879) List items</p>
+<ol><li>A paragraph</li></ol>
+<p>with two lines.</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ol&gt;&lt;li&gt;A paragraph with two lines.&lt;/li&gt;&lt;/ol&gt; +&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 294 (lines 4884-4898) List items &gt; 1. &gt; Blockquote continued here.</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;blockquote&gt;&lt;ol&gt;&lt;li&gt;&lt;blockquote&gt;&lt;p&gt;Blockquote continued here.&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/blockquote&gt; +&lt;blockquote&gt;&lt;ol&gt;&lt;li&gt;&lt;blockquote&gt;&lt;p&gt;Blockquote&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;continued here.&lt;/p&gt;&lt;/blockquote&gt;</p>
+<p>Example 295 (lines 4901-4915) List items &gt; 1. &gt; Blockquote &gt; continued here.</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;blockquote&gt;&lt;ol&gt;&lt;li&gt;&lt;blockquote&gt;&lt;p&gt;Blockquote continued here.&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/blockquote&gt; +&lt;blockquote&gt;&lt;ol&gt;&lt;li&gt;&lt;blockquote&gt;&lt;p&gt;Blockquote&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;continued here.&lt;/p&gt;&lt;/blockquote&gt;</p>
+<p>Example 296 (lines 4929-4950) List items</p>
+<ul><li>foo<ul><li>bar<ul><li>baz<ul><li>boo</li></ul></li></ul></li></ul></li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;foo&lt;ul&gt;&lt;li&gt;bar&lt;ul&gt;&lt;li&gt;baz&lt;ul&gt;&lt;li&gt;boo&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;&lt;p&gt;bar - baz - boo&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 298 (lines 4972-4983) List items</p>
+<ol><li>foo<ul><li>bar</li></ul></li></ol>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ol start=&quot;10&quot;&gt;&lt;li&gt;foo&lt;ul&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ol&gt; +&lt;ol&gt;&lt;li&gt;&lt;p&gt;foo - bar&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 299 (lines 4988-4998) List items</p>
+<ol><li>foo<ul><li>bar</li></ul></li></ol>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ol start=&quot;10&quot;&gt;&lt;li&gt;foo&lt;/li&gt;&lt;/ol&gt;&lt;ul&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt; +&lt;ol&gt;&lt;li&gt;foo&lt;/li&gt;&lt;/ol&gt;&lt;ul&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 302 (lines 5035-5049) List items</p>
+<ul><li># Foo</li><li>Bar</li></ul>
+<p>--- baz</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;h1&gt;Foo&lt;/h1&gt;&lt;/li&gt;&lt;li&gt;&lt;h2&gt;Bar&lt;/h2&gt;baz&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;h1&gt;Foo&lt;/h1&gt;&lt;/li&gt;&lt;li&gt;&lt;h2&gt;Bar&lt;/h2&gt;&lt;p&gt;baz&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 303 (lines 5271-5283) Lists</p>
+<ul><li>foo</li><li>bar</li><li>baz</li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;&lt;ul&gt;&lt;li&gt;baz&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;li&gt;baz&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 304 (lines 5286-5298) Lists</p>
+<ol><li>foo</li><li>bar</li><li>baz</li></ol>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ol&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ol&gt;&lt;ol start=&quot;3&quot;&gt;&lt;li&gt;baz&lt;/li&gt;&lt;/ol&gt; +&lt;ol&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;li&gt;baz&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 305 (lines 5305-5315) Lists Foo</p>
+<ul><li>bar</li><li>baz</li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;Foo&lt;/p&gt;&lt;ul&gt;&lt;li&gt;bar&lt;/li&gt;&lt;li&gt;baz&lt;/li&gt;&lt;/ul&gt; +&lt;p&gt;Foo - bar - baz&lt;/p&gt;</p>
+<p>Example 307 (lines 5392-5400) Lists The number of windows in my house is</p>
+<ol><li>The number of doors is 6.</li></ol>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;The number of windows in my house is&lt;/p&gt;&lt;ol&gt;&lt;li&gt;The number of doors is 6.&lt;/li&gt;&lt;/ol&gt; +&lt;p&gt;The number of windows in my house is 1. The number of doors is 6.&lt;/p&gt;</p>
+<p>Example 309 (lines 5427-5449) Lists</p>
+<ul><li>foo<ul><li>bar<ul><li>baz</li></ul></li></ul></li></ul>
+<p>bim</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1,2 @@ -&lt;ul&gt;&lt;li&gt;foo&lt;ul&gt;&lt;li&gt;bar&lt;ul&gt;&lt;li&gt;&lt;p&gt;baz&lt;/p&gt;&lt;p&gt;bim&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;bar - baz&lt;/p&gt;&lt;pre&gt;&lt;code&gt;bim +&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 310 (lines 5457-5475) Lists</p>
+<ul><li>foo</li><li>bar</li></ul>
+<p>&lt;!-- --&gt;</p>
+<ul><li>baz</li><li>bim</li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;&lt;!-- --&gt;&lt;ul&gt;&lt;li&gt;baz&lt;/li&gt;&lt;li&gt;bim&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;!-- --&gt;&lt;ul&gt;&lt;li&gt;baz&lt;/li&gt;&lt;li&gt;bim&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 314 (lines 5554-5568) Lists</p>
+<ul><li>a<ul><li>b<ul><li>c<ul><li>d<ul><li>e</li></ul></li></ul></li></ul></li></ul></li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;a&lt;/li&gt;&lt;li&gt;b&lt;/li&gt;&lt;li&gt;c&lt;/li&gt;&lt;li&gt;d - e&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;a&lt;/li&gt;&lt;li&gt;b&lt;/li&gt;&lt;li&gt;c&lt;/li&gt;&lt;li&gt;&lt;p&gt;d - e&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 315 (lines 5574-5591) Lists</p>
+<ol><li>a</li></ol>
+<ol><li>b</li></ol>
+<ol><li>c</li></ol>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1 @@ -&lt;ol&gt;&lt;li&gt;&lt;p&gt;a&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;b&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;&lt;pre&gt;&lt;code&gt;3. c -&lt;/code&gt;&lt;/pre&gt; +&lt;ol&gt;&lt;li&gt;&lt;p&gt;a&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;b&lt;/p&gt;&lt;ol start=&quot;3&quot;&gt;&lt;li&gt;c&lt;/li&gt;&lt;/ol&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 317 (lines 5619-5634) Lists</p>
+<ul><li>a</li></ul>
+<p>*</p>
+<ul><li>c</li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;p&gt;a&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;c&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;a&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;*&lt;/p&gt;&lt;ul&gt;&lt;li&gt;c&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 320 (lines 5686-5705) Lists</p>
+<ul><li>a</li><li><code>`</code></li></ul>
+<p>b</p>
+<p><code>`</code></p>
+<ul><li>c</li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1,4 +1,4 @@ -&lt;ul&gt;&lt;li&gt;a&lt;/li&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt;b +&lt;ul&gt;&lt;li&gt;&lt;p&gt;a&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt;b</p>
+<p>-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;li&gt;c&lt;/li&gt;&lt;/ul&gt; +&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;c&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 321 (lines 5712-5730) Lists</p>
+<ul><li>a<ul><li>b</li></ul></li></ul>
+<p>c</p>
+<ul><li>d</li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;a&lt;ul&gt;&lt;li&gt;&lt;p&gt;b&lt;/p&gt;&lt;p&gt;c&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;d&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;a&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;b&lt;/p&gt;&lt;p&gt;c&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;d&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 322 (lines 5736-5750) Lists</p>
+<ul><li>a</li></ul>
+<p>&gt; b &gt;</p>
+<ul><li>c</li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;a&lt;blockquote&gt;&lt;p&gt;b&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;li&gt;c&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;a&lt;/p&gt;&lt;blockquote&gt;&lt;p&gt;b&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;li&gt;c&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 323 (lines 5756-5774) Lists</p>
+<ul><li>a</li></ul>
+<p>&gt; b <code>c</code></p>
+<ul><li>d</li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1 @@ -&lt;ul&gt;&lt;li&gt;a&lt;blockquote&gt;&lt;p&gt;b&lt;/p&gt;&lt;/blockquote&gt;&lt;pre&gt;&lt;code&gt;c -&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;li&gt;d&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;a&lt;/p&gt;&lt;blockquote&gt;&lt;p&gt;b&lt;/p&gt;&lt;pre&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;&lt;p&gt;c&lt;/p&gt;&lt;pre&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;li&gt;d&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 325 (lines 5788-5799) Lists</p>
+<ul><li>a<ul><li>b</li></ul></li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;a&lt;ul&gt;&lt;li&gt;b&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;a&lt;/li&gt;&lt;li&gt;b&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 327 (lines 5824-5839) Lists</p>
+<ul><li>foo<ul><li>bar</li></ul></li></ul>
+<p>baz</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;ul&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;baz&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;bar&lt;/p&gt;&lt;p&gt;baz&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 328 (lines 5842-5867) Lists</p>
+<ul><li>a<ul><li>b</li><li>c</li></ul></li></ul>
+<ul><li>d<ul><li>e</li><li>f</li></ul></li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;p&gt;a&lt;/p&gt;&lt;ul&gt;&lt;li&gt;b&lt;/li&gt;&lt;li&gt;c&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;d&lt;/p&gt;&lt;ul&gt;&lt;li&gt;e&lt;/li&gt;&lt;li&gt;f&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;a&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;b&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;c&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;d&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;e&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;f&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>30 passed, 44 failed, 0 errored, 581 skipped stderr: Traceback (most recent call last): File &quot;lists-conformance.py&quot;, line 20, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>GREEN (prepassed): lists-interface (FEATURE-Block-Lists.md)</li></ul>
+<p>intent: A bullet list is accepted through the executable interface. return code: 0 stdout: &lt;ul&gt;&lt;li&gt;one&lt;/li&gt;&lt;li&gt;two&lt;/li&gt;&lt;/ul&gt;</p>
+<ul><li>GREEN (prepassed): lists-nested-input (FEATURE-Block-Lists.md)</li></ul>
+<p>intent: Nested and ordered list input is accepted through the executable interface. return code: 0 stdout: &lt;ol&gt;&lt;li&gt;one&lt;/li&gt;&lt;/ol&gt; &lt;ul&gt;&lt;li&gt;nested&lt;/li&gt;&lt;/ul&gt;</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: lists-conformance (FEATURE-Block-Lists.md)</li></ul>
+<p>intent: The implementation passes every supplied conformance example owned by list items and lists. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: 74 passed, 0 failed, 0 errored, 581 skipped</p>
+<ul><li>PASS: lists-interface (FEATURE-Block-Lists.md)</li></ul>
+<p>intent: A bullet list is accepted through the executable interface. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: &lt;ul&gt;&lt;li&gt;one&lt;/li&gt;&lt;li&gt;two&lt;/li&gt;&lt;/ul&gt;</p>
+<ul><li>PASS: lists-nested-input (FEATURE-Block-Lists.md)</li></ul>
+<p>intent: Nested and ordered list input is accepted through the executable interface. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: &lt;ol&gt;&lt;li&gt;one &lt;ul&gt;&lt;li&gt;nested&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<h2>Repair attempts</h2>
+<ul><li>attempt 0 (initial build): failed; 2/3 checks; 73/74 cases model=gpt-5.6-luna; execution 20260815.210131.085Z-a3196f28</li><li>attempt 1 (repair 1): built; 3/3 checks; 74/74 cases model=gpt-5.6-luna; execution 20260815.210928.719Z-4a50798b</li></ul>
+<h2>Build summary</h2>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>commonmark</li><li>tests/test_interface.py</li></ul>
+<p>SUMMARY: Fixed nested-list tightness detection and loose outer-list rendering. List conformance passes: 74 passed, 0 failed. Added deterministic regression tests; all 5 interface tests pass.</p>
+<p>BLOCKERS:</p>
+<ul><li>None</li></ul></article>
+</main>
+</body>
+</html>

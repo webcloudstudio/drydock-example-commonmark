@@ -1,0 +1,25 @@
+2026-08-15T21:28:03.034243Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/build/commonmark/commonmark:
+        # Capture simple inline links before escaping their destination and
+        # title.  This preserves the distinction between a literal quote
+        # delimiter and an entity such as &quot;.
+        def early_link(match):
+            image=bool(match.group(1)); label=match.group(3); body=match.group(4).strip(); title=None
+            title_match=re.match(r'^(.*?)[ \t]+(["\'])(.*?)\2$',body)
+            if title_match: body=title_match.group(1); title=title_match.group(3)
+            dest=body
+            if dest.startswith('<') and dest.endswith('>'): dest=dest[1:-1]
+            unescape=lambda value: re.sub(r'\\([!"#$%&\'()*+,-./:;<=>?@\[\\\]^_`{|}~])',r'\1',html.unescape(value))
+            dest=quote(unescape(dest),safe="/%:@?&=+$,;#-_.!~*'()")
+            if '`' in label or '&quot;' in body:
+                return match.group(0)
+            if image:
+                alt=re.sub(r'[*_`]','',unescape(label))
+                rendered='<img src="'+html.escape(dest,quote=True)+'" alt="'+html.escape(alt,quote=True)+'"'
+            else:
+                rendered='<a href="'+html.escape(dest,quote=True)+'"'
+            if title is not None:
+                rendered+=' title="'+html.escape(unescape(title),quote=True)+'"'
+            if image: rendered+=' />'
+            else: rendered+='>'+self.inline(label)+'</a>'
+            return hold(rendered)
+        text=re.sub(r'(?<!\\)(!?)(\[([^\]]*)\])\((<[^>\n]*>|[^)\n]*)\)', early_link, text)

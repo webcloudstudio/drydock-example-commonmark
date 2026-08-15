@@ -1,0 +1,31 @@
+<requirement name="parse-leaf-blocks" stories="block-001">
+This section describes the different kinds of leaf block that make up a Markdown document.
+</requirement>
+<requirement name="parse-link-reference-definitions" stories="block-001,inline-003">
+A link reference definition consists of a link label, optionally preceded by up to three spaces of indentation, followed by a colon (`:`), optional spaces or tabs (including up to one line ending), a link destination, optional spaces or tabs (including up to one line ending), and an optional link title, which if it is present must be separated from the link destination by spaces or tabs.
+</requirement>
+<requirement name="parse-block-quotes" stories="block-002">
+The following rules define block quotes:
+</requirement>
+<requirement name="parse-lists" stories="block-003">
+A list is a sequence of one or more list items of the same type.
+</requirement>
+<requirement name="parse-inline-basics" stories="inline-001">
+Any ASCII punctuation character may be backslash-escaped.
+</requirement>
+<requirement name="parse-emphasis" stories="inline-002">
+The following rules define emphasis and strong emphasis:
+</requirement>
+<requirement name="parse-links-and-images" stories="inline-003">
+There are two basic kinds of links in Markdown. In inline links the destination and title are given immediately after the link text. In reference links the destination and title are defined elsewhere in the document.
+</requirement>
+<requirement name="parse-html-and-autolinks" stories="inline-004">
+Autolinks are absolute URIs and email addresses inside `<` and `>`.
+</requirement>
+<requirement name="parse-raw-html" stories="inline-004">
+Text between `<` and `>` that looks like an HTML tag is parsed as a raw HTML tag and will be rendered in HTML without escaping.
+</requirement>
+<requirement name="run-conformance-tests" stories="verify-001">
+These are intended to double as conformance tests.
+</requirement>
+<unattached story="interface-001"/>

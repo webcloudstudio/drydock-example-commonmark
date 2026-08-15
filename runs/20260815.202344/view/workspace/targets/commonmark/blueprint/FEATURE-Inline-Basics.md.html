@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Inline-Basics.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Inline-Basics.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Inline-Basics.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Inline Basics</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260815 V1</td></tr><tr><td>Description</td><td>Parses CommonMark escapes, entities, code spans, line breaks, and literal text.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md, FEATURE-Block-Leafs.md, FEATURE-Block-Quotes.md, FEATURE-Block-Lists.md</td></tr><tr><td>Provides</td><td>inline escapes, entity references, code spans, hard breaks, soft breaks</td></tr><tr><td>Consumes</td><td>executable commonmark, block structure</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement the foundational inline constructs used by all later inline features.</p>
+<h2>Scope</h2>
+<p>Support ASCII punctuation backslash escapes, HTML named and numeric character references, U+0000 replacement, code spans with delimiter matching and whitespace normalization, hard breaks from trailing spaces or backslashes, soft breaks, and literal textual content.</p>
+<p>Escapes, entities, and line breaks must obey their context restrictions in code spans, code blocks, autolinks, and raw HTML.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC inline-basics-conformance ===<br>Intent: The implementation passes every supplied conformance example owned by foundational inline parsing.</p>
+<p>import subprocess import sys</p>
+<p>pattern = ( r&quot;^(Backslash escapes|Entity and numeric character references|Code spans|&quot; r&quot;Hard line breaks|Soft line breaks|Textual content)$&quot; ) result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, pattern, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC inline-basics-conformance ===</p>
+<p>=== AC inline-basics-interface ===<br>Intent: Inline source containing escapes, entities, code, and line breaks is accepted through the executable interface.</p>
+<p>import subprocess</p>
+<p>source = r&quot;escaped \* text &amp;amp; <code>code</code>  &quot; + &quot;\n&quot; + &quot;next\n&quot; result = subprocess.run( [&quot;./commonmark&quot;], input=source, capture_output=True, text=True, ) print(result.stdout) print(result.stderr) assert result.returncode == 0 === END AC inline-basics-interface ===</p>
+<p>=== AC inline-basics-unicode-input ===<br>Intent: UTF-8 inline text is accepted through the executable interface.</p>
+<p>import subprocess</p>
+<p>source = &quot;Unicode café\n&quot; result = subprocess.run( [&quot;./commonmark&quot;], input=source, capture_output=True, text=True, encoding=&quot;utf-8&quot;, ) print(result.stdout) print(result.stderr) assert result.returncode == 0 === END AC inline-basics-unicode-input ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not apply escapes or entity references inside code spans or code blocks.</li><li>Preserve literal text and internal spaces.</li><li>Do not modify supplied conformance assets.</li></ul></article>
+</main>
+</body>
+</html>

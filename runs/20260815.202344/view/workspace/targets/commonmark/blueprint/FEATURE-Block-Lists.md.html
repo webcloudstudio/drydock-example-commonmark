@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Block-Lists.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Block-Lists.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Block-Lists.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Block Lists</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260815 V1</td></tr><tr><td>Description</td><td>Parses CommonMark lists, list items, nesting, continuation, and tightness.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md, FEATURE-Block-Leafs.md, FEATURE-Block-Quotes.md</td></tr><tr><td>Provides</td><td>list parsing, list-item parsing, list tightness</td></tr><tr><td>Consumes</td><td>executable commonmark, leaf block parsing, block quote parsing</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement bullet and ordered list containers and their list-item block content.</p>
+<h2>Scope</h2>
+<p>Support bullet markers, ordered markers and start numbers, marker widths, indentation, nested lists, list interruption, lazy continuation, empty items, mixed block content, delimiter changes, blank-line handling, and tight versus loose rendering.</p>
+<p>List-item parsing must compose with block quotes and all leaf blocks while preserving the list&#x27;s marker type and tightness rules.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC lists-conformance ===<br>Intent: The implementation passes every supplied conformance example owned by list items and lists.</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, r&quot;^(List items|Lists)$&quot;, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC lists-conformance ===</p>
+<p>=== AC lists-interface ===<br>Intent: A bullet list is accepted through the executable interface.</p>
+<p>import subprocess</p>
+<p>source = &quot;- one\n- two\n&quot; result = subprocess.run( [&quot;./commonmark&quot;], input=source, capture_output=True, text=True, ) print(result.stdout) print(result.stderr) assert result.returncode == 0 === END AC lists-interface ===</p>
+<p>=== AC lists-nested-input ===<br>Intent: Nested and ordered list input is accepted through the executable interface.</p>
+<p>import subprocess</p>
+<p>source = &quot;1. one\n   - nested\n&quot; result = subprocess.run( [&quot;./commonmark&quot;], input=source, capture_output=True, text=True, ) print(result.stdout) print(result.stderr) assert result.returncode == 0 === END AC lists-nested-input ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Preserve list marker type, ordered start number, nesting, and tightness semantics.</li><li>Do not treat thematic breaks as list items when CommonMark gives the thematic break precedence.</li><li>Do not modify supplied conformance assets.</li></ul></article>
+</main>
+</body>
+</html>

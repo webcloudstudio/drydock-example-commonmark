@@ -1,0 +1,10 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark
+
+SUMMARY:
+Fixed tab preservation and block-quote lazy continuation handling. Full suite: 655 passed, 0 failed, 0 errored, 0 skipped.
+
+BLOCKERS:
+- Supplemental pytest directory was unavailable; conformance verification passed.

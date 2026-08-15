@@ -1,0 +1,11 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark
+- README.md
+
+SUMMARY:
+Fixed inline link titles, entity handling, quote escaping, and code-span precedence. Scoped conformance passes: 72/72. Interface and Unicode checks pass.
+
+BLOCKERS:
+- None

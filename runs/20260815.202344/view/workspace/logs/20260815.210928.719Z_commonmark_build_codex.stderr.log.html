@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/logs/20260815.210928.719Z_commonmark_build_codex.stderr.log</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/logs/20260815.210928.719Z_commonmark_build_codex.stderr.log</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../workspace/logs/20260815.210928.719Z_commonmark_build_codex.stderr.log">Raw file</a></div></header>
+<article class="doc"><pre>2026-08-15T21:09:51.626713Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/build/commonmark/commonmark:
+                    content=self.blocks(item).strip()
+                    if not list_loose:
+                        content=self._remove_top_paragraph_tags(content)
+                    elif content.startswith(&#x27;&lt;p&gt;&#x27;) and &#x27;&lt;ul&gt;&#x27; in content and not re.search(r&#x27;&lt;/ul&gt;.*&lt;p&gt;&#x27;, content, re.S):
+                        content=re.sub(r&#x27;^&lt;p&gt;(.*?)&lt;/p&gt;&#x27;, r&#x27;\1&#x27;, content, count=1, flags=re.S)
+                    rendered.append(&#x27;&lt;li&gt;&#x27;+content+&#x27;&lt;/li&gt;&#x27;); continue
+2026-08-15T21:10:09.025584Z ERROR codex_core::tools::router: error=failed to parse function arguments: missing field `session_id` at line 1 column 58
+</pre></article>
+</main>
+</body>
+</html>

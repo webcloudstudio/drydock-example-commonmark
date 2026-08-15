@@ -1,0 +1,11 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark
+- tests/test_inline_html.py
+
+SUMMARY:
+Implemented strict URI/email autolinks and raw HTML parsing. Scoped suite: 40 passed. Full conformance harness and focused tests passed.
+
+BLOCKERS:
+- None

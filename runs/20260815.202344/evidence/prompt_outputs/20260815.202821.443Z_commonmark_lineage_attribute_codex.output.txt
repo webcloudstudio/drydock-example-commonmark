@@ -1,0 +1,17 @@
+<requirement name="standard-io-executable" stories="interface-001">
+The parser reads Markdown from standard input and writes HTML to standard output.
+</requirement>
+<requirement name="parse-block-structure" stories="block-001,block-002,block-003">
+Blocks: paragraphs, thematic breaks, ATX headings, setext headings, indented code, fenced code, HTML blocks, link reference definitions, block quotes, then lists — lists are the hardest block construct, with lazy continuation, nesting, and tightness.
+</requirement>
+<requirement name="parse-inline-contents" stories="inline-001,inline-002,inline-003,inline-004">
+Inlines: backslash escapes, entity and numeric references, code spans, emphasis and strong emphasis (the delimiter-run algorithm), links and images, autolinks, raw HTML, hard breaks.
+</requirement>
+<requirement name="run-full-conformance-suite" stories="verify-001">
+Create one terminal verification story that:
+
+- depends on every parser implementation story;
+- contains the only `Suite: full` acceptance check;
+- runs `sh sources/full_test.sh`, prints captured standard output and standard error, and asserts only `result.returncode == 0`; and
+- carries `Sea Trials: st-001`.
+</requirement>

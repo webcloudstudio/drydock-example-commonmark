@@ -1,0 +1,22 @@
+<reusable-compact filename="spec.txt">
+CommonMark 0.31.2 specification: block structure precedes inline parsing. Leaf blocks include thematic breaks, headings, indented/fenced code, HTML blocks, reference definitions, paragraphs, and blank lines. Reference labels normalize via Unicode case-folding and whitespace collapsing; first definition wins.
+</reusable-compact>
+
+<reusable-compact filename="spec_tests.py">
+Runs supplied CommonMark examples against `--program`, optionally filtered by section pattern. Verdict is the process exit status: failures plus errors; output is diagnostic only.
+</reusable-compact>
+
+<reusable-compact filename="normalize.py">
+Normalizes HTML for conformance comparison: collapses insignificant whitespace, normalizes attributes and entities, preserves preformatted content, and canonicalizes URLs.
+</reusable-compact>
+
+RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark
+
+SUMMARY:
+Implemented and repaired leaf-block parsing and link-reference collection. Scoped conformance: 187 passed, 0 failed, 0 errored. Direct executable interface verification passed.
+
+BLOCKERS:
+- None

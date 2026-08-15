@@ -1,0 +1,12 @@
+{
+  "prepassed": [
+    "block-leafs-interface",
+    "block-leafs-reference-input",
+    "block-quotes-interface",
+    "block-quotes-nested-input",
+    "inline-basics-interface",
+    "inline-basics-unicode-input",
+    "lists-interface",
+    "lists-nested-input"
+  ]
+}

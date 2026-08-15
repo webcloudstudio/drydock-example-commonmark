@@ -1,0 +1,1 @@
+{"criteria":[{"id":"st-001","verdict":"MET","rationale":"The governed full conformance suite passed with 655 tests passed and no failures or errors.","evidence":["sh sources/full_test.sh: return code 0","sh sources/full_test.sh: 655 passed, 0 failed, 0 errored, 0 skipped"]}],"improvements":["Review and commit the uncommitted changes before release."]}

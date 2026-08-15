@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/logs/20260815.211228.205Z_commonmark_build_codex.stderr.log</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/logs/20260815.211228.205Z_commonmark_build_codex.stderr.log</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../workspace/logs/20260815.211228.205Z_commonmark_build_codex.stderr.log">Raw file</a></div></header>
+<article class="doc"><pre>2026-08-15T21:13:29.861046Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/build/commonmark/commonmark:
+    def inline(self, text):
+        text = text.replace(&#x27;\\\n&#x27;,&#x27;&lt;br /&gt;\n&#x27;)
+        stash=[]
+        def hold(v): stash.append(v); return f&#x27;\x00{len(stash)-1}\x00&#x27;
+        # protect code spans, raw HTML, and autolinks before escaping
+        def code(m):
+            x=m.group(2).replace(&#x27;\n&#x27;,&#x27; &#x27;)
+            if x.startswith(&#x27; &#x27;) and x.endswith(&#x27; &#x27;) and x.strip(): x=x[1:-1]
+            return hold(&#x27;&lt;code&gt;&#x27;+esc_text(x)+&#x27;&lt;/code&gt;&#x27;)
+        text=re.sub(r&#x27;(`+)([\s\S]*?)\1&#x27;,code,text)
+        def raw(m):
+            tag=m.group(0)
+            if re.match(r&#x27;&lt;[A-Za-z][A-Za-z0-9+.-]{1,31}:&#x27;,tag):
+                u=tag[1:-1]; return hold(&#x27;&lt;a href=&quot;&#x27;+html.escape(u,quote=True)+&#x27;&quot;&gt;&#x27;+esc_text(u.removeprefix(&#x27;mailto:&#x27;))+&#x27;&lt;/a&gt;&#x27;)
+            if re.match(r&#x27;&lt;[^ &lt;&gt;]+@[^ &lt;&gt;]+&gt;&#x27;,tag):
+                u=tag[1:-1]; return hold(&#x27;&lt;a href=&quot;mailto:&#x27;+html.escape(u,quote=True)+&#x27;&quot;&gt;&#x27;+esc_text(u)+&#x27;&lt;/a&gt;&#x27;)
+            return hold(tag)
+        text=INLINE_TAGS.sub(raw,text)
+        text=re.sub(r&#x27;\\([!&quot;#$%&amp;\&#x27;()*+,-./:;&lt;=&gt;?@[\\\\]^_`{|}~])&#x27;, lambda m: hold(html.escape(m.group(1), quote=True)), text)
+        text=html.escape(html.unescape(text),quote=True)
+        text=re.sub(r&#x27;\\([!&quot;#$%&amp;\&#x27;()*+,-./:;&lt;=&gt;?@[\\\\]^_`{|}~])&#x27;,r&#x27;\1&#x27;,text)
+        text=re.sub(r&#x27;&amp;amp;(#(?:x[0-9A-Fa-f]+|[0-9]+)|[A-Za-z][A-Za-z0-9]+);&#x27;,lambda m:&#x27;&amp;&#x27;+m.group(1)+&#x27;;&#x27;,text)
+</pre></article>
+</main>
+</body>
+</html>

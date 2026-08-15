@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Inline-Emphasis.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Inline-Emphasis.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Inline-Emphasis.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Inline Emphasis</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260815 V1</td></tr><tr><td>Description</td><td>Parse CommonMark emphasis and strong emphasis using the delimiter-run algorithm.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md, FEATURE-Inline-Basics.md</td></tr><tr><td>Provides</td><td>emphasis parsing, strong-emphasis parsing</td></tr><tr><td>Consumes</td><td>executable commonmark, block structure, inline basics</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement emphasis and strong emphasis after block parsing and basic inline tokenization.</p>
+<h2>Behavior</h2>
+<ul><li>Apply the CommonMark delimiter-run algorithm for <code>*</code>, <code>_</code>, <code>**</code>, and <code>__</code>.</li><li>Enforce intraword, Unicode whitespace, Unicode punctuation, and multiple-of-three rules.</li><li>Support nested emphasis, strong emphasis, unmatched delimiters, and precedence with code spans, links, images, and HTML.</li><li>Render emphasis as <code>&lt;em&gt;</code> and strong emphasis as <code>&lt;strong&gt;</code>.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC emphasis-conformance ===<br>Intent: The implementation passes every supplied conformance example owned by emphasis and strong emphasis.<br>Suite: scoped</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, r&quot;^Emphasis and strong emphasis$&quot;, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC emphasis-conformance ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not use a public Markdown implementation.</li><li>Preserve block-before-inline parsing.</li><li>Do not modify supplied conformance assets.</li></ul></article>
+</main>
+</body>
+</html>

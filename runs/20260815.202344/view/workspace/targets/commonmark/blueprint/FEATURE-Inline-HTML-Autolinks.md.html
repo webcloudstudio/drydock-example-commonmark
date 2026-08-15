@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Inline-HTML-Autolinks.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Inline-HTML-Autolinks.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Inline-HTML-Autolinks.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Inline HTML and Autolinks</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260815 V1</td></tr><tr><td>Description</td><td>Parse CommonMark URI autolinks, email autolinks, and raw HTML constructs.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md, FEATURE-Block-Leafs.md, FEATURE-Inline-Basics.md</td></tr><tr><td>Provides</td><td>URI autolinks, email autolinks, raw HTML</td></tr><tr><td>Consumes</td><td>executable commonmark, block structure, inline basics</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement inline autolinks and raw HTML while preserving their precedence over ordinary text and emphasis.</p>
+<h2>Behavior</h2>
+<ul><li>Parse absolute URI autolinks and valid email autolinks.</li><li>Render URI autolinks as links to their URI and email autolinks with <code>mailto:</code> destinations.</li><li>Recognize valid open and closing tags, comments, processing instructions, declarations, and CDATA sections.</li><li>Preserve valid raw HTML without Markdown interpretation inside the raw construct.</li><li>Reject malformed tags and autolinks as literal escaped text.</li><li>Respect precedence with code spans, links, images, and emphasis.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC html-autolinks-conformance ===<br>Intent: The implementation passes every supplied conformance example owned by autolinks and raw HTML.<br>Suite: scoped</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, r&quot;^(Autolinks|Raw HTML)$&quot;, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC html-autolinks-conformance ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not use a public Markdown implementation.</li><li>Preserve raw HTML exactly where the specification requires it.</li><li>Do not modify supplied conformance assets.</li></ul></article>
+</main>
+</body>
+</html>

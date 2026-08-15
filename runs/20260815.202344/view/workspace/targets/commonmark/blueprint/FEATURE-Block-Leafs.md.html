@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Block-Leafs.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Block-Leafs.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Block-Leafs.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Block Leafs</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260815 V1</td></tr><tr><td>Description</td><td>Parses CommonMark leaf blocks and collects link reference definitions.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md</td></tr><tr><td>Provides</td><td>leaf block parsing, link reference definitions</td></tr><tr><td>Consumes</td><td>executable commonmark</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement the leaf-block portion of CommonMark block parsing before inline rendering.</p>
+<h2>Scope</h2>
+<p>The parser handles:</p>
+<ul><li>thematic breaks;</li><li>ATX and setext headings;</li><li>indented and fenced code blocks;</li><li>HTML blocks;</li><li>paragraphs and blank lines;</li><li>link reference definitions, including normalization and first-definition precedence.</li></ul>
+<p>Leaf blocks must preserve raw inline content for later parsing. Code and raw HTML content must remain literal where required by the specification.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC block-leafs-conformance ===<br>Intent: The implementation passes every supplied conformance example owned by leaf-block parsing.</p>
+<p>import subprocess import sys</p>
+<p>pattern = ( r&quot;^(Thematic breaks|ATX headings|Setext headings|Indented code blocks|&quot; r&quot;Fenced code blocks|HTML blocks|Link reference definitions|Paragraphs|Blank lines)$&quot; ) result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, pattern, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC block-leafs-conformance ===</p>
+<p>=== AC block-leafs-interface ===<br>Intent: Leaf parsing remains reachable through the required executable interface.</p>
+<p>import subprocess</p>
+<p>source = &quot;# heading\n\n    code\n&quot; result = subprocess.run( [&quot;./commonmark&quot;], input=source, capture_output=True, text=True, ) print(result.stdout) print(result.stderr) assert result.returncode == 0 === END AC block-leafs-interface ===</p>
+<p>=== AC block-leafs-reference-input ===<br>Intent: Link-reference-definition input is accepted through the executable interface.</p>
+<p>import subprocess</p>
+<p>source = &quot;[label]: /destination\n\n[label]\n&quot; result = subprocess.run( [&quot;./commonmark&quot;], input=source, capture_output=True, text=True, ) print(result.stdout) print(result.stderr) assert result.returncode == 0 === END AC block-leafs-reference-input ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Build block structure before inline parsing.</li><li>Do not modify <code>sources/spec.txt</code>, <code>sources/spec_tests.py</code>, <code>sources/cmark.py</code>, or <code>sources/normalize.py</code>.</li><li>Do not interpret code blocks or HTML blocks as ordinary inline content.</li></ul></article>
+</main>
+</body>
+</html>

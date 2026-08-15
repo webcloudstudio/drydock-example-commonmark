@@ -1,0 +1,770 @@
+#!/usr/bin/env python3
+import html
+import re
+import sys
+import unicodedata
+from urllib.parse import quote
+
+ESCAPABLE = r'!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
+INLINE_TAGS = re.compile(r'<(?:[A-Za-z][A-Za-z0-9+.-]{1,31}:[^ >]+|[A-Za-z][^ >]*@[^ >]+|/?[A-Za-z][^>]*|!--[\s\S]*?--|\?[\s\S]*?\?|![A-Z]+\s+[\s\S]*?\s*!|![CDATA\[[\s\S]*?\]\])>')
+
+def esc_text(s):
+    return html.escape(s, quote=False)
+
+def normalize_source(s):
+    s = s.replace('\r\n', '\n').replace('\r', '\n').replace('\x00', '\ufffd')
+    # Expand tabs only while measuring leading indentation; preserve interior tabs.
+    expanded=[]
+    for line in s.splitlines():
+        col=0; result=''; leading=True
+        structural_prefix = re.match(r'^ {0,3}(?:>|[-+*]|\d{1,9}[.)])', line) is not None
+        for ch in line:
+            if ch=='\t':
+                if leading or structural_prefix:
+                    spaces=4-(col%4)
+                    result+=' '*spaces; col+=spaces
+                else:
+                    result+='\t'; col+=1
+            else:
+                result+=ch; col+=1
+                if ch!=' ': leading=False
+        expanded.append(result)
+    return '\n'.join(expanded) + ('\n' if not s.endswith('\n') else '')
+
+class Document:
+    def __init__(self, source):
+        self.lines = normalize_source(source).splitlines()
+        self.refs = {}
+
+    def parse(self):
+        self.collect_refs()
+        return self.blocks(self.lines)
+
+    def collect_refs(self):
+        # Resolve standalone definitions, including their permitted continuation lines.
+        staged=[]; kept=[]; j=0
+        while j < len(self.lines):
+            first=self.lines[j]
+            if re.match(r' {0,3}\[[^\]]*$', first):
+                k = j + 1
+                while k < len(self.lines) and self.lines[k].strip() and ']: ' not in self.lines[k] and not re.search(r'\]:[ \t]', self.lines[k]): k += 1
+                if k < len(self.lines) and re.search(r'\]:[ \t]', self.lines[k]):
+                    first = first + '\n' + '\n'.join(self.lines[j + 1:k + 1])
+                    self.lines[j] = first
+                    del self.lines[j + 1:k + 1]
+            mm=re.match(r' {0,3}\[((?:\\.|[^\]])+)\]:[ \t]*(.*)$', first)
+            if mm and not first.startswith('    ') and (j == 0 or not self.lines[j-1].strip() or re.match(r' {0,3}#{1,6}[ \t]', self.lines[j-1]) or self.is_thematic(self.lines[j-1])):
+                label, rest=mm.group(1), mm.group(2); k=j+1
+                while k < len(self.lines) and k < j+100 and self.lines[k].strip() and (not rest.strip() or self.parse_reference(rest) is None or (self.parse_reference(rest)[1] is None and self.lines[k].lstrip().startswith(("'", '"', '(')))):
+                    rest += '\n' + self.lines[k]; k += 1
+                parsed=self.parse_reference(rest)
+                if parsed is not None:
+                    key=self.ref_key(label)
+                    if label.strip() and not re.search(r'(?<!\\)\[', label):
+                        if key not in self.refs: self.refs[key]=parsed
+                        j=k; continue
+            kept.append(first); j+=1
+        self.lines=kept
+        out=[]; i=0; protected=False; boundary=True; previous_ref=False
+        while i < len(self.lines):
+            line=self.lines[i]
+            fence=re.match(r' {0,3}(`{3,}|~{3,})', line)
+            if fence:
+                protected=not protected
+                out.append(line); i+=1; boundary=False; previous_ref=False; continue
+            quoted_reference=False
+            if line.startswith('>'):
+                probe=re.sub(r'^ {0,3}>[ \t]?','',line)
+                if re.match(r'\[[^\]]+\]:',probe): line=probe; quoted_reference=True
+                else:
+                    out.append(line); i+=1; boundary=False; previous_ref=False; continue
+            if protected or line.startswith('    '):
+                out.append(line); i+=1; boundary=False; previous_ref=False; continue
+            candidate=[line]; end=i+1
+            # Labels may span lines, but only through the first closing bracket.
+            can_ref=boundary or previous_ref or (i > 0 and (re.match(r' {0,3}#{1,6}[ \t]', self.lines[i-1]) or self.is_thematic(self.lines[i-1])))
+            if not can_ref or not re.match(r' {0,3}\[((?:\\.|[^\]])*)\]:', line):
+                if re.match(r' {0,3}\[$', line):
+                    while end < len(self.lines) and end-i < 1000:
+                        candidate.append(self.lines[end]);
+                        if ']' in self.lines[end]: end += 1; break
+                        end += 1
+                else:
+                    out.append(line); i+=1; boundary=not bool(line.strip()); previous_ref=False; continue
+            text='\n'.join(candidate)
+            m=re.match(r' {0,3}\[((?:\\.|[^\]])+)\]:[ \t]*(.*)$', text, re.S)
+            if not m:
+                out.append(line); i+=1; boundary=not bool(line.strip()); previous_ref=False; continue
+            label=m.group(1); rest=m.group(2)
+            # Destination and title may use one following line each.
+            while end < len(self.lines) and (not self.parse_reference(rest) or rest.strip()=='' or (self.parse_reference(rest)[1] is None and re.match(r'^[ \t]+[\'"(]', self.lines[end]))):
+                if not self.lines[end].strip(): break
+                if not (rest.rstrip().endswith((':', '<', "'", '"', '(')) or re.match(r'^[ \t]+[\'"(]', self.lines[end])): break
+                rest += '\n' + self.lines[end]; end += 1
+            parsed=self.parse_reference(rest)
+            if parsed is None:
+                out.extend(self.lines[i:end] if end > i+1 else [self.lines[i]]); i=end; boundary=False; previous_ref=False; continue
+            key=self.ref_key(label)
+            if not label.strip() or re.search(r'(?<!\\)\[', label):
+                out.extend(self.lines[i:end] if end > i + 1 else [self.lines[i]])
+                i = end; boundary = False; previous_ref = False; continue
+            if key not in self.refs: self.refs[key]=parsed
+            if quoted_reference: out.append('>')
+            i=end; boundary=False; previous_ref=True; continue
+        self.lines=out
+
+    @staticmethod
+    def ref_key(label):
+        return re.sub(r'[ \t\n]+',' ',label.strip()).casefold()
+
+    @staticmethod
+    def parse_reference(rest):
+        rest=rest.strip(' \t\n')
+        if rest.startswith('<'):
+            close=rest.find('>')
+            if close < 0 or '\n' in rest[1:close]: return None
+            dest=rest[1:close]; tail=rest[close+1:]
+            if tail and tail[0] not in ' \t\n': return None
+            if tail and tail[0] not in ' \t\n': return None
+        else:
+            dest=''; tail=''
+            # Consume balanced parentheses in ordinary destinations.
+            depth=0; pos=0; stopped=False
+            while pos < len(rest):
+                ch=rest[pos]
+                if ch=='\\': pos += 2; continue
+                if ch=='(': depth+=1
+                elif ch==')':
+                    if depth==0: break
+                    depth-=1
+                if ch in ' \t\n' and depth==0:
+                    break
+                pos += 1
+            dest=rest[:pos]
+            tail=rest[pos:]
+        tail=tail.strip(' \t\n')
+        title=None
+        if tail:
+            q=tail[0]
+            endchar={"'":"'", '"':'"', '(' : ')'}.get(q)
+            if not endchar: return None
+            escaped=False; end=None
+            for j in range(1,len(tail)):
+                if escaped: escaped=False; continue
+                if tail[j]=='\\': escaped=True; continue
+                if tail[j]==endchar: end=j; break
+            if end is None or tail[end+1:].strip(' \t\n'): return None
+            title=tail[1:end]
+        if not dest and rest != '<>': return None
+        dest=re.sub(r'\\([!"#$%&\'()*+,\-./:;<=>?@[\\\]^_`{|}~])',r'\1',dest)
+        title=None if title is None else re.sub(r'\\([!"#$%&\'()*+,\-./:;<=>?@[\\\]^_`{|}~])',r'\1',title)
+        return dest,title
+
+    def inline(self, text):
+        stash=[]
+        def hold(v): stash.append(v); return f'\x00{len(stash)-1}\x00'
+        escapable = r'![!"#$%&\'()*+,\-./:;<=>?@\[\\\]^_`{|}~]'
+        def escape_text(value):
+            ref = re.compile(r'&(?:#[0-9]{1,7}|#[xX][0-9A-Fa-f]{1,6}|[A-Za-z][A-Za-z0-9]{1,31});')
+            result=[]; pos=0
+            def plain(part):
+                return html.escape(part, quote=True)
+            for m in ref.finditer(value):
+                result.append(plain(value[pos:m.start()]))
+                token=m.group(0)
+                if token.startswith('&#'):
+                    try:
+                        num=int(token[3:-1],16) if token[2].lower()=='x' else int(token[2:-1])
+                        value2='\ufffd' if num == 0 or num > 0x10ffff or 0xd800 <= num <= 0xdfff else chr(num)
+                    except (ValueError, OverflowError): value2=token
+                else: value2=html.entities.html5.get(token[1:-1]+';', token)
+                result.append(hold(html.escape(value2, quote=True))); pos=m.end()
+            result.append(plain(value[pos:]))
+            return ''.join(result)
+
+        def link_unescape(value):
+            return re.sub(r'\\([!"#$%&\'()*+,\-./:;<=>?@\[\\\]^_`{|}~])', r'\1', html.unescape(value))
+
+        def bracket_end(value, opening):
+            depth = 0; escaped = False
+            for j in range(opening + 1, len(value)):
+                ch = value[j]
+                if escaped: escaped = False; continue
+                if ch == '\\': escaped = True
+                elif ch == '[': depth += 1
+                elif ch == ']':
+                    if depth == 0: return j
+                    depth -= 1
+            return None
+
+        def title_at(value, start):
+            if start >= len(value) or value[start] not in "\"'(": return None
+            closing = {'"':'"', "'":"'", '(' : ')'}[value[start]]
+            escaped = False
+            for j in range(start + 1, len(value)):
+                ch = value[j]
+                if escaped: escaped = False
+                elif ch == '\\': escaped = True
+                elif ch == closing: return value[start + 1:j], j + 1
+            return None
+
+        def tail_at(value, start):
+            if start >= len(value) or value[start] != '(': return None
+            j = start + 1
+            while j < len(value) and value[j] in ' \t\n': j += 1
+            if j < len(value) and value[j] == '<':
+                k = j + 1; escaped = False
+                while k < len(value):
+                    if value[k] in '\r\n': return None
+                    if escaped: escaped = False
+                    elif value[k] == '\\': escaped = True
+                    elif value[k] == '>': break
+                    k += 1
+                if k >= len(value) or escaped: return None
+                dest = value[j + 1:k]; j = k + 1
+            else:
+                begin = j; depth = 0; escaped = False
+                while j < len(value):
+                    ch = value[j]
+                    if escaped: escaped = False; j += 1; continue
+                    if ch == '\\': escaped = True; j += 1; continue
+                    if ch in ' \t\n' and depth == 0: break
+                    if ch == '(': depth += 1
+                    elif ch == ')':
+                        if depth == 0: break
+                        depth -= 1
+                    j += 1
+                if depth: return None
+                dest = value[begin:j]
+                if any(c in ' \t\n\r' for c in dest): return None
+            while j < len(value) and value[j] in ' \t\n': j += 1
+            title = None
+            if j < len(value) and value[j] != ')':
+                parsed = title_at(value, j)
+                if parsed is None: return None
+                title, j = parsed
+                while j < len(value) and value[j] in ' \t\n': j += 1
+            if j >= len(value) or value[j] != ')': return None
+            return dest, title, j + 1
+
+        def render_link(label, dest, title, image):
+            url = quote(link_unescape(dest), safe="/%:@?&=+$,;#-_.!~*'()")
+            if image:
+                rendered_alt = self.inline(label)
+                rendered_alt = re.sub(r'<img\b[^>]*\balt="([^"]*)"[^>]*/>', r'\1', rendered_alt)
+                alt = html.unescape(re.sub(r'<[^>]*>', '', rendered_alt))
+                out = '<img src="' + html.escape(url, quote=True) + '" alt="' + html.escape(alt, quote=True) + '"'
+            else:
+                out = '<a href="' + html.escape(url, quote=True) + '"'
+            if title is not None: out += ' title="' + html.escape(link_unescape(title), quote=True) + '"'
+            return out + (' />' if image else '>' + self.inline(label) + '</a>')
+
+        def extract_links(value):
+            out=[]; i=0
+            while i < len(value):
+                image = value.startswith('![', i); opening = i + 1 if image else i
+                if value.rfind('<', 0, i) > value.rfind('>', 0, i) or value[:i].count('`') % 2:
+                    out.append(value[i]); i += 1; continue
+                if value[opening:opening + 1] != '[' or (i and value[i - 1] == '\\'):
+                    out.append(value[i]); i += 1; continue
+                close = bracket_end(value, opening)
+                if close is None: out.append(value[i]); i += 1; continue
+                parsed = tail_at(value, close + 1) if close + 1 < len(value) and value[close + 1] == '(' else None
+                if parsed:
+                    inner = value[opening + 1:close]
+                    if not image and (re.search(r'(?<!\!)\[[^\n]*\](?:\s*\(|\s*\[)', inner) or inner.count('`') % 2 or ('<' in inner and '>' not in inner)):
+                        out.append(value[i]); i += 1; continue
+                    out.append(hold(render_link(inner, parsed[0], parsed[1], image))); i = parsed[2]; continue
+                ref_end = close + 1; ref_label = value[opening + 1:close]
+                if ref_end < len(value) and value[ref_end] == '[':
+                    end = value.find(']', ref_end + 1)
+                    if end < 0: end = ref_end
+                    else:
+                        supplied = value[ref_end + 1:end]
+                        if re.search(r'(?<!\\)\[|(?<!\\)\]', supplied):
+                            out.append(value[i:ref_end + 1]); i = ref_end + 1; continue
+                        ref_label = supplied or ref_label; ref_end = end + 1
+                if not ref_label.strip():
+                    out.append(value[i:ref_end]); i = ref_end; continue
+                key = self.ref_key(ref_label)
+                if key in self.refs:
+                    dest, title = self.refs[key]
+                    inner = value[opening + 1:close]
+                    if not image and (re.search(r'(?<!\!)\[[^\n]*\](?:\s*\(|\s*\[)', inner) or inner.count('`') % 2 or ('<' in inner and '>' not in inner)):
+                        out.append(value[i]); i += 1; continue
+                    out.append(hold(render_link(value[opening + 1:close], dest, title, image))); i = ref_end; continue
+                out.append(value[i]); i += 1
+            return ''.join(out)
+
+        text = extract_links(text)
+
+        # Protect code spans, autolinks, and valid raw HTML before escaping.
+        def html_construct(value, start):
+            """Return the end of one valid raw HTML construct, if present."""
+            tail=value[start:]
+            if tail.startswith('<!--'):
+                if tail.startswith('<!-->') or tail.startswith('<!--->'):
+                    return start + (5 if tail.startswith('<!-->') else 6)
+                end=tail.find('-->', 4)
+                return start + end + 3 if end >= 0 else None
+            if tail.startswith('<?'):
+                end=tail.find('?>', 2)
+                return start + end + 2 if end >= 0 else None
+            if tail.startswith('<![CDATA['):
+                end=tail.find(']]>', 9)
+                return start + end + 3 if end >= 0 else None
+            if re.match(r'<![A-Za-z]', tail):
+                end=tail.find('>', 2)
+                return start + end + 1 if end >= 0 else None
+            m=re.match(r'</?([A-Za-z][A-Za-z0-9-]*)', tail)
+            if not m: return None
+            pos=m.end(); closing=tail.startswith('</')
+            if closing:
+                while pos < len(tail) and tail[pos] in ' \t\r\n': pos += 1
+                return start + pos + 1 if pos < len(tail) and tail[pos] == '>' else None
+            # Scan to the first unquoted >, then validate the complete tag.
+            quote_char=None; end=None
+            while pos < len(tail):
+                ch=tail[pos]
+                if quote_char:
+                    if ch == quote_char: quote_char=None
+                elif ch in "'\"": quote_char=ch
+                elif ch == '>': end=pos; break
+                pos += 1
+            if end is None or quote_char: return None
+            body=tail[m.end():end]
+            if body.endswith('/'):
+                body=body[:-1].rstrip(' \t\r\n')
+            attr=re.compile(r'[ \t\r\n]+([A-Za-z_:][A-Za-z0-9_.:-]*)(?:[ \t\r\n]*=[ \t\r\n]*(?:[^ \t\r\n"\'=<>`]+|"[^"]*"|\'[^\']*\'))?')
+            p=0
+            while p < len(body):
+                am=attr.match(body,p)
+                if not am:
+                    return start + end + 1 if body[p:].strip(' \t\r\n') == '' else None
+                p=am.end()
+            return start + end + 1
+
+        auto_re=re.compile(r'<([^ <>]+)>')
+        result=[]; i=0
+        while i < len(text):
+            if text[i] == '`' and (i == 0 or text[i-1] not in '\\`'):
+                end=i
+                while end < len(text) and text[end]=='`': end+=1
+                run=text[i:end]; close=text.find(run,end)
+                while close >= 0 and ((close > 0 and text[close-1]=='`') or (close+len(run)<len(text) and text[close+len(run)]=='`')):
+                    close=text.find(run,close+1)
+                if close >= 0:
+                    value=text[end:close].replace('\r\n','\n').replace('\r','\n').replace('\n',' ')
+                    if len(value)>=2 and value.startswith(' ') and value.endswith(' ') and value.strip(' '): value=value[1:-1]
+                    result.append(hold('<code>'+html.escape(value,quote=True)+'</code>')); i=close+len(run); continue
+            if text[i] == '<' and (i == 0 or text[i-1] != '\\'):
+                auto=auto_re.match(text,i)
+                if auto:
+                    value=auto.group(1)
+                    if re.match(r'^[A-Za-z][A-Za-z0-9+.-]{1,31}:[^ <>]*$',value):
+                        url=quote(value,safe="/%:@?&=+$,;#-_.!~*'()")
+                        result.append(hold('<a href="'+html.escape(url,quote=True)+'">'+escape_text(value)+'</a>')); i=auto.end(); continue
+                    if re.match(r'^[A-Za-z0-9.!#$%&\'*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$',value):
+                        result.append(hold('<a href="mailto:'+html.escape(value,quote=True)+'">'+escape_text(value)+'</a>')); i=auto.end(); continue
+                tag_end=html_construct(text,i)
+                if tag_end is not None:
+                    result.append(hold(text[i:tag_end])); i=tag_end; continue
+            result.append(text[i]); i+=1
+        text=''.join(result)
+        text=re.sub(r'\\\r?\n',lambda _:hold('<br />\n'),text)
+        text=re.sub(r' {2,}\r?\n',lambda _:hold('<br />\n'),text)
+        text=re.sub(r'\n[ \t]+','\n',text)
+        text=re.sub(r'(\x00\d+\x00)[ \t]+', lambda m: m.group(1) if stash[int(m.group(1)[1:-1])].startswith('<br />') else m.group(0), text)
+        text=re.sub(r'\\('+escapable[1:]+r')',lambda m:hold(escape_text(m.group(1))),text)
+        text=escape_text(text)
+        # Keep protected entities and escaped punctuation opaque to the
+        # link/emphasis passes, then restore every protected token once.
+        # images and links, including reference forms
+        def unprotect(value):
+            return re.sub(r'\x00(\d+)\x00', lambda m: '"' if stash[int(m.group(1))] == '\x01' else re.sub(r'<[^>]*>','',stash[int(m.group(1))]), value)
+        def image(m):
+            alt= re.sub(r'[*_`]','',m.group(1)); dest=unprotect(m.group(2)); title=unprotect(m.group(3)) if m.group(3) is not None else None
+            dest=quote(dest, safe="/%:@?&=+$,;#-_.!~*'()")
+            a='<img src="'+html.escape(dest,quote=True)+'" alt="'+html.escape(alt,quote=True)+'"'
+            if title is not None: a+=' title="'+html.escape(title,quote=True)+'"'
+            return a+' />'
+        def link(m):
+            label=m.group(1); dest=quote(unprotect(m.group(2)), safe="/%:@?&=+$,;#-_.!~*'()"); title=unprotect(m.group(3)) if m.group(3) is not None else None
+            a='<a href="'+html.escape(dest,quote=True)+'"'
+            if title is not None: a+=' title="'+html.escape(title,quote=True)+'"'
+            return a+'>'+self.inline(label)+'</a>'
+        destination=r'(?:\x00\d+\x00|[^ \t\n)])+?'
+        def inline_link(match):
+            body=unprotect(match.group(2)).strip(); title=None
+            if '&quot;' in body or '&amp;quot;' in body:
+                return match.group(0)
+            title_match=re.match(r'^(.*?)[ \t]+(?:"([^"]*)"|\'([^\']*)\'|\(([^)]*)\))$',body)
+            if title_match: body=title_match.group(1); title=title_match.group(2) or title_match.group(3) or title_match.group(4)
+            if body.startswith('<') and body.endswith('>'): body=body[1:-1]
+            fake=type('M',(),{'group':lambda _,n: [None,match.group(1),body,title][n]})()
+            return link(fake)
+        def inline_image(match):
+            body=unprotect(match.group(2)).strip(); title=None
+            title_match=re.match(r'^(.*?)[ \t]+(?:"([^"]*)"|\'([^\']*)\'|\(([^)]*)\))$',body)
+            if title_match: body=title_match.group(1); title=title_match.group(2) or title_match.group(3) or title_match.group(4)
+            if body.startswith('<') and body.endswith('>'): body=body[1:-1]
+            fake=type('M',(),{'group':lambda _,n: [None,match.group(1),body,title][n]})()
+            return image(fake)
+        # Link/image syntax was resolved by extract_links before escaping.
+        def ref(m):
+            key=(m.group(2) or m.group(1)).strip().casefold(); r=self.refs.get(key)
+            if not r:return m.group(0)
+            if m.group(0).startswith('!'):
+                return '<img src="'+html.escape(r[0],quote=True)+'" alt="'+html.escape(m.group(1),quote=True)+'"'+((' title="'+html.escape(r[1],quote=True)+'"') if r[1] else '')+' />'
+            return '<a href="'+html.escape(r[0],quote=True)+'"'+((' title="'+html.escape(r[1],quote=True)+'"') if r[1] else '')+'>'+self.inline(m.group(1))+'</a>'
+        def replace_ref(m):
+            rawkey=(m.group(3) or m.group(2)).strip()
+            rawkey=re.sub(r'\x00(\d+)\x00', lambda x: stash[int(x.group(1))], rawkey)
+            key=rawkey.casefold()
+            if key not in self.refs: return m.group(0)
+            url,title=self.refs[key]
+            url=quote(html.unescape(url), safe="/%:@?&=+$,;#-_.!~*'()")
+            if m.group(1):
+                return '<img src="'+html.escape(url,quote=True)+'" alt="'+html.escape(m.group(2),quote=True)+'"'+((' title="'+html.escape(html.unescape(title),quote=True)+'"') if title else '')+' />'
+            return '<a href="'+html.escape(url,quote=True)+'"'+((' title="'+html.escape(html.unescape(title),quote=True)+'"') if title else '')+'>'+self.inline(m.group(2))+'</a>'
+        # Reference syntax was resolved by extract_links before escaping.
+        text=self._process_emphasis(text)
+        text=re.sub(r' {2,}\n','<br />\n',text)
+        for _ in range(len(stash) + 1):
+            for i,v in enumerate(stash): text=text.replace(f'\x00{i}\x00',v)
+        text=text.replace('\x01','&quot;')
+        return text
+
+    @staticmethod
+    def _is_unicode_punctuation(ch):
+        return bool(ch) and unicodedata.category(ch)[0] in ('P', 'S')
+
+    @classmethod
+    def _delimiter_flanking(cls, text, start, end):
+        before = text[start - 1] if start else '\n'
+        after = text[end] if end < len(text) else '\n'
+        before_ws = before.isspace()
+        after_ws = after.isspace()
+        before_punct = cls._is_unicode_punctuation(before)
+        after_punct = cls._is_unicode_punctuation(after)
+        left = not after_ws and (not after_punct or before_ws or before_punct)
+        right = not before_ws and (not before_punct or after_ws or after_punct)
+        return left, right
+
+    @classmethod
+    def _process_emphasis(cls, text):
+        """Resolve * and _ runs using the CommonMark delimiter algorithm.
+
+        Protected inline constructs are represented by NUL placeholders by
+        the caller, so they remain indivisible while delimiters are matched.
+        """
+        tokens=[]
+        pos=0
+        while pos < len(text):
+            if text[pos] not in '*_':
+                end=pos+1
+                while end < len(text) and text[end] not in '*_': end += 1
+                tokens.append({'kind':'text','value':text[pos:end]})
+                pos=end
+                continue
+            marker=text[pos]; end=pos+1
+            while end < len(text) and text[end] == marker: end += 1
+            left,right=cls._delimiter_flanking(text,pos,end)
+            if marker == '_':
+                can_open=left and (not right or cls._is_unicode_punctuation(text[pos-1] if pos else ''))
+                can_close=right and (not left or cls._is_unicode_punctuation(text[end] if end < len(text) else ''))
+            else:
+                can_open,can_close=left,right
+            tokens.append({'kind':'delim','marker':marker,'count':end-pos,
+                           'original':end-pos,'open':can_open,'close':can_close})
+            pos=end
+
+        def render(items):
+            out=[]
+            for item in items:
+                if item['kind'] == 'html': out.append(item['value'])
+                elif item['kind'] == 'text': out.append(item['value'])
+                else: out.append(item['marker'] * item['count'])
+            return ''.join(out)
+
+        cursor=0
+        while True:
+            closer_index=None
+            for index in range(cursor,len(tokens)):
+                item=tokens[index]
+                if item['kind'] == 'delim' and item['count'] and item['close']:
+                    closer_index=index; break
+            if closer_index is None: break
+            closer=tokens[closer_index]
+            opener_index=None
+            for index in range(closer_index-1,-1,-1):
+                opener=tokens[index]
+                if opener['kind'] != 'delim' or not opener['count'] or not opener['open']:
+                    continue
+                if opener['marker'] != closer['marker']:
+                    continue
+                if (opener['open'] and opener['close']) or (closer['open'] and closer['close']):
+                    if (opener['original'] + closer['original']) % 3 == 0 and \
+                       opener['original'] % 3 != 0 and closer['original'] % 3 != 0:
+                        continue
+                opener_index=index; break
+            if opener_index is None:
+                if not closer['open']:
+                    # The reference algorithm removes an unmatched closer
+                    # from the delimiter stack, but its source characters
+                    # remain literal text in the inline stream.
+                    closer['close']=False
+                    cursor=closer_index+1
+                else:
+                    cursor=closer_index+1
+                continue
+            opener=tokens[opener_index]
+            use=2 if opener['count'] >= 2 and closer['count'] >= 2 else 1
+            inner=tokens[opener_index+1:closer_index]
+            tag='strong' if use == 2 else 'em'
+            wrapped={'kind':'html','value':'<'+tag+'>'+render(inner)+'</'+tag+'>'}
+            replacement=[]
+            if opener['count'] > use:
+                replacement.append({'kind':'delim','marker':opener['marker'],
+                                    'count':opener['count']-use,'original':opener['original'],
+                                    'open':opener['open'],'close':opener['close']})
+            replacement.append(wrapped)
+            if closer['count'] > use:
+                replacement.append({'kind':'delim','marker':closer['marker'],
+                                    'count':closer['count']-use,'original':closer['original'],
+                                    'open':closer['open'],'close':closer['close']})
+            tokens[opener_index:closer_index+1]=replacement
+            cursor=max(0,opener_index-1)
+        return render(tokens)
+
+    def blocks(self, lines, allow_setext=True):
+        out=[]; i=0; n=len(lines)
+        while i<n:
+            line=lines[i]
+            if not line.strip(): i+=1; continue
+            m=re.match(r'^( {0,3})(`{3,}|~{3,})([^\n]*)$',line)
+            if m:
+                indent=len(m.group(1)); fence=m.group(2); info=m.group(3).strip(); body=[]; i+=1
+                if fence[0]=='`' and '`' in info: # not a fence; it is inline content
+                    return self._paragraph_fallback(lines, out, i-1)
+                close=re.compile(r'^ {0,3}'+re.escape(fence[0])+r'{'+str(len(fence))+r',}[ \t]*$')
+                while i<n and not close.match(lines[i]):
+                    lead=len(lines[i])-len(lines[i].lstrip(' '))
+                    body.append(lines[i][min(indent, lead):]); i+=1
+                if i<n:i+=1
+                info=self.inline(info).replace('<br />\n','') if info else ''
+                cls=' class="language-'+html.escape(info.split()[0],quote=True)+'"' if info else ''
+                out.append('<pre><code'+cls+'>'+esc_text('\n'.join(body)+('\n' if body else ''))+'</code></pre>'); continue
+            m=re.match(r' {0,3}(#{1,6})(?:[ \t]+|$)(.*)$',line)
+            if m:
+                content=m.group(2)
+                if re.fullmatch(r'[ \t]*#+[ \t]*', content): content=''
+                else: content=re.sub(r'[ \t]+#+[ \t]*$','',content)
+                content=content.strip(' \t'); out.append(f'<h{len(m.group(1))}>'+self.inline(content)+f'</h{len(m.group(1))}>'); i+=1; continue
+            if self.is_thematic(line): out.append('<hr />'); i+=1; continue
+            if re.match(r' {0,3}>',line):
+                q=[]; has_lazy=False
+                # A blank line without a quote marker terminates a quote.
+                # A blank line carrying a marker belongs to the quote and is
+                # important for paragraph separation inside it.
+                while i<n:
+                    marked = re.match(r'^ {0,3}>', lines[i])
+                    if marked:
+                        q.append(re.sub(r'^ {0,3}>[ \t]?','',lines[i])); i+=1
+                        continue
+                    if not lines[i].strip():
+                        break
+                    # Laziness applies only to paragraph continuation text.
+                    # In particular it cannot continue an indented or fenced
+                    # code block, nor can it manufacture another container.
+                    candidate=lines[i]
+                    if q and not q[-1].strip():
+                        break
+                    last = next((x for x in reversed(q) if x.strip()), '')
+                    if (len(last)-len(last.lstrip(' ')) >= 4 or
+                        re.match(r'^ {0,3}(?:`{3,}|~{3,})', last)):
+                        break
+                    if (re.match(r'^ {0,3}(?:#{1,6})(?:[ \t]|$)',candidate) or
+                        re.match(r'^ {0,3}(?:`{3,}|~{3,})',candidate) or
+                        re.match(r'^ {0,3}(?:>|[-+*] |\d+[.)] )',candidate) or
+                        self.html_block_kind(candidate) not in (None,'tag') or
+                        self.is_thematic(candidate)):
+                        break
+                    if re.match(r'^ {0,3}=+[ \t]*$',candidate):
+                        if q and not q[-1].strip():
+                            break
+                        q.append(candidate); i+=1; continue
+                    if re.match(r'^ {0,3}-+[ \t]*$',candidate):
+                        break
+                    q.append(candidate); has_lazy=True; i+=1
+                while q and not q[-1].strip(): q.pop()
+                inner = self.blocks(q, allow_setext=allow_setext and not has_lazy).rstrip('\n')
+                out.append('<blockquote>\n'+inner+'\n</blockquote>'); continue
+            lm=re.match(r'^( {0,3})([-+*]|\d{1,9}[.)])(?:([ \t]+)(.*)|([ \t]*))$',line)
+            if lm:
+                marker=lm.group(2); ordered=marker[0].isdigit(); list_kind=("o", marker[-1]) if ordered else ("u", marker)
+                items=[]; list_loose=False
+                while i<n:
+                    mm=re.match(r'^( {0,3})([-+*]|\d{1,9}[.)])(?:([ \t]+)(.*)|([ \t]*))$',lines[i])
+                    if not mm: break
+                    mm_marker=mm.group(2); mm_kind=("o", mm_marker[-1]) if mm_marker[0].isdigit() else ("u", mm_marker)
+                    if mm_kind != list_kind or self.is_thematic(lines[i]): break
+                    leading=len(mm.group(1)); gap=mm.group(3) or ''
+                    # A marker followed by no content is still a real item.
+                    first=mm.group(4) or ''
+                    item=[first]; item_indent=leading+len(mm_marker)+max(1, min(4,len(gap)))
+                    if not first and not gap: item_indent=leading+len(mm_marker)+1
+                    item_was_empty=not first
+                    if len(gap) > 4 and first:
+                        item=[' ' * (len(gap)-1) + first]
+                        item_indent=leading+len(mm_marker)+1
+                    fence_match=re.match(r'(`{3,}|~{3,})(?:[ \t].*)?$', first)
+                    fence_char=fence_match.group(1)[0] if fence_match else None
+                    fence_len=len(fence_match.group(1)) if fence_match else 0
+                    i+=1; item_had_blank=False
+                    while i<n:
+                        next_marker=re.match(r'^( {0,3})([-+*]|\d{1,9}[.)])(?:[ \t]+.*|[ \t]*)$',lines[i])
+                        if next_marker:
+                            nl=len(next_marker.group(1)); nm=next_marker.group(2)
+                            nk=("o",nm[-1]) if nm[0].isdigit() else ("u",nm)
+                            if nl < item_indent: break
+                        if not lines[i].strip():
+                            item.append('')
+                            if fence_char is None:
+                                look=i+1
+                                while look<n and not lines[look].strip(): look+=1
+                                next_lead=(len(lines[look])-len(lines[look].lstrip(' '))) if look<n else -1
+                                next_is_marker=bool(look<n and re.match(r'^ {0,3}(?:[-+*]|\d{1,9}[.)])(?:[ \t]+|$)',lines[look]))
+                                last_nonblank=next((x for x in reversed(item[:-1]) if x.strip()), '')
+                                if (next_is_marker and next_lead < item_indent) or (next_lead == item_indent and not next_is_marker) or (next_lead > item_indent and not re.match(r'^[-+*]|^\d{1,9}[.)]', last_nonblank.lstrip(' '))):
+                                    item_had_blank=True
+                            i+=1
+                            if item_was_empty: break
+                            continue
+                        lead=len(lines[i])-len(lines[i].lstrip(' '))
+                        deindented=lines[i][min(item_indent,lead):]
+                        fm=re.match(r'(`{3,}|~{3,})(?:[ \t].*)?$', deindented)
+                        if fm:
+                            if fence_char is None: fence_char=fm.group(1)[0]; fence_len=len(fm.group(1))
+                            elif fm.group(1)[0] == fence_char and len(fm.group(1)) >= fence_len: fence_char=None
+                        if lead >= item_indent:
+                            item.append(lines[i][item_indent:]); i+=1; continue
+                        if item_was_empty and not item_had_blank and lead >= leading + 1:
+                            item.append(lines[i].lstrip(' ')); i+=1; item_was_empty=False; continue
+                        # Lazy continuation is allowed only while the item
+                        # still ends in paragraph text.
+                        last=next((x for x in reversed(item) if x.strip()), '')
+                        if last and item[-1:] != [''] and not self.is_thematic(lines[i]) and not re.match(r'^( {0,3})(?:#{1,6})(?:[ \t]|$)',lines[i]) and not re.match(r'^( {0,3})(?:`{3,}|~{3,})',lines[i]) and not re.match(r'^( {0,3})>',lines[i]) and self.html_block_kind(lines[i]) in (None, 'tag'):
+                            item.append(('    ' + lines[i].lstrip(' ')) if lead > 3 else lines[i].lstrip(' ')); i+=1; continue
+                        break
+                    if item_had_blank: list_loose=True
+                    items.append(item)
+                tag='ol' if ordered else 'ul'; attrs=''
+                if ordered and int(re.match(r'\d+',marker).group()) != 1: attrs=' start="'+str(int(re.match(r'\d+',marker).group()))+'"'
+                rendered=[]
+                for item in items:
+                    content=self.blocks(item).strip()
+                    if not list_loose:
+                        content=self._remove_top_paragraph_tags(content)
+                    rendered.append('<li>'+content+'</li>')
+                out.append('<'+tag+attrs+'>'+''.join(rendered)+'</'+tag+'>'); continue
+            if re.match(r' {4}',line):
+                b=[]
+                while i<n and (lines[i].startswith('    ') or not lines[i].strip()): b.append(lines[i][4:] if lines[i].startswith('    ') else ''); i+=1
+                out.append('<pre><code>'+html.escape('\n'.join(b).rstrip('\n')+'\n',quote=True)+'</code></pre>'); continue
+            # HTML blocks are emitted verbatim and therefore never become paragraphs.
+            html_kind=self.html_block_kind(line)
+            if html_kind:
+                b=[line]; i+=1
+                if html_kind in ('pre','script','style','textarea','comment','pi','decl','cdata'):
+                    end={'pre':'</pre>','script':'</script>','style':'</style>','textarea':'</textarea>','comment':'-->','pi':'?>','decl':'>','cdata':']]>'}[html_kind]
+                    while i<n and end.lower() not in '\n'.join(b).lower(): b.append(lines[i]); i+=1
+                else:
+                    while i<n and lines[i].strip(): b.append(lines[i]); i+=1
+                out.append('\n'.join(b)); continue
+            # paragraph, with setext heading
+            b=[line]; i+=1
+            while i<n and lines[i].strip():
+                nxt=lines[i]
+                if re.match(r' {0,3}(#{1,6})(?:[ \t]|$)',nxt) or re.match(r' {0,3}(`{3,}|~{3,})',nxt) or re.match(r' {0,3}>',nxt) or self.html_block_kind(nxt) not in (None,'tag'): break
+                list_start=re.match(r'^ {0,3}([-+*]|1[.)])[ \t]+\S',nxt)
+                if list_start and not self.is_thematic(nxt): break
+                if re.match(r' {4}',nxt):
+                    # Indented lines cannot interrupt an open paragraph.
+                    b.append(nxt[4:]); i+=1; continue
+                if self.is_thematic(nxt) and not re.match(r' {0,3}-+[ \t]*$',nxt):
+                    break
+                if allow_setext and (re.match(r' {0,3}=+[ \t]*$',nxt) or re.match(r' {0,3}-+[ \t]*$',nxt)):
+                    level=1 if nxt.lstrip().startswith('=') else 2
+                    out.append(f'<h{level}>'+self.inline('\n'.join(b).strip(' \t'))+f'</h{level}>'); i+=1; b=None; break
+                b.append(lines[i]); i+=1
+            if b is not None: out.append('<p>'+self.inline('\n'.join(b))+'</p>')
+        return '\n'.join(out)+'\n' if out else ''
+
+    @staticmethod
+    def is_thematic(line):
+        if len(line)-len(line.lstrip(' '))>3: return False
+        s=line.strip(' \t'); chars=s.replace(' ','').replace('\t','')
+        return len(chars)>=3 and chars[0] in '*-_' and len(set(chars))==1
+
+    @staticmethod
+    def html_block_kind(line):
+        s=line.lstrip(' ') if len(line)-len(line.lstrip(' '))<=3 else ''
+        low=s.lower()
+        if not s: return None
+        for tag in ('pre','script','style','textarea'):
+            if re.match(r'<'+tag+r'(?:[ \t>]|$)',low): return tag
+        if low.startswith('<!--'): return 'comment'
+        if low.startswith('<?'): return 'pi'
+        if re.match(r'<![a-z]',low): return 'decl'
+        if low.startswith('<![cdata['): return 'cdata'
+        block=r'(?:address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|nav|ol|p|param|section|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul)'
+        if re.match(r'</?'+block+r'(?:[ \t/>]|$)',low): return 'block'
+        # Type 7 HTML blocks require a complete, grammatically valid tag;
+        # malformed tags and autolinks must remain paragraph text.
+        if re.match(r'</?[A-Za-z][A-Za-z0-9-]*', s):
+            if Document.valid_html_tag_line(s): return 'tag'
+        return None
+
+    @staticmethod
+    def valid_html_tag_line(value):
+        value=value.rstrip(' \t')
+        m=re.match(r'</?([A-Za-z][A-Za-z0-9-]*)', value)
+        if not m or not value.endswith('>'): return False
+        body=value[m.end():-1]
+        if value.startswith('</'):
+            return bool(re.fullmatch(r'[ \t\r\n]*', body))
+        if body.endswith('/'):
+            body=body[:-1].rstrip(' \t\r\n')
+        attr=re.compile(r'[ \t\r\n]+([A-Za-z_:][A-Za-z0-9_.:-]*)(?:[ \t\r\n]*=[ \t\r\n]*(?:[^ \t\r\n"\'=<>`]+|"[^"]*"|\'[^\']*\'))?')
+        pos=0
+        while pos < len(body):
+            match=attr.match(body,pos)
+            if not match: return body[pos:].strip(' \t\r\n') == ''
+            pos=match.end()
+        return True
+
+    def _paragraph_fallback(self, lines, out, start):
+        b=[lines[start]]; i=start+1
+        while i<len(lines) and lines[i].strip(): b.append(lines[i]); i+=1
+        out.append('<p>'+self.inline('\n'.join(b))+'</p>')
+        return '\n'.join(out)+'\n'
+
+    @staticmethod
+    def _remove_top_paragraph_tags(content):
+        """Remove paragraph wrappers belonging directly to one list item."""
+        result=[]; depth=0; pos=0
+        for m in re.finditer(r'<(/?)([A-Za-z][A-Za-z0-9]*)\b[^>]*>', content):
+            result.append(content[pos:m.start()]); tag=m.group(2).lower(); closing=bool(m.group(1))
+            if tag == 'p' and depth == 0:
+                if closing: result.append('')
+                pos=m.end(); continue
+            result.append(m.group(0)); pos=m.end()
+            if tag not in ('br','hr','img','input','meta','link'):
+                depth += -1 if closing else 1
+        result.append(content[pos:])
+        return ''.join(result)
+
+def main():
+    sys.stdout.write(Document(sys.stdin.read()).parse())
+if __name__=='__main__': main()

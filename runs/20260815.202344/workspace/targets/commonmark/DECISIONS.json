@@ -1,0 +1,69 @@
+[
+  {
+    "id": "analyze-display_name",
+    "type": "text",
+    "severity": "material",
+    "origin": "analyze-questionnaire",
+    "blueprint": "ARCHITECTURE.md",
+    "story": null,
+    "status": "answered",
+    "archived": false,
+    "title": "Display Name",
+    "description": "The display name Drydock will use for this project. Edit to override the proposal.",
+    "options": [],
+    "system_choice": "CommonMark",
+    "commander_direction": "CommonMark"
+  },
+  {
+    "id": "analyze-short_description",
+    "type": "text",
+    "severity": "material",
+    "origin": "analyze-questionnaire",
+    "blueprint": "ARCHITECTURE.md",
+    "story": null,
+    "status": "answered",
+    "archived": false,
+    "title": "Short Description",
+    "description": "One-sentence description of what this project does. Edit to override the proposal.",
+    "options": [],
+    "system_choice": "A command-line CommonMark 0.31.2 parser that converts Markdown from standard input to HTML on standard output.",
+    "commander_direction": "A command-line CommonMark 0.31.2 parser that converts Markdown from standard input to HTML on standard output."
+  },
+  {
+    "id": "build-skip-feature-conformance-verification.md-complete-conformance",
+    "type": "text",
+    "severity": "low",
+    "origin": "build",
+    "blueprint": "FEATURE-Conformance-Verification.md",
+    "story": "verify-001",
+    "status": "recommended",
+    "archived": false,
+    "title": "Acceptance skipped: complete-conformance",
+    "description": "malformed check: the assertion itself raised NameError (name 'sys' is not defined. Did you forget to import 'sys'?) in its own frame, before reaching the code under test. No implementation can satisfy it. Each check runs as its own script in its own process, so a name bound by another check is not in scope. Repair the assertion in the Blueprint specification.",
+    "options": [],
+    "system_choice": "Leave complete-conformance untested until its acceptance setup is repaired; do not treat it as passed."
+  },
+  {
+    "id": "plan-architecture-boundary",
+    "type": "choice",
+    "severity": "low",
+    "origin": "plan",
+    "blueprint": "ARCHITECTURE.md",
+    "story": "interface-001",
+    "status": "recommended",
+    "archived": false,
+    "title": "Parser implementation boundary",
+    "description": "The executable and parser will be implemented as a Python standard-library application with block parsing preceding inline parsing and no runtime third-party dependencies.",
+    "options": [
+      {
+        "value": "stdlib",
+        "label": "Python standard library"
+      },
+      {
+        "value": "external",
+        "label": "Third-party parser dependency"
+      }
+    ],
+    "system_choice": "stdlib"
+  }
+]

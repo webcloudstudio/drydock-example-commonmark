@@ -1,0 +1,60 @@
+Drydock 0.1.8  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+
+Acceptance verification: commonmark  (2026-08-15T21:44:26+00:00)
+  PASS 10   FAIL 1   UNVERIFIED 0   PREPASSED 8   (19 AC)
+  8 criterion(s) were green before their block built. Either they do not exercise the story's work,
+  or the deliverable already existed. Not counted as proven; the build is not blocked on them.
+
+  ✓ PASS        interface-executable         interface-001  ARCHITECTURE.md
+  ✓ PASS        interface-process            interface-001  ARCHITECTURE.md
+  ✓ PASS        interface-utf8               interface-001  ARCHITECTURE.md
+  ✓ PASS        block-leafs-conformance      block-001      FEATURE-Block-Leafs.md
+  ~ PREPASSED   block-leafs-interface        block-001      FEATURE-Block-Leafs.md
+        intent: Leaf parsing remains reachable through the required executable interface.
+        green at this block's baseline too, before its code existed — confirm the criterion exercises the story's work
+
+  ~ PREPASSED   block-leafs-reference-input  block-001      FEATURE-Block-Leafs.md
+        intent: Link-reference-definition input is accepted through the executable interface.
+        green at this block's baseline too, before its code existed — confirm the criterion exercises the story's work
+
+  ✓ PASS        block-quotes-conformance     block-002      FEATURE-Block-Quotes.md
+  ~ PREPASSED   block-quotes-interface       block-002      FEATURE-Block-Quotes.md
+        intent: A block quote document is accepted through the executable interface.
+        green at this block's baseline too, before its code existed — confirm the criterion exercises the story's work
+
+  ~ PREPASSED   block-quotes-nested-input    block-002      FEATURE-Block-Quotes.md
+        intent: Nested block quote input is accepted through the executable interface.
+        green at this block's baseline too, before its code existed — confirm the criterion exercises the story's work
+
+  ✓ PASS        lists-conformance            block-003      FEATURE-Block-Lists.md
+  ~ PREPASSED   lists-interface              block-003      FEATURE-Block-Lists.md
+        intent: A bullet list is accepted through the executable interface.
+        green at this block's baseline too, before its code existed — confirm the criterion exercises the story's work
+
+  ~ PREPASSED   lists-nested-input           block-003      FEATURE-Block-Lists.md
+        intent: Nested and ordered list input is accepted through the executable interface.
+        green at this block's baseline too, before its code existed — confirm the criterion exercises the story's work
+
+  ✓ PASS        inline-basics-conformance    inline-001     FEATURE-Inline-Basics.md
+  ~ PREPASSED   inline-basics-interface      inline-001     FEATURE-Inline-Basics.md
+        intent: Inline source containing escapes, entities, code, and line breaks is accepted through the executable interface.
+        green at this block's baseline too, before its code existed — confirm the criterion exercises the story's work
+
+  ~ PREPASSED   inline-basics-unicode-input  inline-001     FEATURE-Inline-Basics.md
+        intent: UTF-8 inline text is accepted through the executable interface.
+        green at this block's baseline too, before its code existed — confirm the criterion exercises the story's work
+
+  ✓ PASS        emphasis-conformance         inline-002     FEATURE-Inline-Emphasis.md
+  ✓ PASS        links-images-conformance     inline-003     FEATURE-Inline-Links-Images.md
+  ✓ PASS        html-autolinks-conformance   inline-004     FEATURE-Inline-HTML-Autolinks.md
+  ✗ FAIL        complete-conformance         verify-001     FEATURE-Conformance-Verification.md
+        intent: The completed parser passes the complete unfiltered supplied CommonMark conformance suite.
+        assertion: malformed check: the assertion itself raised NameError (name 'sys' is not defined. Did you forget to import 'sys'?) in its own frame, before reaching the code under test. No implementation can satisfy it. Each check runs as its own script in its own process, so a name bound by another check is not in scope. Repair the assertion in the Blueprint specification.
+        process exit code: 1
+        error: NameError: name 'sys' is not defined. Did you forget to import 'sys'?
+        observed output:
+          655 passed, 0 failed, 0 errored, 0 skipped
+
+
+Soundings: /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/workspace/targets/commonmark/SOUNDINGS.md
+Target - committed project workspace git store

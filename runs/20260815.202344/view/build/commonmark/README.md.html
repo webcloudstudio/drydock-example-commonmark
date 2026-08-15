@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/README.md</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/README.md</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../build/commonmark/README.md">Raw file</a></div></header>
+<article class="doc"><h1>commonmark</h1>
+<p>A command-line CommonMark 0.31.2 parser that converts Markdown from standard input to HTML on standard output.</p>
+<h2>Intent</h2>
+<p>Build a command-line CommonMark 0.31.2 parser for users and automated tooling that need Markdown converted to conformant HTML. The program is the executable <code>commonmark</code> at the application root: it reads UTF-8 Markdown from standard input and writes HTML to standard output.</p>
+<h2>What It Does</h2>
+<p>Implement the leaf-block portion of CommonMark block parsing before inline rendering.</p>
+<p>Implement bullet and ordered list containers and their list-item block content.</p>
+<p>Implement block quote containers and their interaction with leaf blocks.</p>
+<p>Provide the terminal verification step for the completed command-line parser.</p>
+<p>Implement the foundational inline constructs used by all later inline features.</p>
+<p>Implement emphasis and strong emphasis after block parsing and basic inline tokenization.</p>
+<p>Implement inline autolinks and raw HTML while preserving their precedence over ordinary text and emphasis.</p>
+<p>Implement inline and reference links and images using the document-wide link reference map produced during block parsing.</p>
+<h2>Next Steps</h2>
+<ul><li>Complete the first-run checks above.</li></ul></article>
+</main>
+</body>
+</html>

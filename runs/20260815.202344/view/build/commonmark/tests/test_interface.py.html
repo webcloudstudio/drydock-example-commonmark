@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_interface.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_interface.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_interface.py">Raw file</a></div></header>
+<article class="doc"><pre>import os
+import subprocess
+from pathlib import Path
+
+ROOT = Path(__file__).parents[1]
+
+def run_parser(source: str) -&gt; subprocess.CompletedProcess[str]:
+    return subprocess.run([str(ROOT / &quot;commonmark&quot;)], input=source,
+                          capture_output=True, text=True, encoding=&quot;utf-8&quot;)
+
+def test_executable_exists_and_is_executable():
+    executable = ROOT / &quot;commonmark&quot;
+    assert executable.is_file()
+    assert os.access(executable, os.X_OK)
+
+def test_standard_input_produces_html_on_standard_output():
+    result = run_parser(&quot;interface probe\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout == &quot;&lt;p&gt;interface probe&lt;/p&gt;\n&quot;
+
+def test_utf8_standard_input_round_trips_as_html():
+    result = run_parser(&quot;café — 東京\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout == &quot;&lt;p&gt;café — 東京&lt;/p&gt;\n&quot;
+
+def test_emphasis_delimiter_runs_support_nesting_and_unmatched_markers():
+    result = run_parser(&quot;***strong emph***\n\nfoo_bar_baz\n\n**foo*\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout == (
+        &quot;&lt;p&gt;&lt;em&gt;&lt;strong&gt;strong emph&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;\n&quot;
+        &quot;&lt;p&gt;foo_bar_baz&lt;/p&gt;\n&quot;
+        &quot;&lt;p&gt;*&lt;em&gt;foo&lt;/em&gt;&lt;/p&gt;\n&quot;
+    )
+
+def test_emphasis_uses_unicode_flanking_rules():
+    result = run_parser(&quot;* a *\n\nfoo*bar*\n\nfoo_bar_\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout == (
+        &quot;&lt;p&gt;* a *&lt;/p&gt;\n&quot;
+        &quot;&lt;p&gt;foo&lt;em&gt;bar&lt;/em&gt;&lt;/p&gt;\n&quot;
+        &quot;&lt;p&gt;foo_bar_&lt;/p&gt;\n&quot;
+    )
+
+def test_nested_list_blank_line_does_not_loosen_outer_list():
+    source = &quot;- foo\n  - bar\n    - baz\n\n\n      bim\n&quot;
+    result = run_parser(source)
+    assert result.returncode == 0
+    assert result.stdout == (
+        &quot;&lt;ul&gt;&lt;li&gt;foo\n&lt;ul&gt;&lt;li&gt;bar\n&lt;ul&gt;&lt;li&gt;&lt;p&gt;baz&lt;/p&gt;\n&lt;p&gt;bim&lt;/p&gt;&quot;
+        &quot;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;\n&quot;
+    )
+
+def test_blank_between_outer_siblings_makes_list_loose():
+    source = &quot;- a\n  - b\n  - c\n\n- d\n  - e\n  - f\n&quot;
+    result = run_parser(source)
+    assert result.returncode == 0
+    assert result.stdout == (
+        &quot;&lt;ul&gt;&lt;li&gt;&lt;p&gt;a&lt;/p&gt;\n&lt;ul&gt;&lt;li&gt;b&lt;/li&gt;&lt;li&gt;c&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&quot;
+        &quot;&lt;li&gt;&lt;p&gt;d&lt;/p&gt;\n&lt;ul&gt;&lt;li&gt;e&lt;/li&gt;&lt;li&gt;f&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;\n&quot;
+    )
+</pre></article>
+</main>
+</body>
+</html>

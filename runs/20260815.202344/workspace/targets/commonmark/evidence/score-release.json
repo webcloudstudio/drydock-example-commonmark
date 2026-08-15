@@ -1,0 +1,67 @@
+{
+  "schema_version": 5,
+  "recorded_at": "2026-08-15T21:46:56+00:00",
+  "target": "commonmark",
+  "verdict": "PASSED",
+  "verdict_line": "commonmark: PASSED \u2014 1 of 1",
+  "statement": "commonmark: PASSED \u2014 1 of 1\n\n  st-001  MET       sh sources/full_test.sh: return code 0; sh sources/full_test.sh: 655 passed, 0 failed, 0 errored, 0 skipped\n  reported: Build directory has uncommitted changes",
+  "complete": true,
+  "governed_gate": {
+    "name": "full",
+    "outcome": "PASS",
+    "argv": [
+      "sh",
+      "sources/full_test.sh"
+    ],
+    "return_code": 0,
+    "duration_ms": 45259,
+    "detail": "",
+    "timed_out": false,
+    "build_identity": "7e53d175fb26e9df",
+    "stdout": "655 passed, 0 failed, 0 errored, 0 skipped\n",
+    "stderr": ""
+  },
+  "criteria": [
+    {
+      "criterion_id": "st-001",
+      "verdict": "MET",
+      "rationale": "The governed full conformance suite passed with 655 tests passed and no failures or errors.",
+      "evidence": [
+        "sh sources/full_test.sh: return code 0",
+        "sh sources/full_test.sh: 655 passed, 0 failed, 0 errored, 0 skipped"
+      ]
+    }
+  ],
+  "guardrail_ids": [],
+  "observations": [],
+  "blockers": [],
+  "attestations": [],
+  "kit_faults": [],
+  "warnings": [
+    "Build directory has uncommitted changes"
+  ],
+  "improvements": [
+    "Review and commit the uncommitted changes before release."
+  ],
+  "identities": {
+    "code": "3db3c6f468b2535c7a62571530e800e901310be6",
+    "sea_trials": "0bec2486b8d5c48ca1077f9320bc1686045d3e380a44a4bcc777ea6d77ab9d2a",
+    "blueprint": {
+      "ARCHITECTURE.md": "7ba2aff46307f65e2850fd6267ab488fd9b951d6b7901dc417540bd4a48e0c33",
+      "ARCHITECTURE_compact.md": "f3408e05a97e9dc22ebae2ef8bf928907c13d7a21c08d05eb3a9835f0d748876",
+      "FEATURE-Block-Leafs.md": "e5bc93bbfc292f37d4f342e7df381fa6ba08c69a182ed918e260a88b72aa1aee",
+      "FEATURE-Block-Lists.md": "203a17e8a51a25be222ed72b2332c2adf7d88475bdd63a458599b7bc5ec5958d",
+      "FEATURE-Block-Quotes.md": "422a8a8dd27fc95c1824401ae22ab7da4deaf37e54626424dfb4cf3e1839cbb7",
+      "FEATURE-Conformance-Verification.md": "b2bccd10a6736a0c48d74f2537929893c367fc3484f05968f4cbb0de51b44167",
+      "FEATURE-Inline-Basics.md": "f552fc60ed072e6110c9a3d2a4f54dc5b2d321b60c9d4f722efc2e65633643f1",
+      "FEATURE-Inline-Emphasis.md": "c92b4f8bcfb861a6195430b731e56ecea7f8f6cc3123029c5db44fb6c9bdf97f",
+      "FEATURE-Inline-HTML-Autolinks.md": "f6c98a2ca756b9f4f1b05d932b3eab25733183f4c177977afc90b45623d1db56",
+      "FEATURE-Inline-Links-Images.md": "dc30416a9ca818760a9acb200ab356d1676b7915a768e830836fb135e697521f",
+      "cmark_compact.md": "3129865ab40d603ffe57af55733ebcea045b0a338d0b7250a1d0d5be67f86429",
+      "normalize_compact.md": "c93bff2c627f0fb94ce487151049926efdc013ff186819f4c527ee14d48b88d2",
+      "spec_compact.md": "efc80d95f2045961f96cfbdfd59e90df26ba4d1e0ad148723054837c633acf0d",
+      "spec_tests_compact.md": "f67e385fb0db0c2aaf826d024c5e355fabd698f3ec9ff7af9be15383bbcf9ea8"
+    }
+  },
+  "execution_id": "20260815.214650.046Z-69e94480"
+}

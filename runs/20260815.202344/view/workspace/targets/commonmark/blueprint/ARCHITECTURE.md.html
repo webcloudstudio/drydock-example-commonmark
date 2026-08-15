@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/ARCHITECTURE.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/ARCHITECTURE.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/ARCHITECTURE.md">Raw file</a></div></header>
+<article class="doc"><h1>ARCHITECTURE: CommonMark Parser</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260815 V1</td></tr><tr><td>Description</td><td>Defines the executable boundary and standard-library architecture for the CommonMark parser.</td></tr><tr><td>Depends On</td><td>—</td></tr><tr><td>Provides</td><td>executable commonmark</td></tr><tr><td>Consumes</td><td>—</td></tr></tbody></table></div>
+<h2>Intent</h2>
+<p>The application is a command-line CommonMark 0.31.2 parser. The executable <code>commonmark</code> reads UTF-8 Markdown from standard input and writes rendered HTML to standard output.</p>
+<h2>Boundaries</h2>
+<div class="scroll"><table><thead><tr><th>Module</th><th>Responsibility</th></tr></thead><tbody><tr><td><code>commonmark</code></td><td>Executable process boundary, UTF-8 stream handling, and exit status.</td></tr><tr><td>Parser implementation</td><td>Block parsing, link-reference collection, inline parsing, and HTML rendering.</td></tr><tr><td><code>sources/</code></td><td>Supplied immutable conformance assets used only by verification.</td></tr></tbody></table></div>
+<p>Block structure is resolved before inline structure. Link-reference definitions collected during block parsing are available to inline parsing.</p>
+<h2>Technology Stack</h2>
+<ul><li>Python 3 for the executable and parser.</li><li>Python standard library only at runtime.</li><li>POSIX shell for the supplied conformance harness.</li></ul>
+<h2>Technical Decisions</h2>
+<ul><li>Do not use a public Markdown implementation or third-party runtime dependency.</li><li>Preserve the executable name and standard-input/standard-output contract.</li><li>Replace U+0000 with U+FFFD according to the CommonMark specification.</li><li>Keep supplied scoring assets unchanged.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC interface-executable ===<br>Intent: The application root contains an executable named commonmark.</p>
+<p>import os</p>
+<p>path = &quot;commonmark&quot; assert os.path.isfile(path) assert os.access(path, os.X_OK) === END AC interface-executable ===</p>
+<p>=== AC interface-process ===<br>Intent: The executable accepts standard input and terminates successfully.</p>
+<p>import subprocess</p>
+<p>source = &quot;interface probe\n&quot; result = subprocess.run( [&quot;./commonmark&quot;], input=source, capture_output=True, text=True, ) print(result.stdout) print(result.stderr) assert result.returncode == 0 === END AC interface-process ===</p>
+<p>=== AC interface-utf8 ===<br>Intent: The executable accepts UTF-8 input and terminates successfully.</p>
+<p>import subprocess</p>
+<p>source = &quot;UTF-8 interface probe\n&quot; result = subprocess.run( [&quot;./commonmark&quot;], input=source, capture_output=True, text=True, encoding=&quot;utf-8&quot;, ) print(result.stdout) print(result.stderr) assert result.returncode == 0 === END AC interface-utf8 ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not modify supplied conformance assets.</li><li>Do not add a public Markdown implementation as a dependency.</li></ul></article>
+</main>
+</body>
+</html>

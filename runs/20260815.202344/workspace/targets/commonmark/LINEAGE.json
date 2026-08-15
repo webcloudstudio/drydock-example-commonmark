@@ -1,0 +1,292 @@
+{
+  "version": 1,
+  "import": {
+    "root": "/mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/sources",
+    "format": "markdown"
+  },
+  "sources": {
+    "INSTRUCTIONS.md": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "f6f0fb4",
+          "date": "2026-08-15",
+          "hash": "10b172786a92ad4dc012e88358cf96fcead95bcd919f2677df3a03405782fb0a",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "standard-io-executable",
+              "text": "The parser reads Markdown from standard input and writes HTML to standard output.",
+              "stories": [
+                "interface-001"
+              ]
+            },
+            {
+              "name": "parse-block-structure",
+              "text": "Blocks: paragraphs, thematic breaks, ATX headings, setext headings, indented code, fenced code, HTML blocks, link reference definitions, block quotes, then lists \u2014 lists are the hardest block construct, with lazy continuation, nesting, and tightness.",
+              "stories": [
+                "block-001",
+                "block-002",
+                "block-003"
+              ]
+            },
+            {
+              "name": "parse-inline-contents",
+              "text": "Inlines: backslash escapes, entity and numeric references, code spans, emphasis and strong emphasis (the delimiter-run algorithm), links and images, autolinks, raw HTML, hard breaks.",
+              "stories": [
+                "inline-001",
+                "inline-002",
+                "inline-003",
+                "inline-004"
+              ]
+            },
+            {
+              "name": "run-full-conformance-suite",
+              "text": "Create one terminal verification story that:\n\n- depends on every parser implementation story;\n- contains the only `Suite: full` acceptance check;\n- runs `sh sources/full_test.sh`, prints captured standard output and standard error, and asserts only `result.returncode == 0`; and\n- carries `Sea Trials: st-001`.",
+              "stories": [
+                "verify-001"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "cmark.py": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "f6f0fb4",
+          "date": "2026-08-15",
+          "hash": "c5fb45e7c64fd7670b2a3c49a151e46f4af9d0ad3004bedb37ecf9cdc34d2f00",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "convert-markdown-to-html",
+              "text": "markdown = cmark.cmark_markdown_to_html",
+              "stories": [
+                "block-001",
+                "block-002",
+                "block-003",
+                "inline-001",
+                "inline-002",
+                "inline-003",
+                "inline-004"
+              ]
+            },
+            {
+              "name": "provide-program-interface",
+              "text": "self.to_html = lambda x: pipe_through_prog(prog, x)",
+              "stories": [
+                "interface-001"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "full_test.sh": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "f6f0fb4",
+          "date": "2026-08-15",
+          "hash": "5b634a1c78117313283acceda8faad9de02b594e54949439c73697b058941a93",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "provide-stdio-interface",
+              "text": "The deliverable is an executable named commonmark that reads UTF-8 Markdown on stdin\nand writes HTML to stdout.",
+              "stories": [
+                "interface-001"
+              ]
+            },
+            {
+              "name": "pass-complete-commonmark-suite",
+              "text": "The suite runs unfiltered: no --pattern, no --number, no selector of any kind. spec_tests.py\nexits with failed + errored, so exit 0 means the complete CommonMark 0.31.2 suite passed.",
+              "stories": [
+                "block-001",
+                "block-002",
+                "block-003",
+                "inline-001",
+                "inline-002",
+                "inline-003",
+                "inline-004",
+                "verify-001"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "normalize.py": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "f6f0fb4",
+          "date": "2026-08-15",
+          "hash": "94a9dd253907e3dab7c02fc11e934f06112dcf0f3804255d09d732c8c7c4b5f4",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "collapse-whitespace",
+              "text": "Multiple inner whitespaces are collapsed to a single space (except\nin pre tags):",
+              "stories": []
+            },
+            {
+              "name": "remove-block-whitespace",
+              "text": "Whitespace surrounding block-level tags is removed.",
+              "stories": []
+            },
+            {
+              "name": "normalize-self-closing-tags",
+              "text": "Self-closing tags are converted to open tags.",
+              "stories": []
+            },
+            {
+              "name": "normalize-attributes",
+              "text": "Attributes are sorted and lowercased.",
+              "stories": []
+            },
+            {
+              "name": "convert-references",
+              "text": "References are converted to unicode, except that '<', '>', '&', and\n'\"' are rendered using entities.",
+              "stories": []
+            },
+            {
+              "name": "preserve-cdata",
+              "text": "We work around HTMLParser's limitations parsing CDATA\nby breaking the input into chunks and passing CDATA chunks\nthrough verbatim.",
+              "stories": []
+            },
+            {
+              "name": "return-original-on-error",
+              "text": "return html  # on error, return unnormalized HTML",
+              "stories": []
+            }
+          ]
+        }
+      ]
+    },
+    "spec.txt": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "f6f0fb4",
+          "date": "2026-08-15",
+          "hash": "43fad3e0ac5190a3b0bc6a41f7b1a853201a26ec2e6b74871f5d96239a8c34cf",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "parse-leaf-blocks",
+              "text": "This section describes the different kinds of leaf block that make up a Markdown document.",
+              "stories": [
+                "block-001"
+              ]
+            },
+            {
+              "name": "parse-link-reference-definitions",
+              "text": "A link reference definition consists of a link label, optionally preceded by up to three spaces of indentation, followed by a colon (`:`), optional spaces or tabs (including up to one line ending), a link destination, optional spaces or tabs (including up to one line ending), and an optional link title, which if it is present must be separated from the link destination by spaces or tabs.",
+              "stories": [
+                "block-001",
+                "inline-003"
+              ]
+            },
+            {
+              "name": "parse-block-quotes",
+              "text": "The following rules define block quotes:",
+              "stories": [
+                "block-002"
+              ]
+            },
+            {
+              "name": "parse-lists",
+              "text": "A list is a sequence of one or more list items of the same type.",
+              "stories": [
+                "block-003"
+              ]
+            },
+            {
+              "name": "parse-inline-basics",
+              "text": "Any ASCII punctuation character may be backslash-escaped.",
+              "stories": [
+                "inline-001"
+              ]
+            },
+            {
+              "name": "parse-emphasis",
+              "text": "The following rules define emphasis and strong emphasis:",
+              "stories": [
+                "inline-002"
+              ]
+            },
+            {
+              "name": "parse-links-and-images",
+              "text": "There are two basic kinds of links in Markdown. In inline links the destination and title are given immediately after the link text. In reference links the destination and title are defined elsewhere in the document.",
+              "stories": [
+                "inline-003"
+              ]
+            },
+            {
+              "name": "parse-html-and-autolinks",
+              "text": "Autolinks are absolute URIs and email addresses inside `<` and `>`.",
+              "stories": [
+                "inline-004"
+              ]
+            },
+            {
+              "name": "parse-raw-html",
+              "text": "Text between `<` and `>` that looks like an HTML tag is parsed as a raw HTML tag and will be rendered in HTML without escaping.",
+              "stories": [
+                "inline-004"
+              ]
+            },
+            {
+              "name": "run-conformance-tests",
+              "text": "These are intended to double as conformance tests.",
+              "stories": [
+                "verify-001"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "spec_tests.py": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "f6f0fb4",
+          "date": "2026-08-15",
+          "hash": "9db1ea4a3ee79c5ec74eebc09c5985eb252427e8d9d19ef45e5cc3f2ae410855",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "run-cmark-tests",
+              "text": "Run cmark tests.",
+              "stories": [
+                "verify-001"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

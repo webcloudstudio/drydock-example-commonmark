@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Conformance-Verification.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Conformance-Verification.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Conformance-Verification.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Conformance Verification</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260815 V1</td></tr><tr><td>Description</td><td>Verify the completed parser against the complete supplied CommonMark 0.31.2 conformance suite.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md, FEATURE-Block-Leafs.md, FEATURE-Block-Quotes.md, FEATURE-Block-Lists.md, FEATURE-Inline-Basics.md, FEATURE-Inline-Emphasis.md, FEATURE-Inline-Links-Images.md, FEATURE-Inline-HTML-Autolinks.md</td></tr><tr><td>Provides</td><td>complete CommonMark conformance verification</td></tr><tr><td>Consumes</td><td>executable commonmark, all parser capabilities</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Provide the terminal verification step for the completed command-line parser.</p>
+<h2>Behavior</h2>
+<ul><li>Stage <code>spec.txt</code>, <code>spec_tests.py</code>, <code>cmark.py</code>, <code>normalize.py</code>, and <code>full_test.sh</code> unchanged.</li><li>Run <code>sh sources/full_test.sh</code> from the completed application root.</li><li>Treat the supplied scoring entry point&#x27;s exit status as the verification result.</li><li>Keep the suite unfiltered and terminal.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC complete-conformance ===<br>Intent: The completed parser passes the complete unfiltered supplied CommonMark conformance suite.<br>Suite: full</p>
+<p>import subprocess</p>
+<p>result = subprocess.run( [&quot;sh&quot;, &quot;sources/full_test.sh&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC complete-conformance ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>This is the only full-suite acceptance check.</li><li>Do not filter, skip, reinterpret, or modify the supplied scoring assets.</li><li>Do not modify the supplied scoring entry point.</li></ul></article>
+</main>
+</body>
+</html>

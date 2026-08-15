@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/logs/20260815.204259.896Z_commonmark_build_codex.stderr.log</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/logs/20260815.204259.896Z_commonmark_build_codex.stderr.log</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../workspace/logs/20260815.204259.896Z_commonmark_build_codex.stderr.log">Raw file</a></div></header>
+<article class="doc"><pre>2026-08-15T20:46:16.547559Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/build/commonmark/commonmark:
+                out.append(line); i+=1; continue
+2026-08-15T20:46:45.578037Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/build/commonmark/commonmark:
+        text=re.sub(r&#x27;(?&lt;![*\w])\*([^*\n]*\S[^*\n]*)\*(?!\*)|(?&lt;![_\w])_([^_\n]*\S[^_]*)_(?![_\w])&#x27;,lambda m:&#x27;&lt;em&gt;&#x27;+self.inline(m.group(1) or m.group(2))+&#x27;&lt;/em&gt;&#x27;,text)
+2026-08-15T20:48:40.360135Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/build/commonmark/commonmark:
+            while end &lt; len(self.lines) and not self.parse_reference(rest):
+2026-08-15T20:49:43.992997Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/build/commonmark/commonmark:
+            key=self.ref_key(re.sub(r&#x27;\\([!&quot;#$%&amp;\&#x27;()*+,\-./:;&lt;=&gt;?@[\\\]^_`{|}~])&#x27;,r&#x27;\1&#x27;,label))
+            if key not in self.refs: self.refs[key]=parsed
+            i=end; boundary=False; previous_ref=True; continue
+2026-08-15T20:49:51.155738Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/build/commonmark/commonmark:
+            key=self.ref_key(re.sub(r&#x27;\\([!&quot;#$%&amp;\&#x27;()*+,\-./:;&lt;=&gt;?@[\\\]^_`{|}~])&#x27;,r&#x27;\1&#x27;,label))
+            if key not in self.refs: self.refs[key]=parsed
+            i=end; boundary=False; previous_ref=True; continue
+2026-08-15T20:50:46.329774Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/build/commonmark/commonmark:
+        text=re.sub(r&#x27;(?&lt;!\w)\*([^*\n]*\S[^*\n]*)\*|(?&lt;!\w)_([^_\n]*\S[^_\n]*)_(?!\w)&#x27;,lambda m:&#x27;&lt;em&gt;&#x27;+self.inline(m.group(1) or m.group(2))+&#x27;&lt;/em&gt;&#x27;,text)
+2026-08-15T20:55:36.753681Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/build/commonmark/commonmark:
+                out.append(&#x27;&lt;pre&gt;&lt;code&gt;&#x27;+esc_text(&#x27;\n&#x27;.join(b).rstrip(&#x27;\n&#x27;)+&#x27;\n&#x27;)+&#x27;&lt;/code&gt;&lt;/pre&gt;&#x27;); continue
+</pre></article>
+</main>
+</body>
+</html>
