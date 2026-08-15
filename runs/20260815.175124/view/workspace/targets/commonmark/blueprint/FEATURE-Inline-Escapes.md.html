@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Inline-Escapes.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Inline-Escapes.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Inline-Escapes.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Inline Escapes</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260815 V1</td></tr><tr><td>Description</td><td>Parse backslash escapes and named or numeric character references in inline content.</td></tr><tr><td>Depends On</td><td>FEATURE-Block-Lists.md</td></tr><tr><td>Provides</td><td>escaped punctuation, named entity references, numeric character references</td></tr><tr><td>Consumes</td><td>block tree, document-wide link reference definition map</td></tr></tbody></table></div>
+<h2>Workflow</h2>
+<p>Parse inline text after block structure has been established. Remove backslashes only when they precede ASCII punctuation, preserve backslashes before other characters, and decode valid HTML5 named entities plus decimal and hexadecimal numeric references.</p>
+<p>Apply reference parsing outside code spans, fenced code, indented code, autolinks, and raw HTML. Replace U+0000 and invalid numeric code points with U+FFFD, while leaving invalid or unterminated references as literal text.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC inline-escapes-conformance ===<br>Intent: The implementation passes the authoritative CommonMark examples for backslash escapes and entity or numeric character references owned by this story.<br>Suite: scoped</p>
+<p>import subprocess</p>
+<p>result = subprocess.run( [ &quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, r&quot;^(Backslash escapes|Entity and numeric character references)$&quot;, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr) assert result.returncode == 0 === END AC inline-escapes-conformance ===</p>
+<p>=== AC inline-escapes-selector ===<br>Intent: The escape and character-reference conformance selector executes successfully.<br>Suite: scoped</p>
+<p>import subprocess</p>
+<p>sections = r&quot;^(Backslash escapes|Entity and numeric character references)$&quot; result = subprocess.run( [ &quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, sections, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr) assert result.returncode == 0 === END AC inline-escapes-selector ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not decode entities or escapes inside code spans or code blocks.</li><li>Do not treat entity references as block-structure markers.</li><li>Do not invoke <code>full_test.sh</code> from this story.</li></ul></article>
+</main>
+</body>
+</html>

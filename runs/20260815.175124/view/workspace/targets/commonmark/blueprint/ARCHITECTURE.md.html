@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/ARCHITECTURE.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/ARCHITECTURE.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/ARCHITECTURE.md">Raw file</a></div></header>
+<article class="doc"><h1>ARCHITECTURE: CommonMark Parser</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260815 V1</td></tr><tr><td>Description</td><td>Standalone Python architecture for a two-phase CommonMark 0.31.2 Markdown-to-HTML parser.</td></tr><tr><td>Depends On</td><td>—</td></tr><tr><td>Provides</td><td>parser architecture, block parser boundary, inline parser boundary, renderer boundary</td></tr><tr><td>Consumes</td><td>—</td></tr></tbody></table></div>
+<h2>Intent</h2>
+<p>The application is a standalone command-line parser. It reads UTF-8 Markdown from standard input and writes CommonMark-compatible HTML to standard output without using a public Markdown implementation.</p>
+<h2>Architecture</h2>
+<p>Parsing proceeds in two phases:</p>
+<ol><li>Input preprocessing creates normalized Unicode lines while preserving required tabs and replacing U+0000 with U+FFFD.</li><li>Block parsing constructs the document structure and collects document-wide link reference definitions.</li><li>Inline parsing resolves paragraph and heading content after block parsing completes.</li><li>Rendering converts the completed block and inline tree to HTML.</li><li>The executable owns only process I/O, error propagation, and the stdin/stdout contract.</li></ol>
+<p>Recommended module boundaries:</p>
+<div class="scroll"><table><thead><tr><th>Module boundary</th><th>Ownership</th></tr></thead><tbody><tr><td>Input normalization</td><td>Unicode preprocessing, line endings, blank lines, indentation columns</td></tr><tr><td>Block parser</td><td>Leaf blocks, containers, lists, and block tree construction</td></tr><tr><td>Reference collector</td><td>Link-reference definition detection and normalized lookup</td></tr><tr><td>Inline parser</td><td>Escapes, references, code spans, emphasis, links, images, autolinks, and raw HTML</td></tr><tr><td>Renderer</td><td>HTML escaping, attributes, URLs, block and inline serialization</td></tr><tr><td>Executable</td><td>UTF-8 stdin, HTML stdout, process exit behavior</td></tr></tbody></table></div>
+<p>The block tree is the interface between block and inline parsing. Reference definitions are collected during block parsing and supplied to inline parsing. Renderer inputs are completed block and inline nodes, including list tightness and raw HTML nodes.</p>
+<h2>Module Ownership</h2>
+<div class="scroll"><table><thead><tr><th>Concern</th><th>Owning boundary</th><th>Allowed responsibilities</th></tr></thead><tbody><tr><td>Input and Unicode</td><td>Input normalization</td><td>Decode stdin, normalize line endings, replace insecure characters</td></tr><tr><td>Block structure</td><td>Block parser</td><td>Recognize and nest block nodes; do not parse inline emphasis</td></tr><tr><td>References</td><td>Reference collector</td><td>Parse definitions and expose normalized document-wide lookup</td></tr><tr><td>Inline structure</td><td>Inline parser</td><td>Parse raw inline content using the reference map</td></tr><tr><td>HTML output</td><td>Renderer</td><td>Escape text and attributes and serialize nodes</td></tr><tr><td>Process contract</td><td>Executable</td><td>Connect stdin/stdout to the parser and renderer</td></tr></tbody></table></div>
+<p>No module may call a public Markdown implementation. The executable must remain usable by the supplied <code>cmark.py</code> adapter.</p>
+<h2>Technology Stack</h2>
+<div class="scroll"><table><thead><tr><th>Technology</th><th>Use</th></tr></thead><tbody><tr><td>Python 3</td><td>Parser, renderer, executable, and standard-library tests</td></tr><tr><td>Python standard library</td><td>Unicode, HTML escaping, URL handling, and process support</td></tr><tr><td>POSIX shell</td><td>Terminal <code>full_test.sh</code> wrapper</td></tr></tbody></table></div>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC architecture-input-boundary ===<br>Intent: The implementation exposes an input-normalization boundary that accepts text input. import importlib</p>
+<p>module = importlib.import_module(&quot;commonmark&quot;) assert callable(getattr(module, &quot;parse&quot;, None)) === END AC architecture-input-boundary ===</p>
+<p>=== AC architecture-render-boundary ===<br>Intent: The implementation exposes a rendering boundary that accepts a parsed document. import importlib</p>
+<p>module = importlib.import_module(&quot;commonmark&quot;) assert callable(getattr(module, &quot;render&quot;, None)) === END AC architecture-render-boundary ===</p>
+<p>=== AC architecture-cli-boundary ===<br>Intent: The executable module exposes a callable process entry point. import importlib</p>
+<p>module = importlib.import_module(&quot;commonmark&quot;) assert callable(getattr(module, &quot;main&quot;, None)) === END AC architecture-cli-boundary ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not depend on a public Markdown implementation.</li><li>Preserve block-before-inline parsing.</li><li>Preserve the standard-input/standard-output executable contract.</li><li>Keep module ownership boundaries explicit so later stories extend rather than replace the architecture.</li></ul></article>
+</main>
+</body>
+</html>

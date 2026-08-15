@@ -1,0 +1,109 @@
+Drydock 0.1.8  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+
+Acceptance verification: commonmark  (2026-08-15T18:27:04+00:00)
+  PASS 15   FAIL 19   UNVERIFIED 0   PREPASSED 2   (36 AC)
+  2 criterion(s) were green before their block built. Either they do not exercise the story's work,
+  or the deliverable already existed. Not counted as proven; the build is not blocked on them.
+
+  ✓ PASS        architecture-input-boundary     architecture           ARCHITECTURE.md
+  ✓ PASS        architecture-render-boundary    architecture           ARCHITECTURE.md
+  ✓ PASS        architecture-cli-boundary       architecture           ARCHITECTURE.md
+  ✗ FAIL        block-input-tabs                block-input            FEATURE-Block-Input.md
+        intent: The implementation passes the complete Tabs conformance section.
+        AssertionError
+
+  ~ PREPASSED   block-input-characters          block-input            FEATURE-Block-Input.md
+        intent: The implementation passes the complete Characters and lines conformance section.
+        green at this block's baseline too, before its code existed — confirm the criterion exercises the story's work
+
+  ~ PREPASSED   block-input-insecure            block-input            FEATURE-Block-Input.md
+        intent: The implementation passes the complete Insecure characters conformance section.
+        green at this block's baseline too, before its code existed — confirm the criterion exercises the story's work
+
+  ✓ PASS        block-leaves-basic              block-leaves           FEATURE-Block-Leaves.md
+  ✓ PASS        block-leaves-code               block-leaves           FEATURE-Block-Leaves.md
+  ✓ PASS        block-leaves-html               block-leaves           FEATURE-Block-Leaves.md
+  ✓ PASS        block-references-valid          block-references       FEATURE-Block-References.md
+  ✗ FAIL        block-references-container      block-references       FEATURE-Block-References.md
+        intent: The implementation passes reference-definition cases involving document-wide and container-scoped definitions.
+        TypeError: expected str, bytes or os.PathLike object, not int
+
+  ✗ FAIL        block-quotes-conformance        block-quotes           FEATURE-Block-Quotes.md
+        intent: The implementation passes the complete Block quotes conformance section.
+        AssertionError
+
+  ✗ FAIL        block-quotes-nesting            block-quotes           FEATURE-Block-Quotes.md
+        intent: The implementation passes nested and lazy block-quote examples within the authoritative section.
+        AssertionError
+
+  ✗ FAIL        block-lists-conformance         block-lists            FEATURE-Block-Lists.md
+        intent: The implementation passes the authoritative CommonMark examples for list items and lists owned by this story.
+        AssertionError
+
+  ✗ FAIL        block-lists-selector            block-lists            FEATURE-Block-Lists.md
+        intent: The list conformance selector executes the owned specification sections successfully.
+        AssertionError
+
+  ✗ FAIL        inline-escapes-conformance      inline-escapes         FEATURE-Inline-Escapes.md
+        intent: The implementation passes the authoritative CommonMark examples for backslash escapes and entity or numeric character references owned by this story.
+        AssertionError
+
+  ✗ FAIL        inline-escapes-selector         inline-escapes         FEATURE-Inline-Escapes.md
+        intent: The escape and character-reference conformance selector executes successfully.
+        AssertionError
+
+  ✗ FAIL        inline-code-breaks-conformance  inline-code-breaks     FEATURE-Inline-Code-Breaks.md
+        intent: The implementation passes the authoritative CommonMark examples for code spans and hard or soft line breaks owned by this story.
+        AssertionError
+
+  ✗ FAIL        inline-code-breaks-selector     inline-code-breaks     FEATURE-Inline-Code-Breaks.md
+        intent: The code-span and line-break conformance selector executes successfully.
+        AssertionError
+
+  ✗ FAIL        inline-emphasis-conformance     inline-emphasis        FEATURE-Inline-Emphasis.md
+        intent: The implementation passes the authoritative CommonMark examples for emphasis and strong emphasis owned by this story.
+        AssertionError
+
+  ✗ FAIL        inline-emphasis-selector        inline-emphasis        FEATURE-Inline-Emphasis.md
+        intent: The emphasis conformance selector executes the complete owned specification section successfully.
+        AssertionError
+
+  ✗ FAIL        inline-links-conformance        inline-links           FEATURE-Inline-Links.md
+        intent: The implementation passes the authoritative CommonMark examples for links and images owned by this story.
+        AssertionError
+
+  ✗ FAIL        inline-links-selector           inline-links           FEATURE-Inline-Links.md
+        intent: The link and image conformance selector executes the complete owned specification sections successfully.
+        AssertionError
+
+  ✗ FAIL        inline-autolinks                inline-html-autolinks  FEATURE-Inline-HTML-Autolinks.md
+        intent: The implementation passes the authoritative CommonMark autolink examples owned by this story.
+        AssertionError
+
+  ✗ FAIL        inline-raw-html                 inline-html-autolinks  FEATURE-Inline-HTML-Autolinks.md
+        intent: The implementation passes the authoritative CommonMark raw HTML examples owned by this story.
+        AssertionError
+
+  ✗ FAIL        renderer-conformance            html-renderer          FEATURE-HTML-Renderer.md
+        intent: The renderer passes the authoritative conformance examples covering the implemented rendered surface.
+        AssertionError
+
+  ✓ PASS        renderer-processes-document     html-renderer          FEATURE-HTML-Renderer.md
+  ✓ PASS        cli-stdin-stdout                cli-executable         FEATURE-CLI-Executable.md
+  ✓ PASS        cli-utf8                        cli-executable         FEATURE-CLI-Executable.md
+  ✓ PASS        cli-empty-input                 cli-executable         FEATURE-CLI-Executable.md
+  ✓ PASS        boundaries-unclosed             cli-boundaries         FEATURE-CLI-Boundaries.md
+  ✓ PASS        boundaries-nul                  cli-boundaries         FEATURE-CLI-Boundaries.md
+  ✗ FAIL        boundaries-conformance          cli-boundaries         FEATURE-CLI-Boundaries.md
+        intent: The implementation passes the authoritative bounded conformance examples relevant to malformed and unclosed input.
+        AssertionError
+
+  ✓ PASS        scoped-section                  verification-scoped    FEATURE-Verification-Scoped.md
+  ✓ PASS        scoped-example                  verification-scoped    FEATURE-Verification-Scoped.md
+  ✗ FAIL        full-conformance-suite          verification-full      FEATURE-Verification-Full.md
+        intent: The complete unfiltered supplied CommonMark conformance suite succeeds through the required POSIX wrapper.
+        AssertionError
+
+
+Soundings: /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.175124/workspace/targets/commonmark/SOUNDINGS.md
+Target - committed project workspace git store

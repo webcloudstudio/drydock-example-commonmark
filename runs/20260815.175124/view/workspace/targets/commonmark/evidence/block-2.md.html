@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-2.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-2.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-2.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 2 · Service (block-2)</h1>
+<ul><li>block type: block</li><li>date: 2026-08-15</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 59919</li><li>execution id: 20260815.180149.286Z-7c7e7eaa</li></ul>
+<h2>Stories built</h2>
+<ul><li>Normalize Markdown input lines, whitespace, tabs, and insecure characters. (block-input) [story]</li></ul>
+<h2>Reusable compacts</h2>
+<ul><li>spec_compact.md</li><li>spec_tests_compact.md</li><li>cmark_compact.md</li><li>normalize_compact.md</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1237)</li><li>implements: FEATURE-Block-Input.md (SP 648)</li><li>context: spec.txt (SP 51527)</li><li>context: spec_tests.py (SP 1609)</li><li>context: cmark.py (SP 339)</li><li>context: normalize.py (SP 1631)</li><li>context: ARCHITECTURE_compact.md (SP 124)</li><li>stack: common_compact.md (SP 1179)</li><li>stack: python_compact.md (SP 1534)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>blocks.py</li><li>commonmark</li><li>normalization.py</li><li>renderer.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: block-input-tabs (FEATURE-Block-Input.md)</li></ul>
+<p>intent: The implementation passes the complete Tabs conformance section. return code: 1 stderr: Traceback (most recent call last): File &quot;/mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.175124/build/commonmark/sources/spec_tests.py&quot;, line 164, in &lt;module&gt; result = do_test(test, args.normalize, previous.get(str(test[&#x27;example&#x27;]))) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.175124/build/commonmark/sources/spec_tests.py&quot;, line 44, in do_test [retcode, actual_html_bytes, err] = cmark.to_html(test[&#x27;markdown&#x27;]) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.175124/build/commonmark/sources/cmark.py&quot;, line 23, in &lt;lambda&gt; self.to_html = lambda x: pipe_through_prog(prog, x) ^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.175124/build/commonmark/sources/cmark.py&quot;, line 10, in pipe_through_prog p1 = Popen(prog.split(), stdout=PIPE, stdin=PIPE, stderr=PIPE) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/home/barlo/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/subprocess.py&quot;, line 1026, in <strong>init</strong> self._execute_child(args, executable, preexec_fn, close_fds, File &quot;/home/barlo/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/subprocess.py&quot;, line 1955, in _execute_child raise child_exception_type(errno_num, err_msg, err_filename)<br>FileNotFoundError: [Errno 2] No such file or directory: &#x27;./commonmark&#x27;</p>
+<p>Traceback (most recent call last): File &quot;block-input-tabs.py&quot;, line 11, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>GREEN (prepassed): block-input-characters (FEATURE-Block-Input.md)</li></ul>
+<p>intent: The implementation passes the complete Characters and lines conformance section. return code: 0 stdout: 0 passed, 0 failed, 0 errored, 655 skipped</p>
+<ul><li>GREEN (prepassed): block-input-insecure (FEATURE-Block-Input.md)</li></ul>
+<p>intent: The implementation passes the complete Insecure characters conformance section. return code: 0 stdout: 0 passed, 0 failed, 0 errored, 655 skipped</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: block-input-tabs (FEATURE-Block-Input.md)</li></ul>
+<p>intent: The implementation passes the complete Tabs conformance section. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: 11 passed, 0 failed, 0 errored, 644 skipped</p>
+<ul><li>PASS: block-input-characters (FEATURE-Block-Input.md)</li></ul>
+<p>intent: The implementation passes the complete Characters and lines conformance section. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: 0 passed, 0 failed, 0 errored, 655 skipped</p>
+<ul><li>PASS: block-input-insecure (FEATURE-Block-Input.md)</li></ul>
+<p>intent: The implementation passes the complete Insecure characters conformance section. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 provisioning: not required return code: 0 stdout: 0 passed, 0 failed, 0 errored, 655 skipped</p>
+<h2>Build summary</h2>
+<p>&lt;reusable-compact filename=&quot;spec.txt&quot;&gt; CommonMark 0.31.2 UTF-8 Markdown-to-HTML conformance specification. Input supports Unicode, LF/CRLF/CR line endings, tab-stop indentation, literal internal tabs, and U+0000 → U+FFFD. &lt;/reusable-compact&gt;</p>
+<p>&lt;reusable-compact filename=&quot;spec_tests.py&quot;&gt; Run scoped conformance with <code>python sources/spec_tests.py --spec sources/spec.txt --program ./commonmark --pattern REGEX</code>. Verdict is the process exit code; output is diagnostic only. &lt;/reusable-compact&gt;</p>
+<p>&lt;reusable-compact filename=&quot;cmark.py&quot;&gt; Conformance harness adapter. Program mode pipes UTF-8 Markdown to the executable and captures return code, stdout, and stderr. &lt;/reusable-compact&gt;</p>
+<p>&lt;reusable-compact filename=&quot;normalize.py&quot;&gt; HTML comparison normalizer for conformance tests. Collapses insignificant HTML whitespace, normalizes attributes and entities, and preserves preformatted content. &lt;/reusable-compact&gt;</p>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>blocks.py</li><li>normalization.py</li><li>renderer.py</li><li>commonmark</li></ul>
+<p>SUMMARY: Implemented NUL and line-ending normalization, tab-stop-aware indentation, literal internal-tab preservation, and required tab-sensitive block rendering. Tabs suite: 11 passed. Local unit tests: 4 passed.</p>
+<p>BLOCKERS:</p>
+<ul><li>None</li></ul></article>
+</main>
+</body>
+</html>

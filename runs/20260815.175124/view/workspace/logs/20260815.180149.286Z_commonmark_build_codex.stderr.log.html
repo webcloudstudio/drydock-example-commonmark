@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/logs/20260815.180149.286Z_commonmark_build_codex.stderr.log</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/logs/20260815.180149.286Z_commonmark_build_codex.stderr.log</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../workspace/logs/20260815.180149.286Z_commonmark_build_codex.stderr.log">Raw file</a></div></header>
+<article class="doc"><pre>2026-08-15T18:04:47.642051Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.175124/build/commonmark/blocks.py:
+def remove_indent(line: str, columns: int) -&gt; str:
+    structural = expand_indentation(line)
+    remaining = structural[columns:] if len(structural) &gt;= columns else &quot;&quot;
+    consumed = len(line) - len(line.lstrip(&quot; \t&quot;))
+    if consumed == 0:
+        return line
+    source_prefix = line[:consumed]
+    if len(structural) &lt;= columns:
+        return &quot;&quot;
+    # Structural prefixes are only needed for decisions; once removed,
+    # retain the original suffix so tabs inside content remain literal.
+    source_column = 0
+    source_index = 0
+    while source_index &lt; len(source_prefix) and source_column &lt; columns:
+        source_column += 1 if source_prefix[source_index] == &quot; &quot; else 4 - (source_column % 4)
+        source_index += 1
+    return line[source_index:]
+2026-08-15T18:05:00.606740Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.175124/build/commonmark/blocks.py:
+                start = int(marker.group(2)[:-1]) if kind == &quot;ordered&quot; else None
+                items: list[Block] = []
+                while index &lt; len(lines_to_parse):
+</pre></article>
+</main>
+</body>
+</html>

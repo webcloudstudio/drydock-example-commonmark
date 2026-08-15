@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/LINEAGE.json</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/LINEAGE.json</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../workspace/targets/commonmark/LINEAGE.json">Raw file</a></div></header>
+<article class="doc"><pre>{
+  &quot;version&quot;: 1,
+  &quot;import&quot;: {
+    &quot;root&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.175124/sources&quot;,
+    &quot;format&quot;: &quot;markdown&quot;
+  },
+  &quot;sources&quot;: {
+    &quot;INSTRUCTIONS.md&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;5b151e3&quot;,
+          &quot;date&quot;: &quot;2026-08-15&quot;,
+          &quot;hash&quot;: &quot;4bd6e705f869e15d036f941550352cd0bc55c8efbe78bdc4cceedd3f4a067b93&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;commonmark-parser&quot;,
+              &quot;text&quot;: &quot;Build a CommonMark 0.31.2 parser from the supplied specification. The parser reads Markdown from\nstandard input and writes HTML to standard output. Do not use a public Markdown implementation.&quot;,
+              &quot;stories&quot;: [
+                &quot;architecture&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;normalize-input&quot;,
+              &quot;text&quot;: &quot;CommonMark parsing is two phases: resolve **block structure** first, then run **inline parsing**\nover the block contents. Implement in that order.&quot;,
+              &quot;stories&quot;: [
+                &quot;block-input&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-blocks&quot;,
+              &quot;text&quot;: &quot;1. Blocks: paragraphs, thematic breaks, ATX headings, setext headings, indented code, fenced\ncode, HTML blocks, link reference definitions, block quotes, then lists \u2014 lists are the\nhardest block construct, with lazy continuation, nesting, and tightness.&quot;,
+              &quot;stories&quot;: [
+                &quot;block-leaves&quot;,
+                &quot;block-references&quot;,
+                &quot;block-quotes&quot;,
+                &quot;block-lists&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-inlines&quot;,
+              &quot;text&quot;: &quot;2. Inlines: backslash escapes, entity and numeric references, code spans, emphasis and strong\nemphasis (the delimiter-run algorithm), links and images, autolinks, raw HTML, hard breaks.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline-escapes&quot;,
+                &quot;inline-code-breaks&quot;,
+                &quot;inline-emphasis&quot;,
+                &quot;inline-links&quot;,
+                &quot;inline-html-autolinks&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;follow-parsing-strategy&quot;,
+              &quot;text&quot;: &quot;The specification text is normative and contains the algorithms. The \&quot;Appendix: A parsing\nstrategy\&quot; section describes the reference implementation&#x27;s approach; follow it directly rather\nthan reinventing the rules.&quot;,
+              &quot;stories&quot;: [
+                &quot;html-renderer&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;standard-io&quot;,
+              &quot;text&quot;: &quot;The parser reads Markdown from\nstandard input and writes HTML to standard output.&quot;,
+              &quot;stories&quot;: [
+                &quot;cli-executable&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;scoped-conformance-checks&quot;,
+              &quot;text&quot;: &quot;Parser implementation stories may run `spec_tests.py` with explicit section selectors covering\nthe story&#x27;s complete scope. A selector must name headings that own examples, such as `ATX\nheadings` or `List items`. Chapter headings such as `Leaf blocks`, `Container blocks`, and\n`Characters and lines` own no examples; selecting them can exit zero without testing anything.&quot;,
+              &quot;stories&quot;: [
+                &quot;verification-scoped&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;full-conformance-suite&quot;,
+              &quot;text&quot;: &quot;Create one terminal verification story that:\n\n- depends on every parser implementation story;\n- creates `full_test.sh` as a POSIX-compatible wrapper for the unfiltered suite;\n- contains the only `Suite: full` acceptance check;\n- runs `sh full_test.sh`, prints captured standard output and standard error, and asserts only\n  `result.returncode == 0`; and\n- carries `Sea Trials: st-001`.&quot;,
+              &quot;stories&quot;: [
+                &quot;verification-full&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;cmark.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;5b151e3&quot;,
+          &quot;date&quot;: &quot;2026-08-15&quot;,
+          &quot;hash&quot;: &quot;c5fb45e7c64fd7670b2a3c49a151e46f4af9d0ad3004bedb37ecf9cdc34d2f00&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;pipe-through-program&quot;,
+              &quot;text&quot;: &quot;def pipe_through_prog(prog, text):\n    p1 = Popen(prog.split(), stdout=PIPE, stdin=PIPE, stderr=PIPE)\n    [result, err] = p1.communicate(input=text.encode(&#x27;utf-8&#x27;))\n    return [p1.returncode, result, err]&quot;,
+              &quot;stories&quot;: [
+                &quot;cli-executable&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;use-cmark-library&quot;,
+              &quot;text&quot;: &quot;def use_library(lib, text):\n    textbytes = text.encode(&#x27;utf-8&#x27;)\n    textlen = len(textbytes)\n    return [0, lib(textbytes, textlen, 0), &#x27;&#x27;]&quot;,
+              &quot;stories&quot;: [
+                &quot;html-renderer&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;select-library-by-platform&quot;,
+              &quot;text&quot;: &quot;if sysname == &#x27;Darwin&#x27;:\n    libname = \&quot;libcmark.dylib\&quot;\nelif sysname == &#x27;Windows&#x27;:\n    libname = \&quot;cmark.dll\&quot;\nelse:\n    libname = \&quot;libcmark.so\&quot;&quot;,
+              &quot;stories&quot;: [
+                &quot;architecture&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;configure-library-path&quot;,
+              &quot;text&quot;: &quot;if library_dir:\n    libpath = os.path.join(library_dir, libname)\nelse:\n    libpath = os.path.join(\&quot;build\&quot;, \&quot;src\&quot;, libname)&quot;,
+              &quot;stories&quot;: [
+                &quot;architecture&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;expose-cmark-converter&quot;,
+              &quot;text&quot;: &quot;markdown = cmark.cmark_markdown_to_html\nmarkdown.restype = c_char_p\nmarkdown.argtypes = [c_char_p, c_long, c_int]\nself.to_html = lambda x: use_library(markdown, x)&quot;,
+              &quot;stories&quot;: [
+                &quot;html-renderer&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;normalize.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;5b151e3&quot;,
+          &quot;date&quot;: &quot;2026-08-15&quot;,
+          &quot;hash&quot;: &quot;94a9dd253907e3dab7c02fc11e934f06112dcf0f3804255d09d732c8c7c4b5f4&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;normalize-html-whitespace&quot;,
+              &quot;text&quot;: &quot;Multiple inner whitespaces are collapsed to a single space (except\n        in pre tags):\n\n        &gt;&gt;&gt; normalize_html(\&quot;&lt;p&gt;a  \\t b&lt;/p&gt;\&quot;)\n        &#x27;&lt;p&gt;a b&lt;/p&gt;&#x27;\n\n    * Whitespace surrounding block-level tags is removed.\n\n        &gt;&gt;&gt; normalize_html(\&quot;&lt;p&gt;a  b&lt;/p&gt;\&quot;)\n        &#x27;&lt;p&gt;a b&lt;/p&gt;&#x27;\n\n        &gt;&gt;&gt; normalize_html(\&quot; &lt;p&gt;a  b&lt;/p&gt; \&quot;)\n        &#x27;&lt;p&gt;a b&lt;/p&gt;&#x27;&quot;,
+              &quot;stories&quot;: [
+                &quot;block-input&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;normalize-html-markup&quot;,
+              &quot;text&quot;: &quot;* Self-closing tags are converted to open tags.\n\n        &gt;&gt;&gt; normalize_html(\&quot;&lt;br /&gt;\&quot;)\n        &#x27;&lt;br&gt;&#x27;\n\n    * Attributes are sorted and lowercased.\n\n        &gt;&gt;&gt; normalize_html(&#x27;&lt;a title=\&quot;bar\&quot; HREF=\&quot;foo\&quot;&gt;x&lt;/a&gt;&#x27;)\n        &#x27;&lt;a href=\&quot;foo\&quot; title=\&quot;bar\&quot;&gt;x&lt;/a&gt;&#x27;&quot;,
+              &quot;stories&quot;: [
+                &quot;html-renderer&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;decode-html-references&quot;,
+              &quot;text&quot;: &quot;* References are converted to unicode, except that &#x27;&lt;&#x27;, &#x27;&gt;&#x27;, &#x27;&amp;&#x27;, and\n      &#x27;\&quot;&#x27; are rendered using entities.\n\n        &gt;&gt;&gt; normalize_html(\&quot;&amp;forall;&amp;amp;&amp;gt;&amp;lt;&amp;quot;\&quot;)\n        &#x27;\\u2200&amp;amp;&amp;gt;&amp;lt;&amp;quot;&#x27;&quot;,
+              &quot;stories&quot;: [
+                &quot;inline-escapes&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;handle-normalization-errors&quot;,
+              &quot;text&quot;: &quot;Normalization error:&quot;,
+              &quot;stories&quot;: [
+                &quot;cli-boundaries&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;spec.txt&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;5b151e3&quot;,
+          &quot;date&quot;: &quot;2026-08-15&quot;,
+          &quot;hash&quot;: &quot;43fad3e0ac5190a3b0bc6a41f7b1a853201a26ec2e6b74871f5d96239a8c34cf&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;parse-document-in-phases&quot;,
+              &quot;text&quot;: &quot;Parsing has two phases:&quot;,
+              &quot;stories&quot;: [
+                &quot;architecture&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;normalize-input&quot;,
+              &quot;text&quot;: &quot;Any sequence of [characters] is a valid CommonMark\ndocument.&quot;,
+              &quot;stories&quot;: [
+                &quot;block-input&quot;,
+                &quot;cli-boundaries&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-leaf-blocks&quot;,
+              &quot;text&quot;: &quot;This section describes the different kinds of leaf block that make up a\nMarkdown document.&quot;,
+              &quot;stories&quot;: [
+                &quot;block-leaves&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;resolve-link-references&quot;,
+              &quot;text&quot;: &quot;A [link reference definition](@)\nconsists of a [link label], optionally preceded by up to three spaces of\nindentation, followed\nby a colon (`:`), optional spaces or tabs (including up to one\n[line ending]), a [link destination],\noptional spaces or tabs (including up to one\n[line ending]), and an optional [link\ntitle], which if it is present must be separated\nfrom the [link destination] by spaces or tabs.&quot;,
+              &quot;stories&quot;: [
+                &quot;block-references&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-block-quotes&quot;,
+              &quot;text&quot;: &quot;The following rules define [block quotes]:&quot;,
+              &quot;stories&quot;: [
+                &quot;block-quotes&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-lists&quot;,
+              &quot;text&quot;: &quot;A [list](@) is a sequence of one or more\nlist items [of the same type].&quot;,
+              &quot;stories&quot;: [
+                &quot;block-lists&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-escapes-and-references&quot;,
+              &quot;text&quot;: &quot;Any ASCII punctuation character may be backslash-escaped:&quot;,
+              &quot;stories&quot;: [
+                &quot;inline-escapes&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-code-and-breaks&quot;,
+              &quot;text&quot;: &quot;A [code span](@) begins with a backtick string and ends with\na backtick string of equal length.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline-code-breaks&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-emphasis&quot;,
+              &quot;text&quot;: &quot;The following rules define emphasis and strong emphasis:&quot;,
+              &quot;stories&quot;: [
+                &quot;inline-emphasis&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-links-and-images&quot;,
+              &quot;text&quot;: &quot;There are two basic kinds of links in Markdown. In [inline links] the\ndestination and title are given immediately after the link text. In\n[reference links] the destination and title are defined elsewhere in the\ndocument.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline-links&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-html-and-autolinks&quot;,
+              &quot;text&quot;: &quot;[Autolink](@)s are absolute URIs and email addresses inside\n`&lt;` and `&gt;`.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline-html-autolinks&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;render-html&quot;,
+              &quot;text&quot;: &quot;HTML is capable of representing the structural distinctions we need to make, and the\nchoice of HTML for the tests makes it possible to run the tests against an\nimplementation without writing an abstract syntax tree renderer.&quot;,
+              &quot;stories&quot;: [
+                &quot;html-renderer&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;run-conformance-tests&quot;,
+              &quot;text&quot;: &quot;These are intended to double as conformance tests.&quot;,
+              &quot;stories&quot;: [
+                &quot;verification-scoped&quot;,
+                &quot;verification-full&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;spec_tests.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;5b151e3&quot;,
+          &quot;date&quot;: &quot;2026-08-15&quot;,
+          &quot;hash&quot;: &quot;9db1ea4a3ee79c5ec74eebc09c5985eb252427e8d9d19ef45e5cc3f2ae410855&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;run-conformance-tests&quot;,
+              &quot;text&quot;: &quot;Run cmark tests.&quot;,
+              &quot;stories&quot;: [
+                &quot;verification-full&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;scope-test-selection&quot;,
+              &quot;text&quot;: &quot;limit to sections matching regex pattern&quot;,
+              &quot;stories&quot;: [
+                &quot;verification-scoped&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;compare-normalized-output&quot;,
+              &quot;text&quot;: &quot;if normalize:\n        actual_html = normalize_html(actual_html) + &#x27;\\n&#x27;\n        expected_html = normalize_html(expected_html) + &#x27;\\n&#x27;&quot;,
+              &quot;stories&quot;: [
+                &quot;verification-scoped&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;dump-tests-json&quot;,
+              &quot;text&quot;: &quot;dump tests in JSON format&quot;,
+              &quot;stories&quot;: [
+                &quot;verification-scoped&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;debug-normalization&quot;,
+              &quot;text&quot;: &quot;filter stdin through normalizer for testing&quot;,
+              &quot;stories&quot;: [
+                &quot;block-input&quot;,
+                &quot;verification-scoped&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;track-test-results&quot;,
+              &quot;text&quot;: &quot;track which test cases pass/fail in the given JSON file and only report changes&quot;,
+              &quot;stories&quot;: [
+                &quot;verification-scoped&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+</pre></article>
+</main>
+</body>
+</html>

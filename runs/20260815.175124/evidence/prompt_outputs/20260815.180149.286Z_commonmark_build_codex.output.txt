@@ -1,0 +1,29 @@
+<reusable-compact filename="spec.txt">
+CommonMark 0.31.2 UTF-8 Markdown-to-HTML conformance specification. Input supports Unicode, LF/CRLF/CR line endings, tab-stop indentation, literal internal tabs, and U+0000 → U+FFFD.
+</reusable-compact>
+
+<reusable-compact filename="spec_tests.py">
+Run scoped conformance with `python sources/spec_tests.py --spec sources/spec.txt --program ./commonmark --pattern REGEX`. Verdict is the process exit code; output is diagnostic only.
+</reusable-compact>
+
+<reusable-compact filename="cmark.py">
+Conformance harness adapter. Program mode pipes UTF-8 Markdown to the executable and captures return code, stdout, and stderr.
+</reusable-compact>
+
+<reusable-compact filename="normalize.py">
+HTML comparison normalizer for conformance tests. Collapses insignificant HTML whitespace, normalizes attributes and entities, and preserves preformatted content.
+</reusable-compact>
+
+RESULT: SUCCESS
+
+FILES CHANGED:
+- blocks.py
+- normalization.py
+- renderer.py
+- commonmark
+
+SUMMARY:
+Implemented NUL and line-ending normalization, tab-stop-aware indentation, literal internal-tab preservation, and required tab-sensitive block rendering. Tabs suite: 11 passed. Local unit tests: 4 passed.
+
+BLOCKERS:
+- None

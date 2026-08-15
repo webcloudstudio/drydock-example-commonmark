@@ -1,0 +1,17 @@
+Drydock 0.1.8  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Drydock status — workspace
+
+Target: commonmark
+   Phase:     Implement
+   State:     Failed: programmatic acceptance failed: block-references-container
+   Detail:    5 imported · 16 authored · metadata building
+   Analysis:  Questions · 15 stories · 1 questions · 0 blockers
+   Plan:      approved · 3/16 verified · 12 pending
+   Review:    BLOCKERS.md none · 1 questionnaires
+   Next Step: drydock run quarterdeck commonmark
+   8-15:      ✅  drydock build status commonmark
+   8-15:      ❌  drydock build commonmark --override --repair-attempts 6
+   8-15:      ✅  drydock build status commonmark
+   8-15:      ✅  drydock plan commonmark --override
+   8-15:      ✅  drydock analyze commonmark
+

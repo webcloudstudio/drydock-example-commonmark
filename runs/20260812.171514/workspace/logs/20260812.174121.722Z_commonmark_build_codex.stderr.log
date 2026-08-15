@@ -1,9 +1,0 @@
-2026-08-12T17:43:30.904240Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260812.171514/build/commonmark/parser/blocks.py:
-        if len(line) - len(stripped) <= 3 and (html_start or complete_tag):
-            flush(); content = [line]; i += 1
-            if html_start and re.match(r"<\(?:pre|script|style|textarea)", stripped, re.I):
-                tag = re.match(r"<\s*(pre|script|style|textarea)", stripped, re.I).group(1)
-                while i < len(lines) and not re.search(r"</" + tag + r"\s*>", lines[i], re.I): content.append(lines[i]); i += 1
-                if i < len(lines): content.append(lines[i]); i += 1
-            elif stripped.startswith("<!--") and "-->" not in stripped:
-                while i < len(lines) and "-->" not in content[-1]: content.append(lines[i]); i += 1

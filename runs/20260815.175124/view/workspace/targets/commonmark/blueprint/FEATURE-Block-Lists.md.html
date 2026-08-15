@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Block-Lists.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Block-Lists.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Block-Lists.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Block Lists</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260815 V1</td></tr><tr><td>Description</td><td>Parse nested bullet and ordered lists with CommonMark tightness and lazy continuation.</td></tr><tr><td>Depends On</td><td>FEATURE-Block-Quotes.md, FEATURE-Block-References.md</td></tr><tr><td>Provides</td><td>list nodes, list item nodes, tight and loose list state</td></tr><tr><td>Consumes</td><td>block quote nodes, leaf blocks, document-wide link reference definition map</td></tr></tbody></table></div>
+<h2>Workflow</h2>
+<p>List parsing consumes normalized input after block quotes and reference definitions are available. Recognize bullet and ordered markers, determine item content indentation, recursively parse contained blocks, and group adjacent items only when their marker types match.</p>
+<p>Track list tightness from blank lines between items and between directly contained blocks. Preserve ordered-list start numbers, empty items, nested lists, lazy paragraph continuation, and delimiter changes. Render paragraph wrappers according to the computed tight or loose state.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC block-lists-conformance ===<br>Intent: The implementation passes the authoritative CommonMark examples for list items and lists owned by this story.<br>Suite: scoped</p>
+<p>import subprocess</p>
+<p>result = subprocess.run( [ &quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, r&quot;^(List items|Lists)$&quot;, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr) assert result.returncode == 0 === END AC block-lists-conformance ===</p>
+<p>=== AC block-lists-selector ===<br>Intent: The list conformance selector executes the owned specification sections successfully.<br>Suite: scoped</p>
+<p>import subprocess</p>
+<p>sections = r&quot;^(List items|Lists)$&quot; result = subprocess.run( [ &quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, sections, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr) assert result.returncode == 0 === END AC block-lists-selector ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not invoke <code>full_test.sh</code> from this story.</li><li>Preserve CommonMark block-before-inline parsing.</li><li>Do not use a public Markdown implementation.</li></ul></article>
+</main>
+</body>
+</html>

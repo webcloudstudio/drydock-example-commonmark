@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20260815.180703.199Z_commonmark_build_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20260815.180703.199Z_commonmark_build_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20260815.180703.199Z_commonmark_build_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>RESULT: FAILED
+
+FILES CHANGED:
+- blocks.py
+- renderer.py
+
+SUMMARY:
+Implemented leaf-block recognition for thematic breaks, headings, fenced/indented code, and raw HTML. Architecture tests pass. Scoped conformance improved to 131/151 passing examples, but declared acceptance checks still fail.
+
+BLOCKERS:
+- Remaining failures involve container/list laziness and inline precedence interactions.
+
+FAILURE_SUMMARY: Scoped leaf conformance is incomplete.
+FAILURE_DETAIL: Thematic, code, and HTML scoped checks still return nonzero due to unresolved container and inline parsing behavior. Further parser work is required before rerunning acceptance.</pre></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Inline-Emphasis.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Inline-Emphasis.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Inline-Emphasis.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Inline Emphasis</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260815 V1</td></tr><tr><td>Description</td><td>Parse emphasis and strong emphasis with the CommonMark delimiter-run algorithm.</td></tr><tr><td>Depends On</td><td>FEATURE-Inline-Code-Breaks.md</td></tr><tr><td>Provides</td><td>emphasis and strong-emphasis inline nodes</td></tr><tr><td>Consumes</td><td>code spans, escaped inline content, block tree</td></tr></tbody></table></div>
+<h2>Workflow</h2>
+<p>Build delimiter runs for asterisks and underscores while parsing inline content. Compute left- and right-flanking behavior using Unicode whitespace and punctuation, apply intraword restrictions for underscores, and resolve matching delimiters with the CommonMark delimiter-stack algorithm.</p>
+<p>Support single and double emphasis, nested emphasis, rule-of-three behavior, precedence against code spans and other inline constructs, and unmatched delimiter runs. Preserve literal delimiters when no valid pairing exists.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC inline-emphasis-conformance ===<br>Intent: The implementation passes the authoritative CommonMark examples for emphasis and strong emphasis owned by this story.<br>Suite: scoped</p>
+<p>import subprocess</p>
+<p>result = subprocess.run( [ &quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, r&quot;^Emphasis and strong emphasis$&quot;, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr) assert result.returncode == 0 === END AC inline-emphasis-conformance ===</p>
+<p>=== AC inline-emphasis-selector ===<br>Intent: The emphasis conformance selector executes the complete owned specification section successfully.<br>Suite: scoped</p>
+<p>import subprocess</p>
+<p>section = r&quot;^Emphasis and strong emphasis$&quot; result = subprocess.run( [ &quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, section, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr) assert result.returncode == 0 === END AC inline-emphasis-selector ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Apply delimiter matching only after code spans, links, images, and raw HTML precedence is respected.</li><li>Do not allow intraword underscore emphasis.</li><li>Do not invoke <code>full_test.sh</code> from this story.</li></ul></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<requirement name="parse-document-in-phases" stories="architecture">
+Parsing has two phases:
+</requirement>
+<requirement name="normalize-input" stories="block-input,cli-boundaries">
+Any sequence of [characters] is a valid CommonMark
+document.
+</requirement>
+<requirement name="parse-leaf-blocks" stories="block-leaves">
+This section describes the different kinds of leaf block that make up a
+Markdown document.
+</requirement>
+<requirement name="resolve-link-references" stories="block-references">
+A [link reference definition](@)
+consists of a [link label], optionally preceded by up to three spaces of
+indentation, followed
+by a colon (`:`), optional spaces or tabs (including up to one
+[line ending]), a [link destination],
+optional spaces or tabs (including up to one
+[line ending]), and an optional [link
+title], which if it is present must be separated
+from the [link destination] by spaces or tabs.
+</requirement>
+<requirement name="parse-block-quotes" stories="block-quotes">
+The following rules define [block quotes]:
+</requirement>
+<requirement name="parse-lists" stories="block-lists">
+A [list](@) is a sequence of one or more
+list items [of the same type].
+</requirement>
+<requirement name="parse-escapes-and-references" stories="inline-escapes">
+Any ASCII punctuation character may be backslash-escaped:
+</requirement>
+<requirement name="parse-code-and-breaks" stories="inline-code-breaks">
+A [code span](@) begins with a backtick string and ends with
+a backtick string of equal length.
+</requirement>
+<requirement name="parse-emphasis" stories="inline-emphasis">
+The following rules define emphasis and strong emphasis:
+</requirement>
+<requirement name="parse-links-and-images" stories="inline-links">
+There are two basic kinds of links in Markdown. In [inline links] the
+destination and title are given immediately after the link text. In
+[reference links] the destination and title are defined elsewhere in the
+document.
+</requirement>
+<requirement name="parse-html-and-autolinks" stories="inline-html-autolinks">
+[Autolink](@)s are absolute URIs and email addresses inside
+`<` and `>`.
+</requirement>
+<requirement name="render-html" stories="html-renderer">
+HTML is capable of representing the structural distinctions we need to make, and the
+choice of HTML for the tests makes it possible to run the tests against an
+implementation without writing an abstract syntax tree renderer.
+</requirement>
+<requirement name="run-conformance-tests" stories="verification-scoped,verification-full">
+These are intended to double as conformance tests.
+</requirement>
+<unattached story="cli-executable"/>

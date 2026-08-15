@@ -1,0 +1,6 @@
+2026-08-15T18:20:51.255617Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.175124/build/commonmark/references.py:
+    text = first[match.start() + len(first[match.start():match.start() + len(first[match.start():])]) if False else 0:]
+    # Remove only the permitted indentation, retaining the label's source.
+    text = first[len(first) - len(first.lstrip(" \t"):)]
+    text = first[len(first) - len(first.lstrip(" \t")):]
+    text = first[first.index("["):]

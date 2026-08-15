@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Inline-Links.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Inline-Links.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Inline-Links.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Inline Links</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260815 V1</td></tr><tr><td>Description</td><td>Parse inline, reference, collapsed, and shortcut links together with images.</td></tr><tr><td>Depends On</td><td>FEATURE-Inline-Emphasis.md, FEATURE-Block-References.md</td></tr><tr><td>Provides</td><td>links and images with destinations, titles, references, and alt text</td></tr><tr><td>Consumes</td><td>emphasis inline nodes, code spans, document-wide link reference definition map</td></tr></tbody></table></div>
+<h2>Workflow</h2>
+<p>Recognize bracketed link text and image descriptions before resolving inline, full-reference, collapsed-reference, and shortcut forms. Parse balanced destinations, angle-bracket destinations, optional titles, escapes, entities, and permitted line endings.</p>
+<p>Resolve labels using the document-wide first-definition map. Prevent nested links while allowing nested images, and construct image alt text from the plain textual content of the description. Preserve literal brackets and source text when a candidate does not satisfy the link grammar.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC inline-links-conformance ===<br>Intent: The implementation passes the authoritative CommonMark examples for links and images owned by this story.<br>Suite: scoped</p>
+<p>import subprocess</p>
+<p>result = subprocess.run( [ &quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, r&quot;^(Links|Images)$&quot;, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr) assert result.returncode == 0 === END AC inline-links-conformance ===</p>
+<p>=== AC inline-links-selector ===<br>Intent: The link and image conformance selector executes the complete owned specification sections successfully.<br>Suite: scoped</p>
+<p>import subprocess</p>
+<p>sections = r&quot;^(Links|Images)$&quot; result = subprocess.run( [ &quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, sections, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr) assert result.returncode == 0 === END AC inline-links-selector ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not resolve references before block parsing has collected document-wide definitions.</li><li>Do not permit links nested inside links.</li><li>Preserve image descriptions as plain text for <code>alt</code> attributes.</li><li>Do not invoke <code>full_test.sh</code> from this story.</li></ul></article>
+</main>
+</body>
+</html>

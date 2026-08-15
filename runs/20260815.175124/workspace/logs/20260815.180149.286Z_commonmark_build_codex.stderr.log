@@ -1,0 +1,22 @@
+2026-08-15T18:04:47.642051Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.175124/build/commonmark/blocks.py:
+def remove_indent(line: str, columns: int) -> str:
+    structural = expand_indentation(line)
+    remaining = structural[columns:] if len(structural) >= columns else ""
+    consumed = len(line) - len(line.lstrip(" \t"))
+    if consumed == 0:
+        return line
+    source_prefix = line[:consumed]
+    if len(structural) <= columns:
+        return ""
+    # Structural prefixes are only needed for decisions; once removed,
+    # retain the original suffix so tabs inside content remain literal.
+    source_column = 0
+    source_index = 0
+    while source_index < len(source_prefix) and source_column < columns:
+        source_column += 1 if source_prefix[source_index] == " " else 4 - (source_column % 4)
+        source_index += 1
+    return line[source_index:]
+2026-08-15T18:05:00.606740Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.175124/build/commonmark/blocks.py:
+                start = int(marker.group(2)[:-1]) if kind == "ordered" else None
+                items: list[Block] = []
+                while index < len(lines_to_parse):

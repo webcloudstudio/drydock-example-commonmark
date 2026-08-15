@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/test_references.py</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/test_references.py</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../build/commonmark/test_references.py">Raw file</a></div></header>
+<article class="doc"><pre>import unittest
+
+from commonmark import parse, render
+
+
+class ReferenceDefinitionTests(unittest.TestCase):
+    def test_labels_use_casefold_and_collapsed_whitespace(self):
+        document = parse(&quot;[  FOO\n bar ]: /url\n\n[foo bar]\n&quot;)
+        self.assertEqual(render(document), &#x27;&lt;p&gt;&lt;a href=&quot;/url&quot;&gt;foo bar&lt;/a&gt;&lt;/p&gt;\n&#x27;)
+
+    def test_definition_is_document_wide_and_first_wins(self):
+        document = parse(&quot;[foo]\n\n&gt; [foo]: /first\n&gt; [foo]: /second\n&quot;)
+        self.assertEqual(render(document), &#x27;&lt;p&gt;&lt;a href=&quot;/first&quot;&gt;foo&lt;/a&gt;&lt;/p&gt;\n&lt;blockquote&gt;\n\n&lt;/blockquote&gt;\n&#x27;)
+
+    def test_invalid_definition_remains_visible(self):
+        document = parse(&quot;[foo]: &lt;bar&gt;(baz)\n\n[foo]\n&quot;)
+        self.assertEqual(render(document), &#x27;&lt;p&gt;[foo]: &lt;bar&gt;(baz)&lt;/p&gt;\n&lt;p&gt;[foo]&lt;/p&gt;\n&#x27;)
+
+    def test_multiline_title_is_preserved(self):
+        document = parse(&quot;[foo]: /url &#x27;\ntitle\nline1\n&#x27;\n\n[foo]\n&quot;)
+        self.assertIn(&#x27;title=&quot;\ntitle\nline1\n&quot;&#x27;, render(document))
+
+    def test_escaped_destination_parenthesis_is_not_structural(self):
+        document = parse(&quot;[foo]: /url\\)\n\n[foo]\n&quot;)
+        self.assertEqual(render(document), &#x27;&lt;p&gt;&lt;a href=&quot;/url)&quot;&gt;foo&lt;/a&gt;&lt;/p&gt;\n&#x27;)
+
+    def test_definition_inside_list_is_document_wide(self):
+        document = parse(&quot;[foo]\n\n- [foo]: /url\n&quot;)
+        self.assertEqual(render(document), &#x27;&lt;p&gt;&lt;a href=&quot;/url&quot;&gt;foo&lt;/a&gt;&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;&lt;/li&gt;\n&lt;/ul&gt;\n&#x27;)
+
+
+if __name__ == &quot;__main__&quot;:
+    unittest.main()
+</pre></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<requirement name="pipe-through-program" stories="cli-executable">
+def pipe_through_prog(prog, text):
+    p1 = Popen(prog.split(), stdout=PIPE, stdin=PIPE, stderr=PIPE)
+    [result, err] = p1.communicate(input=text.encode('utf-8'))
+    return [p1.returncode, result, err]
+</requirement>
+<requirement name="use-cmark-library" stories="html-renderer">
+def use_library(lib, text):
+    textbytes = text.encode('utf-8')
+    textlen = len(textbytes)
+    return [0, lib(textbytes, textlen, 0), '']
+</requirement>
+<requirement name="select-library-by-platform" stories="architecture">
+if sysname == 'Darwin':
+    libname = "libcmark.dylib"
+elif sysname == 'Windows':
+    libname = "cmark.dll"
+else:
+    libname = "libcmark.so"
+</requirement>
+<requirement name="configure-library-path" stories="architecture">
+if library_dir:
+    libpath = os.path.join(library_dir, libname)
+else:
+    libpath = os.path.join("build", "src", libname)
+</requirement>
+<requirement name="expose-cmark-converter" stories="html-renderer">
+markdown = cmark.cmark_markdown_to_html
+markdown.restype = c_char_p
+markdown.argtypes = [c_char_p, c_long, c_int]
+self.to_html = lambda x: use_library(markdown, x)
+</requirement>
+<unattached story="block-input"/>
+<unattached story="block-leaves"/>
+<unattached story="block-references"/>
+<unattached story="block-quotes"/>
+<unattached story="block-lists"/>
+<unattached story="inline-escapes"/>
+<unattached story="inline-code-breaks"/>
+<unattached story="inline-emphasis"/>
+<unattached story="inline-links"/>
+<unattached story="inline-html-autolinks"/>
+<unattached story="cli-boundaries"/>
+<unattached story="verification-scoped"/>
+<unattached story="verification-full"/>

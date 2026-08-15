@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/inlines.py</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/inlines.py</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../build/commonmark/inlines.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Inline parsing boundary, supplied with references after block parsing.&quot;&quot;&quot;
+
+from dataclasses import dataclass
+
+from references import ReferenceCollector
+
+
+@dataclass(frozen=True)
+class Inline:
+    kind: str
+    content: str
+
+
+def parse_inlines(text: str, references: ReferenceCollector) -&gt; tuple[Inline, ...]:
+    &quot;&quot;&quot;Return inline source nodes; detailed CommonMark rules grow in this phase.&quot;&quot;&quot;
+    del references
+    return (Inline(&quot;text&quot;, text),) if text else ()
+</pre></article>
+</main>
+</body>
+</html>

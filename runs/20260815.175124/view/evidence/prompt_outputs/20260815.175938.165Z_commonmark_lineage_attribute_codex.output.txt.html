@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20260815.175938.165Z_commonmark_lineage_attribute_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20260815.175938.165Z_commonmark_lineage_attribute_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20260815.175938.165Z_commonmark_lineage_attribute_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>&lt;requirement name=&quot;run-conformance-tests&quot; stories=&quot;verification-full&quot;&gt;
+Run cmark tests.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;scope-test-selection&quot; stories=&quot;verification-scoped&quot;&gt;
+limit to sections matching regex pattern
+&lt;/requirement&gt;
+&lt;requirement name=&quot;compare-normalized-output&quot; stories=&quot;verification-scoped&quot;&gt;
+if normalize:
+        actual_html = normalize_html(actual_html) + &#x27;\n&#x27;
+        expected_html = normalize_html(expected_html) + &#x27;\n&#x27;
+&lt;/requirement&gt;
+&lt;requirement name=&quot;dump-tests-json&quot; stories=&quot;verification-scoped&quot;&gt;
+dump tests in JSON format
+&lt;/requirement&gt;
+&lt;requirement name=&quot;debug-normalization&quot; stories=&quot;block-input,verification-scoped&quot;&gt;
+filter stdin through normalizer for testing
+&lt;/requirement&gt;
+&lt;requirement name=&quot;track-test-results&quot; stories=&quot;verification-scoped&quot;&gt;
+track which test cases pass/fail in the given JSON file and only report changes
+&lt;/requirement&gt;
+&lt;unattached story=&quot;architecture&quot;/&gt;
+&lt;unattached story=&quot;block-leaves&quot;/&gt;
+&lt;unattached story=&quot;block-references&quot;/&gt;
+&lt;unattached story=&quot;block-quotes&quot;/&gt;
+&lt;unattached story=&quot;block-lists&quot;/&gt;
+&lt;unattached story=&quot;inline-escapes&quot;/&gt;
+&lt;unattached story=&quot;inline-code-breaks&quot;/&gt;
+&lt;unattached story=&quot;inline-emphasis&quot;/&gt;
+&lt;unattached story=&quot;inline-links&quot;/&gt;
+&lt;unattached story=&quot;inline-html-autolinks&quot;/&gt;
+&lt;unattached story=&quot;html-renderer&quot;/&gt;
+&lt;unattached story=&quot;cli-executable&quot;/&gt;
+&lt;unattached story=&quot;cli-boundaries&quot;/&gt;</pre></article>
+</main>
+</body>
+</html>

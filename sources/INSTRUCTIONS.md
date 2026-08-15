@@ -1,15 +1,18 @@
 # Build Instructions: CommonMark Parser
 
-Build a CommonMark 0.31.2 parser from the supplied specification. Read Markdown from standard
-input and write HTML to standard output. Do not use a public Markdown implementation.
+Build a CommonMark 0.31.2 parser from the supplied specification. The parser reads Markdown from
+standard input and writes HTML to standard output. Do not use a public Markdown implementation.
 
-The sole definition of product success is `sh full_test.sh` returning exit code `0`.
-`full_test.sh` runs the complete, unfiltered supplied CommonMark suite. Treat the suite runner's
-exit status as the verdict; do not parse or hardcode its printed tally.
+Product acceptance is `sh full_test.sh` returning exit code `0`. The script runs the complete,
+unfiltered supplied CommonMark suite. Its exit status is the verdict; do not parse or hardcode its
+printed tally.
 
 `sources/INSTRUCTIONS.md` is imported specification prose. It is not staged into the completed
 application. The runtime conformance assets are only `spec.txt`, `spec_tests.py`, `cmark.py`, and
 `normalize.py`.
+
+Create a concise project `README.md` describing the standard-input/standard-output interface.
+README content is not an acceptance criterion and does not require a documentation story.
 
 ## Implementation Guidance
 
@@ -28,23 +31,19 @@ than reinventing the rules.
 
 ## Acceptance
 
-Do not create acceptance checks asserting that imported or staged files merely exist. Do not
-create a scoped check by invoking `full_test.sh`; it is intentionally full-suite only. Parser
-implementation stories may run the supplied harness with explicit section selectors that cover
-the whole story scope.
+Parser implementation stories may run `spec_tests.py` with explicit section selectors covering
+the story's complete scope. A selector must name headings that own examples, such as `ATX
+headings` or `List items`. Chapter headings such as `Leaf blocks`, `Container blocks`, and
+`Characters and lines` own no examples; selecting them can exit zero without testing anything.
 
-A section selector must select examples. `spec.txt` nests example-bearing headings such as
-`ATX headings` and `List items` under chapter titles such as `Leaf blocks`, `Container blocks`,
-and `Characters and lines`; the chapter titles own no examples of their own, so a selector
-naming one matches nothing, exits zero, and proves nothing. Select on the headings that own
-examples, and cover a chapter by naming all of them.
+Create one terminal verification story that:
 
-The final verification story depends on all parser stories, creates `full_test.sh`, and has
-exactly one terminal `Suite: full` acceptance check. The check prints captured standard output
-and standard error and asserts only `result.returncode == 0`. It carries `Sea Trials: st-001`.
+- depends on every parser implementation story;
+- creates `full_test.sh` as a POSIX-compatible wrapper for the unfiltered suite;
+- contains the only `Suite: full` acceptance check;
+- runs `sh full_test.sh`, prints captured standard output and standard error, and asserts only
+  `result.returncode == 0`; and
+- carries `Sea Trials: st-001`.
 
-Do not add separate verification stories for script presence, focused verification, staged
-assets, or complete verification.
-
-Deliver a concise project `README.md` documenting the standard-input/standard-output interface
-and the `sh full_test.sh` command.
+Do not invoke `full_test.sh` from scoped checks. Do not create file-presence or staged-asset
+acceptance checks, or additional verification stories.

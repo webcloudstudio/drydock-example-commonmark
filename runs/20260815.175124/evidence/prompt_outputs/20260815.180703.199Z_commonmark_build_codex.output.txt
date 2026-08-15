@@ -1,0 +1,14 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- blocks.py
+- renderer.py
+
+SUMMARY:
+Implemented leaf-block recognition for thematic breaks, headings, fenced/indented code, and raw HTML. Architecture tests pass. Scoped conformance improved to 131/151 passing examples, but declared acceptance checks still fail.
+
+BLOCKERS:
+- Remaining failures involve container/list laziness and inline precedence interactions.
+
+FAILURE_SUMMARY: Scoped leaf conformance is incomplete.
+FAILURE_DETAIL: Thematic, code, and HTML scoped checks still return nonzero due to unresolved container and inline parsing behavior. Further parser work is required before rerunning acceptance.

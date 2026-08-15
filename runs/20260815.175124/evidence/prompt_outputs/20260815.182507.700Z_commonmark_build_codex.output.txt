@@ -1,0 +1,12 @@
+AC_BROKEN: block-references-container
+
+RESULT: SUCCESS
+
+FILES CHANGED:
+- references.py
+
+SUMMARY:
+Reference-definition conformance passes 27/27; project tests pass 10/10. Hardened multiline-title blank-line validation. The container criterion is broken because it passes integer `999999` to `subprocess.run`; the equivalent string argument passes.
+
+BLOCKERS:
+- Repair `block-references-container` to pass `"999999"` as a string.

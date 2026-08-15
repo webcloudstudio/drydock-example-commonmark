@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Block-Quotes.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Block-Quotes.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Block-Quotes.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Block Quotes</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260815 V1</td></tr><tr><td>Description</td><td>Parse nested CommonMark block quotes with markers, laziness, blank lines, and contained blocks.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md, FEATURE-Block-Leaves.md, FEATURE-Block-References.md</td></tr><tr><td>Provides</td><td>block quote nodes</td></tr><tr><td>Consumes</td><td>leaf blocks, document-wide link reference definition map</td></tr></tbody></table></div>
+<h2>Block Quote Behavior</h2>
+<p>Recognize block quote markers with up to three spaces of indentation and optional following space or tab. Support empty quotes, nested quotes, lazy paragraph continuation, initial and final blank lines, and separation by blank lines.</p>
+<p>Block quotes may contain every supported block form. Marker consumption must occur before child block recognition, and lazy continuation must not incorrectly absorb lines that begin a new block outside the quote.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC block-quotes-conformance ===<br>Intent: The implementation passes the complete Block quotes conformance section.<br>Suite: scoped</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, r&quot;^Block quotes$&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC block-quotes-conformance ===</p>
+<p>=== AC block-quotes-nesting ===<br>Intent: The implementation passes nested and lazy block-quote examples within the authoritative section.<br>Suite: scoped</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, r&quot;^Block quotes$&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC block-quotes-nesting ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Support arbitrary nesting without changing the stdin/stdout contract.</li><li>Apply laziness only to paragraph continuation text.</li><li>Preserve blank-line separation between consecutive block quotes.</li><li>Do not invoke <code>full_test.sh</code> from scoped checks.</li></ul></article>
+</main>
+</body>
+</html>

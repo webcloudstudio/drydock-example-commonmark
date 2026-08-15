@@ -1,0 +1,43 @@
+<requirement name="commonmark-parser" stories="architecture">
+Build a CommonMark 0.31.2 parser from the supplied specification. The parser reads Markdown from
+standard input and writes HTML to standard output. Do not use a public Markdown implementation.
+</requirement>
+<requirement name="normalize-input" stories="block-input">
+CommonMark parsing is two phases: resolve **block structure** first, then run **inline parsing**
+over the block contents. Implement in that order.
+</requirement>
+<requirement name="parse-blocks" stories="block-leaves,block-references,block-quotes,block-lists">
+1. Blocks: paragraphs, thematic breaks, ATX headings, setext headings, indented code, fenced
+code, HTML blocks, link reference definitions, block quotes, then lists — lists are the
+hardest block construct, with lazy continuation, nesting, and tightness.
+</requirement>
+<requirement name="parse-inlines" stories="inline-escapes,inline-code-breaks,inline-emphasis,inline-links,inline-html-autolinks">
+2. Inlines: backslash escapes, entity and numeric references, code spans, emphasis and strong
+emphasis (the delimiter-run algorithm), links and images, autolinks, raw HTML, hard breaks.
+</requirement>
+<requirement name="follow-parsing-strategy" stories="html-renderer">
+The specification text is normative and contains the algorithms. The "Appendix: A parsing
+strategy" section describes the reference implementation's approach; follow it directly rather
+than reinventing the rules.
+</requirement>
+<requirement name="standard-io" stories="cli-executable">
+The parser reads Markdown from
+standard input and writes HTML to standard output.
+</requirement>
+<requirement name="scoped-conformance-checks" stories="verification-scoped">
+Parser implementation stories may run `spec_tests.py` with explicit section selectors covering
+the story's complete scope. A selector must name headings that own examples, such as `ATX
+headings` or `List items`. Chapter headings such as `Leaf blocks`, `Container blocks`, and
+`Characters and lines` own no examples; selecting them can exit zero without testing anything.
+</requirement>
+<requirement name="full-conformance-suite" stories="verification-full">
+Create one terminal verification story that:
+
+- depends on every parser implementation story;
+- creates `full_test.sh` as a POSIX-compatible wrapper for the unfiltered suite;
+- contains the only `Suite: full` acceptance check;
+- runs `sh full_test.sh`, prints captured standard output and standard error, and asserts only
+  `result.returncode == 0`; and
+- carries `Sea Trials: st-001`.
+</requirement>
+<unattached story="cli-boundaries"/>

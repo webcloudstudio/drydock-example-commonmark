@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Verification-Scoped.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Verification-Scoped.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Verification-Scoped.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Scoped Verification</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20260815 V1</td></tr><tr><td>Description</td><td>Stage conformance assets and provide bounded specification-section checks.</td></tr><tr><td>Depends On</td><td>FEATURE-CLI-Executable.md</td></tr><tr><td>Provides</td><td>scoped conformance verification</td></tr><tr><td>Consumes</td><td>commonmark stdin/stdout executable</td></tr></tbody></table></div>
+<h2>Verification Contract</h2>
+<p>The build environment stages the normative specification and its test helpers at:</p>
+<ul><li><code>sources/spec.txt</code></li><li><code>sources/spec_tests.py</code></li><li><code>sources/cmark.py</code></li><li><code>sources/normalize.py</code></li></ul>
+<p>Scoped verification invokes <code>spec_tests.py</code> with explicit <code>--pattern</code> or <code>--number</code> selectors. It must never invoke <code>full_test.sh</code>; the unfiltered suite is reserved for <code>FEATURE-Verification-Full.md</code>.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC scoped-section ===<br>Intent: A selected CommonMark specification section executes successfully against the completed executable.<br>Suite: scoped</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, r&quot;^ATX headings$&quot;, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC scoped-section ===</p>
+<p>=== AC scoped-example ===<br>Intent: A single explicitly selected CommonMark example executes successfully against the completed executable.<br>Suite: scoped</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--number&quot;, &quot;1&quot;, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC scoped-example ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Use explicit specification section or example selectors for every scoped check.</li><li>Never invoke <code>full_test.sh</code> from scoped verification.</li><li>Treat the conformance runner&#x27;s exit status as the verdict; do not assert on printed tallies.</li><li>Do not modify the staged conformance assets.</li></ul></article>
+</main>
+</body>
+</html>

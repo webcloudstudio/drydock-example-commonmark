@@ -1,0 +1,13 @@
+Drydock 0.1.8  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+2026-08-15 14:30:47 EDT  Calling CODEX/gpt-5.6-luna (score release)...
+  Completed CODEX/gpt-5.6-luna (score release)  rc=0
+
+commonmark: PASSED — 0 of 1
+
+  st-001  MANUAL    sh full_test.sh: full_test.sh not found
+  reported: Build directory has uncommitted changes
+
+Scorecard: /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.175124/workspace/targets/commonmark/SCORECARD.md
+Evidence: /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.175124/workspace/targets/commonmark/evidence/score-release.json
+  MANUAL VERIFICATION: st-001 needs manual verification: The completed parser shall pass every test run by sh full_test.sh.
+Target - committed project workspace git store

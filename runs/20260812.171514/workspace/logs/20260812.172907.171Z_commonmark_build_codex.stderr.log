@@ -1,1 +1,0 @@
-2026-08-12T17:29:55.491404Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to read file to update /mnt/c/Users/barlo/projects/drydock/uat/20260812.171514/build/commonmark/parser/inlines.py: No such file or directory (os error 2)
