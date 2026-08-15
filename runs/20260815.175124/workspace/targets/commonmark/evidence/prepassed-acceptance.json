@@ -1,0 +1,6 @@
+{
+  "prepassed": [
+    "block-input-characters",
+    "block-input-insecure"
+  ]
+}
