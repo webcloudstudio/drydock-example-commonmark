@@ -267,10 +267,10 @@
         "commonmark"
       ],
       "cwd": "workspace",
-      "elapsed_ms": 97581,
+      "elapsed_ms": 146386,
       "label": "16-score-acceptance",
       "llm_executions": [],
-      "returncode": 1,
+      "returncode": 0,
       "stderr_path": "evidence/commands/16-score-acceptance.stderr.log",
       "stdout_path": "evidence/commands/16-score-acceptance.stdout.log"
     },
@@ -284,7 +284,7 @@
         "commonmark"
       ],
       "cwd": "workspace",
-      "elapsed_ms": 316,
+      "elapsed_ms": 462,
       "label": "17-score-build-report",
       "llm_executions": [],
       "returncode": 0,
@@ -301,65 +301,14 @@
         "commonmark"
       ],
       "cwd": "workspace",
-      "elapsed_ms": 54128,
-      "label": "18-score-release",
-      "llm_executions": [],
-      "returncode": 0,
-      "stderr_path": "evidence/commands/18-score-release.stderr.log",
-      "stdout_path": "evidence/commands/18-score-release.stdout.log"
-    },
-    {
-      "argv": [
-        "/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3",
-        "-m",
-        "drydock",
-        "score",
-        "ac",
-        "commonmark"
-      ],
-      "cwd": "workspace",
-      "elapsed_ms": 146386,
-      "label": "21-score-acceptance",
-      "llm_executions": [],
-      "returncode": 0,
-      "stderr_path": "evidence/commands/21-score-acceptance.stderr.log",
-      "stdout_path": "evidence/commands/21-score-acceptance.stdout.log"
-    },
-    {
-      "argv": [
-        "/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3",
-        "-m",
-        "drydock",
-        "score",
-        "build",
-        "commonmark"
-      ],
-      "cwd": "workspace",
-      "elapsed_ms": 462,
-      "label": "22-score-build-report",
-      "llm_executions": [],
-      "returncode": 0,
-      "stderr_path": "evidence/commands/22-score-build-report.stderr.log",
-      "stdout_path": "evidence/commands/22-score-build-report.stdout.log"
-    },
-    {
-      "argv": [
-        "/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3",
-        "-m",
-        "drydock",
-        "score",
-        "release",
-        "commonmark"
-      ],
-      "cwd": "workspace",
       "elapsed_ms": 73188,
-      "label": "23-score-release",
+      "label": "18-score-release",
       "llm_executions": [
         "20260816.002157.109Z-5689f94b"
       ],
       "returncode": 0,
-      "stderr_path": "evidence/commands/23-score-release.stderr.log",
-      "stdout_path": "evidence/commands/23-score-release.stdout.log"
+      "stderr_path": "evidence/commands/18-score-release.stderr.log",
+      "stdout_path": "evidence/commands/18-score-release.stdout.log"
     }
   ],
   "degraded": [],

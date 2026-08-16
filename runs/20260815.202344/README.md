@@ -6,12 +6,12 @@
 
 | Claim | Verdict | Recorded outcome | Proof |
 |---|---|---|---|
-| Lifecycle completed | PASS | 21 lifecycle commands executed; the run ended at 23-score-release. | [result.json](result.json) |
+| Lifecycle completed | PASS | 18 lifecycle commands executed; the run ended at 18-score-release. | [result.json](result.json) |
 | External conformance suite passed | PASS | sh sources/full_test.sh exited 0. | [evidence/commands/15-test.stdout.log](evidence/commands/15-test.stdout.log) |
 | Target completion check passed | UNPROVEN | drydock status commonmark --check exited 1. | [evidence/commands/11-initial-complete.stdout.log](evidence/commands/11-initial-complete.stdout.log) |
-| Acceptance score passed | PASS | drydock score acceptance exited 0. | [evidence/commands/21-score-acceptance.stdout.log](evidence/commands/21-score-acceptance.stdout.log) |
-| Release score passed | PASS | drydock score release exited 0. | [evidence/commands/23-score-release.stdout.log](evidence/commands/23-score-release.stdout.log) |
-| Integrity verification passed | PASS | 322 files digested; verify with sha256sum -c SHA256SUMS. | [SHA256SUMS](SHA256SUMS) |
+| Acceptance score passed | PASS | drydock score acceptance exited 0. | [evidence/commands/16-score-acceptance.stdout.log](evidence/commands/16-score-acceptance.stdout.log) |
+| Release score passed | PASS | drydock score release exited 0. | [evidence/commands/18-score-release.stdout.log](evidence/commands/18-score-release.stdout.log) |
+| Integrity verification passed | PASS | 233 files digested; verify with sha256sum -c SHA256SUMS. | [SHA256SUMS](SHA256SUMS) |
 
 ## Run facts
 
@@ -60,12 +60,9 @@
 | 13-after-initial-build-target-status | `/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 -m drydock status commonmark` | 0 | 0.8s | [stdout](evidence/commands/13-after-initial-build-target-status.stdout.log) · [stderr](evidence/commands/13-after-initial-build-target-status.stderr.log) |
 | 14-after-initial-build-workspace-status | `/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 -m drydock status` | 0 | 0.5s | [stdout](evidence/commands/14-after-initial-build-workspace-status.stdout.log) · [stderr](evidence/commands/14-after-initial-build-workspace-status.stderr.log) |
 | 15-test | `sh sources/full_test.sh` | 0 | 45.4s | [stdout](evidence/commands/15-test.stdout.log) · [stderr](evidence/commands/15-test.stderr.log) |
-| 16-score-acceptance | `/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 -m drydock score ac commonmark` | 1 | 97.6s | [stdout](evidence/commands/16-score-acceptance.stdout.log) · [stderr](evidence/commands/16-score-acceptance.stderr.log) |
-| 17-score-build-report | `/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 -m drydock score build commonmark` | 0 | 0.3s | [stdout](evidence/commands/17-score-build-report.stdout.log) · [stderr](evidence/commands/17-score-build-report.stderr.log) |
-| 18-score-release | `/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 -m drydock score release commonmark` | 0 | 54.1s | [stdout](evidence/commands/18-score-release.stdout.log) · [stderr](evidence/commands/18-score-release.stderr.log) |
-| 21-score-acceptance | `/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 -m drydock score ac commonmark` | 0 | 146.4s | [stdout](evidence/commands/21-score-acceptance.stdout.log) · [stderr](evidence/commands/21-score-acceptance.stderr.log) |
-| 22-score-build-report | `/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 -m drydock score build commonmark` | 0 | 0.5s | [stdout](evidence/commands/22-score-build-report.stdout.log) · [stderr](evidence/commands/22-score-build-report.stderr.log) |
-| 23-score-release | `/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 -m drydock score release commonmark` | 0 | 73.2s | [stdout](evidence/commands/23-score-release.stdout.log) · [stderr](evidence/commands/23-score-release.stderr.log) · [llm](evidence/llm_logs/20260816.002157.109Z_commonmark_score-release_codex.llm.log) |
+| 16-score-acceptance | `/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 -m drydock score ac commonmark` | 0 | 146.4s | [stdout](evidence/commands/16-score-acceptance.stdout.log) · [stderr](evidence/commands/16-score-acceptance.stderr.log) |
+| 17-score-build-report | `/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 -m drydock score build commonmark` | 0 | 0.5s | [stdout](evidence/commands/17-score-build-report.stdout.log) · [stderr](evidence/commands/17-score-build-report.stderr.log) |
+| 18-score-release | `/mnt/c/Users/barlo/projects/drydock/.venv/bin/python3 -m drydock score release commonmark` | 0 | 73.2s | [stdout](evidence/commands/18-score-release.stdout.log) · [stderr](evidence/commands/18-score-release.stderr.log) · [llm](evidence/llm_logs/20260816.002157.109Z_commonmark_score-release_codex.llm.log) |
 
 ## Evidence
 

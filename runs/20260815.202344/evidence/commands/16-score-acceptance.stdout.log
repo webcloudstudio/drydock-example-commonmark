@@ -1,7 +1,9 @@
 Drydock 0.1.8  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Target - setup project workspace git store
+Target - committed project workspace git store
 
-Acceptance verification: commonmark  (2026-08-15T21:44:26+00:00)
-  PASS 10   FAIL 1   UNVERIFIED 0   PREPASSED 8   (19 AC)
+Acceptance verification: commonmark  (2026-08-16T00:18:27+00:00)
+  PASS 10   FAIL 0   UNVERIFIED 1   PREPASSED 8   (19 AC)
   8 criterion(s) were green before their block built. Either they do not exercise the story's work,
   or the deliverable already existed. Not counted as proven; the build is not blocked on them.
 
@@ -47,7 +49,7 @@ Acceptance verification: commonmark  (2026-08-15T21:44:26+00:00)
   ✓ PASS        emphasis-conformance         inline-002     FEATURE-Inline-Emphasis.md
   ✓ PASS        links-images-conformance     inline-003     FEATURE-Inline-Links-Images.md
   ✓ PASS        html-autolinks-conformance   inline-004     FEATURE-Inline-HTML-Autolinks.md
-  ✗ FAIL        complete-conformance         verify-001     FEATURE-Conformance-Verification.md
+  — UNVERIFIED  complete-conformance         verify-001     FEATURE-Conformance-Verification.md
         intent: The completed parser passes the complete unfiltered supplied CommonMark conformance suite.
         assertion: malformed check: the assertion itself raised NameError (name 'sys' is not defined. Did you forget to import 'sys'?) in its own frame, before reaching the code under test. No implementation can satisfy it. Each check runs as its own script in its own process, so a name bound by another check is not in scope. Repair the assertion in the Blueprint specification.
         process exit code: 1
@@ -56,5 +58,5 @@ Acceptance verification: commonmark  (2026-08-15T21:44:26+00:00)
           655 passed, 0 failed, 0 errored, 0 skipped
 
 
-Soundings: /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.202344/workspace/targets/commonmark/SOUNDINGS.md
+Soundings: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20260815.202344/workspace/targets/commonmark/SOUNDINGS.md
 Target - committed project workspace git store
