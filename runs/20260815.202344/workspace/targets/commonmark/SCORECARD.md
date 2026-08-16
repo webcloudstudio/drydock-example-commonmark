@@ -1,13 +1,13 @@
 # Release Scorecard: commonmark
 
 - Verdict: PASSED
-- Code identity: 3db3c6f468b2535c7a62571530e800e901310be6
+- Code identity: 5f7d8c6014b9ce286fcd32c19539c4f785d31963
 
 ## Project acceptance
 
 | ID | Type | Criterion | Verdict | Observed |
 |---|---|---|---|---|
-| st-001 | technical | The completed parser shall pass every test run by sh sources/full_test.sh. | MET | sh sources/full_test.sh: return code 0; sh sources/full_test.sh: 655 passed, 0 failed, 0 errored, 0 skipped |
+| st-001 | technical | The completed parser shall pass every test run by sh sources/full_test.sh. | MET | sh sources/full_test.sh: return code 0; stdout: 655 passed, 0 failed, 0 errored, 0 skipped |
 
 ## Failures
 
@@ -27,4 +27,4 @@
 
 ## Ranked improvements
 
-1. Review and commit the uncommitted changes before release.
+None.

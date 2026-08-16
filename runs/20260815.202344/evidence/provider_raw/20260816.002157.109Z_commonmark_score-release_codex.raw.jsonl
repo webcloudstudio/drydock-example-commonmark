@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a007f2-57ce-7bd2-b7ef-0590f8244e57"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"criteria\":[{\"id\":\"st-001\",\"verdict\":\"MET\",\"rationale\":\"The governed full conformance suite passed with 655 tests passed and no failures, errors, or skips.\",\"evidence\":[\"sh sources/full_test.sh: return code 0\",\"stdout: 655 passed, 0 failed, 0 errored, 0 skipped\"]}],\"improvements\":[]}"}}
+{"type":"turn.completed","usage":{"input_tokens":13237,"cached_input_tokens":8960,"cache_write_input_tokens":0,"output_tokens":115,"reasoning_output_tokens":31}}

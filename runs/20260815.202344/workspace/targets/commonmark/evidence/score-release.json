@@ -1,10 +1,10 @@
 {
   "schema_version": 5,
-  "recorded_at": "2026-08-15T21:46:56+00:00",
+  "recorded_at": "2026-08-16T00:22:03+00:00",
   "target": "commonmark",
   "verdict": "PASSED",
   "verdict_line": "commonmark: PASSED \u2014 1 of 1",
-  "statement": "commonmark: PASSED \u2014 1 of 1\n\n  st-001  MET       sh sources/full_test.sh: return code 0; sh sources/full_test.sh: 655 passed, 0 failed, 0 errored, 0 skipped\n  reported: Build directory has uncommitted changes",
+  "statement": "commonmark: PASSED \u2014 1 of 1\n\n  st-001  MET       sh sources/full_test.sh: return code 0; stdout: 655 passed, 0 failed, 0 errored, 0 skipped\n  reported: Build directory has uncommitted changes",
   "complete": true,
   "governed_gate": {
     "name": "full",
@@ -14,10 +14,10 @@
       "sources/full_test.sh"
     ],
     "return_code": 0,
-    "duration_ms": 45259,
+    "duration_ms": 63452,
     "detail": "",
     "timed_out": false,
-    "build_identity": "7e53d175fb26e9df",
+    "build_identity": "47c7c416ed0c42ca",
     "stdout": "655 passed, 0 failed, 0 errored, 0 skipped\n",
     "stderr": ""
   },
@@ -25,10 +25,10 @@
     {
       "criterion_id": "st-001",
       "verdict": "MET",
-      "rationale": "The governed full conformance suite passed with 655 tests passed and no failures or errors.",
+      "rationale": "The governed full conformance suite passed with 655 tests passed and no failures, errors, or skips.",
       "evidence": [
         "sh sources/full_test.sh: return code 0",
-        "sh sources/full_test.sh: 655 passed, 0 failed, 0 errored, 0 skipped"
+        "stdout: 655 passed, 0 failed, 0 errored, 0 skipped"
       ]
     }
   ],
@@ -40,11 +40,9 @@
   "warnings": [
     "Build directory has uncommitted changes"
   ],
-  "improvements": [
-    "Review and commit the uncommitted changes before release."
-  ],
+  "improvements": [],
   "identities": {
-    "code": "3db3c6f468b2535c7a62571530e800e901310be6",
+    "code": "5f7d8c6014b9ce286fcd32c19539c4f785d31963",
     "sea_trials": "0bec2486b8d5c48ca1077f9320bc1686045d3e380a44a4bcc777ea6d77ab9d2a",
     "blueprint": {
       "ARCHITECTURE.md": "7ba2aff46307f65e2850fd6267ab488fd9b951d6b7901dc417540bd4a48e0c33",
@@ -63,5 +61,5 @@
       "spec_tests_compact.md": "f67e385fb0db0c2aaf826d024c5e355fabd698f3ec9ff7af9be15383bbcf9ea8"
     }
   },
-  "execution_id": "20260815.214650.046Z-69e94480"
+  "execution_id": "20260816.002157.109Z-5689f94b"
 }

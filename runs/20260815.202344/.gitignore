@@ -122,4 +122,13 @@
 /workspace/logs/20260815.214650.046Z_commonmark_score-release_codex.output.txt
 /workspace/logs/20260815.214650.046Z_commonmark_score-release_codex.prompt.md
 /workspace/logs/20260815.214650.046Z_commonmark_score-release_codex.raw.jsonl
+/workspace/logs/20260816.001053.169Z_commonmark_score.log
+/workspace/logs/20260816.001436.572Z_commonmark_score.log
+/workspace/logs/20260816.001824.587Z_commonmark_score.log
+/workspace/logs/20260816.002050.976Z_build_score.log
+/workspace/logs/20260816.002051.425Z_commonmark_score_codex.log
+/workspace/logs/20260816.002157.109Z_commonmark_score-release_codex.llm.log
+/workspace/logs/20260816.002157.109Z_commonmark_score-release_codex.output.txt
+/workspace/logs/20260816.002157.109Z_commonmark_score-release_codex.prompt.md
+/workspace/logs/20260816.002157.109Z_commonmark_score-release_codex.raw.jsonl
 /workspace/logs/llm.jsonl
