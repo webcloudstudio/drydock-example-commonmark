@@ -1,2 +1,0 @@
-2026-08-15T18:10:37.201913Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.175124/build/commonmark/blocks.py:
-HTML_TAG_RE = re.compile(r"^ {0,3}</?[A-Za-z][^>]*>[ \t]*$")

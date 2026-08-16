@@ -1,2 +1,0 @@
-2026-08-15T18:17:35.618426Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/Commonmark/runs/20260815.175124/build/commonmark/renderer.py:
-    rendered = escape(html.unescape(text), quote=False)
