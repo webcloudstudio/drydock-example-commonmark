@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/LINEAGE.json</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/LINEAGE.json</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../workspace/targets/commonmark/LINEAGE.json">Raw file</a></div></header>
+<article class="doc"><pre>{
+  &quot;version&quot;: 1,
+  &quot;import&quot;: {
+    &quot;root&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261024.233753/sources&quot;,
+    &quot;format&quot;: &quot;markdown&quot;
+  },
+  &quot;sources&quot;: {
+    &quot;INSTRUCTIONS.md&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;49ecdf5&quot;,
+          &quot;date&quot;: &quot;2026-10-24&quot;,
+          &quot;hash&quot;: &quot;10b172786a92ad4dc012e88358cf96fcead95bcd919f2677df3a03405782fb0a&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;commonmark-parser&quot;,
+              &quot;text&quot;: &quot;Build a CommonMark 0.31.2 parser from the supplied specification. The parser reads Markdown from\nstandard input and writes HTML to standard output. Do not use a public Markdown implementation.&quot;,
+              &quot;stories&quot;: [
+                &quot;architecture&quot;,
+                &quot;blocks_001&quot;,
+                &quot;inline_007&quot;,
+                &quot;inline_003&quot;,
+                &quot;inline_006&quot;,
+                &quot;blocks_004&quot;,
+                &quot;inline_002&quot;,
+                &quot;blocks_002&quot;,
+                &quot;blocks_006&quot;,
+                &quot;blocks_003&quot;,
+                &quot;blocks_007&quot;,
+                &quot;inline_001&quot;,
+                &quot;blocks_005&quot;,
+                &quot;inline_005&quot;,
+                &quot;inline_004&quot;,
+                &quot;conformance_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;executable-deliverable&quot;,
+              &quot;text&quot;: &quot;The deliverable is an executable named `commonmark` at the application root.&quot;,
+              &quot;stories&quot;: [
+                &quot;conformance_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;run-full-suite&quot;,
+              &quot;text&quot;: &quot;`sources/full_test.sh` is the single scoring entry point. It is supplied, not authored: it is staged verbatim into the build directory alongside the other imported assets, and `drydock uat` runs `sh sources/full_test.sh` from the completed application root and takes its exit code and output as the score. It runs the complete, unfiltered supplied CommonMark suite against `./commonmark`.&quot;,
+              &quot;stories&quot;: [
+                &quot;conformance_002&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;protect-scoring-assets&quot;,
+              &quot;text&quot;: &quot;The scoring assets are read-only. `sources/full_test.sh`, `sources/spec_tests.py`, `sources/cmark.py`, `sources/normalize.py`, and `sources/spec.txt` are hash-verified against the import and restored before grading, so a modification is reported as tampering rather than honored. Do not write to them. Build `./commonmark` so that the supplied entry point succeeds; changing the entry point is not a repair.&quot;,
+              &quot;stories&quot;: [
+                &quot;architecture&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;project-readme&quot;,
+              &quot;text&quot;: &quot;Create a concise project `README.md` describing the standard-input/standard-output interface.&quot;,
+              &quot;stories&quot;: [
+                &quot;conformance_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;block-inline-order&quot;,
+              &quot;text&quot;: &quot;CommonMark parsing is two phases: resolve block structure first, then run inline parsing\nover the block contents. Implement in that order.&quot;,
+              &quot;stories&quot;: [
+                &quot;architecture&quot;,
+                &quot;blocks_001&quot;,
+                &quot;inline_007&quot;,
+                &quot;inline_003&quot;,
+                &quot;inline_006&quot;,
+                &quot;blocks_004&quot;,
+                &quot;inline_002&quot;,
+                &quot;blocks_002&quot;,
+                &quot;blocks_006&quot;,
+                &quot;blocks_003&quot;,
+                &quot;blocks_007&quot;,
+                &quot;inline_001&quot;,
+                &quot;blocks_005&quot;,
+                &quot;inline_005&quot;,
+                &quot;inline_004&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;block-elements&quot;,
+              &quot;text&quot;: &quot;1. Blocks: paragraphs, thematic breaks, ATX headings, setext headings, indented code, fenced\n   code, HTML blocks, link reference definitions, block quotes, then lists \u2014 lists are the\n   hardest block construct, with lazy continuation, nesting, and tightness.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_001&quot;,
+                &quot;blocks_002&quot;,
+                &quot;blocks_003&quot;,
+                &quot;blocks_004&quot;,
+                &quot;blocks_005&quot;,
+                &quot;blocks_006&quot;,
+                &quot;blocks_007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;inline-elements&quot;,
+              &quot;text&quot;: &quot;2. Inlines: backslash escapes, entity and numeric references, code spans, emphasis and strong\n   emphasis (the delimiter-run algorithm), links and images, autolinks, raw HTML, hard breaks.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_001&quot;,
+                &quot;inline_002&quot;,
+                &quot;inline_003&quot;,
+                &quot;inline_004&quot;,
+                &quot;inline_005&quot;,
+                &quot;inline_006&quot;,
+                &quot;inline_007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parsing-strategy&quot;,
+              &quot;text&quot;: &quot;The specification text is normative and contains the algorithms. The \&quot;Appendix: A parsing\nstrategy\&quot; section describes the reference implementation&#x27;s approach; follow it directly rather than reinventing the rules.&quot;,
+              &quot;stories&quot;: [
+                &quot;architecture&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;scoped-tests&quot;,
+              &quot;text&quot;: &quot;Parser implementation stories may run `spec_tests.py` with explicit section selectors covering\nthe story&#x27;s complete scope. A selector must name headings that own examples, such as `ATX\nheadings` or `List items`. Chapter headings such as `Leaf blocks`, `Container blocks`, and\n`Characters and lines` own no examples; selecting them can exit zero without testing anything.&quot;,
+              &quot;stories&quot;: [
+                &quot;conformance_002&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;full-suite-verification-requirements&quot;,
+              &quot;text&quot;: &quot;Create one terminal verification story that:\n\n- depends on every parser implementation story;\n- contains the only `Suite: full` acceptance check;\n- runs `sh sources/full_test.sh`, prints captured standard output and standard error, and asserts\n  only `result.returncode == 0`; and\n- carries `Sea Trials: st-001`.&quot;,
+              &quot;stories&quot;: [
+                &quot;conformance_002&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;cmark.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;49ecdf5&quot;,
+          &quot;date&quot;: &quot;2026-10-24&quot;,
+          &quot;hash&quot;: &quot;c5fb45e7c64fd7670b2a3c49a151e46f4af9d0ad3004bedb37ecf9cdc34d2f00&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;run-converter-via-program&quot;,
+              &quot;text&quot;: &quot;if prog:\n            self.to_html = lambda x: pipe_through_prog(prog, x)&quot;,
+              &quot;stories&quot;: [
+                &quot;conformance_001&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;full_test.sh&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;49ecdf5&quot;,
+          &quot;date&quot;: &quot;2026-10-24&quot;,
+          &quot;hash&quot;: &quot;5b634a1c78117313283acceda8faad9de02b594e54949439c73697b058941a93&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;executable-interface&quot;,
+              &quot;text&quot;: &quot;The deliverable is an executable named commonmark that reads UTF-8 Markdown on stdin\nand writes HTML to stdout.&quot;,
+              &quot;stories&quot;: [
+                &quot;conformance_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;full-unfiltered-suite&quot;,
+              &quot;text&quot;: &quot;The suite runs unfiltered: no --pattern, no --number, no selector of any kind. spec_tests.py exits with failed + errored, so exit 0 means the complete CommonMark 0.31.2 suite passed.&quot;,
+              &quot;stories&quot;: [
+                &quot;conformance_002&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;normalize.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;49ecdf5&quot;,
+          &quot;date&quot;: &quot;2026-10-24&quot;,
+          &quot;hash&quot;: &quot;94a9dd253907e3dab7c02fc11e934f06112dcf0f3804255d09d732c8c7c4b5f4&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;normalize-html-whitespace&quot;,
+              &quot;text&quot;: &quot;Multiple inner whitespaces are collapsed to a single space (except\n    in pre tags):&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_004&quot;,
+                &quot;inline_006&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;normalize-block-whitespace&quot;,
+              &quot;text&quot;: &quot;* Whitespace surrounding block-level tags is removed.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_004&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;normalize-self-closing-tags&quot;,
+              &quot;text&quot;: &quot;* Self-closing tags are converted to open tags.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_004&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;normalize-attributes&quot;,
+              &quot;text&quot;: &quot;* Attributes are sorted and lowercased.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_004&quot;,
+                &quot;inline_006&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;normalize-character-references&quot;,
+              &quot;text&quot;: &quot;* References are converted to unicode, except that &#x27;&lt;&#x27;, &#x27;&gt;&#x27;, &#x27;&amp;&#x27;, and\n      &#x27;\&quot;&#x27; are rendered using entities.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_001&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;spec.txt&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;49ecdf5&quot;,
+          &quot;date&quot;: &quot;2026-10-24&quot;,
+          &quot;hash&quot;: &quot;43fad3e0ac5190a3b0bc6a41f7b1a853201a26ec2e6b74871f5d96239a8c34cf&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;character-and-line-handling&quot;,
+              &quot;text&quot;: &quot;Any sequence of [characters] is a valid CommonMark document.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;tab-handling&quot;,
+              &quot;text&quot;: &quot;Tabs in lines are not expanded to [spaces].  However,\nin contexts where spaces help to define block structure,\ntabs behave as if they were replaced by spaces with a tab stop\nof 4 characters.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_001&quot;,
+                &quot;blocks_003&quot;,
+                &quot;blocks_006&quot;,
+                &quot;blocks_007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;insecure-character-replacement&quot;,
+              &quot;text&quot;: &quot;For security reasons, the Unicode character `U+0000` must be replaced\nwith the REPLACEMENT CHARACTER (`U+FFFD`).&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;backslash-escapes&quot;,
+              &quot;text&quot;: &quot;Any ASCII punctuation character may be backslash-escaped:&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;character-references&quot;,
+              &quot;text&quot;: &quot;Valid HTML entity references and numeric character references\ncan be used in place of the corresponding Unicode character,\nwith the following exceptions:&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;block-inline-precedence&quot;,
+              &quot;text&quot;: &quot;Indicators of block structure always take precedence over indicators\nof inline structure.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_001&quot;,
+                &quot;blocks_002&quot;,
+                &quot;blocks_003&quot;,
+                &quot;blocks_004&quot;,
+                &quot;blocks_005&quot;,
+                &quot;blocks_006&quot;,
+                &quot;blocks_007&quot;,
+                &quot;inline_001&quot;,
+                &quot;inline_002&quot;,
+                &quot;inline_003&quot;,
+                &quot;inline_004&quot;,
+                &quot;inline_005&quot;,
+                &quot;inline_006&quot;,
+                &quot;inline_007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;thematic-breaks&quot;,
+              &quot;text&quot;: &quot;A line consisting of optionally up to three spaces of indentation, followed by a\nsequence of three or more matching `-`, `_`, or `*` characters, each followed\noptionally by any number of spaces or tabs, forms a\n[thematic break](@).&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;atx-headings&quot;,
+              &quot;text&quot;: &quot;An [ATX heading](@)\nconsists of a string of characters, parsed as inline content, between an\nopening sequence of 1--6 unescaped `#` characters and an optional\nclosing sequence of any number of unescaped `#` characters.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;setext-headings&quot;,
+              &quot;text&quot;: &quot;A [setext heading](@) consists of one or more\nlines of text, not interrupted by a blank line, of which the first line does not\nhave more than 3 spaces of indentation, followed by\na [setext heading underline].&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_002&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;indented-code-blocks&quot;,
+              &quot;text&quot;: &quot;An [indented code block](@) is composed of one or more\n[indented chunks] separated by blank lines.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_003&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;fenced-code-blocks&quot;,
+              &quot;text&quot;: &quot;A [code fence](@) is a sequence\nof at least three consecutive backtick characters (`` ` ``) or\ntildes (`~`).  (Tildes and backticks cannot be mixed.)\nA [fenced code block](@)\nbegins with a code fence, preceded by up to three spaces of indentation.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_003&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;html-blocks&quot;,
+              &quot;text&quot;: &quot;An [HTML block](@) is a group of lines that is treated\nas raw HTML (and will not be escaped in HTML output).&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_004&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;link-reference-definitions-and-paragraphs&quot;,
+              &quot;text&quot;: &quot;A [link reference definition](@)\nconsists of a [link label], optionally preceded by up to three spaces of\nindentation, followed\nby a colon (`:`), optional spaces or tabs (including up to one\n[line ending]), a [link destination],\noptional spaces or tabs (including up to one\n[line ending]), and an optional [link\ntitle], which if it is present must be separated\nfrom the [link destination] by spaces or tabs.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_005&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;paragraphs-and-blank-lines&quot;,
+              &quot;text&quot;: &quot;A sequence of non-blank lines that cannot be interpreted as other\nkinds of blocks forms a [paragraph](@).&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_005&quot;,
+                &quot;blocks_007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;block-quotes&quot;,
+              &quot;text&quot;: &quot;A [block quote marker](@),\noptionally preceded by up to three spaces of indentation,\nconsists of (a) the character `&gt;` together with a following space of\nindentation, or (b) a single character `&gt;` not followed by a space of\nindentation.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_006&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;list-items-and-lists&quot;,
+              &quot;text&quot;: &quot;The following rules define [list items]:&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;code-spans&quot;,
+              &quot;text&quot;: &quot;A [code span](@) begins with a backtick string and ends with\na backtick string of equal length.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_002&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;emphasis-and-strong-emphasis&quot;,
+              &quot;text&quot;: &quot;The following rules define emphasis and strong emphasis:&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_003&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;links&quot;,
+              &quot;text&quot;: &quot;A link contains [link text] (the visible text), a [link destination]\n(the URI that is the link destination), and optionally a [link title].&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_004&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;images&quot;,
+              &quot;text&quot;: &quot;Syntax for images is like the syntax for links, with one\ndifference. Instead of [link text], we have an\n[image description](@).&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_005&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;autolinks&quot;,
+              &quot;text&quot;: &quot;[Autolink](@)s are absolute URIs and email addresses inside\n`&lt;` and `&gt;`.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_006&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;raw-html&quot;,
+              &quot;text&quot;: &quot;Text between `&lt;` and `&gt;` that looks like an HTML tag is parsed as a\nraw HTML tag and will be rendered in HTML without escaping.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_006&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;hard-line-breaks&quot;,
+              &quot;text&quot;: &quot;A line ending (not in a code span or HTML tag) that is preceded\nby two or more spaces and does not occur at the end of a block\nis parsed as a [hard line break](@) (rendered\nin HTML as a `&lt;br /&gt;` tag):&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;soft-line-breaks&quot;,
+              &quot;text&quot;: &quot;A regular line ending (not in a code span or HTML tag) that is not\npreceded by two or more spaces or a backslash is parsed as a\n[softbreak](@).&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;textual-content&quot;,
+              &quot;text&quot;: &quot;Any characters not given an interpretation by the above rules will\nbe parsed as plain textual content.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_007&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;spec_tests.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;49ecdf5&quot;,
+          &quot;date&quot;: &quot;2026-10-24&quot;,
+          &quot;hash&quot;: &quot;9db1ea4a3ee79c5ec74eebc09c5985eb252427e8d9d19ef45e5cc3f2ae410855&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;parse-supplied-conformance-suite&quot;,
+              &quot;text&quot;: &quot;def get_tests(specfile):&quot;,
+              &quot;stories&quot;: [
+                &quot;conformance_001&quot;,
+                &quot;conformance_002&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;filter-tests-by-section-and-number&quot;,
+              &quot;text&quot;: &quot;if args.pattern:\n        pattern_re = re.compile(args.pattern, re.IGNORECASE)\n    else:\n        pattern_re = re.compile(&#x27;.&#x27;)\n    tests = [ test for test in all_tests if re.search(pattern_re, test[&#x27;section&#x27;]) and (not args.number or test[&#x27;example&#x27;] == args.number) ]&quot;,
+              &quot;stories&quot;: [
+                &quot;conformance_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;compare-rendered-html-with-expected-output&quot;,
+              &quot;text&quot;: &quot;def do_test(test, normalize, prev_result):&quot;,
+              &quot;stories&quot;: [
+                &quot;conformance_001&quot;,
+                &quot;conformance_002&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;track-test-result-changes&quot;,
+              &quot;text&quot;: &quot;if args.track:\n            try:\n                with open(args.track) as f:\n                    previous = json.load(f)\n            except FileNotFoundError:\n                pass&quot;,
+              &quot;stories&quot;: [
+                &quot;conformance_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;dump-tests-as-json&quot;,
+              &quot;text&quot;: &quot;if args.dump_tests:\n        out(json.dumps(tests, ensure_ascii=False, indent=2))\n        exit(0)&quot;,
+              &quot;stories&quot;: [
+                &quot;conformance_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;report-test-result-counts&quot;,
+              &quot;text&quot;: &quot;out(\&quot;{pass} passed, {fail} failed, {error} errored, {skip} skipped\\n\&quot;.format(**result_counts))&quot;,
+              &quot;stories&quot;: [
+                &quot;conformance_001&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+</pre></article>
+</main>
+</body>
+</html>

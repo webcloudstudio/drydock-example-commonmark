@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Links.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Links.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Links.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Links</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261024 V1</td></tr><tr><td>Description</td><td>Parses CommonMark inline and reference links.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md, FEATURE-ReferenceDefinitionsAndParagraphs.md</td></tr><tr><td>Provides</td><td>inline links, reference links</td></tr><tr><td>Consumes</td><td>link reference definitions</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Parse inline, full, collapsed, and shortcut links according to CommonMark 0.31.2. Handle destinations, titles, label normalization, and document-wide reference definitions.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC links-conformance ===<br>Intent: The implementation passes every supplied example in the “Links” section.<br>Suite: scoped<br>Probe: --dump-tests<br>Probe Count: json</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Links&quot;, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC links-conformance ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Follow the supplied CommonMark 0.31.2 specification.</li><li>Resolve references using definitions collected during block parsing.</li><li>Do not use a public Markdown implementation as the parser.</li><li>Keep supplied conformance assets under <code>sources/</code> unchanged.</li></ul></article>
+</main>
+</body>
+</html>

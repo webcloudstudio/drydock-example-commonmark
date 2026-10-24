@@ -1,0 +1,125 @@
+<requirement name="character-and-line-handling" stories="inline_001">
+Any sequence of [characters] is a valid CommonMark document.
+</requirement>
+<requirement name="tab-handling" stories="inline_001,blocks_003,blocks_006,blocks_007">
+Tabs in lines are not expanded to [spaces].  However,
+in contexts where spaces help to define block structure,
+tabs behave as if they were replaced by spaces with a tab stop
+of 4 characters.
+</requirement>
+<requirement name="insecure-character-replacement" stories="inline_001">
+For security reasons, the Unicode character `U+0000` must be replaced
+with the REPLACEMENT CHARACTER (`U+FFFD`).
+</requirement>
+<requirement name="backslash-escapes" stories="inline_001">
+Any ASCII punctuation character may be backslash-escaped:
+</requirement>
+<requirement name="character-references" stories="inline_001">
+Valid HTML entity references and numeric character references
+can be used in place of the corresponding Unicode character,
+with the following exceptions:
+</requirement>
+<requirement name="block-inline-precedence" stories="blocks_001,blocks_002,blocks_003,blocks_004,blocks_005,blocks_006,blocks_007,inline_001,inline_002,inline_003,inline_004,inline_005,inline_006,inline_007">
+Indicators of block structure always take precedence over indicators
+of inline structure.
+</requirement>
+<requirement name="thematic-breaks" stories="blocks_001">
+A line consisting of optionally up to three spaces of indentation, followed by a
+sequence of three or more matching `-`, `_`, or `*` characters, each followed
+optionally by any number of spaces or tabs, forms a
+[thematic break](@).
+</requirement>
+<requirement name="atx-headings" stories="blocks_001">
+An [ATX heading](@)
+consists of a string of characters, parsed as inline content, between an
+opening sequence of 1--6 unescaped `#` characters and an optional
+closing sequence of any number of unescaped `#` characters.
+</requirement>
+<requirement name="setext-headings" stories="blocks_002">
+A [setext heading](@) consists of one or more
+lines of text, not interrupted by a blank line, of which the first line does not
+have more than 3 spaces of indentation, followed by
+a [setext heading underline].
+</requirement>
+<requirement name="indented-code-blocks" stories="blocks_003">
+An [indented code block](@) is composed of one or more
+[indented chunks] separated by blank lines.
+</requirement>
+<requirement name="fenced-code-blocks" stories="blocks_003">
+A [code fence](@) is a sequence
+of at least three consecutive backtick characters (`` ` ``) or
+tildes (`~`).  (Tildes and backticks cannot be mixed.)
+A [fenced code block](@)
+begins with a code fence, preceded by up to three spaces of indentation.
+</requirement>
+<requirement name="html-blocks" stories="blocks_004">
+An [HTML block](@) is a group of lines that is treated
+as raw HTML (and will not be escaped in HTML output).
+</requirement>
+<requirement name="link-reference-definitions-and-paragraphs" stories="blocks_005">
+A [link reference definition](@)
+consists of a [link label], optionally preceded by up to three spaces of
+indentation, followed
+by a colon (`:`), optional spaces or tabs (including up to one
+[line ending]), a [link destination],
+optional spaces or tabs (including up to one
+[line ending]), and an optional [link
+title], which if it is present must be separated
+from the [link destination] by spaces or tabs.
+</requirement>
+<requirement name="paragraphs-and-blank-lines" stories="blocks_005,blocks_007">
+A sequence of non-blank lines that cannot be interpreted as other
+kinds of blocks forms a [paragraph](@).
+</requirement>
+<requirement name="block-quotes" stories="blocks_006">
+A [block quote marker](@),
+optionally preceded by up to three spaces of indentation,
+consists of (a) the character `>` together with a following space of
+indentation, or (b) a single character `>` not followed by a space of
+indentation.
+</requirement>
+<requirement name="list-items-and-lists" stories="blocks_007">
+The following rules define [list items]:
+</requirement>
+<requirement name="code-spans" stories="inline_002">
+A [code span](@) begins with a backtick string and ends with
+a backtick string of equal length.
+</requirement>
+<requirement name="emphasis-and-strong-emphasis" stories="inline_003">
+The following rules define emphasis and strong emphasis:
+</requirement>
+<requirement name="links" stories="inline_004">
+A link contains [link text] (the visible text), a [link destination]
+(the URI that is the link destination), and optionally a [link title].
+</requirement>
+<requirement name="images" stories="inline_005">
+Syntax for images is like the syntax for links, with one
+difference. Instead of [link text], we have an
+[image description](@).
+</requirement>
+<requirement name="autolinks" stories="inline_006">
+[Autolink](@)s are absolute URIs and email addresses inside
+`<` and `>`.
+</requirement>
+<requirement name="raw-html" stories="inline_006">
+Text between `<` and `>` that looks like an HTML tag is parsed as a
+raw HTML tag and will be rendered in HTML without escaping.
+</requirement>
+<requirement name="hard-line-breaks" stories="inline_007">
+A line ending (not in a code span or HTML tag) that is preceded
+by two or more spaces and does not occur at the end of a block
+is parsed as a [hard line break](@) (rendered
+in HTML as a `<br />` tag):
+</requirement>
+<requirement name="soft-line-breaks" stories="inline_007">
+A regular line ending (not in a code span or HTML tag) that is not
+preceded by two or more spaces or a backslash is parsed as a
+[softbreak](@).
+</requirement>
+<requirement name="textual-content" stories="inline_007">
+Any characters not given an interpretation by the above rules will
+be parsed as plain textual content.
+</requirement>
+<unattached story="architecture"/>
+<unattached story="conformance_001"/>
+<unattached story="conformance_002"/>

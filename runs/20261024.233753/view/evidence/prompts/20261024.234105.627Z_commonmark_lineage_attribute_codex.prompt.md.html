@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompts/20261024.234105.627Z_commonmark_lineage_attribute_codex.prompt.md</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompts/20261024.234105.627Z_commonmark_lineage_attribute_codex.prompt.md</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompts/20261024.234105.627Z_commonmark_lineage_attribute_codex.prompt.md">Raw file</a></div></header>
+<article class="doc"><h1>Attribute Stories to Source Requirements</h1>
+<p>You are the lineage attribution agent. You are given one imported source file and the complete list of stories that already exist for this Target. Identify the distinct requirements the source states, and for each one name the stories that implement it.</p>
+<p>This is a matching task against a closed set. Every story you may name is listed in <code>&lt;stories&gt;</code>. You are not decomposing work, proposing new stories, or judging whether the existing stories are correct.</p>
+<h2>Method</h2>
+<ol><li>Read the source and identify each distinct requirement it states. A requirement is a thing the</li></ol>
+<p>system must do, at whatever granularity the author wrote it. One sentence may state one requirement that several stories implement — for example &quot;add a table and show it on screen&quot; is one requirement implemented by a schema story, a route story, and a view story. Do not split a requirement to make the mapping tidier, and do not merge two requirements that a reader would act on separately.</p>
+<ol><li>Give each requirement a short kebab-case name that describes it. The name is an identifier, not</li></ol>
+<p>a summary: <code>mark-book-read</code>, not <code>the-reader-can-mark-a-book-as-read</code>.</p>
+<ol><li>For each requirement, list every story that implements any part of it. A story may implement</li></ol>
+<p>more than one requirement; a requirement may need more than one story.</p>
+<ol><li>List any story that implements no requirement in the source as <code>&lt;unattached&gt;</code>. This is expected</li></ol>
+<p>and correct for foundational work — application scaffolding, configuration, shared UI framing, test harnesses — that the author never asked for by name. Do not force such a story onto an unrelated requirement.</p>
+<h2>Rules</h2>
+<ul><li>Use only story ids that appear in <code>&lt;stories&gt;</code>. Never invent one.</li><li>Every story must appear exactly once, either inside a <code>stories</code> attribute or as <code>&lt;unattached&gt;</code>.</li><li>Quote the requirement text verbatim from the source in the tag body. Do not paraphrase it.</li><li>Emit nothing but the tags below. No preamble, no commentary, no explanation.</li></ul>
+<h2>Output</h2>
+<pre><code>&lt;requirement name=&quot;add-remove-books&quot; stories=&quot;add-book,remove-book,database&quot;&gt;
+The reader can add a book with a title and author, view the books in the order added, and remove a book.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;reject-empty-fields&quot; stories=&quot;validate-book&quot;&gt;
+An empty title or author is rejected with a clear error message.
+&lt;/requirement&gt;
+&lt;unattached story=&quot;architecture&quot;/&gt;
+&lt;unattached story=&quot;ui-general&quot;/&gt;</code></pre>
+<h1>Attribution job</h1>
+<p>&lt;source name=&quot;spec_tests.py&quot;&gt; #!/usr/bin/env python3</p>
+<h1>-<em>- coding: utf-8 -</em>-</h1>
+<p>import sys from difflib import unified_diff import argparse import re import json from cmark import CMark from normalize import normalize_html</p>
+<p>if <strong>name</strong> == &quot;<strong>main</strong>&quot;: parser = argparse.ArgumentParser(description=&#x27;Run cmark tests.&#x27;) parser.add_argument(&#x27;-p&#x27;, &#x27;--program&#x27;, dest=&#x27;program&#x27;, nargs=&#x27;?&#x27;, default=None, help=&#x27;program to test&#x27;) parser.add_argument(&#x27;-s&#x27;, &#x27;--spec&#x27;, dest=&#x27;spec&#x27;, nargs=&#x27;?&#x27;, default=&#x27;spec.txt&#x27;, help=&#x27;path to spec&#x27;) parser.add_argument(&#x27;-P&#x27;, &#x27;--pattern&#x27;, dest=&#x27;pattern&#x27;, nargs=&#x27;?&#x27;, default=None, help=&#x27;limit to sections matching regex pattern&#x27;) parser.add_argument(&#x27;--library-dir&#x27;, dest=&#x27;library_dir&#x27;, nargs=&#x27;?&#x27;, default=None, help=&#x27;directory containing dynamic library&#x27;) parser.add_argument(&#x27;--no-normalize&#x27;, dest=&#x27;normalize&#x27;, action=&#x27;store_const&#x27;, const=False, default=True, help=&#x27;do not normalize HTML&#x27;) parser.add_argument(&#x27;-d&#x27;, &#x27;--dump-tests&#x27;, dest=&#x27;dump_tests&#x27;, action=&#x27;store_const&#x27;, const=True, default=False, help=&#x27;dump tests in JSON format&#x27;) parser.add_argument(&#x27;--debug-normalization&#x27;, dest=&#x27;debug_normalization&#x27;, action=&#x27;store_const&#x27;, const=True, default=False, help=&#x27;filter stdin through normalizer for testing&#x27;) parser.add_argument(&#x27;-n&#x27;, &#x27;--number&#x27;, type=int, default=None, help=&#x27;only consider the test with the given number&#x27;) parser.add_argument(&#x27;--track&#x27;, metavar=&#x27;path&#x27;, help=&#x27;track which test cases pass/fail in the given JSON file and only report changes&#x27;) args = parser.parse_args(sys.argv[1:])</p>
+<p>def out(str): sys.stdout.buffer.write(str.encode(&#x27;utf-8&#x27;))</p>
+<p>def print_test_header(test): out(&quot;Example %d (lines %d-%d) %s\n&quot; % (test[&#x27;example&#x27;], test[&#x27;start_line&#x27;], test[&#x27;end_line&#x27;], test[&#x27;section&#x27;]))</p>
+<p>def do_test(test, normalize, prev_result): [retcode, actual_html_bytes, err] = cmark.to_html(test[&#x27;markdown&#x27;]) if retcode != 0: if prev_result != &#x27;error&#x27;: print_test_header(test) out(&quot;program returned error code %d\n&quot; % retcode) sys.stdout.buffer.write(err) return &#x27;error&#x27;</p>
+<p>expected_html = test[&#x27;html&#x27;]</p>
+<p>try: actual_html = actual_html_bytes.decode(&#x27;utf-8&#x27;) except UnicodeDecodeError as e: if prev_result != &#x27;fail&#x27;: print_test_header(test) out(test[&#x27;markdown&#x27;] + &#x27;\n&#x27;) out(&quot;Unicode error: &quot; + str(e) + &#x27;\n&#x27;) out(&quot;Expected: &quot; + repr(expected_html) + &#x27;\n&#x27;) out(&quot;Got:      &quot; + repr(actual_html_bytes) + &#x27;\n&#x27;) out(&#x27;\n&#x27;) return &#x27;fail&#x27;</p>
+<p>if normalize: actual_html = normalize_html(actual_html) + &#x27;\n&#x27; expected_html = normalize_html(expected_html) + &#x27;\n&#x27;</p>
+<p>if actual_html != expected_html: if prev_result != &#x27;fail&#x27;: print_test_header(test) out(test[&#x27;markdown&#x27;] + &#x27;\n&#x27;) expected_html_lines = expected_html.splitlines(True) actual_html_lines = actual_html.splitlines(True) for diffline in unified_diff(expected_html_lines, actual_html_lines, &quot;expected HTML&quot;, &quot;actual HTML&quot;): out(diffline) out(&#x27;\n&#x27;) return &#x27;fail&#x27;</p>
+<p>if prev_result and prev_result != &#x27;pass&#x27;: print_test_header(test) print(&#x27;fixed!&#x27;)</p>
+<p>return &#x27;pass&#x27;</p>
+<p>def get_tests(specfile): line_number = 0 start_line = 0 end_line = 0 example_number = 0 markdown_lines = [] html_lines = [] state = 0  # 0 regular text, 1 markdown example, 2 html output headertext = &#x27;&#x27; tests = []</p>
+<p>header_re = re.compile(&#x27;#+ &#x27;)</p>
+<p>with open(specfile, &#x27;r&#x27;, encoding=&#x27;utf-8&#x27;, newline=&#x27;\n&#x27;) as specf: for line in specf: line_number = line_number + 1 l = line.strip() if l == &quot;<code>&quot; * 32 + &quot; example&quot;: state = 1 elif state == 2 and l == &quot;</code>&quot; * 32: state = 0 example_number = example_number + 1 end_line = line_number tests.append({ &quot;markdown&quot;:&#x27;&#x27;.join(markdown_lines).replace(&#x27;→&#x27;,&quot;\t&quot;), &quot;html&quot;:&#x27;&#x27;.join(html_lines).replace(&#x27;→&#x27;,&quot;\t&quot;), &quot;example&quot;: example_number, &quot;start_line&quot;: start_line, &quot;end_line&quot;: end_line, &quot;section&quot;: headertext}) start_line = 0 markdown_lines = [] html_lines = [] elif l == &quot;.&quot;: state = 2 elif state == 1: if start_line == 0: start_line = line_number - 1 markdown_lines.append(line) elif state == 2: html_lines.append(line) elif state == 0 and re.match(header_re, line): headertext = header_re.sub(&#x27;&#x27;, line).strip() return tests</p>
+<p>if <strong>name</strong> == &quot;<strong>main</strong>&quot;: if args.debug_normalization: out(normalize_html(sys.stdin.read())) exit(0)</p>
+<p>all_tests = get_tests(args.spec) if args.pattern: pattern_re = re.compile(args.pattern, re.IGNORECASE) else: pattern_re = re.compile(&#x27;.&#x27;) tests = [ test for test in all_tests if re.search(pattern_re, test[&#x27;section&#x27;]) and (not args.number or test[&#x27;example&#x27;] == args.number) ] if args.dump_tests: out(json.dumps(tests, ensure_ascii=False, indent=2)) exit(0) else: skipped = len(all_tests) - len(tests) cmark = CMark(prog=args.program, library_dir=args.library_dir) result_counts = {&#x27;pass&#x27;: 0, &#x27;fail&#x27;: 0, &#x27;error&#x27;: 0, &#x27;skip&#x27;: skipped}</p>
+<p>previous = {}</p>
+<p>if args.track: try: with open(args.track) as f: previous = json.load(f) except FileNotFoundError: pass</p>
+<p>results = {}</p>
+<p>for test in tests: result = do_test(test, args.normalize, previous.get(str(test[&#x27;example&#x27;]))) result_counts[result] += 1 results[test[&#x27;example&#x27;]] = result</p>
+<p>if args.track: with open(args.track, &#x27;w&#x27;) as f: json.dump(results, f)</p>
+<p>out(&quot;{pass} passed, {fail} failed, {error} errored, {skip} skipped\n&quot;.format(**result_counts)) exit(result_counts[&#x27;fail&#x27;] + result_counts[&#x27;error&#x27;]) &lt;/source&gt;</p>
+<p>&lt;stories&gt; &lt;story id=&quot;architecture&quot; implements=&quot;ARCHITECTURE.md&quot;&gt;Establish the Python project structure and stage the supplied conformance assets.&lt;/story&gt; &lt;story id=&quot;blocks_001&quot; implements=&quot;FEATURE-ThematicBreaksAndATXHeadings.md&quot;&gt;Parse thematic breaks and ATX headings.&lt;/story&gt; &lt;story id=&quot;inline_007&quot; implements=&quot;FEATURE-LineBreaksAndText.md&quot;&gt;Render hard breaks, soft breaks, and textual content.&lt;/story&gt; &lt;story id=&quot;inline_003&quot; implements=&quot;FEATURE-Emphasis.md&quot;&gt;Parse emphasis and strong emphasis.&lt;/story&gt; &lt;story id=&quot;inline_006&quot; implements=&quot;FEATURE-AutolinksAndRawHTML.md&quot;&gt;Parse autolinks and raw HTML.&lt;/story&gt; &lt;story id=&quot;blocks_004&quot; implements=&quot;FEATURE-HTMLBlocks.md&quot;&gt;Parse HTML blocks.&lt;/story&gt; &lt;story id=&quot;inline_002&quot; implements=&quot;FEATURE-CodeSpans.md&quot;&gt;Parse code spans.&lt;/story&gt; &lt;story id=&quot;blocks_002&quot; implements=&quot;FEATURE-SetextHeadings.md&quot;&gt;Parse setext headings.&lt;/story&gt; &lt;story id=&quot;blocks_006&quot; implements=&quot;FEATURE-BlockQuotes.md&quot;&gt;Parse block quotes.&lt;/story&gt; &lt;story id=&quot;blocks_003&quot; implements=&quot;FEATURE-CodeBlocks.md&quot;&gt;Parse indented and fenced code blocks.&lt;/story&gt; &lt;story id=&quot;blocks_007&quot; implements=&quot;FEATURE-Lists.md&quot;&gt;Parse list items, list structure, and tightness.&lt;/story&gt; &lt;story id=&quot;inline_001&quot; implements=&quot;FEATURE-EscapesAndCharacterReferences.md&quot;&gt;Parse backslash escapes and character references.&lt;/story&gt; &lt;story id=&quot;blocks_005&quot; implements=&quot;FEATURE-ReferenceDefinitionsAndParagraphs.md&quot;&gt;Collect link reference definitions and parse paragraphs.&lt;/story&gt; &lt;story id=&quot;inline_005&quot; implements=&quot;FEATURE-Images.md&quot;&gt;Parse images.&lt;/story&gt; &lt;story id=&quot;inline_004&quot; implements=&quot;FEATURE-Links.md&quot;&gt;Parse inline links and reference links.&lt;/story&gt; &lt;story id=&quot;conformance_001&quot; implements=&quot;FEATURE-ExecutableInterface.md&quot;&gt;Provide the commonmark executable and describe its standard input and output interface.&lt;/story&gt; &lt;story id=&quot;conformance_002&quot; implements=&quot;FEATURE-FullConformanceVerification.md&quot;&gt;Verify the completed parser against the full supplied conformance suite.&lt;/story&gt; &lt;/stories&gt;</p></article>
+</main>
+</body>
+</html>

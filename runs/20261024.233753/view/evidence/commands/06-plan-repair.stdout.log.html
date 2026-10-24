@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/commands/06-plan-repair.stdout.log</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/commands/06-plan-repair.stdout.log</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/commands/06-plan-repair.stdout.log">Raw file</a></div></header>
+<article class="doc"><pre>Drydock 0.8.0  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+repair: FEATURE-BlockQuotes.md, FEATURE-CodeSpans.md, FEATURE-EscapesAndCharacterReferences.md, FEATURE-Lists.md, FEATURE-ReferenceDefinitionsAndParagraphs.md · 5 criteria · 1 of 1 attempt
+2026-10-24 19:41:41 EDT  Calling CODEX/gpt-6-luna (plan repair)...
+  Completed CODEX/gpt-6-luna (plan repair)  rc=0
+  ✗  FEATURE-BlockQuotes.md [block-quotes]: unrepaired — line 12: sources/spec_tests.py --pattern &#x27;Block quotes&#x27; selects a subset of a staged corpus: Probe: &quot;--dump-tests --pattern &#x27;Block quotes&#x27;&quot; is empty or not a plain flag literal
+  ✗  FEATURE-CodeSpans.md [code-spans]: unrepaired — line 12: sources/spec_tests.py --pattern &#x27;Code spans&#x27; selects a subset of a staged corpus: Probe: &quot;--dump-tests --pattern &#x27;Code spans&#x27;&quot; is empty or not a plain flag literal
+  ✗  FEATURE-EscapesAndCharacterReferences.md [escapes-and-character-references]: unrepaired — line 12: sources/spec_tests.py --pattern &#x27;Backslash escapes|Entity and numeric character references&#x27; selects a subset of a staged corpus: Probe: &quot;--dump-tests --pattern &#x27;Backslash escapes|Entity and numeric character references&#x27;&quot; is empty or not a plain flag literal
+  ✗  FEATURE-Lists.md [lists]: unrepaired — line 12: sources/spec_tests.py --pattern &#x27;List items|Lists&#x27; selects a subset of a staged corpus: Probe: &quot;--dump-tests --pattern &#x27;List items|Lists&#x27;&quot; is empty or not a plain flag literal
+  ✗  FEATURE-ReferenceDefinitionsAndParagraphs.md [references-and-paragraphs]: unrepaired — line 12: sources/spec_tests.py --pattern &#x27;Link reference definitions|Paragraphs&#x27; selects a subset of a staged corpus: Probe: &quot;--dump-tests --pattern &#x27;Link reference definitions|Paragraphs&#x27;&quot; is empty or not a plain flag literal
+plan repair: commonmark
+  0 repaired, 5 outstanding, 0 files changed
+  ✗  FEATURE-BlockQuotes.md [block-quotes]: unrepaired — line 12: sources/spec_tests.py --pattern &#x27;Block quotes&#x27; selects a subset of a staged corpus: Probe: &quot;--dump-tests --pattern &#x27;Block quotes&#x27;&quot; is empty or not a plain flag literal
+  ✗  FEATURE-CodeSpans.md [code-spans]: unrepaired — line 12: sources/spec_tests.py --pattern &#x27;Code spans&#x27; selects a subset of a staged corpus: Probe: &quot;--dump-tests --pattern &#x27;Code spans&#x27;&quot; is empty or not a plain flag literal
+  ✗  FEATURE-EscapesAndCharacterReferences.md [escapes-and-character-references]: unrepaired — line 12: sources/spec_tests.py --pattern &#x27;Backslash escapes|Entity and numeric character references&#x27; selects a subset of a staged corpus: Probe: &quot;--dump-tests --pattern &#x27;Backslash escapes|Entity and numeric character references&#x27;&quot; is empty or not a plain flag literal
+  ✗  FEATURE-Lists.md [lists]: unrepaired — line 12: sources/spec_tests.py --pattern &#x27;List items|Lists&#x27; selects a subset of a staged corpus: Probe: &quot;--dump-tests --pattern &#x27;List items|Lists&#x27;&quot; is empty or not a plain flag literal
+  ✗  FEATURE-ReferenceDefinitionsAndParagraphs.md [references-and-paragraphs]: unrepaired — line 12: sources/spec_tests.py --pattern &#x27;Link reference definitions|Paragraphs&#x27; selects a subset of a staged corpus: Probe: &quot;--dump-tests --pattern &#x27;Link reference definitions|Paragraphs&#x27;&quot; is empty or not a plain flag literal
+plan verify: commonmark
+  5 criteria cannot run as written
+  ✗  FEATURE-BlockQuotes.md [block-quotes]: line 12: sources/spec_tests.py --pattern &#x27;Block quotes&#x27; selects a subset of a staged corpus: probe arguments cannot be statically resolved
+  ✗  FEATURE-CodeSpans.md [code-spans]: line 12: sources/spec_tests.py --pattern &#x27;Code spans&#x27; selects a subset of a staged corpus: probe arguments cannot be statically resolved
+  ✗  FEATURE-EscapesAndCharacterReferences.md [escapes-and-character-references]: line 12: sources/spec_tests.py --pattern &#x27;Backslash escapes|Entity and numeric character references&#x27; selects a subset of a staged corpus: probe arguments cannot be statically resolved
+  ✗  FEATURE-Lists.md [lists]: line 12: sources/spec_tests.py --pattern &#x27;List items|Lists&#x27; selects a subset of a staged corpus: probe arguments cannot be statically resolved
+  ✗  FEATURE-ReferenceDefinitionsAndParagraphs.md [references-and-paragraphs]: line 12: sources/spec_tests.py --pattern &#x27;Link reference definitions|Paragraphs&#x27; selects a subset of a staged corpus: probe arguments cannot be statically resolved
+  Run: drydock plan repair commonmark
+Target - committed project workspace git store
+</pre></article>
+</main>
+</body>
+</html>

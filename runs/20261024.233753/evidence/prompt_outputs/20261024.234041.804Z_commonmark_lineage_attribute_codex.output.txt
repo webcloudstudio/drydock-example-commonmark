@@ -1,0 +1,22 @@
+<requirement name="executable-interface" stories="conformance_001">
+The deliverable is an executable named commonmark that reads UTF-8 Markdown on stdin
+and writes HTML to stdout.
+</requirement>
+<requirement name="full-unfiltered-suite" stories="conformance_002">
+The suite runs unfiltered: no --pattern, no --number, no selector of any kind. spec_tests.py exits with failed + errored, so exit 0 means the complete CommonMark 0.31.2 suite passed.
+</requirement>
+<unattached story="architecture"/>
+<unattached story="blocks_001"/>
+<unattached story="inline_007"/>
+<unattached story="inline_003"/>
+<unattached story="inline_006"/>
+<unattached story="blocks_004"/>
+<unattached story="inline_002"/>
+<unattached story="blocks_002"/>
+<unattached story="blocks_006"/>
+<unattached story="blocks_003"/>
+<unattached story="blocks_007"/>
+<unattached story="inline_001"/>
+<unattached story="blocks_005"/>
+<unattached story="inline_005"/>
+<unattached story="inline_004"/>

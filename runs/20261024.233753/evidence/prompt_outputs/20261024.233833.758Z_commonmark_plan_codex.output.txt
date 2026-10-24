@@ -1,0 +1,338 @@
+=== BEGIN ARTIFACT TOPOLOGY.md ===
+## Declarations
+
+## story architecture
+summary:      Establish the Python project structure and stage the supplied conformance assets.
+type:         foundational
+kind:         capability
+phase:        1
+implements:   ARCHITECTURE.md
+stack:        common.md, python.md
+copy:         blueprint/sources/spec.txt -> sources/spec.txt
+copy:         blueprint/sources/spec_tests.py -> sources/spec_tests.py
+copy:         blueprint/sources/cmark.py -> sources/cmark.py
+copy:         blueprint/sources/normalize.py -> sources/normalize.py
+copy:         blueprint/sources/full_test.sh -> sources/full_test.sh
+acceptance:   yes
+instructions: |
+  Establish the Python project structure for the root commonmark executable and stage the five runtime conformance assets verbatim under sources/. Keep the parser implementation original; do not use a public Markdown implementation.
+
+## story blocks_001
+summary:      Parse thematic breaks and ATX headings.
+type:         service
+kind:         capability
+phase:        1
+implements:   FEATURE-ThematicBreaksAndATXHeadings.md
+covers:       BLOCKS-001
+context:      sources/spec.txt, sources/spec_tests.py
+context_roles: |
+  sources/spec.txt: normative specification and conformance test suite
+  sources/spec_tests.py: conformance harness
+stack:        common.md, python.md
+provides:     thematic breaks, ATX headings
+depends:       architecture
+acceptance:   yes
+instructions: |
+  Implement thematic breaks and ATX headings according to CommonMark 0.31.2. Run the complete scoped example slice for these sections.
+
+## story blocks_002
+summary:      Parse setext headings.
+type:         service
+kind:         capability
+phase:        1
+implements:   FEATURE-SetextHeadings.md
+covers:       BLOCKS-002
+context:      sources/spec.txt, sources/spec_tests.py
+context_roles: |
+  sources/spec.txt: normative specification and conformance test suite
+  sources/spec_tests.py: conformance harness
+stack:        common.md, python.md
+provides:     setext headings
+depends:       architecture
+acceptance:   yes
+instructions: |
+  Implement setext headings according to CommonMark 0.31.2. Run the complete scoped example slice for this section.
+
+## story blocks_003
+summary:      Parse indented and fenced code blocks.
+type:         service
+kind:         capability
+phase:        1
+implements:   FEATURE-CodeBlocks.md
+covers:       BLOCKS-003
+context:      sources/spec.txt, sources/spec_tests.py
+context_roles: |
+  sources/spec.txt: normative specification and conformance test suite
+  sources/spec_tests.py: conformance harness
+stack:        common.md, python.md
+provides:     indented code blocks, fenced code blocks
+depends:       architecture
+acceptance:   yes
+instructions: |
+  Implement indented and fenced code blocks according to CommonMark 0.31.2. Run the complete scoped example slice for both sections.
+
+## story blocks_004
+summary:      Parse HTML blocks.
+type:         service
+kind:         capability
+phase:        1
+implements:   FEATURE-HTMLBlocks.md
+covers:       BLOCKS-004
+context:      sources/spec.txt, sources/spec_tests.py
+context_roles: |
+  sources/spec.txt: normative specification and conformance test suite
+  sources/spec_tests.py: conformance harness
+stack:        common.md, python.md
+provides:     HTML blocks
+depends:       architecture
+acceptance:   yes
+instructions: |
+  Implement the seven CommonMark HTML block types and their start and end conditions. Run the complete scoped example slice for this section.
+
+## story blocks_005
+summary:      Collect link reference definitions and parse paragraphs.
+type:         service
+kind:         capability
+phase:        1
+implements:   FEATURE-ReferenceDefinitionsAndParagraphs.md
+covers:       BLOCKS-005
+context:      sources/spec.txt, sources/spec_tests.py
+context_roles: |
+  sources/spec.txt: normative specification and conformance test suite
+  sources/spec_tests.py: conformance harness
+stack:        common.md, python.md
+provides:     link reference definitions, paragraphs
+depends:       architecture
+acceptance:   yes
+instructions: |
+  Implement paragraph formation and document-wide link reference definition collection, including definitions inside containers and first-definition precedence. Run the complete scoped example slice for both sections.
+
+## story blocks_006
+summary:      Parse block quotes.
+type:         service
+kind:         capability
+phase:        1
+implements:   FEATURE-BlockQuotes.md
+covers:       BLOCKS-006
+context:      sources/spec.txt, sources/spec_tests.py
+context_roles: |
+  sources/spec.txt: normative specification and conformance test suite
+  sources/spec_tests.py: conformance harness
+stack:        common.md, python.md
+provides:     block quotes
+depends:       architecture
+acceptance:   yes
+instructions: |
+  Implement block quote parsing, including lazy continuation and nested content. Run the complete scoped example slice for this section.
+
+## story blocks_007
+summary:      Parse list items, list structure, and tightness.
+type:         service
+kind:         capability
+phase:        1
+implements:   FEATURE-Lists.md
+covers:       BLOCKS-007
+context:      sources/spec.txt, sources/spec_tests.py
+context_roles: |
+  sources/spec.txt: normative specification and conformance test suite
+  sources/spec_tests.py: conformance harness
+stack:        common.md, python.md
+provides:     list items, lists and tightness
+depends:       architecture
+acceptance:   yes
+instructions: |
+  Implement bullet and ordered list items, nesting, continuation, and tightness according to CommonMark 0.31.2. Run the complete scoped example slice for both sections.
+
+## story inline_001
+summary:      Parse backslash escapes and character references.
+type:         service
+kind:         capability
+phase:        1
+implements:   FEATURE-EscapesAndCharacterReferences.md
+covers:       INLINE-001
+context:      sources/spec.txt, sources/spec_tests.py
+context_roles: |
+  sources/spec.txt: normative specification and conformance test suite
+  sources/spec_tests.py: conformance harness
+stack:        common.md, python.md
+provides:     backslash escapes, entity and numeric character references
+depends:       architecture
+acceptance:   yes
+instructions: |
+  Implement inline backslash escapes and valid HTML entity and numeric character references. Run the complete scoped example slice for both sections.
+
+## story inline_002
+summary:      Parse code spans.
+type:         service
+kind:         capability
+phase:        1
+implements:   FEATURE-CodeSpans.md
+covers:       INLINE-002
+context:      sources/spec.txt, sources/spec_tests.py
+context_roles: |
+  sources/spec.txt: normative specification and conformance test suite
+  sources/spec_tests.py: conformance harness
+stack:        common.md, python.md
+provides:     code spans
+depends:       architecture
+acceptance:   yes
+instructions: |
+  Implement code span delimiter matching and content normalization. Run the complete scoped example slice for this section.
+
+## story inline_003
+summary:      Parse emphasis and strong emphasis.
+type:         service
+kind:         capability
+phase:        1
+implements:   FEATURE-Emphasis.md
+covers:       INLINE-003
+context:      sources/spec.txt, sources/spec_tests.py
+context_roles: |
+  sources/spec.txt: normative specification and conformance test suite
+  sources/spec_tests.py: conformance harness
+stack:        common.md, python.md
+provides:     emphasis and strong emphasis
+depends:       architecture
+acceptance:   yes
+instructions: |
+  Implement the CommonMark delimiter-run algorithm for emphasis and strong emphasis, including nesting and ambiguity rules. Run the complete scoped example slice for this section.
+
+## story inline_004
+summary:      Parse inline links and reference links.
+type:         service
+kind:         capability
+phase:        1
+implements:   FEATURE-Links.md
+covers:       INLINE-004
+context:      sources/spec.txt, sources/spec_tests.py
+context_roles: |
+  sources/spec.txt: normative specification and conformance test suite
+  sources/spec_tests.py: conformance harness
+stack:        common.md, python.md
+provides:     inline links, reference links
+consumes:      link reference definitions
+depends:       architecture, blocks_005
+acceptance:   yes
+instructions: |
+  Implement inline, full, collapsed, and shortcut links, including destination, title, label normalization, and integration with collected reference definitions. Run the complete scoped example slice for this section.
+
+## story inline_005
+summary:      Parse images.
+type:         service
+kind:         capability
+phase:        1
+implements:   FEATURE-Images.md
+covers:       INLINE-005
+context:      sources/spec.txt, sources/spec_tests.py
+context_roles: |
+  sources/spec.txt: normative specification and conformance test suite
+  sources/spec_tests.py: conformance harness
+stack:        common.md, python.md
+provides:     inline and reference images
+consumes:      link reference definitions
+depends:       architecture, blocks_005
+acceptance:   yes
+instructions: |
+  Implement inline and reference-style images, including plain-text alt attributes. Run the complete scoped example slice for this section.
+
+## story inline_006
+summary:      Parse autolinks and raw HTML.
+type:         service
+kind:         capability
+phase:        1
+implements:   FEATURE-AutolinksAndRawHTML.md
+covers:       INLINE-006
+context:      sources/spec.txt, sources/spec_tests.py
+context_roles: |
+  sources/spec.txt: normative specification and conformance test suite
+  sources/spec_tests.py: conformance harness
+stack:        common.md, python.md
+provides:     URI and email autolinks, inline raw HTML
+depends:       architecture
+acceptance:   yes
+instructions: |
+  Implement URI and email autolinks and raw inline HTML tags, comments, declarations, processing instructions, and CDATA. Run the complete scoped example slice for both sections.
+
+## story inline_007
+summary:      Render hard breaks, soft breaks, and textual content.
+type:         service
+kind:         capability
+phase:        1
+implements:   FEATURE-LineBreaksAndText.md
+covers:       INLINE-007
+context:      sources/spec.txt, sources/spec_tests.py
+context_roles: |
+  sources/spec.txt: normative specification and conformance test suite
+  sources/spec_tests.py: conformance harness
+stack:        common.md, python.md
+provides:     hard line breaks, soft line breaks, textual content
+depends:       architecture
+acceptance:   yes
+instructions: |
+  Implement inline text rendering, soft line breaks, and hard line breaks. Run the complete scoped example slice for all three sections.
+
+## story conformance_001
+summary:      Provide the commonmark executable and describe its standard input and output interface.
+type:         service
+kind:         capability
+phase:        1
+implements:   FEATURE-ExecutableInterface.md
+covers:       CONFORMANCE-001
+context:      sources/INSTRUCTIONS.md
+context_roles: |
+  sources/INSTRUCTIONS.md: author intent
+stack:        common.md, python.md
+provides:     ./commonmark command
+depends:       architecture
+acceptance:   yes
+instructions: |
+  Provide an executable named commonmark at the application root. It reads UTF-8 Markdown from standard input and writes rendered HTML to standard output. Add the concise project README describing this interface.
+
+## story conformance_002
+summary:      Verify the completed parser against the full supplied conformance suite.
+type:         service
+kind:         test harness
+phase:        1
+implements:   FEATURE-FullConformanceVerification.md
+covers:       CONFORMANCE-002
+accepts:       st-001
+context:      sources/full_test.sh, sources/spec_tests.py, sources/cmark.py, sources/normalize.py, sources/spec.txt
+context_roles: |
+  sources/full_test.sh: conformance harness
+  sources/spec_tests.py: conformance harness
+  sources/cmark.py: test helper
+  sources/normalize.py: parser-to-normalizer
+  sources/spec.txt: normative specification and conformance test suite
+stack:        common.md, python.md
+depends:       architecture, blocks_001, blocks_002, blocks_003, blocks_004, blocks_005, blocks_006, blocks_007, inline_001, inline_002, inline_003, inline_004, inline_005, inline_006, inline_007, conformance_001
+acceptance:   yes
+instructions: |
+  Run sh sources/full_test.sh from the completed application root as the sole unfiltered conformance verification. Preserve the supplied harness and assets unchanged.
+
+## full_test.sh suite-binding choice
+The supplied scoring harness checks both the runner exit status and its tally because the runner may exit zero after a modulo-256 failure count. The terminal acceptance therefore relies on the supplied harness's exit code as the conventional narrow response contract for complete-suite success.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT DECISIONS.json ===
+[
+  {
+    "id": "Q-001",
+    "type": "choice",
+    "severity": "material",
+    "blueprint": "FEATURE-ExecutableInterface.md",
+    "story": "conformance_001",
+    "title": "CLI response contract",
+    "description": "The imported instructions specify standard input and output but leave process status and error-channel behavior unstated. Use the conventional CLI contract: successful conversion exits 0; an input or conversion failure exits nonzero and reports its diagnostic on standard error.",
+    "options": [
+      {
+        "value": "conventional_cli",
+        "label": "Zero on success; nonzero with diagnostics on standard error for failure"
+      },
+      {
+        "value": "always_zero",
+        "label": "Always exit zero"
+      }
+    ],
+    "system_choice": "conventional_cli"
+  }
+]
+=== END ARTIFACT ===

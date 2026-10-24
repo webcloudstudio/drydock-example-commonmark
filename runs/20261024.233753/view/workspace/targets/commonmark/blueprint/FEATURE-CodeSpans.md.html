@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-CodeSpans.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-CodeSpans.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-CodeSpans.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Code Spans</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261024 V1</td></tr><tr><td>Description</td><td>Parses and renders CommonMark inline code spans.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md</td></tr><tr><td>Provides</td><td>code spans</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Recognize matching backtick runs in inline content and render their contents as code.</p>
+<h2>Behavior</h2>
+<ul><li>A code span opens with a run of one or more backticks and closes at the next run of exactly the same length.</li><li>Convert line endings in code-span contents to spaces.</li><li>Remove one leading and trailing space when both are present and the content is not entirely spaces.</li><li>Preserve other content literally, including backslashes and character-reference syntax; escape it for HTML without interpreting Markdown inside the span.</li><li>If no matching closing run exists, treat the opening backticks as literal text.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC code-spans ===<br>Intent: The parser passes the complete supplied examples for code spans.<br>Suite: scoped<br>Requires: executable=python3; scope=test<br>Probe: --dump-tests<br>Probe Count: json</p>
+<p>import os import subprocess import sys</p>
+<p>pattern = &quot;Code spans&quot; environment = { **os.environ, &quot;PYTHONPATH&quot;: os.pathsep.join( [os.path.abspath(&quot;sources&quot;), os.environ.get(&quot;PYTHONPATH&quot;, &quot;&quot;)] ).rstrip(os.pathsep), } result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.path.abspath(&quot;commonmark&quot;), &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, pattern, ], capture_output=True, text=True, env=environment, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC code-spans ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Preserve the supplied conformance assets unchanged.</li><li>Do not use a public Markdown implementation as the parser.</li></ul></article>
+</main>
+</body>
+</html>

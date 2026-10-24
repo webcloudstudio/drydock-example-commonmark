@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-HTMLBlocks.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-HTMLBlocks.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-HTMLBlocks.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: HTML Blocks</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261024 V1</td></tr><tr><td>Description</td><td>Recognizes CommonMark HTML block types and passes their source through as raw HTML.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md</td></tr><tr><td>Provides</td><td>HTML blocks</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement all seven CommonMark HTML block types, preserving their source text and stopping at the appropriate end condition.</p>
+<h2>Behavior</h2>
+<ul><li>Recognize start conditions after up to three spaces of indentation.</li><li>For types one through five, continue through the matching end condition, or to the end of the containing block or document.</li><li>For type six, continue until a blank line. For type seven, recognize complete open or closing tags on a line and continue until a blank line.</li><li>Permit types one through six to interrupt paragraphs; type seven cannot interrupt a paragraph.</li><li>Pass block contents through without inline parsing or escaping.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC html-block-conformance ===<br>Intent: The parser passes every supplied HTML blocks example.<br>Suite: scoped<br>Probe: --dump-tests<br>Probe Count: json</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, r&quot;^HTML blocks$&quot;, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC html-block-conformance ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>HTML inside a raw HTML block is passed through verbatim, including content that resembles other block syntax.</li><li>Do not extend HTML block termination rules across container boundaries.</li><li>Do not classify an inline HTML tag in the middle of paragraph text as a type seven block.</li></ul></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-EscapesAndCharacterReferences.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-EscapesAndCharacterReferences.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-EscapesAndCharacterReferences.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Escapes and Character References</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261024 V1</td></tr><tr><td>Description</td><td>Parses CommonMark backslash escapes and HTML character references.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md</td></tr><tr><td>Provides</td><td>backslash escapes, entity and numeric character references</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Interpret backslash escapes and valid HTML entity and numeric character references in inline content according to CommonMark 0.31.2.</p>
+<h2>Behavior</h2>
+<ul><li>A backslash escapes an ASCII punctuation character, rendering that character literally. A backslash before other characters remains literal.</li><li>A backslash at the end of an inline line creates a hard line break.</li><li>Recognize valid HTML5 named entities with semicolons, decimal references of one to seven digits, and hexadecimal references of one to six digits.</li><li>Replace invalid Unicode code points and U+0000 with U+FFFD.</li><li>Escape rendered text appropriately for HTML. References and escapes do not create block structure or replace structural Markdown markers.</li><li>Do not interpret escapes or references inside code spans, code blocks, autolinks, or raw HTML.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC escapes-and-character-references ===<br>Intent: The parser passes the complete supplied examples for backslash escapes and entity and numeric character references.<br>Suite: scoped<br>Requires: executable=python3; scope=test<br>Probe: --dump-tests<br>Probe Count: json</p>
+<p>import os import subprocess import sys</p>
+<p>pattern = &quot;Backslash escapes|Entity and numeric character references&quot; environment = { **os.environ, &quot;PYTHONPATH&quot;: os.pathsep.join( [os.path.abspath(&quot;sources&quot;), os.environ.get(&quot;PYTHONPATH&quot;, &quot;&quot;)] ).rstrip(os.pathsep), } result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.path.abspath(&quot;commonmark&quot;), &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, pattern, ], capture_output=True, text=True, env=environment, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC escapes-and-character-references ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Preserve the supplied conformance assets unchanged.</li><li>Do not use a public Markdown implementation as the parser.</li></ul></article>
+</main>
+</body>
+</html>

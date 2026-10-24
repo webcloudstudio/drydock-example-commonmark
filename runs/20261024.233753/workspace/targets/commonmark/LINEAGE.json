@@ -1,0 +1,517 @@
+{
+  "version": 1,
+  "import": {
+    "root": "/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261024.233753/sources",
+    "format": "markdown"
+  },
+  "sources": {
+    "INSTRUCTIONS.md": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "49ecdf5",
+          "date": "2026-10-24",
+          "hash": "10b172786a92ad4dc012e88358cf96fcead95bcd919f2677df3a03405782fb0a",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "commonmark-parser",
+              "text": "Build a CommonMark 0.31.2 parser from the supplied specification. The parser reads Markdown from\nstandard input and writes HTML to standard output. Do not use a public Markdown implementation.",
+              "stories": [
+                "architecture",
+                "blocks_001",
+                "inline_007",
+                "inline_003",
+                "inline_006",
+                "blocks_004",
+                "inline_002",
+                "blocks_002",
+                "blocks_006",
+                "blocks_003",
+                "blocks_007",
+                "inline_001",
+                "blocks_005",
+                "inline_005",
+                "inline_004",
+                "conformance_001"
+              ]
+            },
+            {
+              "name": "executable-deliverable",
+              "text": "The deliverable is an executable named `commonmark` at the application root.",
+              "stories": [
+                "conformance_001"
+              ]
+            },
+            {
+              "name": "run-full-suite",
+              "text": "`sources/full_test.sh` is the single scoring entry point. It is supplied, not authored: it is staged verbatim into the build directory alongside the other imported assets, and `drydock uat` runs `sh sources/full_test.sh` from the completed application root and takes its exit code and output as the score. It runs the complete, unfiltered supplied CommonMark suite against `./commonmark`.",
+              "stories": [
+                "conformance_002"
+              ]
+            },
+            {
+              "name": "protect-scoring-assets",
+              "text": "The scoring assets are read-only. `sources/full_test.sh`, `sources/spec_tests.py`, `sources/cmark.py`, `sources/normalize.py`, and `sources/spec.txt` are hash-verified against the import and restored before grading, so a modification is reported as tampering rather than honored. Do not write to them. Build `./commonmark` so that the supplied entry point succeeds; changing the entry point is not a repair.",
+              "stories": [
+                "architecture"
+              ]
+            },
+            {
+              "name": "project-readme",
+              "text": "Create a concise project `README.md` describing the standard-input/standard-output interface.",
+              "stories": [
+                "conformance_001"
+              ]
+            },
+            {
+              "name": "block-inline-order",
+              "text": "CommonMark parsing is two phases: resolve block structure first, then run inline parsing\nover the block contents. Implement in that order.",
+              "stories": [
+                "architecture",
+                "blocks_001",
+                "inline_007",
+                "inline_003",
+                "inline_006",
+                "blocks_004",
+                "inline_002",
+                "blocks_002",
+                "blocks_006",
+                "blocks_003",
+                "blocks_007",
+                "inline_001",
+                "blocks_005",
+                "inline_005",
+                "inline_004"
+              ]
+            },
+            {
+              "name": "block-elements",
+              "text": "1. Blocks: paragraphs, thematic breaks, ATX headings, setext headings, indented code, fenced\n   code, HTML blocks, link reference definitions, block quotes, then lists \u2014 lists are the\n   hardest block construct, with lazy continuation, nesting, and tightness.",
+              "stories": [
+                "blocks_001",
+                "blocks_002",
+                "blocks_003",
+                "blocks_004",
+                "blocks_005",
+                "blocks_006",
+                "blocks_007"
+              ]
+            },
+            {
+              "name": "inline-elements",
+              "text": "2. Inlines: backslash escapes, entity and numeric references, code spans, emphasis and strong\n   emphasis (the delimiter-run algorithm), links and images, autolinks, raw HTML, hard breaks.",
+              "stories": [
+                "inline_001",
+                "inline_002",
+                "inline_003",
+                "inline_004",
+                "inline_005",
+                "inline_006",
+                "inline_007"
+              ]
+            },
+            {
+              "name": "parsing-strategy",
+              "text": "The specification text is normative and contains the algorithms. The \"Appendix: A parsing\nstrategy\" section describes the reference implementation's approach; follow it directly rather than reinventing the rules.",
+              "stories": [
+                "architecture"
+              ]
+            },
+            {
+              "name": "scoped-tests",
+              "text": "Parser implementation stories may run `spec_tests.py` with explicit section selectors covering\nthe story's complete scope. A selector must name headings that own examples, such as `ATX\nheadings` or `List items`. Chapter headings such as `Leaf blocks`, `Container blocks`, and\n`Characters and lines` own no examples; selecting them can exit zero without testing anything.",
+              "stories": [
+                "conformance_002"
+              ]
+            },
+            {
+              "name": "full-suite-verification-requirements",
+              "text": "Create one terminal verification story that:\n\n- depends on every parser implementation story;\n- contains the only `Suite: full` acceptance check;\n- runs `sh sources/full_test.sh`, prints captured standard output and standard error, and asserts\n  only `result.returncode == 0`; and\n- carries `Sea Trials: st-001`.",
+              "stories": [
+                "conformance_002"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "cmark.py": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "49ecdf5",
+          "date": "2026-10-24",
+          "hash": "c5fb45e7c64fd7670b2a3c49a151e46f4af9d0ad3004bedb37ecf9cdc34d2f00",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "run-converter-via-program",
+              "text": "if prog:\n            self.to_html = lambda x: pipe_through_prog(prog, x)",
+              "stories": [
+                "conformance_001"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "full_test.sh": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "49ecdf5",
+          "date": "2026-10-24",
+          "hash": "5b634a1c78117313283acceda8faad9de02b594e54949439c73697b058941a93",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "executable-interface",
+              "text": "The deliverable is an executable named commonmark that reads UTF-8 Markdown on stdin\nand writes HTML to stdout.",
+              "stories": [
+                "conformance_001"
+              ]
+            },
+            {
+              "name": "full-unfiltered-suite",
+              "text": "The suite runs unfiltered: no --pattern, no --number, no selector of any kind. spec_tests.py exits with failed + errored, so exit 0 means the complete CommonMark 0.31.2 suite passed.",
+              "stories": [
+                "conformance_002"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "normalize.py": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "49ecdf5",
+          "date": "2026-10-24",
+          "hash": "94a9dd253907e3dab7c02fc11e934f06112dcf0f3804255d09d732c8c7c4b5f4",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "normalize-html-whitespace",
+              "text": "Multiple inner whitespaces are collapsed to a single space (except\n    in pre tags):",
+              "stories": [
+                "blocks_004",
+                "inline_006"
+              ]
+            },
+            {
+              "name": "normalize-block-whitespace",
+              "text": "* Whitespace surrounding block-level tags is removed.",
+              "stories": [
+                "blocks_004"
+              ]
+            },
+            {
+              "name": "normalize-self-closing-tags",
+              "text": "* Self-closing tags are converted to open tags.",
+              "stories": [
+                "blocks_004"
+              ]
+            },
+            {
+              "name": "normalize-attributes",
+              "text": "* Attributes are sorted and lowercased.",
+              "stories": [
+                "blocks_004",
+                "inline_006"
+              ]
+            },
+            {
+              "name": "normalize-character-references",
+              "text": "* References are converted to unicode, except that '<', '>', '&', and\n      '\"' are rendered using entities.",
+              "stories": [
+                "inline_001"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "spec.txt": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "49ecdf5",
+          "date": "2026-10-24",
+          "hash": "43fad3e0ac5190a3b0bc6a41f7b1a853201a26ec2e6b74871f5d96239a8c34cf",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "character-and-line-handling",
+              "text": "Any sequence of [characters] is a valid CommonMark document.",
+              "stories": [
+                "inline_001"
+              ]
+            },
+            {
+              "name": "tab-handling",
+              "text": "Tabs in lines are not expanded to [spaces].  However,\nin contexts where spaces help to define block structure,\ntabs behave as if they were replaced by spaces with a tab stop\nof 4 characters.",
+              "stories": [
+                "inline_001",
+                "blocks_003",
+                "blocks_006",
+                "blocks_007"
+              ]
+            },
+            {
+              "name": "insecure-character-replacement",
+              "text": "For security reasons, the Unicode character `U+0000` must be replaced\nwith the REPLACEMENT CHARACTER (`U+FFFD`).",
+              "stories": [
+                "inline_001"
+              ]
+            },
+            {
+              "name": "backslash-escapes",
+              "text": "Any ASCII punctuation character may be backslash-escaped:",
+              "stories": [
+                "inline_001"
+              ]
+            },
+            {
+              "name": "character-references",
+              "text": "Valid HTML entity references and numeric character references\ncan be used in place of the corresponding Unicode character,\nwith the following exceptions:",
+              "stories": [
+                "inline_001"
+              ]
+            },
+            {
+              "name": "block-inline-precedence",
+              "text": "Indicators of block structure always take precedence over indicators\nof inline structure.",
+              "stories": [
+                "blocks_001",
+                "blocks_002",
+                "blocks_003",
+                "blocks_004",
+                "blocks_005",
+                "blocks_006",
+                "blocks_007",
+                "inline_001",
+                "inline_002",
+                "inline_003",
+                "inline_004",
+                "inline_005",
+                "inline_006",
+                "inline_007"
+              ]
+            },
+            {
+              "name": "thematic-breaks",
+              "text": "A line consisting of optionally up to three spaces of indentation, followed by a\nsequence of three or more matching `-`, `_`, or `*` characters, each followed\noptionally by any number of spaces or tabs, forms a\n[thematic break](@).",
+              "stories": [
+                "blocks_001"
+              ]
+            },
+            {
+              "name": "atx-headings",
+              "text": "An [ATX heading](@)\nconsists of a string of characters, parsed as inline content, between an\nopening sequence of 1--6 unescaped `#` characters and an optional\nclosing sequence of any number of unescaped `#` characters.",
+              "stories": [
+                "blocks_001"
+              ]
+            },
+            {
+              "name": "setext-headings",
+              "text": "A [setext heading](@) consists of one or more\nlines of text, not interrupted by a blank line, of which the first line does not\nhave more than 3 spaces of indentation, followed by\na [setext heading underline].",
+              "stories": [
+                "blocks_002"
+              ]
+            },
+            {
+              "name": "indented-code-blocks",
+              "text": "An [indented code block](@) is composed of one or more\n[indented chunks] separated by blank lines.",
+              "stories": [
+                "blocks_003"
+              ]
+            },
+            {
+              "name": "fenced-code-blocks",
+              "text": "A [code fence](@) is a sequence\nof at least three consecutive backtick characters (`` ` ``) or\ntildes (`~`).  (Tildes and backticks cannot be mixed.)\nA [fenced code block](@)\nbegins with a code fence, preceded by up to three spaces of indentation.",
+              "stories": [
+                "blocks_003"
+              ]
+            },
+            {
+              "name": "html-blocks",
+              "text": "An [HTML block](@) is a group of lines that is treated\nas raw HTML (and will not be escaped in HTML output).",
+              "stories": [
+                "blocks_004"
+              ]
+            },
+            {
+              "name": "link-reference-definitions-and-paragraphs",
+              "text": "A [link reference definition](@)\nconsists of a [link label], optionally preceded by up to three spaces of\nindentation, followed\nby a colon (`:`), optional spaces or tabs (including up to one\n[line ending]), a [link destination],\noptional spaces or tabs (including up to one\n[line ending]), and an optional [link\ntitle], which if it is present must be separated\nfrom the [link destination] by spaces or tabs.",
+              "stories": [
+                "blocks_005"
+              ]
+            },
+            {
+              "name": "paragraphs-and-blank-lines",
+              "text": "A sequence of non-blank lines that cannot be interpreted as other\nkinds of blocks forms a [paragraph](@).",
+              "stories": [
+                "blocks_005",
+                "blocks_007"
+              ]
+            },
+            {
+              "name": "block-quotes",
+              "text": "A [block quote marker](@),\noptionally preceded by up to three spaces of indentation,\nconsists of (a) the character `>` together with a following space of\nindentation, or (b) a single character `>` not followed by a space of\nindentation.",
+              "stories": [
+                "blocks_006"
+              ]
+            },
+            {
+              "name": "list-items-and-lists",
+              "text": "The following rules define [list items]:",
+              "stories": [
+                "blocks_007"
+              ]
+            },
+            {
+              "name": "code-spans",
+              "text": "A [code span](@) begins with a backtick string and ends with\na backtick string of equal length.",
+              "stories": [
+                "inline_002"
+              ]
+            },
+            {
+              "name": "emphasis-and-strong-emphasis",
+              "text": "The following rules define emphasis and strong emphasis:",
+              "stories": [
+                "inline_003"
+              ]
+            },
+            {
+              "name": "links",
+              "text": "A link contains [link text] (the visible text), a [link destination]\n(the URI that is the link destination), and optionally a [link title].",
+              "stories": [
+                "inline_004"
+              ]
+            },
+            {
+              "name": "images",
+              "text": "Syntax for images is like the syntax for links, with one\ndifference. Instead of [link text], we have an\n[image description](@).",
+              "stories": [
+                "inline_005"
+              ]
+            },
+            {
+              "name": "autolinks",
+              "text": "[Autolink](@)s are absolute URIs and email addresses inside\n`<` and `>`.",
+              "stories": [
+                "inline_006"
+              ]
+            },
+            {
+              "name": "raw-html",
+              "text": "Text between `<` and `>` that looks like an HTML tag is parsed as a\nraw HTML tag and will be rendered in HTML without escaping.",
+              "stories": [
+                "inline_006"
+              ]
+            },
+            {
+              "name": "hard-line-breaks",
+              "text": "A line ending (not in a code span or HTML tag) that is preceded\nby two or more spaces and does not occur at the end of a block\nis parsed as a [hard line break](@) (rendered\nin HTML as a `<br />` tag):",
+              "stories": [
+                "inline_007"
+              ]
+            },
+            {
+              "name": "soft-line-breaks",
+              "text": "A regular line ending (not in a code span or HTML tag) that is not\npreceded by two or more spaces or a backslash is parsed as a\n[softbreak](@).",
+              "stories": [
+                "inline_007"
+              ]
+            },
+            {
+              "name": "textual-content",
+              "text": "Any characters not given an interpretation by the above rules will\nbe parsed as plain textual content.",
+              "stories": [
+                "inline_007"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "spec_tests.py": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "49ecdf5",
+          "date": "2026-10-24",
+          "hash": "9db1ea4a3ee79c5ec74eebc09c5985eb252427e8d9d19ef45e5cc3f2ae410855",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "parse-supplied-conformance-suite",
+              "text": "def get_tests(specfile):",
+              "stories": [
+                "conformance_001",
+                "conformance_002"
+              ]
+            },
+            {
+              "name": "filter-tests-by-section-and-number",
+              "text": "if args.pattern:\n        pattern_re = re.compile(args.pattern, re.IGNORECASE)\n    else:\n        pattern_re = re.compile('.')\n    tests = [ test for test in all_tests if re.search(pattern_re, test['section']) and (not args.number or test['example'] == args.number) ]",
+              "stories": [
+                "conformance_001"
+              ]
+            },
+            {
+              "name": "compare-rendered-html-with-expected-output",
+              "text": "def do_test(test, normalize, prev_result):",
+              "stories": [
+                "conformance_001",
+                "conformance_002"
+              ]
+            },
+            {
+              "name": "track-test-result-changes",
+              "text": "if args.track:\n            try:\n                with open(args.track) as f:\n                    previous = json.load(f)\n            except FileNotFoundError:\n                pass",
+              "stories": [
+                "conformance_001"
+              ]
+            },
+            {
+              "name": "dump-tests-as-json",
+              "text": "if args.dump_tests:\n        out(json.dumps(tests, ensure_ascii=False, indent=2))\n        exit(0)",
+              "stories": [
+                "conformance_001"
+              ]
+            },
+            {
+              "name": "report-test-result-counts",
+              "text": "out(\"{pass} passed, {fail} failed, {error} errored, {skip} skipped\\n\".format(**result_counts))",
+              "stories": [
+                "conformance_001"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

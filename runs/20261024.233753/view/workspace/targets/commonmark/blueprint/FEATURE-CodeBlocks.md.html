@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-CodeBlocks.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-CodeBlocks.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-CodeBlocks.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Code Blocks</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261024 V1</td></tr><tr><td>Description</td><td>Parses indented and fenced code blocks as literal HTML code blocks.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md</td></tr><tr><td>Provides</td><td>indented code blocks, fenced code blocks</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement indented and fenced code blocks according to CommonMark 0.31.2. Code content is literal and is not processed as inline Markdown.</p>
+<h2>Behavior</h2>
+<ul><li>An indented code block collects indented chunks, removes four spaces of indentation from nonblank lines, preserves content and blank lines, and cannot interrupt a paragraph.</li><li>Fenced blocks begin with at least three matching backticks or tildes and up to three leading spaces. A closing fence uses the same marker, is at least as long, has up to three leading spaces, and is followed only by spaces or tabs.</li><li>An unclosed fenced block continues to the end of its containing block or document.</li><li>Remove up to the opening fence indentation from each content line. Use the first word of an info string as the code language class, escaping it for HTML attributes.</li><li>Escape code text as HTML text while preserving its content.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC code-block-conformance ===<br>Intent: The parser passes every supplied Indented code blocks and Fenced code blocks example.<br>Suite: scoped<br>Probe: --dump-tests<br>Probe Count: json</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--pattern&quot;, r&quot;^(Indented code blocks|Fenced code blocks)$&quot;, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC code-block-conformance ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not parse code block contents as Markdown or recognize references and character entities inside them.</li><li>Preserve trailing spaces and tabs in code content.</li><li>A fence opener containing invalid internal whitespace or, for backtick fences, backticks in its info string is not a code-fence opener.</li></ul></article>
+</main>
+</body>
+</html>

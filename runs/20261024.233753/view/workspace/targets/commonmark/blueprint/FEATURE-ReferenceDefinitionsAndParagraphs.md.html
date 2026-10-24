@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-ReferenceDefinitionsAndParagraphs.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-ReferenceDefinitionsAndParagraphs.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-ReferenceDefinitionsAndParagraphs.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Reference Definitions and Paragraphs</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261024 V1</td></tr><tr><td>Description</td><td>Forms paragraphs and collects document-wide link reference definitions.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md</td></tr><tr><td>Provides</td><td>link reference definitions, paragraphs</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Form paragraphs from consecutive non-blank lines that are not interpreted as other block types. Collect link reference definitions during block parsing so inline links can resolve definitions anywhere in the document.</p>
+<h2>Behavior</h2>
+<ul><li>Paragraph content is the raw text of its lines, with leading and trailing spaces or tabs removed before inline parsing. A paragraph cannot contain a blank line.</li><li>Recognize link reference definitions with up to three spaces of indentation. Definitions may span lines as allowed by CommonMark 0.31.2 and may have an optional title.</li><li>Definitions do not render as document content. Collect them across the whole document, including inside block quotes and list items.</li><li>Normalize labels by Unicode case folding, trimming surrounding spaces, tabs, and line endings, and collapsing consecutive internal whitespace to one space.</li><li>The first definition for a normalized label takes precedence.</li><li>A link reference definition cannot interrupt a paragraph. Text that does not form a valid definition remains paragraph content.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC references-and-paragraphs ===<br>Intent: The parser passes the complete supplied examples for link reference definitions and paragraphs.<br>Suite: scoped<br>Requires: executable=python3; scope=test<br>Probe: --dump-tests<br>Probe Count: json</p>
+<p>import os import subprocess import sys</p>
+<p>pattern = &quot;Link reference definitions|Paragraphs&quot; environment = { **os.environ, &quot;PYTHONPATH&quot;: os.pathsep.join( [os.path.abspath(&quot;sources&quot;), os.environ.get(&quot;PYTHONPATH&quot;, &quot;&quot;)] ).rstrip(os.pathsep), } result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.path.abspath(&quot;commonmark&quot;), &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, pattern, ], capture_output=True, text=True, env=environment, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC references-and-paragraphs ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Preserve the supplied conformance assets unchanged.</li><li>Do not use a public Markdown implementation as the parser.</li></ul></article>
+</main>
+</body>
+</html>

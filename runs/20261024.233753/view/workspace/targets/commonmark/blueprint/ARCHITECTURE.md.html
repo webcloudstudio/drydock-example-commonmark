@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/ARCHITECTURE.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/ARCHITECTURE.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/ARCHITECTURE.md">Raw file</a></div></header>
+<article class="doc"><h1>ARCHITECTURE: CommonMark Parser</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261024 V1</td></tr><tr><td>Description</td><td>Defines the Python command-line parser structure and its block-first, inline-second parsing boundary.</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>The application is a Python command-line program rooted at <code>./commonmark</code>. It reads UTF-8 Markdown from standard input and writes rendered HTML to standard output.</p>
+<h2>Components and boundaries</h2>
+<ul><li>The executable delegates parsing and rendering to original project code. It must not use a public Markdown implementation.</li><li>The parser builds block structure before parsing inline content. Link reference definitions are collected during block parsing and made available to the inline phase.</li><li>Block parsing owns paragraphs, headings, code blocks, HTML blocks, thematic breaks, block quotes, and lists. Inline parsing owns inline constructs such as escapes, code spans, emphasis, links, images, autolinks, raw HTML, and line breaks.</li><li>The renderer converts the parsed document to HTML. The supplied conformance runner invokes <code>./commonmark</code> and compares normalized HTML with examples from the supplied specification.</li><li>Runtime conformance assets are staged verbatim under <code>sources/</code>: <code>spec.txt</code>, <code>spec_tests.py</code>, <code>cmark.py</code>, <code>normalize.py</code>, and <code>full_test.sh</code>.</li></ul>
+<h2>Module ownership</h2>
+<div class="scroll"><table><thead><tr><th>Boundary</th><th>Owner</th><th>Allowed access</th></tr></thead><tbody><tr><td>Parsing and rendering</td><td>Project parser modules</td><td>Internal parser and renderer interfaces</td></tr><tr><td>Configuration</td><td>None</td><td>No configuration store is specified</td></tr><tr><td>File store</td><td>None</td><td>No file store is specified</td></tr><tr><td>External services</td><td>None</td><td>No external service is specified</td></tr><tr><td>Conformance assets</td><td><code>sources/</code></td><td>Read-only runtime inputs for the supplied test harness</td></tr></tbody></table></div>
+<h2>Technology Stack</h2>
+<div class="scroll"><table><thead><tr><th>Technology</th><th>Use</th></tr></thead><tbody><tr><td>Python 3</td><td>CLI, parser, renderer, and project checks</td></tr><tr><td>Python standard library</td><td>Runtime implementation without third-party dependencies</td></tr><tr><td>POSIX shell</td><td>Supplied full-suite invocation</td></tr></tbody></table></div>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC architecture-staged-assets ===<br>Intent: The architecture story stages the corpus and runner inputs needed by later scoped checks.<br>Suite: scoped<br>Probe: --dump-tests<br>Probe Count: json</p>
+<p>import json import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--dump-tests&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 tests = json.loads(result.stdout) assert len(tests) &gt; 0 === END AC architecture-staged-assets ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Keep the five supplied runtime conformance assets unchanged.</li><li>Do not modify scoring assets or author or replace <code>sources/full_test.sh</code>.</li><li>Preserve the parser boundary between block structure and inline parsing.</li><li>Do not use a public Markdown implementation.</li></ul></article>
+</main>
+</body>
+</html>
