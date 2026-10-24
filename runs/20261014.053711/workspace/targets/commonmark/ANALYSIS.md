@@ -1,0 +1,202 @@
+# Blueprint Analysis: commonmark
+
+## Commander Expectations
+
+- assert the deliverable is an executable named `commonmark` at the application root that reads Markdown from standard input and writes HTML to standard output
+- assert the parser implements CommonMark 0.31.2 from the supplied specification and uses no public Markdown implementation
+- assert the parser is built in two phases, block structure first and inline parsing second, following the spec's "Appendix: A parsing strategy"
+- assert the complete supplied conformance suite passes when run through `sh sources/full_test.sh`
+- assert the scoring assets (`sources/full_test.sh`, `sources/spec_tests.py`, `sources/cmark.py`, `sources/normalize.py`, `sources/spec.txt`) are never modified
+- assert a concise `README.md` describes the standard-input/standard-output interface, with no documentation story and no README acceptance criterion
+
+## Crew
+
+| Crew | Charge |
+|---|---|
+| Commander | Defines intent and decides what done means. |
+| Team Lead | Confirms epic completeness and stakeholder expectations. |
+| Planning Crew | Authors atomic specifications and the ordered Manifest. |
+| Shipyard Crew | Builds the tickets without synchronous Commander access. |
+
+## Story List
+
+### Feature: Executable and Block Engine
+
+| ID | Story | High-level AC |
+|---|---|---|
+| CMK-001 | Executable entry point, line intake, and README | `./commonmark` is executable, reads all of stdin as UTF-8, and writes HTML to stdout. LF, CR, and CRLF are line endings. U+0000 becomes U+FFFD. `README.md` describes the stdin/stdout interface. |
+| CMK-002 | Block parsing engine, paragraphs, and blank lines | Per-line open-block matching, new block starts, and text accumulation follow the Appendix procedure. Paragraphs render as `<p>` with HTML escaping. Sections `Paragraphs` and `Blank lines` pass. |
+
+### Feature: Leaf Blocks
+
+| ID | Story | High-level AC |
+|---|---|---|
+| LEAF-001 | Thematic breaks | Section `Thematic breaks` passes, including precedence over setext underlines and list items. |
+| LEAF-002 | ATX headings | Section `ATX headings` passes, covering levels 1-6, closing sequences, escapes, and empty headings. |
+| LEAF-003 | Setext headings | Section `Setext headings` passes, covering multiline content and the lazy-continuation exclusions. |
+| LEAF-004 | Indented code blocks | Section `Indented code blocks` passes, covering chunks, blank-line handling, and the paragraph-interruption rule. |
+| LEAF-005 | Fenced code blocks | Section `Fenced code blocks` passes, covering backtick and tilde fences, indentation stripping, info strings, and unclosed fences. |
+| LEAF-006 | HTML blocks | Section `HTML blocks` passes for all seven start/end condition kinds, including the rule that type 7 cannot interrupt a paragraph. |
+| LEAF-007 | Link reference definitions and label matching | Section `Link reference definitions` passes. Definitions are extracted when a paragraph closes, the first definition wins, and labels are normalized with Unicode case fold and whitespace collapse. |
+
+### Feature: Container Blocks
+
+| ID | Story | High-level AC |
+|---|---|---|
+| CONT-001 | Block quotes | Section `Block quotes` passes, including laziness and consecutiveness rules. |
+| CONT-002 | List items | Section `List items` passes for markers, indentation rules 1-6, empty items, start numbers, and lazy continuation. |
+| CONT-003 | Lists, tight and loose | Section `Lists` passes: same-type grouping, the one-start-number interruption rule, and tight/loose `<p>` rendering. |
+| CONT-004 | Tabs in block-structure contexts | Section `Tabs` passes: tabs act as a 4-column tab stop for block structure and are never expanded in content. |
+
+### Feature: Inline Parsing
+
+| ID | Story | High-level AC |
+|---|---|---|
+| INL-001 | Code spans and inline precedence | Sections `Code spans`, `Inlines`, and `Precedence` pass, including backtick-string matching, line-ending and space normalization, and precedence against HTML and autolinks. |
+| INL-002 | Backslash escapes | Section `Backslash escapes` passes. Escapes are honored in text, link destinations and titles, and info strings, and are inert in code and raw HTML. |
+| INL-003 | Entity and numeric character references | Section `Entity and numeric character references` passes, covering the HTML5 named-entity set, decimal and hex ranges, and U+FFFD substitution. |
+| INL-004 | Emphasis and strong emphasis | Section `Emphasis and strong emphasis` passes using flanking rules and the delimiter-stack algorithm from the Appendix. |
+| INL-005 | Links: inline, full, collapsed, and shortcut | Section `Links` passes: destination and title grammar, bracket matching, no nested links, reference resolution, and URL percent-encoding. |
+| INL-006 | Images | Section `Images` passes, covering plain-text alt rendering and all four link forms. |
+| INL-007 | Autolinks | Section `Autolinks` passes for URI and email autolinks. |
+| INL-008 | Raw inline HTML | Section `Raw HTML` passes for open and closing tags, comments, processing instructions, declarations, and CDATA. |
+| INL-009 | Hard breaks, soft breaks, and textual content | Sections `Hard line breaks`, `Soft line breaks`, and `Textual content` pass. |
+
+### Feature: Conformance Verification
+
+| ID | Story | High-level AC |
+|---|---|---|
+| VER-001 | Complete conformance suite passes | `sh sources/full_test.sh` exits 0. The unfiltered supplied suite passes with no failures or errors. |
+
+## Story Guidance
+
+Named stories planning must produce. Authoritative record: `STORY_GUIDANCE.json`.
+
+None.
+
+## Surfaced Acceptance Criteria
+
+| ID | Story ID | Criterion |
+|---|---|---|
+| AC-001 | CMK-001 | Empty standard input produces empty standard output and exit status 0. |
+| AC-002 | CMK-001 | Bytes on standard input that are not valid UTF-8 are decoded with U+FFFD replacement; the program exits 0 and emits no traceback. |
+| AC-003 | CMK-001 | Standard output carries only rendered HTML; any diagnostics go to standard error. |
+
+## Source Inventory
+
+| Path | Content kind | Disposition | Reason |
+|---|---|---|---|
+| `sources/INSTRUCTIONS.md` | markdown | analyzed | readable UTF-8 |
+| `sources/cmark.py` | code | analyzed | readable UTF-8 |
+| `sources/full_test.sh` | code | analyzed | readable UTF-8 |
+| `sources/normalize.py` | code | analyzed | readable UTF-8 |
+| `sources/spec.txt` | text | chunked | split into 18 bounded chunks |
+| `sources/spec_tests.py` | code | analyzed | readable UTF-8 |
+
+## Relationship Model
+
+| Source or group | Relationship type | Related source or group | Evidence | Delivery implication |
+|---|---|---|---|---|
+| `sources/INSTRUCTIONS.md` | instruction-to-test | `sources/full_test.sh` | "`sources/full_test.sh` is the single scoring entry point"; terminal story runs `sh sources/full_test.sh` | One terminal `Suite: full` story carries Sea Trial st-001; all others stay scoped. |
+| `sources/full_test.sh` | test-kit-to-implementation | `./commonmark` | Checks `[ -x ./commonmark ]`, then runs `spec_tests.py --program "$PWD/commonmark"` | The executable must exist at the application root and be directly runnable. |
+| `sources/full_test.sh` | dependency | `sources/spec_tests.py` | Invokes `python3 sources/spec_tests.py --spec sources/spec.txt` and requires `0 failed, 0 errored, 0 skipped` | Runner, spec, and helpers must all be staged. |
+| `sources/spec_tests.py` | dependency | `sources/cmark.py` | `from cmark import CMark`; `pipe_through_prog` spawns the program with the Markdown on stdin | Program contract is stdin to stdout, UTF-8, exit 0. |
+| `sources/spec_tests.py` | parser-to-normalizer | `sources/normalize.py` | `normalize_html` is applied to both expected and actual HTML | Whitespace and attribute-order differences are tolerated; tag structure is not. |
+| `sources/spec_tests.py` | test-kit-to-implementation | `sources/spec.txt` | `get_tests` extracts examples and assigns each to its nearest preceding heading as `section` | Sections that own examples are the unit for scoped selectors. |
+| `sources/spec.txt` (Appendix) | reference-to-replacement | `./commonmark` | "follow it directly rather than reinventing the rules" | The block procedure and the delimiter-stack algorithms are the design basis. |
+
+## Source Roles
+
+| Path | Role | Plan disposition | Build disposition |
+|---|---|---|---|
+| `sources/INSTRUCTIONS.md` | author intent | compass | prompt-only |
+| `sources/spec.txt` | normative specification and conformance test suite | context | stage |
+| `sources/spec_tests.py` | conformance harness | context | stage |
+| `sources/cmark.py` | test helper | context | stage |
+| `sources/normalize.py` | test helper | context | stage |
+| `sources/full_test.sh` | conformance harness | context | stage |
+
+## Planning Instructions
+
+### Delivery Shape
+
+The system is a single-process CLI: `./commonmark` reads UTF-8 Markdown from stdin and writes HTML to stdout. The implementation has two phases.
+- **Phase 1:** consume lines, maintain the open-block tree (document, block quote, list, list item, paragraph, headings, code, HTML block), and collect link reference definitions.
+- **Phase 2:** walk the finished tree and parse paragraph and heading text into inlines, using the reference map and the Appendix delimiter-stack algorithms (look for link or image; process emphasis).
+
+A renderer turns the tree into HTML. The test runner compares normalized HTML, so whitespace and attribute order are not significant but tag structure, entities, and URL percent-encoding are.
+
+### Story Realization Map
+
+All stories realize a capability inside the single executable. Evidence comes from `sources/spec.txt`, from the section named in the story, and from the Appendix.
+
+| Story | Scope and evidence |
+|---|---|
+| CMK-001 | Capability and acceptance contract. Evidence: `sources/INSTRUCTIONS.md`, `sources/full_test.sh`, `sources/cmark.py`, and the spec sections "Characters and lines" and "Insecure characters". |
+| CMK-002 | Capability: tree, per-line procedure, paragraph rendering. Evidence: Appendix "Phase 1: block structure"; sections `Paragraphs` and `Blank lines`. |
+| LEAF-001 to LEAF-006 | One capability per same-named spec section. Each is a block start/continue/close rule plus renderer output. |
+| LEAF-007 | Capability: definition parsing on paragraph close, plus the label normalization shared with INL-005 and INL-006. Evidence: sections `Link reference definitions` and `Links` ("matches"). |
+| CONT-001 to CONT-003 | Container capabilities: quote markers, list marker and indentation rules, laziness, list grouping, and tight/loose computation. |
+| CONT-004 | Capability on the shared column-aware indentation logic. Evidence: section `Tabs`. |
+| INL-001, INL-002, INL-003, INL-007, INL-008, INL-009 | Inline capabilities, one per same-named section. INL-003 needs the HTML5 entity table; the spec names `entities.json` as the authority. |
+| INL-004, INL-005, INL-006 | Share one delimiter stack. INL-004 owns `*`/`_` delimiter runs and process-emphasis. INL-005 owns `[`/`![` handling and look-for-link-or-image. INL-006 reuses INL-005. |
+| VER-001 | Acceptance contract only, running `sources/full_test.sh`. |
+
+### Test and Acceptance Strategy
+
+- **Scoped stories:** each feature story runs `python3 sources/spec_tests.py --program ./commonmark --spec sources/spec.txt --pattern '<regex>'` with `Suite: scoped`. Never invoke `full_test.sh` from these checks.
+- **Selector semantics:** `--pattern` is a case-insensitive regex searched against section headings. Anchor each selector, for example `^ATX headings$` or `^Code spans$|^Inlines$|^Precedence$`. Unanchored `Links` would also match `Autolinks`. Name only headings that own examples. Chapter headings own none and can exit 0 while testing nothing.
+- **Section ownership (the sections that own examples):**
+
+| Story | Sections |
+|---|---|
+| CMK-002 | `Paragraphs`, `Blank lines` |
+| INL-001 | `Code spans`, `Inlines`, `Precedence` |
+| INL-009 | `Hard line breaks`, `Soft line breaks`, `Textual content` |
+| Remaining stories | The same-named section |
+
+- **Terminal story:** VER-001 is the only story with `Suite: full`. It depends on every other story, runs `sh sources/full_test.sh`, prints captured stdout and stderr, asserts only `result.returncode == 0`, and carries `Sea Trials: st-001`.
+- **Prohibitions:** no file-presence or staged-asset checks, and no additional verification stories.
+- **Not an acceptance criterion:** README content.
+- **Story-scoped:** the surfaced criteria AC-001 to AC-003, tested with small bounded stdin cases.
+
+### Sequencing and Dependencies
+
+- **Build order:** CMK-001, then CMK-002, then the leaf and container stories, then the inline stories, then VER-001.
+- **Cross-section examples:** nearly every spec section includes examples that use constructs from other sections. A scoped section check is only satisfiable once the stories whose constructs its examples exercise are complete. Planning must place each story after those dependencies and attach its scoped check accordingly. Known couplings:
+  - Thematic breaks, setext headings, and indented code use lists and block quotes.
+  - ATX headings use emphasis and escapes.
+  - Fenced code uses code spans.
+  - Link reference definitions use links.
+  - Backslash escapes and entities use links, autolinks, raw HTML, and fenced code.
+  - Code spans use autolinks and raw HTML.
+  - Emphasis uses links and images.
+  - Images use links.
+  - Tabs use lists and block quotes.
+- **Shared infrastructure:**
+  - Label normalization is built in LEAF-007 and consumed by INL-005 and INL-006.
+  - The delimiter stack is shared by INL-004 and INL-005.
+  - URL percent-encoding and HTML escaping live in the renderer from CMK-002 onward.
+- **Constraint:** the scoring assets are read-only and hash-verified. No story may write to them.
+
+### Source Conflicts and Gaps
+
+- No cross-source conflicts found. `sources/INSTRUCTIONS.md`, `sources/full_test.sh`, and `sources/spec_tests.py` agree on the program interface and the unfiltered scoring.
+- **Implementation language:** not named in the sources. The harness only requires an executable `./commonmark`, and `python3` is already required to run it. Selected under the unattended policy: Python 3 with an executable script and shebang, recorded as a proposal in `TECHNOLOGY_STACK.md`. This is not a questionnaire.
+- **Soft breaks:** the spec allows a line ending or a space, and the normalizer collapses both. Selected: render a line ending.
+- **Persistence, auth, deployment, and external services:** not applicable.
+
+## Analysis Notes
+generated: 2026-10-14
+blueprint: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/workspace/targets/commonmark/blueprint
+
+Quality: Ready
+  blockers: 0
+  questions: 0
+  features: 5
+  stories: 23
+  stack: not declared
+  display_name: not proposed
+  short_description: A CommonMark 0.31.2 parser executable that converts Markdown on standard input to HTML on standard output.
+
+Project type: cli. The program takes no sub-verbs, so there is no per-command help baseline to define. The only open items are the pre-filled identity confirmations.

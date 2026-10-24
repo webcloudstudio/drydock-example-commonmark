@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-20.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-20.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-20.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 20 · Service (block-20)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-14</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 5441</li><li>execution id: 20261014.075451.866Z-23e771a2</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse setext headings, including multiline content and underline precedence. (setext-headings) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1072)</li><li>implements: FEATURE-Setext-Headings.md (SP 2267)</li><li>context: ARCHITECTURE_compact.md (SP 335)</li><li>stack: common_compact.md (SP 1199)</li><li>stack: python_compact.md (SP 390)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>mdparser/blocks.py</li><li>mdparser/render.py</li><li>tests/test_blocks.py</li><li>tests/test_setext_headings.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: setext-both-levels (FEATURE-Setext-Headings.md)</li></ul>
+<p>intent: Equals underlines give h1 and dash underlines give h2. return code: 1 stdout: &lt;p&gt;Foo &lt;em&gt;bar&lt;/em&gt; =========&lt;/p&gt;</p>
+<p>&lt;p&gt;Foo &lt;em&gt;bar&lt;/em&gt;&lt;/p&gt; &lt;hr /&gt; stderr: --- drydock: values at failure --- equals = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;Foo &lt;em&gt;bar&lt;/em&gt;\n=========&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;setext-both-levels.py&quot;, line 9, in &lt;module&gt; assert equals.stdout.count(&quot;&lt;h1&gt;&quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: setext-multiline-content (FEATURE-Setext-Headings.md)</li></ul>
+<p>intent: Several paragraph lines before the underline become one heading with no paragraph. return code: 1 stdout: &lt;p&gt;Foo Bar&lt;/p&gt; &lt;hr /&gt; stderr: --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;Foo\nBar&lt;/p&gt;\n&lt;hr /&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;setext-multiline-content.py&quot;, line 6, in &lt;module&gt; assert result.stdout.count(&quot;&lt;h2&gt;&quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: setext-underline-beats-thematic-break (FEATURE-Setext-Headings.md)</li></ul>
+<p>intent: Dashes after paragraph text make a heading, not a thematic break. return code: 1 stdout: &lt;p&gt;Foo&lt;/p&gt; &lt;hr /&gt; &lt;p&gt;bar&lt;/p&gt; stderr: --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;Foo&lt;/p&gt;\n&lt;hr /&gt;\n&lt;p&gt;bar&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;setext-underline-beats-thematic-break.py&quot;, line 6, in &lt;module&gt; assert result.stdout.count(&quot;&lt;h2&gt;&quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: setext-sequence-with-thematic-breaks (FEATURE-Setext-Headings.md)</li></ul>
+<p>intent: Dashes with no preceding paragraph are thematic breaks, mixed with two setext headings and a paragraph. return code: 1 stdout: &lt;hr /&gt; &lt;p&gt;Foo&lt;/p&gt; &lt;hr /&gt; &lt;p&gt;Bar&lt;/p&gt; &lt;hr /&gt; &lt;p&gt;Baz&lt;/p&gt; stderr: --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;hr /&gt;\n&lt;p&gt;Foo&lt;/p&gt;\n&lt;hr /&gt;\n&lt;p&gt;Bar&lt;/p&gt;\n&lt;hr /&gt;\n&lt;p&gt;Baz&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;setext-sequence-with-thematic-breaks.py&quot;, line 6, in &lt;module&gt; assert result.stdout.count(&quot;&lt;hr /&gt;&quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>GREEN (prepassed): setext-underline-limits (FEATURE-Setext-Headings.md)</li></ul>
+<p>intent: Four spaces of indentation or internal spaces disqualify the underline. return code: 0 stdout: &lt;p&gt;Foo ---&lt;/p&gt;</p>
+<p>&lt;p&gt;Foo = =&lt;/p&gt;</p>
+<ul><li>GREEN (prepassed): setext-not-lazy-in-quote (FEATURE-Setext-Headings.md)</li></ul>
+<p>intent: An unmarked underline after a quote paragraph does not make a heading inside the quote. return code: 0 stdout: &lt;blockquote&gt; &lt;p&gt;foo bar ===&lt;/p&gt; &lt;/blockquote&gt;</p>
+<ul><li>GREEN (prepassed): setext-quote-then-thematic-break (FEATURE-Setext-Headings.md)</li></ul>
+<p>intent: Dashes after a quote without a marker are a thematic break outside the quote. return code: 0 stdout: &lt;blockquote&gt; &lt;p&gt;Foo&lt;/p&gt; &lt;/blockquote&gt; &lt;hr /&gt;</p>
+<ul><li>GREEN (prepassed): setext-empty-is-paragraph (FEATURE-Setext-Headings.md)</li></ul>
+<p>intent: An underline with no content line is not a heading. return code: 0 stdout: &lt;p&gt;====&lt;/p&gt;</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: setext-both-levels (FEATURE-Setext-Headings.md)</li></ul>
+<p>intent: Equals underlines give h1 and dash underlines give h2. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;h1&gt;Foo &lt;em&gt;bar&lt;/em&gt;&lt;/h1&gt;</p>
+<p>&lt;h2&gt;Foo &lt;em&gt;bar&lt;/em&gt;&lt;/h2&gt;</p>
+<ul><li>PASS: setext-multiline-content (FEATURE-Setext-Headings.md)</li></ul>
+<p>intent: Several paragraph lines before the underline become one heading with no paragraph. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;h2&gt;Foo Bar&lt;/h2&gt;</p>
+<ul><li>PASS: setext-underline-beats-thematic-break (FEATURE-Setext-Headings.md)</li></ul>
+<p>intent: Dashes after paragraph text make a heading, not a thematic break. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;h2&gt;Foo&lt;/h2&gt; &lt;p&gt;bar&lt;/p&gt;</p>
+<ul><li>PASS: setext-sequence-with-thematic-breaks (FEATURE-Setext-Headings.md)</li></ul>
+<p>intent: Dashes with no preceding paragraph are thematic breaks, mixed with two setext headings and a paragraph. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;hr /&gt; &lt;h2&gt;Foo&lt;/h2&gt; &lt;h2&gt;Bar&lt;/h2&gt; &lt;p&gt;Baz&lt;/p&gt;</p>
+<ul><li>PASS: setext-underline-limits (FEATURE-Setext-Headings.md)</li></ul>
+<p>intent: Four spaces of indentation or internal spaces disqualify the underline. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;Foo ---&lt;/p&gt;</p>
+<p>&lt;p&gt;Foo = =&lt;/p&gt;</p>
+<ul><li>PASS: setext-not-lazy-in-quote (FEATURE-Setext-Headings.md)</li></ul>
+<p>intent: An unmarked underline after a quote paragraph does not make a heading inside the quote. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;blockquote&gt; &lt;p&gt;foo bar ===&lt;/p&gt; &lt;/blockquote&gt;</p>
+<ul><li>PASS: setext-quote-then-thematic-break (FEATURE-Setext-Headings.md)</li></ul>
+<p>intent: Dashes after a quote without a marker are a thematic break outside the quote. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;blockquote&gt; &lt;p&gt;Foo&lt;/p&gt; &lt;/blockquote&gt; &lt;hr /&gt;</p>
+<ul><li>PASS: setext-empty-is-paragraph (FEATURE-Setext-Headings.md)</li></ul>
+<p>intent: An underline with no content line is not a heading. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;====&lt;/p&gt;</p>
+<h2>Build summary</h2>
+<p>Baseline is green (991 passed, 1 skipped). Now I&#x27;ll add the setext rule to the block engine, register it ahead of thematic breaks so dashes after a paragraph win, and render the new block kind.Now the test file: the declared acceptance checks transcribed unchanged, plus block-tree and exact-output tests.Two expectations I wrote need correcting before I run them: a trailing-space hard break <em>between</em> heading lines is valid (only the last line&#x27;s trailing spaces are dropped), and one test name is misleading.Both failures are mistakes in my test expectations, not the engine. <code>&quot;  \tFoo  &quot;</code> is four columns of indentation, so it&#x27;s an indented code block; and paragraph lines drop their leading whitespace, so the content is <code>Foo\n===</code>. Fixing the tests:Now the new file, then the whole project suite in the background to check for regressions against the 991-pass baseline.Same mistake again: a space followed by a tab reaches column 4, so it&#x27;s still indented code. The single-space case is the one I meant to test, so I&#x27;ll use that.The new file is green (48 passed). Waiting on the full-suite run:The background run started before my last test fix, so the <code>strips_surrounding</code> failure there is stale. The real regression is an existing registry-order test in <code>test_blocks.py</code>, which pins the start-rule list. Let me look at it.This test pins the old start-rule order. Adding the setext rule ahead of thematic break is an intended change, so I&#x27;ll update the expectation (it isn&#x27;t a declared acceptance check) and rename it to match.RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>mdparser/blocks.py</li><li>mdparser/render.py</li><li>tests/test_blocks.py</li><li>tests/test_setext_headings.py</li></ul>
+<p>SUMMARY: Setext headings are implemented as a registered block type, <code>setext_heading</code>, with a start rule that runs only when the open container is a paragraph.</p>
+<ul><li><strong>Underline rule:</strong> the line must have at most three columns of indentation, one run of a single <code>=</code> or <code>-</code>, and only trailing spaces or tabs. Internal spaces disqualify it. <code>=</code> gives level 1 and <code>-</code> gives level 2.</li><li><strong>Whole-paragraph content:</strong> the heading content is all paragraph lines joined, with surrounding spaces and tabs stripped. Leading link reference definitions are extracted into the document map first and do not become heading text.</li><li><strong>Empty guard:</strong> if no text remains after definitions, the rule declines. The underline then stays paragraph text, or becomes a thematic break for dashes.</li><li><strong>Precedence:</strong> the setext rule is registered before the thematic-break rule, so dashes after paragraph text make a heading.</li><li><strong>Lazy continuation:</strong> the rule never fires for a lazy line, so <code>&gt; foo\nbar\n===</code> stays a paragraph inside the quote.</li><li><strong>Tree mechanics:</strong> the paragraph&#x27;s lines are cleared, so it closes empty and leaves the tree. The heading is attached in its place.</li><li><strong>Rendering:</strong> <code>render.py</code> emits <code>&lt;hN&gt;</code> for <code>setext_heading</code> the same way it does for ATX headings.</li></ul>
+<p>Tests:</p>
+<ul><li><code>tests/test_setext_headings.py</code> (new, 48 tests) transcribes the seven declared acceptance checks unchanged and adds block-tree and exact-output tests. It passes 48/48.</li><li><code>tests/test_blocks.py</code>: I updated one existing test that pinned the old start-rule order to include the new rule first, and renamed it to match. This is an intended change, not a weakened assertion.</li><li>Full project suite: 1037 passed, 1 skipped, 2 failed. One failure was the registry-order test I then updated. The other was a bad input in my own new test, which I then fixed. After those edits, the affected files (test_blocks, test_setext_headings, test_thematic_breaks, test_atx_headings, test_block_quotes, test_block_engine) pass 253/253. I did not rerun the entire suite after the last two edits.</li></ul>
+<p>Not run: <code>sources/full_test.sh</code> and <code>spec_tests.py</code>. The setext corpus examples are gated in the lists story, so I did not invoke the staged corpus here. No commits were made.</p>
+<p>BLOCKERS:</p>
+<ul><li>none</li></ul></article>
+</main>
+</body>
+</html>

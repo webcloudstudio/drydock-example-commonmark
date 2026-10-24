@@ -1,0 +1,41 @@
+Drydock 0.2.0  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+
+Build report: commonmark
+  evidence: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/workspace/targets/commonmark/evidence
+  usage:    /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/workspace/logs/llm.jsonl
+
+  Blueprint acceptance (last `score ac`): PASS 79  FAIL 0  UNVERIFIED 0  PREPASSED 47  (126 AC)
+
+  Block                     Build AC  Calls      Cached  Uncached     Hit   Output     Time
+  ─────────────────────────────────────────────────────────────────────────────────────────
+  ✓ Block 1 · Foundational       1/1      1     206,741        18  100.0%   10,015   1m 24s
+  ✓ Block 2 · Service            5/5      1     440,397        32  100.0%   14,042   1m 26s
+  ✓ Block 3 · Service            4/4      1   1,496,237        42  100.0%   62,663   4m 56s
+  ✓ Block 4 · Service            4/4      1     625,335        28  100.0%   23,789   2m 19s
+  ✓ Block 5 · Service            5/5      1   1,076,357        44  100.0%   29,776   3m 04s
+  ✓ Block 6 · Service            5/5      1     374,331        24  100.0%   16,520   2m 36s
+  ✓ Block 7 · Service            4/4      1     394,675        24  100.0%   14,272   2m 11s
+  ✓ Block 8 · Service            6/6      1     597,524        30  100.0%   20,669   2m 33s
+  ✓ Block 9 · Service            6/6      1   1,136,965        38  100.0%   47,498   7m 11s
+  ✓ Block 10 · Service           5/5      1     964,845        32  100.0%   40,198   5m 02s
+  ✓ Block 11 · Service           6/6      1   1,374,193        40  100.0%   57,177   5m 31s
+  ✓ Block 12 · Service           5/5      1     562,629        28  100.0%   22,326   7m 12s
+  ✓ Block 13 · Service           6/6      1     567,415        28  100.0%   17,889   6m 50s
+  ✓ Block 14 · Service           4/4      1     614,290        34  100.0%   12,418   4m 54s
+  ✓ Block 15 · Service           6/6      1     392,950        22  100.0%   17,763   5m 27s
+  ✓ Block 16 · Service           5/5      1     490,527        24  100.0%   22,283   7m 55s
+  ✓ Block 17 · Service           7/7      1   1,007,913        38  100.0%   39,737   8m 34s
+  ✓ Block 18 · Service           7/7      1   1,635,708        50  100.0%   51,273   8m 39s
+  ✓ Block 19 · Service           8/8      1   1,154,108        36  100.0%   48,377   8m 07s
+  ✓ Block 20 · Service           8/8      1   1,262,015        46  100.0%   31,396   7m 28s
+  ✓ Block 21 · Service           7/7      1   1,707,536        42  100.0%   79,593   9m 41s
+  ✓ Block 22 · Service           6/6      1   1,583,696        58  100.0%   46,317  12m 46s
+  ✓ Block 23 · Service           5/5      1     264,659        22  100.0%    9,057   5m 05s
+  ✓ Block 24 · Feature           1/1      1     156,903        16  100.0%    3,115  10m 56s
+  ─────────────────────────────────────────────────────────────────────────────────────────
+  TOTAL                      126/126     24  20,087,949       796  100.0%  738,163   2h 21m
+
+  Blocks: 24/24 verified · 24 on first call · 0 repaired
+  Model:  claude-haiku-5-5
+  Tokens: 20,087,949 cached · 796 uncached · 738,163 out
+

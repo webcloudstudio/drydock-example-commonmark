@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261014.055025.658Z_commonmark_lineage_attribute_claude.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261014.055025.658Z_commonmark_lineage_attribute_claude.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261014.055025.658Z_commonmark_lineage_attribute_claude.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>&lt;requirement name=&quot;block-structure-two-phase-parsing&quot; stories=&quot;block-engine,foundation&quot;&gt;
+Parsing has two phases: in the first phase, lines of input are consumed and the block structure of the document is constructed. In the second phase, the raw text contents of paragraphs and headings are parsed into sequences of Markdown inline elements.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;thematic-breaks&quot; stories=&quot;thematic-breaks&quot;&gt;
+A line consisting of optionally up to three spaces of indentation, followed by a sequence of three or more matching `-`, `_`, or `*` characters, each followed optionally by any number of spaces or tabs, forms a thematic break.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;atx-headings&quot; stories=&quot;atx-headings&quot;&gt;
+An ATX heading consists of a string of characters, parsed as inline content, between an opening sequence of 1--6 unescaped `#` characters and an optional closing sequence of any number of unescaped `#` characters.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;setext-headings&quot; stories=&quot;setext-headings&quot;&gt;
+A setext heading consists of one or more lines of text, not interrupted by a blank line, of which the first line does not have more than 3 spaces of indentation, followed by a setext heading underline.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;indented-code-blocks&quot; stories=&quot;indented-code&quot;&gt;
+An indented code block is composed of one or more indented chunks separated by blank lines. An indented chunk is a sequence of non-blank lines, each preceded by four or more spaces of indentation.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;fenced-code-blocks&quot; stories=&quot;fenced-code&quot;&gt;
+A fenced code block begins with a code fence, preceded by up to three spaces of indentation. The line with the opening code fence may optionally contain some text following the code fence, called the info string.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;html-blocks&quot; stories=&quot;html-blocks&quot;&gt;
+An HTML block is a group of lines that is treated as raw HTML (and will not be escaped in HTML output). There are seven kinds of HTML block, which can be defined by their start and end conditions.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;link-reference-definitions&quot; stories=&quot;link-reference-definitions&quot;&gt;
+A link reference definition consists of a link label, optionally preceded by up to three spaces of indentation, followed by a colon (`:`), optional spaces or tabs (including up to one line ending), a link destination, optional spaces or tabs (including up to one line ending), and an optional link title.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;paragraphs&quot; stories=&quot;block-engine&quot;&gt;
+A sequence of non-blank lines that cannot be interpreted as other kinds of blocks forms a paragraph.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;block-quotes&quot; stories=&quot;block-quotes&quot;&gt;
+A block quote marker, optionally preceded by up to three spaces of indentation, consists of (a) the character `&gt;` together with a following space of indentation, or (b) a single character `&gt;` not followed by a space of indentation.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;list-items&quot; stories=&quot;list-items&quot;&gt;
+A list marker is a bullet list marker or an ordered list marker. A bullet list marker is a `-`, `+`, or `*` character. An ordered list marker is a sequence of 1--9 arabic digits (`0-9`), followed by either a `.` character or a `)` character.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;lists&quot; stories=&quot;lists&quot;&gt;
+A list is a sequence of one or more list items of the same type. The list items may be separated by any number of blank lines.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;code-spans&quot; stories=&quot;code-spans&quot;&gt;
+A code span begins with a backtick string and ends with a backtick string of equal length. The contents of the code span are the characters between these two backtick strings, normalized in the following ways: first, line endings are converted to spaces.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;emphasis-and-strong-emphasis&quot; stories=&quot;emphasis&quot;&gt;
+Emphasis begins with a delimiter that can open emphasis and ends with a delimiter that can close emphasis, and that uses the same character (`_` or `*`) as the opening delimiter. Strong emphasis begins with a delimiter that can open strong emphasis and ends with a delimiter that can close strong emphasis.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;links-and-images&quot; stories=&quot;links,images&quot;&gt;
+A link contains link text (the visible text), a link destination (the URI that is the link destination), and optionally a link title. An image description has inline elements as its contents, and when an image is rendered to HTML, this is standardly used as the image&#x27;s alt attribute.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;autolinks&quot; stories=&quot;autolinks&quot;&gt;
+Autolinks are absolute URIs and email addresses inside `&lt;` and `&gt;`. They are parsed as links, with the URL or email address as the link label.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;raw-html&quot; stories=&quot;raw-html-inline&quot;&gt;
+Text between `&lt;` and `&gt;` that looks like an HTML tag is parsed as a raw HTML tag and will be rendered in HTML without escaping.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;backslash-escapes&quot; stories=&quot;backslash-escapes&quot;&gt;
+Any ASCII punctuation character may be backslash-escaped. Backslash escapes do not work in code blocks, code spans, autolinks, or raw HTML, but they work in all other contexts, including URLs and link titles, link references, and info strings in fenced code blocks.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;entity-and-numeric-character-references&quot; stories=&quot;entities&quot;&gt;
+Valid HTML entity references and numeric character references can be used in place of the corresponding Unicode character. Decimal numeric character references consist of `&amp;#` + a string of 1--7 arabic digits + `;`. Hexadecimal numeric character references consist of `&amp;#` + either `X` or `x` + a string of 1-6 hexadecimal digits + `;`.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;hard-line-breaks&quot; stories=&quot;line-breaks-text&quot;&gt;
+A line ending (not in a code span or HTML tag) that is preceded by two or more spaces and does not occur at the end of a block is parsed as a hard line break (rendered in HTML as a `&lt;br /&gt;` tag).
+&lt;/requirement&gt;
+&lt;requirement name=&quot;soft-line-breaks&quot; stories=&quot;line-breaks-text&quot;&gt;
+A regular line ending (not in a code span or HTML tag) that is not preceded by two or more spaces or a backslash is parsed as a softbreak.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;textual-content&quot; stories=&quot;line-breaks-text&quot;&gt;
+Any characters not given an interpretation by the above rules will be parsed as plain textual content.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;tab-handling&quot; stories=&quot;cont-tabs-slice&quot;&gt;
+Tabs in lines are not expanded to spaces. However, in contexts where spaces help to define block structure, tabs behave as if they were replaced by spaces with a tab stop of 4 characters.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;conformance-suite&quot; stories=&quot;verify-conformance&quot;&gt;
+A conforming implementation must produce the HTML the spec examples require; the spec examples double as conformance tests run by `spec_tests.py` against a program.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;executable-program&quot; stories=&quot;executable-interface&quot;&gt;
+The spec tests are run against a program: `python test/spec_tests.py --spec spec.txt --program PROGRAM`.
+&lt;/requirement&gt;
+&lt;unattached story=&quot;foundation&quot;/&gt;
+&lt;unattached story=&quot;executable-interface&quot;/&gt;
+&lt;unattached story=&quot;block-engine&quot;/&gt;
+&lt;unattached story=&quot;images&quot;/&gt;
+&lt;unattached story=&quot;cont-tabs-slice&quot;/&gt;
+&lt;unattached story=&quot;verify-conformance&quot;/&gt;</pre></article>
+</main>
+</body>
+</html>

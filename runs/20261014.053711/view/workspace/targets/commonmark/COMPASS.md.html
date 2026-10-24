@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/COMPASS.md</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/COMPASS.md</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../workspace/targets/commonmark/COMPASS.md">Raw file</a></div></header>
+<article class="doc"><h1>COMPASS: commonmark</h1>
+<h2>Compass</h2>
+<p>This product is a CommonMark 0.31.2 parser delivered as a single executable, <code>commonmark</code>, at the application root. It reads UTF-8 Markdown from standard input and writes HTML to standard output. It is built from the supplied specification text, following the Appendix parsing strategy (block structure first, then inline parsing with the delimiter-stack algorithms). Success means the complete supplied conformance suite passes when run unfiltered through <code>sh sources/full_test.sh</code>.</p>
+<h2>Constraints</h2>
+<ul><li>The deliverable is an executable named <code>commonmark</code> at the application root.</li><li>Input is UTF-8 on stdin; output is HTML on stdout; no arguments are required.</li><li><code>spec.txt</code> is normative; the spec&#x27;s Appendix gives the reference parsing algorithms to follow directly.</li><li>The runner compares normalized HTML, so tag structure, entities, and URL percent-encoding of non-ASCII characters must match the spec examples.</li><li><code>sources/INSTRUCTIONS.md</code> is prose only and is not staged; the staged runtime assets are <code>spec.txt</code>, <code>spec_tests.py</code>, <code>cmark.py</code>, <code>normalize.py</code>, and <code>full_test.sh</code>.</li><li>A concise <code>README.md</code> describes the stdin/stdout interface; it is not an acceptance criterion.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Never use or call a public Markdown implementation.</li><li>Never modify <code>sources/full_test.sh</code>, <code>sources/spec_tests.py</code>, <code>sources/cmark.py</code>, <code>sources/normalize.py</code>, or <code>sources/spec.txt</code>; they are hash-verified and restored before grading.</li><li>Never filter, skip, or reinterpret tests; changing the entry point is not a repair.</li><li>Never write anything but rendered HTML to stdout.</li></ul>
+<p>&lt;!-- drydock:build-write-guardrail:start --&gt;</p>
+<h2>Build Write Guardrail</h2>
+<ul><li>Authorized build directory: <code>/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark</code></li><li>Authorized Target directory: <code>/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/workspace/targets/commonmark</code></li><li>Build agents have permission to create, modify, and remove files required by the active build block inside these authorized directories.</li><li>No path outside these authorized directories may be modified.</li><li>Protected Drydock artifacts:<ul><li><code>/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/workspace/targets/commonmark/blueprint/</code></li><li><code>/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/workspace/targets/commonmark/MANIFEST.md</code></li><li><code>/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/workspace/targets/commonmark/COMPASS.md</code></li><li><code>/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/workspace/targets/commonmark/QuarterDeck/</code></li><li><code>/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/workspace/targets/commonmark/evidence/</code></li></ul></li></ul>
+<p>&lt;!-- drydock:build-write-guardrail:end --&gt;</p></article>
+</main>
+</body>
+</html>

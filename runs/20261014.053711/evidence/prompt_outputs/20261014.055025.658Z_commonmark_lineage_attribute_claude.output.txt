@@ -1,0 +1,81 @@
+<requirement name="block-structure-two-phase-parsing" stories="block-engine,foundation">
+Parsing has two phases: in the first phase, lines of input are consumed and the block structure of the document is constructed. In the second phase, the raw text contents of paragraphs and headings are parsed into sequences of Markdown inline elements.
+</requirement>
+<requirement name="thematic-breaks" stories="thematic-breaks">
+A line consisting of optionally up to three spaces of indentation, followed by a sequence of three or more matching `-`, `_`, or `*` characters, each followed optionally by any number of spaces or tabs, forms a thematic break.
+</requirement>
+<requirement name="atx-headings" stories="atx-headings">
+An ATX heading consists of a string of characters, parsed as inline content, between an opening sequence of 1--6 unescaped `#` characters and an optional closing sequence of any number of unescaped `#` characters.
+</requirement>
+<requirement name="setext-headings" stories="setext-headings">
+A setext heading consists of one or more lines of text, not interrupted by a blank line, of which the first line does not have more than 3 spaces of indentation, followed by a setext heading underline.
+</requirement>
+<requirement name="indented-code-blocks" stories="indented-code">
+An indented code block is composed of one or more indented chunks separated by blank lines. An indented chunk is a sequence of non-blank lines, each preceded by four or more spaces of indentation.
+</requirement>
+<requirement name="fenced-code-blocks" stories="fenced-code">
+A fenced code block begins with a code fence, preceded by up to three spaces of indentation. The line with the opening code fence may optionally contain some text following the code fence, called the info string.
+</requirement>
+<requirement name="html-blocks" stories="html-blocks">
+An HTML block is a group of lines that is treated as raw HTML (and will not be escaped in HTML output). There are seven kinds of HTML block, which can be defined by their start and end conditions.
+</requirement>
+<requirement name="link-reference-definitions" stories="link-reference-definitions">
+A link reference definition consists of a link label, optionally preceded by up to three spaces of indentation, followed by a colon (`:`), optional spaces or tabs (including up to one line ending), a link destination, optional spaces or tabs (including up to one line ending), and an optional link title.
+</requirement>
+<requirement name="paragraphs" stories="block-engine">
+A sequence of non-blank lines that cannot be interpreted as other kinds of blocks forms a paragraph.
+</requirement>
+<requirement name="block-quotes" stories="block-quotes">
+A block quote marker, optionally preceded by up to three spaces of indentation, consists of (a) the character `>` together with a following space of indentation, or (b) a single character `>` not followed by a space of indentation.
+</requirement>
+<requirement name="list-items" stories="list-items">
+A list marker is a bullet list marker or an ordered list marker. A bullet list marker is a `-`, `+`, or `*` character. An ordered list marker is a sequence of 1--9 arabic digits (`0-9`), followed by either a `.` character or a `)` character.
+</requirement>
+<requirement name="lists" stories="lists">
+A list is a sequence of one or more list items of the same type. The list items may be separated by any number of blank lines.
+</requirement>
+<requirement name="code-spans" stories="code-spans">
+A code span begins with a backtick string and ends with a backtick string of equal length. The contents of the code span are the characters between these two backtick strings, normalized in the following ways: first, line endings are converted to spaces.
+</requirement>
+<requirement name="emphasis-and-strong-emphasis" stories="emphasis">
+Emphasis begins with a delimiter that can open emphasis and ends with a delimiter that can close emphasis, and that uses the same character (`_` or `*`) as the opening delimiter. Strong emphasis begins with a delimiter that can open strong emphasis and ends with a delimiter that can close strong emphasis.
+</requirement>
+<requirement name="links-and-images" stories="links,images">
+A link contains link text (the visible text), a link destination (the URI that is the link destination), and optionally a link title. An image description has inline elements as its contents, and when an image is rendered to HTML, this is standardly used as the image's alt attribute.
+</requirement>
+<requirement name="autolinks" stories="autolinks">
+Autolinks are absolute URIs and email addresses inside `<` and `>`. They are parsed as links, with the URL or email address as the link label.
+</requirement>
+<requirement name="raw-html" stories="raw-html-inline">
+Text between `<` and `>` that looks like an HTML tag is parsed as a raw HTML tag and will be rendered in HTML without escaping.
+</requirement>
+<requirement name="backslash-escapes" stories="backslash-escapes">
+Any ASCII punctuation character may be backslash-escaped. Backslash escapes do not work in code blocks, code spans, autolinks, or raw HTML, but they work in all other contexts, including URLs and link titles, link references, and info strings in fenced code blocks.
+</requirement>
+<requirement name="entity-and-numeric-character-references" stories="entities">
+Valid HTML entity references and numeric character references can be used in place of the corresponding Unicode character. Decimal numeric character references consist of `&#` + a string of 1--7 arabic digits + `;`. Hexadecimal numeric character references consist of `&#` + either `X` or `x` + a string of 1-6 hexadecimal digits + `;`.
+</requirement>
+<requirement name="hard-line-breaks" stories="line-breaks-text">
+A line ending (not in a code span or HTML tag) that is preceded by two or more spaces and does not occur at the end of a block is parsed as a hard line break (rendered in HTML as a `<br />` tag).
+</requirement>
+<requirement name="soft-line-breaks" stories="line-breaks-text">
+A regular line ending (not in a code span or HTML tag) that is not preceded by two or more spaces or a backslash is parsed as a softbreak.
+</requirement>
+<requirement name="textual-content" stories="line-breaks-text">
+Any characters not given an interpretation by the above rules will be parsed as plain textual content.
+</requirement>
+<requirement name="tab-handling" stories="cont-tabs-slice">
+Tabs in lines are not expanded to spaces. However, in contexts where spaces help to define block structure, tabs behave as if they were replaced by spaces with a tab stop of 4 characters.
+</requirement>
+<requirement name="conformance-suite" stories="verify-conformance">
+A conforming implementation must produce the HTML the spec examples require; the spec examples double as conformance tests run by `spec_tests.py` against a program.
+</requirement>
+<requirement name="executable-program" stories="executable-interface">
+The spec tests are run against a program: `python test/spec_tests.py --spec spec.txt --program PROGRAM`.
+</requirement>
+<unattached story="foundation"/>
+<unattached story="executable-interface"/>
+<unattached story="block-engine"/>
+<unattached story="images"/>
+<unattached story="cont-tabs-slice"/>
+<unattached story="verify-conformance"/>

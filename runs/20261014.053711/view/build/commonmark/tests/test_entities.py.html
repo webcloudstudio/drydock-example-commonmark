@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_entities.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_entities.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_entities.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Entity and numeric character reference tests: named references from the HTML5 table, decimal
+and hexadecimal numeric references, U+FFFD replacement, decoded text as plain text, inertness in
+code spans, and the shared `unescape_and_decode` helper for destinations, titles and info strings.
+
+Each test compares a returned string, a parsed value, or the executable&#x27;s stdout bytes with its
+exact expected value. The declared acceptance checks are transcribed from FEATURE-Entities.md.
+&quot;&quot;&quot;
+
+import subprocess
+from pathlib import Path
+
+import pytest
+
+from mdparser import entities
+from mdparser.entities import match_reference, unescape_and_decode
+
+
+def run_executable(project_root: Path, data: str) -&gt; subprocess.CompletedProcess[bytes]:
+    return subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=data.encode(&quot;utf-8&quot;),
+        capture_output=True,
+        cwd=project_root,
+        check=False,
+    )
+
+
+def render(project_root: Path, data: str) -&gt; str:
+    result = run_executable(project_root, data)
+    assert result.returncode == 0
+    return result.stdout.decode(&quot;utf-8&quot;)
+
+
+# --- Declared acceptance checks (transcribed from FEATURE-Entities.md) ---
+
+
+def test_entities_decimal_reference(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC entities-decimal-reference: a decimal reference decodes to the character with the bound code point.&quot;&quot;&quot;
+    code_point = 65
+    result = run_executable(project_root, &quot;x &amp;#&quot; + str(code_point) + &quot;; y\n&quot;)
+    assert result.returncode == 0
+    assert chr(code_point) in result.stdout.decode(&quot;utf-8&quot;)
+    assert result.stdout.count(b&quot;&amp;#&quot;) == 0
+
+
+def test_entities_hex_reference(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC entities-hex-reference: lowercase and uppercase hexadecimal references decode to the same character.&quot;&quot;&quot;
+    code_point = 66
+    lower = &quot;&amp;#x&quot; + format(code_point, &quot;x&quot;) + &quot;;&quot;
+    upper = &quot;&amp;#X&quot; + format(code_point, &quot;X&quot;) + &quot;;&quot;
+    first = run_executable(project_root, lower + &quot;\n&quot;)
+    second = run_executable(project_root, upper + &quot;\n&quot;)
+    assert first.returncode == 0
+    assert second.returncode == 0
+    assert chr(code_point) in first.stdout.decode(&quot;utf-8&quot;)
+    assert first.stdout == second.stdout
+
+
+def test_entities_named_ampersand(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC entities-named-ampersand: the named ampersand reference round trips to the same escaped form.&quot;&quot;&quot;
+    reference = &quot;&amp;amp;&quot;
+    result = run_executable(project_root, &quot;a &quot; + reference + &quot; b\n&quot;)
+    assert result.returncode == 0
+    assert reference in result.stdout.decode(&quot;utf-8&quot;)
+    assert result.stdout.decode(&quot;utf-8&quot;).count(&quot;&amp;amp;&quot;) == 1
+
+
+def test_entities_unknown_stays_literal(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC entities-unknown-stays-literal: an unknown entity name is literal text with its ampersand escaped.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;&amp;MadeUpEntity;\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;).count(&quot;&amp;amp;&quot;) == 1
+
+
+def test_entities_nul_reference_replaced(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC entities-nul-reference-replaced: the reference for code point zero equals a literal U+FFFD.&quot;&quot;&quot;
+    first = run_executable(project_root, &quot;&amp;#0;\n&quot;)
+    second = run_executable(project_root, chr(0xFFFD) + &quot;\n&quot;)
+    assert first.returncode == 0
+    assert second.returncode == 0
+    assert first.stdout == second.stdout
+
+
+def test_entities_inert_in_code_span(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC entities-inert-in-code-span: a reference inside a code span is not decoded.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;`&amp;amp;`\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;).count(&quot;&amp;amp;amp;&quot;) == 1
+
+
+# --- Named references ---
+
+
+@pytest.mark.parametrize(
+    (&quot;source&quot;, &quot;character&quot;),
+    [
+        (&quot;&amp;amp;&quot;, &quot;&amp;&quot;),
+        (&quot;&amp;lt;&quot;, &quot;&lt;&quot;),
+        (&quot;&amp;gt;&quot;, &quot;&gt;&quot;),
+        (&quot;&amp;quot;&quot;, &#x27;&quot;&#x27;),
+        (&quot;&amp;copy;&quot;, &quot;©&quot;),
+        (&quot;&amp;AElig;&quot;, &quot;Æ&quot;),
+        (&quot;&amp;nbsp;&quot;, &quot; &quot;),
+    ],
+)
+def test_named_reference_decodes_to_its_character(project_root: Path, source: str, character: str) -&gt; None:
+    &quot;&quot;&quot;A recognized named reference yields its character, escaped as text.&quot;&quot;&quot;
+    escaped = {&quot;&amp;&quot;: &quot;&amp;amp;&quot;, &quot;&lt;&quot;: &quot;&amp;lt;&quot;, &quot;&gt;&quot;: &quot;&amp;gt;&quot;, &#x27;&quot;&#x27;: &quot;&amp;quot;&quot;}.get(character, character)
+    assert render(project_root, source + &quot;\n&quot;) == f&quot;&lt;p&gt;{escaped}&lt;/p&gt;\n&quot;
+
+
+def test_named_reference_with_two_code_points_emits_both(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A named entity that decodes to two code points emits both, in order.&quot;&quot;&quot;
+    assert unescape_and_decode(&quot;&amp;NotEqualTilde;&quot;) == &quot;≂̸&quot;
+    assert render(project_root, &quot;&amp;NotEqualTilde;\n&quot;) == &quot;&lt;p&gt;≂̸&lt;/p&gt;\n&quot;
+
+
+def test_named_reference_without_semicolon_is_literal(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A name without its trailing semicolon is not a reference, so the ampersand is escaped.&quot;&quot;&quot;
+    assert render(project_root, &quot;&amp;copy\n&quot;) == &quot;&lt;p&gt;&amp;amp;copy&lt;/p&gt;\n&quot;
+
+
+def test_named_reference_lookup_is_case_sensitive(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;`&amp;cOpy;` is not in the table (only `&amp;copy;` is), so it stays literal.&quot;&quot;&quot;
+    assert match_reference(&quot;&amp;cOpy;&quot;, 0) is None
+    assert render(project_root, &quot;&amp;cOpy;\n&quot;) == &quot;&lt;p&gt;&amp;amp;cOpy;&lt;/p&gt;\n&quot;
+
+
+def test_unknown_name_returns_no_match() -&gt; None:
+    assert match_reference(&quot;&amp;MadeUpEntity;&quot;, 0) is None
+
+
+def test_named_reference_returns_value_and_end() -&gt; None:
+    assert match_reference(&quot;x &amp;copy; y&quot;, 2) == (&quot;©&quot;, 8)
+
+
+# --- Decimal references ---
+
+
+@pytest.mark.parametrize(
+    (&quot;source&quot;, &quot;character&quot;),
+    [
+        (&quot;&amp;#65;&quot;, &quot;A&quot;),
+        (&quot;&amp;#0000065;&quot;, &quot;A&quot;),
+        (&quot;&amp;#97;&quot;, &quot;a&quot;),
+        (&quot;&amp;#9731;&quot;, &quot;☃&quot;),
+    ],
+)
+def test_decimal_reference_decodes(project_root: Path, source: str, character: str) -&gt; None:
+    assert render(project_root, source + &quot;\n&quot;) == f&quot;&lt;p&gt;{character}&lt;/p&gt;\n&quot;
+
+
+def test_decimal_reference_accepts_seven_digits_at_most() -&gt; None:
+    &quot;&quot;&quot;A decimal reference of 8 digits is not recognized.&quot;&quot;&quot;
+    assert match_reference(&quot;&amp;#00000065;&quot;, 0) is None
+    assert match_reference(&quot;&amp;#0000065;&quot;, 0) == (&quot;A&quot;, 10)
+
+
+def test_decimal_reference_with_no_digits_is_literal(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;&amp;#;\n&quot;) == &quot;&lt;p&gt;&amp;amp;#;&lt;/p&gt;\n&quot;
+
+
+# --- Hexadecimal references ---
+
+
+@pytest.mark.parametrize(
+    (&quot;source&quot;, &quot;character&quot;),
+    [
+        (&quot;&amp;#x41;&quot;, &quot;A&quot;),
+        (&quot;&amp;#X41;&quot;, &quot;A&quot;),
+        (&quot;&amp;#x2603;&quot;, &quot;☃&quot;),
+        (&quot;&amp;#x1F600;&quot;, &quot;\U0001F600&quot;),
+    ],
+)
+def test_hexadecimal_reference_decodes(project_root: Path, source: str, character: str) -&gt; None:
+    assert render(project_root, source + &quot;\n&quot;) == f&quot;&lt;p&gt;{character}&lt;/p&gt;\n&quot;
+
+
+def test_hexadecimal_reference_accepts_six_digits_at_most() -&gt; None:
+    &quot;&quot;&quot;A hexadecimal reference of 7 digits is not recognized.&quot;&quot;&quot;
+    assert match_reference(&quot;&amp;#x0000041;&quot;, 0) is None
+    assert match_reference(&quot;&amp;#x000041;&quot;, 0) == (&quot;A&quot;, 10)
+
+
+def test_decimal_digits_are_not_read_as_hexadecimal(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;`&amp;#41;` is decimal 41, the `)` character, not a hexadecimal reference.&quot;&quot;&quot;
+    assert render(project_root, &quot;&amp;#41;\n&quot;) == &quot;&lt;p&gt;)&lt;/p&gt;\n&quot;
+
+
+# --- Invalid code points ---
+
+
+@pytest.mark.parametrize(
+    &quot;source&quot;,
+    [
+        &quot;&amp;#0;&quot;,
+        &quot;&amp;#x0;&quot;,
+        &quot;&amp;#xD800;&quot;,
+        &quot;&amp;#xDFFF;&quot;,
+        &quot;&amp;#55296;&quot;,
+        &quot;&amp;#x110000;&quot;,
+        &quot;&amp;#1114112;&quot;,
+        &quot;&amp;#9999999;&quot;,
+    ],
+)
+def test_invalid_code_point_becomes_replacement_character(project_root: Path, source: str) -&gt; None:
+    assert render(project_root, source + &quot;\n&quot;) == &quot;&lt;p&gt;�&lt;/p&gt;\n&quot;
+
+
+def test_last_valid_code_point_is_kept() -&gt; None:
+    assert match_reference(&quot;&amp;#x10FFFF;&quot;, 0) == (&quot;\U0010FFFF&quot;, 10)
+
+
+def test_first_code_point_after_surrogates_is_kept() -&gt; None:
+    assert match_reference(&quot;&amp;#xE000;&quot;, 0) == (&quot;&quot;, 8)
+
+
+# --- Decoded characters are plain text ---
+
+
+def test_decoded_asterisks_do_not_open_emphasis(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;&amp;#42;foo&amp;#42;\n&quot;) == &quot;&lt;p&gt;*foo*&lt;/p&gt;\n&quot;
+
+
+def test_decoded_hash_does_not_start_heading(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;&amp;#35; word\n&quot;) == &quot;&lt;p&gt;# word&lt;/p&gt;\n&quot;
+
+
+def test_decoded_angle_brackets_are_escaped_text(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A decoded `&lt;` is text and not the start of raw HTML.&quot;&quot;&quot;
+    assert render(project_root, &quot;&amp;lt;b&amp;gt;bold&amp;lt;/b&amp;gt;\n&quot;) == &quot;&lt;p&gt;&amp;lt;b&amp;gt;bold&amp;lt;/b&amp;gt;&lt;/p&gt;\n&quot;
+
+
+def test_numeric_angle_bracket_is_escaped_text(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;&amp;#60;b&amp;#62;\n&quot;) == &quot;&lt;p&gt;&amp;lt;b&amp;gt;&lt;/p&gt;\n&quot;
+
+
+def test_decoded_ampersand_is_not_decoded_again(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;`&amp;amp;amp;` decodes once to `&amp;amp;` text; the second `amp;` is not re-decoded.&quot;&quot;&quot;
+    assert render(project_root, &quot;&amp;amp;amp;\n&quot;) == &quot;&lt;p&gt;&amp;amp;amp;&lt;/p&gt;\n&quot;
+
+
+def test_numeric_ampersand_is_escaped(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;&amp;#38;\n&quot;) == &quot;&lt;p&gt;&amp;amp;&lt;/p&gt;\n&quot;
+
+
+# --- Inertness and ordinary text ---
+
+
+def test_references_inside_code_span_stay_literal(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;`&amp;#65;`\n&quot;) == &quot;&lt;p&gt;&lt;code&gt;&amp;amp;#65;&lt;/code&gt;&lt;/p&gt;\n&quot;
+
+
+def test_multiple_references_in_one_paragraph(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;&amp;#65;&amp;#66;&amp;#x43;\n&quot;) == &quot;&lt;p&gt;ABC&lt;/p&gt;\n&quot;
+
+
+def test_bare_ampersand_is_escaped(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;AT&amp;T\n&quot;) == &quot;&lt;p&gt;AT&amp;amp;T&lt;/p&gt;\n&quot;
+
+
+def test_ampersand_at_end_of_line_is_escaped(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;AT&amp;\n&quot;) == &quot;&lt;p&gt;AT&amp;amp;&lt;/p&gt;\n&quot;
+
+
+def test_empty_input_renders_nothing(project_root: Path) -&gt; None:
+    result = run_executable(project_root, &quot;&quot;)
+    assert result.returncode == 0
+    assert result.stdout == b&quot;&quot;
+
+
+# --- Shared helper for destinations, titles and info strings ---
+
+
+def test_helper_decodes_a_reference() -&gt; None:
+    assert unescape_and_decode(&quot;&amp;#x26;&quot;) == &quot;&amp;&quot;
+
+
+def test_helper_decodes_named_reference() -&gt; None:
+    assert unescape_and_decode(&quot;a&amp;copy;b&quot;) == &quot;a©b&quot;
+
+
+def test_helper_backslash_then_reference_is_not_decoded() -&gt; None:
+    &quot;&quot;&quot;A backslash escapes the ampersand, so the reference is not read: `\\&amp;amp;` gives `&amp;amp;`.&quot;&quot;&quot;
+    assert unescape_and_decode(&quot;\\&amp;amp;&quot;) == &quot;&amp;amp;&quot;
+
+
+def test_helper_reference_then_backslash_escape() -&gt; None:
+    assert unescape_and_decode(&quot;&amp;#42;\\*&quot;) == &quot;**&quot;
+
+
+def test_helper_keeps_unrecognized_reference() -&gt; None:
+    assert unescape_and_decode(&quot;&amp;copy&quot;) == &quot;&amp;copy&quot;
+
+
+def test_helper_keeps_backslash_before_non_punctuation() -&gt; None:
+    assert unescape_and_decode(&quot;\\A&amp;#65;&quot;) == &quot;\\AA&quot;
+
+
+def test_helper_empty_string() -&gt; None:
+    assert unescape_and_decode(&quot;&quot;) == &quot;&quot;
+
+
+def test_helper_replaces_nul_reference() -&gt; None:
+    assert unescape_and_decode(&quot;&amp;#0;&quot;) == &quot;�&quot;
+
+
+def test_unescape_still_leaves_references_alone() -&gt; None:
+    &quot;&quot;&quot;The backslash-only helper does not decode references.&quot;&quot;&quot;
+    assert entities.unescape(&quot;&amp;amp;\\*&quot;) == &quot;&amp;amp;*&quot;
+
+
+def test_decode_helper_never_returns_a_partial_reference() -&gt; None:
+    &quot;&quot;&quot;Text that looks like a reference but is cut short comes back unchanged.&quot;&quot;&quot;
+    assert unescape_and_decode(&quot;&amp;#x41&quot;) == &quot;&amp;#x41&quot;
+    assert unescape_and_decode(&quot;&amp;amp&quot;) == &quot;&amp;amp&quot;
+</pre></article>
+</main>
+</body>
+</html>

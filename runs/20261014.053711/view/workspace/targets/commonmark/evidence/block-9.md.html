@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-9.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-9.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-9.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 9 · Service (block-9)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-14</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 5421</li><li>execution id: 20261014.061842.732Z-41490866</li></ul>
+<h2>Stories built</h2>
+<ul><li>Implement the delimiter stack, flanking rules, and the process-emphasis algorithm. (emphasis) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1072)</li><li>implements: FEATURE-Emphasis.md (SP 2139)</li><li>context: ARCHITECTURE_compact.md (SP 335)</li><li>stack: common_compact.md (SP 1199)</li><li>stack: python_compact.md (SP 390)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>mdparser/inlines.py</li><li>tests/test_emphasis.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: emphasis-star-and-underscore (FEATURE-Emphasis.md)</li></ul>
+<p>intent: Single star and single underscore wrap supplied words in one em element each. return code: 1 stdout: &lt;p&gt;<em>wordy</em>&lt;/p&gt; stderr: --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;<em>wordy</em>&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;emphasis-star-and-underscore.py&quot;, line 8, in &lt;module&gt; assert result.stdout.count(&quot;&lt;em&gt;&quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: emphasis-strong (FEATURE-Emphasis.md)</li></ul>
+<p>intent: Doubled delimiters produce one strong element. return code: 1 stdout: &lt;p&gt;<strong>wordy</strong>&lt;/p&gt; stderr: --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;<strong>wordy</strong>&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;emphasis-strong.py&quot;, line 8, in &lt;module&gt; assert result.stdout.count(&quot;&lt;strong&gt;&quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: emphasis-intraword-rules (FEATURE-Emphasis.md)</li></ul>
+<p>intent: Intraword emphasis works with star but not with underscore. return code: 1 stdout: &lt;p&gt;foo*bar*baz&lt;/p&gt;</p>
+<p>&lt;p&gt;foo_bar_baz&lt;/p&gt; stderr: --- drydock: values at failure --- star = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;foo*bar*baz&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;emphasis-intraword-rules.py&quot;, line 9, in &lt;module&gt; assert star.stdout.count(&quot;&lt;em&gt;&quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>GREEN (prepassed): emphasis-flanking-whitespace (FEATURE-Emphasis.md)</li></ul>
+<p>intent: A delimiter run followed or preceded by whitespace does not form emphasis. return code: 0 stdout: &lt;p&gt;a * foo bar*&lt;/p&gt; &lt;p&gt;foo bar *&lt;/p&gt;</p>
+<ul><li>RED: emphasis-nesting (FEATURE-Emphasis.md)</li></ul>
+<p>intent: Triple delimiters give one em containing one strong, and nested forms keep both elements. return code: 1 stdout: &lt;p&gt;<strong><em>word</strong></em>&lt;/p&gt;</p>
+<p>&lt;p&gt;<em>a <strong>b</strong> c</em>&lt;/p&gt; stderr: --- drydock: values at failure --- triple = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;<strong><em>word</strong></em>&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;emphasis-nesting.py&quot;, line 9, in &lt;module&gt; assert triple.stdout.count(&quot;&lt;em&gt;&quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>GREEN (prepassed): emphasis-code-span-binds-tighter (FEATURE-Emphasis.md)</li></ul>
+<p>intent: A star inside a code span cannot close emphasis. return code: 0 stdout: &lt;p&gt;<em>foo&lt;code&gt;</em>&lt;/code&gt;&lt;/p&gt;</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: emphasis-star-and-underscore (FEATURE-Emphasis.md)</li></ul>
+<p>intent: Single star and single underscore wrap supplied words in one em element each. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;&lt;em&gt;wordy&lt;/em&gt;&lt;/p&gt;</p>
+<p>&lt;p&gt;&lt;em&gt;wordy&lt;/em&gt;&lt;/p&gt;</p>
+<ul><li>PASS: emphasis-strong (FEATURE-Emphasis.md)</li></ul>
+<p>intent: Doubled delimiters produce one strong element. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;&lt;strong&gt;wordy&lt;/strong&gt;&lt;/p&gt;</p>
+<p>&lt;p&gt;&lt;strong&gt;wordy&lt;/strong&gt;&lt;/p&gt;</p>
+<ul><li>PASS: emphasis-intraword-rules (FEATURE-Emphasis.md)</li></ul>
+<p>intent: Intraword emphasis works with star but not with underscore. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;foo&lt;em&gt;bar&lt;/em&gt;baz&lt;/p&gt;</p>
+<p>&lt;p&gt;foo_bar_baz&lt;/p&gt;</p>
+<ul><li>PASS: emphasis-flanking-whitespace (FEATURE-Emphasis.md)</li></ul>
+<p>intent: A delimiter run followed or preceded by whitespace does not form emphasis. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;a * foo bar*&lt;/p&gt; &lt;p&gt;foo bar *&lt;/p&gt;</p>
+<ul><li>PASS: emphasis-nesting (FEATURE-Emphasis.md)</li></ul>
+<p>intent: Triple delimiters give one em containing one strong, and nested forms keep both elements. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;&lt;em&gt;&lt;strong&gt;word&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;</p>
+<p>&lt;p&gt;&lt;em&gt;a &lt;strong&gt;b&lt;/strong&gt; c&lt;/em&gt;&lt;/p&gt;</p>
+<ul><li>PASS: emphasis-code-span-binds-tighter (FEATURE-Emphasis.md)</li></ul>
+<p>intent: A star inside a code span cannot close emphasis. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;<em>foo&lt;code&gt;</em>&lt;/code&gt;&lt;/p&gt;</p>
+<h2>Build summary</h2>
+<p>The build directory already has an <code>mdparser</code> package, a <code>tests</code> directory, and a <code>commonmark</code> launcher from earlier blocks. I&#x27;ll read those before changing anything.The inline parser is already in place with code spans, autolinks, raw HTML, and entities. Emphasis needs a delimiter stack wired into that scanner. Next I&#x27;ll read the call sites and test conventions.The existing <code>parse_inline</code> returns strings directly, so emphasis needs a node list it can wrap after the scan. Before I change it, I&#x27;ll check which tests depend on the current inline functions.Existing tests only exercise inline text without a matched pair of delimiters, so they should stay green. I&#x27;ll rewrite <code>inlines.py</code> so the scan builds nodes, then add the delimiter stack and the Appendix process-emphasis procedure on top.Next, the scanner: switch <code>parse_inline</code> to build nodes and hand delimiter runs to the stack.The scanner and stack are in place. I&#x27;ll run a few inputs through the executable and the existing suite before writing new tests.Every spec example I tried matches the expected CommonMark output, and the existing 419 tests still pass. Next I&#x27;ll write <code>tests/test_emphasis.py</code>: the declared acceptance checks transcribed as written, plus exact-output tests beside them.Before running the new file, I&#x27;ll drop the unused <code>project_root</code> fixture from the pure-inline tests and check line lengths against the repo&#x27;s 100-column style.The implementation is right and my expected value was wrong. The inner <code>*b*</code> pairs with the nearest opener, then the final <code>*</code> pairs with the outer opener, giving nested em. I&#x27;ll correct that test and fix the lines over 100 columns.The edit script stopped before writing because the function signature had already lost its fixture argument. Nothing was saved, so I&#x27;ll rerun it with the correct text.The same assertion fired again, so the file&#x27;s signature doesn&#x27;t match what I assumed. I&#x27;ll check the actual line.The regex-based trim missed this one. I&#x27;ll make the fix with exact edits instead.Both files show as changed on disk; that&#x27;s from my own scripted edits, and the suite passes at 459. I&#x27;ll confirm the current content, then finish the cleanup: remove the remaining unused <code>project_root</code> parameters and shorten line 229.The emphasis file is clean at 40 passing tests. I&#x27;ll run the full suite once more and check which files changed.RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>mdparser/inlines.py</li><li>tests/test_emphasis.py</li></ul>
+<p>SUMMARY:</p>
+<ul><li><code>parse_inline</code> now builds a node list instead of joining strings. Code spans, autolinks, raw HTML, escapes and entities are <code>Html</code> nodes. Each <code>*</code> or <code>_</code> run is a <code>Text</code> node pushed on a <code>DelimiterStack</code>, with <code>can_open</code>/<code>can_close</code> set from the flanking rules.</li><li>Flanking uses <code>unicodedata</code>: Unicode whitespace is tab, LF, FF, CR or Zs, and the line edges count as whitespace. Punctuation is categories P* and S*. <code>*</code> and <code>_</code> have their own open/close rules.</li><li><code>DelimiterStack.process_emphasis(stack_bottom=None)</code> follows the Appendix algorithm. It uses a doubly linked stack with a bottom sentinel, <code>openers_bottom</code> per character, closer length mod 3 and closer-can-open, the multiple-of-3 rule, and strong versus em selection. Unmatched runs stay as escaped literal text. Wrapping moves the nodes between a matched pair into an <code>Element</code>.</li><li>Tests: <code>tests/test_emphasis.py</code> (40 tests). The six declared acceptance checks are transcribed with their assertions unchanged. The rest check exact output for single and double delimiters, triple and nested runs, flanking, the rule of 3, unmatched and empty runs, and code-span interaction.</li><li>Results: <code>python3 -m pytest -q</code> gives 459 passed, 0 failed. That is the existing 419 plus 40 new.</li><li>I did not run <code>sh sources/full_test.sh</code>. The corpus section for Emphasis needs links, so the spec gates it in the images story.</li></ul>
+<p>Choices I made that you may want to redirect:</p>
+<ul><li><code>openers_bottom</code> is keyed by the closer&#x27;s original length mod 3, not the current length. The spec says &quot;length&quot;; the rule of 3 depends on original lengths.</li><li>The stack operates on a sibling node list passed in at construction. Links will need one stack per bracket level, which the links story can add.</li></ul>
+<p>&lt;blueprint-decisions&gt; [{&quot;spec&quot;:&quot;FEATURE-Emphasis.md&quot;,&quot;severity&quot;:&quot;Low&quot;,&quot;subject&quot;:&quot;openers_bottom key uses original delimiter length mod 3&quot;,&quot;decision&quot;:&quot;The spec says closer length mod 3. I keyed openers_bottom on the closer&#x27;s original length, because the multiple-of-3 rule is defined on original lengths and a current-length key could skip a valid opener. Is that acceptable, or should it read the spec literally?&quot;}] &lt;/blueprint-decisions&gt;</p>
+<p>BLOCKERS:</p>
+<ul><li>None.</li></ul></article>
+</main>
+</body>
+</html>

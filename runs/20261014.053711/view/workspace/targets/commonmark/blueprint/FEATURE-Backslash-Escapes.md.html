@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Backslash-Escapes.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Backslash-Escapes.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Backslash-Escapes.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Backslash Escapes</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>Implement backslash escapes of ASCII punctuation in text and expose a shared unescape helper for destinations, titles and info strings.</td></tr><tr><td>Depends On</td><td>FEATURE-Code-Spans.md</td></tr><tr><td>Provides</td><td>backslash escape inline rule, shared unescape helper</td></tr><tr><td>Consumes</td><td>inline scanner loop</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement the Backslash escapes section of the spec.</p>
+<h2>Rules</h2>
+<ul><li>A backslash followed by any ASCII punctuation character yields that character as plain text with no Markdown meaning, so it cannot start emphasis, a link, a code span, a heading, a list or a tag.</li><li>A backslash followed by any other character is a literal backslash.</li><li>A backslash at the end of a line is a hard break marker, handled by the line-breaks story.</li><li>A backslash that is itself escaped leaves the next character unescaped.</li><li>Backslash escapes are inert in code spans, code blocks, autolinks and raw HTML.</li><li>The shared <code>unescape</code> helper applies the same rule to link destinations, link titles and fenced code info strings, and is reused by those stories.</li></ul>
+<h2>Reads</h2>
+<ul><li>Inline text of paragraphs and headings.</li></ul>
+<h2>Writes</h2>
+<ul><li>Plain text nodes in the inline tree.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>The Backslash escapes corpus section uses fenced code, links and definitions, so it is gated in the tabs story. The checks here are bounded.</p>
+<p>=== AC escapes-punctuation-inert ===<br>Intent: An escaped asterisk prevents emphasis.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;\\<em>not emphasized</em>\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;em&gt;&quot;) == 0 assert result.stdout.count(&quot;\\&quot;) == 0 === END AC escapes-punctuation-inert ===</p>
+<p>=== AC escapes-non-punctuation-literal ===<br>Intent: A backslash before a non-punctuation character is kept as a literal backslash.</p>
+<p>import subprocess</p>
+<p>text = &quot;\\A\\a\\3&quot; result = subprocess.run([&quot;./commonmark&quot;], input=text + &quot;\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert text in result.stdout === END AC escapes-non-punctuation-literal ===</p>
+<p>=== AC escapes-block-markers ===<br>Intent: An escaped heading marker does not start a heading.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;\\# word\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;h1&gt;&quot;) == 0 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1 === END AC escapes-block-markers ===</p>
+<p>=== AC escapes-inert-in-code-span ===<br>Intent: A backslash in a code span is not an escape.</p>
+<p>import subprocess</p>
+<p>content = &quot;\\*&quot; result = subprocess.run([&quot;./commonmark&quot;], input=&quot;<code>&quot; + content + &quot;</code>\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert content in result.stdout === END AC escapes-inert-in-code-span ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Never treat a backslash before a non-punctuation character as an escape.</li><li>Never process escapes in code spans, code blocks, autolinks or raw HTML.</li><li>Do not skip, filter or reinterpret corpus examples.</li></ul></article>
+</main>
+</body>
+</html>

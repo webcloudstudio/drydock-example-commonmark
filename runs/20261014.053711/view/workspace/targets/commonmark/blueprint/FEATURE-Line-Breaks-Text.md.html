@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Line-Breaks-Text.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Line-Breaks-Text.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Line-Breaks-Text.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Line Breaks and Text</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>Implement hard line breaks, soft line breaks and plain textual content in inline parsing.</td></tr><tr><td>Depends On</td><td>FEATURE-Images.md</td></tr><tr><td>Provides</td><td>hard break and soft break inline nodes</td></tr><tr><td>Consumes</td><td>inline scanner loop</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement the Hard line breaks, Soft line breaks and Textual content sections of the spec.</p>
+<h2>Rules</h2>
+<ul><li>A line ending preceded by two or more spaces, or by a backslash, that is not at the end of the block is a hard break, rendered as <code>&lt;br /&gt;</code> followed by a line ending. The spaces or backslash are consumed. Leading spaces on the following line are dropped.</li><li>Any other line ending inside a block is a soft break, rendered as a line ending. Spaces at the end of the line and at the start of the next line are removed.</li><li>A hard-break marker at the end of a paragraph or heading is not a break: trailing spaces are dropped and a trailing backslash stays literal.</li><li>Breaks work inside emphasis and link text. They are inert inside code spans (the line ending becomes a space) and inside raw HTML tags.</li><li>All other characters are plain text. Internal spaces are preserved verbatim.</li></ul>
+<h2>Reads</h2>
+<ul><li>Inline text of paragraphs and headings.</li></ul>
+<h2>Writes</h2>
+<ul><li>Break and text nodes in the inline tree.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>The Hard line breaks section has an ATX heading example, so it is gated in the tabs story. The checks here are bounded.</p>
+<p>=== AC breaks-corpus-sections ===<br>Intent: The Soft line breaks and Textual content conformance sections (5 cases) pass in full.<br>Suite: scoped<br>Probe: --dump-tests<br>Probe Count: lines</p>
+<p>import os import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.getcwd() + &quot;/commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;^Soft line breaks$|^Textual content$&quot;, ], capture_output=True, text=True, env={**os.environ}, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC breaks-corpus-sections ===</p>
+<p>=== AC breaks-hard-break-spaces ===<br>Intent: Two or more trailing spaces before a line ending give one br element between the two lines.</p>
+<p>import subprocess</p>
+<p>first = &quot;alpha&quot; second = &quot;beta&quot; result = subprocess.run([&quot;./commonmark&quot;], input=first + &quot;   \n&quot; + second + &quot;\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;br /&gt;&quot;) == 1 assert first in result.stdout assert second in result.stdout === END AC breaks-hard-break-spaces ===</p>
+<p>=== AC breaks-hard-break-backslash ===<br>Intent: A backslash before a line ending gives one br element.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;alpha\\\nbeta\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;br /&gt;&quot;) == 1 === END AC breaks-hard-break-backslash ===</p>
+<p>=== AC breaks-soft-break ===<br>Intent: A plain line ending is not a hard break and both lines stay in one paragraph.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;alpha\nbeta\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;br /&gt;&quot;) == 0 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1 === END AC breaks-soft-break ===</p>
+<p>=== AC breaks-none-at-block-end ===<br>Intent: Trailing spaces or a trailing backslash at the end of a paragraph do not create a break.</p>
+<p>import subprocess</p>
+<p>for source in (&quot;alpha  \n&quot;, &quot;alpha\\\n&quot;): result = subprocess.run([&quot;./commonmark&quot;], input=source, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;br /&gt;&quot;) == 0 === END AC breaks-none-at-block-end ===</p>
+<p>=== AC breaks-inert-in-code-span ===<br>Intent: Trailing spaces before a line ending inside a code span do not create a break.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;<code>code  \nspan</code>\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;br /&gt;&quot;) == 0 assert result.stdout.count(&quot;&lt;code&gt;&quot;) == 1 === END AC breaks-inert-in-code-span ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>A hard break must never occur at the end of a block.</li><li>Spaces in the middle of a text line must never be collapsed.</li><li>Do not skip, filter or reinterpret corpus examples.</li></ul></article>
+</main>
+</body>
+</html>

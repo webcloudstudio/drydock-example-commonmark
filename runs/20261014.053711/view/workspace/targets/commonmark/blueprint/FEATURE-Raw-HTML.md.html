@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Raw-HTML.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Raw-HTML.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Raw-HTML.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Raw HTML</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>Parse raw inline HTML tags, comments, processing instructions, declarations and CDATA sections and pass them through unescaped.</td></tr><tr><td>Depends On</td><td>FEATURE-Block-Engine.md</td></tr><tr><td>Provides</td><td>raw inline HTML construct</td></tr><tr><td>Consumes</td><td>inline parser hook</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement the Raw HTML section of the spec.</p>
+<h2>Grammar</h2>
+<ul><li>A tag name is an ASCII letter followed by letters, digits or hyphens.</li><li>An attribute is whitespace (spaces, tabs, at most one line ending), an attribute name, and an optional value specification. An attribute name starts with a letter, <code>_</code> or <code>:</code> and continues with letters, digits, <code>_</code>, <code>.</code>, <code>:</code> or <code>-</code>.</li><li>An unquoted value is nonempty and contains no whitespace, <code>&quot;</code>, <code>&#x27;</code>, <code>=</code>, <code>&lt;</code>, <code>&gt;</code> or backtick. Quoted values use single or double quotes.</li><li>An open tag is <code>&lt;</code>, a tag name, attributes, optional whitespace (at most one line ending), an optional <code>/</code>, then <code>&gt;</code>. A closing tag is <code>&lt;/</code>, a tag name, optional whitespace, then <code>&gt;</code>, with no attributes.</li><li>A comment is <code>&lt;!--&gt;</code>, <code>&lt;!---&gt;</code>, or <code>&lt;!--</code> followed by text not containing <code>--&gt;</code> and then <code>--&gt;</code>. A processing instruction is <code>&lt;?</code> to <code>?&gt;</code>. A declaration is <code>&lt;!</code>, an ASCII letter, then text up to <code>&gt;</code>. CDATA is <code>&lt;![CDATA[</code> to <code>]]&gt;</code>.</li></ul>
+<h2>Rules</h2>
+<ul><li>A recognized tag is emitted unescaped and unchanged. Everything else is plain text with <code>&lt;</code>, <code>&gt;</code>, <code>&amp;</code> and <code>&quot;</code> escaped.</li><li>Backslash escapes and entities are inert inside raw HTML, so the text is passed through byte for byte.</li><li>Raw HTML binds as tightly as code spans and autolinks. It takes precedence over emphasis delimiters inside its attribute values.</li><li>A line ending inside a tag is kept as written and never becomes a hard break.</li></ul>
+<h2>Reads</h2>
+<ul><li>Inline text of paragraphs and headings.</li></ul>
+<h2>Writes</h2>
+<ul><li>Raw HTML nodes in the inline tree.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>One corpus example in this section needs block quotes. The Raw HTML section is gated in the tabs story, so the checks here are bounded.</p>
+<p>=== AC rawhtml-open-and-close-tags ===<br>Intent: Valid open, self-closing and closing tags in a paragraph pass through verbatim.</p>
+<p>import subprocess</p>
+<p>tags = &#x27;&lt;a&gt;&lt;bab&gt;&lt;c2c&gt; &lt;a href=&quot;x&quot; data-k=v /&gt; &lt;/a&gt;&lt;/foo &gt;&#x27; result = subprocess.run([&quot;./commonmark&quot;], input=&quot;Foo &quot; + tags + &quot;\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert tags in result.stdout === END AC rawhtml-open-and-close-tags ===</p>
+<p>=== AC rawhtml-comment-pi-declaration-cdata ===<br>Intent: Inline comments, processing instructions, declarations and CDATA pass through verbatim.</p>
+<p>import subprocess</p>
+<p>for fragment in [&quot;&lt;!-- a comment --&gt;&quot;, &quot;&lt;?php echo $a; ?&gt;&quot;, &quot;&lt;!ELEMENT br EMPTY&gt;&quot;, &quot;&lt;![CDATA[&gt;&amp;&lt;]]&gt;&quot;]: result = subprocess.run([&quot;./commonmark&quot;], input=&quot;foo &quot; + fragment + &quot; bar\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert fragment in result.stdout === END AC rawhtml-comment-pi-declaration-cdata ===</p>
+<p>=== AC rawhtml-illegal-forms-escaped ===<br>Intent: Illegal tag names are not raw HTML, so only the paragraph tags contribute angle brackets.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;&lt;33&gt; &lt;__&gt;\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;&quot;) == 2 assert result.stdout.count(&quot;&gt;&quot;) == 2 === END AC rawhtml-illegal-forms-escaped ===</p>
+<p>=== AC rawhtml-closing-tag-with-attributes ===<br>Intent: A closing tag with attributes is not raw HTML, so no extra angle brackets appear in the output.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&#x27;&lt;/a href=&quot;foo&quot;&gt;\n&#x27;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;&quot;) == 2 === END AC rawhtml-closing-tag-with-attributes ===</p>
+<p>=== AC rawhtml-backslash-inert ===<br>Intent: A backslash inside a tag attribute value is preserved and not treated as an escape.</p>
+<p>import subprocess</p>
+<p>tag = &#x27;&lt;a href=&quot;\\*&quot;&gt;&#x27; result = subprocess.run([&quot;./commonmark&quot;], input=&quot;foo &quot; + tag + &quot;\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert tag in result.stdout === END AC rawhtml-backslash-inert ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Never process backslash escapes or entities inside recognized raw HTML.</li><li>Never treat a tag-like string as raw HTML unless it matches the grammar completely.</li><li>Do not skip, filter or reinterpret corpus examples.</li></ul></article>
+</main>
+</body>
+</html>

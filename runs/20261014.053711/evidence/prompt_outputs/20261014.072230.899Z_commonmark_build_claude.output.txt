@@ -1,0 +1,37 @@
+Baseline is green (797 passed, 1 skipped). The indented-code work already gives me the pattern: a block type with start, continue, add-line, and finalize rules. I'll add fenced code the same way, then update the one registry test that pins the default start-rule list.Now the renderer, and the registry test that pins the default start-rule tuple.Before writing tests, a quick smoke run over the declared inputs and some spec-style cases.Most cases match the spec, but the unclosed-fence outputs have an extra trailing blank line. The cause is `cli.split_lines`: input ending in `\n` yields a final empty "line", which the fence correctly treats as content. Let me check what depends on that split before changing it.An existing test pins `split_lines("a\n") == ["a", ""]`, so I won't change `split_lines`. The final newline terminates the last line rather than starting a new one, so I'll drop that one trailing entry in `render_lines`, the document-level entry point, which leaves the pinned helper alone.Now the test file. The seven declared checks are transcribed with their assertions unchanged, following the indented-code file's pattern. The rest act on the block tree and on exact stdout.I left a broken assertion in the indentation test (an `or True` line that makes it meaningless). Fixing that, plus a few awkward test names and a missing return annotation.Now the new file and the full suite together, since the registry change could affect other tests.Four failures, all in my test expectations rather than the implementation:
+
+1. An indented `" ```"` line followed by an unindented `code` line correctly closes the indented block, so the test needed the content indented too. A single line is the right input.
+2. `parse_lines` takes lines with the document's terminator already removed, so `["```", "a", ""]` is the right input for "a\n\n" content. The `render_lines` drop is what handles the terminator.RESULT: SUCCESS
+
+FILES CHANGED:
+- mdparser/blocks.py
+- mdparser/render.py
+- mdparser/cli.py
+- tests/test_blocks.py
+- tests/test_fenced_code.py
+
+SUMMARY:
+Fenced code blocks are implemented as a new block type, `FENCED_CODE`, registered after indented code. It follows the same start, continue, add-line, and finalize pattern as the existing types.
+
+- **Opening fence:** a run of three or more backticks or tildes, indented up to three columns. A backtick fence whose info string contains a backtick is not a fence. A fence can interrupt a paragraph.
+- **Info string:** decoded with the shared `unescape_and_decode`, then the first word becomes `class="language-WORD"`, HTML-escaped.
+- **Content:** up to the opening fence's indentation is stripped from each line. Content is escaped and never parsed as Markdown.
+- **Closing fence:** same character, at least as long, up to three columns of indentation, followed only by spaces or tabs. It closes the block and adds no content.
+- **Unclosed:** runs to the end of the document.
+
+Changes outside the fence code, each needed for correctness:
+- `cli.render_lines` drops the one empty entry left by a final newline. Without this, an unclosed fence gained a stray blank line. I left `split_lines` alone because an existing test pins its trailing-empty behaviour.
+- `tests/test_blocks.py`: the registry test that pins the default start-rule tuple now includes `FENCED_CODE`.
+
+Tests:
+- The seven declared checks are transcribed with their assertions unchanged, in `tests/test_fenced_code.py`. All seven pass.
+- 72 further tests cover the start rule, language extraction, content stripping, closing-fence rules, and exact stdout.
+- Full `pytest -q` is 876 passed, 1 skipped. The skip predates this step.
+
+I did not run `sources/full_test.sh` or `spec_tests.py`. No declared criterion invokes the staged suite, and this step's corpus examples are gated in the lists story.
+
+Nothing was committed.
+
+<blueprint-decisions>
+[{"spec":"FEATURE-Fenced-Code.md","severity":"Material","subject":"Dropping the final empty line in render_lines","decision":"split_lines is pinned by an existing test to return a trailing empty entry for input ending in a newline. Changing it would break that test. I dropped the one trailing empty entry in cli.render_lines instead, so an unclosed fence does not gain a blank line. Is that acceptable, or should the line model move into blocks.parse_lines on replan?"}]
+</blueprint-decisions>

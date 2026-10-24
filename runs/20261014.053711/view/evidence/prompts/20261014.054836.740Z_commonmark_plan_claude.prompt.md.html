@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompts/20261014.054836.740Z_commonmark_plan_claude.prompt.md</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompts/20261014.054836.740Z_commonmark_plan_claude.prompt.md</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompts/20261014.054836.740Z_commonmark_plan_claude.prompt.md">Raw file</a></div></header>
+<article class="doc"><p>&lt;pblock label=&quot;Plan artifact repair&quot; kind=&quot;repair&quot;&gt;</p>
+<h1>Plan Artifact Repair</h1>
+<p>Drydock accepted the Plan response shape but rejected the emitted Blueprint artifact(s) below. Repair only the deterministic defect. Preserve all unrelated content, contracts, headings, decisions, and acceptance assertions byte-for-byte where possible. Do not remove or weaken a valid assertion while adding a missing one. Every artifact with a programmatic surface retains at least two concrete Python acceptance assertions. Every DECISIONS.json is the sole decision disclosure surface; do not emit Markdown question sections.</p>
+<p>Emit each artifact below in exactly this form, and emit no other text:</p>
+<p>=== BEGIN ARTIFACT &lt;FILENAME&gt; === &lt;the complete file body&gt; === END ARTIFACT ===</p>
+<p>The filename appears once, in the opening delimiter. The closing delimiter is the constant token above and never carries a name.</p>
+<p>Emit exactly one such block for each of: FEATURE-Lists.md.</p>
+<p>Repair pass: 1</p>
+<p>Deterministic validation defect: FEATURE-Lists.md []: FEATURE-Lists.md [lists-blank-in-code-stays-tight] acceptance block closes with a different id: expected &#x27;=== END AC lists-blank-in-code-stays-tight ===&#x27;, found &#x27;=== END AC lists-blank-inside-code-stays-tight ===&#x27;</p>
+<p>Normative Compass sections. They bind every assertion you write or retain, including one you add to satisfy the defect above.</p>
+<h2>Constraints</h2>
+<ul><li>The deliverable is an executable named <code>commonmark</code> at the application root.</li><li>Input is UTF-8 on stdin; output is HTML on stdout; no arguments are required.</li><li><code>spec.txt</code> is normative; the spec&#x27;s Appendix gives the reference parsing algorithms to follow directly.</li><li>The runner compares normalized HTML, so tag structure, entities, and URL percent-encoding of non-ASCII characters must match the spec examples.</li><li><code>sources/INSTRUCTIONS.md</code> is prose only and is not staged; the staged runtime assets are <code>spec.txt</code>, <code>spec_tests.py</code>, <code>cmark.py</code>, <code>normalize.py</code>, and <code>full_test.sh</code>.</li><li>A concise <code>README.md</code> describes the stdin/stdout interface; it is not an acceptance criterion.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Never use or call a public Markdown implementation.</li><li>Never modify <code>sources/full_test.sh</code>, <code>sources/spec_tests.py</code>, <code>sources/cmark.py</code>, <code>sources/normalize.py</code>, or <code>sources/spec.txt</code>; they are hash-verified and restored before grading.</li><li>Never filter, skip, or reinterpret tests; changing the entry point is not a repair.</li><li>Never write anything but rendered HTML to stdout.</li></ul>
+<p>&lt;!-- drydock:build-write-guardrail:start --&gt;</p>
+<p>Original FEATURE-Lists.md, in the same form your reply must use: === BEGIN ARTIFACT FEATURE-Lists.md ===</p>
+<h1>FEATURE: Lists</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>Group list items into lists, compute tight and loose rendering, and gate the block-structure corpus sections.</td></tr><tr><td>Depends On</td><td>FEATURE-List-Items.md</td></tr><tr><td>Provides</td><td>list container, tight/loose computation</td></tr><tr><td>Consumes</td><td>list item container</td></tr></tbody></table></div>
+<h2>Questions</h2>
+<ul><li>None.</li></ul>
+<h2>Purpose</h2>
+<p>Implement the Lists section of the spec, and gate the block-structure sections whose examples need lists.</p>
+<h2>Rules</h2>
+<ul><li>Consecutive items of the same type form one list. Two items are of the same type if both are bullets with the same character, or both are ordered with the same delimiter. Changing the bullet character or the ordered delimiter starts a new list.</li><li>The start number of an ordered list is that of its first item. The <code>start</code> attribute is emitted only when it is not 1.</li><li>Items may be separated by any number of blank lines. Items need not be indented identically, as long as none is indented enough to be inside the previous item.</li><li>A list can interrupt a paragraph; an ordered list does so only if it starts at 1.</li><li>A list is loose if any two of its items are separated by a blank line, or if any item directly contains two block children with a blank line between them. Otherwise it is tight. Blank lines inside fenced code, inside a nested list&#x27;s own children, or inside a block quote do not make the outer list loose. Link reference definitions do not count as blocks for this purpose.</li><li>In a tight list the paragraphs of the items render without <code>&lt;p&gt;</code> tags. In a loose list they render with them. Nested lists decide their own tightness.</li></ul>
+<h2>Reads</h2>
+<ul><li>List item nodes from the block tree.</li></ul>
+<h2>Writes</h2>
+<ul><li>List nodes and the tight flag in the block tree.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC lists-corpus-sections ===<br>Intent: The Lists, List items, Block quotes, Thematic breaks, ATX headings, Setext headings, Indented code blocks, Fenced code blocks and Precedence conformance sections (roughly 300 cases) pass in full.<br>Suite: scoped<br>Probe: --dump-tests<br>Probe Count: lines</p>
+<p>import os import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.getcwd() + &quot;/commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;^Lists$|^List items$|^Block quotes$|^Thematic breaks$|^ATX headings$|^Setext headings$|^Indented code blocks$|^Fenced code blocks$|^Precedence$&quot;, ], capture_output=True, text=True, env={**os.environ}, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC lists-corpus-sections ===</p>
+<p>=== AC lists-changing-marker-starts-new-list ===<br>Intent: Changing the bullet character or ordered delimiter starts a new list.</p>
+<p>import subprocess</p>
+<p>bullets = subprocess.run([&quot;./commonmark&quot;], input=&quot;- foo\n- bar\n+ baz\n&quot;, capture_output=True, text=True) ordered = subprocess.run([&quot;./commonmark&quot;], input=&quot;1. foo\n2. bar\n3) baz\n&quot;, capture_output=True, text=True) print(bullets.stdout) print(ordered.stdout) assert bullets.returncode == 0 assert ordered.returncode == 0 assert bullets.stdout.count(&quot;&lt;ul&gt;&quot;) == 2 assert ordered.stdout.count(&quot;&lt;ol&quot;) == 2 === END AC lists-changing-marker-starts-new-list ===</p>
+<p>=== AC lists-tight-versus-loose ===<br>Intent: Items without blank lines are tight, and a blank line between items makes the list loose.</p>
+<p>import subprocess</p>
+<p>tight = subprocess.run([&quot;./commonmark&quot;], input=&quot;- a\n- b\n&quot;, capture_output=True, text=True) loose = subprocess.run([&quot;./commonmark&quot;], input=&quot;- a\n\n- b\n&quot;, capture_output=True, text=True) print(tight.stdout) print(loose.stdout) assert tight.returncode == 0 assert loose.returncode == 0 assert tight.stdout.count(&quot;&lt;p&gt;&quot;) == 0 assert loose.stdout.count(&quot;&lt;p&gt;&quot;) == 2 === END AC lists-tight-versus-loose ===</p>
+<p>=== AC lists-blank-inside-item-makes-loose ===<br>Intent: A blank line between two paragraphs of one item makes the whole list loose.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;- a\n- b\n\n  c\n- d\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 4 === END AC lists-blank-inside-item-makes-loose ===</p>
+<p>=== AC lists-blank-in-code-stays-tight ===<br>Intent: Blank lines inside a fenced code block do not make a list loose.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run( [&quot;./commonmark&quot;], input=&quot;- a\n- <code>\n  b\n\n\n</code>\n- c\n&quot;, capture_output=True, text=True ) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 0 assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1 === END AC lists-blank-inside-code-stays-tight ===</p>
+<p>=== AC lists-interrupt-paragraph ===<br>Intent: A bullet list interrupts a paragraph, and an ordered list does so only when it starts at one.</p>
+<p>import subprocess</p>
+<p>bullet = subprocess.run([&quot;./commonmark&quot;], input=&quot;Foo\n- bar\n- baz\n&quot;, capture_output=True, text=True) one = subprocess.run([&quot;./commonmark&quot;], input=&quot;Intro\n1. item\n&quot;, capture_output=True, text=True) other = subprocess.run([&quot;./commonmark&quot;], input=&quot;Intro\n14. item\n&quot;, capture_output=True, text=True) print(bullet.stdout) print(one.stdout) print(other.stdout) assert bullet.returncode == 0 assert one.returncode == 0 assert other.returncode == 0 assert bullet.stdout.count(&quot;&lt;ul&gt;&quot;) == 1 assert one.stdout.count(&quot;&lt;ol&quot;) == 1 assert other.stdout.count(&quot;&lt;ol&quot;) == 0 === END AC lists-interrupt-paragraph ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Looseness is decided per list, never inherited from a nested or enclosing list.</li><li>Do not skip, filter or reinterpret corpus examples.</li></ul>
+<p>=== END ARTIFACT === &lt;/pblock&gt;</p></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,4 @@
+2026-10-14 01:37:22 EDT  Calling CLAUDE/sonnet (analyze)...
+  upgraded=prompt_limit claude-haiku-5-5->sonnet (112,912 > 98% of 100,000)
+  Completed CLAUDE/claude-sonnet-5-5 (analyze)  rc=0
+    elapsed=1m 58.6s   provider=1m 56.8s   turns=1   cached=1,454 (100% hit)   uncached=2   write 110,396   out=16,525   cost=$0.6070   tps=139.3

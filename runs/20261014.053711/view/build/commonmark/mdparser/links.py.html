@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/mdparser/links.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/mdparser/links.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/mdparser/links.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Link tails: the text that follows a link&#x27;s closing bracket.
+
+Responsibility: match the inline form `(destination &quot;title&quot;)` and the full, collapsed and shortcut
+reference forms against the source after a `]`. The destination and title grammar and the label
+scanner come from `mdparser.refs`, and resolution goes through the reference map. The bracket
+procedure that calls these matchers lives in `mdparser.inlines`.
+&quot;&quot;&quot;
+
+from dataclasses import dataclass
+
+from mdparser.refs import (
+    TITLE_CLOSERS,
+    ReferenceMap,
+    parse_destination,
+    parse_title,
+    scan_label,
+    skip_whitespace_with_line_ending,
+)
+
+
+@dataclass(frozen=True)
+class LinkTail:
+    &quot;&quot;&quot;A matched link tail: the decoded destination, the decoded title or None, and the index past it.&quot;&quot;&quot;
+
+    destination: str
+    title: str | None
+    end: int
+
+
+def match_inline_link(raw: str, start: int) -&gt; LinkTail | None:
+    &quot;&quot;&quot;Match `(destination &quot;title&quot;)` at `start`, which must hold `(`, or return None.
+
+    The destination is optional and comes first. A title must be separated from the destination by
+    whitespace. Whitespace around each part is spaces, tabs and at most one line ending.
+    &quot;&quot;&quot;
+    if raw[start : start + 1] != &quot;(&quot;:
+        return None
+    index = skip_whitespace_with_line_ending(raw, start + 1)
+    if raw[index : index + 1] == &quot;)&quot;:
+        return LinkTail(&quot;&quot;, None, index + 1)
+    destination = parse_destination(raw, index)
+    if destination is None:
+        return None
+    destination_text, index = destination
+
+    after_space = skip_whitespace_with_line_ending(raw, index)
+    title = None
+    if after_space &gt; index and raw[after_space : after_space + 1] in TITLE_CLOSERS:
+        parsed_title = parse_title(raw, after_space)
+        if parsed_title is None:
+            return None
+        title, index = parsed_title
+        index = skip_whitespace_with_line_ending(raw, index)
+    else:
+        index = after_space
+    if raw[index : index + 1] != &quot;)&quot;:
+        return None
+    return LinkTail(destination_text, title, index + 1)
+
+
+def match_reference_tail(raw: str, start: int, text: str, references: ReferenceMap) -&gt; LinkTail | None:
+    &quot;&quot;&quot;Match a full, collapsed or shortcut reference at `start`, just past the link text `text`.
+
+    A following label, `[label]` or `[]`, decides the form. The shortcut form applies only when no
+    label follows, so a following label that does not resolve fails the whole link and the link text
+    is not tried as a shortcut.
+    &quot;&quot;&quot;
+    if raw[start : start + 2] == &quot;[]&quot;:
+        return _resolve(text, references, start + 2)
+    label_end = scan_label(raw, start) if raw[start : start + 1] == &quot;[&quot; else None
+    if label_end is not None:
+        return _resolve(raw[start + 1 : label_end - 1], references, label_end)
+    return _resolve(text, references, start)
+
+
+def _resolve(label: str, references: ReferenceMap, end: int) -&gt; LinkTail | None:
+    &quot;&quot;&quot;The definition for `label`, as a tail ending at `end`, or None when the label is not defined.
+
+    The label must be a valid link label: 1 to 999 characters, not blank, with no unescaped
+    brackets. Only then is it looked up, so the text of a link can serve as its own label.
+    &quot;&quot;&quot;
+    if scan_label(&quot;[&quot; + label + &quot;]&quot;, 0) != len(label) + 2:
+        return None
+    reference = references.get(label)
+    if reference is None:
+        return None
+    return LinkTail(reference.destination, reference.title, end)
+</pre></article>
+</main>
+</body>
+</html>

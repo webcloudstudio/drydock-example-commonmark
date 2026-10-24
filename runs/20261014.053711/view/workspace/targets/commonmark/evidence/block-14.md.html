@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-14.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-14.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-14.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 14 · Service (block-14)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-14</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 4457</li><li>execution id: 20261014.065812.667Z-3615fdb5</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse thematic breaks. (thematic-breaks) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1072)</li><li>implements: FEATURE-Thematic-Breaks.md (SP 1277)</li><li>context: ARCHITECTURE_compact.md (SP 335)</li><li>stack: common_compact.md (SP 1199)</li><li>stack: python_compact.md (SP 390)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>mdparser/blocks.py</li><li>mdparser/render.py</li><li>tests/test_blocks.py</li><li>tests/test_thematic_breaks.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: thematic-three-markers (FEATURE-Thematic-Breaks.md)</li></ul>
+<p>intent: Lines of three or more matching marker characters each render one hr element. return code: 1 stdout: &lt;p&gt;<strong>*&lt;/p&gt; &lt;p&gt;---&lt;/p&gt; &lt;p&gt;___&lt;/p&gt; &lt;p&gt;_____________&lt;/p&gt; &lt;p&gt;- - -&lt;/p&gt; &lt;p&gt;</strong>  * ** * ** * <strong>&lt;/p&gt; stderr: --- drydock: values at failure --- lines = [&#x27;</strong>*&#x27;, &#x27;---&#x27;, &#x27;<strong>_&#x27;, &#x27;</strong><strong>_</strong><strong>_</strong>_&#x27;, &#x27; - - -&#x27;, &#x27; **  * ** * ** * <strong>&#x27;] result = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;</strong>*&lt;/p&gt;\n&lt;p&gt;---&lt;/p&gt;\n&lt;p&gt;<strong>_&lt;/p&gt;\n&lt;p&gt;</strong><strong>_</strong><strong>_</strong>_&lt;/p&gt;\n&lt;p&gt;- - -&lt;/p&gt;\n&lt;p&gt;**  * ** * ** * **&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;thematic-three-markers.py&quot;, line 8, in &lt;module&gt; assert result.stdout.count(&quot;&lt;hr /&gt;&quot;) == len(lines) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>GREEN (prepassed): thematic-not-a-break (FEATURE-Thematic-Breaks.md)</li></ul>
+<p>intent: Wrong characters, too few characters, mixed characters and trailing text do not produce hr elements. return code: 0 stdout: &lt;p&gt;+++&lt;/p&gt; &lt;p&gt;--&lt;/p&gt; &lt;p&gt;_ _ _ _ a&lt;/p&gt; &lt;p&gt;a------&lt;/p&gt; &lt;p&gt;&lt;em&gt;-&lt;/em&gt;&lt;/p&gt;</p>
+<ul><li>RED: thematic-interrupts-paragraph (FEATURE-Thematic-Breaks.md)</li></ul>
+<p>intent: A thematic break directly after paragraph text splits it into two paragraphs around one hr. return code: 1 stdout: &lt;p&gt;Foo <strong>* bar&lt;/p&gt; stderr: --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;Foo\n</strong>*\nbar&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;thematic-interrupts-paragraph.py&quot;, line 6, in &lt;module&gt; assert result.stdout.count(&quot;&lt;hr /&gt;&quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: thematic-trailing-whitespace (FEATURE-Thematic-Breaks.md)</li></ul>
+<p>intent: Trailing spaces and tabs after the marker characters are allowed. return code: 1 stdout: &lt;p&gt;- - - -&lt;/p&gt; stderr: --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;- - - -&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;thematic-trailing-whitespace.py&quot;, line 6, in &lt;module&gt; assert result.stdout.count(&quot;&lt;hr /&gt;&quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: thematic-three-markers (FEATURE-Thematic-Breaks.md)</li></ul>
+<p>intent: Lines of three or more matching marker characters each render one hr element. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;hr /&gt; &lt;hr /&gt; &lt;hr /&gt; &lt;hr /&gt; &lt;hr /&gt; &lt;hr /&gt;</p>
+<ul><li>PASS: thematic-not-a-break (FEATURE-Thematic-Breaks.md)</li></ul>
+<p>intent: Wrong characters, too few characters, mixed characters and trailing text do not produce hr elements. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;+++&lt;/p&gt; &lt;p&gt;--&lt;/p&gt; &lt;p&gt;_ _ _ _ a&lt;/p&gt; &lt;p&gt;a------&lt;/p&gt; &lt;p&gt;&lt;em&gt;-&lt;/em&gt;&lt;/p&gt;</p>
+<ul><li>PASS: thematic-interrupts-paragraph (FEATURE-Thematic-Breaks.md)</li></ul>
+<p>intent: A thematic break directly after paragraph text splits it into two paragraphs around one hr. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;Foo&lt;/p&gt; &lt;hr /&gt; &lt;p&gt;bar&lt;/p&gt;</p>
+<ul><li>PASS: thematic-trailing-whitespace (FEATURE-Thematic-Breaks.md)</li></ul>
+<p>intent: Trailing spaces and tabs after the marker characters are allowed. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;hr /&gt;</p>
+<h2>Build summary</h2>
+<p>Baseline is green (649 passed, 1 skipped). Now I&#x27;ll add the thematic-break block type as a registered start rule in <code>blocks.py</code>.Now the tests: the four declared acceptance checks transcribed unchanged, plus block-tree and exact-output tests for the boundaries.One existing test pins the default registry to zero start rules, which this step intentionally changes. Let me look at it.Now the full project suite, run in the background since it takes about two minutes.Thematic breaks now parse and render as <code>&lt;hr /&gt;</code>. The full project suite passes: 687 passed, 1 skipped (the skip was already there before this change).</p>
+<p>I did not run <code>sources/full_test.sh</code>. The feature&#x27;s acceptance is gated on the lists story, and the conformance corpus needs lists and setext headings.</p>
+<p><strong>What changed</strong></p>
+<ul><li><code>mdparser/blocks.py</code>: a new <code>thematic_break</code> block type with a start rule. It accepts up to three spaces of indentation, then three or more matching <code>*</code>, <code>-</code> or <code>_</code>, with spaces or tabs allowed between and after, and nothing else. It is registered in <code>DEFAULT_REGISTRY</code>, so it takes precedence over paragraph text, and it closes on the next line.</li><li><code>mdparser/render.py</code>: renders the block as <code>&lt;hr /&gt;\n</code>.</li><li><code>tests/test_thematic_breaks.py</code> (new): the four declared checks transcribed with their assertions unchanged, plus boundary tests for marker counts, indentation, mixed and trailing characters, paragraph interaction, and exact output.</li><li><code>tests/test_blocks.py</code>: one existing test asserted the default registry had no start rules. That is now false by design, so I changed it to expect exactly the thematic-break rule. I did not weaken any declared assertion.</li></ul>
+<p><strong>Choices I made</strong></p>
+<ul><li>The start rule lives in <code>blocks.py</code> next to <code>PARAGRAPH</code>, following the existing pattern, rather than in a new module.</li><li>The setext precedence and list precedence are not wired, as the spec says; they belong to the later stories.</li></ul>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>mdparser/blocks.py</li><li>mdparser/render.py</li><li>tests/test_blocks.py</li><li>tests/test_thematic_breaks.py</li></ul>
+<p>SUMMARY: Added the thematic-break block type as a registered start rule, rendered it as <code>&lt;hr /&gt;</code>, and added tests. Declared acceptance checks (thematic-three-markers, thematic-not-a-break, thematic-interrupts-paragraph, thematic-trailing-whitespace) are transcribed in <code>tests/test_thematic_breaks.py</code> and pass. Full pytest run: 687 passed, 1 skipped (pre-existing skip). Baseline before the change was 649 passed, 1 skipped. Conformance corpus (<code>sources/full_test.sh</code>) was not run because this step&#x27;s criteria gate it in the lists story.</p></article>
+</main>
+</body>
+</html>

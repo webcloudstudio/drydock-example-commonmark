@@ -1,0 +1,27 @@
+The column helpers already exist. Let me run the scoped gate to see where things stand before changing anything.The scoped gate already passes (159 passed, 0 failed, 0 errored). Next I'll check the four declared acceptance assertions and the existing project tests.All four declared assertions pass, and the full project suite is green (1142 passed, 1 skipped). Now I'll check whether any existing test covers tab columns, since the spec asks for tests beside the code.Existing tests cover tabs only incidentally, and there is no dedicated tab test file. I'll check the outputs for a set of spec tab cases, then write `tests/test_tabs.py` with exact-output assertions.Every probed output matches the spec examples. I'll write `tests/test_tabs.py`: exact-output tests through the executable, plus direct tests of the column helpers and the partial-tab cursor state.All 31 new tests pass. I'll confirm the only file change is the new test file and that no staged assets were touched.RESULT: SUCCESS
+
+FILES CHANGED:
+- tests/test_tabs.py
+
+SUMMARY:
+The tab column handling was already in place from earlier blocks: `next_column`, `indent_columns`, the `Cursor` split-tab state (`in_tab` and `rest`), and the block rules that use them. I verified it rather than changing it, and I added the tab test file that was missing.
+
+Declared gate (`Suite: scoped`, the nine-section `--pattern`): **159 passed, 0 failed, 0 errored, 496 skipped**. Exit status 0.
+
+Declared acceptance assertions, all passing:
+- tabs-indented-code-and-internal-tabs: pass
+- tabs-list-continuation: pass
+- tabs-after-markers: pass
+- tabs-as-separators: pass
+
+Project tests:
+- New `tests/test_tabs.py`: 31 tests, all passing. They cover `next_column`, `indent_columns`, partial-tab `Cursor` state, and exact stdout for indented code, list continuation, quote and bullet markers, and tab separators. Expected outputs were checked against the spec examples.
+- Full `pytest -q`: 1142 passed, 1 skipped (the skip is pre-existing in `test_foundation.py`).
+
+I did not run `sources/full_test.sh`. The block's declared invocation is the scoped gate, and the staged suite's unscoped run belongs to a later block.
+
+Choices I made:
+- Tests check exact bytes of the whole output, not substrings.
+- Helper tests read back returned columns and `rest` text directly.
+
+No staged assets, protected paths, or Git history were touched. `tests/test_tabs.py` is untracked and not committed.

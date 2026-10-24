@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261014.054425.781Z_commonmark_plan_claude.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261014.054425.781Z_commonmark_plan_claude.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261014.054425.781Z_commonmark_plan_claude.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>=== BEGIN ARTIFACT FEATURE-Code-Spans.md ===
+# FEATURE: Code Spans
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Parse code spans and establish the left-to-right inline scanner with code, autolink and raw HTML precedence. |
+| Depends On  | FEATURE-Autolinks.md, FEATURE-Raw-HTML.md |
+| Provides    | code span inline construct, inline scanner loop |
+| Consumes    | autolink inline construct, raw inline HTML construct |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the Code spans and Inlines sections of the spec, and the inline scanner loop that later inline stories extend.
+
+## Rules
+
+- The scanner walks the text left to right. At a backtick, `&lt;` or other special character it tries the matching construct; the first construct that matches wins.
+- A backtick string is a maximal run of backticks. A code span opens at a backtick string and closes at the next backtick string of exactly the same length. If none exists, the opening run is literal text.
+- Content normalization: convert line endings to spaces; then, if the content both begins and ends with a space and is not entirely spaces, remove one space from each end. Only U+0020 counts, not other whitespace. Interior spaces are not collapsed.
+- Content is HTML-escaped. Backslash escapes and entities are inert inside code spans.
+- Code spans, raw HTML and autolinks have equal precedence: whichever starts first is parsed first. Bracket and emphasis handling is lower precedence and is added by later stories.
+
+## Reads
+
+- Inline text of paragraphs and headings.
+
+## Writes
+
+- Code nodes in the inline tree.
+
+## Programmatic Acceptance
+
+The Precedence section needs lists and is gated in the lists story.
+
+=== AC codespans-corpus-sections ===
+Intent: The Code spans and Inlines conformance sections (23 cases) pass in full.
+Suite: scoped
+Probe: --dump-tests
+Probe Count: lines
+
+import os
+import subprocess
+import sys
+
+result = subprocess.run(
+    [
+        sys.executable,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;,
+        os.getcwd() + &quot;/commonmark&quot;,
+        &quot;--spec&quot;,
+        &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;,
+        &quot;^Code spans$|^Inlines$&quot;,
+    ],
+    capture_output=True,
+    text=True,
+    env={**os.environ},
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC codespans-corpus-sections ===
+
+=== AC codespans-simple ===
+Intent: A single-backtick span renders one code element containing the supplied content.
+
+import subprocess
+
+content = &quot;some code&quot;
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;`&quot; + content + &quot;`\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&lt;code&gt;&quot;) == 1
+assert content in result.stdout
+=== END AC codespans-simple ===
+
+=== AC codespans-backtick-length-match ===
+Intent: A double-backtick span may contain a single backtick, which is kept inside one code element.
+
+import subprocess
+
+inner = &quot;a`b&quot;
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;``&quot; + inner + &quot;``\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&lt;code&gt;&quot;) == 1
+assert inner in result.stdout
+=== END AC codespans-backtick-length-match ===
+
+=== AC codespans-unclosed-literal ===
+Intent: An unmatched backtick run is literal text and produces no code element.
+
+import subprocess
+
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;```foo``\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&lt;code&gt;&quot;) == 0
+=== END AC codespans-unclosed-literal ===
+
+=== AC codespans-escapes-inert ===
+Intent: A backslash inside a code span is kept literally.
+
+import subprocess
+
+content = &quot;\\[&quot;
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;`&quot; + content + &quot;`\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&lt;code&gt;&quot;) == 1
+assert content in result.stdout
+=== END AC codespans-escapes-inert ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Never strip more than one leading and one trailing space, and never strip when the content is entirely spaces.
+- Never process escapes, entities or emphasis inside a code span.
+- Do not skip, filter or reinterpret corpus examples.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Backslash-Escapes.md ===
+# FEATURE: Backslash Escapes
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Implement backslash escapes of ASCII punctuation in text and expose a shared unescape helper for destinations, titles and info strings. |
+| Depends On  | FEATURE-Code-Spans.md |
+| Provides    | backslash escape inline rule, shared unescape helper |
+| Consumes    | inline scanner loop |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the Backslash escapes section of the spec.
+
+## Rules
+
+- A backslash followed by any ASCII punctuation character yields that character as plain text with no Markdown meaning, so it cannot start emphasis, a link, a code span, a heading, a list or a tag.
+- A backslash followed by any other character is a literal backslash.
+- A backslash at the end of a line is a hard break marker, handled by the line-breaks story.
+- A backslash that is itself escaped leaves the next character unescaped.
+- Backslash escapes are inert in code spans, code blocks, autolinks and raw HTML.
+- The shared `unescape` helper applies the same rule to link destinations, link titles and fenced code info strings, and is reused by those stories.
+
+## Reads
+
+- Inline text of paragraphs and headings.
+
+## Writes
+
+- Plain text nodes in the inline tree.
+
+## Programmatic Acceptance
+
+The Backslash escapes corpus section uses fenced code, links and definitions, so it is gated in the tabs story. The checks here are bounded.
+
+=== AC escapes-punctuation-inert ===
+Intent: An escaped asterisk prevents emphasis.
+
+import subprocess
+
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;\\*not emphasized*\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&lt;em&gt;&quot;) == 0
+assert result.stdout.count(&quot;\\&quot;) == 0
+=== END AC escapes-punctuation-inert ===
+
+=== AC escapes-non-punctuation-literal ===
+Intent: A backslash before a non-punctuation character is kept as a literal backslash.
+
+import subprocess
+
+text = &quot;\\A\\a\\3&quot;
+result = subprocess.run([&quot;./commonmark&quot;], input=text + &quot;\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert text in result.stdout
+=== END AC escapes-non-punctuation-literal ===
+
+=== AC escapes-block-markers ===
+Intent: An escaped heading marker does not start a heading.
+
+import subprocess
+
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;\\# word\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&lt;h1&gt;&quot;) == 0
+assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+=== END AC escapes-block-markers ===
+
+=== AC escapes-inert-in-code-span ===
+Intent: A backslash in a code span is not an escape.
+
+import subprocess
+
+content = &quot;\\*&quot;
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;`&quot; + content + &quot;`\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert content in result.stdout
+=== END AC escapes-inert-in-code-span ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Never treat a backslash before a non-punctuation character as an escape.
+- Never process escapes in code spans, code blocks, autolinks or raw HTML.
+- Do not skip, filter or reinterpret corpus examples.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Entities.md ===
+# FEATURE: Entities
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Decode HTML5 named entities and decimal and hexadecimal numeric character references, with a shared helper for destinations, titles and info strings. |
+| Depends On  | FEATURE-Backslash-Escapes.md |
+| Provides    | entity decoding rule, shared entity helper |
+| Consumes    | inline scanner loop |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the Entity and numeric character references section of the spec.
+
+## Rules
+
+- A named reference is `&amp;`, a name present in `html.entities.html5` with a trailing semicolon, and `;`. References without a semicolon (for example `&amp;copy`) and unknown names are not recognized and stay literal, with `&amp;` escaped as `&amp;amp;`.
+- A decimal reference is `&amp;#` plus 1 to 7 digits plus `;`. A hexadecimal reference is `&amp;#` plus `x` or `X` plus 1 to 6 hex digits plus `;`.
+- Invalid code points (surrogates, above U+10FFFF) and U+0000 are replaced with U+FFFD.
+- A decoded character is always plain text and never structure: `&amp;#42;` cannot start emphasis, a list or a thematic break. The decoded text is HTML-escaped on output.
+- References are inert in code spans and code blocks, and are decoded in link destinations, titles and fenced info strings. The shared helper provides that for those stories.
+- Some named entities decode to two code points; both are emitted.
+
+## Reads
+
+- Inline text of paragraphs and headings.
+
+## Writes
+
+- Plain text nodes in the inline tree.
+
+## Programmatic Acceptance
+
+The corpus section needs links, definitions, fenced code, indented code and emphasis, so it is gated in the tabs story. The checks here are bounded and derive their expectations from bound inputs.
+
+=== AC entities-decimal-reference ===
+Intent: A decimal reference decodes to the character with the bound code point.
+
+import subprocess
+
+code_point = 65
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;x &amp;#&quot; + str(code_point) + &quot;; y\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert chr(code_point) in result.stdout
+assert result.stdout.count(&quot;&amp;#&quot;) == 0
+=== END AC entities-decimal-reference ===
+
+=== AC entities-hex-reference ===
+Intent: Lowercase and uppercase hexadecimal references decode to the same character.
+
+import subprocess
+
+code_point = 66
+lower = &quot;&amp;#x&quot; + format(code_point, &quot;x&quot;) + &quot;;&quot;
+upper = &quot;&amp;#X&quot; + format(code_point, &quot;X&quot;) + &quot;;&quot;
+first = subprocess.run([&quot;./commonmark&quot;], input=lower + &quot;\n&quot;, capture_output=True, text=True)
+second = subprocess.run([&quot;./commonmark&quot;], input=upper + &quot;\n&quot;, capture_output=True, text=True)
+print(first.stdout)
+assert first.returncode == 0
+assert second.returncode == 0
+assert chr(code_point) in first.stdout
+assert first.stdout == second.stdout
+=== END AC entities-hex-reference ===
+
+=== AC entities-named-ampersand ===
+Intent: The named ampersand reference round trips to the same escaped form.
+
+import subprocess
+
+reference = &quot;&amp;amp;&quot;
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;a &quot; + reference + &quot; b\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert reference in result.stdout
+assert result.stdout.count(&quot;&amp;amp;&quot;) == 1
+=== END AC entities-named-ampersand ===
+
+=== AC entities-unknown-stays-literal ===
+Intent: An unknown entity name is literal text with its ampersand escaped.
+
+import subprocess
+
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;&amp;MadeUpEntity;\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&amp;amp;&quot;) == 1
+=== END AC entities-unknown-stays-literal ===
+
+=== AC entities-nul-reference-replaced ===
+Intent: The reference for code point zero decodes to the same output as a literal U+FFFD character.
+Encoding: utf-8
+
+import subprocess
+
+reference = &quot;&amp;#0;&quot;
+replacement = chr(0xFFFD)
+first = subprocess.run([&quot;./commonmark&quot;], input=reference + &quot;\n&quot;, capture_output=True, text=True, encoding=&quot;utf-8&quot;)
+second = subprocess.run([&quot;./commonmark&quot;], input=replacement + &quot;\n&quot;, capture_output=True, text=True, encoding=&quot;utf-8&quot;)
+print(first.stdout)
+assert first.returncode == 0
+assert second.returncode == 0
+assert first.stdout == second.stdout
+=== END AC entities-nul-reference-replaced ===
+
+=== AC entities-inert-in-code-span ===
+Intent: A reference inside a code span is not decoded, so its ampersand is escaped.
+
+import subprocess
+
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;`&amp;amp;`\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&amp;amp;amp;&quot;) == 1
+=== END AC entities-inert-in-code-span ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Never recognize named references without a semicolon.
+- Never let a decoded reference act as structure (emphasis, list marker, thematic break).
+- Never decode references in code spans or code blocks.
+- Do not skip, filter or reinterpret corpus examples.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Emphasis.md ===
+# FEATURE: Emphasis
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Implement the delimiter stack, flanking rules and the Appendix process-emphasis algorithm for emphasis and strong emphasis. |
+| Depends On  | FEATURE-Entities.md |
+| Provides    | delimiter stack, process_emphasis procedure |
+| Consumes    | inline scanner loop |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the Emphasis and strong emphasis section of the spec using the Appendix algorithm directly.
+
+## Delimiter stack
+
+- On a run of `*` or `_`, insert a text node holding the run and push a stack entry with: delimiter type, run length, original length, active flag, and `can_open` and `can_close`.
+- The stack also accepts `[` and `![` entries so the links story reuses it.
+- Flanking: a run is left-flanking when it is not followed by Unicode whitespace and either is not followed by punctuation, or is followed by punctuation and preceded by whitespace or punctuation. Right-flanking is the mirror. Line start and end count as whitespace. Punctuation means Unicode categories `P*` and `S*` via `unicodedata`.
+- For `*`: `can_open` is left-flanking and `can_close` is right-flanking. For `_`: `can_open` is left-flanking and (not right-flanking or preceded by punctuation); `can_close` is right-flanking and (not left-flanking or followed by punctuation).
+
+## process_emphasis(stack_bottom)
+
+- Maintain `openers_bottom` per delimiter type, indexed by closer length mod 3 and whether the closer can also open.
+- Find the first potential closer, then search back for a valid opener: same type, can open, and the multiple-of-3 rule satisfied (if either can both open and close, the sum of original lengths must not be a multiple of 3 unless both are).
+- If found, use strong when both runs have length of at least 2, otherwise regular. Wrap the nodes between opener and closer, remove delimiters between them, and consume 1 or 2 characters from each side, removing empty entries.
+- If not found, lower `openers_bottom`, drop the closer if it cannot open, and advance.
+- At the end remove everything above `stack_bottom`. Leftover delimiters stay as literal text.
+
+## Reads
+
+- Inline text of paragraphs and headings.
+
+## Writes
+
+- Emphasis and strong nodes in the inline tree.
+
+## Programmatic Acceptance
+
+The corpus section includes links in rule 9 and rule 17 examples, so it is gated in the images story. The checks here are bounded and structural.
+
+=== AC emphasis-star-and-underscore ===
+Intent: Single star and single underscore wrap supplied words in one em element each.
+
+import subprocess
+
+word = &quot;wordy&quot;
+for mark in (&quot;*&quot;, &quot;_&quot;):
+    result = subprocess.run([&quot;./commonmark&quot;], input=mark + word + mark + &quot;\n&quot;, capture_output=True, text=True)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;em&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;strong&gt;&quot;) == 0
+    assert word in result.stdout
+=== END AC emphasis-star-and-underscore ===
+
+=== AC emphasis-strong ===
+Intent: Doubled delimiters produce one strong element.
+
+import subprocess
+
+word = &quot;wordy&quot;
+for mark in (&quot;**&quot;, &quot;__&quot;):
+    result = subprocess.run([&quot;./commonmark&quot;], input=mark + word + mark + &quot;\n&quot;, capture_output=True, text=True)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;strong&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;em&gt;&quot;) == 0
+=== END AC emphasis-strong ===
+
+=== AC emphasis-intraword-rules ===
+Intent: Intraword emphasis works with star but not with underscore.
+
+import subprocess
+
+star = subprocess.run([&quot;./commonmark&quot;], input=&quot;foo*bar*baz\n&quot;, capture_output=True, text=True)
+under = subprocess.run([&quot;./commonmark&quot;], input=&quot;foo_bar_baz\n&quot;, capture_output=True, text=True)
+print(star.stdout)
+print(under.stdout)
+assert star.returncode == 0
+assert under.returncode == 0
+assert star.stdout.count(&quot;&lt;em&gt;&quot;) == 1
+assert under.stdout.count(&quot;&lt;em&gt;&quot;) == 0
+=== END AC emphasis-intraword-rules ===
+
+=== AC emphasis-flanking-whitespace ===
+Intent: A delimiter run followed or preceded by whitespace does not form emphasis.
+
+import subprocess
+
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;a * foo bar*\n\nfoo bar *\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&lt;em&gt;&quot;) == 0
+=== END AC emphasis-flanking-whitespace ===
+
+=== AC emphasis-nesting ===
+Intent: Triple delimiters give one em containing one strong, and nested forms keep both elements.
+
+import subprocess
+
+triple = subprocess.run([&quot;./commonmark&quot;], input=&quot;***word***\n&quot;, capture_output=True, text=True)
+nested = subprocess.run([&quot;./commonmark&quot;], input=&quot;*a **b** c*\n&quot;, capture_output=True, text=True)
+print(triple.stdout)
+print(nested.stdout)
+assert triple.returncode == 0
+assert nested.returncode == 0
+assert triple.stdout.count(&quot;&lt;em&gt;&quot;) == 1
+assert triple.stdout.count(&quot;&lt;strong&gt;&quot;) == 1
+assert nested.stdout.count(&quot;&lt;em&gt;&quot;) == 1
+assert nested.stdout.count(&quot;&lt;strong&gt;&quot;) == 1
+=== END AC emphasis-nesting ===
+
+=== AC emphasis-code-span-binds-tighter ===
+Intent: A star inside a code span cannot close emphasis.
+
+import subprocess
+
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;*foo`*`\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&lt;em&gt;&quot;) == 0
+assert result.stdout.count(&quot;&lt;code&gt;&quot;) == 1
+=== END AC emphasis-code-span-binds-tighter ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Follow the Appendix algorithm; do not reinvent the emphasis rules or use backtracking.
+- Never form empty emphasis.
+- Do not skip, filter or reinterpret corpus examples.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Link-Reference-Definitions.md ===
+# FEATURE: Link Reference Definitions
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Extract link reference definitions when a paragraph closes and provide the document-wide reference map and label normalization. |
+| Depends On  | FEATURE-Block-Engine.md |
+| Provides    | reference map, normalize_label |
+| Consumes    | block tree builder |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the Link reference definitions section of the spec and the label matching shared with links and images.
+
+## Rules
+
+- When a paragraph closes, repeatedly parse a definition at the start of its text: up to three spaces of indentation, a link label, a colon, optional whitespace with up to one line ending, a link destination, optional whitespace with up to one line ending, and an optional title. Nothing else may follow on the final line.
+- A link label has 1 to 999 characters, at least one non-whitespace character, and no unescaped brackets. A destination is either `&lt;...&gt;` with no line ending or unescaped `&lt;` or `&gt;`, or a nonempty run with no spaces or control characters and balanced parentheses. An empty `&lt;&gt;` destination is allowed.
+- A title is double-quoted, single-quoted or parenthesized, may span lines, must not contain a blank line, and must be separated from the destination by whitespace.
+- If the title does not parse, but the destination ends its line, the definition has no title and the rest of the paragraph remains. If anything else follows the title on its line, the whole attempt fails and the text stays a paragraph.
+- The first definition for a normalized label wins. Definitions in containers go into the same document-wide map. A definition cannot interrupt a paragraph, which follows from extracting only at the start of the paragraph&#x27;s text.
+- Remaining text becomes a paragraph. A paragraph that consists only of definitions disappears.
+- `normalize_label` strips the brackets, applies `str.casefold()`, strips, and collapses internal spaces, tabs and line endings to one space. Matching compares normalized strings, not parsed inlines.
+- Destination and title go through the shared unescape and entity helpers. The stored destination is percent-encoded at render time by the link story.
+
+## Reads
+
+- Closed paragraph text.
+
+## Writes
+
+- Entries in the reference map.
+
+## Programmatic Acceptance
+
+The corpus section needs headings, quotes, setext headings and links, so it is gated in the tabs story. The checks here are bounded and use paragraph counts.
+
+=== AC defs-definition-only-renders-nothing ===
+Intent: A document that is only a definition, with or without a title or angle brackets, renders no paragraph.
+
+import subprocess
+
+for source in [&#x27;[foo]: /url &quot;title&quot;\n&#x27;, &quot;[foo]:\n/url\n&#x27;title&#x27;\n&quot;, &quot;[foo]: &lt;&gt;\n&quot;]:
+    result = subprocess.run([&quot;./commonmark&quot;], input=source, capture_output=True, text=True)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 0
+=== END AC defs-definition-only-renders-nothing ===
+
+=== AC defs-remainder-is-paragraph ===
+Intent: Text after a definition stays as one paragraph.
+
+import subprocess
+
+rest = &quot;remaining text&quot;
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;[foo]: /url\n&quot; + rest + &quot;\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+assert rest in result.stdout
+=== END AC defs-remainder-is-paragraph ===
+
+=== AC defs-trailing-text-not-definition ===
+Intent: Extra text after the title means the line is not a definition, so it stays a paragraph.
+
+import subprocess
+
+result = subprocess.run([&quot;./commonmark&quot;], input=&#x27;[foo]: /url &quot;title&quot; ok\n&#x27;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+=== END AC defs-trailing-text-not-definition ===
+
+=== AC defs-cannot-interrupt-paragraph ===
+Intent: A definition line directly after paragraph text is part of that paragraph.
+
+import subprocess
+
+definition = &quot;[bar]: /baz&quot;
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;Foo\n&quot; + definition + &quot;\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+assert definition in result.stdout
+=== END AC defs-cannot-interrupt-paragraph ===
+
+=== AC defs-title-with-blank-line ===
+Intent: A title containing a blank line is not valid, so the two halves become two paragraphs.
+
+import subprocess
+
+result = subprocess.run(
+    [&quot;./commonmark&quot;],
+    input=&quot;[foo]: /url &#x27;title\n\nwith blank line&#x27;\n&quot;,
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 2
+=== END AC defs-title-with-blank-line ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- A definition must never interrupt a paragraph.
+- Label matching is on normalized strings only, never on parsed inline content.
+- Do not skip, filter or reinterpret corpus examples.
+=== END ARTIFACT ===</pre></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-15.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-15.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-15.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 15 · Service (block-15)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-14</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 4955</li><li>execution id: 20261014.070515.046Z-5a98a58e</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse ATX headings. (atx-headings) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1072)</li><li>implements: FEATURE-ATX-Headings.md (SP 1713)</li><li>context: ARCHITECTURE_compact.md (SP 335)</li><li>stack: common_compact.md (SP 1199)</li><li>stack: python_compact.md (SP 390)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>mdparser/blocks.py</li><li>mdparser/render.py</li><li>tests/test_atx_headings.py</li><li>tests/test_blocks.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: atx-levels-one-to-six (FEATURE-ATX-Headings.md)</li></ul>
+<p>intent: Each opening-sequence length from 1 to 6 renders exactly one heading of that level. return code: 1 stdout: &lt;p&gt;# foo&lt;/p&gt; stderr: --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;# foo&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) level = 1 --- drydock: end values --- Traceback (most recent call last): File &quot;atx-levels-one-to-six.py&quot;, line 8, in &lt;module&gt; assert result.stdout.count(&quot;&lt;h&quot; + str(level) + &quot;&gt;&quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>GREEN (prepassed): atx-not-a-heading (FEATURE-ATX-Headings.md)</li></ul>
+<p>intent: Seven hashes, a missing space, and an escaped hash do not produce headings. return code: 0 stdout: &lt;p&gt;####### foo&lt;/p&gt; &lt;p&gt;#hashtag&lt;/p&gt; &lt;p&gt;## foo&lt;/p&gt;</p>
+<ul><li>RED: atx-closing-sequence (FEATURE-ATX-Headings.md)</li></ul>
+<p>intent: A closing hash sequence is removed from the heading content. return code: 1 stdout: &lt;p&gt;## foo ##&lt;/p&gt; stderr: --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;## foo ##&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;atx-closing-sequence.py&quot;, line 6, in &lt;module&gt; assert result.stdout.count(&quot;&lt;h2&gt;&quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: atx-empty-heading (FEATURE-ATX-Headings.md)</li></ul>
+<p>intent: Empty headings are allowed, one per line. return code: 1 stdout: &lt;p&gt;#&lt;/p&gt; &lt;p&gt;##&lt;/p&gt; stderr: --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;#&lt;/p&gt;\n&lt;p&gt;##&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;atx-empty-heading.py&quot;, line 6, in &lt;module&gt; assert result.stdout.count(&quot;&lt;h1&gt;&quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: atx-interrupts-paragraph (FEATURE-ATX-Headings.md)</li></ul>
+<p>intent: A heading splits a paragraph without blank lines, leaving two paragraphs around it. return code: 1 stdout: &lt;p&gt;Foo bar # baz Bar foo&lt;/p&gt; stderr: --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;Foo bar\n# baz\nBar foo&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;atx-interrupts-paragraph.py&quot;, line 6, in &lt;module&gt; assert result.stdout.count(&quot;&lt;h1&gt;&quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: atx-indentation-limit (FEATURE-ATX-Headings.md)</li></ul>
+<p>intent: Up to three spaces of indentation are allowed before the opening sequence, and four are not. return code: 1 stdout: &lt;p&gt;# foo&lt;/p&gt;</p>
+<p>&lt;p&gt;# foo&lt;/p&gt; stderr: --- drydock: values at failure --- allowed = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;# foo&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;atx-indentation-limit.py&quot;, line 9, in &lt;module&gt; assert allowed.stdout.count(&quot;&lt;h1&gt;&quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: atx-levels-one-to-six (FEATURE-ATX-Headings.md)</li></ul>
+<p>intent: Each opening-sequence length from 1 to 6 renders exactly one heading of that level. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;h1&gt;foo&lt;/h1&gt;</p>
+<p>&lt;h2&gt;foo&lt;/h2&gt;</p>
+<p>&lt;h3&gt;foo&lt;/h3&gt;</p>
+<p>&lt;h4&gt;foo&lt;/h4&gt;</p>
+<p>&lt;h5&gt;foo&lt;/h5&gt;</p>
+<p>&lt;h6&gt;foo&lt;/h6&gt;</p>
+<ul><li>PASS: atx-not-a-heading (FEATURE-ATX-Headings.md)</li></ul>
+<p>intent: Seven hashes, a missing space, and an escaped hash do not produce headings. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;####### foo&lt;/p&gt; &lt;p&gt;#hashtag&lt;/p&gt; &lt;p&gt;## foo&lt;/p&gt;</p>
+<ul><li>PASS: atx-closing-sequence (FEATURE-ATX-Headings.md)</li></ul>
+<p>intent: A closing hash sequence is removed from the heading content. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;h2&gt;foo&lt;/h2&gt;</p>
+<ul><li>PASS: atx-empty-heading (FEATURE-ATX-Headings.md)</li></ul>
+<p>intent: Empty headings are allowed, one per line. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;h1&gt;&lt;/h1&gt; &lt;h2&gt;&lt;/h2&gt;</p>
+<ul><li>PASS: atx-interrupts-paragraph (FEATURE-ATX-Headings.md)</li></ul>
+<p>intent: A heading splits a paragraph without blank lines, leaving two paragraphs around it. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;Foo bar&lt;/p&gt; &lt;h1&gt;baz&lt;/h1&gt; &lt;p&gt;Bar foo&lt;/p&gt;</p>
+<ul><li>PASS: atx-indentation-limit (FEATURE-ATX-Headings.md)</li></ul>
+<p>intent: Up to three spaces of indentation are allowed before the opening sequence, and four are not. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;h1&gt;foo&lt;/h1&gt;</p>
+<p>&lt;p&gt;# foo&lt;/p&gt;</p>
+<h2>Agent self-report (advisory)</h2>
+<p>The build agent declared a failure. This is advisory only; the programmatic acceptance above is the authority for this block&#x27;s outcome.</p>
+<ul><li>summary: Scoped ATX gate fails on Example 69, which needs the indented-code story that is not in this block.</li><li>detail:</li></ul>
+<p>The gate <code>spec_tests.py --pattern &#x27;^ATX headings$&#x27;</code> ran 18 examples: 17 pass and Example 69 (<code># foo</code>) fails. That example expects <code>&lt;pre&gt;&lt;code&gt;# foo&lt;/code&gt;&lt;/pre&gt;</code>, which requires indented code blocks, a separate story not present in this build. The ATX implementation and all declared acceptance checks pass, and the full pytest suite passes (755 passed, 1 skipped). To clear the gate, land the indented-code story (or include it in the next block) and rerun the same scoped command. No example-specific workaround was added.</p>
+<h2>Build summary</h2>
+<p>I&#x27;ll start by inspecting the build directory and the staged sources.The project already has an <code>mdparser</code> package and tests from earlier blocks. I&#x27;ll read those and the staged runner before changing anything.The thematic-break block is the pattern to follow: a registered start rule, a <code>BlockType</code>, and a renderer branch. Before designing the heading block I&#x27;ll check the inline parser&#x27;s signature, the rest of the thematic-break test file, and whether any existing test depends on heading behavior.The thematic-break commit changed a registry test (<code>test_default_registry_start_rules_are_the_thematic_break</code>), so adding a second start rule will affect it too. I&#x27;ll run the current test suite for a baseline and check the two existing heading-adjacent tests.Baseline is 687 passed, 1 skipped. I have what I need, so here is the plan:</p>
+<ul><li><strong><code>mdparser/blocks.py</code></strong>: add an <code>ATX_HEADING</code> block type with a start rule that handles the opening run, the 1–6 limit, the space/tab/EOL rule, and content stripping. A separate helper removes the closing sequence, and the rule is registered after thematic breaks. <code>Block</code> gets a <code>level</code> field.</li><li><strong><code>mdparser/render.py</code></strong>: render <code>&lt;hN&gt;</code> with the content passed through the inline hook.</li><li><strong>Tests</strong>: a new <code>tests/test_atx_headings.py</code> that transcribes the six declared checks unchanged, plus finer tests. I&#x27;ll also update the one registry test that pins the old start-rule list.</li></ul>
+<p>Starting with the block engine:Now the test file. The six declared checks are transcribed with their assertions unchanged. The finer tests cover each level, the boundaries, closing sequences, inline content, and interaction with paragraphs.I&#x27;ll run the new heading tests and the block-engine and renderer tests first, since they cover the changed code most directly.The focused tests pass. Next is the declared gate for this step: the scoped spec run with <code>--pattern &#x27;^ATX headings$&#x27;</code>, using the same <code>PYTHONPATH</code> setup as <code>full_test.sh</code>. I&#x27;m not running the unscoped suite, since that belongs to a later step.The scoped gate runs 18 examples in the ATX section: 17 pass and 1 fails. The failure is Example 69 (<code># foo</code>), which expects an indented code block. Indented code is a separate story that hasn&#x27;t landed, and the build instructions say this example depends on it. I won&#x27;t implement it here or special-case the example. Next, the full project test suite, to confirm nothing else regressed.The ATX heading story is implemented, but the declared scoped gate does not pass: 17 of 18 examples pass, and Example 69 fails because it needs the indented-code story.</p>
+<p><strong>What changed</strong></p>
+<ul><li><code>mdparser/blocks.py</code>: new <code>ATX_HEADING</code> block type with a start rule. It accepts 1–6 <code>#</code> after up to three spaces of indentation, requires a space, tab, or end of line after the run, and strips surrounding whitespace. A separate helper removes a closing sequence only when it is preceded by whitespace or is the whole content, so <code>foo#</code> and <code>foo \#</code> keep their hashes. <code>Block</code> gets a <code>level</code> field, and the rule is registered after thematic breaks.</li><li><code>mdparser/render.py</code>: renders <code>&lt;hN&gt;</code> with the content passed through the inline parser.</li><li><code>tests/test_blocks.py</code>: one registry test updated to expect both start rules, since it pinned the old list.</li><li><code>tests/test_atx_headings.py</code> (new): the six declared checks, transcribed with assertions unchanged, plus block-tree and exact-output tests.</li></ul>
+<p><strong>Verification</strong></p>
+<ul><li>Full project suite: 755 passed, 1 skipped. The skip was already there before this change. The baseline was 687 passed.</li><li>Scoped spec gate (<code>--pattern &#x27;^ATX headings$&#x27;</code>): 17 passed, 1 failed, 637 skipped. I did not run <code>full_test.sh</code>, since it belongs to a later step.</li></ul>
+<p><strong>Blocker</strong></p>
+<ul><li>Example 69 (<code># foo</code>) expects <code>&lt;pre&gt;&lt;code&gt;# foo&lt;/code&gt;&lt;/pre&gt;</code>, an indented code block. Nothing in this step can produce that, and the build instructions say the example depends on the indented-code story. I did not implement indented code or special-case the example. It should pass once that story lands.</li></ul>
+<p><strong>Choices I made</strong></p>
+<ul><li>The heading level lives on <code>Block.level</code>, and content is stored at start time, with inline parsing deferred to render.</li></ul>
+<p>No git add or commit was run; the changes are in the working tree.</p>
+<p>RESULT: FAILED</p>
+<p>FILES CHANGED:</p>
+<ul><li>mdparser/blocks.py</li><li>mdparser/render.py</li><li>tests/test_blocks.py</li><li>tests/test_atx_headings.py</li></ul>
+<p>SUMMARY: Added the ATX heading block (start rule, closing-sequence stripping, level, registration) and its HTML rendering with inline content. The six declared acceptance checks pass, and the full pytest suite is green at 755 passed, 1 skipped. The scoped spec gate <code>--pattern &#x27;^ATX headings$&#x27;</code> returns 17 passed, 1 failed, 637 skipped.</p>
+<p>BLOCKERS:</p>
+<ul><li>Spec Example 69 (<code># foo</code>) expects an indented code block. It needs the indented-code story, which is not in this block.</li></ul>
+<p>&lt;blueprint-decisions&gt; [{&quot;spec&quot;:&quot;FEATURE-ATX-Headings.md&quot;,&quot;severity&quot;:&quot;Low&quot;,&quot;subject&quot;:&quot;Closing-sequence detection&quot;,&quot;decision&quot;:&quot;The closing run is removed only when it is the whole heading content or follows a space or tab. Backslash-escaped and attached hashes (foo#, foo \\#) are kept, as the spec&#x27;s guardrail requires. Options were a regex or a character scan; I chose the character scan to match the existing cursor-based start rules.&quot;}] &lt;/blueprint-decisions&gt;</p>
+<p>FAILURE_SUMMARY: Scoped ATX gate fails on Example 69, which needs the indented-code story that is not in this block.<br>FAILURE_DETAIL: The gate <code>spec_tests.py --pattern &#x27;^ATX headings$&#x27;</code> ran 18 examples: 17 pass and Example 69 (<code># foo</code>) fails. That example expects <code>&lt;pre&gt;&lt;code&gt;# foo&lt;/code&gt;&lt;/pre&gt;</code>, which requires indented code blocks, a separate story not present in this build. The ATX implementation and all declared acceptance checks pass, and the full pytest suite passes (755 passed, 1 skipped). To clear the gate, land the indented-code story (or include it in the next block) and rerun the same scoped command. No example-specific workaround was added.</p></article>
+</main>
+</body>
+</html>

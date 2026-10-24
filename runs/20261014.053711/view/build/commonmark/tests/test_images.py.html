@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_images.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_images.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_images.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Image tests: the image construct in its inline and reference forms, the plain-text alt attribute,
+nesting with links and images, and the corpus sections that the images story gates.
+
+The declared acceptance checks are transcribed from FEATURE-Images.md with their assertions kept as
+written. The remaining tests compare the returned HTML string, or the executable&#x27;s stdout, with its
+exact expected value. Reference maps are built per test, so no state is shared between tests.
+&quot;&quot;&quot;
+
+import subprocess
+import sys
+from pathlib import Path
+
+from mdparser import inlines
+from mdparser.refs import ReferenceMap
+
+
+def run_executable(project_root: Path, data: str) -&gt; subprocess.CompletedProcess[bytes]:
+    return subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=data.encode(&quot;utf-8&quot;),
+        capture_output=True,
+        cwd=project_root,
+        check=False,
+    )
+
+
+def references_with(*definitions: tuple[str, str, str | None]) -&gt; ReferenceMap:
+    &quot;&quot;&quot;A fresh reference map holding each (label, destination, title) definition.&quot;&quot;&quot;
+    references = ReferenceMap()
+    for label, destination, title in definitions:
+        references.add(label, destination, title)
+    return references
+
+
+def parse(source: str, references: ReferenceMap | None = None) -&gt; str:
+    return inlines.parse_inline(source, references)
+
+
+# --- Declared acceptance checks (transcribed from FEATURE-Images.md) ---
+
+
+def test_images_corpus_sections(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC images-corpus-sections: the Emphasis and strong emphasis, Links and Images sections pass.&quot;&quot;&quot;
+    result = subprocess.run(
+        [
+            sys.executable,
+            &quot;sources/spec_tests.py&quot;,
+            &quot;--program&quot;,
+            str(project_root / &quot;commonmark&quot;),
+            &quot;--spec&quot;,
+            &quot;sources/spec.txt&quot;,
+            &quot;--pattern&quot;,
+            &quot;^Emphasis and strong emphasis$|^Links$|^Images$&quot;,
+        ],
+        capture_output=True,
+        text=True,
+        cwd=project_root,
+        check=False,
+    )
+    print(result.stdout)
+    print(result.stderr, file=sys.stderr)
+    assert result.returncode == 0
+
+
+def test_images_inline_image(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC images-inline-image: an inline image renders one img element carrying the supplied src, alt and title.&quot;&quot;&quot;
+    alt = &quot;my alt&quot;
+    src = &quot;/path/pic.jpg&quot;
+    title = &quot;a title&quot;
+    source = &quot;![&quot; + alt + &quot;](&quot; + src + &#x27; &quot;&#x27; + title + &#x27;&quot;)\n&#x27;
+    result = subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=source,
+        capture_output=True,
+        text=True,
+        cwd=project_root,
+        check=False,
+    )
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;img &quot;) == 1
+    assert (&#x27;src=&quot;&#x27; + src + &#x27;&quot;&#x27;) in result.stdout
+    assert (&#x27;alt=&quot;&#x27; + alt + &#x27;&quot;&#x27;) in result.stdout
+    assert (&#x27;title=&quot;&#x27; + title + &#x27;&quot;&#x27;) in result.stdout
+
+
+def test_images_alt_is_plain_text(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC images-alt-is-plain-text: emphasis inside an image description does not appear as markup in alt.&quot;&quot;&quot;
+    result = subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=&quot;![foo *bar*](/u)\n&quot;,
+        capture_output=True,
+        text=True,
+        cwd=project_root,
+        check=False,
+    )
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;img &quot;) == 1
+    assert result.stdout.count(&quot;&lt;em&gt;&quot;) == 0
+
+
+def test_images_reference_forms(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC images-reference-forms: full, collapsed and shortcut image references each resolve against a definition.&quot;&quot;&quot;
+    definition = &quot;\n\n[foo]: /url\n&quot;
+    for use in (&quot;![text][foo]&quot;, &quot;![foo][]&quot;, &quot;![foo]&quot;):
+        result = subprocess.run(
+            [str(project_root / &quot;commonmark&quot;)],
+            input=use + definition,
+            capture_output=True,
+            text=True,
+            cwd=project_root,
+            check=False,
+        )
+        print(result.stdout)
+        assert result.returncode == 0
+        assert result.stdout.count(&quot;&lt;img &quot;) == 1
+
+
+def test_images_inside_link(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC images-inside-link: an image inside a link produces one a element containing one img element.&quot;&quot;&quot;
+    result = subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=&quot;[![moon](moon.jpg)](/uri)\n&quot;,
+        capture_output=True,
+        text=True,
+        cwd=project_root,
+        check=False,
+    )
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;a &quot;) == 1
+    assert result.stdout.count(&quot;&lt;img &quot;) == 1
+
+
+# --- Inline form: attributes ---
+
+
+def test_inline_image_without_title_has_no_title_attribute() -&gt; None:
+    assert parse(&quot;![foo](/url)&quot;) == &#x27;&lt;img src=&quot;/url&quot; alt=&quot;foo&quot; /&gt;&#x27;
+
+
+def test_inline_image_with_title() -&gt; None:
+    assert parse(&#x27;![foo](/url &quot;title&quot;)&#x27;) == &#x27;&lt;img src=&quot;/url&quot; alt=&quot;foo&quot; title=&quot;title&quot; /&gt;&#x27;
+
+
+def test_inline_image_with_empty_description_has_empty_alt() -&gt; None:
+    assert parse(&quot;![](/url)&quot;) == &#x27;&lt;img src=&quot;/url&quot; alt=&quot;&quot; /&gt;&#x27;
+
+
+def test_image_title_is_escaped() -&gt; None:
+    assert parse(&#x27;![a](/u &quot;x&amp;y&quot;)&#x27;) == &#x27;&lt;img src=&quot;/u&quot; alt=&quot;a&quot; title=&quot;x&amp;amp;y&quot; /&gt;&#x27;
+
+
+def test_image_src_is_percent_encoded() -&gt; None:
+    assert parse(&quot;![a](&lt;/a b&gt;)&quot;) == &#x27;&lt;img src=&quot;/a%20b&quot; alt=&quot;a&quot; /&gt;&#x27;
+
+
+def test_image_src_is_percent_encoded_for_non_ascii() -&gt; None:
+    assert parse(&quot;![a](/é)&quot;) == &#x27;&lt;img src=&quot;/%C3%A9&quot; alt=&quot;a&quot; /&gt;&#x27;
+
+
+# --- Alt text is the plain text of the description ---
+
+
+def test_alt_drops_strong_emphasis_markup() -&gt; None:
+    assert parse(&quot;![foo **bar**](/u)&quot;) == &#x27;&lt;img src=&quot;/u&quot; alt=&quot;foo bar&quot; /&gt;&#x27;
+
+
+def test_alt_keeps_code_span_content() -&gt; None:
+    assert parse(&quot;![foo `bar`](/u)&quot;) == &#x27;&lt;img src=&quot;/u&quot; alt=&quot;foo bar&quot; /&gt;&#x27;
+
+
+def test_alt_keeps_link_text_and_drops_the_link() -&gt; None:
+    assert parse(&quot;![foo [bar](/url)](/url2)&quot;) == &#x27;&lt;img src=&quot;/url2&quot; alt=&quot;foo bar&quot; /&gt;&#x27;
+
+
+def test_alt_takes_the_alt_of_a_nested_image() -&gt; None:
+    assert parse(&quot;![foo ![bar](/url)](/url2)&quot;) == &#x27;&lt;img src=&quot;/url2&quot; alt=&quot;foo bar&quot; /&gt;&#x27;
+
+
+def test_alt_keeps_autolink_text() -&gt; None:
+    assert parse(&quot;![&lt;http://x.y&gt;](/u)&quot;) == &#x27;&lt;img src=&quot;/u&quot; alt=&quot;http://x.y&quot; /&gt;&#x27;
+
+
+def test_alt_is_escaped_text() -&gt; None:
+    assert parse(&quot;![a&lt;b&amp;c](/u)&quot;) == &#x27;&lt;img src=&quot;/u&quot; alt=&quot;a&amp;lt;b&amp;amp;c&quot; /&gt;&#x27;
+
+
+def test_alt_keeps_an_escaped_punctuation_character_as_text() -&gt; None:
+    assert parse(&quot;![a\\*b](/u)&quot;) == &#x27;&lt;img src=&quot;/u&quot; alt=&quot;a*b&quot; /&gt;&#x27;
+
+
+def test_alt_decodes_a_character_reference() -&gt; None:
+    assert parse(&quot;![&amp;copy;](/u)&quot;) == &#x27;&lt;img src=&quot;/u&quot; alt=&quot;©&quot; /&gt;&#x27;
+
+
+# --- Reference forms ---
+
+
+def test_full_reference_image_uses_its_text_as_alt() -&gt; None:
+    references = references_with((&quot;foo&quot;, &quot;/url&quot;, None))
+    assert parse(&quot;![text][foo]&quot;, references) == &#x27;&lt;img src=&quot;/url&quot; alt=&quot;text&quot; /&gt;&#x27;
+
+
+def test_collapsed_reference_image_uses_its_label_as_alt() -&gt; None:
+    references = references_with((&quot;foo&quot;, &quot;/url&quot;, None))
+    assert parse(&quot;![foo][]&quot;, references) == &#x27;&lt;img src=&quot;/url&quot; alt=&quot;foo&quot; /&gt;&#x27;
+
+
+def test_shortcut_reference_image_uses_its_label_as_alt() -&gt; None:
+    references = references_with((&quot;foo&quot;, &quot;/url&quot;, None))
+    assert parse(&quot;![foo]&quot;, references) == &#x27;&lt;img src=&quot;/url&quot; alt=&quot;foo&quot; /&gt;&#x27;
+
+
+def test_reference_image_carries_the_definition_title() -&gt; None:
+    references = references_with((&quot;foo&quot;, &quot;/url&quot;, &quot;t&quot;))
+    assert parse(&quot;![foo]&quot;, references) == &#x27;&lt;img src=&quot;/url&quot; alt=&quot;foo&quot; title=&quot;t&quot; /&gt;&#x27;
+
+
+def test_unresolved_shortcut_image_is_literal_text() -&gt; None:
+    assert parse(&quot;![foo]&quot;) == &quot;![foo]&quot;
+
+
+def test_unresolved_full_reference_fails_the_whole_image() -&gt; None:
+    references = references_with((&quot;foo&quot;, &quot;/url&quot;, None))
+    assert parse(&quot;![text][bar]&quot;, references) == &quot;![text][bar]&quot;
+
+
+# --- Interaction with the other constructs ---
+
+
+def test_image_inside_link_renders_one_anchor_around_one_image() -&gt; None:
+    assert parse(&quot;[![moon](moon.jpg)](/uri)&quot;) == (
+        &#x27;&lt;a href=&quot;/uri&quot;&gt;&lt;img src=&quot;moon.jpg&quot; alt=&quot;moon&quot; /&gt;&lt;/a&gt;&#x27;
+    )
+
+
+def test_image_in_running_text_keeps_surrounding_text() -&gt; None:
+    assert parse(&quot;My ![foo](/path) here&quot;) == &#x27;My &lt;img src=&quot;/path&quot; alt=&quot;foo&quot; /&gt; here&#x27;
+
+
+def test_escaped_bang_leaves_a_link_after_it() -&gt; None:
+    references = references_with((&quot;foo&quot;, &quot;/url&quot;, None))
+    assert parse(&quot;\\![foo]&quot;, references) == &#x27;!&lt;a href=&quot;/url&quot;&gt;foo&lt;/a&gt;&#x27;
+
+
+def test_escaped_opening_bracket_after_bang_is_literal() -&gt; None:
+    references = references_with((&quot;foo&quot;, &quot;/url&quot;, None))
+    assert parse(&quot;!\\[foo]&quot;, references) == &quot;![foo]&quot;
+
+
+# --- Executable ---
+
+
+def test_executable_renders_an_image_paragraph(project_root: Path) -&gt; None:
+    result = run_executable(project_root, &quot;![foo](/url)\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout == b&#x27;&lt;p&gt;&lt;img src=&quot;/url&quot; alt=&quot;foo&quot; /&gt;&lt;/p&gt;\n&#x27;
+
+
+def test_executable_resolves_an_image_reference_definition(project_root: Path) -&gt; None:
+    result = run_executable(project_root, &quot;![foo]\n\n[foo]: /url\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout == b&#x27;&lt;p&gt;&lt;img src=&quot;/url&quot; alt=&quot;foo&quot; /&gt;&lt;/p&gt;\n&#x27;
+</pre></article>
+</main>
+</body>
+</html>

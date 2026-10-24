@@ -1,0 +1,579 @@
+=== BEGIN ARTIFACT ARCHITECTURE.md ===
+# ARCHITECTURE: CommonMark Parser
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Two-phase CommonMark 0.31.2 parser delivered as the stdin-to-stdout executable commonmark, with its module layout and technical decisions. |
+| Depends On  | None |
+| Provides    | mdparser package, mdparser.blocks, mdparser.inlines, mdparser.refs, mdparser.entities, mdparser.render, mdparser.cli |
+| Consumes    | None |
+
+## Questions
+
+- None.
+
+## Overview
+
+The product is a single-process CLI. `./commonmark` reads UTF-8 Markdown from stdin and writes HTML to stdout. It is implemented in the Python package `mdparser` and follows the spec Appendix "A parsing strategy" directly.
+
+- **Phase 1, block structure.** Lines are consumed one at a time. Each line is matched against the open blocks, then new block starts are looked for, then remaining text is added to the deepest open block. Link reference definitions are extracted when a paragraph closes and stored in one document-wide reference map.
+- **Phase 2, inline structure.** The finished tree is walked. The raw text of paragraphs and headings is parsed into inlines with the delimiter-stack algorithms (look for link or image, process emphasis), using the reference map.
+- **Rendering.** A renderer turns the tree into HTML. The conformance runner compares normalized HTML, so tag structure, entities and URL percent-encoding must match the spec examples.
+
+## Technology Stack
+
+Derived from `TECHNOLOGY_STACK.md`, which remains the decision of record.
+
+| Technology | Where it applies |
+|---|---|
+| Python 3 | Implementation language for the whole package and the `commonmark` script. |
+| Python standard library | The only runtime dependency set: `re`, `unicodedata`, `html.entities`, `sys`. |
+| POSIX shell | The supplied `sources/full_test.sh` scoring entry point; it is staged, never authored. |
+
+The Foundation Contract is: source root `./`, environment `.venv` created by `uv venv`, dependencies in `pyproject.toml` with a committed `uv.lock`, and `pytest -q` as the test command. The executable must also run under plain `python3` with no environment activated, because the supplied harness runs `./commonmark` directly.
+
+## Modules
+
+| Module | Responsibility |
+|---|---|
+| `commonmark` (root script) | Shebang entry point; puts its own directory on `sys.path` and calls `mdparser.cli.main`. |
+| `mdparser.cli` | Byte intake, UTF-8 decoding with replacement, line-ending normalization, U+0000 replacement, output writing. |
+| `mdparser.blocks` | Block tree, block-type registry (start, continue, close rules), per-line procedure, lazy continuation. |
+| `mdparser.refs` | Reference map, link reference definition extraction, `normalize_label`. |
+| `mdparser.inlines` | Inline scanner, delimiter stack, `process_emphasis`, look-for-link-or-image. |
+| `mdparser.entities` | Entity and numeric character reference decoding, backslash unescape helper. |
+| `mdparser.render` | HTML rendering, HTML escaping, URL percent-encoding. |
+
+## Technical Decisions
+
+- Named entities come from the standard library table `html.entities.html5`; only names ending in a semicolon are recognized.
+- Label matching uses `str.casefold()` plus whitespace collapse.
+- Unicode punctuation for flanking rules is classified with `unicodedata` general categories `P*` and `S*`.
+- Soft line breaks render as a line ending.
+- No public Markdown implementation is used or imported.
+- Exit status is 0 for every input. Invalid UTF-8 is decoded with U+FFFD replacement. Diagnostics go to stderr only.
+
+## Persistence, Configuration and Boundaries
+
+| Boundary | Owner module | Allowed low-level APIs |
+|---|---|---|
+| Persistence | None. The product is stateless. | None |
+| Configuration | None. No arguments or environment are required. | None |
+| File store | None. | None |
+| External services | None. | None |
+| Process I/O | `mdparser.cli` | `sys.stdin.buffer`, `sys.stdout.buffer`, `sys.stderr` |
+
+## Programmatic Acceptance
+
+=== AC foundation-package-imports ===
+Intent: The mdparser package and each reserved module import cleanly using only the standard library.
+
+import importlib
+import os
+import sys
+
+sys.path.insert(0, os.getcwd())
+
+importlib.import_module("mdparser")
+for name in ["blocks", "inlines", "refs", "entities", "render", "cli"]:
+    full = "mdparser." + name
+    module = importlib.import_module(full)
+    assert module.__name__ == full
+=== END AC foundation-package-imports ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Never use or import a public Markdown implementation.
+- Never add a third-party runtime dependency.
+- Never write to `sources/full_test.sh`, `sources/spec_tests.py`, `sources/cmark.py`, `sources/normalize.py`, or `sources/spec.txt`.
+- Nothing but rendered HTML is ever written to stdout.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Executable.md ===
+# FEATURE: Executable
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | The commonmark executable reads UTF-8 Markdown on stdin, normalizes lines, and writes only HTML to stdout. |
+| Depends On  | ARCHITECTURE.md |
+| Provides    | ./commonmark |
+| Consumes    | mdparser.cli |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Deliver the executable `commonmark` at the application root. It takes no arguments.
+
+## Trigger
+
+A process runs `./commonmark` with Markdown on stdin.
+
+## Sequence
+
+1. Read all of stdin as bytes.
+2. Decode as UTF-8 with U+FFFD replacement for invalid bytes.
+3. Treat LF, CR and CRLF as line endings. Replace U+0000 with U+FFFD.
+4. Pass the lines to the parser entry point in `mdparser.cli`. Until the block engine story lands this may be a placeholder that renders no blocks.
+5. Write the rendered HTML to stdout as UTF-8 and exit 0.
+
+## Interface
+
+- File `commonmark` at the application root: python3 shebang, executable bit set, puts its own directory on `sys.path`, and does not need an activated virtual environment.
+- stdin: UTF-8 Markdown. stdout: HTML only. stderr: diagnostics only.
+- Exit status 0 for all input, including empty input and invalid UTF-8, with no traceback.
+- `README.md` at the project root concisely describes the stdin/stdout interface. README content is not an acceptance criterion.
+
+## Reads
+
+- Standard input.
+
+## Writes
+
+- Standard output only. No files.
+
+## Programmatic Acceptance
+
+=== AC executable-empty-input ===
+Intent: Empty standard input produces empty standard output and exit status 0 (AC-001).
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="", capture_output=True, text=True)
+print(result.stdout)
+print(result.stderr)
+assert result.returncode == 0
+assert len(result.stdout) == 0
+=== END AC executable-empty-input ===
+
+=== AC executable-invalid-utf8 ===
+Intent: Bytes that are not valid UTF-8 are decoded with replacement and the program exits 0 with decodable output (AC-002).
+
+import subprocess
+
+payload = b"\xff\xfe text \xc3\x28 end\n"
+result = subprocess.run(["./commonmark"], input=payload, capture_output=True)
+print(result.stdout)
+print(result.stderr)
+assert result.returncode == 0
+result.stdout.decode("utf-8")
+=== END AC executable-invalid-utf8 ===
+
+=== AC executable-stdout-is-html-only ===
+Intent: A normal run exits 0 and its stdout is valid UTF-8 text while diagnostics stay on stderr (AC-003).
+
+import subprocess
+
+source = "hello world\n\nsecond paragraph\n"
+result = subprocess.run(["./commonmark"], input=source.encode("utf-8"), capture_output=True)
+print(result.stdout)
+print(result.stderr)
+assert result.returncode == 0
+result.stdout.decode("utf-8")
+=== END AC executable-stdout-is-html-only ===
+
+=== AC executable-line-endings ===
+Intent: LF, CR and CRLF line endings yield identical output for the same document.
+
+import subprocess
+
+lines = "one", "two", "", "three"
+variants = ["\n".join(lines) + "\n", "\r\n".join(lines) + "\r\n", "\r".join(lines) + "\r"]
+outputs = []
+for source in variants:
+    result = subprocess.run(["./commonmark"], input=source.encode("utf-8"), capture_output=True)
+    print(result.stdout)
+    assert result.returncode == 0
+    outputs.append(result.stdout)
+assert outputs[0] == outputs[1] == outputs[2]
+=== END AC executable-line-endings ===
+
+=== AC executable-nul-replacement ===
+Intent: U+0000 on input is treated exactly like U+FFFD (the spec's Insecure characters rule).
+Encoding: utf-8
+
+import subprocess
+
+with_nul = "a\x00b\n"
+with_replacement = "a\ufffdb\n"
+first = subprocess.run(["./commonmark"], input=with_nul, capture_output=True, text=True, encoding="utf-8")
+second = subprocess.run(["./commonmark"], input=with_replacement, capture_output=True, text=True, encoding="utf-8")
+print(first.stdout)
+assert first.returncode == 0
+assert second.returncode == 0
+assert first.stdout == second.stdout
+=== END AC executable-nul-replacement ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Never write anything but rendered HTML to stdout.
+- Never require command-line arguments.
+- Never exit non-zero or emit a traceback because of input content.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Block-Engine.md ===
+# FEATURE: Block Engine
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | The phase 1 block engine with an extensible block-type registry, paragraph and blank-line handling, and HTML rendering with escaping. |
+| Depends On  | FEATURE-Executable.md |
+| Provides    | block tree builder, block-type registry, paragraph renderer, HTML escaping helper, URL percent-encoding helper |
+| Consumes    | ./commonmark, inline parser hook |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the per-line procedure from the spec Appendix, "Phase 1: block structure", and render paragraphs. Later block stories add start, continue and close rules to the registry without changing the loop.
+
+## Sequence
+
+For each line:
+
+1. Walk the open blocks from the document down the last-child chain. Each block checks whether the line continues it. Unmatched blocks are not closed yet, because the line may be a lazy continuation.
+2. Look for new block starts. If one is found, close the unmatched blocks, then create the new block under the last matched container.
+3. Add the remaining text to the deepest open block. A line that is a lazy paragraph continuation is added to the open paragraph.
+
+At end of input all open blocks are closed. Phase 2 then walks the tree and calls the inline parser hook for paragraph and heading content. The hook initially returns the escaped text.
+
+## Rules
+
+- A paragraph is a sequence of non-blank lines that is not another block. Its raw content strips initial and final spaces and tabs. Lines after the first may have any indentation.
+- Blank lines separate paragraphs and are otherwise ignored, including at the start and end of the document.
+- Column-aware indentation (tab stop 4) is computed in one shared helper, so later block stories reuse it.
+- The renderer emits `<p>` elements, one line ending between blocks, and escapes `&`, `<`, `>` and `"` in text.
+- The shared URL percent-encoding helper lives here and is reused by the link and autolink stories.
+
+## Reads
+
+- Lines produced by `mdparser.cli`.
+
+## Writes
+
+- HTML string returned to `mdparser.cli`.
+
+## Programmatic Acceptance
+
+The corpus sections Paragraphs and Blank lines need indented code, hard breaks and ATX headings, so they are gated in the tabs story and the terminal story. The checks here are bounded.
+
+=== AC engine-paragraph-count ===
+Intent: Blank-line-separated paragraphs render as one p element each.
+
+import subprocess
+
+paragraphs = ["alpha beta", "gamma delta", "epsilon"]
+source = "\n\n".join(paragraphs) + "\n"
+result = subprocess.run(["./commonmark"], input=source, capture_output=True, text=True)
+print(result.stdout)
+print(result.stderr)
+assert result.returncode == 0
+assert result.stdout.count("<p>") == len(paragraphs)
+assert result.stdout.count("</p>") == len(paragraphs)
+for text in paragraphs:
+    assert text in result.stdout
+=== END AC engine-paragraph-count ===
+
+=== AC engine-multiline-paragraph ===
+Intent: Consecutive non-blank lines with arbitrary indentation after the first stay in one paragraph.
+
+import subprocess
+
+first = "first line"
+second = "second line"
+third = "third line"
+source = first + "\n" + "             " + second + "\n" + third + "\n"
+result = subprocess.run(["./commonmark"], input=source, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<p>") == 1
+for text in (first, second, third):
+    assert text in result.stdout
+=== END AC engine-multiline-paragraph ===
+
+=== AC engine-blank-lines-ignored ===
+Intent: Leading, trailing and repeated blank lines produce no extra blocks, and a blank-only document produces no paragraph.
+
+import subprocess
+
+word = "content"
+padded = "\n  \n\n" + word + "\n\n\n  \n"
+result = subprocess.run(["./commonmark"], input=padded, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<p>") == 1
+
+blank = subprocess.run(["./commonmark"], input="\n \n\t\n", capture_output=True, text=True)
+assert blank.returncode == 0
+assert blank.stdout.count("<p>") == 0
+=== END AC engine-blank-lines-ignored ===
+
+=== AC engine-html-escaping ===
+Intent: Special characters in paragraph text are escaped, so only the paragraph tags contribute angle brackets.
+
+import subprocess
+
+source = "x < y > z & w\n"
+result = subprocess.run(["./commonmark"], input=source, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<") == 2
+assert result.stdout.count(">") == 2
+=== END AC engine-html-escaping ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Do not hard-code block handling in the main loop; every block type is registered through the registry.
+- Never close an unmatched block before new block starts have been tried.
+- Never write anything but rendered HTML to stdout.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Autolinks.md ===
+# FEATURE: Autolinks
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Parse URI autolinks and email autolinks inside angle brackets into links. |
+| Depends On  | FEATURE-Block-Engine.md |
+| Provides    | autolink inline construct |
+| Consumes    | inline parser hook, URL percent-encoding helper |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the Autolinks section of the spec.
+
+## Rules
+
+- A URI autolink is `<`, a scheme, a colon, zero or more characters other than ASCII control characters, space, `<` and `>`, then `>`. A scheme is 2 to 32 characters: an ASCII letter followed by letters, digits, `+`, `.` or `-`.
+- An email autolink is `<`, an address matching the HTML5 email regex given in the spec, then `>`. The href is `mailto:` followed by the address.
+- The link text is the address as written, HTML-escaped. The href is percent-encoded for non-ASCII and unsafe characters (for example a backtick or backslash), with `&` escaped as `&amp;`.
+- Backslash escapes are inert inside autolinks.
+- Anything with a space, an empty body, a one-letter scheme, or no scheme or `@` stays literal text with `<` and `>` escaped.
+- Autolinks bind as tightly as code spans and raw HTML; the first one found left to right wins.
+
+## Reads
+
+- Inline text of paragraphs and headings.
+
+## Writes
+
+- Link nodes in the inline tree.
+
+## Programmatic Acceptance
+
+=== AC autolinks-corpus-section ===
+Intent: The Autolinks conformance section (19 cases) passes in full.
+Suite: scoped
+Probe: --dump-tests
+Probe Count: lines
+
+import os
+import subprocess
+import sys
+
+result = subprocess.run(
+    [
+        sys.executable,
+        "sources/spec_tests.py",
+        "--program",
+        os.getcwd() + "/commonmark",
+        "--spec",
+        "sources/spec.txt",
+        "--pattern",
+        "^Autolinks$",
+    ],
+    capture_output=True,
+    text=True,
+    env={**os.environ},
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC autolinks-corpus-section ===
+
+=== AC autolinks-uri-roundtrip ===
+Intent: A URI autolink renders as one link whose href and text are the supplied URI.
+
+import subprocess
+
+uri = "http://example.org/path"
+result = subprocess.run(["./commonmark"], input="<" + uri + ">\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<a ") == 1
+assert ('href="' + uri + '"') in result.stdout
+assert (">" + uri + "</a>") in result.stdout
+=== END AC autolinks-uri-roundtrip ===
+
+=== AC autolinks-email-mailto ===
+Intent: An email autolink renders with a mailto href built from the supplied address.
+
+import subprocess
+
+address = "someone@example.org"
+result = subprocess.run(["./commonmark"], input="<" + address + ">\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<a ") == 1
+assert ('href="mailto:' + address + '"') in result.stdout
+=== END AC autolinks-email-mailto ===
+
+=== AC autolinks-space-not-autolink ===
+Intent: A URI containing a space is not an autolink, so no link element is produced.
+
+import subprocess
+
+result = subprocess.run(
+    ["./commonmark"], input="<http://example.org/a b>\n", capture_output=True, text=True
+)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<a ") == 0
+=== END AC autolinks-space-not-autolink ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Backslash escapes must not be processed inside autolinks.
+- Bare URLs and bare email addresses without angle brackets must not become links.
+- Do not skip, filter or reinterpret corpus examples.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Raw-HTML.md ===
+# FEATURE: Raw HTML
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Parse raw inline HTML tags, comments, processing instructions, declarations and CDATA sections and pass them through unescaped. |
+| Depends On  | FEATURE-Block-Engine.md |
+| Provides    | raw inline HTML construct |
+| Consumes    | inline parser hook |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the Raw HTML section of the spec.
+
+## Grammar
+
+- A tag name is an ASCII letter followed by letters, digits or hyphens.
+- An attribute is whitespace (spaces, tabs, at most one line ending), an attribute name, and an optional value specification. An attribute name starts with a letter, `_` or `:` and continues with letters, digits, `_`, `.`, `:` or `-`.
+- An unquoted value is nonempty and contains no whitespace, `"`, `'`, `=`, `<`, `>` or backtick. Quoted values use single or double quotes.
+- An open tag is `<`, a tag name, attributes, optional whitespace (at most one line ending), an optional `/`, then `>`. A closing tag is `</`, a tag name, optional whitespace, then `>`, with no attributes.
+- A comment is `<!-->`, `<!--->`, or `<!--` followed by text not containing `-->` and then `-->`. A processing instruction is `<?` to `?>`. A declaration is `<!`, an ASCII letter, then text up to `>`. CDATA is `<![CDATA[` to `]]>`.
+
+## Rules
+
+- A recognized tag is emitted unescaped and unchanged. Everything else is plain text with `<`, `>`, `&` and `"` escaped.
+- Backslash escapes and entities are inert inside raw HTML, so the text is passed through byte for byte.
+- Raw HTML binds as tightly as code spans and autolinks. It takes precedence over emphasis delimiters inside its attribute values.
+- A line ending inside a tag is kept as written and never becomes a hard break.
+
+## Reads
+
+- Inline text of paragraphs and headings.
+
+## Writes
+
+- Raw HTML nodes in the inline tree.
+
+## Programmatic Acceptance
+
+One corpus example in this section needs block quotes. The Raw HTML section is gated in the tabs story, so the checks here are bounded.
+
+=== AC rawhtml-open-and-close-tags ===
+Intent: Valid open, self-closing and closing tags in a paragraph pass through verbatim.
+
+import subprocess
+
+tags = '<a><bab><c2c> <a href="x" data-k=v /> </a></foo >'
+result = subprocess.run(["./commonmark"], input="Foo " + tags + "\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert tags in result.stdout
+=== END AC rawhtml-open-and-close-tags ===
+
+=== AC rawhtml-comment-pi-declaration-cdata ===
+Intent: Inline comments, processing instructions, declarations and CDATA pass through verbatim.
+
+import subprocess
+
+for fragment in ["<!-- a comment -->", "<?php echo $a; ?>", "<!ELEMENT br EMPTY>", "<![CDATA[>&<]]>"]:
+    result = subprocess.run(["./commonmark"], input="foo " + fragment + " bar\n", capture_output=True, text=True)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert fragment in result.stdout
+=== END AC rawhtml-comment-pi-declaration-cdata ===
+
+=== AC rawhtml-illegal-forms-escaped ===
+Intent: Illegal tag names are not raw HTML, so only the paragraph tags contribute angle brackets.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="<33> <__>\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<") == 2
+assert result.stdout.count(">") == 2
+=== END AC rawhtml-illegal-forms-escaped ===
+
+=== AC rawhtml-closing-tag-with-attributes ===
+Intent: A closing tag with attributes is not raw HTML, so no extra angle brackets appear in the output.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input='</a href="foo">\n', capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<") == 2
+=== END AC rawhtml-closing-tag-with-attributes ===
+
+=== AC rawhtml-backslash-inert ===
+Intent: A backslash inside a tag attribute value is preserved and not treated as an escape.
+
+import subprocess
+
+tag = '<a href="\\*">'
+result = subprocess.run(["./commonmark"], input="foo " + tag + "\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert tag in result.stdout
+=== END AC rawhtml-backslash-inert ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Never process backslash escapes or entities inside recognized raw HTML.
+- Never treat a tag-like string as raw HTML unless it matches the grammar completely.
+- Do not skip, filter or reinterpret corpus examples.
+=== END ARTIFACT ===

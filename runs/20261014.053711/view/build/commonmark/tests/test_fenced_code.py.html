@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_fenced_code.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_fenced_code.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_fenced_code.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Fenced code block tests: the seven declared checks from FEATURE-Fenced-Code.md, then block-tree and
+exact-output tests through the `commonmark` executable.
+
+The declared checks are transcribed first, with their assertions unchanged. The rest act on the
+block tree returned by `parse_lines` and on the exact stdout bytes, which is the state handed back.
+The corpus section examples that use quotes, lists and setext headings are gated in the lists story
+and are not run here.
+&quot;&quot;&quot;
+
+import subprocess
+from pathlib import Path
+
+import pytest
+
+from mdparser.blocks import FENCED_CODE, INDENTED_CODE, PARAGRAPH, Block, Fence, parse_lines
+
+
+def run_commonmark(project_root: Path, source: str) -&gt; subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=source,
+        capture_output=True,
+        text=True,
+        cwd=project_root,
+        check=False,
+    )
+
+
+def kinds(lines: list[str]) -&gt; list[str]:
+    &quot;&quot;&quot;Names of the top-level block types that `lines` produce, in order.&quot;&quot;&quot;
+    return [child.kind.name for child in parse_lines(lines).children]
+
+
+def fenced_blocks(lines: list[str]) -&gt; list[Block]:
+    &quot;&quot;&quot;The top-level fenced code blocks that `lines` produce, in order.&quot;&quot;&quot;
+    return [child for child in parse_lines(lines).children if child.kind is FENCED_CODE]
+
+
+def code_contents(lines: list[str]) -&gt; list[str]:
+    &quot;&quot;&quot;The content of each top-level fenced code block, in order.&quot;&quot;&quot;
+    return [block.content for block in fenced_blocks(lines)]
+
+
+def fence_of(lines: list[str]) -&gt; Fence:
+    &quot;&quot;&quot;The opening fence of the only top-level fenced code block that `lines` produce.&quot;&quot;&quot;
+    (block,) = fenced_blocks(lines)
+    assert block.fence is not None
+    return block.fence
+
+
+# --- Declared acceptance checks (transcribed from FEATURE-Fenced-Code.md) ---
+
+
+def test_fenced_backtick_and_tilde(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Backtick and tilde fences each render one pre element containing the supplied body.&quot;&quot;&quot;
+    body = &quot;some body text&quot;
+    for fence in (&quot;```&quot;, &quot;~~~&quot;):
+        source = fence + &quot;\n&quot; + body + &quot;\n&quot; + fence + &quot;\n&quot;
+        result = run_commonmark(project_root, source)
+        print(result.stdout)
+        assert result.returncode == 0
+        assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1
+        assert body in result.stdout
+
+
+def test_fenced_info_string_language_class(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;The first word of the info string becomes the language class.&quot;&quot;&quot;
+    language = &quot;ruby&quot;
+    source = &quot;```&quot; + language + &quot; extra words\ncode\n```\n&quot;
+    result = run_commonmark(project_root, source)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert (&#x27;class=&quot;language-&#x27; + language + &#x27;&quot;&#x27;) in result.stdout
+
+
+def test_fenced_closing_fence_rules(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A fence of the other character, or a shorter fence, does not close the block.&quot;&quot;&quot;
+    other = &quot;~~~&quot;
+    shorter = &quot;```&quot;
+    source = &quot;````\naaa\n&quot; + other + &quot;\n&quot; + shorter + &quot;\n&quot;
+    result = run_commonmark(project_root, source)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1
+    assert other in result.stdout
+    assert shorter in result.stdout
+
+
+def test_fenced_unclosed_runs_to_end(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;An unclosed fence consumes the rest of the document as code.&quot;&quot;&quot;
+    trailing = &quot;still code&quot;
+    result = run_commonmark(project_root, &quot;```\nfirst\n\n&quot; + trailing + &quot;\n&quot;)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 0
+    assert trailing in result.stdout
+
+
+def test_fenced_interrupts_paragraph(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A fence interrupts a paragraph and text after it starts a new paragraph.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot;foo\n```\nbar\n```\nbaz\n&quot;)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 2
+
+
+def test_fenced_two_backticks_not_a_fence(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Two backticks do not open a fence; they form a code span instead.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot;``\nfoo\n``\n&quot;)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 0
+    assert result.stdout.count(&quot;&lt;code&gt;&quot;) == 1
+
+
+def test_fenced_indentation_stripped(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Content indentation up to the fence indentation is removed, and unindented lines are kept.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot; ```\n aaa\naaa\n```\n&quot;)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1
+    assert result.stdout.count(&quot;aaa&quot;) == 2
+    assert result.stdout.count(&quot; aaa&quot;) == 0
+
+
+# --- Block tree: opening fence ---
+
+
+@pytest.mark.parametrize(&quot;fence&quot;, [&quot;```&quot;, &quot;~~~&quot;, &quot;````&quot;, &quot;~~~~~&quot;])
+def test_fence_of_three_or_more_characters_starts_a_block(fence: str) -&gt; None:
+    assert kinds([fence, &quot;code&quot;, fence]) == [FENCED_CODE.name]
+
+
+@pytest.mark.parametrize(&quot;fence&quot;, [&quot;``&quot;, &quot;~~&quot;, &quot;`&quot;, &quot;~&quot;])
+def test_fewer_than_three_characters_do_not_start_a_block(fence: str) -&gt; None:
+    assert kinds([fence, &quot;code&quot;, fence]) == [PARAGRAPH.name]
+
+
+@pytest.mark.parametrize(&quot;indent&quot;, [0, 1, 2, 3])
+def test_fence_indented_up_to_three_columns_starts_a_block(indent: int) -&gt; None:
+    assert kinds([&quot; &quot; * indent + &quot;```&quot;, &quot;code&quot;, &quot;```&quot;]) == [FENCED_CODE.name]
+
+
+@pytest.mark.parametrize(&quot;indent&quot;, [4, 5, 8])
+def test_fence_indented_four_or_more_columns_is_not_a_fence(indent: int) -&gt; None:
+    assert kinds([&quot; &quot; * indent + &quot;```&quot;]) == [INDENTED_CODE.name]
+
+
+def test_backtick_info_string_with_a_backtick_is_not_a_fence() -&gt; None:
+    assert kinds([&quot;``` aa ```&quot;, &quot;foo&quot;]) == [PARAGRAPH.name]
+
+
+def test_tilde_info_string_may_contain_a_backtick() -&gt; None:
+    assert kinds([&quot;~~~ aa ```&quot;, &quot;foo&quot;, &quot;~~~&quot;]) == [FENCED_CODE.name]
+
+
+def test_fence_interrupts_a_paragraph() -&gt; None:
+    assert kinds([&quot;foo&quot;, &quot;```&quot;, &quot;bar&quot;, &quot;```&quot;]) == [PARAGRAPH.name, FENCED_CODE.name]
+
+
+def test_fence_without_blank_lines_around_it_is_its_own_block() -&gt; None:
+    assert kinds([&quot;```&quot;, &quot;a&quot;, &quot;```&quot;, &quot;b&quot;]) == [FENCED_CODE.name, PARAGRAPH.name]
+
+
+def test_text_directly_after_closing_fence_starts_a_paragraph() -&gt; None:
+    (fenced, paragraph) = parse_lines([&quot;```&quot;, &quot;a&quot;, &quot;```&quot;, &quot;b&quot;]).children
+    assert fenced.kind is FENCED_CODE
+    assert paragraph.kind is PARAGRAPH
+
+
+def test_two_fenced_blocks_in_a_row_are_separate() -&gt; None:
+    assert code_contents([&quot;```&quot;, &quot;a&quot;, &quot;```&quot;, &quot;```&quot;, &quot;b&quot;, &quot;```&quot;]) == [&quot;a\n&quot;, &quot;b\n&quot;]
+
+
+# --- Block tree: info string and language ---
+
+
+def test_language_is_the_first_word_of_the_info_string() -&gt; None:
+    assert fence_of([&quot;```ruby extra words&quot;, &quot;x&quot;, &quot;```&quot;]).language == &quot;ruby&quot;
+
+
+def test_no_info_string_gives_no_language() -&gt; None:
+    assert fence_of([&quot;```&quot;, &quot;x&quot;, &quot;```&quot;]).language == &quot;&quot;
+
+
+def test_info_string_of_only_spaces_gives_no_language() -&gt; None:
+    assert fence_of([&quot;```   \t&quot;, &quot;x&quot;, &quot;```&quot;]).language == &quot;&quot;
+
+
+def test_leading_spaces_before_the_info_string_are_trimmed() -&gt; None:
+    assert fence_of([&quot;```    python&quot;, &quot;x&quot;, &quot;```&quot;]).language == &quot;python&quot;
+
+
+def test_tilde_fence_info_string_gives_the_language() -&gt; None:
+    assert fence_of([&quot;~~~ js&quot;, &quot;x&quot;, &quot;~~~&quot;]).language == &quot;js&quot;
+
+
+def test_backslash_escape_in_info_string_is_removed() -&gt; None:
+    assert fence_of([&quot;```foo\\+bar&quot;, &quot;x&quot;, &quot;```&quot;]).language == &quot;foo+bar&quot;
+
+
+def test_entity_in_info_string_is_decoded() -&gt; None:
+    assert fence_of([&quot;```&amp;ouml;kl&quot;, &quot;x&quot;, &quot;```&quot;]).language == &quot;ökl&quot;
+
+
+def test_opening_fence_records_its_character_and_length() -&gt; None:
+    fence = fence_of([&quot;~~~~ rust&quot;, &quot;x&quot;, &quot;~~~~&quot;])
+    assert (fence.char, fence.length) == (&quot;~&quot;, 4)
+
+
+def test_opening_fence_records_its_indentation() -&gt; None:
+    assert fence_of([&quot;  ```&quot;, &quot;x&quot;, &quot;```&quot;]).indent == 2
+
+
+# --- Block tree: content ---
+
+
+def test_content_lines_are_joined_with_line_endings() -&gt; None:
+    assert code_contents([&quot;```&quot;, &quot;a&quot;, &quot;b&quot;, &quot;```&quot;]) == [&quot;a\nb\n&quot;]
+
+
+def test_empty_fence_has_empty_content() -&gt; None:
+    assert code_contents([&quot;```&quot;, &quot;```&quot;]) == [&quot;&quot;]
+
+
+def test_blank_lines_inside_the_fence_are_kept() -&gt; None:
+    assert code_contents([&quot;```&quot;, &quot;a&quot;, &quot;&quot;, &quot;b&quot;, &quot;```&quot;]) == [&quot;a\n\nb\n&quot;]
+
+
+@pytest.mark.parametrize(&quot;indent&quot;, [0, 1, 2, 3])
+def test_content_loses_up_to_the_opening_indentation(indent: int) -&gt; None:
+    assert code_contents([&quot; &quot; * indent + &quot;```&quot;, &quot;   aaa&quot;, &quot;```&quot;]) == [&quot; &quot; * (3 - indent) + &quot;aaa\n&quot;]
+
+
+def test_content_less_indented_than_the_fence_keeps_its_text() -&gt; None:
+    assert code_contents([&quot;   ```&quot;, &quot;aaa&quot;, &quot;```&quot;]) == [&quot;aaa\n&quot;]
+
+
+def test_content_indentation_beyond_the_fence_is_kept() -&gt; None:
+    assert code_contents([&quot;```&quot;, &quot;    indented&quot;, &quot;```&quot;]) == [&quot;    indented\n&quot;]
+
+
+def test_content_is_not_parsed_as_markdown() -&gt; None:
+    assert code_contents([&quot;```&quot;, &quot;*hi* # head&quot;, &quot;```&quot;]) == [&quot;*hi* # head\n&quot;]
+
+
+def test_content_fence_of_the_same_character_but_shorter_does_not_close() -&gt; None:
+    assert code_contents([&quot;````&quot;, &quot;aaa&quot;, &quot;```&quot;, &quot;````&quot;]) == [&quot;aaa\n```\n&quot;]
+
+
+def test_content_fence_with_an_info_string_does_not_close() -&gt; None:
+    assert code_contents([&quot;```&quot;, &quot;aaa&quot;, &quot;``` aaa&quot;, &quot;```&quot;]) == [&quot;aaa\n``` aaa\n&quot;]
+
+
+def test_content_fence_indented_four_columns_does_not_close() -&gt; None:
+    assert code_contents([&quot;```&quot;, &quot;aaa&quot;, &quot;    ```&quot;]) == [&quot;aaa\n    ```\n&quot;]
+
+
+def test_unclosed_block_keeps_trailing_blank_lines() -&gt; None:
+    # The document &quot;```\na\n\n&quot; has three lines once its final line ending is dropped.
+    assert code_contents([&quot;```&quot;, &quot;a&quot;, &quot;&quot;]) == [&quot;a\n\n&quot;]
+
+
+def test_unclosed_block_keeps_a_fence_of_the_other_character_as_content() -&gt; None:
+    assert code_contents([&quot;```&quot;, &quot;~~~&quot;]) == [&quot;~~~\n&quot;]
+
+
+# --- Block tree: closing fence ---
+
+
+@pytest.mark.parametrize(&quot;closing&quot;, [&quot;```&quot;, &quot;````&quot;, &quot;``````&quot;])
+def test_closing_fence_at_least_as_long_closes_the_block(closing: str) -&gt; None:
+    assert code_contents([&quot;```&quot;, &quot;a&quot;, closing, &quot;after&quot;]) == [&quot;a\n&quot;]
+
+
+@pytest.mark.parametrize(&quot;indent&quot;, [0, 1, 2, 3])
+def test_closing_fence_indented_up_to_three_columns_closes(indent: int) -&gt; None:
+    assert code_contents([&quot;```&quot;, &quot;a&quot;, &quot; &quot; * indent + &quot;```&quot;]) == [&quot;a\n&quot;]
+
+
+@pytest.mark.parametrize(&quot;trailer&quot;, [&quot;  &quot;, &quot;\t&quot;, &quot; \t &quot;])
+def test_closing_fence_followed_by_spaces_or_tabs_closes(trailer: str) -&gt; None:
+    assert code_contents([&quot;```&quot;, &quot;a&quot;, &quot;```&quot; + trailer]) == [&quot;a\n&quot;]
+
+
+def test_closing_fence_may_not_carry_an_info_string() -&gt; None:
+    assert code_contents([&quot;```&quot;, &quot;a&quot;, &quot;``` x&quot;, &quot;```&quot;]) == [&quot;a\n``` x\n&quot;]
+
+
+def test_closing_fence_must_use_the_opening_character() -&gt; None:
+    assert code_contents([&quot;~~~&quot;, &quot;a&quot;, &quot;```&quot;, &quot;~~~&quot;]) == [&quot;a\n```\n&quot;]
+
+
+def test_closing_fence_adds_no_content_line() -&gt; None:
+    assert code_contents([&quot;```&quot;, &quot;a&quot;, &quot;```&quot;]) == [&quot;a\n&quot;]
+
+
+def test_line_after_closing_fence_is_not_code() -&gt; None:
+    assert kinds([&quot;```&quot;, &quot;a&quot;, &quot;```&quot;, &quot;b&quot;]) == [FENCED_CODE.name, PARAGRAPH.name]
+
+
+def test_closing_fence_as_last_line_ends_the_document() -&gt; None:
+    assert kinds([&quot;```&quot;, &quot;a&quot;, &quot;```&quot;]) == [FENCED_CODE.name]
+
+
+# --- Exact output through the executable ---
+
+
+def test_exact_backtick_fence_output(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;```\na\n```\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout == &quot;&lt;pre&gt;&lt;code&gt;a\n&lt;/code&gt;&lt;/pre&gt;\n&quot;
+
+
+def test_exact_tilde_fence_output(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;~~~\na\n~~~\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout == &quot;&lt;pre&gt;&lt;code&gt;a\n&lt;/code&gt;&lt;/pre&gt;\n&quot;
+
+
+def test_exact_language_class_output(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;```ruby\na\n```\n&quot;)
+    assert result.stdout == &#x27;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;a\n&lt;/code&gt;&lt;/pre&gt;\n&#x27;
+
+
+def test_exact_empty_fence_output(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;```\n```\n&quot;)
+    assert result.stdout == &quot;&lt;pre&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;\n&quot;
+
+
+def test_exact_unclosed_fence_output(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;```\na\n&quot;)
+    assert result.stdout == &quot;&lt;pre&gt;&lt;code&gt;a\n&lt;/code&gt;&lt;/pre&gt;\n&quot;
+
+
+def test_exact_unclosed_fence_keeps_trailing_blank_line(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;```\na\n\n&quot;)
+    assert result.stdout == &quot;&lt;pre&gt;&lt;code&gt;a\n\n&lt;/code&gt;&lt;/pre&gt;\n&quot;
+
+
+def test_exact_content_is_escaped(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;```\n&lt;a&gt;&amp;amp;\&quot;\n```\n&quot;)
+    assert result.stdout == &quot;&lt;pre&gt;&lt;code&gt;&amp;lt;a&amp;gt;&amp;amp;amp;&amp;quot;\n&lt;/code&gt;&lt;/pre&gt;\n&quot;
+
+
+def test_exact_language_class_is_escaped(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;```a&amp;quot;b\nx\n```\n&quot;)
+    assert result.stdout == &#x27;&lt;pre&gt;&lt;code class=&quot;language-a&amp;quot;b&quot;&gt;x\n&lt;/code&gt;&lt;/pre&gt;\n&#x27;
+
+
+def test_exact_fence_interrupts_paragraph(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;foo\n```\nbar\n```\nbaz\n&quot;)
+    assert result.stdout == &quot;&lt;p&gt;foo&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;bar\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;baz&lt;/p&gt;\n&quot;
+
+
+def test_exact_indentation_stripped(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;   ```\n   aaa\n    aaa\n  aaa\n   ```\n&quot;)
+    assert result.stdout == &quot;&lt;pre&gt;&lt;code&gt;aaa\n aaa\naaa\n&lt;/code&gt;&lt;/pre&gt;\n&quot;
+
+
+def test_exact_two_fenced_blocks(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;```\na\n```\n~~~\nb\n~~~\n&quot;)
+    assert result.stdout == &quot;&lt;pre&gt;&lt;code&gt;a\n&lt;/code&gt;&lt;/pre&gt;\n&lt;pre&gt;&lt;code&gt;b\n&lt;/code&gt;&lt;/pre&gt;\n&quot;
+
+
+def test_exact_missing_final_newline_matches_with_one(project_root: Path) -&gt; None:
+    with_newline = run_commonmark(project_root, &quot;```\na\n```\n&quot;)
+    without_newline = run_commonmark(project_root, &quot;```\na\n```&quot;)
+    assert without_newline.stdout == with_newline.stdout
+</pre></article>
+</main>
+</body>
+</html>

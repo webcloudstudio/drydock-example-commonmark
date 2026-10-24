@@ -1,0 +1,20 @@
+```json
+{
+  "criteria": [
+    {
+      "id": "st-001",
+      "verdict": "MET",
+      "rationale": "The governed full gate `sh sources/full_test.sh` exited 0 against this tree (identity e9d2b96, clean) with 655 passed, 0 failed, 0 errored, 0 skipped.",
+      "evidence": [
+        "governed_gate full: outcome PASS, return_code 0, timed_out false, duration 151886 ms",
+        "governed_gate stdout: \"655 passed, 0 failed, 0 errored, 0 skipped\"",
+        "code.dirty false, identity e9d2b96c72a51ed155f642ebd01891734085ca6e"
+      ]
+    }
+  ],
+  "improvements": [
+    "Name the suite in the criterion (for example, 'the 655-case CommonMark conformance suite run by sh sources/full_test.sh') so a future change to the test script cannot silently shrink what 'every test' means.",
+    "Record the expected test count as a baseline in the trial, so a gate that passes with fewer cases than expected is flagged as a regression."
+  ]
+}
+```

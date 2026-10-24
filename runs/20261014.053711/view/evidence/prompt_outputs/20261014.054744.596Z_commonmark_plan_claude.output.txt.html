@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261014.054744.596Z_commonmark_plan_claude.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261014.054744.596Z_commonmark_plan_claude.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261014.054744.596Z_commonmark_plan_claude.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>=== BEGIN ARTIFACT FEATURE-List-Items.md ===
+# FEATURE: List Items
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Parse list items with bullet and ordered markers, content-offset indentation rules, empty items, start numbers and lazy continuation. |
+| Depends On  | FEATURE-Setext-Headings.md |
+| Provides    | list item container |
+| Consumes    | block-type registry |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the List items section of the spec as a registered container block. Grouping items into lists and tight or loose rendering belong to the lists story.
+
+## Rules
+
+- A bullet marker is `-`, `+` or `*`. An ordered marker is 1 to 9 digits followed by `.` or `)`. The marker may have up to three spaces of indentation. At least one space or tab must follow the marker unless the item is empty.
+- Content offset W+N: W is the marker width and N is the number of spaces after it, if that is 1 to 4. If 5 or more spaces follow the marker and the rest of the line is not blank, the item starts with an indented code block and N is 1. If the rest of the line is blank, the item starts with a blank line and N is 1.
+- Column-aware indentation with tab stop 4 is used throughout. Continuation lines must be indented at least W+N columns relative to the containing block. Blank lines continue the item.
+- An item can begin with at most one blank line: a second consecutive blank line right after an empty marker ends the item.
+- Interruption: when a list item would interrupt a paragraph, it must not start with a blank line, and an ordered item must start with number 1. A thematic break line is never a list item.
+- Laziness: an unindented line that is paragraph continuation text stays in the item&#x27;s open paragraph.
+- Ordered items carry a start number (leading zeros allowed). Output is `&lt;li&gt;` elements; a loose item wraps paragraphs in `&lt;p&gt;`.
+
+## Reads
+
+- Lines handed to the block engine.
+
+## Writes
+
+- List item nodes in the block tree.
+
+## Programmatic Acceptance
+
+The corpus section examples need list grouping and tightness, so it is gated in the lists story. The checks here are bounded and avoid tight-list paragraph rendering.
+
+=== AC items-bullet-items ===
+Intent: Each bullet marker line starts one li element, and consecutive items of one marker form one ul.
+
+import subprocess
+
+items = [&quot;first&quot;, &quot;second&quot;, &quot;third&quot;]
+source = &quot;&quot;.join(&quot;- &quot; + text + &quot;\n&quot; for text in items)
+result = subprocess.run([&quot;./commonmark&quot;], input=source, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&lt;li&gt;&quot;) == len(items)
+assert result.stdout.count(&quot;&lt;ul&gt;&quot;) == 1
+for text in items:
+    assert text in result.stdout
+=== END AC items-bullet-items ===
+
+=== AC items-ordered-start-number ===
+Intent: An ordered list takes its start number from the first item, and ten digits is not a marker.
+
+import subprocess
+
+number = 123456789
+good = subprocess.run([&quot;./commonmark&quot;], input=str(number) + &quot;. ok\n&quot;, capture_output=True, text=True)
+bad = subprocess.run([&quot;./commonmark&quot;], input=str(number) + &quot;0. not ok\n&quot;, capture_output=True, text=True)
+print(good.stdout)
+print(bad.stdout)
+assert good.returncode == 0
+assert bad.returncode == 0
+assert (&#x27;start=&quot;&#x27; + str(number) + &#x27;&quot;&#x27;) in good.stdout
+assert bad.stdout.count(&quot;&lt;ol&quot;) == 0
+=== END AC items-ordered-start-number ===
+
+=== AC items-continuation-paragraph ===
+Intent: A continuation paragraph indented to the content column joins the item, giving a loose item with two paragraphs.
+
+import subprocess
+
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;- one\n\n  two\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&lt;li&gt;&quot;) == 1
+assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 2
+=== END AC items-continuation-paragraph ===
+
+=== AC items-insufficient-indent-ends-item ===
+Intent: A paragraph indented less than the content column is outside the item.
+
+import subprocess
+
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;- one\n\n two\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&lt;li&gt;&quot;) == 1
+assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+=== END AC items-insufficient-indent-ends-item ===
+
+=== AC items-empty-items ===
+Intent: Empty items are allowed in the middle of a list, but an empty item cannot interrupt a paragraph.
+
+import subprocess
+
+middle = subprocess.run([&quot;./commonmark&quot;], input=&quot;- foo\n-\n- bar\n&quot;, capture_output=True, text=True)
+interrupt = subprocess.run([&quot;./commonmark&quot;], input=&quot;foo\n*\n&quot;, capture_output=True, text=True)
+print(middle.stdout)
+print(interrupt.stdout)
+assert middle.returncode == 0
+assert interrupt.returncode == 0
+assert middle.stdout.count(&quot;&lt;li&gt;&quot;) == 2 + 1
+assert interrupt.stdout.count(&quot;&lt;li&gt;&quot;) == 0
+=== END AC items-empty-items ===
+
+=== AC items-nested-and-code ===
+Intent: A sublist indented to the content column nests, and a code block six spaces in is code inside the item.
+
+import subprocess
+
+nested = subprocess.run([&quot;./commonmark&quot;], input=&quot;- foo\n  - bar\n&quot;, capture_output=True, text=True)
+code = subprocess.run([&quot;./commonmark&quot;], input=&quot;- foo\n\n      bar\n&quot;, capture_output=True, text=True)
+print(nested.stdout)
+print(code.stdout)
+assert nested.returncode == 0
+assert code.returncode == 0
+assert nested.stdout.count(&quot;&lt;ul&gt;&quot;) == 2
+assert code.stdout.count(&quot;&lt;pre&gt;&quot;) == 1
+=== END AC items-nested-and-code ===
+
+=== AC items-four-spaces-is-code ===
+Intent: A marker indented four spaces is code, not a list item.
+
+import subprocess
+
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;    1.  A paragraph\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&lt;ol&quot;) == 0
+assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1
+=== END AC items-four-spaces-is-code ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- A marker must be followed by a space or tab unless the item is empty.
+- An ordered list may interrupt a paragraph only when it starts at 1.
+- Do not skip, filter or reinterpret corpus examples.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Lists.md ===
+# FEATURE: Lists
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Group list items into lists, compute tight and loose rendering, and gate the block-structure corpus sections. |
+| Depends On  | FEATURE-List-Items.md |
+| Provides    | list container, tight/loose computation |
+| Consumes    | list item container |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the Lists section of the spec, and gate the block-structure sections whose examples need lists.
+
+## Rules
+
+- Consecutive items of the same type form one list. Two items are of the same type if both are bullets with the same character, or both are ordered with the same delimiter. Changing the bullet character or the ordered delimiter starts a new list.
+- The start number of an ordered list is that of its first item. The `start` attribute is emitted only when it is not 1.
+- Items may be separated by any number of blank lines. Items need not be indented identically, as long as none is indented enough to be inside the previous item.
+- A list can interrupt a paragraph; an ordered list does so only if it starts at 1.
+- A list is loose if any two of its items are separated by a blank line, or if any item directly contains two block children with a blank line between them. Otherwise it is tight. Blank lines inside fenced code, inside a nested list&#x27;s own children, or inside a block quote do not make the outer list loose. Link reference definitions do not count as blocks for this purpose.
+- In a tight list the paragraphs of the items render without `&lt;p&gt;` tags. In a loose list they render with them. Nested lists decide their own tightness.
+
+## Reads
+
+- List item nodes from the block tree.
+
+## Writes
+
+- List nodes and the tight flag in the block tree.
+
+## Programmatic Acceptance
+
+=== AC lists-corpus-sections ===
+Intent: The Lists, List items, Block quotes, Thematic breaks, ATX headings, Setext headings, Indented code blocks, Fenced code blocks and Precedence conformance sections (roughly 300 cases) pass in full.
+Suite: scoped
+Probe: --dump-tests
+Probe Count: lines
+
+import os
+import subprocess
+import sys
+
+result = subprocess.run(
+    [
+        sys.executable,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;,
+        os.getcwd() + &quot;/commonmark&quot;,
+        &quot;--spec&quot;,
+        &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;,
+        &quot;^Lists$|^List items$|^Block quotes$|^Thematic breaks$|^ATX headings$|^Setext headings$|^Indented code blocks$|^Fenced code blocks$|^Precedence$&quot;,
+    ],
+    capture_output=True,
+    text=True,
+    env={**os.environ},
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC lists-corpus-sections ===
+
+=== AC lists-changing-marker-starts-new-list ===
+Intent: Changing the bullet character or ordered delimiter starts a new list.
+
+import subprocess
+
+bullets = subprocess.run([&quot;./commonmark&quot;], input=&quot;- foo\n- bar\n+ baz\n&quot;, capture_output=True, text=True)
+ordered = subprocess.run([&quot;./commonmark&quot;], input=&quot;1. foo\n2. bar\n3) baz\n&quot;, capture_output=True, text=True)
+print(bullets.stdout)
+print(ordered.stdout)
+assert bullets.returncode == 0
+assert ordered.returncode == 0
+assert bullets.stdout.count(&quot;&lt;ul&gt;&quot;) == 2
+assert ordered.stdout.count(&quot;&lt;ol&quot;) == 2
+=== END AC lists-changing-marker-starts-new-list ===
+
+=== AC lists-tight-versus-loose ===
+Intent: Items without blank lines are tight, and a blank line between items makes the list loose.
+
+import subprocess
+
+tight = subprocess.run([&quot;./commonmark&quot;], input=&quot;- a\n- b\n&quot;, capture_output=True, text=True)
+loose = subprocess.run([&quot;./commonmark&quot;], input=&quot;- a\n\n- b\n&quot;, capture_output=True, text=True)
+print(tight.stdout)
+print(loose.stdout)
+assert tight.returncode == 0
+assert loose.returncode == 0
+assert tight.stdout.count(&quot;&lt;p&gt;&quot;) == 0
+assert loose.stdout.count(&quot;&lt;p&gt;&quot;) == 2
+=== END AC lists-tight-versus-loose ===
+
+=== AC lists-blank-inside-item-makes-loose ===
+Intent: A blank line between two paragraphs of one item makes the whole list loose.
+
+import subprocess
+
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;- a\n- b\n\n  c\n- d\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 4
+=== END AC lists-blank-inside-item-makes-loose ===
+
+=== AC lists-blank-in-code-stays-tight ===
+Intent: Blank lines inside a fenced code block do not make a list loose.
+
+import subprocess
+
+result = subprocess.run(
+    [&quot;./commonmark&quot;], input=&quot;- a\n- ```\n  b\n\n\n  ```\n- c\n&quot;, capture_output=True, text=True
+)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 0
+assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1
+=== END AC lists-blank-inside-code-stays-tight ===
+
+=== AC lists-interrupt-paragraph ===
+Intent: A bullet list interrupts a paragraph, and an ordered list does so only when it starts at one.
+
+import subprocess
+
+bullet = subprocess.run([&quot;./commonmark&quot;], input=&quot;Foo\n- bar\n- baz\n&quot;, capture_output=True, text=True)
+one = subprocess.run([&quot;./commonmark&quot;], input=&quot;Intro\n1. item\n&quot;, capture_output=True, text=True)
+other = subprocess.run([&quot;./commonmark&quot;], input=&quot;Intro\n14. item\n&quot;, capture_output=True, text=True)
+print(bullet.stdout)
+print(one.stdout)
+print(other.stdout)
+assert bullet.returncode == 0
+assert one.returncode == 0
+assert other.returncode == 0
+assert bullet.stdout.count(&quot;&lt;ul&gt;&quot;) == 1
+assert one.stdout.count(&quot;&lt;ol&quot;) == 1
+assert other.stdout.count(&quot;&lt;ol&quot;) == 0
+=== END AC lists-interrupt-paragraph ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Looseness is decided per list, never inherited from a nested or enclosing list.
+- Do not skip, filter or reinterpret corpus examples.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Tabs.md ===
+# FEATURE: Tabs
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Make tabs behave as four-column tab stops for block structure while leaving tabs untouched in content, and gate the remaining corpus sections. |
+| Depends On  | FEATURE-Lists.md |
+| Provides    | tab-stop-aware column handling |
+| Consumes    | block container rules |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the Tabs section of the spec, audit every block rule&#x27;s column handling, and gate the corpus sections whose examples needed all block and inline stories.
+
+## Rules
+
+- Tabs are never expanded into spaces in output. Inside code and text, a tab is passed through as a literal tab.
+- Where spaces define block structure (indented code, block quote markers, list marker spacing, list item continuation, ATX heading and thematic break separators), a tab advances to the next multiple of 4 columns.
+- A tab that is only partly consumed (for example after a `&gt;` marker or a list marker) leaves its remaining columns as virtual spaces of indentation for the rest of the line.
+- All block start and continue rules use the one shared column-aware helper from the block engine.
+
+## Reads
+
+- Lines handed to the block engine.
+
+## Writes
+
+- No new nodes; this story corrects column handling in existing rules.
+
+## Programmatic Acceptance
+
+=== AC tabs-corpus-and-remaining-sections ===
+Intent: The Tabs, Link reference definitions, Backslash escapes, Entity and numeric character references, Raw HTML, HTML blocks, Paragraphs, Blank lines and Hard line breaks conformance sections (roughly 160 cases) pass in full.
+Suite: scoped
+Probe: --dump-tests
+Probe Count: lines
+
+import os
+import subprocess
+import sys
+
+result = subprocess.run(
+    [
+        sys.executable,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;,
+        os.getcwd() + &quot;/commonmark&quot;,
+        &quot;--spec&quot;,
+        &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;,
+        &quot;^Tabs$|^Link reference definitions$|^Backslash escapes$|^Entity and numeric character references$|^Raw HTML$|^HTML blocks$|^Paragraphs$|^Blank lines$|^Hard line breaks$&quot;,
+    ],
+    capture_output=True,
+    text=True,
+    env={**os.environ},
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC tabs-corpus-and-remaining-sections ===
+
+=== AC tabs-indented-code-and-internal-tabs ===
+Intent: A leading tab opens indented code, and internal tabs inside it are kept as tabs.
+
+import subprocess
+
+inner = &quot;a\ta&quot;
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;\t&quot; + inner + &quot;\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1
+assert inner in result.stdout
+=== END AC tabs-indented-code-and-internal-tabs ===
+
+=== AC tabs-list-continuation ===
+Intent: A tab-indented continuation paragraph belongs to the list item.
+
+import subprocess
+
+result = subprocess.run([&quot;./commonmark&quot;], input=&quot;  - foo\n\n\tbar\n&quot;, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count(&quot;&lt;li&gt;&quot;) == 1
+assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 2
+=== END AC tabs-list-continuation ===
+
+=== AC tabs-after-markers ===
+Intent: A tab after a quote marker or list marker is consumed as columns, leaving code inside the container.
+
+import subprocess
+
+quote = subprocess.run([&quot;./commonmark&quot;], input=&quot;&gt;\t\tfoo\n&quot;, capture_output=True, text=True)
+item = subprocess.run([&quot;./commonmark&quot;], input=&quot;-\t\tfoo\n&quot;, capture_output=True, text=True)
+print(quote.stdout)
+print(item.stdout)
+assert quote.returncode == 0
+assert item.returncode == 0
+assert quote.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 1
+assert quote.stdout.count(&quot;&lt;pre&gt;&quot;) == 1
+assert item.stdout.count(&quot;&lt;li&gt;&quot;) == 1
+assert item.stdout.count(&quot;&lt;pre&gt;&quot;) == 1
+=== END AC tabs-after-markers ===
+
+=== AC tabs-as-separators ===
+Intent: Tabs between a heading marker and its text, and between thematic break characters, act as spaces.
+
+import subprocess
+
+heading = subprocess.run([&quot;./commonmark&quot;], input=&quot;#\tFoo\n&quot;, capture_output=True, text=True)
+rule = subprocess.run([&quot;./commonmark&quot;], input=&quot;*\t*\t*\t\n&quot;, capture_output=True, text=True)
+print(heading.stdout)
+print(rule.stdout)
+assert heading.returncode == 0
+assert rule.returncode == 0
+assert heading.stdout.count(&quot;&lt;h1&gt;&quot;) == 1
+assert rule.stdout.count(&quot;&lt;hr /&gt;&quot;) == 1
+=== END AC tabs-as-separators ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Never expand tabs into spaces in rendered content.
+- Do not skip, filter or reinterpret corpus examples.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Verification.md ===
+# FEATURE: Verification
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Terminal assembly that runs the complete supplied CommonMark conformance suite unfiltered through the supplied scoring entry point. |
+| Depends On  | FEATURE-Executable.md, FEATURE-Block-Engine.md, FEATURE-Autolinks.md, FEATURE-Raw-HTML.md, FEATURE-Code-Spans.md, FEATURE-Backslash-Escapes.md, FEATURE-Entities.md, FEATURE-Emphasis.md, FEATURE-Link-Reference-Definitions.md, FEATURE-Links.md, FEATURE-Images.md, FEATURE-Line-Breaks-Text.md, FEATURE-Thematic-Breaks.md, FEATURE-ATX-Headings.md, FEATURE-Indented-Code.md, FEATURE-Fenced-Code.md, FEATURE-HTML-Blocks.md, FEATURE-Block-Quotes.md, FEATURE-Setext-Headings.md, FEATURE-List-Items.md, FEATURE-Lists.md, FEATURE-Tabs.md |
+| Provides    | None |
+| Consumes    | ./commonmark |
+
+## Questions
+
+- None.
+
+## Purpose
+
+This is the terminal story. Once every parser story has closed, it proves the whole product by running the supplied scoring entry point `sources/full_test.sh`, which runs the complete, unfiltered CommonMark 0.31.2 suite against `./commonmark`.
+
+## Assembly and Intent
+
+- Nothing new is implemented here. A failure points at the parser story that owns the failing example&#x27;s construct, and the repair belongs in the parser.
+- The scoring assets `sources/full_test.sh`, `sources/spec_tests.py`, `sources/cmark.py`, `sources/normalize.py` and `sources/spec.txt` are hash-verified and restored before grading. They must never be modified, and changing the entry point is not a repair.
+- The check asserts only the script&#x27;s exit status. The script itself confirms the clean tally.
+
+## Programmatic Acceptance
+
+=== AC full-conformance-suite ===
+Intent: The complete supplied conformance suite passes when run unfiltered through sources/full_test.sh.
+Suite: full
+
+import subprocess
+
+result = subprocess.run([&quot;sh&quot;, &quot;sources/full_test.sh&quot;], capture_output=True, text=True)
+print(result.stdout)
+print(result.stderr)
+assert result.returncode == 0
+=== END AC full-conformance-suite ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Never filter, skip or reinterpret tests.
+- Never modify `sources/full_test.sh`, `sources/spec_tests.py`, `sources/cmark.py`, `sources/normalize.py` or `sources/spec.txt`.
+- Never use or call a public Markdown implementation.
+=== END ARTIFACT ===</pre></article>
+</main>
+</body>
+</html>

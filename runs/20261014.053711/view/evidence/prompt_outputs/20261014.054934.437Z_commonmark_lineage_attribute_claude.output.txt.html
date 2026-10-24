@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261014.054934.437Z_commonmark_lineage_attribute_claude.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261014.054934.437Z_commonmark_lineage_attribute_claude.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261014.054934.437Z_commonmark_lineage_attribute_claude.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>&lt;requirement name=&quot;pipe-markdown-through-program&quot; stories=&quot;executable-interface&quot;&gt;
+def pipe_through_prog(prog, text):
+    p1 = Popen(prog.split(), stdout=PIPE, stdin=PIPE, stderr=PIPE)
+    [result, err] = p1.communicate(input=text.encode(&#x27;utf-8&#x27;))
+    return [p1.returncode, result, err]
+&lt;/requirement&gt;
+&lt;requirement name=&quot;select-backend&quot; stories=&quot;&quot;&gt;
+        if prog:
+            self.to_html = lambda x: pipe_through_prog(prog, x)
+        else:
+&lt;/requirement&gt;
+&lt;requirement name=&quot;locate-cmark-library&quot; stories=&quot;&quot;&gt;
+            sysname = platform.system()
+            if sysname == &#x27;Darwin&#x27;:
+                libname = &quot;libcmark.dylib&quot;
+            elif sysname == &#x27;Windows&#x27;:
+                libname = &quot;cmark.dll&quot;
+            else:
+                libname = &quot;libcmark.so&quot;
+            if library_dir:
+                libpath = os.path.join(library_dir, libname)
+            else:
+                libpath = os.path.join(&quot;build&quot;, &quot;src&quot;, libname)
+&lt;/requirement&gt;
+&lt;requirement name=&quot;call-cmark-library&quot; stories=&quot;&quot;&gt;
+def use_library(lib, text):
+    textbytes = text.encode(&#x27;utf-8&#x27;)
+    textlen = len(textbytes)
+    return [0, lib(textbytes, textlen, 0), &#x27;&#x27;]
+&lt;/requirement&gt;
+&lt;unattached story=&quot;foundation&quot;/&gt;
+&lt;unattached story=&quot;block-engine&quot;/&gt;
+&lt;unattached story=&quot;autolinks&quot;/&gt;
+&lt;unattached story=&quot;raw-html-inline&quot;/&gt;
+&lt;unattached story=&quot;code-spans&quot;/&gt;
+&lt;unattached story=&quot;backslash-escapes&quot;/&gt;
+&lt;unattached story=&quot;entities&quot;/&gt;
+&lt;unattached story=&quot;emphasis&quot;/&gt;
+&lt;unattached story=&quot;link-reference-definitions&quot;/&gt;
+&lt;unattached story=&quot;links&quot;/&gt;
+&lt;unattached story=&quot;images&quot;/&gt;
+&lt;unattached story=&quot;line-breaks-text&quot;/&gt;
+&lt;unattached story=&quot;thematic-breaks&quot;/&gt;
+&lt;unattached story=&quot;atx-headings&quot;/&gt;
+&lt;unattached story=&quot;indented-code&quot;/&gt;
+&lt;unattached story=&quot;fenced-code&quot;/&gt;
+&lt;unattached story=&quot;html-blocks&quot;/&gt;
+&lt;unattached story=&quot;block-quotes&quot;/&gt;
+&lt;unattached story=&quot;setext-headings&quot;/&gt;
+&lt;unattached story=&quot;list-items&quot;/&gt;
+&lt;unattached story=&quot;lists&quot;/&gt;
+&lt;unattached story=&quot;cont-tabs-slice&quot;/&gt;
+&lt;unattached story=&quot;verify-conformance&quot;/&gt;</pre></article>
+</main>
+</body>
+</html>

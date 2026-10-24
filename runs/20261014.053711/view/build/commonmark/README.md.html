@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/README.md</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/README.md</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../build/commonmark/README.md">Raw file</a></div></header>
+<article class="doc"><h1>commonmark</h1>
+<p>A CommonMark 0.31.2 parser executable that converts Markdown on standard input to HTML on standard output.</p>
+<h2>Intent</h2>
+<p>This product is a CommonMark 0.31.2 parser delivered as a single executable, <code>commonmark</code>, at the application root. It reads UTF-8 Markdown from standard input and writes HTML to standard output. It is built from the supplied specification text, following the Appendix parsing strategy (block structure first, then inline parsing with the delimiter-stack algorithms). Success means the complete supplied conformance suite passes when run unfiltered through <code>sh sources/full_test.sh</code>.</p>
+<h2>What It Does</h2>
+<p>Implement the ATX headings section of the spec as a registered block start rule whose content is parsed as inlines.</p>
+<p>Implement the Autolinks section of the spec.</p>
+<p>Implement the Backslash escapes section of the spec.</p>
+<p>Implement the per-line procedure from the spec Appendix, &quot;Phase 1: block structure&quot;, and render paragraphs. Later block stories add start, continue and close rules to the registry without changing the loop.</p>
+<p>Implement the Block quotes section of the spec as a registered container block.</p>
+<p>Implement the Code spans and Inlines sections of the spec, and the inline scanner loop that later inline stories extend.</p>
+<p>Implement the Emphasis and strong emphasis section of the spec using the Appendix algorithm directly.</p>
+<p>Implement the Entity and numeric character references section of the spec.</p>
+<p>Deliver the executable <code>commonmark</code> at the application root. It takes no arguments.</p>
+<p>Implement the Fenced code blocks section of the spec.</p>
+<p>Implement the HTML blocks section of the spec.</p>
+<p>Implement the Images section of the spec on top of the shared link machinery, and gate the Emphasis, Links and Images corpus sections, which are all satisfiable once images exist.</p>
+<p>Implement the Indented code blocks section of the spec as a registered block start rule.</p>
+<p>Implement the Hard line breaks, Soft line breaks and Textual content sections of the spec.</p>
+<p>Implement the Link reference definitions section of the spec and the label matching shared with links and images.</p>
+<p>Implement the Links section of the spec following the Appendix &quot;look for link or image&quot; procedure. The <code>![</code> machinery is shared with images; image rendering belongs to the images story.</p>
+<p>Implement the List items section of the spec as a registered container block. Grouping items into lists and tight or loose rendering belong to the lists story.</p>
+<p>Implement the Lists section of the spec, and gate the block-structure sections whose examples need lists.</p>
+<p>Implement the Raw HTML section of the spec.</p>
+<p>Implement the Setext headings section of the spec.</p>
+<p>Implement the Tabs section of the spec, audit every block rule&#x27;s column handling, and gate the corpus sections whose examples needed all block and inline stories.</p>
+<p>Implement the Thematic breaks section of the spec as a registered block start rule.</p>
+<p>This is the terminal story. Once every parser story has closed, it proves the whole product by running the supplied scoring entry point <code>sources/full_test.sh</code>, which runs the complete, unfiltered CommonMark 0.31.2 suite against <code>./commonmark</code>.</p>
+<h2>Setup and Running</h2>
+<p><strong>Before first run:</strong></p>
+<ul><li>Copy <code>.env.example</code> to <code>.env</code> and fill in local values before starting.</li><li>Confirm the repository has the expected remote with <code>git remote -v</code>; add <code>origin</code> if the startup guard requires it.</li><li>Run <code>git status --short</code> and commit or intentionally stash local changes before deployment-oriented runs.</li></ul>
+<p><strong>Install dependencies:</strong></p>
+<pre><code>uv sync</code></pre>
+<h2>Verification</h2>
+<pre><code>bash bin/test.sh</code></pre>
+<h2>Next Steps</h2>
+<ul><li>Complete the first-run checks above.</li><li>Run <code>bash bin/test.sh</code> before making release or deployment changes.</li></ul></article>
+</main>
+</body>
+</html>

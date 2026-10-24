@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261014.054902.112Z_commonmark_lineage_attribute_claude.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261014.054902.112Z_commonmark_lineage_attribute_claude.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261014.054902.112Z_commonmark_lineage_attribute_claude.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>&lt;requirement name=&quot;commonmark-executable&quot; stories=&quot;executable-interface&quot;&gt;
+The deliverable is an executable named `commonmark` at the application root.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;stdin-stdout-interface&quot; stories=&quot;executable-interface&quot;&gt;
+The parser reads Markdown from standard input and writes HTML to standard output.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;readme-stdio-interface&quot; stories=&quot;executable-interface&quot;&gt;
+Create a concise project `README.md` describing the standard-input/standard-output interface.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;entry-point-succeeds&quot; stories=&quot;executable-interface,verify-conformance&quot;&gt;
+Build `./commonmark` so that the supplied entry point succeeds
+&lt;/requirement&gt;
+&lt;requirement name=&quot;two-phase-parsing&quot; stories=&quot;block-engine,code-spans&quot;&gt;
+CommonMark parsing is two phases: resolve **block structure** first, then run **inline parsing** over the block contents. Implement in that order.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;follow-appendix-strategy&quot; stories=&quot;block-engine&quot;&gt;
+The &quot;Appendix: A parsing strategy&quot; section describes the reference implementation&#x27;s approach; follow it directly rather than reinventing the rules.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;block-paragraphs&quot; stories=&quot;block-engine&quot;&gt;
+paragraphs
+&lt;/requirement&gt;
+&lt;requirement name=&quot;block-thematic-breaks&quot; stories=&quot;thematic-breaks&quot;&gt;
+thematic breaks
+&lt;/requirement&gt;
+&lt;requirement name=&quot;block-atx-headings&quot; stories=&quot;atx-headings&quot;&gt;
+ATX headings
+&lt;/requirement&gt;
+&lt;requirement name=&quot;block-setext-headings&quot; stories=&quot;setext-headings&quot;&gt;
+setext headings
+&lt;/requirement&gt;
+&lt;requirement name=&quot;block-indented-code&quot; stories=&quot;indented-code&quot;&gt;
+indented code
+&lt;/requirement&gt;
+&lt;requirement name=&quot;block-fenced-code&quot; stories=&quot;fenced-code&quot;&gt;
+fenced code
+&lt;/requirement&gt;
+&lt;requirement name=&quot;block-html-blocks&quot; stories=&quot;html-blocks&quot;&gt;
+HTML blocks
+&lt;/requirement&gt;
+&lt;requirement name=&quot;block-link-reference-definitions&quot; stories=&quot;link-reference-definitions&quot;&gt;
+link reference definitions
+&lt;/requirement&gt;
+&lt;requirement name=&quot;block-quotes&quot; stories=&quot;block-quotes&quot;&gt;
+block quotes
+&lt;/requirement&gt;
+&lt;requirement name=&quot;list-structure&quot; stories=&quot;list-items,lists&quot;&gt;
+lists are the hardest block construct, with lazy continuation, nesting, and tightness.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;inline-backslash-escapes&quot; stories=&quot;backslash-escapes&quot;&gt;
+backslash escapes
+&lt;/requirement&gt;
+&lt;requirement name=&quot;inline-entities&quot; stories=&quot;entities&quot;&gt;
+entity and numeric references
+&lt;/requirement&gt;
+&lt;requirement name=&quot;inline-code-spans&quot; stories=&quot;code-spans&quot;&gt;
+code spans
+&lt;/requirement&gt;
+&lt;requirement name=&quot;inline-emphasis&quot; stories=&quot;emphasis&quot;&gt;
+emphasis and strong emphasis (the delimiter-run algorithm)
+&lt;/requirement&gt;
+&lt;requirement name=&quot;inline-links-and-images&quot; stories=&quot;links,images&quot;&gt;
+links and images
+&lt;/requirement&gt;
+&lt;requirement name=&quot;inline-autolinks&quot; stories=&quot;autolinks&quot;&gt;
+autolinks
+&lt;/requirement&gt;
+&lt;requirement name=&quot;inline-raw-html&quot; stories=&quot;raw-html-inline&quot;&gt;
+raw HTML
+&lt;/requirement&gt;
+&lt;requirement name=&quot;inline-hard-breaks&quot; stories=&quot;line-breaks-text&quot;&gt;
+hard breaks
+&lt;/requirement&gt;
+&lt;requirement name=&quot;unfiltered-conformance-run&quot; stories=&quot;verify-conformance&quot;&gt;
+It runs the complete, unfiltered supplied CommonMark suite against `./commonmark`.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;terminal-verification-story&quot; stories=&quot;verify-conformance&quot;&gt;
+Create one terminal verification story that:
+&lt;/requirement&gt;
+&lt;unattached story=&quot;foundation&quot;/&gt;
+&lt;unattached story=&quot;cont-tabs-slice&quot;/&gt;</pre></article>
+</main>
+</body>
+</html>

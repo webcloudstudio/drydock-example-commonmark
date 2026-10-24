@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/ARCHITECTURE_compact.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/ARCHITECTURE_compact.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/ARCHITECTURE_compact.md">Raw file</a></div></header>
+<article class="doc"><p>&lt;!-- Compacted from ARCHITECTURE.md sha256=31c9332eb2d8fb03ce59b945037d21a6779e2a57c5095549568689664d6abc2d on 2026-10-14 by drydock build agent --&gt;</p>
+<p>Package: mdparser (stdlib only, no runtime deps, Python &gt;=3.11)<br>Executable: ./commonmark (root, plain python3, no venv needed); calls mdparser.cli.main<br>Modules: cli (stdin bytes to stdout bytes, exit 0 always, diagnostics to stderr only), blocks (phase 1 block tree), refs (reference map, normalize_label = casefold + whitespace collapse), inlines (phase 2 delimiter stack), entities (html.entities.html5 names ending in &#x27;;&#x27; only, numeric refs, backslash unescape), render (HTML escape, URL percent-encoding)<br>Decisions: unicodedata P*/S* for flanking punctuation; soft line breaks render as a line ending; no third-party Markdown library<br>Guardrails: never write to sources/ staged assets; stdout carries only rendered HTML</p></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-List-Items.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-List-Items.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-List-Items.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: List Items</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>Parse list items with bullet and ordered markers, content-offset indentation rules, empty items, start numbers and lazy continuation.</td></tr><tr><td>Depends On</td><td>FEATURE-Setext-Headings.md</td></tr><tr><td>Provides</td><td>list item container</td></tr><tr><td>Consumes</td><td>block-type registry</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement the List items section of the spec as a registered container block. Grouping items into lists and tight or loose rendering belong to the lists story.</p>
+<h2>Rules</h2>
+<ul><li>A bullet marker is <code>-</code>, <code>+</code> or <code>*</code>. An ordered marker is 1 to 9 digits followed by <code>.</code> or <code>)</code>. The marker may have up to three spaces of indentation. At least one space or tab must follow the marker unless the item is empty.</li><li>Content offset W+N: W is the marker width and N is the number of spaces after it, if that is 1 to 4. If 5 or more spaces follow the marker and the rest of the line is not blank, the item starts with an indented code block and N is 1. If the rest of the line is blank, the item starts with a blank line and N is 1.</li><li>Column-aware indentation with tab stop 4 is used throughout. Continuation lines must be indented at least W+N columns relative to the containing block. Blank lines continue the item.</li><li>An item can begin with at most one blank line: a second consecutive blank line right after an empty marker ends the item.</li><li>Interruption: when a list item would interrupt a paragraph, it must not start with a blank line, and an ordered item must start with number 1. A thematic break line is never a list item.</li><li>Laziness: an unindented line that is paragraph continuation text stays in the item&#x27;s open paragraph.</li><li>Ordered items carry a start number (leading zeros allowed). Output is <code>&lt;li&gt;</code> elements; a loose item wraps paragraphs in <code>&lt;p&gt;</code>.</li></ul>
+<h2>Reads</h2>
+<ul><li>Lines handed to the block engine.</li></ul>
+<h2>Writes</h2>
+<ul><li>List item nodes in the block tree.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>The corpus section examples need list grouping and tightness, so it is gated in the lists story. The checks here are bounded and avoid tight-list paragraph rendering.</p>
+<p>=== AC items-bullet-items ===<br>Intent: Each bullet marker line starts one li element, and consecutive items of one marker form one ul.</p>
+<p>import subprocess</p>
+<p>items = [&quot;first&quot;, &quot;second&quot;, &quot;third&quot;] source = &quot;&quot;.join(&quot;- &quot; + text + &quot;\n&quot; for text in items) result = subprocess.run([&quot;./commonmark&quot;], input=source, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;li&gt;&quot;) == len(items) assert result.stdout.count(&quot;&lt;ul&gt;&quot;) == 1 for text in items: assert text in result.stdout === END AC items-bullet-items ===</p>
+<p>=== AC items-ordered-start-number ===<br>Intent: An ordered list takes its start number from the first item, and ten digits is not a marker.</p>
+<p>import subprocess</p>
+<p>number = 123456789 good = subprocess.run([&quot;./commonmark&quot;], input=str(number) + &quot;. ok\n&quot;, capture_output=True, text=True) bad = subprocess.run([&quot;./commonmark&quot;], input=str(number) + &quot;0. not ok\n&quot;, capture_output=True, text=True) print(good.stdout) print(bad.stdout) assert good.returncode == 0 assert bad.returncode == 0 assert (&#x27;start=&quot;&#x27; + str(number) + &#x27;&quot;&#x27;) in good.stdout assert bad.stdout.count(&quot;&lt;ol&quot;) == 0 === END AC items-ordered-start-number ===</p>
+<p>=== AC items-continuation-paragraph ===<br>Intent: A continuation paragraph indented to the content column joins the item, giving a loose item with two paragraphs.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;- one\n\n  two\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;li&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 2 === END AC items-continuation-paragraph ===</p>
+<p>=== AC items-insufficient-indent-ends-item ===<br>Intent: A paragraph indented less than the content column is outside the item.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;- one\n\n two\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;li&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1 === END AC items-insufficient-indent-ends-item ===</p>
+<p>=== AC items-empty-items ===<br>Intent: Empty items are allowed in the middle of a list, but an empty item cannot interrupt a paragraph.</p>
+<p>import subprocess</p>
+<p>middle = subprocess.run([&quot;./commonmark&quot;], input=&quot;- foo\n-\n- bar\n&quot;, capture_output=True, text=True) interrupt = subprocess.run([&quot;./commonmark&quot;], input=&quot;foo\n*\n&quot;, capture_output=True, text=True) print(middle.stdout) print(interrupt.stdout) assert middle.returncode == 0 assert interrupt.returncode == 0 assert middle.stdout.count(&quot;&lt;li&gt;&quot;) == 2 + 1 assert interrupt.stdout.count(&quot;&lt;li&gt;&quot;) == 0 === END AC items-empty-items ===</p>
+<p>=== AC items-nested-and-code ===<br>Intent: A sublist indented to the content column nests, and a code block six spaces in is code inside the item.</p>
+<p>import subprocess</p>
+<p>nested = subprocess.run([&quot;./commonmark&quot;], input=&quot;- foo\n  - bar\n&quot;, capture_output=True, text=True) code = subprocess.run([&quot;./commonmark&quot;], input=&quot;- foo\n\n      bar\n&quot;, capture_output=True, text=True) print(nested.stdout) print(code.stdout) assert nested.returncode == 0 assert code.returncode == 0 assert nested.stdout.count(&quot;&lt;ul&gt;&quot;) == 2 assert code.stdout.count(&quot;&lt;pre&gt;&quot;) == 1 === END AC items-nested-and-code ===</p>
+<p>=== AC items-four-spaces-is-code ===<br>Intent: A marker indented four spaces is code, not a list item.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;    1.  A paragraph\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;ol&quot;) == 0 assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1 === END AC items-four-spaces-is-code ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>A marker must be followed by a space or tab unless the item is empty.</li><li>An ordered list may interrupt a paragraph only when it starts at 1.</li><li>Do not skip, filter or reinterpret corpus examples.</li></ul></article>
+</main>
+</body>
+</html>

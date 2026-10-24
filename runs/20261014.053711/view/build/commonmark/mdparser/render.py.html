@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/mdparser/render.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/mdparser/render.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/mdparser/render.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;HTML rendering.
+
+Responsibility: turn the parsed tree into HTML, escape HTML text and attributes, and
+percent-encode URLs. The conformance runner compares normalized HTML, so tag structure and
+entities must match the spec examples.
+&quot;&quot;&quot;
+
+from __future__ import annotations
+
+import string
+from collections.abc import Callable
+
+from mdparser.blocks import Block
+
+InlineParser = Callable[[str], str]
+
+ESCAPES = ((&quot;&amp;&quot;, &quot;&amp;amp;&quot;), (&quot;&lt;&quot;, &quot;&amp;lt;&quot;), (&quot;&gt;&quot;, &quot;&amp;gt;&quot;), (&#x27;&quot;&#x27;, &quot;&amp;quot;&quot;))
+URL_SAFE_CHARS = frozenset(string.ascii_letters + string.digits + &quot;;,/?:@&amp;=+$-_.!~*&#x27;()#&quot;)
+HEX_DIGITS = frozenset(string.hexdigits)
+
+
+def escape_html(text: str) -&gt; str:
+    &quot;&quot;&quot;Escape &amp;, &lt;, &gt; and &quot; so the text renders as literal characters. The ampersand goes first.&quot;&quot;&quot;
+    for raw, entity in ESCAPES:
+        text = text.replace(raw, entity)
+    return text
+
+
+def percent_encode_url(url: str) -&gt; str:
+    &quot;&quot;&quot;Percent-encode a URL for use in an attribute.
+
+    URL-safe ASCII and existing %XX escapes are kept. Every other character is encoded as its
+    UTF-8 bytes, so a lone % becomes %25.
+    &quot;&quot;&quot;
+    out: list[str] = []
+    index = 0
+    while index &lt; len(url):
+        char = url[index]
+        if char == &quot;%&quot; and _is_hex_pair(url[index + 1 : index + 3]):
+            out.append(url[index : index + 3])
+            index += 3
+            continue
+        if char in URL_SAFE_CHARS:
+            out.append(char)
+        else:
+            out.extend(f&quot;%{byte:02X}&quot; for byte in char.encode(&quot;utf-8&quot;))
+        index += 1
+    return &quot;&quot;.join(out)
+
+
+def _is_hex_pair(text: str) -&gt; bool:
+    return len(text) == 2 and all(char in HEX_DIGITS for char in text)
+
+
+def render_document(root: Block, parse_inline: InlineParser) -&gt; str:
+    &quot;&quot;&quot;Phase 2 walk: render the top-level blocks in order, one line ending after each block.
+
+    `parse_inline` is the inline parser hook. It receives the raw content of each paragraph and
+    returns that content&#x27;s HTML.
+    &quot;&quot;&quot;
+    return _render_children(root, parse_inline)
+
+
+def _render_children(block: Block, parse_inline: InlineParser, tight: bool = False) -&gt; str:
+    &quot;&quot;&quot;Render the children in order. A run of list items with the same marker becomes one list.
+
+    In a tight list item a paragraph is its inline content, without a `&lt;p&gt;` wrapper. Each piece ends
+    with a line ending unless it is inline text, so a line ending is added before the next piece.
+    &quot;&quot;&quot;
+    pieces: list[str] = []
+    children = block.children
+    index = 0
+    while index &lt; len(children):
+        child = children[index]
+        if child.kind.name == &quot;list_item&quot;:
+            end = index + 1
+            while end &lt; len(children) and _same_list(child, children[end]):
+                end += 1
+            pieces.append(_render_list(children[index:end], parse_inline))
+            index = end
+            continue
+        if tight and child.kind.name == &quot;paragraph&quot;:
+            pieces.append(parse_inline(child.content))
+        else:
+            pieces.append(_render_block(child, parse_inline))
+        index += 1
+    html = &quot;&quot;
+    for piece in pieces:
+        if html and not html.endswith(&quot;\n&quot;):
+            html += &quot;\n&quot;
+        html += piece
+    return html
+
+
+def _same_list(first: Block, other: Block) -&gt; bool:
+    &quot;&quot;&quot;True when `other` is a list item that continues the list `first` starts.
+
+    A change of bullet character or of ordered delimiter starts a new list.
+    &quot;&quot;&quot;
+    if other.kind.name != &quot;list_item&quot;:
+        return False
+    assert first.item is not None and other.item is not None
+    return (first.item.ordered, first.item.delimiter) == (other.item.ordered, other.item.delimiter)
+
+
+def _render_list(items: list[Block], parse_inline: InlineParser) -&gt; str:
+    &quot;&quot;&quot;One `&lt;ul&gt;` or `&lt;ol&gt;` holding an `&lt;li&gt;` per item. An ordered list states its start unless it is 1.&quot;&quot;&quot;
+    first = items[0].item
+    assert first is not None
+    tag = &quot;ol&quot; if first.ordered else &quot;ul&quot;
+    open_tag = f&#x27;&lt;ol start=&quot;{first.start}&quot;&gt;&#x27; if first.ordered and first.start != 1 else f&quot;&lt;{tag}&gt;&quot;
+    loose = _list_is_loose(items)
+    body = &quot;&quot;.join(_render_item(item, loose, parse_inline) for item in items)
+    return f&quot;{open_tag}\n{body}&lt;/{tag}&gt;\n&quot;
+
+
+def _list_is_loose(items: list[Block]) -&gt; bool:
+    &quot;&quot;&quot;A list is loose when a blank line separates two of its items, or two blocks inside one item.
+
+    A gap between two items of a nested list is not a gap between blocks of this item: the nested list
+    is one block, and its own looseness decides how its items are spaced.
+    &quot;&quot;&quot;
+    for index, item in enumerate(items):
+        has_next_item = index + 1 &lt; len(items)
+        if has_next_item and _ends_with_blank_line(item):
+            return True
+        for child_index, child in enumerate(item.children):
+            if child_index + 1 &lt; len(item.children):
+                successor = item.children[child_index + 1]
+                if child.kind.name == &quot;list_item&quot; and _same_list(child, successor):
+                    continue
+                has_next_block = True
+            else:
+                has_next_block = has_next_item
+            if has_next_block and _ends_with_blank_line(child):
+                return True
+    return False
+
+
+def _ends_with_blank_line(block: Block) -&gt; bool:
+    &quot;&quot;&quot;True when `block` ends with a blank line, looking into the last child of each list item.&quot;&quot;&quot;
+    node: Block | None = block
+    while node is not None:
+        if node.last_line_blank:
+            return True
+        if node.kind.name != &quot;list_item&quot; or not node.children:
+            return False
+        node = node.children[-1]
+    return False
+
+
+def _render_item(item: Block, loose: bool, parse_inline: InlineParser) -&gt; str:
+    &quot;&quot;&quot;One `&lt;li&gt;`. A loose item puts each block on its own line, after a line ending.&quot;&quot;&quot;
+    body = _render_children(item, parse_inline, tight=not loose)
+    if loose and body:
+        return f&quot;&lt;li&gt;\n{body}&lt;/li&gt;\n&quot;
+    return f&quot;&lt;li&gt;{body}&lt;/li&gt;\n&quot;
+
+
+def _render_block(block: Block, parse_inline: InlineParser) -&gt; str:
+    if block.kind.name == &quot;block_quote&quot;:
+        return f&quot;&lt;blockquote&gt;\n{_render_children(block, parse_inline)}&lt;/blockquote&gt;\n&quot;
+    if block.kind.name == &quot;paragraph&quot;:
+        return f&quot;&lt;p&gt;{parse_inline(block.content)}&lt;/p&gt;\n&quot;
+    if block.kind.name == &quot;thematic_break&quot;:
+        return &quot;&lt;hr /&gt;\n&quot;
+    if block.kind.name in (&quot;atx_heading&quot;, &quot;setext_heading&quot;):
+        return f&quot;&lt;h{block.level}&gt;{parse_inline(block.content)}&lt;/h{block.level}&gt;\n&quot;
+    if block.kind.name == &quot;indented_code&quot;:
+        return f&quot;&lt;pre&gt;&lt;code&gt;{escape_html(block.content)}&lt;/code&gt;&lt;/pre&gt;\n&quot;
+    if block.kind.name == &quot;fenced_code&quot;:
+        return f&quot;&lt;pre&gt;{_fenced_code_open_tag(block)}{escape_html(block.content)}&lt;/code&gt;&lt;/pre&gt;\n&quot;
+    if block.kind.name == &quot;html_block&quot;:
+        # Raw lines pass through unchanged. The content already ends with a line ending.
+        return block.content
+    raise ValueError(f&quot;no HTML renderer for block type {block.kind.name!r}&quot;)
+
+
+def _fenced_code_open_tag(block: Block) -&gt; str:
+    &quot;&quot;&quot;The `&lt;code&gt;` opening tag for a fenced block, with a language class when the info string has a word.&quot;&quot;&quot;
+    assert block.fence is not None
+    language = block.fence.language
+    if not language:
+        return &quot;&lt;code&gt;&quot;
+    return f&#x27;&lt;code class=&quot;language-{escape_html(language)}&quot;&gt;&#x27;
+</pre></article>
+</main>
+</body>
+</html>

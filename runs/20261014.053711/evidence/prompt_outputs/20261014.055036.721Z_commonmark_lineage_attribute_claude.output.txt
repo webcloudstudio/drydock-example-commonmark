@@ -1,0 +1,44 @@
+<requirement name="run-conformance-suite" stories="verify-conformance">
+Run cmark tests.
+</requirement>
+<requirement name="report-result-counts" stories="verify-conformance">
+{pass} passed, {fail} failed, {error} errored, {skip} skipped
+</requirement>
+<requirement name="filter-by-section-pattern" stories="">
+limit to sections matching regex pattern
+</requirement>
+<requirement name="filter-by-example-number" stories="">
+only consider the test with the given number
+</requirement>
+<requirement name="normalize-html-before-compare" stories="">
+do not normalize HTML
+</requirement>
+<requirement name="dump-tests-json" stories="">
+dump tests in JSON format
+</requirement>
+<requirement name="track-changed-results" stories="">
+track which test cases pass/fail in the given JSON file and only report changes
+</requirement>
+<unattached story="foundation"/>
+<unattached story="executable-interface"/>
+<unattached story="block-engine"/>
+<unattached story="autolinks"/>
+<unattached story="raw-html-inline"/>
+<unattached story="code-spans"/>
+<unattached story="backslash-escapes"/>
+<unattached story="entities"/>
+<unattached story="emphasis"/>
+<unattached story="link-reference-definitions"/>
+<unattached story="links"/>
+<unattached story="images"/>
+<unattached story="line-breaks-text"/>
+<unattached story="thematic-breaks"/>
+<unattached story="atx-headings"/>
+<unattached story="indented-code"/>
+<unattached story="fenced-code"/>
+<unattached story="html-blocks"/>
+<unattached story="block-quotes"/>
+<unattached story="setext-headings"/>
+<unattached story="list-items"/>
+<unattached story="lists"/>
+<unattached story="cont-tabs-slice"/>

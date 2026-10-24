@@ -1,0 +1,709 @@
+=== BEGIN ARTIFACT FEATURE-Indented-Code.md ===
+# FEATURE: Indented Code
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Parse indented code blocks made of chunks of lines indented four or more columns and render them as pre and code elements. |
+| Depends On  | FEATURE-ATX-Headings.md |
+| Provides    | indented code block |
+| Consumes    | block-type registry |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the Indented code blocks section of the spec as a registered block start rule.
+
+## Rules
+
+- A line with four or more columns of indentation (column-aware, tab stop 4), that is not blank and does not continue a paragraph, starts an indented code block.
+- An indented code block cannot interrupt a paragraph. A non-blank line with fewer than four columns of indentation ends the block immediately.
+- Chunks are separated by blank lines. Interior blank lines are kept in the content, with any indentation beyond four columns retained. Leading and trailing blank lines are not part of the block.
+- Content is the literal lines minus four columns of indentation, including trailing spaces, and is HTML-escaped. It is never parsed as Markdown. There is no info string.
+- It renders as `<pre><code>...</code></pre>` with a final line ending inside the code element.
+
+## Reads
+
+- Lines handed to the block engine.
+
+## Writes
+
+- Code block nodes in the block tree.
+
+## Programmatic Acceptance
+
+The corpus section examples use lists, so it is gated in the lists story. The checks here are bounded.
+
+=== AC indented-simple-block ===
+Intent: Four-space-indented lines render one pre element whose code keeps the extra indentation and content.
+
+import subprocess
+
+first = "a simple"
+second = "  indented code block"
+source = "    " + first + "\n    " + second + "\n"
+result = subprocess.run(["./commonmark"], input=source, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<pre>") == 1
+assert result.stdout.count("<code>") == 1
+assert first in result.stdout
+assert second in result.stdout
+=== END AC indented-simple-block ===
+
+=== AC indented-cannot-interrupt-paragraph ===
+Intent: An indented line directly after paragraph text is a continuation, not a code block.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="Foo\n    bar\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<pre>") == 0
+assert result.stdout.count("<p>") == 1
+=== END AC indented-cannot-interrupt-paragraph ===
+
+=== AC indented-chunks-and-ending ===
+Intent: Chunks separated by a blank line form one block, and an unindented line ends it and starts a paragraph.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="    chunk1\n\n    chunk2\nbar\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<pre>") == 1
+assert result.stdout.count("<p>") == 1
+=== END AC indented-chunks-and-ending ===
+
+=== AC indented-content-escaped-and-literal ===
+Intent: Code content is escaped and not parsed as Markdown, so only the four code wrapper tags contribute angle brackets.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="    <a/>\n    *hi*\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<") == 4
+assert result.stdout.count("<em>") == 0
+=== END AC indented-content-escaped-and-literal ===
+
+=== AC indented-tab-indentation ===
+Intent: A leading tab counts as four columns of indentation.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="\tfoo\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<pre>") == 1
+=== END AC indented-tab-indentation ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Never let an indented code block interrupt a paragraph.
+- Never expand tabs inside code content; only the indentation prefix is column-aware.
+- Do not skip, filter or reinterpret corpus examples.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Fenced-Code.md ===
+# FEATURE: Fenced Code
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Parse fenced code blocks delimited by backtick or tilde fences with info strings and indentation stripping. |
+| Depends On  | FEATURE-Indented-Code.md |
+| Provides    | fenced code block |
+| Consumes    | block-type registry, shared unescape and entity helpers |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the Fenced code blocks section of the spec.
+
+## Rules
+
+- An opening fence is at least three consecutive backticks or tildes, with up to three spaces of indentation. Backtick and tilde fences cannot be mixed. The text after the fence is the info string, trimmed. For a backtick fence the info string must not contain a backtick; otherwise the line is not a fence (it is parsed as a paragraph with a code span).
+- Content is all following lines until a closing fence of the same character, at least as long as the opening one, with up to three spaces of indentation and followed only by spaces or tabs. Closing fences have no info string.
+- If the opening fence is indented by N spaces, up to N spaces of indentation are removed from each content line.
+- An unclosed fence runs to the end of the document or the enclosing container.
+- A fenced code block can interrupt a paragraph and needs no blank lines around it.
+- The first word of the info string, after backslash unescape and entity decoding, becomes `class="language-WORD"` on the code element. Content is HTML-escaped and never parsed.
+
+## Reads
+
+- Lines handed to the block engine.
+
+## Writes
+
+- Code block nodes in the block tree.
+
+## Programmatic Acceptance
+
+The corpus section examples use quotes, lists and setext headings, so it is gated in the lists story. The checks here are bounded.
+
+=== AC fenced-backtick-and-tilde ===
+Intent: Backtick and tilde fences each render one pre element containing the supplied body.
+
+import subprocess
+
+body = "some body text"
+for fence in ("```", "~~~"):
+    source = fence + "\n" + body + "\n" + fence + "\n"
+    result = subprocess.run(["./commonmark"], input=source, capture_output=True, text=True)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count("<pre>") == 1
+    assert body in result.stdout
+=== END AC fenced-backtick-and-tilde ===
+
+=== AC fenced-info-string-language-class ===
+Intent: The first word of the info string becomes the language class.
+
+import subprocess
+
+language = "ruby"
+source = "```" + language + " extra words\ncode\n```\n"
+result = subprocess.run(["./commonmark"], input=source, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert ('class="language-' + language + '"') in result.stdout
+=== END AC fenced-info-string-language-class ===
+
+=== AC fenced-closing-fence-rules ===
+Intent: A fence of the other character, or a shorter fence, does not close the block.
+
+import subprocess
+
+other = "~~~"
+shorter = "```"
+source = "````\naaa\n" + other + "\n" + shorter + "\n"
+result = subprocess.run(["./commonmark"], input=source, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<pre>") == 1
+assert other in result.stdout
+assert shorter in result.stdout
+=== END AC fenced-closing-fence-rules ===
+
+=== AC fenced-unclosed-runs-to-end ===
+Intent: An unclosed fence consumes the rest of the document as code.
+
+import subprocess
+
+trailing = "still code"
+result = subprocess.run(["./commonmark"], input="```\nfirst\n\n" + trailing + "\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<pre>") == 1
+assert result.stdout.count("<p>") == 0
+assert trailing in result.stdout
+=== END AC fenced-unclosed-runs-to-end ===
+
+=== AC fenced-interrupts-paragraph ===
+Intent: A fence interrupts a paragraph and text after it starts a new paragraph.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="foo\n```\nbar\n```\nbaz\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<pre>") == 1
+assert result.stdout.count("<p>") == 2
+=== END AC fenced-interrupts-paragraph ===
+
+=== AC fenced-two-backticks-not-a-fence ===
+Intent: Two backticks do not open a fence; they form a code span instead.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="``\nfoo\n``\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<pre>") == 0
+assert result.stdout.count("<code>") == 1
+=== END AC fenced-two-backticks-not-a-fence ===
+
+=== AC fenced-indentation-stripped ===
+Intent: Content indentation up to the fence indentation is removed, and unindented lines are kept.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input=" ```\n aaa\naaa\n```\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<pre>") == 1
+assert result.stdout.count("aaa") == 2
+assert result.stdout.count(" aaa") == 0
+=== END AC fenced-indentation-stripped ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Never parse fenced content as Markdown.
+- Never let a closing fence carry an info string.
+- Do not skip, filter or reinterpret corpus examples.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-HTML-Blocks.md ===
+# FEATURE: HTML Blocks
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Parse the seven kinds of HTML block and emit their lines as raw HTML. |
+| Depends On  | FEATURE-Fenced-Code.md |
+| Provides    | HTML block |
+| Consumes    | block-type registry |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the HTML blocks section of the spec.
+
+## Start and end conditions
+
+After up to three spaces of indentation:
+
+1. Line begins with `<pre`, `<script`, `<style` or `<textarea` (case-insensitive) followed by a space, tab, `>` or end of line. Ends at a line containing `</pre>`, `</script>`, `</style>` or `</textarea>` (case-insensitive, need not match the start tag).
+2. Begins with `<!--`. Ends at a line containing `-->`.
+3. Begins with `<?`. Ends at a line containing `?>`.
+4. Begins with `<!` and an ASCII letter. Ends at a line containing `>`.
+5. Begins with `<![CDATA[`. Ends at a line containing `]]>`.
+6. Begins with `<` or `</` and one of the block-level tag names listed in the spec (case-insensitive), followed by a space, tab, end of line, `>` or `/>`. Ends before the next blank line.
+7. Begins with a complete open tag (tag name not `pre`, `script`, `style` or `textarea`) or complete closing tag alone on the line, followed only by spaces and tabs. Ends before the next blank line.
+
+## Rules
+
+- If the first line also meets the end condition, the block is that single line. Types 1 to 5 include the line holding the end condition, with anything after the end tag.
+- Blocks end at the end of the document or enclosing container if no end condition is met.
+- Types 1 to 6 can interrupt a paragraph. Type 7 cannot.
+- Lines are emitted unchanged and unescaped, with their original indentation. Content inside the block is never parsed as Markdown, and tags inside it never change parser state.
+
+## Reads
+
+- Lines handed to the block engine.
+
+## Writes
+
+- HTML block nodes in the block tree.
+
+## Programmatic Acceptance
+
+The corpus section has examples that use quotes, lists and indented code, so it is gated in the tabs story. The checks here are bounded.
+
+=== AC htmlblock-type6-raw-lines ===
+Intent: A block-level tag block passes through verbatim and its Markdown is not parsed.
+
+import subprocess
+
+block = "<div>\n*foo*\n</div>"
+result = subprocess.run(["./commonmark"], input=block + "\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert block in result.stdout
+assert result.stdout.count("<em>") == 0
+assert result.stdout.count("<p>") == 0
+=== END AC htmlblock-type6-raw-lines ===
+
+=== AC htmlblock-type6-ends-at-blank-line ===
+Intent: A type 6 block ends at a blank line and Markdown after it is parsed.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="<div>\nraw\n\n*bar*\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<p>") == 1
+assert result.stdout.count("<em>") == 1
+=== END AC htmlblock-type6-ends-at-blank-line ===
+
+=== AC htmlblock-comment-spans-blank-lines ===
+Intent: A comment block keeps blank lines until its end marker, and the following line is a paragraph.
+
+import subprocess
+
+comment = "<!-- Foo\n\nbar\n   baz -->"
+result = subprocess.run(["./commonmark"], input=comment + "\nokay\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert comment in result.stdout
+assert result.stdout.count("<p>") == 1
+=== END AC htmlblock-comment-spans-blank-lines ===
+
+=== AC htmlblock-pre-spans-blank-lines ===
+Intent: A pre block keeps blank lines and does not parse the Markdown inside it.
+
+import subprocess
+
+block = "<pre>\n*x*\n\n_y_\n</pre>"
+result = subprocess.run(["./commonmark"], input=block + "\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert block in result.stdout
+assert result.stdout.count("<em>") == 0
+=== END AC htmlblock-pre-spans-blank-lines ===
+
+=== AC htmlblock-type7-cannot-interrupt ===
+Intent: A lone open tag line after paragraph text stays inside the paragraph.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input='Foo\n<a href="bar">\nbaz\n', capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<p>") == 1
+=== END AC htmlblock-type7-cannot-interrupt ===
+
+=== AC htmlblock-type6-interrupts-paragraph ===
+Intent: A block-level tag line interrupts a paragraph.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="Foo\n<div>\nbar\n</div>\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<p>") == 1
+=== END AC htmlblock-type6-interrupts-paragraph ===
+
+=== AC htmlblock-four-space-indent-is-code ===
+Intent: Four spaces of indentation make an indented code block, not an HTML block.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="    <!-- foo -->\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<pre>") == 1
+=== END AC htmlblock-four-space-indent-is-code ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Never escape or alter lines inside an HTML block.
+- Type 7 must never interrupt a paragraph.
+- Do not skip, filter or reinterpret corpus examples.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Block-Quotes.md ===
+# FEATURE: Block Quotes
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Parse block quotes with marker handling, lazy continuation and the blank-line consecutiveness rule. |
+| Depends On  | FEATURE-HTML-Blocks.md |
+| Provides    | block quote container |
+| Consumes    | block-type registry, lazy continuation check |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the Block quotes section of the spec as a registered container block.
+
+## Rules
+
+- A block quote marker is `>` with up to three spaces of indentation, optionally followed by one space of indentation. A following tab is treated column-aware, so a partly consumed tab leaves its remaining columns as content indentation.
+- Continue rule: a line continues the quote if it has a marker. A line without a marker is a lazy continuation only if it would be paragraph continuation text of the deepest open paragraph. Headings, fences, thematic breaks, list items and indented code do not continue lazily.
+- A blank line (or a line with only a marker) behaves as in the spec: a fully blank line ends the quote, so two quotes separated by a blank line stay separate.
+- Block quotes can interrupt paragraphs and nest. Any number of leading `>` may be omitted on a lazy line of a nested quote.
+- A quote can be empty. It renders as `<blockquote>` and `</blockquote>` with contents on separate lines.
+
+## Reads
+
+- Lines handed to the block engine.
+
+## Writes
+
+- Block quote nodes in the block tree.
+
+## Programmatic Acceptance
+
+The corpus section has examples that use lists, so it is gated in the lists story. The checks here are bounded.
+
+=== AC quote-basic-content ===
+Intent: A quote with a heading and paragraph lines renders one blockquote containing one h1 and one paragraph.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="> # Foo\n> bar\n> baz\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<blockquote>") == 1
+assert result.stdout.count("<h1>") == 1
+assert result.stdout.count("<p>") == 1
+=== END AC quote-basic-content ===
+
+=== AC quote-marker-space-optional ===
+Intent: The space after the marker is optional, and up to three spaces of indentation are allowed.
+
+import subprocess
+
+for source in ("># Foo\n>bar\n", "   > # Foo\n   > bar\n"):
+    result = subprocess.run(["./commonmark"], input=source, capture_output=True, text=True)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count("<blockquote>") == 1
+    assert result.stdout.count("<h1>") == 1
+=== END AC quote-marker-space-optional ===
+
+=== AC quote-lazy-continuation ===
+Intent: An unmarked paragraph continuation line stays in the quote's paragraph.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="> bar\nbaz\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<blockquote>") == 1
+assert result.stdout.count("<p>") == 1
+=== END AC quote-lazy-continuation ===
+
+=== AC quote-nested-lazy ===
+Intent: Omitted markers on a nested quote's continuation line still keep three nesting levels and one paragraph.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="> > > foo\nbar\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<blockquote>") == 3
+assert result.stdout.count("<p>") == 1
+=== END AC quote-nested-lazy ===
+
+=== AC quote-blank-line-separates ===
+Intent: A blank line separates two quotes, and adjacent marked lines form one quote.
+
+import subprocess
+
+separated = subprocess.run(["./commonmark"], input="> foo\n\n> bar\n", capture_output=True, text=True)
+joined = subprocess.run(["./commonmark"], input="> foo\n> bar\n", capture_output=True, text=True)
+print(separated.stdout)
+print(joined.stdout)
+assert separated.returncode == 0
+assert joined.returncode == 0
+assert separated.stdout.count("<blockquote>") == 2
+assert joined.stdout.count("<blockquote>") == 1
+=== END AC quote-blank-line-separates ===
+
+=== AC quote-interrupts-paragraph ===
+Intent: A quote interrupts a paragraph, leaving one paragraph before it and one inside it.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="foo\n> bar\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<blockquote>") == 1
+assert result.stdout.count("<p>") == 2
+=== END AC quote-interrupts-paragraph ===
+
+=== AC quote-four-spaces-is-code ===
+Intent: Four spaces before the marker make an indented code block, not a quote.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="    > foo\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<blockquote>") == 0
+assert result.stdout.count("<pre>") == 1
+=== END AC quote-four-spaces-is-code ===
+
+=== AC quote-no-lazy-code ===
+Intent: Laziness does not apply to indented code, so the unmarked indented line becomes its own code block.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input=">     foo\n    bar\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<blockquote>") == 1
+assert result.stdout.count("<pre>") == 2
+=== END AC quote-no-lazy-code ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Laziness must apply only to paragraph continuation text.
+- Two quotes must never merge across a blank line.
+- Do not skip, filter or reinterpret corpus examples.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Setext-Headings.md ===
+# FEATURE: Setext Headings
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Parse setext headings, including multiline content and the precedence and laziness exclusions. |
+| Depends On  | FEATURE-Block-Quotes.md |
+| Provides    | setext heading block |
+| Consumes    | paragraph block, thematic break block |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the Setext headings section of the spec.
+
+## Rules
+
+- A setext heading is one or more lines of paragraph text followed by an underline of `=` (level 1) or `-` (level 2) characters, with up to three spaces of indentation and only trailing spaces or tabs after. The underline cannot contain internal spaces.
+- The text lines must be such that, without the underline, they would form a paragraph. The first line has at most three spaces of indentation.
+- The underline applies to the whole accumulated paragraph, so multiple lines become one heading. The heading content is the paragraph's raw text with leading and trailing spaces and tabs removed, parsed as inlines. Trailing spaces or a backslash on the last content line are not a hard break.
+- An underline of dashes takes precedence over a thematic break reading of the same line when it follows paragraph text. Without paragraph text it is a thematic break. A setext heading cannot be empty, so `====` alone is a paragraph.
+- The underline cannot be a lazy continuation line of a container: after a quote or list item, an unmarked underline does not underline the container's paragraph.
+- Link reference definitions already extracted from the paragraph's start do not become heading text.
+
+## Reads
+
+- Lines handed to the block engine; the open paragraph.
+
+## Writes
+
+- Heading nodes of level 1 or 2 in the block tree.
+
+## Programmatic Acceptance
+
+The corpus section has examples that use lists, so it is gated in the lists story. The checks here are bounded.
+
+=== AC setext-both-levels ===
+Intent: Equals underlines give h1 and dash underlines give h2.
+
+import subprocess
+
+equals = subprocess.run(["./commonmark"], input="Foo *bar*\n=========\n", capture_output=True, text=True)
+dashes = subprocess.run(["./commonmark"], input="Foo *bar*\n---------\n", capture_output=True, text=True)
+print(equals.stdout)
+print(dashes.stdout)
+assert equals.returncode == 0
+assert dashes.returncode == 0
+assert equals.stdout.count("<h1>") == 1
+assert dashes.stdout.count("<h2>") == 1
+assert equals.stdout.count("<em>") == 1
+=== END AC setext-both-levels ===
+
+=== AC setext-multiline-content ===
+Intent: Several paragraph lines before the underline become one heading with no paragraph.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="Foo\nBar\n---\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<h2>") == 1
+assert result.stdout.count("<p>") == 0
+=== END AC setext-multiline-content ===
+
+=== AC setext-underline-beats-thematic-break ===
+Intent: Dashes after paragraph text make a heading, not a thematic break.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="Foo\n---\nbar\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<h2>") == 1
+assert result.stdout.count("<hr />") == 0
+assert result.stdout.count("<p>") == 1
+=== END AC setext-underline-beats-thematic-break ===
+
+=== AC setext-sequence-with-thematic-breaks ===
+Intent: Dashes with no preceding paragraph are thematic breaks, mixed with two setext headings and a paragraph.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="---\nFoo\n---\nBar\n---\nBaz\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<hr />") == 1
+assert result.stdout.count("<h2>") == 2
+assert result.stdout.count("<p>") == 1
+=== END AC setext-sequence-with-thematic-breaks ===
+
+=== AC setext-underline-limits ===
+Intent: Four spaces of indentation or internal spaces disqualify the underline.
+
+import subprocess
+
+for source in ("Foo\n    ---\n", "Foo\n= =\n"):
+    result = subprocess.run(["./commonmark"], input=source, capture_output=True, text=True)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count("<h1>") == 0
+    assert result.stdout.count("<h2>") == 0
+    assert result.stdout.count("<p>") == 1
+=== END AC setext-underline-limits ===
+
+=== AC setext-not-lazy-in-quote ===
+Intent: An unmarked underline after a quote paragraph does not make a heading inside the quote.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="> foo\nbar\n===\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<h1>") == 0
+assert result.stdout.count("<blockquote>") == 1
+assert result.stdout.count("<p>") == 1
+=== END AC setext-not-lazy-in-quote ===
+
+=== AC setext-quote-then-thematic-break ===
+Intent: Dashes after a quote without a marker are a thematic break outside the quote.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="> Foo\n---\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<blockquote>") == 1
+assert result.stdout.count("<hr />") == 1
+assert result.stdout.count("<h2>") == 0
+=== END AC setext-quote-then-thematic-break ===
+
+=== AC setext-empty-is-paragraph ===
+Intent: An underline with no content line is not a heading.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="\n====\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<h1>") == 0
+assert result.stdout.count("<p>") == 1
+=== END AC setext-empty-is-paragraph ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- A setext underline must never act through lazy continuation.
+- A setext heading must never be empty.
+- Do not skip, filter or reinterpret corpus examples.
+=== END ARTIFACT ===

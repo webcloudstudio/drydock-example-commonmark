@@ -1,0 +1,19 @@
+The terminal story only needs the declared acceptance check transcribed as a test, plus the suite run through its declared invocation. I'll add `tests/test_verification.py` now.The declared check passed. I'll read the conformance tally directly from the same declared invocation and run the whole project test suite to confirm it is green.The complete CommonMark 0.31.2 suite passes unfiltered: `sh sources/full_test.sh` exits 0 and reports `655 passed, 0 failed, 0 errored, 0 skipped`.
+
+I added the one test this story declares, `tests/test_verification.py`. It runs `sh sources/full_test.sh` through subprocess, prints the captured output, and asserts only the exit status. Nothing else was written, and no staged assets were touched.
+
+Full project suite (`.venv/bin/python -m pytest -q`): 1174 passed, 1 skipped. The skip is `tests/test_foundation.py:38` ("got empty parameter set for (name)"). It predates this step and I did not change it.
+
+RESULT: SUCCESS
+
+FILES CHANGED:
+- tests/test_verification.py
+
+SUMMARY:
+- Transcribed the declared AC `full-conformance-suite` as `test_full_conformance_suite`, with its assertion unchanged.
+- Ran the suite through its declared invocation: `full_test.sh` exit 0, tally 655 passed / 0 failed / 0 errored / 0 skipped.
+- Ran the whole project test suite: 1174 passed, 1 skipped (pre-existing skip noted above).
+- No parser code changes were needed in this step; the existing parser already passes the full suite.
+
+BLOCKERS:
+- None.

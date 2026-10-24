@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/mdparser/refs.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/mdparser/refs.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/mdparser/refs.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Link reference definitions: extraction, the document-wide reference map, and `normalize_label`.
+
+Responsibility: extract link reference definitions when a paragraph closes, store them in one
+reference map, and normalize labels with `str.casefold` plus whitespace collapse.
+&quot;&quot;&quot;
+
+from __future__ import annotations
+
+import re
+from dataclasses import dataclass
+
+from mdparser.entities import ASCII_PUNCTUATION, unescape_and_decode
+
+# A link label may hold at most this many characters between its brackets.
+MAX_LABEL_LENGTH = 999
+# Whitespace inside a label collapses to one space: spaces, tabs and line endings.
+LABEL_WHITESPACE_PATTERN = re.compile(r&quot;[ \t\r\n]+&quot;)
+# Title delimiters: each opener maps to the closer that ends the title.
+TITLE_CLOSERS = {&#x27;&quot;&#x27;: &#x27;&quot;&#x27;, &quot;&#x27;&quot;: &quot;&#x27;&quot;, &quot;(&quot;: &quot;)&quot;}
+
+
+@dataclass(frozen=True)
+class LinkReference:
+    &quot;&quot;&quot;A stored definition: the decoded destination and the decoded title, or None when untitled.&quot;&quot;&quot;
+
+    destination: str
+    title: str | None
+
+
+def normalize_label(label: str) -&gt; str:
+    &quot;&quot;&quot;Return the matching key for a link label.
+
+    The brackets are stripped when the label has them, the text is case folded, and runs of
+    spaces, tabs and line endings collapse to one space. Matching compares these keys only.
+    &quot;&quot;&quot;
+    if label.startswith(&quot;[&quot;) and label.endswith(&quot;]&quot;):
+        label = label[1:-1]
+    return LABEL_WHITESPACE_PATTERN.sub(&quot; &quot;, label.casefold()).strip(&quot; &quot;)
+
+
+class ReferenceMap:
+    &quot;&quot;&quot;The document-wide map from normalized label to definition. The first definition wins.&quot;&quot;&quot;
+
+    def __init__(self) -&gt; None:
+        self._entries: dict[str, LinkReference] = {}
+
+    def add(self, label: str, destination: str, title: str | None = None) -&gt; None:
+        &quot;&quot;&quot;Store a definition under its normalized label unless that label is already present.&quot;&quot;&quot;
+        key = normalize_label(label)
+        if key not in self._entries:
+            self._entries[key] = LinkReference(destination, title)
+
+    def get(self, label: str) -&gt; LinkReference | None:
+        &quot;&quot;&quot;The definition for `label`, matched on its normalized form, or None when absent.&quot;&quot;&quot;
+        return self._entries.get(normalize_label(label))
+
+    def __contains__(self, label: object) -&gt; bool:
+        return isinstance(label, str) and normalize_label(label) in self._entries
+
+    def __len__(self) -&gt; int:
+        return len(self._entries)
+
+
+def extract_definitions(text: str, references: ReferenceMap) -&gt; str:
+    &quot;&quot;&quot;Remove the link reference definitions at the start of a closed paragraph&#x27;s text.
+
+    Each definition found is added to `references`. Scanning stops at the first line that is not a
+    definition, and the rest of the text is returned. Text that is not at the start of the
+    paragraph is never examined, so a definition cannot interrupt a paragraph.
+    &quot;&quot;&quot;
+    pos = 0
+    while pos &lt; len(text):
+        parsed = _parse_definition(text, pos)
+        if parsed is None:
+            break
+        label, destination, title, pos = parsed
+        references.add(label, destination, title)
+    return text[pos:]
+
+
+def _parse_definition(text: str, pos: int) -&gt; tuple[str, str, str | None, int] | None:
+    &quot;&quot;&quot;Parse one definition at `pos`. Return (raw label, destination, title, index after it), or None.&quot;&quot;&quot;
+    label_end = scan_label(text, pos)
+    if label_end is None:
+        return None
+    label = text[pos:label_end]
+    if text[label_end : label_end + 1] != &quot;:&quot;:
+        return None
+    index = skip_whitespace_with_line_ending(text, label_end + 1)
+    destination = parse_destination(text, index)
+    if destination is None:
+        return None
+    destination_text, after_destination = destination
+
+    destination_line_end = _line_end(text, after_destination)
+    if not _is_blank(text[after_destination:destination_line_end]):
+        # Anything after the destination on its line must be a title on that same line.
+        title_start = _skip_spaces(text, after_destination)
+        if title_start == after_destination or not _is_title_opener(text, title_start):
+            return None
+        title = parse_title(text, title_start)
+        if title is None or not _rest_of_line_is_blank(text, title[1]):
+            return None
+        return label, destination_text, title[0], _after_line(text, title[1])
+
+    # The destination ends its line. A title may follow on a later line; if it does not parse
+    # cleanly, the definition keeps its destination and the title text stays in the paragraph.
+    title_start = skip_whitespace_with_line_ending(text, after_destination)
+    if title_start &gt; after_destination and _is_title_opener(text, title_start):
+        title = parse_title(text, title_start)
+        if title is not None and _rest_of_line_is_blank(text, title[1]):
+            return label, destination_text, title[0], _after_line(text, title[1])
+    return label, destination_text, None, _after_line(text, destination_line_end)
+
+
+def scan_label(text: str, pos: int) -&gt; int | None:
+    &quot;&quot;&quot;Return the index just past the closing `]` of a link label at `pos`, or None.
+
+    The label is 1 to 999 characters between its brackets, holds no unescaped bracket, and has at
+    least one non-whitespace character.
+    &quot;&quot;&quot;
+    if text[pos : pos + 1] != &quot;[&quot;:
+        return None
+    index = pos + 1
+    while index &lt; len(text):
+        char = text[index]
+        if char == &quot;\\&quot; and _is_escapable(text, index):
+            index += 2
+            continue
+        if char == &quot;[&quot;:
+            return None
+        if char == &quot;]&quot;:
+            inner = text[pos + 1 : index]
+            if not 1 &lt;= len(inner) &lt;= MAX_LABEL_LENGTH or not inner.strip():
+                return None
+            return index + 1
+        index += 1
+    return None
+
+
+def parse_destination(text: str, pos: int) -&gt; tuple[str, int] | None:
+    &quot;&quot;&quot;Return the decoded destination and the index just past it, or None.&quot;&quot;&quot;
+    if text[pos : pos + 1] == &quot;&lt;&quot;:
+        return _parse_angle_destination(text, pos)
+    return _parse_plain_destination(text, pos)
+
+
+def _parse_angle_destination(text: str, pos: int) -&gt; tuple[str, int] | None:
+    &quot;&quot;&quot;A destination in angle brackets: no line ending, and no unescaped `&lt;` or `&gt;` inside.&quot;&quot;&quot;
+    index = pos + 1
+    while index &lt; len(text):
+        char = text[index]
+        if char == &quot;\\&quot; and _is_escapable(text, index):
+            index += 2
+            continue
+        if char in &quot;&lt;\n&quot;:
+            return None
+        if char == &quot;&gt;&quot;:
+            return unescape_and_decode(text[pos + 1 : index]), index + 1
+        index += 1
+    return None
+
+
+def _parse_plain_destination(text: str, pos: int) -&gt; tuple[str, int] | None:
+    &quot;&quot;&quot;A nonempty destination with no space or control character and balanced parentheses.&quot;&quot;&quot;
+    index = pos
+    depth = 0
+    while index &lt; len(text):
+        char = text[index]
+        if char == &quot;\\&quot; and _is_escapable(text, index):
+            index += 2
+            continue
+        if char == &quot;(&quot;:
+            depth += 1
+        elif char == &quot;)&quot;:
+            if depth == 0:
+                break
+            depth -= 1
+        elif char == &quot; &quot; or _is_ascii_control(char):
+            break
+        index += 1
+    if index == pos or depth != 0:
+        return None
+    return unescape_and_decode(text[pos:index]), index
+
+
+def parse_title(text: str, pos: int) -&gt; tuple[str, int] | None:
+    &quot;&quot;&quot;A title in double quotes, single quotes or parentheses. Return (decoded title, index past it).&quot;&quot;&quot;
+    opener = text[pos]
+    closer = TITLE_CLOSERS[opener]
+    index = pos + 1
+    while index &lt; len(text):
+        char = text[index]
+        if char == &quot;\\&quot; and _is_escapable(text, index):
+            index += 2
+            continue
+        if char == closer:
+            return unescape_and_decode(text[pos + 1 : index]), index + 1
+        if opener == &quot;(&quot; and char == &quot;(&quot;:
+            return None
+        index += 1
+    return None
+
+
+def _is_escapable(text: str, index: int) -&gt; bool:
+    &quot;&quot;&quot;True when the backslash at `index` escapes the character after it.&quot;&quot;&quot;
+    return index + 1 &lt; len(text) and text[index + 1] in ASCII_PUNCTUATION
+
+
+def _is_title_opener(text: str, pos: int) -&gt; bool:
+    return text[pos : pos + 1] in TITLE_CLOSERS
+
+
+def _is_ascii_control(char: str) -&gt; bool:
+    return char &lt; &quot; &quot; or char == &quot;\x7f&quot;
+
+
+def _is_blank(segment: str) -&gt; bool:
+    return segment.strip(&quot; \t&quot;) == &quot;&quot;
+
+
+def _skip_spaces(text: str, pos: int) -&gt; int:
+    &quot;&quot;&quot;Index of the first character at or after `pos` that is not a space or tab.&quot;&quot;&quot;
+    while pos &lt; len(text) and text[pos] in &quot; \t&quot;:
+        pos += 1
+    return pos
+
+
+def skip_whitespace_with_line_ending(text: str, pos: int) -&gt; int:
+    &quot;&quot;&quot;Skip spaces and tabs, then at most one line ending, then spaces and tabs.&quot;&quot;&quot;
+    pos = _skip_spaces(text, pos)
+    if text[pos : pos + 1] == &quot;\n&quot;:
+        pos = _skip_spaces(text, pos + 1)
+    return pos
+
+
+def _line_end(text: str, pos: int) -&gt; int:
+    &quot;&quot;&quot;Index of the line ending at or after `pos`, or the end of the text.&quot;&quot;&quot;
+    end = text.find(&quot;\n&quot;, pos)
+    return len(text) if end == -1 else end
+
+
+def _after_line(text: str, pos: int) -&gt; int:
+    &quot;&quot;&quot;Index just past the line ending at or after `pos`, or the end of the text.&quot;&quot;&quot;
+    end = _line_end(text, pos)
+    return min(end + 1, len(text))
+
+
+def _rest_of_line_is_blank(text: str, pos: int) -&gt; bool:
+    return _is_blank(text[pos : _line_end(text, pos)])
+</pre></article>
+</main>
+</body>
+</html>

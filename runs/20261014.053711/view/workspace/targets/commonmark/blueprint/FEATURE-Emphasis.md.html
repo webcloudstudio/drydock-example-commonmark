@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Emphasis.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Emphasis.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Emphasis.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Emphasis</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>Implement the delimiter stack, flanking rules and the Appendix process-emphasis algorithm for emphasis and strong emphasis.</td></tr><tr><td>Depends On</td><td>FEATURE-Entities.md</td></tr><tr><td>Provides</td><td>delimiter stack, process_emphasis procedure</td></tr><tr><td>Consumes</td><td>inline scanner loop</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement the Emphasis and strong emphasis section of the spec using the Appendix algorithm directly.</p>
+<h2>Delimiter stack</h2>
+<ul><li>On a run of <code>*</code> or <code>_</code>, insert a text node holding the run and push a stack entry with: delimiter type, run length, original length, active flag, and <code>can_open</code> and <code>can_close</code>.</li><li>The stack also accepts <code>[</code> and <code>![</code> entries so the links story reuses it.</li><li>Flanking: a run is left-flanking when it is not followed by Unicode whitespace and either is not followed by punctuation, or is followed by punctuation and preceded by whitespace or punctuation. Right-flanking is the mirror. Line start and end count as whitespace. Punctuation means Unicode categories <code>P*</code> and <code>S*</code> via <code>unicodedata</code>.</li><li>For <code>*</code>: <code>can_open</code> is left-flanking and <code>can_close</code> is right-flanking. For <code>_</code>: <code>can_open</code> is left-flanking and (not right-flanking or preceded by punctuation); <code>can_close</code> is right-flanking and (not left-flanking or followed by punctuation).</li></ul>
+<h2>process_emphasis(stack_bottom)</h2>
+<ul><li>Maintain <code>openers_bottom</code> per delimiter type, indexed by closer length mod 3 and whether the closer can also open.</li><li>Find the first potential closer, then search back for a valid opener: same type, can open, and the multiple-of-3 rule satisfied (if either can both open and close, the sum of original lengths must not be a multiple of 3 unless both are).</li><li>If found, use strong when both runs have length of at least 2, otherwise regular. Wrap the nodes between opener and closer, remove delimiters between them, and consume 1 or 2 characters from each side, removing empty entries.</li><li>If not found, lower <code>openers_bottom</code>, drop the closer if it cannot open, and advance.</li><li>At the end remove everything above <code>stack_bottom</code>. Leftover delimiters stay as literal text.</li></ul>
+<h2>Reads</h2>
+<ul><li>Inline text of paragraphs and headings.</li></ul>
+<h2>Writes</h2>
+<ul><li>Emphasis and strong nodes in the inline tree.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>The corpus section includes links in rule 9 and rule 17 examples, so it is gated in the images story. The checks here are bounded and structural.</p>
+<p>=== AC emphasis-star-and-underscore ===<br>Intent: Single star and single underscore wrap supplied words in one em element each.</p>
+<p>import subprocess</p>
+<p>word = &quot;wordy&quot; for mark in (&quot;*&quot;, &quot;_&quot;): result = subprocess.run([&quot;./commonmark&quot;], input=mark + word + mark + &quot;\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;em&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;strong&gt;&quot;) == 0 assert word in result.stdout === END AC emphasis-star-and-underscore ===</p>
+<p>=== AC emphasis-strong ===<br>Intent: Doubled delimiters produce one strong element.</p>
+<p>import subprocess</p>
+<p>word = &quot;wordy&quot; for mark in (&quot;**&quot;, &quot;__&quot;): result = subprocess.run([&quot;./commonmark&quot;], input=mark + word + mark + &quot;\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;strong&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;em&gt;&quot;) == 0 === END AC emphasis-strong ===</p>
+<p>=== AC emphasis-intraword-rules ===<br>Intent: Intraword emphasis works with star but not with underscore.</p>
+<p>import subprocess</p>
+<p>star = subprocess.run([&quot;./commonmark&quot;], input=&quot;foo*bar*baz\n&quot;, capture_output=True, text=True) under = subprocess.run([&quot;./commonmark&quot;], input=&quot;foo_bar_baz\n&quot;, capture_output=True, text=True) print(star.stdout) print(under.stdout) assert star.returncode == 0 assert under.returncode == 0 assert star.stdout.count(&quot;&lt;em&gt;&quot;) == 1 assert under.stdout.count(&quot;&lt;em&gt;&quot;) == 0 === END AC emphasis-intraword-rules ===</p>
+<p>=== AC emphasis-flanking-whitespace ===<br>Intent: A delimiter run followed or preceded by whitespace does not form emphasis.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;a * foo bar*\n\nfoo bar *\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;em&gt;&quot;) == 0 === END AC emphasis-flanking-whitespace ===</p>
+<p>=== AC emphasis-nesting ===<br>Intent: Triple delimiters give one em containing one strong, and nested forms keep both elements.</p>
+<p>import subprocess</p>
+<p>triple = subprocess.run([&quot;./commonmark&quot;], input=&quot;<strong><em>word</strong></em>\n&quot;, capture_output=True, text=True) nested = subprocess.run([&quot;./commonmark&quot;], input=&quot;<em>a <strong>b</strong> c</em>\n&quot;, capture_output=True, text=True) print(triple.stdout) print(nested.stdout) assert triple.returncode == 0 assert nested.returncode == 0 assert triple.stdout.count(&quot;&lt;em&gt;&quot;) == 1 assert triple.stdout.count(&quot;&lt;strong&gt;&quot;) == 1 assert nested.stdout.count(&quot;&lt;em&gt;&quot;) == 1 assert nested.stdout.count(&quot;&lt;strong&gt;&quot;) == 1 === END AC emphasis-nesting ===</p>
+<p>=== AC emphasis-code-span-binds-tighter ===<br>Intent: A star inside a code span cannot close emphasis.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;*foo<code>*</code>\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;em&gt;&quot;) == 0 assert result.stdout.count(&quot;&lt;code&gt;&quot;) == 1 === END AC emphasis-code-span-binds-tighter ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Follow the Appendix algorithm; do not reinvent the emphasis rules or use backtracking.</li><li>Never form empty emphasis.</li><li>Do not skip, filter or reinterpret corpus examples.</li></ul></article>
+</main>
+</body>
+</html>

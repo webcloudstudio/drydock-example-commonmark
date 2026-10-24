@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_block_quotes.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_block_quotes.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_block_quotes.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Block quote tests: the eight declared checks from FEATURE-Block-Quotes.md, then block-tree, cursor
+and exact-output tests for marker handling, lazy continuation and the blank-line rule.
+
+The declared checks are transcribed first, with their assertions unchanged. The rest act on the
+block tree returned by `parse_lines` and on the exact stdout bytes, which is the state handed back.
+&quot;&quot;&quot;
+
+import subprocess
+from pathlib import Path
+
+from mdparser.blocks import BLOCK_QUOTE, DEFAULT_REGISTRY, PARAGRAPH, Block, Cursor, parse_lines
+
+
+def run_commonmark(project_root: Path, source: str) -&gt; subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=source,
+        capture_output=True,
+        text=True,
+        cwd=project_root,
+        check=False,
+    )
+
+
+def kinds(block: Block) -&gt; list[str]:
+    &quot;&quot;&quot;Names of the child block types of `block`, in order.&quot;&quot;&quot;
+    return [child.kind.name for child in block.children]
+
+
+def paragraph_texts(block: Block) -&gt; list[str]:
+    &quot;&quot;&quot;Raw content of every paragraph under `block`, in document order.&quot;&quot;&quot;
+    texts: list[str] = []
+    for child in block.children:
+        if child.kind is PARAGRAPH:
+            texts.append(child.content)
+        texts.extend(paragraph_texts(child))
+    return texts
+
+
+# --- Declared acceptance checks (transcribed from FEATURE-Block-Quotes.md) ---
+
+
+def test_quote_basic_content(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;&gt; # Foo\n&gt; bar\n&gt; baz\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;h1&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+
+
+def test_quote_marker_space_optional(project_root: Path) -&gt; None:
+    for source in (&quot;&gt;# Foo\n&gt;bar\n&quot;, &quot;   &gt; # Foo\n   &gt; bar\n&quot;):
+        result = run_commonmark(project_root, source)
+        assert result.returncode == 0
+        assert result.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 1
+        assert result.stdout.count(&quot;&lt;h1&gt;&quot;) == 1
+
+
+def test_quote_lazy_continuation(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;&gt; bar\nbaz\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+
+
+def test_quote_nested_lazy(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;&gt; &gt; &gt; foo\nbar\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 3
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+
+
+def test_quote_blank_line_separates(project_root: Path) -&gt; None:
+    separated = run_commonmark(project_root, &quot;&gt; foo\n\n&gt; bar\n&quot;)
+    joined = run_commonmark(project_root, &quot;&gt; foo\n&gt; bar\n&quot;)
+    assert separated.returncode == 0
+    assert joined.returncode == 0
+    assert separated.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 2
+    assert joined.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 1
+
+
+def test_quote_interrupts_paragraph(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;foo\n&gt; bar\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 2
+
+
+def test_quote_four_spaces_is_code(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;    &gt; foo\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 0
+    assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1
+
+
+def test_quote_no_lazy_code(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;&gt;     foo\n    bar\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 2
+
+
+# --- Exact output through the executable ---
+
+
+def test_single_quote_output_is_exact(project_root: Path) -&gt; None:
+    assert run_commonmark(project_root, &quot;&gt; foo\n&quot;).stdout == &quot;&lt;blockquote&gt;\n&lt;p&gt;foo&lt;/p&gt;\n&lt;/blockquote&gt;\n&quot;
+
+
+def test_empty_quote_marker_only_output_is_exact(project_root: Path) -&gt; None:
+    assert run_commonmark(project_root, &quot;&gt;\n&quot;).stdout == &quot;&lt;blockquote&gt;\n&lt;/blockquote&gt;\n&quot;
+
+
+def test_empty_input_renders_nothing(project_root: Path) -&gt; None:
+    assert run_commonmark(project_root, &quot;&quot;).stdout == &quot;&quot;
+
+
+def test_nested_quotes_output_is_exact(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;&gt; &gt; foo\n&quot;)
+    assert result.stdout == &quot;&lt;blockquote&gt;\n&lt;blockquote&gt;\n&lt;p&gt;foo&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;/blockquote&gt;\n&quot;
+
+
+def test_marker_only_line_keeps_one_quote_and_splits_paragraphs(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;&gt; foo\n&gt;\n&gt; bar\n&quot;)
+    assert result.stdout == &quot;&lt;blockquote&gt;\n&lt;p&gt;foo&lt;/p&gt;\n&lt;p&gt;bar&lt;/p&gt;\n&lt;/blockquote&gt;\n&quot;
+
+
+def test_blank_line_ends_quote_and_following_text_is_a_paragraph(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;&gt; foo\n\nbar\n&quot;)
+    assert result.stdout == &quot;&lt;blockquote&gt;\n&lt;p&gt;foo&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;bar&lt;/p&gt;\n&quot;
+
+
+def test_quote_with_leading_indent_of_three_spaces_output_is_exact(project_root: Path) -&gt; None:
+    assert run_commonmark(project_root, &quot;   &gt; foo\n&quot;).stdout == &quot;&lt;blockquote&gt;\n&lt;p&gt;foo&lt;/p&gt;\n&lt;/blockquote&gt;\n&quot;
+
+
+def test_quote_marker_with_tab_output_is_exact(project_root: Path) -&gt; None:
+    # The tab after the marker is one column of the optional space; its other three columns are text
+    # indentation that the paragraph strips.
+    assert run_commonmark(project_root, &quot;&gt;\tfoo\n&quot;).stdout == &quot;&lt;blockquote&gt;\n&lt;p&gt;foo&lt;/p&gt;\n&lt;/blockquote&gt;\n&quot;
+
+
+def test_quote_partly_consumed_tab_leaves_columns_as_code_indentation(project_root: Path) -&gt; None:
+    # `&gt;` and one column of the first tab form the marker. The rest of the first tab and the second tab
+    # give six columns of indentation; the code rule takes four, leaving two spaces.
+    assert run_commonmark(project_root, &quot;&gt;\t\tfoo\n&quot;).stdout == (
+        &quot;&lt;blockquote&gt;\n&lt;pre&gt;&lt;code&gt;  foo\n&lt;/code&gt;&lt;/pre&gt;\n&lt;/blockquote&gt;\n&quot;
+    )
+
+
+def test_quote_content_after_no_optional_space_keeps_text(project_root: Path) -&gt; None:
+    assert run_commonmark(project_root, &quot;&gt;foo\n&quot;).stdout == &quot;&lt;blockquote&gt;\n&lt;p&gt;foo&lt;/p&gt;\n&lt;/blockquote&gt;\n&quot;
+
+
+# --- Block tree ---
+
+
+def test_marker_creates_a_block_quote_holding_its_paragraph() -&gt; None:
+    root = parse_lines([&quot;&gt; foo&quot;])
+    assert kinds(root) == [&quot;block_quote&quot;]
+    assert kinds(root.children[0]) == [&quot;paragraph&quot;]
+    assert paragraph_texts(root) == [&quot;foo&quot;]
+
+
+def test_default_registry_includes_block_quote() -&gt; None:
+    assert BLOCK_QUOTE in DEFAULT_REGISTRY.starts()
+
+
+def test_two_marked_lines_form_one_quote() -&gt; None:
+    root = parse_lines([&quot;&gt; foo&quot;, &quot;&gt; bar&quot;])
+    assert kinds(root) == [&quot;block_quote&quot;]
+    assert paragraph_texts(root) == [&quot;foo\nbar&quot;]
+
+
+def test_blank_line_closes_the_quote_before_the_next_marked_line() -&gt; None:
+    root = parse_lines([&quot;&gt; foo&quot;, &quot;&quot;, &quot;&gt; bar&quot;])
+    assert kinds(root) == [&quot;block_quote&quot;, &quot;block_quote&quot;]
+    assert [paragraph_texts(child) for child in root.children] == [[&quot;foo&quot;], [&quot;bar&quot;]]
+
+
+def test_quote_closes_at_end_of_input_and_is_finalized() -&gt; None:
+    root = parse_lines([&quot;&gt; foo&quot;])
+    assert root.children[0].is_open is False
+
+
+def test_quote_may_be_entered_from_a_paragraph_without_a_blank_line() -&gt; None:
+    root = parse_lines([&quot;foo&quot;, &quot;&gt; bar&quot;])
+    assert kinds(root) == [&quot;paragraph&quot;, &quot;block_quote&quot;]
+    assert paragraph_texts(root) == [&quot;foo&quot;, &quot;bar&quot;]
+
+
+def test_text_after_a_blank_line_is_not_part_of_the_quote_paragraph() -&gt; None:
+    root = parse_lines([&quot;&gt; foo&quot;, &quot;&quot;, &quot;bar&quot;])
+    assert kinds(root) == [&quot;block_quote&quot;, &quot;paragraph&quot;]
+    assert paragraph_texts(root.children[0]) == [&quot;foo&quot;]
+    assert paragraph_texts(root) == [&quot;foo&quot;, &quot;bar&quot;]
+
+
+def test_nested_quote_nests_in_the_tree() -&gt; None:
+    root = parse_lines([&quot;&gt; &gt; &gt; foo&quot;])
+    depth = 0
+    node = root
+    while node.children and node.children[0].kind is BLOCK_QUOTE:
+        node = node.children[0]
+        depth += 1
+    assert depth == 3
+    assert kinds(node) == [&quot;paragraph&quot;]
+
+
+def test_empty_quote_has_no_children() -&gt; None:
+    root = parse_lines([&quot;&gt;&quot;])
+    assert kinds(root) == [&quot;block_quote&quot;]
+    assert root.children[0].children == []
+
+
+# --- Lazy continuation: only paragraph text may continue a quote without a marker ---
+
+
+def test_lazy_line_joins_the_paragraph_inside_a_nested_quote() -&gt; None:
+    root = parse_lines([&quot;&gt; &gt; foo&quot;, &quot;&gt; bar&quot;])
+    assert kinds(root) == [&quot;block_quote&quot;]
+    assert kinds(root.children[0]) == [&quot;block_quote&quot;]
+    assert paragraph_texts(root) == [&quot;foo\nbar&quot;]
+
+
+def test_heading_does_not_continue_a_quote_lazily() -&gt; None:
+    root = parse_lines([&quot;&gt; foo&quot;, &quot;# bar&quot;])
+    assert kinds(root) == [&quot;block_quote&quot;, &quot;atx_heading&quot;]
+
+
+def test_thematic_break_does_not_continue_a_quote_lazily() -&gt; None:
+    root = parse_lines([&quot;&gt; foo&quot;, &quot;***&quot;])
+    assert kinds(root) == [&quot;block_quote&quot;, &quot;thematic_break&quot;]
+
+
+def test_fence_does_not_continue_a_quote_lazily() -&gt; None:
+    root = parse_lines([&quot;&gt; foo&quot;, &quot;```&quot;, &quot;bar&quot;])
+    assert kinds(root) == [&quot;block_quote&quot;, &quot;fenced_code&quot;]
+    assert paragraph_texts(root) == [&quot;foo&quot;]
+
+
+def test_indented_code_does_not_continue_a_quote_lazily() -&gt; None:
+    root = parse_lines([&quot;&gt; foo&quot;, &quot;    bar&quot;])
+    assert kinds(root) == [&quot;block_quote&quot;]
+    assert paragraph_texts(root) == [&quot;foo\nbar&quot;]
+
+
+def test_type_seven_html_does_not_interrupt_a_lazy_paragraph() -&gt; None:
+    root = parse_lines([&quot;&gt; foo&quot;, &#x27;&lt;a href=&quot;x&quot;&gt;&#x27;])
+    assert kinds(root) == [&quot;block_quote&quot;]
+    assert paragraph_texts(root) == [&#x27;foo\n&lt;a href=&quot;x&quot;&gt;&#x27;]
+
+
+def test_type_six_html_interrupts_a_quote_paragraph() -&gt; None:
+    root = parse_lines([&quot;&gt; foo&quot;, &quot;&lt;div&gt;&quot;])
+    assert kinds(root) == [&quot;block_quote&quot;, &quot;html_block&quot;]
+
+
+def test_lazy_continuation_follows_the_deepest_open_paragraph() -&gt; None:
+    root = parse_lines([&quot;&gt; &gt; foo&quot;, &quot;bar&quot;, &quot;baz&quot;])
+    assert kinds(root) == [&quot;block_quote&quot;]
+    assert paragraph_texts(root) == [&quot;foo\nbar\nbaz&quot;]
+
+
+def test_lazy_line_after_a_closed_inner_block_is_not_lazy() -&gt; None:
+    root = parse_lines([&quot;&gt; # foo&quot;, &quot;bar&quot;])
+    assert kinds(root) == [&quot;block_quote&quot;, &quot;paragraph&quot;]
+
+
+# --- Cursor: column-aware consumption of a tab that is only partly taken ---
+
+
+def test_consume_columns_splits_a_straddling_tab() -&gt; None:
+    cursor = Cursor(&quot;\tx&quot;)
+    cursor.consume_columns(2)
+    assert cursor.pos == 0
+    assert cursor.col == 2
+    assert cursor.rest == &quot;  x&quot;
+
+
+def test_consume_columns_finishes_a_split_tab_on_the_next_consumption() -&gt; None:
+    cursor = Cursor(&quot;\tx&quot;)
+    cursor.consume_columns(2)
+    cursor.consume_columns(2)
+    assert cursor.pos == 1
+    assert cursor.col == 4
+    assert cursor.rest == &quot;x&quot;
+
+
+def test_consume_columns_takes_a_whole_tab_that_fits() -&gt; None:
+    cursor = Cursor(&quot;\tx&quot;)
+    cursor.consume_columns(4)
+    assert cursor.pos == 1
+    assert cursor.rest == &quot;x&quot;
+
+
+def test_consume_columns_takes_plain_spaces_one_column_each() -&gt; None:
+    cursor = Cursor(&quot;   x&quot;)
+    cursor.consume_columns(2)
+    assert cursor.rest == &quot; x&quot;
+
+
+def test_consume_columns_stops_at_text() -&gt; None:
+    cursor = Cursor(&quot;a  b&quot;)
+    cursor.consume_columns(3)
+    assert cursor.pos == 0
+    assert cursor.rest == &quot;a  b&quot;
+
+
+def test_advance_to_past_a_split_tab_clears_the_split() -&gt; None:
+    cursor = Cursor(&quot;\tx&quot;)
+    cursor.consume_columns(2)
+    cursor.advance_to(1)
+    assert cursor.rest == &quot;x&quot;
+    assert cursor.in_tab is False
+
+
+def test_split_tab_reports_its_remaining_columns_as_indent() -&gt; None:
+    cursor = Cursor(&quot;\tx&quot;)
+    cursor.consume_columns(2)
+    assert cursor.indent == 2
+</pre></article>
+</main>
+</body>
+</html>

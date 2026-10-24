@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_thematic_breaks.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_thematic_breaks.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_thematic_breaks.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Thematic break tests: the four declared checks from FEATURE-Thematic-Breaks.md, then block-tree
+and exact-output tests through the `commonmark` executable.
+
+The declared checks are transcribed first, with their assertions unchanged. The rest act on the
+block tree returned by `parse_lines` and on the exact stdout bytes, which is the state handed back.
+&quot;&quot;&quot;
+
+import subprocess
+from pathlib import Path
+
+import pytest
+
+from mdparser.blocks import PARAGRAPH, THEMATIC_BREAK, parse_lines
+
+
+def run_commonmark(project_root: Path, source: str) -&gt; subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=source,
+        capture_output=True,
+        text=True,
+        cwd=project_root,
+        check=False,
+    )
+
+
+def kinds(lines: list[str]) -&gt; list[str]:
+    &quot;&quot;&quot;Names of the top-level block types that `lines` produce, in order.&quot;&quot;&quot;
+    return [child.kind.name for child in parse_lines(lines).children]
+
+
+# --- Declared acceptance checks (transcribed from FEATURE-Thematic-Breaks.md) ---
+
+
+def test_thematic_three_markers(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Lines of three or more matching marker characters each render one hr element.&quot;&quot;&quot;
+    lines = [&quot;***&quot;, &quot;---&quot;, &quot;___&quot;, &quot;_____________&quot;, &quot; - - -&quot;, &quot; **  * ** * ** * **&quot;]
+    source = &quot;\n\n&quot;.join(lines) + &quot;\n&quot;
+    result = run_commonmark(project_root, source)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;hr /&gt;&quot;) == len(lines)
+
+
+def test_thematic_not_a_break(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Wrong characters, too few characters, mixed characters and trailing text do not produce hr elements.&quot;&quot;&quot;
+    source = &quot;+++\n\n--\n\n_ _ _ _ a\n\na------\n\n *-*\n&quot;
+    result = run_commonmark(project_root, source)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;hr /&gt;&quot;) == 0
+
+
+def test_thematic_interrupts_paragraph(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A thematic break directly after paragraph text splits it into two paragraphs around one hr.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot;Foo\n***\nbar\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;hr /&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 2
+
+
+def test_thematic_trailing_whitespace(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Trailing spaces and tabs after the marker characters are allowed.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot;- - - -    \t\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;hr /&gt;&quot;) == 1
+
+
+# --- Block tree: start rule boundaries ---
+
+
+@pytest.mark.parametrize(&quot;marker&quot;, [&quot;*&quot;, &quot;-&quot;, &quot;_&quot;])
+def test_three_matching_markers_form_a_break(marker: str) -&gt; None:
+    assert kinds([marker * 3]) == [&quot;thematic_break&quot;]
+
+
+@pytest.mark.parametrize(&quot;marker&quot;, [&quot;*&quot;, &quot;-&quot;, &quot;_&quot;])
+def test_two_markers_do_not_form_a_break(marker: str) -&gt; None:
+    assert kinds([marker * 2]) == [&quot;paragraph&quot;]
+
+
+@pytest.mark.parametrize(&quot;marker&quot;, [&quot;*&quot;, &quot;-&quot;, &quot;_&quot;])
+def test_long_run_of_markers_forms_a_break(marker: str) -&gt; None:
+    assert kinds([marker * 40]) == [&quot;thematic_break&quot;]
+
+
+@pytest.mark.parametrize(&quot;indent&quot;, [1, 2, 3])
+def test_up_to_three_spaces_of_indentation_form_a_break(indent: int) -&gt; None:
+    assert kinds([&quot; &quot; * indent + &quot;***&quot;]) == [&quot;thematic_break&quot;]
+
+
+def test_four_spaces_of_indentation_is_not_a_break() -&gt; None:
+    assert kinds([&quot;    ***&quot;]) == [&quot;indented_code&quot;]
+
+
+def test_one_tab_of_indentation_is_not_a_break() -&gt; None:
+    assert kinds([&quot;\t***&quot;]) == [&quot;indented_code&quot;]
+
+
+def test_spaces_and_tabs_between_markers_are_allowed() -&gt; None:
+    assert kinds([&quot;*\t \t*\t*&quot;]) == [&quot;thematic_break&quot;]
+
+
+def test_mixed_marker_characters_are_not_a_break() -&gt; None:
+    assert kinds([&quot;*-*&quot;]) == [&quot;paragraph&quot;]
+
+
+def test_trailing_text_is_not_a_break() -&gt; None:
+    assert kinds([&quot;***a&quot;]) == [&quot;paragraph&quot;]
+
+
+def test_leading_text_is_not_a_break() -&gt; None:
+    assert kinds([&quot;a***&quot;]) == [&quot;paragraph&quot;]
+
+
+def test_unsupported_marker_character_is_not_a_break() -&gt; None:
+    assert kinds([&quot;+++&quot;]) == [&quot;paragraph&quot;]
+
+
+def test_marker_run_with_trailing_space_is_a_break() -&gt; None:
+    assert kinds([&quot;***   &quot;]) == [&quot;thematic_break&quot;]
+
+
+def test_blank_line_is_not_a_break() -&gt; None:
+    assert kinds([&quot;   &quot;]) == []
+
+
+# --- Block tree: interaction with paragraphs and neighbours ---
+
+
+def test_break_directly_after_paragraph_closes_the_paragraph() -&gt; None:
+    assert kinds([&quot;Foo&quot;, &quot;***&quot;]) == [&quot;paragraph&quot;, &quot;thematic_break&quot;]
+
+
+def test_paragraph_resumes_after_break_without_blank_line() -&gt; None:
+    assert kinds([&quot;Foo&quot;, &quot;***&quot;, &quot;bar&quot;]) == [&quot;paragraph&quot;, &quot;thematic_break&quot;, &quot;paragraph&quot;]
+
+
+def test_consecutive_breaks_are_separate_blocks() -&gt; None:
+    assert kinds([&quot;***&quot;, &quot;***&quot;, &quot;***&quot;]) == [&quot;thematic_break&quot;] * 3
+
+
+def test_break_followed_by_blank_line_stays_one_block() -&gt; None:
+    assert kinds([&quot;***&quot;, &quot;&quot;]) == [&quot;thematic_break&quot;]
+
+
+def test_break_block_holds_no_children_or_lines() -&gt; None:
+    (block,) = parse_lines([&quot;***&quot;]).children
+    assert block.kind is THEMATIC_BREAK
+    assert block.children == []
+    assert block.content == &quot;&quot;
+
+
+def test_break_line_keeps_no_line_text() -&gt; None:
+    (block,) = parse_lines([&quot;- - -   &quot;]).children
+    assert block.kind is THEMATIC_BREAK
+    assert block.lines == []
+
+
+def test_indented_marker_run_after_paragraph_is_paragraph_text() -&gt; None:
+    assert kinds([&quot;Foo&quot;, &quot;    ***&quot;]) == [&quot;paragraph&quot;]
+
+
+# --- Exact output through the executable ---
+
+
+def test_break_renders_as_hr_exactly(project_root: Path) -&gt; None:
+    assert run_commonmark(project_root, &quot;***\n&quot;).stdout == &quot;&lt;hr /&gt;\n&quot;
+
+
+def test_break_between_paragraphs_renders_exactly(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;Foo\n***\nbar\n&quot;)
+    assert result.stdout == &quot;&lt;p&gt;Foo&lt;/p&gt;\n&lt;hr /&gt;\n&lt;p&gt;bar&lt;/p&gt;\n&quot;
+
+
+def test_consecutive_breaks_render_exactly(project_root: Path) -&gt; None:
+    assert run_commonmark(project_root, &quot;***\n\n---\n&quot;).stdout == &quot;&lt;hr /&gt;\n&lt;hr /&gt;\n&quot;
+
+
+def test_trailing_whitespace_break_renders_exactly(project_root: Path) -&gt; None:
+    assert run_commonmark(project_root, &quot;- - - -    \t\n&quot;).stdout == &quot;&lt;hr /&gt;\n&quot;
+
+
+def test_non_break_renders_as_code_block_exactly(project_root: Path) -&gt; None:
+    assert run_commonmark(project_root, &quot;    ***\n&quot;).stdout == &quot;&lt;pre&gt;&lt;code&gt;***\n&lt;/code&gt;&lt;/pre&gt;\n&quot;
+
+
+def test_paragraph_kind_is_unchanged_by_break_registration() -&gt; None:
+    assert kinds([&quot;plain text&quot;]) == [PARAGRAPH.name]
+</pre></article>
+</main>
+</body>
+</html>

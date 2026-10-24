@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261014.080449.725Z_commonmark_build_claude.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261014.080449.725Z_commonmark_build_claude.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261014.080449.725Z_commonmark_build_claude.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>The build directory already has a container-based engine (block quotes, fences, setext). I&#x27;ll add list items as a container block, group runs of items into lists at render time, and track blank-line state for tight/loose rendering. Starting with the block engine.Now the registration and the per-line blank tracking in the engine.Now the renderer: group runs of items into lists, and render tight items without `&lt;p&gt;`.Quick smoke run against the declared inputs and a few spec-shaped cases before writing tests:Every declared input and edge case renders as the spec expects. Now the registry assertion in the existing block tests needs the new start rule, so I&#x27;ll look at it before editing.Now the test file: the seven declared checks transcribed unchanged, then block-tree and exact-output tests.Two fixes before running: I left redundant inner `import subprocess` lines in the transcribed checks, and one test expects two blank lines to end an item with content. The spec only limits blank lines at the *start* of an item, so that expectation is wrong. Fixing both.Both failures are in my test helper usage, not the parser: `paragraph_texts` walks a block&#x27;s children, so passing a paragraph itself returns nothing. Reading the paragraph&#x27;s content directly is the correct check.Now the full non-suite test run. Several existing test files invoke `spec_tests.py` with section patterns; per the step contract I won&#x27;t run those, so I&#x27;ll find exactly which test functions do and deselect them.1103 passed, 1 skipped (the skip is pre-existing in `test_foundation.py`), and the 4 deselected tests are the staged-suite invocations I held back. Checking the working tree for stray files:RESULT: SUCCESS
+
+FILES CHANGED:
+- mdparser/blocks.py
+- mdparser/render.py
+- tests/test_blocks.py
+- tests/test_list_items.py
+
+SUMMARY:
+List items are parsed as a container block (`LIST_ITEM`) and rendered as `&lt;ul&gt;`/`&lt;ol&gt;` with `&lt;li&gt;` children. All seven declared checks (`items-*`) pass, and their assertions are unchanged in `tests/test_list_items.py`.
+
+- **Markers:** `-`, `+`, `*`, and 1–9 digit ordered markers with `.` or `)`. A marker must end the line or be followed by a space or tab. Up to three columns of indentation are allowed.
+- **Content column:** marker width plus 1–4 spaces. Five or more spaces make the content an indented code block, and a blank start uses marker width plus 1. The column is stored as an absolute column, so nested items work.
+- **Continuation:** lines must reach the content column. Blank lines continue an item with content, but a blank line after an empty item ends it.
+- **Interruption:** an empty item or a non-1 ordered item cannot interrupt a paragraph. Thematic break is registered first, so `* * *` is never an item.
+- **Laziness:** handled by the existing engine&#x27;s lazy paragraph rule.
+- **Start numbers:** `&lt;ol start=&quot;N&quot;&gt;` is emitted only when N ≠ 1.
+- **Tight/loose:** the engine records whether each block ended with a blank line, following the reference algorithm. Tight items render without `&lt;p&gt;`.
+
+Decisions beyond the feature&#x27;s stated scope:
+- The spec&#x27;s Purpose says grouping and tight/loose rendering belong to the lists story. The declared checks require `&lt;ul&gt;` counts and `&lt;p&gt;` counts, so I implemented grouping (runs of items with the same marker kind and delimiter) and tightness at render time. The lists story can extend this rather than redo it.
+- An existing registry test in `tests/test_blocks.py` asserted the exact start-rule tuple. I added `LIST_ITEM` to it, as the setext step did.
+
+Verification:
+- `.venv/bin/python -m pytest -q` with the four staged-suite invocations deselected: 1103 passed, 1 skipped. The skip is pre-existing in `test_foundation.py`.
+- Deselected, not run: `test_autolinks_corpus_section_passes_in_full`, `test_codespans_corpus_sections_pass_in_full`, `test_images_corpus_sections`, `test_breaks_corpus_sections`. These call `spec_tests.py` with section patterns from earlier steps. I did not run them because this step&#x27;s criteria don&#x27;t invoke the staged suite. Lists can appear in those sections, so their gates should be checked in the step that owns them.
+- I did not run `sources/full_test.sh` or `spec_tests.py`.
+- Nothing was committed or staged.
+
+&lt;blueprint-decisions&gt;
+[{&quot;spec&quot;:&quot;FEATURE-List-Items.md&quot;,&quot;severity&quot;:&quot;Material&quot;,&quot;subject&quot;:&quot;List grouping and tight/loose rendering implemented in this step&quot;,&quot;decision&quot;:&quot;The spec&#x27;s Purpose assigns grouping items into lists and tight/loose rendering to the lists story. The declared acceptance checks require one &lt;ul&gt; for consecutive same-marker items, an &lt;ol start&gt; attribute, and &lt;p&gt; counts that depend on tightness, so I implemented a minimal version at render time: runs of items sharing a marker kind and delimiter form one list, and a list is loose when a blank line separates items or blocks inside an item (commonmark.js algorithm). Is that acceptable, or should this move to the lists story on replan?&quot;},{&quot;spec&quot;:&quot;FEATURE-List-Items.md&quot;,&quot;severity&quot;:&quot;Low&quot;,&quot;subject&quot;:&quot;Interruption decided by the matched container, not the lazy-paragraph flag&quot;,&quot;decision&quot;:&quot;A list item&#x27;s interruption rules (no empty start, ordered start must be 1) apply when the matched container is a paragraph, not when the line is merely a lazy continuation. This matches the reference algorithm, so &#x27;&gt; foo&#x27; followed by &#x27;- bar&#x27; at top level yields a list. Acceptable?&quot;}]
+&lt;/blueprint-decisions&gt;</pre></article>
+</main>
+</body>
+</html>

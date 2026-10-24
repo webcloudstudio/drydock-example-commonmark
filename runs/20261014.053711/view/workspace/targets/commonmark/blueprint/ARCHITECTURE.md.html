@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/ARCHITECTURE.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/ARCHITECTURE.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/ARCHITECTURE.md">Raw file</a></div></header>
+<article class="doc"><h1>ARCHITECTURE: CommonMark Parser</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>Two-phase CommonMark 0.31.2 parser delivered as the stdin-to-stdout executable commonmark, with its module layout and technical decisions.</td></tr><tr><td>Depends On</td><td>None</td></tr><tr><td>Provides</td><td>mdparser package, mdparser.blocks, mdparser.inlines, mdparser.refs, mdparser.entities, mdparser.render, mdparser.cli</td></tr><tr><td>Consumes</td><td>None</td></tr></tbody></table></div>
+<h2>Overview</h2>
+<p>The product is a single-process CLI. <code>./commonmark</code> reads UTF-8 Markdown from stdin and writes HTML to stdout. It is implemented in the Python package <code>mdparser</code> and follows the spec Appendix &quot;A parsing strategy&quot; directly.</p>
+<ul><li><strong>Phase 1, block structure.</strong> Lines are consumed one at a time. Each line is matched against the open blocks, then new block starts are looked for, then remaining text is added to the deepest open block. Link reference definitions are extracted when a paragraph closes and stored in one document-wide reference map.</li><li><strong>Phase 2, inline structure.</strong> The finished tree is walked. The raw text of paragraphs and headings is parsed into inlines with the delimiter-stack algorithms (look for link or image, process emphasis), using the reference map.</li><li><strong>Rendering.</strong> A renderer turns the tree into HTML. The conformance runner compares normalized HTML, so tag structure, entities and URL percent-encoding must match the spec examples.</li></ul>
+<h2>Technology Stack</h2>
+<p>Derived from <code>TECHNOLOGY_STACK.md</code>, which remains the decision of record.</p>
+<div class="scroll"><table><thead><tr><th>Technology</th><th>Where it applies</th></tr></thead><tbody><tr><td>Python 3</td><td>Implementation language for the whole package and the <code>commonmark</code> script.</td></tr><tr><td>Python standard library</td><td>The only runtime dependency set: <code>re</code>, <code>unicodedata</code>, <code>html.entities</code>, <code>sys</code>.</td></tr><tr><td>POSIX shell</td><td>The supplied <code>sources/full_test.sh</code> scoring entry point; it is staged, never authored.</td></tr></tbody></table></div>
+<p>The Foundation Contract is: source root <code>./</code>, environment <code>.venv</code> created by <code>uv venv</code>, dependencies in <code>pyproject.toml</code> with a committed <code>uv.lock</code>, and <code>pytest -q</code> as the test command. The executable must also run under plain <code>python3</code> with no environment activated, because the supplied harness runs <code>./commonmark</code> directly.</p>
+<h2>Modules</h2>
+<div class="scroll"><table><thead><tr><th>Module</th><th>Responsibility</th></tr></thead><tbody><tr><td><code>commonmark</code> (root script)</td><td>Shebang entry point; puts its own directory on <code>sys.path</code> and calls <code>mdparser.cli.main</code>.</td></tr><tr><td><code>mdparser.cli</code></td><td>Byte intake, UTF-8 decoding with replacement, line-ending normalization, U+0000 replacement, output writing.</td></tr><tr><td><code>mdparser.blocks</code></td><td>Block tree, block-type registry (start, continue, close rules), per-line procedure, lazy continuation.</td></tr><tr><td><code>mdparser.refs</code></td><td>Reference map, link reference definition extraction, <code>normalize_label</code>.</td></tr><tr><td><code>mdparser.inlines</code></td><td>Inline scanner, delimiter stack, <code>process_emphasis</code>, look-for-link-or-image.</td></tr><tr><td><code>mdparser.entities</code></td><td>Entity and numeric character reference decoding, backslash unescape helper.</td></tr><tr><td><code>mdparser.render</code></td><td>HTML rendering, HTML escaping, URL percent-encoding.</td></tr></tbody></table></div>
+<h2>Technical Decisions</h2>
+<ul><li>Named entities come from the standard library table <code>html.entities.html5</code>; only names ending in a semicolon are recognized.</li><li>Label matching uses <code>str.casefold()</code> plus whitespace collapse.</li><li>Unicode punctuation for flanking rules is classified with <code>unicodedata</code> general categories <code>P*</code> and <code>S*</code>.</li><li>Soft line breaks render as a line ending.</li><li>No public Markdown implementation is used or imported.</li><li>Exit status is 0 for every input. Invalid UTF-8 is decoded with U+FFFD replacement. Diagnostics go to stderr only.</li></ul>
+<h2>Persistence, Configuration and Boundaries</h2>
+<div class="scroll"><table><thead><tr><th>Boundary</th><th>Owner module</th><th>Allowed low-level APIs</th></tr></thead><tbody><tr><td>Persistence</td><td>None. The product is stateless.</td><td>None</td></tr><tr><td>Configuration</td><td>None. No arguments or environment are required.</td><td>None</td></tr><tr><td>File store</td><td>None.</td><td>None</td></tr><tr><td>External services</td><td>None.</td><td>None</td></tr><tr><td>Process I/O</td><td><code>mdparser.cli</code></td><td><code>sys.stdin.buffer</code>, <code>sys.stdout.buffer</code>, <code>sys.stderr</code></td></tr></tbody></table></div>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC foundation-package-imports ===<br>Intent: The mdparser package and each reserved module import cleanly using only the standard library.</p>
+<p>import importlib import os import sys</p>
+<p>sys.path.insert(0, os.getcwd())</p>
+<p>importlib.import_module(&quot;mdparser&quot;) for name in [&quot;blocks&quot;, &quot;inlines&quot;, &quot;refs&quot;, &quot;entities&quot;, &quot;render&quot;, &quot;cli&quot;]: full = &quot;mdparser.&quot; + name module = importlib.import_module(full) assert module.<strong>name</strong> == full === END AC foundation-package-imports ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Never use or import a public Markdown implementation.</li><li>Never add a third-party runtime dependency.</li><li>Never write to <code>sources/full_test.sh</code>, <code>sources/spec_tests.py</code>, <code>sources/cmark.py</code>, <code>sources/normalize.py</code>, or <code>sources/spec.txt</code>.</li><li>Nothing but rendered HTML is ever written to stdout.</li></ul></article>
+</main>
+</body>
+</html>

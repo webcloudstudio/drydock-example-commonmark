@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_render.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_render.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_render.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Renderer and inline hook tests: HTML escaping, URL percent-encoding, the phase 2 walk, and
+the inline parser hook. Each test compares a returned string with its exact expected value.&quot;&quot;&quot;
+
+import pytest
+
+from mdparser import blocks, inlines, render
+from mdparser.blocks import DOCUMENT, PARAGRAPH, Block, BlockRegistry, BlockType
+
+
+def upper_hook(raw: str) -&gt; str:
+    return raw.upper()
+
+
+def render_source(lines: list[str], hook=inlines.parse_inline) -&gt; str:
+    return render.render_document(blocks.parse_lines(lines), hook)
+
+
+# --- HTML escaping ---
+
+
+@pytest.mark.parametrize(
+    (&quot;text&quot;, &quot;expected&quot;),
+    [
+        (&quot;&amp;&quot;, &quot;&amp;amp;&quot;),
+        (&quot;&lt;&quot;, &quot;&amp;lt;&quot;),
+        (&quot;&gt;&quot;, &quot;&amp;gt;&quot;),
+        (&#x27;&quot;&#x27;, &quot;&amp;quot;&quot;),
+        (&quot;&#x27;&quot;, &quot;&#x27;&quot;),
+        (&quot;plain&quot;, &quot;plain&quot;),
+        (&quot;&quot;, &quot;&quot;),
+    ],
+)
+def test_escape_html_maps_each_special_character(text: str, expected: str) -&gt; None:
+    assert render.escape_html(text) == expected
+
+
+def test_escape_html_does_not_escape_an_ampersand_twice() -&gt; None:
+    assert render.escape_html(&quot;&lt;&amp;&gt;&quot;) == &quot;&amp;lt;&amp;amp;&amp;gt;&quot;
+
+
+def test_escape_html_leaves_existing_entity_text_as_an_escaped_ampersand() -&gt; None:
+    assert render.escape_html(&quot;&amp;amp;&quot;) == &quot;&amp;amp;amp;&quot;
+
+
+# --- URL percent-encoding ---
+
+
+@pytest.mark.parametrize(
+    (&quot;url&quot;, &quot;expected&quot;),
+    [
+        (&quot;&quot;, &quot;&quot;),
+        (&quot;abc&quot;, &quot;abc&quot;),
+        (&quot;a b&quot;, &quot;a%20b&quot;),
+        (&quot;é&quot;, &quot;%C3%A9&quot;),
+        (&quot;😀&quot;, &quot;%F0%9F%98%80&quot;),
+        (&quot;%20&quot;, &quot;%20&quot;),
+        (&quot;%zz&quot;, &quot;%25zz&quot;),
+        (&quot;%&quot;, &quot;%25&quot;),
+        (&quot;a\&quot;b&quot;, &quot;a%22b&quot;),
+        (&quot;[x]&quot;, &quot;%5Bx%5D&quot;),
+        (&quot;http://e.com/a?b=c&amp;d=#e&quot;, &quot;http://e.com/a?b=c&amp;d=#e&quot;),
+        (&quot;a\\b&quot;, &quot;a%5Cb&quot;),
+    ],
+)
+def test_percent_encode_url_encodes_only_what_must_be_encoded(url: str, expected: str) -&gt; None:
+    assert render.percent_encode_url(url) == expected
+
+
+def test_percent_encode_url_is_idempotent() -&gt; None:
+    once = render.percent_encode_url(&quot;a b é%zz&quot;)
+    assert render.percent_encode_url(once) == once
+
+
+# --- Phase 2 walk and paragraph rendering ---
+
+
+def test_empty_document_renders_nothing() -&gt; None:
+    assert render.render_document(Block(DOCUMENT), upper_hook) == &quot;&quot;
+
+
+def test_one_paragraph_renders_as_one_p_element_with_a_line_ending() -&gt; None:
+    assert render_source([&quot;alpha&quot;]) == &quot;&lt;p&gt;alpha&lt;/p&gt;\n&quot;
+
+
+def test_each_paragraph_renders_with_its_own_line_ending() -&gt; None:
+    assert render_source([&quot;alpha&quot;, &quot;&quot;, &quot;beta&quot;]) == &quot;&lt;p&gt;alpha&lt;/p&gt;\n&lt;p&gt;beta&lt;/p&gt;\n&quot;
+
+
+def test_paragraph_content_is_escaped_by_the_default_hook() -&gt; None:
+    assert render_source([&quot;x &lt; y &gt; z &amp; w&quot;]) == &quot;&lt;p&gt;x &amp;lt; y &amp;gt; z &amp;amp; w&lt;/p&gt;\n&quot;
+
+
+def test_phase_two_calls_the_hook_with_each_paragraphs_raw_content() -&gt; None:
+    calls: list[str] = []
+
+    def recording_hook(raw: str) -&gt; str:
+        calls.append(raw)
+        return raw
+
+    render_source([&quot;one&quot;, &quot;two&quot;, &quot;&quot;, &quot;three&quot;], recording_hook)
+    assert calls == [&quot;one\ntwo&quot;, &quot;three&quot;]
+
+
+def test_phase_two_places_the_hook_output_inside_the_paragraph() -&gt; None:
+    assert render_source([&quot;abc&quot;], upper_hook) == &quot;&lt;p&gt;ABC&lt;/p&gt;\n&quot;
+
+
+def test_block_without_a_renderer_is_rejected() -&gt; None:
+    registry = BlockRegistry(root=DOCUMENT, fallback=PARAGRAPH)
+    unknown = BlockType(&quot;unknown&quot;, continues=lambda block, cursor: False, is_container=False)
+    registry.register(unknown)
+    root = Block(DOCUMENT)
+    root.children.append(Block(unknown))
+    with pytest.raises(ValueError):
+        render.render_document(root, upper_hook)
+
+
+# --- Inline parser hook ---
+
+
+def test_inline_hook_escapes_special_characters() -&gt; None:
+    # `&lt;b&gt;` is a raw HTML open tag, so it passes through; the `&amp;` and `&quot;` are still escaped.
+    assert inlines.parse_inline(&quot;a&lt;b&gt;&amp;\&quot;c\&quot;&quot;) == &quot;a&lt;b&gt;&amp;amp;&amp;quot;c&amp;quot;&quot;
+
+
+def test_inline_hook_returns_empty_text_for_empty_content() -&gt; None:
+    assert inlines.parse_inline(&quot;&quot;) == &quot;&quot;
+
+
+def test_inline_hook_keeps_ordinary_text_unchanged() -&gt; None:
+    assert inlines.parse_inline(&quot;plain words, 123&quot;) == &quot;plain words, 123&quot;
+</pre></article>
+</main>
+</body>
+</html>

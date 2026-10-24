@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_foundation.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_foundation.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_foundation.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Foundation tests: project tree, package skeleton, and the stdlib-only dependency contract.&quot;&quot;&quot;
+
+import importlib
+import os
+import shutil
+import subprocess
+import sys
+import tomllib
+from pathlib import Path
+
+import pytest
+
+RESERVED_MODULES = [&quot;blocks&quot;, &quot;inlines&quot;, &quot;refs&quot;, &quot;entities&quot;, &quot;render&quot;, &quot;cli&quot;]
+# `cli` gained its entry point in the executable block; `blocks`, `render` and `inlines` gained
+# behavior in the block-engine build; `entities` gained the backslash unescape helper in the
+# backslash-escapes build; `refs` gained the reference map and label normalization in the
+# link-reference-definitions build. No reserved module remains behavior-free.
+NO_BEHAVIOR_MODULES: list[str] = []
+
+
+def test_foundation_package_imports(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Acceptance: the mdparser package and each reserved module import cleanly.&quot;&quot;&quot;
+    sys.path.insert(0, str(project_root))
+
+    importlib.import_module(&quot;mdparser&quot;)
+    for name in RESERVED_MODULES:
+        full = &quot;mdparser.&quot; + name
+        module = importlib.import_module(full)
+        assert module.__name__ == full
+
+
+@pytest.mark.parametrize(&quot;name&quot;, RESERVED_MODULES)
+def test_reserved_module_has_documented_responsibility(name: str) -&gt; None:
+    module = importlib.import_module(&quot;mdparser.&quot; + name)
+    assert module.__doc__ and module.__doc__.strip()
+
+
+@pytest.mark.parametrize(&quot;name&quot;, NO_BEHAVIOR_MODULES)
+def test_reserved_module_has_no_behavior_yet(name: str) -&gt; None:
+    module = importlib.import_module(&quot;mdparser.&quot; + name)
+    public = [attr for attr in vars(module) if not attr.startswith(&quot;_&quot;)]
+    assert public == []
+
+
+def test_package_is_named_mdparser_not_commonmark() -&gt; None:
+    package = importlib.import_module(&quot;mdparser&quot;)
+    assert package.__name__ == &quot;mdparser&quot;
+    with pytest.raises(ModuleNotFoundError):
+        importlib.import_module(&quot;commonmark&quot;)
+
+
+def test_package_declares_no_runtime_dependencies(project_root: Path) -&gt; None:
+    data = tomllib.loads((project_root / &quot;pyproject.toml&quot;).read_text(encoding=&quot;utf-8&quot;))
+    assert data[&quot;project&quot;][&quot;dependencies&quot;] == []
+
+
+def test_package_declares_supported_python(project_root: Path) -&gt; None:
+    data = tomllib.loads((project_root / &quot;pyproject.toml&quot;).read_text(encoding=&quot;utf-8&quot;))
+    assert data[&quot;project&quot;][&quot;requires-python&quot;] == &quot;&gt;=3.11&quot;
+
+
+def test_dev_group_provides_pytest(project_root: Path) -&gt; None:
+    data = tomllib.loads((project_root / &quot;pyproject.toml&quot;).read_text(encoding=&quot;utf-8&quot;))
+    assert any(req.startswith(&quot;pytest&quot;) for req in data[&quot;dependency-groups&quot;][&quot;dev&quot;])
+
+
+def test_lockfile_is_committed_on_disk(project_root: Path) -&gt; None:
+    assert (project_root / &quot;uv.lock&quot;).is_file()
+
+
+def test_test_launcher_is_executable(project_root: Path) -&gt; None:
+    launcher = project_root / &quot;bin&quot; / &quot;test.sh&quot;
+    assert launcher.is_file()
+    assert os.access(launcher, os.X_OK)
+
+
+def test_package_imports_under_plain_python3_without_venv(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;The package must import under plain python3 with no virtual environment activated.&quot;&quot;&quot;
+    python = shutil.which(&quot;python3&quot;)
+    assert python is not None
+    env = {key: value for key, value in os.environ.items() if key != &quot;VIRTUAL_ENV&quot;}
+    env[&quot;PYTHONDONTWRITEBYTECODE&quot;] = &quot;1&quot;
+    result = subprocess.run(
+        [python, &quot;-c&quot;, &quot;import mdparser.cli, mdparser.render, mdparser.inlines&quot;],
+        cwd=project_root,
+        env=env,
+        capture_output=True,
+        check=False,
+    )
+    assert result.returncode == 0
+</pre></article>
+</main>
+</body>
+</html>

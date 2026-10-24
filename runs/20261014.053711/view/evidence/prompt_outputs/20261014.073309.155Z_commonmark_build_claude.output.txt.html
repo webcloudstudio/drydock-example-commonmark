@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261014.073309.155Z_commonmark_build_claude.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261014.073309.155Z_commonmark_build_claude.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261014.073309.155Z_commonmark_build_claude.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>I&#x27;ll start by inspecting the build directory and the existing sources.The earlier blocks are already in place. Next I&#x27;ll read the block engine, since HTML blocks have to plug into it.The block engine has clean hooks for this: start rules, a continue rule, and an add-line rule, all of which fenced code already uses. Next I&#x27;ll check the cli, an existing test file for style, and the exact tag-name list in the staged spec.The spec section defines the exact tag list and the type 7 grammar, so I&#x27;ll read it directly rather than working from memory.The registry test at `tests/test_blocks.py:225` asserts the exact start-rule tuple, so registering a new type will need that expectation updated. I&#x27;ll also check whether the inline raw-HTML grammar is already defined, so I can reuse it rather than duplicate it.I have what I need for the design. Before editing, I&#x27;ll record a baseline of the existing test suite so I can tell any regressions I cause from failures that were already there.The baseline run is slow, probably because some tests spawn the conformance runner. I&#x27;ll wait for it to finish before editing anything, so the edits don&#x27;t contaminate the baseline.Baseline is 876 passed, 1 skipped. Now I&#x27;ll implement. First, the block-tree state on `Block`, which mirrors the existing `fence` attribute.Next, the HTML block section itself: the seven start and end conditions, the type 7 paragraph restriction, and the three rules.Two things to fix in what I just wrote: `blocks.py` doesn&#x27;t import `re` yet, and the type aliases should be defined before the helpers that use them. I&#x27;ll correct both.Now the renderer. HTML block content is emitted verbatim, with no escaping and no extra newline, because the content already ends in one.The existing registry test pins the exact start-rule tuple, so it needs the new type added. This is a structural expectation, not one of the declared acceptance checks, so I&#x27;m updating it to match the registry.Before writing the test file, I&#x27;ll smoke-test the declared acceptance inputs and a few edge cases directly against the executable.Every smoke result matches the spec behaviour: type 1 ignores blank lines, type 6 stops at a blank line, type 7 can&#x27;t interrupt a paragraph, and the first-line end conditions produce single-line blocks. Now I&#x27;ll write the test file, transcribing the seven declared checks unchanged and adding finer block-tree and exact-output tests beside them.Before running anything, I re-derived the expectations by hand and found three mistakes in what I wrote. A type 1 block never closes without `&lt;/pre&gt;`, so the blank-line case should yield only `html_block`. A single-line `&lt;!DOCTYPE html&gt;` closes on its own line, so the following `*a*` is a paragraph. And one test name is misleading. I&#x27;ll correct those before running.Now I&#x27;ll run the new test file together with the two registry-adjacent files. This doesn&#x27;t touch the conformance runner.Two failures, and I checked both against the spec. The first is a real bug: type 7 requires trailing spaces and tabs to be allowed after the tag, and my tag regex didn&#x27;t include them. The second is a wrong test: `&lt;span&gt;é&lt;/span&gt;` is not a block start (`span` is not a type 6 name, and text follows the tag), so rendering it as a paragraph is correct. I&#x27;ll fix the regex and change the test to use a `&lt;div&gt;` line.Now I&#x27;ll re-run the targeted files. Then I need a regression check across the rest of the project&#x27;s unit tests. Some existing tests invoke the conformance runner on scoped sections, so I&#x27;ll first find which files do that, to keep the regression run from triggering them unnecessarily.The targeted files pass (241). For a regression check I&#x27;ll run the project&#x27;s full declared test command. The four corpus-invoking files only run scoped sections, not the unscoped conformance run, so they&#x27;re part of the normal suite, and the baseline already included them. This takes about two and a half minutes, so I&#x27;ll run it in the background.While that runs, I&#x27;ll review the diff read-only. I won&#x27;t edit any source until the run finishes.The diff reads cleanly: the new code mirrors the fenced-code pattern, the type 7 restriction lives in the start rule, and the renderer passes content through untouched. I&#x27;ll check on the full run.The full project suite passes: 948 passed, 1 skipped, against a baseline of 876 passed, 1 skipped. The 72 new tests are the seven declared checks plus the finer coverage. I&#x27;ll confirm the set of files I actually changed.HTML block parsing is implemented, and the full project test suite passes. The conformance runner (`sources/spec_tests.py`) was not run, because no acceptance criterion in this step invokes it. The spec gates the corpus examples in the later cont-tabs-slice story.
+
+**What changed**
+- `mdparser/blocks.py`: the seven HTML block start and end conditions, the type 6 tag list, and the type 7 complete-tag grammar. Types 1 to 5 close on their end line, and types 6 and 7 close before a blank line. Type 7 is refused while a paragraph is open. Lines are kept raw, with their original indentation.
+- `mdparser/render.py`: HTML block content is emitted unchanged, with no escaping.
+- `tests/test_html_blocks.py` (new): the seven declared checks, transcribed with their assertions unchanged, plus about 65 finer tests on start and end conditions, paragraph interruption, single-line blocks, raw indentation, and exact stdout.
+- `tests/test_blocks.py`: the registry test pins the exact start-rule tuple, so I added `HTML_BLOCK` to it. That is a structural expectation, not a declared check.
+
+**Verification**
+- Baseline before my edits: 876 passed, 1 skipped.
+- After my edits: 948 passed, 1 skipped. All seven declared checks pass.
+
+**Choices I made**
+- For types 1 to 5, the end test runs against the whole line, including the start. So `&lt;!--&gt;` closes on its own line, following the spec&#x27;s literal &quot;line contains `--&gt;`&quot;.
+- Type 7 is blocked from starting inside a paragraph by checking whether the container accepts lines, the same way the indented-code rule does.
+
+RESULT: SUCCESS
+
+FILES CHANGED:
+- mdparser/blocks.py
+- mdparser/render.py
+- tests/test_blocks.py
+- tests/test_html_blocks.py
+
+SUMMARY:
+Implemented the seven HTML block types in the block engine as a new `html_block` leaf type, registered after fenced code. Type 7 cannot interrupt a paragraph. Rendering emits the raw lines unchanged. Added `tests/test_html_blocks.py` with the seven declared checks transcribed unchanged and finer block-tree and exact-output tests. Updated the registry expectation in `tests/test_blocks.py`. Full project pytest: 948 passed, 1 skipped (baseline 876 passed, 1 skipped). Conformance runner not invoked in this step.
+
+&lt;blueprint-decisions&gt;
+[{&quot;spec&quot;:&quot;FEATURE-HTML-Blocks.md&quot;,&quot;severity&quot;:&quot;Low&quot;,&quot;subject&quot;:&quot;End-condition check on the start line for types 1 to 5&quot;,&quot;decision&quot;:&quot;The end test runs on the whole start line, so `&lt;!--&gt;` closes immediately because it literally contains `--&gt;`. The spec wording &#x27;line contains&#x27; supports this. Acceptable, or should the search begin after the opening marker?&quot;}]
+&lt;/blueprint-decisions&gt;</pre></article>
+</main>
+</body>
+</html>

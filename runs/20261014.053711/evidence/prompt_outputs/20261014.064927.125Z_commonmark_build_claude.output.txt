@@ -1,0 +1,25 @@
+The inline scanner in `mdparser/inlines.py` has no line-break handling yet, and paragraph text keeps its interior newlines and trailing spaces. I'll add the break branches to the scan loop, then write the tests.Scoped corpus gate passes (5 passed, 0 failed). Next I'll match the existing test style for the acceptance checks and the finer tests.Baseline is green (612 passed, 1 skipped). Now the tests file, with the six declared acceptance checks transcribed as written and finer tests that compare exact returned or emitted HTML.Two failures, both from my tests calling `parse_inline` directly on input the block layer normally cleans up first. The first is a real gap: the spec says leading spaces on the next line are dropped as part of the break rule, so the inline scanner should not depend on the block layer for that. I'll fix that in the scanner. The second is a test-level mistake: trailing-space stripping belongs to paragraph finalization, so I'll test it through the executable instead. (The file change notice was my own `sed` rename.)All 37 new tests and the related existing suites pass. Now I'll run the full project suite, the scoped gate with its real exit status, and confirm no staged assets changed.The line-break and text story is built. The scoped conformance gate passes, and the full project test suite is green at 649 passed, 1 skipped.
+
+Hard breaks, soft breaks, and plain text now work in `mdparser/inlines.py`. A line ending preceded by two or more spaces or a backslash renders `<br />` plus a line ending. Any other line ending is a soft break, with spaces before it dropped. Breaks are inert inside code spans and raw HTML tags, and at the end of a block they do nothing.
+
+- **Gate:** `^Soft line breaks$|^Textual content$` gives 5 passed, 0 failed, exit 0. The unfiltered `sources/full_test.sh` was not run, since this step does not declare it.
+- **Tests:** `tests/test_line_breaks.py` has 37 tests. The six declared acceptance checks are transcribed as written, and the rest compare exact HTML from the inline parser and the executable.
+- **Staged assets:** untouched.
+
+Choices I made that you may want to redirect:
+- The inline scanner drops the spaces that begin the next line itself, rather than relying only on the block layer. This is what the spec's break rule says.
+- Trailing spaces at the end of a paragraph are still dropped by the block layer, not by the inline parser.
+- In image alt text, a break becomes a plain line ending, which matches how the spec's reference renderer handles it.
+
+RESULT: SUCCESS
+
+FILES CHANGED:
+- mdparser/inlines.py
+- tests/test_line_breaks.py
+
+SUMMARY:
+Added hard-break, soft-break and plain-text handling to the inline scanner, with helpers `_hard_break`, `_soft_break`, `_skip_spaces` and `_line_ending_after_spaces`. Added `tests/test_line_breaks.py` with the six declared acceptance checks plus finer tests. Scoped corpus gate `^Soft line breaks$|^Textual content$`: 5 passed, 0 failed, exit 0. Full pytest: 649 passed, 1 skipped.
+
+<blueprint-decisions>
+[{"spec":"FEATURE-Line-Breaks-Text.md","severity":"Low","subject":"Break text inside image alt","decision":"A hard or soft break inside an image description contributes a plain line ending to the alt attribute, so `![foo  \nbar](/u)` gives alt=\"foo\\nbar\". The spec does not say what alt should contain for a break. Is that acceptable?"}]
+</blueprint-decisions>

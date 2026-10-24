@@ -1,0 +1,614 @@
+{
+  "version": 1,
+  "import": {
+    "root": "/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/sources",
+    "format": "markdown"
+  },
+  "sources": {
+    "INSTRUCTIONS.md": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "4fd2a21",
+          "date": "2026-10-14",
+          "hash": "10b172786a92ad4dc012e88358cf96fcead95bcd919f2677df3a03405782fb0a",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "commonmark-executable",
+              "text": "The deliverable is an executable named `commonmark` at the application root.",
+              "stories": [
+                "executable-interface"
+              ]
+            },
+            {
+              "name": "stdin-stdout-interface",
+              "text": "The parser reads Markdown from standard input and writes HTML to standard output.",
+              "stories": [
+                "executable-interface"
+              ]
+            },
+            {
+              "name": "readme-stdio-interface",
+              "text": "Create a concise project `README.md` describing the standard-input/standard-output interface.",
+              "stories": [
+                "executable-interface"
+              ]
+            },
+            {
+              "name": "entry-point-succeeds",
+              "text": "Build `./commonmark` so that the supplied entry point succeeds",
+              "stories": [
+                "executable-interface",
+                "verify-conformance"
+              ]
+            },
+            {
+              "name": "two-phase-parsing",
+              "text": "CommonMark parsing is two phases: resolve **block structure** first, then run **inline parsing** over the block contents. Implement in that order.",
+              "stories": [
+                "block-engine",
+                "code-spans"
+              ]
+            },
+            {
+              "name": "follow-appendix-strategy",
+              "text": "The \"Appendix: A parsing strategy\" section describes the reference implementation's approach; follow it directly rather than reinventing the rules.",
+              "stories": [
+                "block-engine"
+              ]
+            },
+            {
+              "name": "block-paragraphs",
+              "text": "paragraphs",
+              "stories": [
+                "block-engine"
+              ]
+            },
+            {
+              "name": "block-thematic-breaks",
+              "text": "thematic breaks",
+              "stories": [
+                "thematic-breaks"
+              ]
+            },
+            {
+              "name": "block-atx-headings",
+              "text": "ATX headings",
+              "stories": [
+                "atx-headings"
+              ]
+            },
+            {
+              "name": "block-setext-headings",
+              "text": "setext headings",
+              "stories": [
+                "setext-headings"
+              ]
+            },
+            {
+              "name": "block-indented-code",
+              "text": "indented code",
+              "stories": [
+                "indented-code"
+              ]
+            },
+            {
+              "name": "block-fenced-code",
+              "text": "fenced code",
+              "stories": [
+                "fenced-code"
+              ]
+            },
+            {
+              "name": "block-html-blocks",
+              "text": "HTML blocks",
+              "stories": [
+                "html-blocks"
+              ]
+            },
+            {
+              "name": "block-link-reference-definitions",
+              "text": "link reference definitions",
+              "stories": [
+                "link-reference-definitions"
+              ]
+            },
+            {
+              "name": "block-quotes",
+              "text": "block quotes",
+              "stories": [
+                "block-quotes"
+              ]
+            },
+            {
+              "name": "list-structure",
+              "text": "lists are the hardest block construct, with lazy continuation, nesting, and tightness.",
+              "stories": [
+                "list-items",
+                "lists"
+              ]
+            },
+            {
+              "name": "inline-backslash-escapes",
+              "text": "backslash escapes",
+              "stories": [
+                "backslash-escapes"
+              ]
+            },
+            {
+              "name": "inline-entities",
+              "text": "entity and numeric references",
+              "stories": [
+                "entities"
+              ]
+            },
+            {
+              "name": "inline-code-spans",
+              "text": "code spans",
+              "stories": [
+                "code-spans"
+              ]
+            },
+            {
+              "name": "inline-emphasis",
+              "text": "emphasis and strong emphasis (the delimiter-run algorithm)",
+              "stories": [
+                "emphasis"
+              ]
+            },
+            {
+              "name": "inline-links-and-images",
+              "text": "links and images",
+              "stories": [
+                "links",
+                "images"
+              ]
+            },
+            {
+              "name": "inline-autolinks",
+              "text": "autolinks",
+              "stories": [
+                "autolinks"
+              ]
+            },
+            {
+              "name": "inline-raw-html",
+              "text": "raw HTML",
+              "stories": [
+                "raw-html-inline"
+              ]
+            },
+            {
+              "name": "inline-hard-breaks",
+              "text": "hard breaks",
+              "stories": [
+                "line-breaks-text"
+              ]
+            },
+            {
+              "name": "unfiltered-conformance-run",
+              "text": "It runs the complete, unfiltered supplied CommonMark suite against `./commonmark`.",
+              "stories": [
+                "verify-conformance"
+              ]
+            },
+            {
+              "name": "terminal-verification-story",
+              "text": "Create one terminal verification story that:",
+              "stories": [
+                "verify-conformance"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "cmark.py": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "4fd2a21",
+          "date": "2026-10-14",
+          "hash": "c5fb45e7c64fd7670b2a3c49a151e46f4af9d0ad3004bedb37ecf9cdc34d2f00",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "pipe-markdown-through-program",
+              "text": "def pipe_through_prog(prog, text):\n    p1 = Popen(prog.split(), stdout=PIPE, stdin=PIPE, stderr=PIPE)\n    [result, err] = p1.communicate(input=text.encode('utf-8'))\n    return [p1.returncode, result, err]",
+              "stories": [
+                "executable-interface"
+              ]
+            },
+            {
+              "name": "select-backend",
+              "text": "if prog:\n            self.to_html = lambda x: pipe_through_prog(prog, x)\n        else:",
+              "stories": []
+            },
+            {
+              "name": "locate-cmark-library",
+              "text": "sysname = platform.system()\n            if sysname == 'Darwin':\n                libname = \"libcmark.dylib\"\n            elif sysname == 'Windows':\n                libname = \"cmark.dll\"\n            else:\n                libname = \"libcmark.so\"\n            if library_dir:\n                libpath = os.path.join(library_dir, libname)\n            else:\n                libpath = os.path.join(\"build\", \"src\", libname)",
+              "stories": []
+            },
+            {
+              "name": "call-cmark-library",
+              "text": "def use_library(lib, text):\n    textbytes = text.encode('utf-8')\n    textlen = len(textbytes)\n    return [0, lib(textbytes, textlen, 0), '']",
+              "stories": []
+            }
+          ]
+        }
+      ]
+    },
+    "full_test.sh": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "4fd2a21",
+          "date": "2026-10-14",
+          "hash": "5b634a1c78117313283acceda8faad9de02b594e54949439c73697b058941a93",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "deliver-commonmark-executable",
+              "text": "The deliverable is an executable named commonmark that reads UTF-8 Markdown on stdin and writes HTML to stdout.",
+              "stories": [
+                "executable-interface"
+              ]
+            },
+            {
+              "name": "pass-full-conformance-suite",
+              "text": "The suite runs unfiltered: no --pattern, no --number, no selector of any kind. spec_tests.py exits with failed + errored, so exit 0 means the complete CommonMark 0.31.2 suite passed.",
+              "stories": [
+                "executable-interface",
+                "block-engine",
+                "autolinks",
+                "raw-html-inline",
+                "code-spans",
+                "backslash-escapes",
+                "entities",
+                "emphasis",
+                "link-reference-definitions",
+                "links",
+                "images",
+                "line-breaks-text",
+                "thematic-breaks",
+                "atx-headings",
+                "indented-code",
+                "fenced-code",
+                "html-blocks",
+                "block-quotes",
+                "setext-headings",
+                "list-items",
+                "lists",
+                "cont-tabs-slice",
+                "verify-conformance"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "normalize.py": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "4fd2a21",
+          "date": "2026-10-14",
+          "hash": "94a9dd253907e3dab7c02fc11e934f06112dcf0f3804255d09d732c8c7c4b5f4",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "collapse-inner-whitespace",
+              "text": "Multiple inner whitespaces are collapsed to a single space (except in pre tags).",
+              "stories": [
+                "verify-conformance"
+              ]
+            },
+            {
+              "name": "strip-block-tag-whitespace",
+              "text": "Whitespace surrounding block-level tags is removed.",
+              "stories": [
+                "verify-conformance"
+              ]
+            },
+            {
+              "name": "self-closing-to-open",
+              "text": "Self-closing tags are converted to open tags.",
+              "stories": [
+                "verify-conformance"
+              ]
+            },
+            {
+              "name": "sort-and-lowercase-attributes",
+              "text": "Attributes are sorted and lowercased.",
+              "stories": [
+                "verify-conformance"
+              ]
+            },
+            {
+              "name": "decode-references",
+              "text": "References are converted to unicode, except that '<', '>', '&', and '\"' are rendered using entities.",
+              "stories": [
+                "verify-conformance"
+              ]
+            },
+            {
+              "name": "return-unnormalized-on-error",
+              "text": "on error, return unnormalized HTML",
+              "stories": [
+                "verify-conformance"
+              ]
+            },
+            {
+              "name": "pass-cdata-verbatim",
+              "text": "passing CDATA chunks through verbatim.",
+              "stories": [
+                "verify-conformance"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "spec.txt": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "4fd2a21",
+          "date": "2026-10-14",
+          "hash": "43fad3e0ac5190a3b0bc6a41f7b1a853201a26ec2e6b74871f5d96239a8c34cf",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "block-structure-two-phase-parsing",
+              "text": "Parsing has two phases: in the first phase, lines of input are consumed and the block structure of the document is constructed. In the second phase, the raw text contents of paragraphs and headings are parsed into sequences of Markdown inline elements.",
+              "stories": [
+                "block-engine",
+                "foundation"
+              ]
+            },
+            {
+              "name": "thematic-breaks",
+              "text": "A line consisting of optionally up to three spaces of indentation, followed by a sequence of three or more matching `-`, `_`, or `*` characters, each followed optionally by any number of spaces or tabs, forms a thematic break.",
+              "stories": [
+                "thematic-breaks"
+              ]
+            },
+            {
+              "name": "atx-headings",
+              "text": "An ATX heading consists of a string of characters, parsed as inline content, between an opening sequence of 1--6 unescaped `#` characters and an optional closing sequence of any number of unescaped `#` characters.",
+              "stories": [
+                "atx-headings"
+              ]
+            },
+            {
+              "name": "setext-headings",
+              "text": "A setext heading consists of one or more lines of text, not interrupted by a blank line, of which the first line does not have more than 3 spaces of indentation, followed by a setext heading underline.",
+              "stories": [
+                "setext-headings"
+              ]
+            },
+            {
+              "name": "indented-code-blocks",
+              "text": "An indented code block is composed of one or more indented chunks separated by blank lines. An indented chunk is a sequence of non-blank lines, each preceded by four or more spaces of indentation.",
+              "stories": [
+                "indented-code"
+              ]
+            },
+            {
+              "name": "fenced-code-blocks",
+              "text": "A fenced code block begins with a code fence, preceded by up to three spaces of indentation. The line with the opening code fence may optionally contain some text following the code fence, called the info string.",
+              "stories": [
+                "fenced-code"
+              ]
+            },
+            {
+              "name": "html-blocks",
+              "text": "An HTML block is a group of lines that is treated as raw HTML (and will not be escaped in HTML output). There are seven kinds of HTML block, which can be defined by their start and end conditions.",
+              "stories": [
+                "html-blocks"
+              ]
+            },
+            {
+              "name": "link-reference-definitions",
+              "text": "A link reference definition consists of a link label, optionally preceded by up to three spaces of indentation, followed by a colon (`:`), optional spaces or tabs (including up to one line ending), a link destination, optional spaces or tabs (including up to one line ending), and an optional link title.",
+              "stories": [
+                "link-reference-definitions"
+              ]
+            },
+            {
+              "name": "paragraphs",
+              "text": "A sequence of non-blank lines that cannot be interpreted as other kinds of blocks forms a paragraph.",
+              "stories": [
+                "block-engine"
+              ]
+            },
+            {
+              "name": "block-quotes",
+              "text": "A block quote marker, optionally preceded by up to three spaces of indentation, consists of (a) the character `>` together with a following space of indentation, or (b) a single character `>` not followed by a space of indentation.",
+              "stories": [
+                "block-quotes"
+              ]
+            },
+            {
+              "name": "list-items",
+              "text": "A list marker is a bullet list marker or an ordered list marker. A bullet list marker is a `-`, `+`, or `*` character. An ordered list marker is a sequence of 1--9 arabic digits (`0-9`), followed by either a `.` character or a `)` character.",
+              "stories": [
+                "list-items"
+              ]
+            },
+            {
+              "name": "lists",
+              "text": "A list is a sequence of one or more list items of the same type. The list items may be separated by any number of blank lines.",
+              "stories": [
+                "lists"
+              ]
+            },
+            {
+              "name": "code-spans",
+              "text": "A code span begins with a backtick string and ends with a backtick string of equal length. The contents of the code span are the characters between these two backtick strings, normalized in the following ways: first, line endings are converted to spaces.",
+              "stories": [
+                "code-spans"
+              ]
+            },
+            {
+              "name": "emphasis-and-strong-emphasis",
+              "text": "Emphasis begins with a delimiter that can open emphasis and ends with a delimiter that can close emphasis, and that uses the same character (`_` or `*`) as the opening delimiter. Strong emphasis begins with a delimiter that can open strong emphasis and ends with a delimiter that can close strong emphasis.",
+              "stories": [
+                "emphasis"
+              ]
+            },
+            {
+              "name": "links-and-images",
+              "text": "A link contains link text (the visible text), a link destination (the URI that is the link destination), and optionally a link title. An image description has inline elements as its contents, and when an image is rendered to HTML, this is standardly used as the image's alt attribute.",
+              "stories": [
+                "links",
+                "images"
+              ]
+            },
+            {
+              "name": "autolinks",
+              "text": "Autolinks are absolute URIs and email addresses inside `<` and `>`. They are parsed as links, with the URL or email address as the link label.",
+              "stories": [
+                "autolinks"
+              ]
+            },
+            {
+              "name": "raw-html",
+              "text": "Text between `<` and `>` that looks like an HTML tag is parsed as a raw HTML tag and will be rendered in HTML without escaping.",
+              "stories": [
+                "raw-html-inline"
+              ]
+            },
+            {
+              "name": "backslash-escapes",
+              "text": "Any ASCII punctuation character may be backslash-escaped. Backslash escapes do not work in code blocks, code spans, autolinks, or raw HTML, but they work in all other contexts, including URLs and link titles, link references, and info strings in fenced code blocks.",
+              "stories": [
+                "backslash-escapes"
+              ]
+            },
+            {
+              "name": "entity-and-numeric-character-references",
+              "text": "Valid HTML entity references and numeric character references can be used in place of the corresponding Unicode character. Decimal numeric character references consist of `&#` + a string of 1--7 arabic digits + `;`. Hexadecimal numeric character references consist of `&#` + either `X` or `x` + a string of 1-6 hexadecimal digits + `;`.",
+              "stories": [
+                "entities"
+              ]
+            },
+            {
+              "name": "hard-line-breaks",
+              "text": "A line ending (not in a code span or HTML tag) that is preceded by two or more spaces and does not occur at the end of a block is parsed as a hard line break (rendered in HTML as a `<br />` tag).",
+              "stories": [
+                "line-breaks-text"
+              ]
+            },
+            {
+              "name": "soft-line-breaks",
+              "text": "A regular line ending (not in a code span or HTML tag) that is not preceded by two or more spaces or a backslash is parsed as a softbreak.",
+              "stories": [
+                "line-breaks-text"
+              ]
+            },
+            {
+              "name": "textual-content",
+              "text": "Any characters not given an interpretation by the above rules will be parsed as plain textual content.",
+              "stories": [
+                "line-breaks-text"
+              ]
+            },
+            {
+              "name": "tab-handling",
+              "text": "Tabs in lines are not expanded to spaces. However, in contexts where spaces help to define block structure, tabs behave as if they were replaced by spaces with a tab stop of 4 characters.",
+              "stories": [
+                "cont-tabs-slice"
+              ]
+            },
+            {
+              "name": "conformance-suite",
+              "text": "A conforming implementation must produce the HTML the spec examples require; the spec examples double as conformance tests run by `spec_tests.py` against a program.",
+              "stories": [
+                "verify-conformance"
+              ]
+            },
+            {
+              "name": "executable-program",
+              "text": "The spec tests are run against a program: `python test/spec_tests.py --spec spec.txt --program PROGRAM`.",
+              "stories": [
+                "executable-interface"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "spec_tests.py": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "4fd2a21",
+          "date": "2026-10-14",
+          "hash": "9db1ea4a3ee79c5ec74eebc09c5985eb252427e8d9d19ef45e5cc3f2ae410855",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "run-conformance-suite",
+              "text": "Run cmark tests.",
+              "stories": [
+                "verify-conformance"
+              ]
+            },
+            {
+              "name": "report-result-counts",
+              "text": "{pass} passed, {fail} failed, {error} errored, {skip} skipped",
+              "stories": [
+                "verify-conformance"
+              ]
+            },
+            {
+              "name": "filter-by-section-pattern",
+              "text": "limit to sections matching regex pattern",
+              "stories": []
+            },
+            {
+              "name": "filter-by-example-number",
+              "text": "only consider the test with the given number",
+              "stories": []
+            },
+            {
+              "name": "normalize-html-before-compare",
+              "text": "do not normalize HTML",
+              "stories": []
+            },
+            {
+              "name": "dump-tests-json",
+              "text": "dump tests in JSON format",
+              "stories": []
+            },
+            {
+              "name": "track-changed-results",
+              "text": "track which test cases pass/fail in the given JSON file and only report changes",
+              "stories": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

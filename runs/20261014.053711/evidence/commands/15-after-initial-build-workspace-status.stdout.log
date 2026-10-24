@@ -1,0 +1,16 @@
+Drydock 0.2.0  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Drydock status — workspace
+
+Target: commonmark
+   Phase:     Loop
+   State:     24 closed/implemented
+   Detail:    8 imported · 24 authored · metadata built
+   Analysis:  Ready · 23 stories · 0 questions · 0 blockers
+   Plan:      24 closed/implemented
+   Next Step: drydock refit commonmark BOTH <Scope> <Change>
+   10-14:     ✅  drydock build status commonmark
+   10-14:     ✅  drydock build commonmark --override --repair-attempts 6
+   10-14:     ✅  drydock build status commonmark
+   10-14:     ✅  drydock plan verify commonmark
+   10-14:     ✅  drydock plan commonmark --override
+

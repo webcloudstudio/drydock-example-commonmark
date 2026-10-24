@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Thematic-Breaks.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Thematic-Breaks.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Thematic-Breaks.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Thematic Breaks</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>Parse thematic breaks of three or more matching -, _ or * characters and render them as hr elements.</td></tr><tr><td>Depends On</td><td>FEATURE-Line-Breaks-Text.md</td></tr><tr><td>Provides</td><td>thematic break block</td></tr><tr><td>Consumes</td><td>block-type registry</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement the Thematic breaks section of the spec as a registered block start rule.</p>
+<h2>Rules</h2>
+<ul><li>A thematic break is a line with up to three spaces of indentation, then three or more matching <code>-</code>, <code>_</code> or <code>*</code> characters, each optionally followed by any number of spaces or tabs. No other characters may appear on the line.</li><li>All non-space characters must be the same. Four or more spaces of indentation is not a thematic break.</li><li>A thematic break can interrupt a paragraph and needs no blank lines around it.</li><li>When a line could be a thematic break or a list item, the thematic break wins. When a line of dashes could be a thematic break or a setext underline, the setext heading wins; that wiring is added by the setext story.</li><li>It renders as <code>&lt;hr /&gt;</code>.</li></ul>
+<h2>Reads</h2>
+<ul><li>Lines handed to the block engine.</li></ul>
+<h2>Writes</h2>
+<ul><li>Thematic break nodes in the block tree.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>The corpus section needs lists, setext headings and emphasis, so it is gated in the lists story. The checks here are bounded.</p>
+<p>=== AC thematic-three-markers ===<br>Intent: Lines of three or more matching marker characters each render one hr element.</p>
+<p>import subprocess</p>
+<p>lines = [&quot;***&quot;, &quot;---&quot;, &quot;<strong>_&quot;, &quot;</strong><strong>_</strong><strong>_</strong>_&quot;, &quot; - - -&quot;, &quot; **  * ** * ** * **&quot;] source = &quot;\n\n&quot;.join(lines) + &quot;\n&quot; result = subprocess.run([&quot;./commonmark&quot;], input=source, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;hr /&gt;&quot;) == len(lines) === END AC thematic-three-markers ===</p>
+<p>=== AC thematic-not-a-break ===<br>Intent: Wrong characters, too few characters, mixed characters and trailing text do not produce hr elements.</p>
+<p>import subprocess</p>
+<p>source = &quot;+++\n\n--\n\n_ _ _ _ a\n\na------\n\n <em>-</em>\n&quot; result = subprocess.run([&quot;./commonmark&quot;], input=source, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;hr /&gt;&quot;) == 0 === END AC thematic-not-a-break ===</p>
+<p>=== AC thematic-interrupts-paragraph ===<br>Intent: A thematic break directly after paragraph text splits it into two paragraphs around one hr.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;Foo\n***\nbar\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;hr /&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 2 === END AC thematic-interrupts-paragraph ===</p>
+<p>=== AC thematic-trailing-whitespace ===<br>Intent: Trailing spaces and tabs after the marker characters are allowed.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;- - - -    \t\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;hr /&gt;&quot;) == 1 === END AC thematic-trailing-whitespace ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Mixed marker characters on one line must never form a thematic break.</li><li>Four spaces of indentation must never form a thematic break.</li><li>Do not skip, filter or reinterpret corpus examples.</li></ul></article>
+</main>
+</body>
+</html>

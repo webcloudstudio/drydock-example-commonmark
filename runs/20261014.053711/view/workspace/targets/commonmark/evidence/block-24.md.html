@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-24.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-24.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-24.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 24 · Feature (block-24)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-14</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 4063</li><li>execution id: 20261014.084531.261Z-0cd98f1c</li></ul>
+<h2>Stories built</h2>
+<ul><li>Run the complete supplied CommonMark conformance suite unfiltered. (verify-conformance) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1072)</li><li>implements: FEATURE-Verification.md (SP 886)</li><li>context: ARCHITECTURE_compact.md (SP 335)</li><li>stack: common_compact.md (SP 1199)</li><li>stack: python_compact.md (SP 390)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>tests/test_verification.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>GREEN (prepassed): full-conformance-suite (FEATURE-Verification.md)</li></ul>
+<p>intent: The complete supplied conformance suite passes when run unfiltered through sources/full_test.sh. return code: 0 stdout: 655 passed, 0 failed, 0 errored, 0 skipped</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: full-conformance-suite (FEATURE-Verification.md)</li></ul>
+<p>intent: The complete supplied conformance suite passes when run unfiltered through sources/full_test.sh. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: 655 passed, 0 failed, 0 errored, 0 skipped</p>
+<h2>Build summary</h2>
+<p>The terminal story only needs the declared acceptance check transcribed as a test, plus the suite run through its declared invocation. I&#x27;ll add <code>tests/test_verification.py</code> now.The declared check passed. I&#x27;ll read the conformance tally directly from the same declared invocation and run the whole project test suite to confirm it is green.The complete CommonMark 0.31.2 suite passes unfiltered: <code>sh sources/full_test.sh</code> exits 0 and reports <code>655 passed, 0 failed, 0 errored, 0 skipped</code>.</p>
+<p>I added the one test this story declares, <code>tests/test_verification.py</code>. It runs <code>sh sources/full_test.sh</code> through subprocess, prints the captured output, and asserts only the exit status. Nothing else was written, and no staged assets were touched.</p>
+<p>Full project suite (<code>.venv/bin/python -m pytest -q</code>): 1174 passed, 1 skipped. The skip is <code>tests/test_foundation.py:38</code> (&quot;got empty parameter set for (name)&quot;). It predates this step and I did not change it.</p>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>tests/test_verification.py</li></ul>
+<p>SUMMARY:</p>
+<ul><li>Transcribed the declared AC <code>full-conformance-suite</code> as <code>test_full_conformance_suite</code>, with its assertion unchanged.</li><li>Ran the suite through its declared invocation: <code>full_test.sh</code> exit 0, tally 655 passed / 0 failed / 0 errored / 0 skipped.</li><li>Ran the whole project test suite: 1174 passed, 1 skipped (pre-existing skip noted above).</li><li>No parser code changes were needed in this step; the existing parser already passes the full suite.</li></ul>
+<p>BLOCKERS:</p>
+<ul><li>None.</li></ul></article>
+</main>
+</body>
+</html>

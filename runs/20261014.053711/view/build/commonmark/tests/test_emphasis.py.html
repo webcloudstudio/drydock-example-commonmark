@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_emphasis.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_emphasis.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_emphasis.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Emphasis tests: delimiter runs, flanking rules, the process-emphasis pairing, and the rule of 3.
+
+The declared acceptance checks are transcribed from FEATURE-Emphasis.md with their assertions kept
+as written. The remaining tests compare the executable&#x27;s stdout bytes or a returned string with its
+exact expected value.
+&quot;&quot;&quot;
+
+import subprocess
+from pathlib import Path
+
+from mdparser import inlines
+
+
+def run_executable(project_root: Path, data: str) -&gt; subprocess.CompletedProcess[bytes]:
+    return subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=data.encode(&quot;utf-8&quot;),
+        capture_output=True,
+        cwd=project_root,
+        check=False,
+    )
+
+
+# --- Declared acceptance checks (transcribed from FEATURE-Emphasis.md) ---
+
+
+def test_emphasis_star_and_underscore(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC emphasis-star-and-underscore: single star and single underscore wrap a word in one em.&quot;&quot;&quot;
+    word = &quot;wordy&quot;
+    for mark in (&quot;*&quot;, &quot;_&quot;):
+        result = run_executable(project_root, mark + word + mark + &quot;\n&quot;)
+        stdout = result.stdout.decode(&quot;utf-8&quot;)
+        assert result.returncode == 0
+        assert stdout.count(&quot;&lt;em&gt;&quot;) == 1
+        assert stdout.count(&quot;&lt;strong&gt;&quot;) == 0
+        assert word in stdout
+
+
+def test_emphasis_strong(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC emphasis-strong: doubled delimiters produce one strong element.&quot;&quot;&quot;
+    word = &quot;wordy&quot;
+    for mark in (&quot;**&quot;, &quot;__&quot;):
+        result = run_executable(project_root, mark + word + mark + &quot;\n&quot;)
+        stdout = result.stdout.decode(&quot;utf-8&quot;)
+        assert result.returncode == 0
+        assert stdout.count(&quot;&lt;strong&gt;&quot;) == 1
+        assert stdout.count(&quot;&lt;em&gt;&quot;) == 0
+
+
+def test_emphasis_intraword_rules(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC emphasis-intraword-rules: intraword emphasis works with star but not with underscore.&quot;&quot;&quot;
+    star = run_executable(project_root, &quot;foo*bar*baz\n&quot;)
+    under = run_executable(project_root, &quot;foo_bar_baz\n&quot;)
+    assert star.returncode == 0
+    assert under.returncode == 0
+    assert star.stdout.decode(&quot;utf-8&quot;).count(&quot;&lt;em&gt;&quot;) == 1
+    assert under.stdout.decode(&quot;utf-8&quot;).count(&quot;&lt;em&gt;&quot;) == 0
+
+
+def test_emphasis_flanking_whitespace(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC emphasis-flanking-whitespace: a run next to whitespace does not form emphasis.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;a * foo bar*\n\nfoo bar *\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;).count(&quot;&lt;em&gt;&quot;) == 0
+
+
+def test_emphasis_nesting(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC emphasis-nesting: triple delimiters give one em and one strong; nested forms keep both.&quot;&quot;&quot;
+    triple = run_executable(project_root, &quot;***word***\n&quot;)
+    nested = run_executable(project_root, &quot;*a **b** c*\n&quot;)
+    assert triple.returncode == 0
+    assert nested.returncode == 0
+    assert triple.stdout.decode(&quot;utf-8&quot;).count(&quot;&lt;em&gt;&quot;) == 1
+    assert triple.stdout.decode(&quot;utf-8&quot;).count(&quot;&lt;strong&gt;&quot;) == 1
+    assert nested.stdout.decode(&quot;utf-8&quot;).count(&quot;&lt;em&gt;&quot;) == 1
+    assert nested.stdout.decode(&quot;utf-8&quot;).count(&quot;&lt;strong&gt;&quot;) == 1
+
+
+def test_emphasis_code_span_binds_tighter(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC emphasis-code-span-binds-tighter: a star inside a code span cannot close emphasis.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;*foo`*`\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;).count(&quot;&lt;em&gt;&quot;) == 0
+    assert result.stdout.decode(&quot;utf-8&quot;).count(&quot;&lt;code&gt;&quot;) == 1
+
+
+# --- Single and doubled delimiters ---
+
+
+def test_emphasis_single_star_exact(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A single star pair wraps its word in one em element.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;*wordy*\n&quot;)
+    assert result.stdout.decode(&quot;utf-8&quot;) == &quot;&lt;p&gt;&lt;em&gt;wordy&lt;/em&gt;&lt;/p&gt;\n&quot;
+
+
+def test_emphasis_single_underscore_exact(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A single underscore pair wraps its word in one em element.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;_wordy_\n&quot;)
+    assert result.stdout.decode(&quot;utf-8&quot;) == &quot;&lt;p&gt;&lt;em&gt;wordy&lt;/em&gt;&lt;/p&gt;\n&quot;
+
+
+def test_emphasis_double_star_exact(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A doubled star pair wraps its word in one strong element.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;**wordy**\n&quot;)
+    assert result.stdout.decode(&quot;utf-8&quot;) == &quot;&lt;p&gt;&lt;strong&gt;wordy&lt;/strong&gt;&lt;/p&gt;\n&quot;
+
+
+def test_emphasis_double_underscore_exact(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A doubled underscore pair wraps its word in one strong element.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;__wordy__\n&quot;)
+    assert result.stdout.decode(&quot;utf-8&quot;) == &quot;&lt;p&gt;&lt;strong&gt;wordy&lt;/strong&gt;&lt;/p&gt;\n&quot;
+
+
+def test_emphasis_triple_exact() -&gt; None:
+    &quot;&quot;&quot;Triple stars give em outside strong, following the length-matching rule.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;***word***&quot;) == &quot;&lt;em&gt;&lt;strong&gt;word&lt;/strong&gt;&lt;/em&gt;&quot;
+
+
+def test_emphasis_triple_then_single_opener() -&gt; None:
+    &quot;&quot;&quot;A triple opener closed by a double run gives strong inside em with the leftover star.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;***foo**&quot;) == &quot;*&lt;strong&gt;foo&lt;/strong&gt;&quot;
+
+
+def test_emphasis_nested_exact() -&gt; None:
+    &quot;&quot;&quot;Strong nested in em keeps the surrounding text.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;*a **b** c*&quot;) == &quot;&lt;em&gt;a &lt;strong&gt;b&lt;/strong&gt; c&lt;/em&gt;&quot;
+
+
+def test_emphasis_strong_inside_em_middle() -&gt; None:
+    &quot;&quot;&quot;Strong in the middle of em word.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;*foo**bar**baz*&quot;) == &quot;&lt;em&gt;foo&lt;strong&gt;bar&lt;/strong&gt;baz&lt;/em&gt;&quot;
+
+
+def test_emphasis_three_delimiters_middle() -&gt; None:
+    &quot;&quot;&quot;Triple run in the middle of a word gives em around strong.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;foo***bar***baz&quot;) == &quot;foo&lt;em&gt;&lt;strong&gt;bar&lt;/strong&gt;&lt;/em&gt;baz&quot;
+
+
+# --- Unmatched and empty runs stay literal ---
+
+
+def test_emphasis_unclosed_is_literal() -&gt; None:
+    &quot;&quot;&quot;An opener with no closer is literal text.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;*foo&quot;) == &quot;*foo&quot;
+
+
+def test_emphasis_empty_double_is_literal() -&gt; None:
+    &quot;&quot;&quot;Two adjacent delimiters with nothing between never form empty emphasis.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;**&quot;) == &quot;**&quot;
+
+
+def test_emphasis_empty_underscore_pair_is_literal() -&gt; None:
+    &quot;&quot;&quot;A doubled underscore with no content between it is literal text.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;__&quot;) == &quot;__&quot;
+
+
+def test_emphasis_run_of_four_is_literal() -&gt; None:
+    &quot;&quot;&quot;Four stars with no content are literal text.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;****&quot;) == &quot;****&quot;
+
+
+def test_emphasis_leftover_is_escaped() -&gt; None:
+    &quot;&quot;&quot;A leftover delimiter run is escaped like any other text.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;*a&lt;b&quot;) == &quot;*a&amp;lt;b&quot;
+
+
+# --- Flanking rules ---
+
+
+def test_emphasis_space_after_opener_is_literal() -&gt; None:
+    &quot;&quot;&quot;A star followed by a space cannot open.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;* foo*&quot;) == &quot;* foo*&quot;
+
+
+def test_emphasis_space_before_closer_is_literal() -&gt; None:
+    &quot;&quot;&quot;A star preceded by a space cannot close.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;*foo *&quot;) == &quot;*foo *&quot;
+
+
+def test_emphasis_unicode_space_after_opener_is_literal() -&gt; None:
+    &quot;&quot;&quot;A no-break space after a star counts as Unicode whitespace, so the star cannot open.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;* foo*&quot;) == &quot;* foo*&quot;
+
+
+def test_emphasis_punctuation_edges_open_and_close() -&gt; None:
+    &quot;&quot;&quot;Punctuation at both edges is allowed when the run is preceded by whitespace or start.&quot;&quot;&quot;
+    assert inlines.parse_inline(&#x27;*&quot;foo&quot;*&#x27;) == &quot;&lt;em&gt;&amp;quot;foo&amp;quot;&lt;/em&gt;&quot;
+
+
+def test_emphasis_underscore_inside_word_does_not_open() -&gt; None:
+    &quot;&quot;&quot;An underscore run with alphanumerics on both sides is both-flanking and cannot open.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;foo_bar_&quot;) == &quot;foo_bar_&quot;
+
+
+def test_emphasis_underscore_after_punctuation_opens() -&gt; None:
+    &quot;&quot;&quot;An underscore preceded by punctuation may open even when it is also right-flanking.&quot;&quot;&quot;
+    assert inlines.parse_inline(&#x27;&quot;_foo_&quot;&#x27;) == &quot;&amp;quot;&lt;em&gt;foo&lt;/em&gt;&amp;quot;&quot;
+
+
+def test_emphasis_escaped_star_does_not_open() -&gt; None:
+    &quot;&quot;&quot;A backslash-escaped star is text and is not a delimiter.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;\\*foo*&quot;) == &quot;*foo*&quot;
+
+
+def test_emphasis_entity_star_does_not_open() -&gt; None:
+    &quot;&quot;&quot;A decoded character reference for a star is text and is not a delimiter.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;&amp;#42;foo*&quot;) == &quot;*foo*&quot;
+
+
+# --- Process-emphasis pairing and the rule of 3 ---
+
+
+def test_emphasis_rule_of_three_skips_pair() -&gt; None:
+    &quot;&quot;&quot;Both-flanking runs whose lengths sum to a multiple of 3 do not pair (rule of 3).&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;*foo**bar*&quot;) == &quot;&lt;em&gt;foo**bar&lt;/em&gt;&quot;
+
+
+def test_emphasis_rule_of_three_double_then_single() -&gt; None:
+    &quot;&quot;&quot;A double opener with a single closer sums to 3, so no pair forms.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;**foo*bar*&quot;) == &quot;**foo&lt;em&gt;bar&lt;/em&gt;&quot;
+
+
+def test_emphasis_rule_of_three_multiples_pair() -&gt; None:
+    &quot;&quot;&quot;Runs of length 3 and 3 may pair even though their lengths sum to a multiple of 3.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;***foo***&quot;) == &quot;&lt;em&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/em&gt;&quot;
+
+
+def test_emphasis_closer_pairs_with_nearest_opener() -&gt; None:
+    &quot;&quot;&quot;The inner closer pairs with the nearest opener; the outer closer pairs with the first.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;*a *b* c*&quot;) == &quot;&lt;em&gt;a &lt;em&gt;b&lt;/em&gt; c&lt;/em&gt;&quot;
+
+
+def test_emphasis_star_closer_pairs_across_text() -&gt; None:
+    &quot;&quot;&quot;A star closer may pair with an opener several words back.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;*one two three*&quot;) == &quot;&lt;em&gt;one two three&lt;/em&gt;&quot;
+
+
+def test_emphasis_consumes_one_character_each() -&gt; None:
+    &quot;&quot;&quot;A regular pair consumes one character from each side.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;**a*&quot;) == &quot;*&lt;em&gt;a&lt;/em&gt;&quot;
+
+
+def test_emphasis_multiple_pairs_in_one_paragraph() -&gt; None:
+    &quot;&quot;&quot;Two separate pairs in one paragraph each produce their own element.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;*a* and *b*&quot;) == &quot;&lt;em&gt;a&lt;/em&gt; and &lt;em&gt;b&lt;/em&gt;&quot;
+
+
+def test_emphasis_inside_code_span_is_not_delimiter() -&gt; None:
+    &quot;&quot;&quot;A star inside a code span is code text and does not take part in emphasis.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;`*a*`&quot;) == &quot;&lt;code&gt;*a*&lt;/code&gt;&quot;
+
+
+def test_emphasis_wraps_raw_html() -&gt; None:
+    &quot;&quot;&quot;Emphasis may wrap a raw HTML tag, which stays as written.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;*&lt;b&gt;*&quot;) == &quot;&lt;em&gt;&lt;b&gt;&lt;/em&gt;&quot;
+
+
+# --- Executable, end to end ---
+
+
+def test_emphasis_paragraphs_are_independent(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Delimiter stacks do not carry across paragraphs, so an opener cannot pair across them.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;*a\n\nb*\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;) == &quot;&lt;p&gt;*a&lt;/p&gt;\n&lt;p&gt;b*&lt;/p&gt;\n&quot;
+
+
+def test_emphasis_flanking_exact(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Whitespace-flanked runs in two paragraphs stay literal, with exact output.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;a * foo bar*\n\nfoo bar *\n&quot;)
+    assert result.stdout.decode(&quot;utf-8&quot;) == &quot;&lt;p&gt;a * foo bar*&lt;/p&gt;\n&lt;p&gt;foo bar *&lt;/p&gt;\n&quot;
+
+
+def test_emphasis_code_span_binds_tighter_exact(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A star inside a code span cannot close emphasis: exact output.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;*foo`*`\n&quot;)
+    assert result.stdout.decode(&quot;utf-8&quot;) == &quot;&lt;p&gt;*foo&lt;code&gt;*&lt;/code&gt;&lt;/p&gt;\n&quot;
+</pre></article>
+</main>
+</body>
+</html>

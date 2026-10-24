@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261014.060510.463Z_commonmark_build_claude.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261014.060510.463Z_commonmark_build_claude.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261014.060510.463Z_commonmark_build_claude.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>I&#x27;ll start by inspecting the build directory to see what earlier blocks already produced.The autolink block is the closest precedent for this step. I&#x27;ll read its tests, the conftest, and the spec&#x27;s raw HTML section before writing anything.Tests in this project compare exact returned strings and executable stdout. Before writing the grammar, I&#x27;ll confirm two things: the spec&#x27;s exact comment and declaration wording, and how `blocks.py` joins paragraph lines, since raw HTML can span a line ending.The spec confirms the grammar in `FEATURE-Raw-HTML.md`, and paragraph content is joined with `\n`, so a raw tag can span lines. No block-level rule in `blocks.py` claims a `&lt;` line, so the acceptance inputs reach the inline hook as paragraphs. Next I&#x27;ll add the raw HTML matcher to the inline scanner, ahead of the escape fallback and after autolinks.Now the test file. It follows `test_autolinks.py`: the declared acceptance checks first, then finer grammar tests, each comparing an exact returned string or exact stdout bytes.Before running anything, I want to fix one weakness in what I just wrote. The illegal-form tests compute their expected value with `inlines.escape_html`, which is the code under test. That makes the oracle circular. I&#x27;ll replace each with a literal expected string.Now I&#x27;ll remove the `_escaped` helper, which no test uses any more, and run the new file together with the existing suite.One failure, and the mistake is in my expected value, not the code. In `&lt;a b=c&lt;d&gt;` the trailing `&lt;d&gt;` is itself a valid open tag, so only the leading `&lt;a b=c` is escaped. The output is correct under the spec. I&#x27;ll fix the expectation and keep the case.The new file is green. Next I&#x27;ll run the rest of the project suite to confirm the inline change didn&#x27;t break the earlier blocks. The autolinks file has a test that invokes the staged `spec_tests.py`. This step declares no staged-suite criterion, so I&#x27;ll deselect those corpus-section tests rather than run the staged suite early.Two existing tests now fail, and both fail for the same reason. `&lt;b&gt;` and `&lt;a&gt;` are valid raw HTML tags under the spec, and the earlier blocks&#x27; tests assumed they would be escaped. The new output is what the spec requires. I&#x27;ll update those two expectations and keep each test&#x27;s input unchanged, so the cases still exercise what they were written to exercise.Re-running the project suite with the same corpus deselection, plus the executable&#x27;s behavior on the declared acceptance inputs:The inline change is complete and the project suite is green at 262 passed. I&#x27;ll confirm the set of files written.Raw inline HTML is implemented in `mdparser/inlines.py`. The four declared acceptance checks pass, and the project&#x27;s pytest suite is green at 262 passed.
+
+I did not run `sources/full_test.sh` or the staged `spec_tests.py`. This step declares no criterion that invokes the staged suite, so I left it alone. The autolinks corpus test, which runs the staged suite scoped to Autolinks, is deselected from my runs for the same reason.
+
+Two earlier tests encoded behavior the spec overrides, so I changed their expectations. Their inputs are unchanged:
+- `tests/test_render.py`: `a&lt;b&gt;&amp;&quot;c&quot;` now expects `a&lt;b&gt;&amp;amp;&amp;quot;c&amp;quot;`, because `&lt;b&gt;` is a valid raw tag.
+- `tests/test_autolinks.py`: `&lt;http://e.com/&lt;a&gt;` now expects `&amp;lt;http://e.com/&lt;a&gt;`, because `&lt;a&gt;` is a valid raw tag. Only the leading `&lt;` is escaped.
+
+Choices I made where the spec left room:
+- A tag needs whitespace before each attribute name, so `&lt;a b=&quot;x&quot;c&gt;` is escaped text.
+- Each construct is tried in order after autolinks, so a `&lt;` that opens nothing falls through to escaping.
+
+RESULT: SUCCESS
+
+FILES CHANGED:
+- mdparser/inlines.py
+- tests/test_raw_html.py
+- tests/test_render.py
+- tests/test_autolinks.py
+
+SUMMARY:
+- `inlines.py`: added the raw HTML grammars (open and closing tags, comments including `&lt;!--&gt;` and `&lt;!---&gt;`, processing instructions, declarations, CDATA). `parse_inline` tries autolinks first, then raw HTML, and passes a match through byte for byte. Backslashes and entities inside a match are not processed.
+- `tests/test_raw_html.py` (new): the four declared acceptance checks plus the backslash-inert check, transcribed from `FEATURE-Raw-HTML.md`. Also grammar tests for legal and illegal forms of every construct, including line endings inside tags and the escaping of a backslash before `&lt;`. Every test compares exact output.
+- Test runs: `tests/test_raw_html.py` alone passed 81 of 81 after the fix. The full project suite, with the staged-suite corpus test deselected, passed 262 of 262.
+- The staged `sources/` files are unchanged.
+
+&lt;blueprint-decisions&gt;
+[{&quot;spec&quot;:&quot;FEATURE-Raw-HTML.md&quot;,&quot;severity&quot;:&quot;Material&quot;,&quot;subject&quot;:&quot;Two earlier-block test expectations updated for raw HTML&quot;,&quot;decision&quot;:&quot;tests/test_render.py expected &#x27;a&amp;lt;b&amp;gt;...&#x27; for input &#x27;a&lt;b&gt;&amp;\&quot;c\&quot;&#x27;, and tests/test_autolinks.py expected &#x27;&amp;lt;http://e.com/&amp;lt;a&amp;gt;&#x27; for input &#x27;&lt;http://e.com/&lt;a&gt;&#x27;. Both inputs are valid raw HTML open tags (&lt;b&gt;, &lt;a&gt;), which the spec now passes through. I kept the inputs and changed only the expected values, so each test still checks its original escaping of &amp;, \&quot;, and the leading &lt;. Is that acceptable, or should these tests change their inputs instead?&quot;}]
+&lt;/blueprint-decisions&gt;
+
+RESULT: SUCCESS</pre></article>
+</main>
+</body>
+</html>

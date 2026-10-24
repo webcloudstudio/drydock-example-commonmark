@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>inputs/DECISIONS.json</title>
+<link rel="stylesheet" href="../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>inputs/DECISIONS.json</h1><div class="filenav"><a href="../../index.html">&larr; Report</a><a href="../../inputs/DECISIONS.json">Raw file</a></div></header>
+<article class="doc"><pre>[
+  {
+    &quot;id&quot;: &quot;Q-001&quot;,
+    &quot;type&quot;: &quot;choice&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;plan&quot;,
+    &quot;blueprint&quot;: &quot;ARCHITECTURE.md&quot;,
+    &quot;story&quot;: &quot;foundation&quot;,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Implementation language and package name&quot;,
+    &quot;description&quot;: &quot;The sources do not name a language. The harness only needs an executable ./commonmark and already requires python3. I considered Python 3 with a shebang script versus a compiled language. I picked Python 3, consistent with TECHNOLOGY_STACK.md, with the package named mdparser to avoid any resemblance to a public Markdown library.&quot;,
+    &quot;options&quot;: [
+      {
+        &quot;value&quot;: &quot;python-mdparser&quot;,
+        &quot;label&quot;: &quot;Python 3 script plus mdparser package&quot;
+      },
+      {
+        &quot;value&quot;: &quot;other&quot;,
+        &quot;label&quot;: &quot;Another language&quot;
+      }
+    ],
+    &quot;system_choice&quot;: &quot;python-mdparser&quot;
+  },
+  {
+    &quot;id&quot;: &quot;Q-002&quot;,
+    &quot;type&quot;: &quot;choice&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;plan&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Line-Breaks-Text.md&quot;,
+    &quot;story&quot;: &quot;line-breaks-text&quot;,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Soft break rendering&quot;,
+    &quot;description&quot;: &quot;The spec allows a soft break to render as a line ending or a space, and the normalizer collapses both. I picked a line ending, which matches the spec&#x27;s examples.&quot;,
+    &quot;options&quot;: [
+      {
+        &quot;value&quot;: &quot;newline&quot;,
+        &quot;label&quot;: &quot;Line ending&quot;
+      },
+      {
+        &quot;value&quot;: &quot;space&quot;,
+        &quot;label&quot;: &quot;Space&quot;
+      }
+    ],
+    &quot;system_choice&quot;: &quot;newline&quot;
+  },
+  {
+    &quot;id&quot;: &quot;Q-003&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;material&quot;,
+    &quot;origin&quot;: &quot;plan&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Block-Engine.md&quot;,
+    &quot;story&quot;: &quot;block-engine&quot;,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Corpus section ownership differs from ANALYSIS.md&quot;,
+    &quot;description&quot;: &quot;Nearly every spec section has examples that use constructs from other sections, and some pairs are circular (links and definitions, lists and quotes). A section cannot be gated until all constructs its examples use exist. I kept the analyzed story boundaries but reassigned where each section&#x27;s corpus slice runs. Sections whose examples are self-contained are gated at their own story: Autolinks, Code spans, Inlines, Soft line breaks, Textual content. Cross-coupled sections are gated at the first story after all their constructs exist: Emphasis, Links and Images at images; the block sections at lists; Tabs, Link reference definitions, Backslash escapes, Entities, Raw HTML, HTML blocks, Paragraphs, Blank lines and Hard line breaks at cont-tabs-slice. Stories before their section&#x27;s gate carry bounded state-oracle checks. Every section belongs to exactly one slice, and the terminal story runs the whole suite.&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;Per-story slices as described, with the full suite only in verify-conformance.&quot;
+  },
+  {
+    &quot;id&quot;: &quot;Q-004&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;plan&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Executable.md&quot;,
+    &quot;story&quot;: &quot;executable-interface&quot;,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Exit status and error channel&quot;,
+    &quot;description&quot;: &quot;The sources do not state a response contract for odd input. I picked exit status 0 for all input, with invalid UTF-8 decoded using U+FFFD replacement, and stdout carrying only HTML, with diagnostics on stderr. This follows the surfaced criteria AC-001 to AC-003.&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;Exit 0 always; U+FFFD replacement; diagnostics to stderr only.&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-atx-headings.md-closing-sequence-detection&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-ATX-Headings.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Closing-sequence detection&quot;,
+    &quot;description&quot;: &quot;The closing run is removed only when it is the whole heading content or follows a space or tab. Backslash-escaped and attached hashes (foo#, foo \\#) are kept, as the spec&#x27;s guardrail requires. Options were a regex or a character scan; I chose the character scan to match the existing cursor-based start rules.&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;The closing run is removed only when it is the whole heading content or follows a space or tab. Backslash-escaped and attached hashes (foo#, foo \\#) are kept, as the spec&#x27;s guardrail requires. Options were a regex or a character scan; I chose the character scan to match the existing cursor-based start rules.&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-autolinks.md-minimal-backslash-escape-handling-in-the-inline-scanner&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Autolinks.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Minimal backslash-escape handling in the inline scanner&quot;,
+    &quot;description&quot;: &quot;The Autolinks section&#x27;s example `&lt;foo\\+@bar.example.com&gt;` expects the backslash in front of `+` to be removed outside the autolink, and the gate requires that example to pass. I therefore added a minimal rule to the inline scanner: a backslash before ASCII punctuation yields that character. A full backslash-escape story would replace this, and autolink behaviour does not depend on it. Is that acceptable, or should it move to the entities module on replan?&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;The Autolinks section&#x27;s example `&lt;foo\\+@bar.example.com&gt;` expects the backslash in front of `+` to be removed outside the autolink, and the gate requires that example to pass. I therefore added a minimal rule to the inline scanner: a backslash before ASCII punctuation yields that character. A full backslash-escape story would replace this, and autolink behaviour does not depend on it. Is that acceptable, or should it move to the entities module on replan?&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-backslash-escapes.md-location-of-the-shared-unescape-helper-and-punctuation-set&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Backslash-Escapes.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Location of the shared unescape helper and punctuation set&quot;,
+    &quot;description&quot;: &quot;Placed ASCII_PUNCTUATION and unescape() in mdparser/entities.py, which the ARCHITECTURE assigns backslash unescape to, and made inlines.py import the set rather than keep its own copy. unescape() has no caller until the link and info-string stories are built. Is that acceptable, or should it live elsewhere on replan?&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;Placed ASCII_PUNCTUATION and unescape() in mdparser/entities.py, which the ARCHITECTURE assigns backslash unescape to, and made inlines.py import the set rather than keep its own copy. unescape() has no caller until the link and info-string stories are built. Is that acceptable, or should it live elsewhere on replan?&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-block-engine.md-leading-whitespace-on-paragraph-continuation-lines&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Block-Engine.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Leading whitespace on paragraph continuation lines&quot;,
+    &quot;description&quot;: &quot;Stripped at block level when a line joins a paragraph (the Appendix procedure advances past indentation before adding text). Trailing spaces and tabs are stripped from the whole paragraph at close, and interior trailing spaces are kept for later hard-break handling. The spec says only initial and final whitespace is removed, so this is the reading I took. Is that acceptable, or should continuation indentation pass through to the inline hook?&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;Stripped at block level when a line joins a paragraph (the Appendix procedure advances past indentation before adding text). Trailing spaces and tabs are stripped from the whole paragraph at close, and interior trailing spaces are kept for later hard-break handling. The spec says only initial and final whitespace is removed, so this is the reading I took. Is that acceptable, or should continuation indentation pass through to the inline hook?&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-block-engine.md-partially-consumed-tabs&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Block-Engine.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Partially consumed tabs&quot;,
+    &quot;description&quot;: &quot;Cursor.advance_columns consumes a tab that straddles the target column whole, so the column can overshoot. Partial-tab handling is needed only by block stories that split tabs, such as list item and indented code. Should that story replace this behavior?&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;Cursor.advance_columns consumes a tab that straddles the target column whole, so the column can overshoot. Partial-tab handling is needed only by block stories that split tabs, such as list item and indented code. Should that story replace this behavior?&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-block-engine.md-where-the-inline-hook-lives&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Block-Engine.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Where the inline hook lives&quot;,
+    &quot;description&quot;: &quot;The hook is parse_inline in mdparser/inlines.py, which returns escape_html(raw). render_document takes it as an argument, so render does not import inlines and the import graph has no cycle. cli wires the two together.&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;The hook is parse_inline in mdparser/inlines.py, which returns escape_html(raw). render_document takes it as an argument, so render does not import inlines and the import graph has no cycle. cli wires the two together.&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-block-quotes.md-partly-consumed-tab-after-the-quote-marker&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Block-Quotes.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Partly consumed tab after the quote marker&quot;,
+    &quot;description&quot;: &quot;The spec requires a tab that is only partly consumed to leave its remaining columns as content indentation. I added a separate Cursor.consume_columns method for this and left advance_columns unchanged, because an existing unit test pins its whole-tab overshoot. Indented code&#x27;s start and continue rules now use consume_columns so that the spec&#x27;s &gt;\\t\\tfoo example renders as two spaces inside pre. Fenced-code indentation removal still uses advance_columns, so a tab straddling a fence&#x27;s indentation is still consumed whole. Is that acceptable, or should fenced code move to consume_columns on replan?&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;The spec requires a tab that is only partly consumed to leave its remaining columns as content indentation. I added a separate Cursor.consume_columns method for this and left advance_columns unchanged, because an existing unit test pins its whole-tab overshoot. Indented code&#x27;s start and continue rules now use consume_columns so that the spec&#x27;s &gt;\\t\\tfoo example renders as two spaces inside pre. Fenced-code indentation removal still uses advance_columns, so a tab straddling a fence&#x27;s indentation is still consumed whole. Is that acceptable, or should fenced code move to consume_columns on replan?&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-emphasis.md-openers_bottom-key-uses-original-delimiter-length-mod-3&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Emphasis.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;openers_bottom key uses original delimiter length mod 3&quot;,
+    &quot;description&quot;: &quot;The spec says closer length mod 3. I keyed openers_bottom on the closer&#x27;s original length, because the multiple-of-3 rule is defined on original lengths and a current-length key could skip a valid opener. Is that acceptable, or should it read the spec literally?&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;The spec says closer length mod 3. I keyed openers_bottom on the closer&#x27;s original length, because the multiple-of-3 rule is defined on original lengths and a current-length key could skip a valid opener. Is that acceptable, or should it read the spec literally?&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-entities.md-shared-destination/title/info-string-helper-design&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Entities.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Shared destination/title/info-string helper design&quot;,
+    &quot;description&quot;: &quot;The spec asks for a shared helper but does not define its shape. I added `unescape_and_decode` in `mdparser/entities.py`, a single left-to-right pass that applies backslash escapes and character references together, so an escaped ampersand is not re-read as a reference. The existing backslash-only `unescape` is kept unchanged. Is that acceptable, or should the helper be split into two passes?&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;The spec asks for a shared helper but does not define its shape. I added `unescape_and_decode` in `mdparser/entities.py`, a single left-to-right pass that applies backslash escapes and character references together, so an escaped ampersand is not re-read as a reference. The existing backslash-only `unescape` is kept unchanged. Is that acceptable, or should the helper be split into two passes?&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-executable.md-catch-all-for-internal-rendering-errors&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Executable.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Catch-all for internal rendering errors&quot;,
+    &quot;description&quot;: &quot;main() catches any exception raised while decoding or rendering, prints one diagnostic line to stderr, writes empty stdout, and returns 0. This keeps the exit-0-for-all-input guardrail. Once the block engine lands, this may hide renderer bugs as empty output, so it could be narrowed or made to exit non-zero then. Is that acceptable, or should it change on replan?&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;main() catches any exception raised while decoding or rendering, prints one diagnostic line to stderr, writes empty stdout, and returns 0. This keeps the exit-0-for-all-input guardrail. Once the block engine lands, this may hide renderer bugs as empty output, so it could be narrowed or made to exit non-zero then. Is that acceptable, or should it change on replan?&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-fenced-code.md-dropping-the-final-empty-line-in-render_lines&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;material&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Fenced-Code.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Dropping the final empty line in render_lines&quot;,
+    &quot;description&quot;: &quot;split_lines is pinned by an existing test to return a trailing empty entry for input ending in a newline. Changing it would break that test. I dropped the one trailing empty entry in cli.render_lines instead, so an unclosed fence does not gain a blank line. Is that acceptable, or should the line model move into blocks.parse_lines on replan?&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;split_lines is pinned by an existing test to return a trailing empty entry for input ending in a newline. Changing it would break that test. I dropped the one trailing empty entry in cli.render_lines instead, so an unclosed fence does not gain a blank line. Is that acceptable, or should the line model move into blocks.parse_lines on replan?&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-html-blocks.md-end-condition-check-on-the-start-line-for-types-1-to-5&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-HTML-Blocks.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;End-condition check on the start line for types 1 to 5&quot;,
+    &quot;description&quot;: &quot;The end test runs on the whole start line, so `&lt;!--&gt;` closes immediately because it literally contains `--&gt;`. The spec wording &#x27;line contains&#x27; supports this. Acceptable, or should the search begin after the opening marker?&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;The end test runs on the whole start line, so `&lt;!--&gt;` closes immediately because it literally contains `--&gt;`. The spec wording &#x27;line contains&#x27; supports this. Acceptable, or should the search begin after the opening marker?&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-images.md-raw-html-inside-an-image-description&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Images.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Raw HTML inside an image description&quot;,
+    &quot;description&quot;: &quot;Raw inline HTML contributes its literal source text to alt, escaped, as cmark does in plain-text mode. The spec gives no example for this case. Is that acceptable?&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;Raw inline HTML contributes its literal source text to alt, escaped, as cmark does in plain-text mode. The spec gives no example for this case. Is that acceptable?&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-indented-code.md-start-gate-for-indented-code&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Indented-Code.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Start gate for indented code&quot;,
+    &quot;description&quot;: &quot;The start rule refuses whenever the container is a leaf that takes lines, rather than checking for the paragraph type by name. This keeps the no-interrupt rule general. Acceptable as is?&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;The start rule refuses whenever the container is a leaf that takes lines, rather than checking for the paragraph type by name. This keeps the no-interrupt rule general. Acceptable as is?&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-line-breaks-text.md-break-text-inside-image-alt&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Line-Breaks-Text.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Break text inside image alt&quot;,
+    &quot;description&quot;: &quot;A hard or soft break inside an image description contributes a plain line ending to the alt attribute, so `![foo  \nbar](/u)` gives alt=\&quot;foo\\nbar\&quot;. The spec does not say what alt should contain for a break. Is that acceptable?&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;A hard or soft break inside an image description contributes a plain line ending to the alt attribute, so `![foo  \nbar](/u)` gives alt=\&quot;foo\\nbar\&quot;. The spec does not say what alt should contain for a break. Is that acceptable?&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-link-reference-definitions.md-reference-map-location-and-definition-only-paragraph-removal&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Link-Reference-Definitions.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Reference map location and definition-only paragraph removal&quot;,
+    &quot;description&quot;: &quot;The reference map is held on the document root Block and filled by the paragraph finalize rule, so containers and the inline stories share one map without changing the finalize signature. A paragraph left empty after extraction is removed from the tree. Acceptable, or should the map move to the parser on replan?&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;The reference map is held on the document root Block and filled by the paragraph finalize rule, so containers and the inline stories share one map without changing the finalize signature. A paragraph left empty after extraction is removed from the tree. Acceptable, or should the map move to the parser on replan?&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-links.md-destination-parenthesis-depth&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Links.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Destination parenthesis depth&quot;,
+    &quot;description&quot;: &quot;The spec text says balanced parentheses to at least three levels. I reused the balanced-depth matcher from refs.py, which has no depth limit. Is an unlimited depth acceptable?&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;The spec text says balanced parentheses to at least three levels. I reused the balanced-depth matcher from refs.py, which has no depth limit. Is an unlimited depth acceptable?&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-links.md-image-(![)-constructs&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;material&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Links.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Image (![) constructs&quot;,
+    &quot;description&quot;: &quot;The ![ opener and its inline or reference tail are matched and consumed with the same machinery, but the image is emitted as its literal source text, escaped. Rendering &lt;img&gt; was left to the images story as the build instructions require. Is that acceptable, or should the images story replace this on replan?&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;The ![ opener and its inline or reference tail are matched and consumed with the same machinery, but the image is emitted as its literal source text, escaped. Rendering &lt;img&gt; was left to the images story as the build instructions require. Is that acceptable, or should the images story replace this on replan?&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-list-items.md-interruption-decided-by-the-matched-container,-not-the-lazy-paragraph-flag&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-List-Items.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Interruption decided by the matched container, not the lazy-paragraph flag&quot;,
+    &quot;description&quot;: &quot;A list item&#x27;s interruption rules (no empty start, ordered start must be 1) apply when the matched container is a paragraph, not when the line is merely a lazy continuation. This matches the reference algorithm, so &#x27;&gt; foo&#x27; followed by &#x27;- bar&#x27; at top level yields a list. Acceptable?&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;A list item&#x27;s interruption rules (no empty start, ordered start must be 1) apply when the matched container is a paragraph, not when the line is merely a lazy continuation. This matches the reference algorithm, so &#x27;&gt; foo&#x27; followed by &#x27;- bar&#x27; at top level yields a list. Acceptable?&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-list-items.md-list-grouping-and-tight/loose-rendering-implemented-in-this-step&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;material&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-List-Items.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;List grouping and tight/loose rendering implemented in this step&quot;,
+    &quot;description&quot;: &quot;The spec&#x27;s Purpose assigns grouping items into lists and tight/loose rendering to the lists story. The declared acceptance checks require one &lt;ul&gt; for consecutive same-marker items, an &lt;ol start&gt; attribute, and &lt;p&gt; counts that depend on tightness, so I implemented a minimal version at render time: runs of items sharing a marker kind and delimiter form one list, and a list is loose when a blank line separates items or blocks inside an item (commonmark.js algorithm). Is that acceptable, or should this move to the lists story on replan?&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;The spec&#x27;s Purpose assigns grouping items into lists and tight/loose rendering to the lists story. The declared acceptance checks require one &lt;ul&gt; for consecutive same-marker items, an &lt;ol start&gt; attribute, and &lt;p&gt; counts that depend on tightness, so I implemented a minimal version at render time: runs of items sharing a marker kind and delimiter form one list, and a list is loose when a blank line separates items or blocks inside an item (commonmark.js algorithm). Is that acceptable, or should this move to the lists story on replan?&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-lists.md-looseness-when-a-link-reference-definition-follows-a-blank-line-inside-an-item&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Lists.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Looseness when a link reference definition follows a blank line inside an item&quot;,
+    &quot;description&quot;: &quot;In &#x27;- a\\n\\n  [a]: /u\\n- c&#x27; the list renders loose, because the blank line between item a&#x27;s paragraph and the next item is kept as an item separator even though the definition itself is not a block. Making it tight would also be defensible under the &#x27;definitions do not count as blocks&#x27; rule. No spec example covers this, so I kept the behavior that matches the reference implementation and did not pin it in a test. Is that acceptable?&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;In &#x27;- a\\n\\n  [a]: /u\\n- c&#x27; the list renders loose, because the blank line between item a&#x27;s paragraph and the next item is kept as an item separator even though the definition itself is not a block. Making it tight would also be defensible under the &#x27;definitions do not count as blocks&#x27; rule. No spec example covers this, so I kept the behavior that matches the reference implementation and did not pin it in a test. Is that acceptable?&quot;
+  },
+  {
+    &quot;id&quot;: &quot;build-feature-raw-html.md-two-earlier-block-test-expectations-updated-for-raw-html&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;material&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Raw-HTML.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Two earlier-block test expectations updated for raw HTML&quot;,
+    &quot;description&quot;: &quot;tests/test_render.py expected &#x27;a&amp;lt;b&amp;gt;...&#x27; for input &#x27;a&lt;b&gt;&amp;\&quot;c\&quot;&#x27;, and tests/test_autolinks.py expected &#x27;&amp;lt;http://e.com/&amp;lt;a&amp;gt;&#x27; for input &#x27;&lt;http://e.com/&lt;a&gt;&#x27;. Both inputs are valid raw HTML open tags (&lt;b&gt;, &lt;a&gt;), which the spec now passes through. I kept the inputs and changed only the expected values, so each test still checks its original escaping of &amp;, \&quot;, and the leading &lt;. Is that acceptable, or should these tests change their inputs instead?&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;tests/test_render.py expected &#x27;a&amp;lt;b&amp;gt;...&#x27; for input &#x27;a&lt;b&gt;&amp;\&quot;c\&quot;&#x27;, and tests/test_autolinks.py expected &#x27;&amp;lt;http://e.com/&amp;lt;a&amp;gt;&#x27; for input &#x27;&lt;http://e.com/&lt;a&gt;&#x27;. Both inputs are valid raw HTML open tags (&lt;b&gt;, &lt;a&gt;), which the spec now passes through. I kept the inputs and changed only the expected values, so each test still checks its original escaping of &amp;, \&quot;, and the leading &lt;. Is that acceptable, or should these tests change their inputs instead?&quot;
+  }
+]
+</pre></article>
+</main>
+</body>
+</html>

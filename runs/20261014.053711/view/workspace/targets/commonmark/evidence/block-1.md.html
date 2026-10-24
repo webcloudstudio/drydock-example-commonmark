@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-1.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-1.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-1.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 1 · Foundational (block-1)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-14</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 6696</li><li>execution id: 20261014.055305.566Z-d7256828</li></ul>
+<h2>Stories built</h2>
+<ul><li>Stand up the Python project tree, the mdparser package skeleton, and the pytest runner. (foundation) [story]</li></ul>
+<h2>Reusable compacts</h2>
+<ul><li>ARCHITECTURE_compact.md</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1072)</li><li>implements: ARCHITECTURE.md (SP 1831)</li><li>stack: common.md (SP 2769)</li><li>stack: python.md (SP 600)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>.env.example</li><li>.gitignore</li><li>bin/test.sh</li><li>data/logs/test_2026-10-14_015406.log</li><li>mdparser/<strong>init</strong>.py</li><li>mdparser/blocks.py</li><li>mdparser/cli.py</li><li>mdparser/entities.py</li><li>mdparser/inlines.py</li><li>mdparser/refs.py</li><li>mdparser/render.py</li><li>pyproject.toml</li><li>tests/conftest.py</li><li>tests/test_foundation.py</li><li>uv.lock</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: foundation-package-imports (ARCHITECTURE.md)</li></ul>
+<p>intent: The mdparser package and each reserved module import cleanly using only the standard library. return code: 1 stderr: Traceback (most recent call last): File &quot;foundation-package-imports.py&quot;, line 7, in &lt;module&gt; importlib.import_module(&quot;mdparser&quot;) File &quot;/home/barlo/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/importlib/<strong>init</strong>.py&quot;, line 90, in import_module return _bootstrap._gcd_import(name[level:], package, level) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;&lt;frozen importlib._bootstrap&gt;&quot;, line 1387, in _gcd_import File &quot;&lt;frozen importlib._bootstrap&gt;&quot;, line 1360, in _find_and_load File &quot;&lt;frozen importlib._bootstrap&gt;&quot;, line 1324, in _find_and_load_unlocked<br>ModuleNotFoundError: No module named &#x27;mdparser&#x27;</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: foundation-package-imports (ARCHITECTURE.md)</li></ul>
+<p>intent: The mdparser package and each reserved module import cleanly using only the standard library. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<h2>Build summary</h2>
+<p>The build directory holds only the staged <code>sources/</code> assets and a git repo, so the foundation has to be created from scratch. I&#x27;ll start with the project manifest and check the toolchain.The build backend isn&#x27;t needed: this is a stdlib-only app that runs from the source tree, so I&#x27;ll drop the packaging section and put the source root on pytest&#x27;s path instead.The <code>pyproject.toml</code> change above is my own <code>readme</code> removal, so it matches what I intended. Next I&#x27;ll write the package skeleton, the launcher, and the test scaffolding.Now the foundation tests. The declared acceptance check goes in verbatim, with extra tests for the reserved modules, the no-third-party-dependency rule, and a clean import under plain <code>python3</code>.All 20 tests pass through the declared launcher. Next I&#x27;ll confirm the staged sources are untouched and see what&#x27;s changed.&lt;reusable-compact filename=&quot;ARCHITECTURE.md&quot;&gt;<br>Package: mdparser (stdlib only, no runtime deps, Python &gt;=3.11)<br>Executable: ./commonmark (root, plain python3, no venv needed); calls mdparser.cli.main<br>Modules: cli (stdin bytes to stdout bytes, exit 0 always, diagnostics to stderr only), blocks (phase 1 block tree), refs (reference map, normalize_label = casefold + whitespace collapse), inlines (phase 2 delimiter stack), entities (html.entities.html5 names ending in &#x27;;&#x27; only, numeric refs, backslash unescape), render (HTML escape, URL percent-encoding)<br>Decisions: unicodedata P*/S* for flanking punctuation; soft line breaks render as a line ending; no third-party Markdown library<br>Guardrails: never write to sources/ staged assets; stdout carries only rendered HTML &lt;/reusable-compact&gt;</p>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>pyproject.toml</li><li>uv.lock</li><li>.gitignore</li><li>.env.example</li><li>bin/test.sh</li><li>mdparser/<strong>init</strong>.py</li><li>mdparser/blocks.py</li><li>mdparser/inlines.py</li><li>mdparser/refs.py</li><li>mdparser/entities.py</li><li>mdparser/render.py</li><li>mdparser/cli.py</li><li>tests/conftest.py</li><li>tests/test_foundation.py</li></ul>
+<p>SUMMARY: The language foundation is in place. <code>pyproject.toml</code> declares <code>requires-python &gt;=3.11</code>, no runtime dependencies, and <code>pytest</code> in the dev group; <code>uv.lock</code> was generated by <code>uv</code>. The <code>.venv</code> was created with <code>uv venv</code> and synced with <code>uv sync</code>; it is gitignored. <code>bin/test.sh</code> follows the standard launcher template, runs <code>pytest -q</code> inside <code>.venv</code>, and logs to <code>data/logs/</code>.</p>
+<p>The <code>mdparser</code> package is an importable skeleton with six reserved modules (<code>blocks</code>, <code>inlines</code>, <code>refs</code>, <code>entities</code>, <code>render</code>, <code>cli</code>). Each has a docstring stating its responsibility and no public behavior yet.</p>
+<p>Acceptance check <code>foundation-package-imports</code> is implemented verbatim in <code>tests/test_foundation.py</code>. Additional tests cover the module docstrings, the absence of behavior in reserved modules, the <code>mdparser</code> name, the empty runtime dependency list, the committed lockfile, the launcher being executable, and an import under plain <code>python3</code> with no venv.</p>
+<p>Test run: <code>bin/test.sh</code> gives 20 passed, 0 failed. The staged <code>sources/</code> files are unchanged (<code>git diff</code> is empty). Nothing has been committed.</p>
+<p>Choices I made:</p>
+<ul><li>Project name is <code>mdparser</code>, not <code>commonmark</code>, so the package cannot be mistaken for a public Markdown library.</li><li>No build backend or README. The app runs from the source tree and the test path is set via <code>pythonpath = [&quot;.&quot;]</code>.</li><li>The root <code>commonmark</code> executable is not created. The block only covers the package skeleton, and the executable depends on <code>cli.main</code>, which belongs to a later block. Until it exists, <code>sh sources/full_test.sh</code> will fail with the &quot;no executable&quot; message.</li><li><code>.env.example</code> says no environment variables are read.</li></ul>
+<p>BLOCKERS:</p>
+<ul><li>None for this block.</li></ul></article>
+</main>
+</body>
+</html>

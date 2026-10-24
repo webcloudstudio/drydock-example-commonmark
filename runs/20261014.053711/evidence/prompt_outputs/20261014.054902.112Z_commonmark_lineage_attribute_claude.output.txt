@@ -1,0 +1,80 @@
+<requirement name="commonmark-executable" stories="executable-interface">
+The deliverable is an executable named `commonmark` at the application root.
+</requirement>
+<requirement name="stdin-stdout-interface" stories="executable-interface">
+The parser reads Markdown from standard input and writes HTML to standard output.
+</requirement>
+<requirement name="readme-stdio-interface" stories="executable-interface">
+Create a concise project `README.md` describing the standard-input/standard-output interface.
+</requirement>
+<requirement name="entry-point-succeeds" stories="executable-interface,verify-conformance">
+Build `./commonmark` so that the supplied entry point succeeds
+</requirement>
+<requirement name="two-phase-parsing" stories="block-engine,code-spans">
+CommonMark parsing is two phases: resolve **block structure** first, then run **inline parsing** over the block contents. Implement in that order.
+</requirement>
+<requirement name="follow-appendix-strategy" stories="block-engine">
+The "Appendix: A parsing strategy" section describes the reference implementation's approach; follow it directly rather than reinventing the rules.
+</requirement>
+<requirement name="block-paragraphs" stories="block-engine">
+paragraphs
+</requirement>
+<requirement name="block-thematic-breaks" stories="thematic-breaks">
+thematic breaks
+</requirement>
+<requirement name="block-atx-headings" stories="atx-headings">
+ATX headings
+</requirement>
+<requirement name="block-setext-headings" stories="setext-headings">
+setext headings
+</requirement>
+<requirement name="block-indented-code" stories="indented-code">
+indented code
+</requirement>
+<requirement name="block-fenced-code" stories="fenced-code">
+fenced code
+</requirement>
+<requirement name="block-html-blocks" stories="html-blocks">
+HTML blocks
+</requirement>
+<requirement name="block-link-reference-definitions" stories="link-reference-definitions">
+link reference definitions
+</requirement>
+<requirement name="block-quotes" stories="block-quotes">
+block quotes
+</requirement>
+<requirement name="list-structure" stories="list-items,lists">
+lists are the hardest block construct, with lazy continuation, nesting, and tightness.
+</requirement>
+<requirement name="inline-backslash-escapes" stories="backslash-escapes">
+backslash escapes
+</requirement>
+<requirement name="inline-entities" stories="entities">
+entity and numeric references
+</requirement>
+<requirement name="inline-code-spans" stories="code-spans">
+code spans
+</requirement>
+<requirement name="inline-emphasis" stories="emphasis">
+emphasis and strong emphasis (the delimiter-run algorithm)
+</requirement>
+<requirement name="inline-links-and-images" stories="links,images">
+links and images
+</requirement>
+<requirement name="inline-autolinks" stories="autolinks">
+autolinks
+</requirement>
+<requirement name="inline-raw-html" stories="raw-html-inline">
+raw HTML
+</requirement>
+<requirement name="inline-hard-breaks" stories="line-breaks-text">
+hard breaks
+</requirement>
+<requirement name="unfiltered-conformance-run" stories="verify-conformance">
+It runs the complete, unfiltered supplied CommonMark suite against `./commonmark`.
+</requirement>
+<requirement name="terminal-verification-story" stories="verify-conformance">
+Create one terminal verification story that:
+</requirement>
+<unattached story="foundation"/>
+<unattached story="cont-tabs-slice"/>

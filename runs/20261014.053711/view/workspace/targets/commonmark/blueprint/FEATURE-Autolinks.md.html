@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Autolinks.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Autolinks.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Autolinks.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Autolinks</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>Parse URI autolinks and email autolinks inside angle brackets into links.</td></tr><tr><td>Depends On</td><td>FEATURE-Block-Engine.md</td></tr><tr><td>Provides</td><td>autolink inline construct</td></tr><tr><td>Consumes</td><td>inline parser hook, URL percent-encoding helper</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement the Autolinks section of the spec.</p>
+<h2>Rules</h2>
+<ul><li>A URI autolink is <code>&lt;</code>, a scheme, a colon, zero or more characters other than ASCII control characters, space, <code>&lt;</code> and <code>&gt;</code>, then <code>&gt;</code>. A scheme is 2 to 32 characters: an ASCII letter followed by letters, digits, <code>+</code>, <code>.</code> or <code>-</code>.</li><li>An email autolink is <code>&lt;</code>, an address matching the HTML5 email regex given in the spec, then <code>&gt;</code>. The href is <code>mailto:</code> followed by the address.</li><li>The link text is the address as written, HTML-escaped. The href is percent-encoded for non-ASCII and unsafe characters (for example a backtick or backslash), with <code>&amp;</code> escaped as <code>&amp;amp;</code>.</li><li>Backslash escapes are inert inside autolinks.</li><li>Anything with a space, an empty body, a one-letter scheme, or no scheme or <code>@</code> stays literal text with <code>&lt;</code> and <code>&gt;</code> escaped.</li><li>Autolinks bind as tightly as code spans and raw HTML; the first one found left to right wins.</li></ul>
+<h2>Reads</h2>
+<ul><li>Inline text of paragraphs and headings.</li></ul>
+<h2>Writes</h2>
+<ul><li>Link nodes in the inline tree.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC autolinks-corpus-section ===<br>Intent: The Autolinks conformance section (19 cases) passes in full.<br>Suite: scoped<br>Probe: --dump-tests<br>Probe Count: lines</p>
+<p>import os import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.getcwd() + &quot;/commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;^Autolinks$&quot;, ], capture_output=True, text=True, env={**os.environ}, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC autolinks-corpus-section ===</p>
+<p>=== AC autolinks-uri-roundtrip ===<br>Intent: A URI autolink renders as one link whose href and text are the supplied URI.</p>
+<p>import subprocess</p>
+<p>uri = &quot;http://example.org/path&quot; result = subprocess.run([&quot;./commonmark&quot;], input=&quot;&lt;&quot; + uri + &quot;&gt;\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;a &quot;) == 1 assert (&#x27;href=&quot;&#x27; + uri + &#x27;&quot;&#x27;) in result.stdout assert (&quot;&gt;&quot; + uri + &quot;&lt;/a&gt;&quot;) in result.stdout === END AC autolinks-uri-roundtrip ===</p>
+<p>=== AC autolinks-email-mailto ===<br>Intent: An email autolink renders with a mailto href built from the supplied address.</p>
+<p>import subprocess</p>
+<p>address = &quot;someone@example.org&quot; result = subprocess.run([&quot;./commonmark&quot;], input=&quot;&lt;&quot; + address + &quot;&gt;\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;a &quot;) == 1 assert (&#x27;href=&quot;mailto:&#x27; + address + &#x27;&quot;&#x27;) in result.stdout === END AC autolinks-email-mailto ===</p>
+<p>=== AC autolinks-space-not-autolink ===<br>Intent: A URI containing a space is not an autolink, so no link element is produced.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run( [&quot;./commonmark&quot;], input=&quot;&lt;http://example.org/a b&gt;\n&quot;, capture_output=True, text=True ) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;a &quot;) == 0 === END AC autolinks-space-not-autolink ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Backslash escapes must not be processed inside autolinks.</li><li>Bare URLs and bare email addresses without angle brackets must not become links.</li><li>Do not skip, filter or reinterpret corpus examples.</li></ul></article>
+</main>
+</body>
+</html>

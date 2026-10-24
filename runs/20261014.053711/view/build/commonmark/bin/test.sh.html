@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/bin/test.sh</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/bin/test.sh</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/bin/test.sh">Raw file</a></div></header>
+<article class="doc"><pre>#!/bin/bash
+# CommandCenter Operation
+# Name: Run Test Suite
+# Type: batch
+
+# --- Standard Preamble ---
+set -euo pipefail
+SCRIPT_DIR=&quot;$(cd &quot;$(dirname &quot;${BASH_SOURCE[0]}&quot;)&quot; &amp;&amp; pwd)&quot;
+PROJECT_DIR=&quot;$(cd &quot;$SCRIPT_DIR/..&quot; &amp;&amp; pwd)&quot;
+LOG_DIR=&quot;$PROJECT_DIR/data/logs&quot;
+mkdir -p &quot;$LOG_DIR&quot;
+
+TIMESTAMP=$(date &#x27;+%Y-%m-%d_%H%M%S&#x27;)
+SCRIPT_NAME=$(basename &quot;$0&quot; .sh)
+LOG_FILE=&quot;$LOG_DIR/${SCRIPT_NAME}_${TIMESTAMP}.log&quot;
+
+echo &quot;=== $SCRIPT_NAME started at $(date &#x27;+%Y-%m-%d %H:%M:%S&#x27;) ===&quot; | tee &quot;$LOG_FILE&quot;
+echo &quot;Arguments: $*&quot; | tee -a &quot;$LOG_FILE&quot;
+echo &quot;Working dir: $PROJECT_DIR&quot; | tee -a &quot;$LOG_FILE&quot;
+echo &quot;---&quot; | tee -a &quot;$LOG_FILE&quot;
+
+cd &quot;$PROJECT_DIR&quot;
+
+# --- Test Command (pyproject.toml foundation contract: pytest -q, run inside .venv) ---
+if [ ! -x .venv/bin/python ]; then
+    echo &quot;error: .venv missing; run &#x27;uv venv .venv &amp;&amp; uv sync&#x27; first&quot; | tee -a &quot;$LOG_FILE&quot; &gt;&amp;2
+    exit 1
+fi
+.venv/bin/python -m pytest -q &quot;$@&quot; 2&gt;&amp;1 | tee -a &quot;$LOG_FILE&quot;
+
+echo &quot;=== $SCRIPT_NAME finished at $(date &#x27;+%Y-%m-%d %H:%M:%S&#x27;) ===&quot; | tee -a &quot;$LOG_FILE&quot;
+</pre></article>
+</main>
+</body>
+</html>

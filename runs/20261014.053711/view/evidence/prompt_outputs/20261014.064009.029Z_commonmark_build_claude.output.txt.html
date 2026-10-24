@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261014.064009.029Z_commonmark_build_claude.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261014.064009.029Z_commonmark_build_claude.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261014.064009.029Z_commonmark_build_claude.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>Images are currently kept as literal source. I&#x27;ll replace that with a real `Image` node. Its alt text needs plain text, which the current `Html` nodes don&#x27;t carry, so `Html` gets a `text` field too.Now the `parse_inline` construction sites, so every `Html` node carries its plain text.Next, rendering, the bracket close for images, and the matcher helpers.Now I&#x27;ll update the interim test that pinned the old literal-image behaviour, then check for leftover single-argument `Html(` calls.Now the test file. The four declared acceptance checks are transcribed as written, and the remaining tests cover the behaviour around them.Running the project&#x27;s test suite, which includes the scoped corpus check.One more interim assertion from the links story expected the image to stay literal. The new output is the correct rendering, so I&#x27;ll update that expectation.The scoped gate passes. Let me confirm the set of files I changed.RESULT: SUCCESS
+
+FILES CHANGED:
+- mdparser/inlines.py
+- tests/test_links.py
+- tests/test_images.py
+
+SUMMARY:
+Images are now real nodes instead of literal source. An `![` opener that closes with an inline, full, collapsed or shortcut tail renders `&lt;img src alt title /&gt;`. The src is percent-encoded and escaped like a link href, and the title is omitted when empty. The alt is the plain text of the description: emphasis, links and nested images contribute their text, code spans contribute their content, and the result is escaped.
+
+To get plain text, `Html` nodes now carry a `text` field alongside their rendered HTML. The helpers `_text` and `_raw` build them. The code-span and autolink matchers now return `Html` nodes. Images inside links, and `\![foo]` and `!\[foo]`, behave as the spec requires.
+
+Two interim assertions from the links story pinned the old literal-image output. I updated them to the rendered output: `test_image_construct_is_rendered_as_an_image_not_a_link` and `test_image_opener_does_not_deactivate_earlier_link_openers`. Neither is a declared acceptance assertion.
+
+`tests/test_images.py` transcribes the four declared checks with their assertions kept as written. It adds finer tests for attributes, alt rules, reference forms, nesting and the executable.
+
+Verification:
+- Scoped corpus gate `sources/spec_tests.py --pattern &quot;^Emphasis and strong emphasis$|^Links$|^Images$&quot;`: exit 0, 244 passed, 0 failed (411 skipped by the pattern).
+- Project suite `.venv/bin/python -m pytest -q`: 611 passed, 1 skipped (`test_foundation.py`, pre-existing parametrization skip), 1 failure, which I then fixed. The final run of `test_links.py` and `test_images.py` passed 89 of 89.
+- I did not run `sources/full_test.sh`, since the criteria declare the scoped invocation only.
+- Nothing was committed.
+
+Choices I made:
+- Raw HTML inside an image description contributes its source text to alt, escaped. This follows cmark&#x27;s plain-text behaviour. The spec has no example for it, so it is untested.
+
+BLOCKERS:
+- None.
+
+&lt;blueprint-decisions&gt;
+[{&quot;spec&quot;:&quot;FEATURE-Images.md&quot;,&quot;severity&quot;:&quot;Low&quot;,&quot;subject&quot;:&quot;Raw HTML inside an image description&quot;,&quot;decision&quot;:&quot;Raw inline HTML contributes its literal source text to alt, escaped, as cmark does in plain-text mode. The spec gives no example for this case. Is that acceptable?&quot;}]
+&lt;/blueprint-decisions&gt;</pre></article>
+</main>
+</body>
+</html>

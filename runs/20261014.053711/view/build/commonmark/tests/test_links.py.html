@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_links.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_links.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_links.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Link tests: the look-for-link-or-image procedure, inline and reference forms, and their grammar.
+
+The declared acceptance checks are transcribed from FEATURE-Links.md with their assertions kept as
+written. The remaining tests compare the returned HTML string, or the executable&#x27;s stdout, with its
+exact expected value. Reference maps are built per test, so no state is shared between tests.
+&quot;&quot;&quot;
+
+import subprocess
+from pathlib import Path
+
+from mdparser import inlines
+from mdparser.refs import ReferenceMap
+
+
+def run_executable(project_root: Path, data: str) -&gt; subprocess.CompletedProcess[bytes]:
+    return subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=data.encode(&quot;utf-8&quot;),
+        capture_output=True,
+        cwd=project_root,
+        check=False,
+    )
+
+
+def references_with(*definitions: tuple[str, str, str | None]) -&gt; ReferenceMap:
+    &quot;&quot;&quot;A fresh reference map holding each (label, destination, title) definition.&quot;&quot;&quot;
+    references = ReferenceMap()
+    for label, destination, title in definitions:
+        references.add(label, destination, title)
+    return references
+
+
+def parse(source: str, references: ReferenceMap | None = None) -&gt; str:
+    return inlines.parse_inline(source, references)
+
+
+# --- Declared acceptance checks (transcribed from FEATURE-Links.md) ---
+
+
+def test_links_inline_destination_and_title(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC links-inline-destination-and-title: an inline link renders one a element with its parts.&quot;&quot;&quot;
+    text = &quot;label&quot;
+    dest = &quot;/uri&quot;
+    title = &quot;the title&quot;
+    source = &quot;[&quot; + text + &quot;](&quot; + dest + &#x27; &quot;&#x27; + title + &#x27;&quot;)\n&#x27;
+    result = subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=source,
+        capture_output=True,
+        text=True,
+        cwd=project_root,
+        check=False,
+    )
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;a &quot;) == 1
+    assert (&#x27;href=&quot;&#x27; + dest + &#x27;&quot;&#x27;) in result.stdout
+    assert (&#x27;title=&quot;&#x27; + title + &#x27;&quot;&#x27;) in result.stdout
+    assert (&quot;&gt;&quot; + text + &quot;&lt;/a&gt;&quot;) in result.stdout
+
+
+def test_links_reference_forms(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC links-reference-forms: full, collapsed and shortcut references each render one a element.&quot;&quot;&quot;
+    definition = &quot;\n\n[foo]: /url\n&quot;
+    for use in (&quot;[text][foo]&quot;, &quot;[foo][]&quot;, &quot;[foo]&quot;):
+        result = subprocess.run(
+            [str(project_root / &quot;commonmark&quot;)],
+            input=(use + definition).encode(&quot;utf-8&quot;),
+            capture_output=True,
+            cwd=project_root,
+            check=False,
+        )
+        print(result.stdout)
+        assert result.returncode == 0
+        assert result.stdout.decode(&quot;utf-8&quot;).count(&quot;&lt;a &quot;) == 1
+
+
+def test_links_reference_case_insensitive(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC links-reference-case-insensitive: label matching ignores case.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;[FOO]\n\n[foo]: /url\n&quot;)
+    stdout = result.stdout.decode(&quot;utf-8&quot;)
+    print(stdout)
+    assert result.returncode == 0
+    assert stdout.count(&quot;&lt;a &quot;) == 1
+
+
+def test_links_undefined_reference_literal(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC links-undefined-reference-literal: a shortcut reference with no definition stays literal.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;[nothing defined]\n&quot;)
+    stdout = result.stdout.decode(&quot;utf-8&quot;)
+    print(stdout)
+    assert result.returncode == 0
+    assert stdout.count(&quot;&lt;a &quot;) == 0
+
+
+def test_links_no_nested_links(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC links-no-nested-links: a link inside link text wins and the outer brackets stay literal.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;[foo [bar](/uri)](/uri)\n&quot;)
+    stdout = result.stdout.decode(&quot;utf-8&quot;)
+    print(stdout)
+    assert result.returncode == 0
+    assert stdout.count(&quot;&lt;a &quot;) == 1
+
+
+def test_links_space_before_parenthesis(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC links-space-before-parenthesis: whitespace between link text and the parenthesis is no link.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;[link] (/uri)\n&quot;)
+    stdout = result.stdout.decode(&quot;utf-8&quot;)
+    print(stdout)
+    assert result.returncode == 0
+    assert stdout.count(&quot;&lt;a &quot;) == 0
+
+
+# --- Inline form: destination and title grammar ---
+
+
+def test_inline_link_renders_exact_element() -&gt; None:
+    assert parse(&quot;[a](/u)&quot;) == &#x27;&lt;a href=&quot;/u&quot;&gt;a&lt;/a&gt;&#x27;
+
+
+def test_inline_link_destination_is_optional() -&gt; None:
+    assert parse(&quot;[a]()&quot;) == &#x27;&lt;a href=&quot;&quot;&gt;a&lt;/a&gt;&#x27;
+
+
+def test_inline_link_title_in_single_quotes() -&gt; None:
+    assert parse(&quot;[a](/u &#x27;T&#x27;)&quot;) == &#x27;&lt;a href=&quot;/u&quot; title=&quot;T&quot;&gt;a&lt;/a&gt;&#x27;
+
+
+def test_inline_link_title_in_parentheses() -&gt; None:
+    assert parse(&quot;[a](/u (T))&quot;) == &#x27;&lt;a href=&quot;/u&quot; title=&quot;T&quot;&gt;a&lt;/a&gt;&#x27;
+
+
+def test_inline_link_title_escaped_quote_is_unescaped_then_escaped() -&gt; None:
+    assert parse(&#x27;[a](/u &quot;say \\&quot;hi\\&quot;&quot;)&#x27;) == &#x27;&lt;a href=&quot;/u&quot; title=&quot;say &amp;quot;hi&amp;quot;&quot;&gt;a&lt;/a&gt;&#x27;
+
+
+def test_inline_link_empty_title_is_omitted() -&gt; None:
+    assert parse(&#x27;[a](/u &quot;&quot;)&#x27;) == &#x27;&lt;a href=&quot;/u&quot;&gt;a&lt;/a&gt;&#x27;
+
+
+def test_inline_link_angle_destination_allows_spaces() -&gt; None:
+    assert parse(&quot;[a](&lt;my uri&gt;)&quot;) == &#x27;&lt;a href=&quot;my%20uri&quot;&gt;a&lt;/a&gt;&#x27;
+
+
+def test_inline_link_angle_destination_rejects_inner_angle() -&gt; None:
+    # The `&lt;c&gt;` after the first `&lt;` is a raw HTML tag, so it passes through unescaped.
+    assert parse(&quot;[a](&lt;b&lt;c&gt;)&quot;) == &quot;[a](&amp;lt;b&lt;c&gt;)&quot;
+
+
+def test_inline_link_balanced_parentheses_in_destination() -&gt; None:
+    assert parse(&quot;[a](foo(and(bar)))&quot;) == &#x27;&lt;a href=&quot;foo(and(bar))&quot;&gt;a&lt;/a&gt;&#x27;
+
+
+def test_inline_link_escaped_parentheses_in_destination() -&gt; None:
+    assert parse(&quot;[a](\\(x\\))&quot;) == &#x27;&lt;a href=&quot;(x)&quot;&gt;a&lt;/a&gt;&#x27;
+
+
+def test_inline_link_unbalanced_parenthesis_is_no_link() -&gt; None:
+    assert parse(&quot;[a](foo(bar)&quot;) == &quot;[a](foo(bar)&quot;
+
+
+def test_inline_link_space_in_bare_destination_is_no_link() -&gt; None:
+    assert parse(&quot;[a](my uri)&quot;) == &quot;[a](my uri)&quot;
+
+
+def test_inline_link_destination_is_percent_encoded() -&gt; None:
+    assert parse(&quot;[a](/ü)&quot;) == &#x27;&lt;a href=&quot;/%C3%BC&quot;&gt;a&lt;/a&gt;&#x27;
+
+
+def test_inline_link_destination_keeps_existing_percent_escape() -&gt; None:
+    assert parse(&quot;[a](/a%20b)&quot;) == &#x27;&lt;a href=&quot;/a%20b&quot;&gt;a&lt;/a&gt;&#x27;
+
+
+def test_inline_link_destination_entity_is_decoded_then_escaped() -&gt; None:
+    assert parse(&quot;[a](&amp;amp;x)&quot;) == &#x27;&lt;a href=&quot;&amp;amp;x&quot;&gt;a&lt;/a&gt;&#x27;
+
+
+def test_inline_link_whitespace_and_one_line_ending_around_parts() -&gt; None:
+    assert parse(&#x27;[a](  /u \n &quot;t&quot;  )&#x27;) == &#x27;&lt;a href=&quot;/u&quot; title=&quot;t&quot;&gt;a&lt;/a&gt;&#x27;
+
+
+def test_inline_link_title_needs_whitespace_before_it() -&gt; None:
+    # Without whitespace the quotes belong to the bare destination, which percent-encodes them.
+    assert parse(&#x27;[a](/u&quot;t&quot;)&#x27;) == &#x27;&lt;a href=&quot;/u%22t%22&quot;&gt;a&lt;/a&gt;&#x27;
+
+
+def test_inline_link_title_quoted_destination_is_destination() -&gt; None:
+    assert parse(&#x27;[a](&quot;b&quot;)&#x27;) == &#x27;&lt;a href=&quot;%22b%22&quot;&gt;a&lt;/a&gt;&#x27;
+
+
+def test_inline_link_text_with_balanced_brackets() -&gt; None:
+    assert parse(&quot;[a [b] c](/u)&quot;) == &#x27;&lt;a href=&quot;/u&quot;&gt;a [b] c&lt;/a&gt;&#x27;
+
+
+def test_inline_link_text_with_escaped_bracket() -&gt; None:
+    assert parse(&quot;[a\\]b](/u)&quot;) == &#x27;&lt;a href=&quot;/u&quot;&gt;a]b&lt;/a&gt;&#x27;
+
+
+def test_inline_link_code_span_binds_tighter_than_bracket() -&gt; None:
+    assert parse(&quot;[a `]`](/u)&quot;) == &#x27;&lt;a href=&quot;/u&quot;&gt;a &lt;code&gt;]&lt;/code&gt;&lt;/a&gt;&#x27;
+
+
+def test_inline_link_text_holds_emphasis() -&gt; None:
+    assert parse(&quot;[*a*](/u)&quot;) == &#x27;&lt;a href=&quot;/u&quot;&gt;&lt;em&gt;a&lt;/em&gt;&lt;/a&gt;&#x27;
+
+
+def test_emphasis_can_wrap_a_link() -&gt; None:
+    assert parse(&quot;*[a](/u)*&quot;) == &#x27;&lt;em&gt;&lt;a href=&quot;/u&quot;&gt;a&lt;/a&gt;&lt;/em&gt;&#x27;
+
+
+def test_inline_link_ampersand_in_text_is_escaped() -&gt; None:
+    assert parse(&quot;[a &amp; b](/u)&quot;) == &#x27;&lt;a href=&quot;/u&quot;&gt;a &amp;amp; b&lt;/a&gt;&#x27;
+
+
+# --- Reference forms ---
+
+
+def test_full_reference_uses_its_own_label() -&gt; None:
+    references = references_with((&quot;bar&quot;, &quot;/url&quot;, None))
+    assert parse(&quot;[foo][bar]&quot;, references) == &#x27;&lt;a href=&quot;/url&quot;&gt;foo&lt;/a&gt;&#x27;
+
+
+def test_full_reference_with_undefined_label_is_literal() -&gt; None:
+    references = references_with((&quot;foo&quot;, &quot;/url&quot;, None))
+    assert parse(&quot;[foo][bar]&quot;, references) == &quot;[foo][bar]&quot;
+
+
+def test_shortcut_before_undefined_full_label_is_not_a_link() -&gt; None:
+    references = references_with((&quot;foo&quot;, &quot;/url&quot;, None))
+    assert parse(&quot;[foo][bar][baz]&quot;, references) == &quot;[foo][bar][baz]&quot;
+
+
+def test_full_reference_then_defined_label_links_the_second_pair() -&gt; None:
+    references = references_with((&quot;baz&quot;, &quot;/url&quot;, None))
+    assert parse(&quot;[foo][bar][baz]&quot;, references) == &#x27;[foo]&lt;a href=&quot;/url&quot;&gt;bar&lt;/a&gt;&#x27;
+
+
+def test_collapsed_reference_resolves_text_as_label() -&gt; None:
+    references = references_with((&quot;foo&quot;, &quot;/url&quot;, None))
+    assert parse(&quot;[foo][]&quot;, references) == &#x27;&lt;a href=&quot;/url&quot;&gt;foo&lt;/a&gt;&#x27;
+
+
+def test_collapsed_reference_with_undefined_label_is_literal() -&gt; None:
+    references = references_with((&quot;bar&quot;, &quot;/url&quot;, None))
+    assert parse(&quot;[foo][]&quot;, references) == &quot;[foo][]&quot;
+
+
+def test_shortcut_reference_resolves_text_as_label() -&gt; None:
+    references = references_with((&quot;foo&quot;, &quot;/url&quot;, None))
+    assert parse(&quot;[foo]&quot;, references) == &#x27;&lt;a href=&quot;/url&quot;&gt;foo&lt;/a&gt;&#x27;
+
+
+def test_shortcut_reference_with_undefined_label_is_literal() -&gt; None:
+    references = references_with((&quot;foo&quot;, &quot;/url&quot;, None))
+    assert parse(&quot;[bar]&quot;, references) == &quot;[bar]&quot;
+
+
+def test_shortcut_reference_followed_by_parenthesis_that_is_no_link() -&gt; None:
+    references = references_with((&quot;foo&quot;, &quot;/url&quot;, None))
+    assert parse(&quot;[foo](not a link)&quot;, references) == &#x27;&lt;a href=&quot;/url&quot;&gt;foo&lt;/a&gt;(not a link)&#x27;
+
+
+def test_shortcut_reference_followed_by_blank_brackets_is_still_shortcut() -&gt; None:
+    references = references_with((&quot;foo&quot;, &quot;/url&quot;, None))
+    assert parse(&quot;[foo][ ]&quot;, references) == &#x27;&lt;a href=&quot;/url&quot;&gt;foo&lt;/a&gt;[ ]&#x27;
+
+
+def test_reference_takes_definition_title() -&gt; None:
+    references = references_with((&quot;foo&quot;, &quot;/url&quot;, &quot;T&quot;))
+    assert parse(&quot;[foo]&quot;, references) == &#x27;&lt;a href=&quot;/url&quot; title=&quot;T&quot;&gt;foo&lt;/a&gt;&#x27;
+
+
+def test_reference_label_collapses_whitespace_and_case() -&gt; None:
+    references = references_with((&quot;foo bar&quot;, &quot;/url&quot;, None))
+    assert parse(&quot;[Foo   BAR]&quot;, references) == &#x27;&lt;a href=&quot;/url&quot;&gt;Foo   BAR&lt;/a&gt;&#x27;
+
+
+def test_reference_label_of_maximum_length_matches() -&gt; None:
+    label = &quot;a&quot; * 999
+    references = references_with((label, &quot;/url&quot;, None))
+    assert parse(&quot;[&quot; + label + &quot;]&quot;, references) == &#x27;&lt;a href=&quot;/url&quot;&gt;&#x27; + label + &quot;&lt;/a&gt;&quot;
+
+
+def test_reference_label_over_maximum_length_is_literal() -&gt; None:
+    label = &quot;a&quot; * 1000
+    references = references_with((label, &quot;/url&quot;, None))
+    assert parse(&quot;[&quot; + label + &quot;]&quot;, references) == &quot;[&quot; + label + &quot;]&quot;
+
+
+def test_blank_shortcut_text_is_not_a_label() -&gt; None:
+    references = references_with((&quot; &quot;, &quot;/url&quot;, None))
+    assert parse(&quot;[ ]&quot;, references) == &quot;[ ]&quot;
+
+
+def test_reference_destination_is_percent_encoded_on_render() -&gt; None:
+    references = references_with((&quot;foo&quot;, &quot;/ü&quot;, None))
+    assert parse(&quot;[foo]&quot;, references) == &#x27;&lt;a href=&quot;/%C3%BC&quot;&gt;foo&lt;/a&gt;&#x27;
+
+
+# --- Nesting, deactivation and literal brackets ---
+
+
+def test_inner_link_wins_and_outer_brackets_stay_literal() -&gt; None:
+    assert parse(&quot;[foo [bar](/uri)](/uri)&quot;) == &#x27;[foo &lt;a href=&quot;/uri&quot;&gt;bar&lt;/a&gt;](/uri)&#x27;
+
+
+def test_link_inside_brackets_deactivates_the_outer_opener() -&gt; None:
+    references = references_with((&quot;x&quot;, &quot;/url&quot;, None))
+    assert parse(&quot;[[x]]&quot;, references) == &#x27;[&lt;a href=&quot;/url&quot;&gt;x&lt;/a&gt;]&#x27;
+
+
+def test_unmatched_closing_bracket_is_literal() -&gt; None:
+    assert parse(&quot;a] b&quot;) == &quot;a] b&quot;
+
+
+def test_unmatched_opening_bracket_is_literal() -&gt; None:
+    assert parse(&quot;a [ b&quot;) == &quot;a [ b&quot;
+
+
+def test_unmatched_opener_is_literal_while_emphasis_pairs_across_it() -&gt; None:
+    assert parse(&quot;*foo [bar* baz&quot;) == &quot;&lt;em&gt;foo [bar&lt;/em&gt; baz&quot;
+
+
+def test_escaped_opening_bracket_does_not_open_a_link() -&gt; None:
+    assert parse(&quot;\\[a](/u)&quot;) == &quot;[a](/u)&quot;
+
+
+def test_space_before_parenthesis_is_no_link() -&gt; None:
+    assert parse(&quot;[link] (/uri)&quot;) == &quot;[link] (/uri)&quot;
+
+
+def test_image_construct_is_rendered_as_an_image_not_a_link() -&gt; None:
+    assert parse(&quot;![foo](/url)&quot;) == &#x27;&lt;img src=&quot;/url&quot; alt=&quot;foo&quot; /&gt;&#x27;
+
+
+def test_image_opener_does_not_deactivate_earlier_link_openers() -&gt; None:
+    assert parse(&quot;[a ![b](/i) c](/u)&quot;) == &#x27;&lt;a href=&quot;/u&quot;&gt;a &lt;img src=&quot;/i&quot; alt=&quot;b&quot; /&gt; c&lt;/a&gt;&#x27;
+
+
+# --- Executable: definitions reach paragraphs that use them ---
+
+
+def test_definition_after_use_resolves_through_executable(project_root: Path) -&gt; None:
+    result = run_executable(project_root, &quot;[foo]\n\n[foo]: /url\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;) == &#x27;&lt;p&gt;&lt;a href=&quot;/url&quot;&gt;foo&lt;/a&gt;&lt;/p&gt;\n&#x27;
+
+
+def test_definition_title_resolves_through_executable(project_root: Path) -&gt; None:
+    result = run_executable(project_root, &#x27;[foo]\n\n[foo]: /url &quot;T&quot;\n&#x27;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;) == &#x27;&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot;T&quot;&gt;foo&lt;/a&gt;&lt;/p&gt;\n&#x27;
+
+
+def test_inline_link_through_executable(project_root: Path) -&gt; None:
+    result = run_executable(project_root, &#x27;[a](/u &quot;t&quot;)\n&#x27;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;) == &#x27;&lt;p&gt;&lt;a href=&quot;/u&quot; title=&quot;t&quot;&gt;a&lt;/a&gt;&lt;/p&gt;\n&#x27;
+</pre></article>
+</main>
+</body>
+</html>

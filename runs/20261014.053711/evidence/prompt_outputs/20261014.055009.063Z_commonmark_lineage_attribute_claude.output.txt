@@ -1,0 +1,44 @@
+<requirement name="collapse-inner-whitespace" stories="verify-conformance">
+Multiple inner whitespaces are collapsed to a single space (except in pre tags).
+</requirement>
+<requirement name="strip-block-tag-whitespace" stories="verify-conformance">
+Whitespace surrounding block-level tags is removed.
+</requirement>
+<requirement name="self-closing-to-open" stories="verify-conformance">
+Self-closing tags are converted to open tags.
+</requirement>
+<requirement name="sort-and-lowercase-attributes" stories="verify-conformance">
+Attributes are sorted and lowercased.
+</requirement>
+<requirement name="decode-references" stories="verify-conformance">
+References are converted to unicode, except that '<', '>', '&', and '"' are rendered using entities.
+</requirement>
+<requirement name="return-unnormalized-on-error" stories="verify-conformance">
+on error, return unnormalized HTML
+</requirement>
+<requirement name="pass-cdata-verbatim" stories="verify-conformance">
+passing CDATA chunks through verbatim.
+</requirement>
+<unattached story="foundation"/>
+<unattached story="executable-interface"/>
+<unattached story="block-engine"/>
+<unattached story="autolinks"/>
+<unattached story="raw-html-inline"/>
+<unattached story="code-spans"/>
+<unattached story="backslash-escapes"/>
+<unattached story="entities"/>
+<unattached story="emphasis"/>
+<unattached story="link-reference-definitions"/>
+<unattached story="links"/>
+<unattached story="images"/>
+<unattached story="line-breaks-text"/>
+<unattached story="thematic-breaks"/>
+<unattached story="atx-headings"/>
+<unattached story="indented-code"/>
+<unattached story="fenced-code"/>
+<unattached story="html-blocks"/>
+<unattached story="block-quotes"/>
+<unattached story="setext-headings"/>
+<unattached story="list-items"/>
+<unattached story="lists"/>
+<unattached story="cont-tabs-slice"/>

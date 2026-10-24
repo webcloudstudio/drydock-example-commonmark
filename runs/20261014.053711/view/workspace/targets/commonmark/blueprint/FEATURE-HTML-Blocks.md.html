@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-HTML-Blocks.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-HTML-Blocks.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-HTML-Blocks.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: HTML Blocks</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>Parse the seven kinds of HTML block and emit their lines as raw HTML.</td></tr><tr><td>Depends On</td><td>FEATURE-Fenced-Code.md</td></tr><tr><td>Provides</td><td>HTML block</td></tr><tr><td>Consumes</td><td>block-type registry</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement the HTML blocks section of the spec.</p>
+<h2>Start and end conditions</h2>
+<p>After up to three spaces of indentation:</p>
+<ol><li>Line begins with <code>&lt;pre</code>, <code>&lt;script</code>, <code>&lt;style</code> or <code>&lt;textarea</code> (case-insensitive) followed by a space, tab, <code>&gt;</code> or end of line. Ends at a line containing <code>&lt;/pre&gt;</code>, <code>&lt;/script&gt;</code>, <code>&lt;/style&gt;</code> or <code>&lt;/textarea&gt;</code> (case-insensitive, need not match the start tag).</li><li>Begins with <code>&lt;!--</code>. Ends at a line containing <code>--&gt;</code>.</li><li>Begins with <code>&lt;?</code>. Ends at a line containing <code>?&gt;</code>.</li><li>Begins with <code>&lt;!</code> and an ASCII letter. Ends at a line containing <code>&gt;</code>.</li><li>Begins with <code>&lt;![CDATA[</code>. Ends at a line containing <code>]]&gt;</code>.</li><li>Begins with <code>&lt;</code> or <code>&lt;/</code> and one of the block-level tag names listed in the spec (case-insensitive), followed by a space, tab, end of line, <code>&gt;</code> or <code>/&gt;</code>. Ends before the next blank line.</li><li>Begins with a complete open tag (tag name not <code>pre</code>, <code>script</code>, <code>style</code> or <code>textarea</code>) or complete closing tag alone on the line, followed only by spaces and tabs. Ends before the next blank line.</li></ol>
+<h2>Rules</h2>
+<ul><li>If the first line also meets the end condition, the block is that single line. Types 1 to 5 include the line holding the end condition, with anything after the end tag.</li><li>Blocks end at the end of the document or enclosing container if no end condition is met.</li><li>Types 1 to 6 can interrupt a paragraph. Type 7 cannot.</li><li>Lines are emitted unchanged and unescaped, with their original indentation. Content inside the block is never parsed as Markdown, and tags inside it never change parser state.</li></ul>
+<h2>Reads</h2>
+<ul><li>Lines handed to the block engine.</li></ul>
+<h2>Writes</h2>
+<ul><li>HTML block nodes in the block tree.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>The corpus section has examples that use quotes, lists and indented code, so it is gated in the tabs story. The checks here are bounded.</p>
+<p>=== AC htmlblock-type6-raw-lines ===<br>Intent: A block-level tag block passes through verbatim and its Markdown is not parsed.</p>
+<p>import subprocess</p>
+<p>block = &quot;&lt;div&gt;\n*foo*\n&lt;/div&gt;&quot; result = subprocess.run([&quot;./commonmark&quot;], input=block + &quot;\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert block in result.stdout assert result.stdout.count(&quot;&lt;em&gt;&quot;) == 0 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 0 === END AC htmlblock-type6-raw-lines ===</p>
+<p>=== AC htmlblock-type6-ends-at-blank-line ===<br>Intent: A type 6 block ends at a blank line and Markdown after it is parsed.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;&lt;div&gt;\nraw\n\n*bar*\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;em&gt;&quot;) == 1 === END AC htmlblock-type6-ends-at-blank-line ===</p>
+<p>=== AC htmlblock-comment-spans-blank-lines ===<br>Intent: A comment block keeps blank lines until its end marker, and the following line is a paragraph.</p>
+<p>import subprocess</p>
+<p>comment = &quot;&lt;!-- Foo\n\nbar\n   baz --&gt;&quot; result = subprocess.run([&quot;./commonmark&quot;], input=comment + &quot;\nokay\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert comment in result.stdout assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1 === END AC htmlblock-comment-spans-blank-lines ===</p>
+<p>=== AC htmlblock-pre-spans-blank-lines ===<br>Intent: A pre block keeps blank lines and does not parse the Markdown inside it.</p>
+<p>import subprocess</p>
+<p>block = &quot;&lt;pre&gt;\n*x*\n\n_y_\n&lt;/pre&gt;&quot; result = subprocess.run([&quot;./commonmark&quot;], input=block + &quot;\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert block in result.stdout assert result.stdout.count(&quot;&lt;em&gt;&quot;) == 0 === END AC htmlblock-pre-spans-blank-lines ===</p>
+<p>=== AC htmlblock-type7-cannot-interrupt ===<br>Intent: A lone open tag line after paragraph text stays inside the paragraph.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&#x27;Foo\n&lt;a href=&quot;bar&quot;&gt;\nbaz\n&#x27;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1 === END AC htmlblock-type7-cannot-interrupt ===</p>
+<p>=== AC htmlblock-type6-interrupts-paragraph ===<br>Intent: A block-level tag line interrupts a paragraph.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;Foo\n&lt;div&gt;\nbar\n&lt;/div&gt;\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1 === END AC htmlblock-type6-interrupts-paragraph ===</p>
+<p>=== AC htmlblock-four-space-indent-is-code ===<br>Intent: Four spaces of indentation make an indented code block, not an HTML block.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;    &lt;!-- foo --&gt;\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1 === END AC htmlblock-four-space-indent-is-code ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Never escape or alter lines inside an HTML block.</li><li>Type 7 must never interrupt a paragraph.</li><li>Do not skip, filter or reinterpret corpus examples.</li></ul></article>
+</main>
+</body>
+</html>

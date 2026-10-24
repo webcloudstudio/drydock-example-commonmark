@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_list_items.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_list_items.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_list_items.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;List item tests: the seven declared checks from FEATURE-List-Items.md, then block-tree and exact-output
+tests for markers, content columns, empty items, start numbers, laziness and interruption.
+
+The declared checks are transcribed first, with their assertions unchanged. The rest act on the
+block tree returned by `parse_lines` and on the exact stdout bytes, which is the state handed back.
+&quot;&quot;&quot;
+
+import subprocess
+from pathlib import Path
+
+import pytest
+
+from mdparser.blocks import DEFAULT_REGISTRY, LIST_ITEM, PARAGRAPH, Block, parse_lines
+
+
+def run_commonmark(project_root: Path, source: str) -&gt; subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=source,
+        capture_output=True,
+        text=True,
+        cwd=project_root,
+        check=False,
+    )
+
+
+def kinds(block: Block) -&gt; list[str]:
+    &quot;&quot;&quot;Names of the child block types of `block`, in order.&quot;&quot;&quot;
+    return [child.kind.name for child in block.children]
+
+
+def paragraph_texts(block: Block) -&gt; list[str]:
+    &quot;&quot;&quot;Raw content of every paragraph under `block`, in document order.&quot;&quot;&quot;
+    texts: list[str] = []
+    for child in block.children:
+        if child.kind is PARAGRAPH:
+            texts.append(child.content)
+        texts.extend(paragraph_texts(child))
+    return texts
+
+
+def only_item(lines: list[str]) -&gt; Block:
+    &quot;&quot;&quot;The single list item at the top of the document built from `lines`.&quot;&quot;&quot;
+    root = parse_lines(lines)
+    assert kinds(root) == [&quot;list_item&quot;]
+    return root.children[0]
+
+
+# --- Declared acceptance checks (transcribed from FEATURE-List-Items.md) ---
+
+
+def test_items_bullet_items(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Each bullet marker line starts one li element, and consecutive items of one marker form one ul.&quot;&quot;&quot;
+    items = [&quot;first&quot;, &quot;second&quot;, &quot;third&quot;]
+    source = &quot;&quot;.join(&quot;- &quot; + text + &quot;\n&quot; for text in items)
+    result = subprocess.run([str(project_root / &quot;commonmark&quot;)], input=source, capture_output=True, text=True)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;li&gt;&quot;) == len(items)
+    assert result.stdout.count(&quot;&lt;ul&gt;&quot;) == 1
+    for text in items:
+        assert text in result.stdout
+
+
+def test_items_ordered_start_number(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;An ordered list takes its start number from the first item, and ten digits is not a marker.&quot;&quot;&quot;
+    number = 123456789
+    good = subprocess.run([str(project_root / &quot;commonmark&quot;)], input=str(number) + &quot;. ok\n&quot;, capture_output=True, text=True)
+    bad = subprocess.run([str(project_root / &quot;commonmark&quot;)], input=str(number) + &quot;0. not ok\n&quot;, capture_output=True, text=True)
+    print(good.stdout)
+    print(bad.stdout)
+    assert good.returncode == 0
+    assert bad.returncode == 0
+    assert (&#x27;start=&quot;&#x27; + str(number) + &#x27;&quot;&#x27;) in good.stdout
+    assert bad.stdout.count(&quot;&lt;ol&quot;) == 0
+
+
+def test_items_continuation_paragraph(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A continuation paragraph indented to the content column joins the item, giving a loose item with two paragraphs.&quot;&quot;&quot;
+    result = subprocess.run([str(project_root / &quot;commonmark&quot;)], input=&quot;- one\n\n  two\n&quot;, capture_output=True, text=True)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;li&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 2
+
+
+def test_items_insufficient_indent_ends_item(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A paragraph indented less than the content column is outside the item.&quot;&quot;&quot;
+    result = subprocess.run([str(project_root / &quot;commonmark&quot;)], input=&quot;- one\n\n two\n&quot;, capture_output=True, text=True)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;li&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+
+
+def test_items_empty_items(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Empty items are allowed in the middle of a list, but an empty item cannot interrupt a paragraph.&quot;&quot;&quot;
+    middle = subprocess.run([str(project_root / &quot;commonmark&quot;)], input=&quot;- foo\n-\n- bar\n&quot;, capture_output=True, text=True)
+    interrupt = subprocess.run([str(project_root / &quot;commonmark&quot;)], input=&quot;foo\n*\n&quot;, capture_output=True, text=True)
+    print(middle.stdout)
+    print(interrupt.stdout)
+    assert middle.returncode == 0
+    assert interrupt.returncode == 0
+    assert middle.stdout.count(&quot;&lt;li&gt;&quot;) == 2 + 1
+    assert interrupt.stdout.count(&quot;&lt;li&gt;&quot;) == 0
+
+
+def test_items_nested_and_code(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A sublist indented to the content column nests, and a code block six spaces in is code inside the item.&quot;&quot;&quot;
+    nested = subprocess.run([str(project_root / &quot;commonmark&quot;)], input=&quot;- foo\n  - bar\n&quot;, capture_output=True, text=True)
+    code = subprocess.run([str(project_root / &quot;commonmark&quot;)], input=&quot;- foo\n\n      bar\n&quot;, capture_output=True, text=True)
+    print(nested.stdout)
+    print(code.stdout)
+    assert nested.returncode == 0
+    assert code.returncode == 0
+    assert nested.stdout.count(&quot;&lt;ul&gt;&quot;) == 2
+    assert code.stdout.count(&quot;&lt;pre&gt;&quot;) == 1
+
+
+def test_items_four_spaces_is_code(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A marker indented four spaces is code, not a list item.&quot;&quot;&quot;
+    result = subprocess.run([str(project_root / &quot;commonmark&quot;)], input=&quot;    1.  A paragraph\n&quot;, capture_output=True, text=True)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;ol&quot;) == 0
+    assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1
+
+
+# --- Markers ---
+
+
+@pytest.mark.parametrize(&quot;bullet&quot;, [&quot;-&quot;, &quot;+&quot;, &quot;*&quot;])
+def test_each_bullet_character_starts_an_item(bullet: str) -&gt; None:
+    item = only_item([f&quot;{bullet} foo&quot;])
+    assert item.item is not None
+    assert item.item.ordered is False
+    assert item.item.delimiter == bullet
+
+
+@pytest.mark.parametrize(&quot;delimiter&quot;, [&quot;.&quot;, &quot;)&quot;])
+def test_ordered_marker_records_its_number_and_delimiter(delimiter: str) -&gt; None:
+    item = only_item([f&quot;3{delimiter} foo&quot;])
+    assert item.item is not None
+    assert item.item.ordered is True
+    assert item.item.start == 3
+    assert item.item.delimiter == delimiter
+
+
+def test_nine_digit_number_is_a_marker() -&gt; None:
+    item = only_item([&quot;123456789. foo&quot;])
+    assert item.item is not None
+    assert item.item.start == 123456789
+
+
+def test_ten_digit_number_is_not_a_marker() -&gt; None:
+    root = parse_lines([&quot;1234567890. foo&quot;])
+    assert kinds(root) == [&quot;paragraph&quot;]
+
+
+@pytest.mark.parametrize(&quot;line&quot;, [&quot;-foo&quot;, &quot;+bar&quot;, &quot;1.foo&quot;, &quot;2)baz&quot;])
+def test_marker_must_be_followed_by_space_or_tab(line: str) -&gt; None:
+    root = parse_lines([line])
+    assert kinds(root) == [&quot;paragraph&quot;]
+
+
+def test_marker_at_end_of_line_is_an_empty_item() -&gt; None:
+    item = only_item([&quot;-&quot;])
+    assert item.children == []
+
+
+def test_leading_zeros_do_not_change_the_start_number() -&gt; None:
+    item = only_item([&quot;007. foo&quot;])
+    assert item.item is not None
+    assert item.item.start == 7
+
+
+def test_marker_may_be_indented_three_spaces() -&gt; None:
+    item = only_item([&quot;   - foo&quot;])
+    assert item.item is not None
+
+
+def test_marker_indented_four_spaces_is_indented_code() -&gt; None:
+    root = parse_lines([&quot;    - foo&quot;])
+    assert kinds(root) == [&quot;indented_code&quot;]
+
+
+def test_thematic_break_takes_precedence_over_an_item() -&gt; None:
+    root = parse_lines([&quot;* * *&quot;])
+    assert kinds(root) == [&quot;thematic_break&quot;]
+
+
+def test_item_is_a_container_for_blocks() -&gt; None:
+    assert LIST_ITEM.is_container is True
+
+
+def test_default_registry_includes_list_item() -&gt; None:
+    assert LIST_ITEM in DEFAULT_REGISTRY.starts()
+
+
+# --- Content column ---
+
+
+def test_content_column_is_marker_plus_one_space() -&gt; None:
+    item = only_item([&quot;- foo&quot;])
+    assert item.item is not None
+    assert item.item.content_column == 2
+
+
+def test_content_column_takes_spaces_up_to_four() -&gt; None:
+    item = only_item([&quot;-   foo&quot;])
+    assert item.item is not None
+    assert item.item.content_column == 4
+
+
+def test_five_spaces_after_marker_make_the_content_code() -&gt; None:
+    item = only_item([&quot;-     foo&quot;])
+    assert item.item is not None
+    assert item.item.content_column == 2
+    assert kinds(item) == [&quot;indented_code&quot;]
+
+
+def test_blank_start_content_column_is_marker_plus_one() -&gt; None:
+    item = only_item([&quot;1.&quot;])
+    assert item.item is not None
+    assert item.item.content_column == 3
+
+
+def test_content_column_is_absolute_for_a_nested_item() -&gt; None:
+    outer = only_item([&quot;- - foo&quot;])
+    inner = outer.children[0]
+    assert inner.item is not None
+    assert inner.item.content_column == 4
+
+
+def test_tab_after_marker_counts_to_the_next_tab_stop() -&gt; None:
+    item = only_item([&quot;-\tfoo&quot;])
+    assert item.item is not None
+    assert item.item.content_column == 4
+
+
+# --- Empty items and the blank line ---
+
+
+def test_empty_item_has_no_children() -&gt; None:
+    item = only_item([&quot;-&quot;])
+    assert item.children == []
+
+
+def test_empty_item_takes_an_indented_continuation_line() -&gt; None:
+    item = only_item([&quot;-&quot;, &quot;  foo&quot;])
+    assert kinds(item) == [&quot;paragraph&quot;]
+    assert paragraph_texts(item) == [&quot;foo&quot;]
+
+
+def test_blank_line_after_an_empty_item_ends_it() -&gt; None:
+    root = parse_lines([&quot;-&quot;, &quot;&quot;, &quot;  foo&quot;])
+    assert kinds(root) == [&quot;list_item&quot;, &quot;paragraph&quot;]
+    assert root.children[0].children == []
+    assert root.children[1].content == &quot;foo&quot;
+
+
+def test_blank_line_keeps_an_item_with_content_open() -&gt; None:
+    item = only_item([&quot;- foo&quot;, &quot;&quot;, &quot;  bar&quot;])
+    assert paragraph_texts(item) == [&quot;foo&quot;, &quot;bar&quot;]
+
+
+def test_blank_lines_inside_an_item_with_content_do_not_end_it() -&gt; None:
+    root = parse_lines([&quot;- foo&quot;, &quot;&quot;, &quot;&quot;, &quot;  bar&quot;])
+    assert kinds(root) == [&quot;list_item&quot;]
+    assert paragraph_texts(root) == [&quot;foo&quot;, &quot;bar&quot;]
+
+
+# --- Indentation and nesting ---
+
+
+def test_nested_item_is_inside_its_parent_at_the_content_column() -&gt; None:
+    item = only_item([&quot;- foo&quot;, &quot;  - bar&quot;])
+    assert kinds(item) == [&quot;paragraph&quot;, &quot;list_item&quot;]
+
+
+def test_paragraph_indented_less_than_the_content_column_is_outside_the_item() -&gt; None:
+    root = parse_lines([&quot;- one&quot;, &quot;&quot;, &quot; two&quot;])
+    assert kinds(root) == [&quot;list_item&quot;, &quot;paragraph&quot;]
+    assert paragraph_texts(root.children[0]) == [&quot;one&quot;]
+    assert root.children[1].content == &quot;two&quot;
+
+
+def test_indented_code_inside_an_item_needs_six_spaces() -&gt; None:
+    item = only_item([&quot;- foo&quot;, &quot;&quot;, &quot;      bar&quot;])
+    assert kinds(item) == [&quot;paragraph&quot;, &quot;indented_code&quot;]
+
+
+def test_item_inside_a_block_quote() -&gt; None:
+    root = parse_lines([&quot;&gt; - foo&quot;])
+    assert kinds(root) == [&quot;block_quote&quot;]
+    assert kinds(root.children[0]) == [&quot;list_item&quot;]
+
+
+# --- Laziness and interruption ---
+
+
+def test_lazy_line_joins_the_item_paragraph() -&gt; None:
+    root = parse_lines([&quot;- foo&quot;, &quot;bar&quot;])
+    assert kinds(root) == [&quot;list_item&quot;]
+    assert paragraph_texts(root) == [&quot;foo\nbar&quot;]
+
+
+def test_unindented_text_after_a_blank_line_is_not_lazy() -&gt; None:
+    root = parse_lines([&quot;- foo&quot;, &quot;&quot;, &quot;bar&quot;])
+    assert kinds(root) == [&quot;list_item&quot;, &quot;paragraph&quot;]
+    assert paragraph_texts(root.children[0]) == [&quot;foo&quot;]
+
+
+def test_bullet_item_interrupts_a_paragraph() -&gt; None:
+    root = parse_lines([&quot;foo&quot;, &quot;- bar&quot;])
+    assert kinds(root) == [&quot;paragraph&quot;, &quot;list_item&quot;]
+
+
+def test_ordered_item_starting_at_one_interrupts_a_paragraph() -&gt; None:
+    root = parse_lines([&quot;foo&quot;, &quot;1. bar&quot;])
+    assert kinds(root) == [&quot;paragraph&quot;, &quot;list_item&quot;]
+
+
+def test_ordered_item_not_starting_at_one_does_not_interrupt_a_paragraph() -&gt; None:
+    root = parse_lines([&quot;foo&quot;, &quot;2. bar&quot;])
+    assert kinds(root) == [&quot;paragraph&quot;]
+    assert paragraph_texts(root) == [&quot;foo\n2. bar&quot;]
+
+
+def test_empty_item_does_not_interrupt_a_paragraph() -&gt; None:
+    root = parse_lines([&quot;foo&quot;, &quot;*&quot;])
+    assert kinds(root) == [&quot;paragraph&quot;]
+    assert paragraph_texts(root) == [&quot;foo\n*&quot;]
+
+
+def test_empty_item_can_follow_an_item_without_a_blank_line() -&gt; None:
+    root = parse_lines([&quot;- foo&quot;, &quot;-&quot;, &quot;- bar&quot;])
+    assert kinds(root) == [&quot;list_item&quot;, &quot;list_item&quot;, &quot;list_item&quot;]
+
+
+def test_ordered_item_not_starting_at_one_may_start_after_an_item() -&gt; None:
+    root = parse_lines([&quot;- foo&quot;, &quot;2. bar&quot;])
+    assert kinds(root) == [&quot;list_item&quot;, &quot;list_item&quot;]
+
+
+def test_thematic_break_after_an_item_is_not_an_item() -&gt; None:
+    root = parse_lines([&quot;- foo&quot;, &quot;***&quot;])
+    assert kinds(root) == [&quot;list_item&quot;, &quot;thematic_break&quot;]
+
+
+def test_item_changes_when_the_marker_changes() -&gt; None:
+    root = parse_lines([&quot;- a&quot;, &quot;* b&quot;])
+    assert kinds(root) == [&quot;list_item&quot;, &quot;list_item&quot;]
+    assert [child.item.delimiter for child in root.children if child.item] == [&quot;-&quot;, &quot;*&quot;]
+
+
+# --- Exact output ---
+
+
+def test_bullet_list_output_is_exact(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;- foo\n- bar\n&quot;)
+    assert result.stdout == &quot;&lt;ul&gt;\n&lt;li&gt;foo&lt;/li&gt;\n&lt;li&gt;bar&lt;/li&gt;\n&lt;/ul&gt;\n&quot;
+
+
+def test_ordered_list_output_is_exact(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;1. foo\n2. bar\n&quot;)
+    assert result.stdout == &quot;&lt;ol&gt;\n&lt;li&gt;foo&lt;/li&gt;\n&lt;li&gt;bar&lt;/li&gt;\n&lt;/ol&gt;\n&quot;
+
+
+def test_ordered_list_states_a_start_number_other_than_one(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;3. a\n4. b\n&quot;)
+    assert result.stdout == &#x27;&lt;ol start=&quot;3&quot;&gt;\n&lt;li&gt;a&lt;/li&gt;\n&lt;li&gt;b&lt;/li&gt;\n&lt;/ol&gt;\n&#x27;
+
+
+def test_zero_start_number_is_stated(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;0. zero\n&quot;)
+    assert result.stdout == &#x27;&lt;ol start=&quot;0&quot;&gt;\n&lt;li&gt;zero&lt;/li&gt;\n&lt;/ol&gt;\n&#x27;
+
+
+def test_leading_zeros_render_the_number_without_them(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;007. foo\n&quot;)
+    assert result.stdout == &#x27;&lt;ol start=&quot;7&quot;&gt;\n&lt;li&gt;foo&lt;/li&gt;\n&lt;/ol&gt;\n&#x27;
+
+
+def test_empty_item_renders_an_empty_li(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;-\n&quot;)
+    assert result.stdout == &quot;&lt;ul&gt;\n&lt;li&gt;&lt;/li&gt;\n&lt;/ul&gt;\n&quot;
+
+
+def test_lazy_continuation_renders_inside_the_tight_item(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;- foo\nbar\n&quot;)
+    assert result.stdout == &quot;&lt;ul&gt;\n&lt;li&gt;foo\nbar&lt;/li&gt;\n&lt;/ul&gt;\n&quot;
+
+
+def test_blank_line_between_items_makes_the_list_loose(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;- foo\n\n- bar\n&quot;)
+    assert result.stdout == &quot;&lt;ul&gt;\n&lt;li&gt;\n&lt;p&gt;foo&lt;/p&gt;\n&lt;/li&gt;\n&lt;li&gt;\n&lt;p&gt;bar&lt;/p&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&quot;
+
+
+def test_blank_line_inside_an_item_makes_that_list_loose(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;- one\n\n  two\n&quot;)
+    assert result.stdout == &quot;&lt;ul&gt;\n&lt;li&gt;\n&lt;p&gt;one&lt;/p&gt;\n&lt;p&gt;two&lt;/p&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&quot;
+
+
+def test_trailing_blank_line_leaves_the_list_tight(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;- foo\n\n&quot;)
+    assert result.stdout == &quot;&lt;ul&gt;\n&lt;li&gt;foo&lt;/li&gt;\n&lt;/ul&gt;\n&quot;
+
+
+def test_nested_tight_list_output_is_exact(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;- foo\n  - bar\n&quot;)
+    assert result.stdout == &quot;&lt;ul&gt;\n&lt;li&gt;foo\n&lt;ul&gt;\n&lt;li&gt;bar&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&quot;
+
+
+def test_five_spaces_after_marker_output_is_code_inside_the_item(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;-     code\n&quot;)
+    assert result.stdout == &quot;&lt;ul&gt;\n&lt;li&gt;&lt;pre&gt;&lt;code&gt;code\n&lt;/code&gt;&lt;/pre&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&quot;
+
+
+def test_change_of_bullet_character_starts_a_new_list(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;- a\n* b\n&quot;)
+    assert result.stdout == &quot;&lt;ul&gt;\n&lt;li&gt;a&lt;/li&gt;\n&lt;/ul&gt;\n&lt;ul&gt;\n&lt;li&gt;b&lt;/li&gt;\n&lt;/ul&gt;\n&quot;
+
+
+def test_change_of_ordered_delimiter_starts_a_new_list(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;1. a\n1) b\n&quot;)
+    assert result.stdout == &quot;&lt;ol&gt;\n&lt;li&gt;a&lt;/li&gt;\n&lt;/ol&gt;\n&lt;ol&gt;\n&lt;li&gt;b&lt;/li&gt;\n&lt;/ol&gt;\n&quot;
+
+
+def test_paragraph_between_items_splits_the_list(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;- a\n\nb\n\n- c\n&quot;)
+    assert result.stdout == &quot;&lt;ul&gt;\n&lt;li&gt;a&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;b&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;c&lt;/li&gt;\n&lt;/ul&gt;\n&quot;
+
+
+def test_thematic_break_between_items_is_outside_the_lists(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;* Foo\n* * *\n* Bar\n&quot;)
+    assert result.stdout == &quot;&lt;ul&gt;\n&lt;li&gt;Foo&lt;/li&gt;\n&lt;/ul&gt;\n&lt;hr /&gt;\n&lt;ul&gt;\n&lt;li&gt;Bar&lt;/li&gt;\n&lt;/ul&gt;\n&quot;
+
+
+def test_empty_input_renders_nothing(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;&quot;)
+    assert result.stdout == &quot;&quot;
+
+
+def test_item_wraps_paragraph_text_in_li_without_p(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;- foo\n  bar\n&quot;)
+    assert &quot;&lt;p&gt;&quot; not in result.stdout
+    assert result.stdout == &quot;&lt;ul&gt;\n&lt;li&gt;foo\nbar&lt;/li&gt;\n&lt;/ul&gt;\n&quot;
+</pre></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/LINEAGE.json</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/LINEAGE.json</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../workspace/targets/commonmark/LINEAGE.json">Raw file</a></div></header>
+<article class="doc"><pre>{
+  &quot;version&quot;: 1,
+  &quot;import&quot;: {
+    &quot;root&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/sources&quot;,
+    &quot;format&quot;: &quot;markdown&quot;
+  },
+  &quot;sources&quot;: {
+    &quot;INSTRUCTIONS.md&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;4fd2a21&quot;,
+          &quot;date&quot;: &quot;2026-10-14&quot;,
+          &quot;hash&quot;: &quot;10b172786a92ad4dc012e88358cf96fcead95bcd919f2677df3a03405782fb0a&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;commonmark-executable&quot;,
+              &quot;text&quot;: &quot;The deliverable is an executable named `commonmark` at the application root.&quot;,
+              &quot;stories&quot;: [
+                &quot;executable-interface&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;stdin-stdout-interface&quot;,
+              &quot;text&quot;: &quot;The parser reads Markdown from standard input and writes HTML to standard output.&quot;,
+              &quot;stories&quot;: [
+                &quot;executable-interface&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;readme-stdio-interface&quot;,
+              &quot;text&quot;: &quot;Create a concise project `README.md` describing the standard-input/standard-output interface.&quot;,
+              &quot;stories&quot;: [
+                &quot;executable-interface&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;entry-point-succeeds&quot;,
+              &quot;text&quot;: &quot;Build `./commonmark` so that the supplied entry point succeeds&quot;,
+              &quot;stories&quot;: [
+                &quot;executable-interface&quot;,
+                &quot;verify-conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;two-phase-parsing&quot;,
+              &quot;text&quot;: &quot;CommonMark parsing is two phases: resolve **block structure** first, then run **inline parsing** over the block contents. Implement in that order.&quot;,
+              &quot;stories&quot;: [
+                &quot;block-engine&quot;,
+                &quot;code-spans&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;follow-appendix-strategy&quot;,
+              &quot;text&quot;: &quot;The \&quot;Appendix: A parsing strategy\&quot; section describes the reference implementation&#x27;s approach; follow it directly rather than reinventing the rules.&quot;,
+              &quot;stories&quot;: [
+                &quot;block-engine&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;block-paragraphs&quot;,
+              &quot;text&quot;: &quot;paragraphs&quot;,
+              &quot;stories&quot;: [
+                &quot;block-engine&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;block-thematic-breaks&quot;,
+              &quot;text&quot;: &quot;thematic breaks&quot;,
+              &quot;stories&quot;: [
+                &quot;thematic-breaks&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;block-atx-headings&quot;,
+              &quot;text&quot;: &quot;ATX headings&quot;,
+              &quot;stories&quot;: [
+                &quot;atx-headings&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;block-setext-headings&quot;,
+              &quot;text&quot;: &quot;setext headings&quot;,
+              &quot;stories&quot;: [
+                &quot;setext-headings&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;block-indented-code&quot;,
+              &quot;text&quot;: &quot;indented code&quot;,
+              &quot;stories&quot;: [
+                &quot;indented-code&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;block-fenced-code&quot;,
+              &quot;text&quot;: &quot;fenced code&quot;,
+              &quot;stories&quot;: [
+                &quot;fenced-code&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;block-html-blocks&quot;,
+              &quot;text&quot;: &quot;HTML blocks&quot;,
+              &quot;stories&quot;: [
+                &quot;html-blocks&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;block-link-reference-definitions&quot;,
+              &quot;text&quot;: &quot;link reference definitions&quot;,
+              &quot;stories&quot;: [
+                &quot;link-reference-definitions&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;block-quotes&quot;,
+              &quot;text&quot;: &quot;block quotes&quot;,
+              &quot;stories&quot;: [
+                &quot;block-quotes&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;list-structure&quot;,
+              &quot;text&quot;: &quot;lists are the hardest block construct, with lazy continuation, nesting, and tightness.&quot;,
+              &quot;stories&quot;: [
+                &quot;list-items&quot;,
+                &quot;lists&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;inline-backslash-escapes&quot;,
+              &quot;text&quot;: &quot;backslash escapes&quot;,
+              &quot;stories&quot;: [
+                &quot;backslash-escapes&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;inline-entities&quot;,
+              &quot;text&quot;: &quot;entity and numeric references&quot;,
+              &quot;stories&quot;: [
+                &quot;entities&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;inline-code-spans&quot;,
+              &quot;text&quot;: &quot;code spans&quot;,
+              &quot;stories&quot;: [
+                &quot;code-spans&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;inline-emphasis&quot;,
+              &quot;text&quot;: &quot;emphasis and strong emphasis (the delimiter-run algorithm)&quot;,
+              &quot;stories&quot;: [
+                &quot;emphasis&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;inline-links-and-images&quot;,
+              &quot;text&quot;: &quot;links and images&quot;,
+              &quot;stories&quot;: [
+                &quot;links&quot;,
+                &quot;images&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;inline-autolinks&quot;,
+              &quot;text&quot;: &quot;autolinks&quot;,
+              &quot;stories&quot;: [
+                &quot;autolinks&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;inline-raw-html&quot;,
+              &quot;text&quot;: &quot;raw HTML&quot;,
+              &quot;stories&quot;: [
+                &quot;raw-html-inline&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;inline-hard-breaks&quot;,
+              &quot;text&quot;: &quot;hard breaks&quot;,
+              &quot;stories&quot;: [
+                &quot;line-breaks-text&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;unfiltered-conformance-run&quot;,
+              &quot;text&quot;: &quot;It runs the complete, unfiltered supplied CommonMark suite against `./commonmark`.&quot;,
+              &quot;stories&quot;: [
+                &quot;verify-conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;terminal-verification-story&quot;,
+              &quot;text&quot;: &quot;Create one terminal verification story that:&quot;,
+              &quot;stories&quot;: [
+                &quot;verify-conformance&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;cmark.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;4fd2a21&quot;,
+          &quot;date&quot;: &quot;2026-10-14&quot;,
+          &quot;hash&quot;: &quot;c5fb45e7c64fd7670b2a3c49a151e46f4af9d0ad3004bedb37ecf9cdc34d2f00&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;pipe-markdown-through-program&quot;,
+              &quot;text&quot;: &quot;def pipe_through_prog(prog, text):\n    p1 = Popen(prog.split(), stdout=PIPE, stdin=PIPE, stderr=PIPE)\n    [result, err] = p1.communicate(input=text.encode(&#x27;utf-8&#x27;))\n    return [p1.returncode, result, err]&quot;,
+              &quot;stories&quot;: [
+                &quot;executable-interface&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;select-backend&quot;,
+              &quot;text&quot;: &quot;if prog:\n            self.to_html = lambda x: pipe_through_prog(prog, x)\n        else:&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;locate-cmark-library&quot;,
+              &quot;text&quot;: &quot;sysname = platform.system()\n            if sysname == &#x27;Darwin&#x27;:\n                libname = \&quot;libcmark.dylib\&quot;\n            elif sysname == &#x27;Windows&#x27;:\n                libname = \&quot;cmark.dll\&quot;\n            else:\n                libname = \&quot;libcmark.so\&quot;\n            if library_dir:\n                libpath = os.path.join(library_dir, libname)\n            else:\n                libpath = os.path.join(\&quot;build\&quot;, \&quot;src\&quot;, libname)&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;call-cmark-library&quot;,
+              &quot;text&quot;: &quot;def use_library(lib, text):\n    textbytes = text.encode(&#x27;utf-8&#x27;)\n    textlen = len(textbytes)\n    return [0, lib(textbytes, textlen, 0), &#x27;&#x27;]&quot;,
+              &quot;stories&quot;: []
+            }
+          ]
+        }
+      ]
+    },
+    &quot;full_test.sh&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;4fd2a21&quot;,
+          &quot;date&quot;: &quot;2026-10-14&quot;,
+          &quot;hash&quot;: &quot;5b634a1c78117313283acceda8faad9de02b594e54949439c73697b058941a93&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;deliver-commonmark-executable&quot;,
+              &quot;text&quot;: &quot;The deliverable is an executable named commonmark that reads UTF-8 Markdown on stdin and writes HTML to stdout.&quot;,
+              &quot;stories&quot;: [
+                &quot;executable-interface&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;pass-full-conformance-suite&quot;,
+              &quot;text&quot;: &quot;The suite runs unfiltered: no --pattern, no --number, no selector of any kind. spec_tests.py exits with failed + errored, so exit 0 means the complete CommonMark 0.31.2 suite passed.&quot;,
+              &quot;stories&quot;: [
+                &quot;executable-interface&quot;,
+                &quot;block-engine&quot;,
+                &quot;autolinks&quot;,
+                &quot;raw-html-inline&quot;,
+                &quot;code-spans&quot;,
+                &quot;backslash-escapes&quot;,
+                &quot;entities&quot;,
+                &quot;emphasis&quot;,
+                &quot;link-reference-definitions&quot;,
+                &quot;links&quot;,
+                &quot;images&quot;,
+                &quot;line-breaks-text&quot;,
+                &quot;thematic-breaks&quot;,
+                &quot;atx-headings&quot;,
+                &quot;indented-code&quot;,
+                &quot;fenced-code&quot;,
+                &quot;html-blocks&quot;,
+                &quot;block-quotes&quot;,
+                &quot;setext-headings&quot;,
+                &quot;list-items&quot;,
+                &quot;lists&quot;,
+                &quot;cont-tabs-slice&quot;,
+                &quot;verify-conformance&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;normalize.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;4fd2a21&quot;,
+          &quot;date&quot;: &quot;2026-10-14&quot;,
+          &quot;hash&quot;: &quot;94a9dd253907e3dab7c02fc11e934f06112dcf0f3804255d09d732c8c7c4b5f4&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;collapse-inner-whitespace&quot;,
+              &quot;text&quot;: &quot;Multiple inner whitespaces are collapsed to a single space (except in pre tags).&quot;,
+              &quot;stories&quot;: [
+                &quot;verify-conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;strip-block-tag-whitespace&quot;,
+              &quot;text&quot;: &quot;Whitespace surrounding block-level tags is removed.&quot;,
+              &quot;stories&quot;: [
+                &quot;verify-conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;self-closing-to-open&quot;,
+              &quot;text&quot;: &quot;Self-closing tags are converted to open tags.&quot;,
+              &quot;stories&quot;: [
+                &quot;verify-conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;sort-and-lowercase-attributes&quot;,
+              &quot;text&quot;: &quot;Attributes are sorted and lowercased.&quot;,
+              &quot;stories&quot;: [
+                &quot;verify-conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;decode-references&quot;,
+              &quot;text&quot;: &quot;References are converted to unicode, except that &#x27;&lt;&#x27;, &#x27;&gt;&#x27;, &#x27;&amp;&#x27;, and &#x27;\&quot;&#x27; are rendered using entities.&quot;,
+              &quot;stories&quot;: [
+                &quot;verify-conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;return-unnormalized-on-error&quot;,
+              &quot;text&quot;: &quot;on error, return unnormalized HTML&quot;,
+              &quot;stories&quot;: [
+                &quot;verify-conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;pass-cdata-verbatim&quot;,
+              &quot;text&quot;: &quot;passing CDATA chunks through verbatim.&quot;,
+              &quot;stories&quot;: [
+                &quot;verify-conformance&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;spec.txt&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;4fd2a21&quot;,
+          &quot;date&quot;: &quot;2026-10-14&quot;,
+          &quot;hash&quot;: &quot;43fad3e0ac5190a3b0bc6a41f7b1a853201a26ec2e6b74871f5d96239a8c34cf&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;block-structure-two-phase-parsing&quot;,
+              &quot;text&quot;: &quot;Parsing has two phases: in the first phase, lines of input are consumed and the block structure of the document is constructed. In the second phase, the raw text contents of paragraphs and headings are parsed into sequences of Markdown inline elements.&quot;,
+              &quot;stories&quot;: [
+                &quot;block-engine&quot;,
+                &quot;foundation&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;thematic-breaks&quot;,
+              &quot;text&quot;: &quot;A line consisting of optionally up to three spaces of indentation, followed by a sequence of three or more matching `-`, `_`, or `*` characters, each followed optionally by any number of spaces or tabs, forms a thematic break.&quot;,
+              &quot;stories&quot;: [
+                &quot;thematic-breaks&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;atx-headings&quot;,
+              &quot;text&quot;: &quot;An ATX heading consists of a string of characters, parsed as inline content, between an opening sequence of 1--6 unescaped `#` characters and an optional closing sequence of any number of unescaped `#` characters.&quot;,
+              &quot;stories&quot;: [
+                &quot;atx-headings&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;setext-headings&quot;,
+              &quot;text&quot;: &quot;A setext heading consists of one or more lines of text, not interrupted by a blank line, of which the first line does not have more than 3 spaces of indentation, followed by a setext heading underline.&quot;,
+              &quot;stories&quot;: [
+                &quot;setext-headings&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;indented-code-blocks&quot;,
+              &quot;text&quot;: &quot;An indented code block is composed of one or more indented chunks separated by blank lines. An indented chunk is a sequence of non-blank lines, each preceded by four or more spaces of indentation.&quot;,
+              &quot;stories&quot;: [
+                &quot;indented-code&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;fenced-code-blocks&quot;,
+              &quot;text&quot;: &quot;A fenced code block begins with a code fence, preceded by up to three spaces of indentation. The line with the opening code fence may optionally contain some text following the code fence, called the info string.&quot;,
+              &quot;stories&quot;: [
+                &quot;fenced-code&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;html-blocks&quot;,
+              &quot;text&quot;: &quot;An HTML block is a group of lines that is treated as raw HTML (and will not be escaped in HTML output). There are seven kinds of HTML block, which can be defined by their start and end conditions.&quot;,
+              &quot;stories&quot;: [
+                &quot;html-blocks&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;link-reference-definitions&quot;,
+              &quot;text&quot;: &quot;A link reference definition consists of a link label, optionally preceded by up to three spaces of indentation, followed by a colon (`:`), optional spaces or tabs (including up to one line ending), a link destination, optional spaces or tabs (including up to one line ending), and an optional link title.&quot;,
+              &quot;stories&quot;: [
+                &quot;link-reference-definitions&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;paragraphs&quot;,
+              &quot;text&quot;: &quot;A sequence of non-blank lines that cannot be interpreted as other kinds of blocks forms a paragraph.&quot;,
+              &quot;stories&quot;: [
+                &quot;block-engine&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;block-quotes&quot;,
+              &quot;text&quot;: &quot;A block quote marker, optionally preceded by up to three spaces of indentation, consists of (a) the character `&gt;` together with a following space of indentation, or (b) a single character `&gt;` not followed by a space of indentation.&quot;,
+              &quot;stories&quot;: [
+                &quot;block-quotes&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;list-items&quot;,
+              &quot;text&quot;: &quot;A list marker is a bullet list marker or an ordered list marker. A bullet list marker is a `-`, `+`, or `*` character. An ordered list marker is a sequence of 1--9 arabic digits (`0-9`), followed by either a `.` character or a `)` character.&quot;,
+              &quot;stories&quot;: [
+                &quot;list-items&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;lists&quot;,
+              &quot;text&quot;: &quot;A list is a sequence of one or more list items of the same type. The list items may be separated by any number of blank lines.&quot;,
+              &quot;stories&quot;: [
+                &quot;lists&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;code-spans&quot;,
+              &quot;text&quot;: &quot;A code span begins with a backtick string and ends with a backtick string of equal length. The contents of the code span are the characters between these two backtick strings, normalized in the following ways: first, line endings are converted to spaces.&quot;,
+              &quot;stories&quot;: [
+                &quot;code-spans&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;emphasis-and-strong-emphasis&quot;,
+              &quot;text&quot;: &quot;Emphasis begins with a delimiter that can open emphasis and ends with a delimiter that can close emphasis, and that uses the same character (`_` or `*`) as the opening delimiter. Strong emphasis begins with a delimiter that can open strong emphasis and ends with a delimiter that can close strong emphasis.&quot;,
+              &quot;stories&quot;: [
+                &quot;emphasis&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;links-and-images&quot;,
+              &quot;text&quot;: &quot;A link contains link text (the visible text), a link destination (the URI that is the link destination), and optionally a link title. An image description has inline elements as its contents, and when an image is rendered to HTML, this is standardly used as the image&#x27;s alt attribute.&quot;,
+              &quot;stories&quot;: [
+                &quot;links&quot;,
+                &quot;images&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;autolinks&quot;,
+              &quot;text&quot;: &quot;Autolinks are absolute URIs and email addresses inside `&lt;` and `&gt;`. They are parsed as links, with the URL or email address as the link label.&quot;,
+              &quot;stories&quot;: [
+                &quot;autolinks&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;raw-html&quot;,
+              &quot;text&quot;: &quot;Text between `&lt;` and `&gt;` that looks like an HTML tag is parsed as a raw HTML tag and will be rendered in HTML without escaping.&quot;,
+              &quot;stories&quot;: [
+                &quot;raw-html-inline&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;backslash-escapes&quot;,
+              &quot;text&quot;: &quot;Any ASCII punctuation character may be backslash-escaped. Backslash escapes do not work in code blocks, code spans, autolinks, or raw HTML, but they work in all other contexts, including URLs and link titles, link references, and info strings in fenced code blocks.&quot;,
+              &quot;stories&quot;: [
+                &quot;backslash-escapes&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;entity-and-numeric-character-references&quot;,
+              &quot;text&quot;: &quot;Valid HTML entity references and numeric character references can be used in place of the corresponding Unicode character. Decimal numeric character references consist of `&amp;#` + a string of 1--7 arabic digits + `;`. Hexadecimal numeric character references consist of `&amp;#` + either `X` or `x` + a string of 1-6 hexadecimal digits + `;`.&quot;,
+              &quot;stories&quot;: [
+                &quot;entities&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;hard-line-breaks&quot;,
+              &quot;text&quot;: &quot;A line ending (not in a code span or HTML tag) that is preceded by two or more spaces and does not occur at the end of a block is parsed as a hard line break (rendered in HTML as a `&lt;br /&gt;` tag).&quot;,
+              &quot;stories&quot;: [
+                &quot;line-breaks-text&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;soft-line-breaks&quot;,
+              &quot;text&quot;: &quot;A regular line ending (not in a code span or HTML tag) that is not preceded by two or more spaces or a backslash is parsed as a softbreak.&quot;,
+              &quot;stories&quot;: [
+                &quot;line-breaks-text&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;textual-content&quot;,
+              &quot;text&quot;: &quot;Any characters not given an interpretation by the above rules will be parsed as plain textual content.&quot;,
+              &quot;stories&quot;: [
+                &quot;line-breaks-text&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;tab-handling&quot;,
+              &quot;text&quot;: &quot;Tabs in lines are not expanded to spaces. However, in contexts where spaces help to define block structure, tabs behave as if they were replaced by spaces with a tab stop of 4 characters.&quot;,
+              &quot;stories&quot;: [
+                &quot;cont-tabs-slice&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;conformance-suite&quot;,
+              &quot;text&quot;: &quot;A conforming implementation must produce the HTML the spec examples require; the spec examples double as conformance tests run by `spec_tests.py` against a program.&quot;,
+              &quot;stories&quot;: [
+                &quot;verify-conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;executable-program&quot;,
+              &quot;text&quot;: &quot;The spec tests are run against a program: `python test/spec_tests.py --spec spec.txt --program PROGRAM`.&quot;,
+              &quot;stories&quot;: [
+                &quot;executable-interface&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;spec_tests.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;4fd2a21&quot;,
+          &quot;date&quot;: &quot;2026-10-14&quot;,
+          &quot;hash&quot;: &quot;9db1ea4a3ee79c5ec74eebc09c5985eb252427e8d9d19ef45e5cc3f2ae410855&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;run-conformance-suite&quot;,
+              &quot;text&quot;: &quot;Run cmark tests.&quot;,
+              &quot;stories&quot;: [
+                &quot;verify-conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;report-result-counts&quot;,
+              &quot;text&quot;: &quot;{pass} passed, {fail} failed, {error} errored, {skip} skipped&quot;,
+              &quot;stories&quot;: [
+                &quot;verify-conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;filter-by-section-pattern&quot;,
+              &quot;text&quot;: &quot;limit to sections matching regex pattern&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;filter-by-example-number&quot;,
+              &quot;text&quot;: &quot;only consider the test with the given number&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;normalize-html-before-compare&quot;,
+              &quot;text&quot;: &quot;do not normalize HTML&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;dump-tests-json&quot;,
+              &quot;text&quot;: &quot;dump tests in JSON format&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;track-changed-results&quot;,
+              &quot;text&quot;: &quot;track which test cases pass/fail in the given JSON file and only report changes&quot;,
+              &quot;stories&quot;: []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+</pre></article>
+</main>
+</body>
+</html>

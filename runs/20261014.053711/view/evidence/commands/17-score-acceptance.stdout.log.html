@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/commands/17-score-acceptance.stdout.log</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/commands/17-score-acceptance.stdout.log</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/commands/17-score-acceptance.stdout.log">Raw file</a></div></header>
+<article class="doc"><pre>Drydock 0.2.0  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+  ✓ PASS        [1/126]  foundation-package-imports             foundation                  ARCHITECTURE.md
+  ✓ PASS        [2/126]  executable-empty-input                 executable-interface        FEATURE-Executable.md
+  ✓ PASS        [3/126]  executable-invalid-utf8                executable-interface        FEATURE-Executable.md
+  ✓ PASS        [4/126]  executable-stdout-is-html-only         executable-interface        FEATURE-Executable.md
+  ✓ PASS        [5/126]  executable-line-endings                executable-interface        FEATURE-Executable.md
+  ✓ PASS        [6/126]  executable-nul-replacement             executable-interface        FEATURE-Executable.md
+  ✓ PASS        [7/126]  engine-paragraph-count                 block-engine                FEATURE-Block-Engine.md
+  ✓ PASS        [8/126]  engine-multiline-paragraph             block-engine                FEATURE-Block-Engine.md
+  ✓ PASS        [9/126]  engine-blank-lines-ignored             block-engine                FEATURE-Block-Engine.md
+  ✓ PASS        [10/126]  engine-html-escaping                   block-engine                FEATURE-Block-Engine.md
+  ✓ PASS        [11/126]  autolinks-corpus-section               autolinks                   FEATURE-Autolinks.md
+  ✓ PASS        [12/126]  autolinks-uri-roundtrip                autolinks                   FEATURE-Autolinks.md
+  ✓ PASS        [13/126]  autolinks-email-mailto                 autolinks                   FEATURE-Autolinks.md
+  ✓ PASS        [14/126]  autolinks-space-not-autolink           autolinks                   FEATURE-Autolinks.md
+  ✓ PASS        [15/126]  rawhtml-open-and-close-tags            raw-html-inline             FEATURE-Raw-HTML.md
+  ✓ PASS        [16/126]  rawhtml-comment-pi-declaration-cdata   raw-html-inline             FEATURE-Raw-HTML.md
+  ✓ PASS        [17/126]  rawhtml-illegal-forms-escaped          raw-html-inline             FEATURE-Raw-HTML.md
+  ✓ PASS        [18/126]  rawhtml-closing-tag-with-attributes    raw-html-inline             FEATURE-Raw-HTML.md
+  ✓ PASS        [19/126]  rawhtml-backslash-inert                raw-html-inline             FEATURE-Raw-HTML.md
+  ✓ PASS        [20/126]  codespans-corpus-sections              code-spans                  FEATURE-Code-Spans.md
+  ✓ PASS        [21/126]  codespans-simple                       code-spans                  FEATURE-Code-Spans.md
+  ✓ PASS        [22/126]  codespans-backtick-length-match        code-spans                  FEATURE-Code-Spans.md
+  ✓ PASS        [23/126]  codespans-unclosed-literal             code-spans                  FEATURE-Code-Spans.md
+  ✓ PASS        [24/126]  codespans-escapes-inert                code-spans                  FEATURE-Code-Spans.md
+  ✓ PASS        [25/126]  escapes-punctuation-inert              backslash-escapes           FEATURE-Backslash-Escapes.md
+  ✓ PASS        [26/126]  escapes-non-punctuation-literal        backslash-escapes           FEATURE-Backslash-Escapes.md
+  ✓ PASS        [27/126]  escapes-block-markers                  backslash-escapes           FEATURE-Backslash-Escapes.md
+  ✓ PASS        [28/126]  escapes-inert-in-code-span             backslash-escapes           FEATURE-Backslash-Escapes.md
+  ✓ PASS        [29/126]  entities-decimal-reference             entities                    FEATURE-Entities.md
+  ✓ PASS        [30/126]  entities-hex-reference                 entities                    FEATURE-Entities.md
+  ✓ PASS        [31/126]  entities-named-ampersand               entities                    FEATURE-Entities.md
+  ✓ PASS        [32/126]  entities-unknown-stays-literal         entities                    FEATURE-Entities.md
+  ✓ PASS        [33/126]  entities-nul-reference-replaced        entities                    FEATURE-Entities.md
+  ✓ PASS        [34/126]  entities-inert-in-code-span            entities                    FEATURE-Entities.md
+  ✓ PASS        [35/126]  emphasis-star-and-underscore           emphasis                    FEATURE-Emphasis.md
+  ✓ PASS        [36/126]  emphasis-strong                        emphasis                    FEATURE-Emphasis.md
+  ✓ PASS        [37/126]  emphasis-intraword-rules               emphasis                    FEATURE-Emphasis.md
+  ✓ PASS        [38/126]  emphasis-flanking-whitespace           emphasis                    FEATURE-Emphasis.md
+  ✓ PASS        [39/126]  emphasis-nesting                       emphasis                    FEATURE-Emphasis.md
+  ✓ PASS        [40/126]  emphasis-code-span-binds-tighter       emphasis                    FEATURE-Emphasis.md
+  ✓ PASS        [41/126]  defs-definition-only-renders-nothing   link-reference-definitions  FEATURE-Link-Reference-Definitions.md
+  ✓ PASS        [42/126]  defs-remainder-is-paragraph            link-reference-definitions  FEATURE-Link-Reference-Definitions.md
+  ✓ PASS        [43/126]  defs-trailing-text-not-definition      link-reference-definitions  FEATURE-Link-Reference-Definitions.md
+  ✓ PASS        [44/126]  defs-cannot-interrupt-paragraph        link-reference-definitions  FEATURE-Link-Reference-Definitions.md
+  ✓ PASS        [45/126]  defs-title-with-blank-line             link-reference-definitions  FEATURE-Link-Reference-Definitions.md
+  ✓ PASS        [46/126]  links-inline-destination-and-title     links                       FEATURE-Links.md
+  ✓ PASS        [47/126]  links-reference-forms                  links                       FEATURE-Links.md
+  ✓ PASS        [48/126]  links-reference-case-insensitive       links                       FEATURE-Links.md
+  ✓ PASS        [49/126]  links-undefined-reference-literal      links                       FEATURE-Links.md
+  ✓ PASS        [50/126]  links-no-nested-links                  links                       FEATURE-Links.md
+  ✓ PASS        [51/126]  links-space-before-parenthesis         links                       FEATURE-Links.md
+  ✓ PASS        [52/126]  images-corpus-sections                 images                      FEATURE-Images.md
+  ✓ PASS        [53/126]  images-inline-image                    images                      FEATURE-Images.md
+  ✓ PASS        [54/126]  images-alt-is-plain-text               images                      FEATURE-Images.md
+  ✓ PASS        [55/126]  images-reference-forms                 images                      FEATURE-Images.md
+  ✓ PASS        [56/126]  images-inside-link                     images                      FEATURE-Images.md
+  ✓ PASS        [57/126]  breaks-corpus-sections                 line-breaks-text            FEATURE-Line-Breaks-Text.md
+  ✓ PASS        [58/126]  breaks-hard-break-spaces               line-breaks-text            FEATURE-Line-Breaks-Text.md
+  ✓ PASS        [59/126]  breaks-hard-break-backslash            line-breaks-text            FEATURE-Line-Breaks-Text.md
+  ✓ PASS        [60/126]  breaks-soft-break                      line-breaks-text            FEATURE-Line-Breaks-Text.md
+  ✓ PASS        [61/126]  breaks-none-at-block-end               line-breaks-text            FEATURE-Line-Breaks-Text.md
+  ✓ PASS        [62/126]  breaks-inert-in-code-span              line-breaks-text            FEATURE-Line-Breaks-Text.md
+  ✓ PASS        [63/126]  thematic-three-markers                 thematic-breaks             FEATURE-Thematic-Breaks.md
+  ✓ PASS        [64/126]  thematic-not-a-break                   thematic-breaks             FEATURE-Thematic-Breaks.md
+  ✓ PASS        [65/126]  thematic-interrupts-paragraph          thematic-breaks             FEATURE-Thematic-Breaks.md
+  ✓ PASS        [66/126]  thematic-trailing-whitespace           thematic-breaks             FEATURE-Thematic-Breaks.md
+  ✓ PASS        [67/126]  atx-levels-one-to-six                  atx-headings                FEATURE-ATX-Headings.md
+  ✓ PASS        [68/126]  atx-not-a-heading                      atx-headings                FEATURE-ATX-Headings.md
+  ✓ PASS        [69/126]  atx-closing-sequence                   atx-headings                FEATURE-ATX-Headings.md
+  ✓ PASS        [70/126]  atx-empty-heading                      atx-headings                FEATURE-ATX-Headings.md
+  ✓ PASS        [71/126]  atx-interrupts-paragraph               atx-headings                FEATURE-ATX-Headings.md
+  ✓ PASS        [72/126]  atx-indentation-limit                  atx-headings                FEATURE-ATX-Headings.md
+  ✓ PASS        [73/126]  indented-simple-block                  indented-code               FEATURE-Indented-Code.md
+  ✓ PASS        [74/126]  indented-cannot-interrupt-paragraph    indented-code               FEATURE-Indented-Code.md
+  ✓ PASS        [75/126]  indented-chunks-and-ending             indented-code               FEATURE-Indented-Code.md
+  ✓ PASS        [76/126]  indented-content-escaped-and-literal   indented-code               FEATURE-Indented-Code.md
+  ✓ PASS        [77/126]  indented-tab-indentation               indented-code               FEATURE-Indented-Code.md
+  ✓ PASS        [78/126]  fenced-backtick-and-tilde              fenced-code                 FEATURE-Fenced-Code.md
+  ✓ PASS        [79/126]  fenced-info-string-language-class      fenced-code                 FEATURE-Fenced-Code.md
+  ✓ PASS        [80/126]  fenced-closing-fence-rules             fenced-code                 FEATURE-Fenced-Code.md
+  ✓ PASS        [81/126]  fenced-unclosed-runs-to-end            fenced-code                 FEATURE-Fenced-Code.md
+  ✓ PASS        [82/126]  fenced-interrupts-paragraph            fenced-code                 FEATURE-Fenced-Code.md
+  ✓ PASS        [83/126]  fenced-two-backticks-not-a-fence       fenced-code                 FEATURE-Fenced-Code.md
+  ✓ PASS        [84/126]  fenced-indentation-stripped            fenced-code                 FEATURE-Fenced-Code.md
+  ✓ PASS        [85/126]  htmlblock-type6-raw-lines              html-blocks                 FEATURE-HTML-Blocks.md
+  ✓ PASS        [86/126]  htmlblock-type6-ends-at-blank-line     html-blocks                 FEATURE-HTML-Blocks.md
+  ✓ PASS        [87/126]  htmlblock-comment-spans-blank-lines    html-blocks                 FEATURE-HTML-Blocks.md
+  ✓ PASS        [88/126]  htmlblock-pre-spans-blank-lines        html-blocks                 FEATURE-HTML-Blocks.md
+  ✓ PASS        [89/126]  htmlblock-type7-cannot-interrupt       html-blocks                 FEATURE-HTML-Blocks.md
+  ✓ PASS        [90/126]  htmlblock-type6-interrupts-paragraph   html-blocks                 FEATURE-HTML-Blocks.md
+  ✓ PASS        [91/126]  htmlblock-four-space-indent-is-code    html-blocks                 FEATURE-HTML-Blocks.md
+  ✓ PASS        [92/126]  quote-basic-content                    block-quotes                FEATURE-Block-Quotes.md
+  ✓ PASS        [93/126]  quote-marker-space-optional            block-quotes                FEATURE-Block-Quotes.md
+  ✓ PASS        [94/126]  quote-lazy-continuation                block-quotes                FEATURE-Block-Quotes.md
+  ✓ PASS        [95/126]  quote-nested-lazy                      block-quotes                FEATURE-Block-Quotes.md
+  ✓ PASS        [96/126]  quote-blank-line-separates             block-quotes                FEATURE-Block-Quotes.md
+  ✓ PASS        [97/126]  quote-interrupts-paragraph             block-quotes                FEATURE-Block-Quotes.md
+  ✓ PASS        [98/126]  quote-four-spaces-is-code              block-quotes                FEATURE-Block-Quotes.md
+  ✓ PASS        [99/126]  quote-no-lazy-code                     block-quotes                FEATURE-Block-Quotes.md
+  ✓ PASS        [100/126]  setext-both-levels                     setext-headings             FEATURE-Setext-Headings.md
+  ✓ PASS        [101/126]  setext-multiline-content               setext-headings             FEATURE-Setext-Headings.md
+  ✓ PASS        [102/126]  setext-underline-beats-thematic-break  setext-headings             FEATURE-Setext-Headings.md
+  ✓ PASS        [103/126]  setext-sequence-with-thematic-breaks   setext-headings             FEATURE-Setext-Headings.md
+  ✓ PASS        [104/126]  setext-underline-limits                setext-headings             FEATURE-Setext-Headings.md
+  ✓ PASS        [105/126]  setext-not-lazy-in-quote               setext-headings             FEATURE-Setext-Headings.md
+  ✓ PASS        [106/126]  setext-quote-then-thematic-break       setext-headings             FEATURE-Setext-Headings.md
+  ✓ PASS        [107/126]  setext-empty-is-paragraph              setext-headings             FEATURE-Setext-Headings.md
+  ✓ PASS        [108/126]  items-bullet-items                     list-items                  FEATURE-List-Items.md
+  ✓ PASS        [109/126]  items-ordered-start-number             list-items                  FEATURE-List-Items.md
+  ✓ PASS        [110/126]  items-continuation-paragraph           list-items                  FEATURE-List-Items.md
+  ✓ PASS        [111/126]  items-insufficient-indent-ends-item    list-items                  FEATURE-List-Items.md
+  ✓ PASS        [112/126]  items-empty-items                      list-items                  FEATURE-List-Items.md
+  ✓ PASS        [113/126]  items-nested-and-code                  list-items                  FEATURE-List-Items.md
+  ✓ PASS        [114/126]  items-four-spaces-is-code              list-items                  FEATURE-List-Items.md
+  ✓ PASS        [115/126]  lists-corpus-sections                  lists                       FEATURE-Lists.md
+  ✓ PASS        [116/126]  lists-changing-marker-starts-new-list  lists                       FEATURE-Lists.md
+  ✓ PASS        [117/126]  lists-tight-versus-loose               lists                       FEATURE-Lists.md
+  ✓ PASS        [118/126]  lists-blank-inside-item-makes-loose    lists                       FEATURE-Lists.md
+  ✓ PASS        [119/126]  lists-blank-in-code-stays-tight        lists                       FEATURE-Lists.md
+  ✓ PASS        [120/126]  lists-interrupt-paragraph              lists                       FEATURE-Lists.md
+  ✓ PASS        [121/126]  tabs-corpus-and-remaining-sections     cont-tabs-slice             FEATURE-Tabs.md
+  ✓ PASS        [122/126]  tabs-indented-code-and-internal-tabs   cont-tabs-slice             FEATURE-Tabs.md
+  ✓ PASS        [123/126]  tabs-list-continuation                 cont-tabs-slice             FEATURE-Tabs.md
+  ✓ PASS        [124/126]  tabs-after-markers                     cont-tabs-slice             FEATURE-Tabs.md
+  ✓ PASS        [125/126]  tabs-as-separators                     cont-tabs-slice             FEATURE-Tabs.md
+  ✓ PASS        [126/126]  full-conformance-suite                 verify-conformance          FEATURE-Verification.md
+
+Acceptance verification: commonmark  (2026-10-14T09:04:35+00:00)
+  PASS 79   FAIL 0   UNVERIFIED 0   PREPASSED 47   (126 AC)
+
+  ✓ PASS        foundation-package-imports             foundation                  ARCHITECTURE.md
+  ✓ PASS        executable-empty-input                 executable-interface        FEATURE-Executable.md
+  ✓ PASS        executable-invalid-utf8                executable-interface        FEATURE-Executable.md
+  ✓ PASS        executable-stdout-is-html-only         executable-interface        FEATURE-Executable.md
+  ✓ PASS        executable-line-endings                executable-interface        FEATURE-Executable.md
+  ✓ PASS        executable-nul-replacement             executable-interface        FEATURE-Executable.md
+  ✓ PASS        engine-paragraph-count                 block-engine                FEATURE-Block-Engine.md
+  ✓ PASS        engine-multiline-paragraph             block-engine                FEATURE-Block-Engine.md
+  ✓ PASS        engine-blank-lines-ignored             block-engine                FEATURE-Block-Engine.md
+  ✓ PASS        engine-html-escaping                   block-engine                FEATURE-Block-Engine.md
+  ✓ PASS        autolinks-corpus-section               autolinks                   FEATURE-Autolinks.md
+  ✓ PASS        autolinks-uri-roundtrip                autolinks                   FEATURE-Autolinks.md
+  ✓ PASS        autolinks-email-mailto                 autolinks                   FEATURE-Autolinks.md
+  ~ PREPASSED   autolinks-space-not-autolink           autolinks                   FEATURE-Autolinks.md
+  ✓ PASS        rawhtml-open-and-close-tags            raw-html-inline             FEATURE-Raw-HTML.md
+  ✓ PASS        rawhtml-comment-pi-declaration-cdata   raw-html-inline             FEATURE-Raw-HTML.md
+  ~ PREPASSED   rawhtml-illegal-forms-escaped          raw-html-inline             FEATURE-Raw-HTML.md
+  ~ PREPASSED   rawhtml-closing-tag-with-attributes    raw-html-inline             FEATURE-Raw-HTML.md
+  ✓ PASS        rawhtml-backslash-inert                raw-html-inline             FEATURE-Raw-HTML.md
+  ✓ PASS        codespans-corpus-sections              code-spans                  FEATURE-Code-Spans.md
+  ✓ PASS        codespans-simple                       code-spans                  FEATURE-Code-Spans.md
+  ✓ PASS        codespans-backtick-length-match        code-spans                  FEATURE-Code-Spans.md
+  ~ PREPASSED   codespans-unclosed-literal             code-spans                  FEATURE-Code-Spans.md
+  ✓ PASS        codespans-escapes-inert                code-spans                  FEATURE-Code-Spans.md
+  ~ PREPASSED   escapes-punctuation-inert              backslash-escapes           FEATURE-Backslash-Escapes.md
+  ~ PREPASSED   escapes-non-punctuation-literal        backslash-escapes           FEATURE-Backslash-Escapes.md
+  ~ PREPASSED   escapes-block-markers                  backslash-escapes           FEATURE-Backslash-Escapes.md
+  ~ PREPASSED   escapes-inert-in-code-span             backslash-escapes           FEATURE-Backslash-Escapes.md
+  ✓ PASS        entities-decimal-reference             entities                    FEATURE-Entities.md
+  ✓ PASS        entities-hex-reference                 entities                    FEATURE-Entities.md
+  ~ PREPASSED   entities-named-ampersand               entities                    FEATURE-Entities.md
+  ~ PREPASSED   entities-unknown-stays-literal         entities                    FEATURE-Entities.md
+  ✓ PASS        entities-nul-reference-replaced        entities                    FEATURE-Entities.md
+  ~ PREPASSED   entities-inert-in-code-span            entities                    FEATURE-Entities.md
+  ✓ PASS        emphasis-star-and-underscore           emphasis                    FEATURE-Emphasis.md
+  ✓ PASS        emphasis-strong                        emphasis                    FEATURE-Emphasis.md
+  ✓ PASS        emphasis-intraword-rules               emphasis                    FEATURE-Emphasis.md
+  ~ PREPASSED   emphasis-flanking-whitespace           emphasis                    FEATURE-Emphasis.md
+  ✓ PASS        emphasis-nesting                       emphasis                    FEATURE-Emphasis.md
+  ~ PREPASSED   emphasis-code-span-binds-tighter       emphasis                    FEATURE-Emphasis.md
+  ✓ PASS        defs-definition-only-renders-nothing   link-reference-definitions  FEATURE-Link-Reference-Definitions.md
+  ~ PREPASSED   defs-remainder-is-paragraph            link-reference-definitions  FEATURE-Link-Reference-Definitions.md
+  ~ PREPASSED   defs-trailing-text-not-definition      link-reference-definitions  FEATURE-Link-Reference-Definitions.md
+  ~ PREPASSED   defs-cannot-interrupt-paragraph        link-reference-definitions  FEATURE-Link-Reference-Definitions.md
+  ~ PREPASSED   defs-title-with-blank-line             link-reference-definitions  FEATURE-Link-Reference-Definitions.md
+  ✓ PASS        links-inline-destination-and-title     links                       FEATURE-Links.md
+  ✓ PASS        links-reference-forms                  links                       FEATURE-Links.md
+  ✓ PASS        links-reference-case-insensitive       links                       FEATURE-Links.md
+  ~ PREPASSED   links-undefined-reference-literal      links                       FEATURE-Links.md
+  ✓ PASS        links-no-nested-links                  links                       FEATURE-Links.md
+  ~ PREPASSED   links-space-before-parenthesis         links                       FEATURE-Links.md
+  ✓ PASS        images-corpus-sections                 images                      FEATURE-Images.md
+  ✓ PASS        images-inline-image                    images                      FEATURE-Images.md
+  ✓ PASS        images-alt-is-plain-text               images                      FEATURE-Images.md
+  ✓ PASS        images-reference-forms                 images                      FEATURE-Images.md
+  ✓ PASS        images-inside-link                     images                      FEATURE-Images.md
+  ~ PREPASSED   breaks-corpus-sections                 line-breaks-text            FEATURE-Line-Breaks-Text.md
+  ✓ PASS        breaks-hard-break-spaces               line-breaks-text            FEATURE-Line-Breaks-Text.md
+  ✓ PASS        breaks-hard-break-backslash            line-breaks-text            FEATURE-Line-Breaks-Text.md
+  ~ PREPASSED   breaks-soft-break                      line-breaks-text            FEATURE-Line-Breaks-Text.md
+  ~ PREPASSED   breaks-none-at-block-end               line-breaks-text            FEATURE-Line-Breaks-Text.md
+  ~ PREPASSED   breaks-inert-in-code-span              line-breaks-text            FEATURE-Line-Breaks-Text.md
+  ✓ PASS        thematic-three-markers                 thematic-breaks             FEATURE-Thematic-Breaks.md
+  ~ PREPASSED   thematic-not-a-break                   thematic-breaks             FEATURE-Thematic-Breaks.md
+  ✓ PASS        thematic-interrupts-paragraph          thematic-breaks             FEATURE-Thematic-Breaks.md
+  ✓ PASS        thematic-trailing-whitespace           thematic-breaks             FEATURE-Thematic-Breaks.md
+  ✓ PASS        atx-levels-one-to-six                  atx-headings                FEATURE-ATX-Headings.md
+  ~ PREPASSED   atx-not-a-heading                      atx-headings                FEATURE-ATX-Headings.md
+  ✓ PASS        atx-closing-sequence                   atx-headings                FEATURE-ATX-Headings.md
+  ✓ PASS        atx-empty-heading                      atx-headings                FEATURE-ATX-Headings.md
+  ✓ PASS        atx-interrupts-paragraph               atx-headings                FEATURE-ATX-Headings.md
+  ✓ PASS        atx-indentation-limit                  atx-headings                FEATURE-ATX-Headings.md
+  ✓ PASS        indented-simple-block                  indented-code               FEATURE-Indented-Code.md
+  ~ PREPASSED   indented-cannot-interrupt-paragraph    indented-code               FEATURE-Indented-Code.md
+  ✓ PASS        indented-chunks-and-ending             indented-code               FEATURE-Indented-Code.md
+  ✓ PASS        indented-content-escaped-and-literal   indented-code               FEATURE-Indented-Code.md
+  ✓ PASS        indented-tab-indentation               indented-code               FEATURE-Indented-Code.md
+  ✓ PASS        fenced-backtick-and-tilde              fenced-code                 FEATURE-Fenced-Code.md
+  ✓ PASS        fenced-info-string-language-class      fenced-code                 FEATURE-Fenced-Code.md
+  ✓ PASS        fenced-closing-fence-rules             fenced-code                 FEATURE-Fenced-Code.md
+  ✓ PASS        fenced-unclosed-runs-to-end            fenced-code                 FEATURE-Fenced-Code.md
+  ✓ PASS        fenced-interrupts-paragraph            fenced-code                 FEATURE-Fenced-Code.md
+  ~ PREPASSED   fenced-two-backticks-not-a-fence       fenced-code                 FEATURE-Fenced-Code.md
+  ✓ PASS        fenced-indentation-stripped            fenced-code                 FEATURE-Fenced-Code.md
+  ✓ PASS        htmlblock-type6-raw-lines              html-blocks                 FEATURE-HTML-Blocks.md
+  ✓ PASS        htmlblock-type6-ends-at-blank-line     html-blocks                 FEATURE-HTML-Blocks.md
+  ✓ PASS        htmlblock-comment-spans-blank-lines    html-blocks                 FEATURE-HTML-Blocks.md
+  ✓ PASS        htmlblock-pre-spans-blank-lines        html-blocks                 FEATURE-HTML-Blocks.md
+  ~ PREPASSED   htmlblock-type7-cannot-interrupt       html-blocks                 FEATURE-HTML-Blocks.md
+  ~ PREPASSED   htmlblock-type6-interrupts-paragraph   html-blocks                 FEATURE-HTML-Blocks.md
+  ~ PREPASSED   htmlblock-four-space-indent-is-code    html-blocks                 FEATURE-HTML-Blocks.md
+  ✓ PASS        quote-basic-content                    block-quotes                FEATURE-Block-Quotes.md
+  ✓ PASS        quote-marker-space-optional            block-quotes                FEATURE-Block-Quotes.md
+  ✓ PASS        quote-lazy-continuation                block-quotes                FEATURE-Block-Quotes.md
+  ✓ PASS        quote-nested-lazy                      block-quotes                FEATURE-Block-Quotes.md
+  ✓ PASS        quote-blank-line-separates             block-quotes                FEATURE-Block-Quotes.md
+  ✓ PASS        quote-interrupts-paragraph             block-quotes                FEATURE-Block-Quotes.md
+  ~ PREPASSED   quote-four-spaces-is-code              block-quotes                FEATURE-Block-Quotes.md
+  ✓ PASS        quote-no-lazy-code                     block-quotes                FEATURE-Block-Quotes.md
+  ✓ PASS        setext-both-levels                     setext-headings             FEATURE-Setext-Headings.md
+  ✓ PASS        setext-multiline-content               setext-headings             FEATURE-Setext-Headings.md
+  ✓ PASS        setext-underline-beats-thematic-break  setext-headings             FEATURE-Setext-Headings.md
+  ✓ PASS        setext-sequence-with-thematic-breaks   setext-headings             FEATURE-Setext-Headings.md
+  ~ PREPASSED   setext-underline-limits                setext-headings             FEATURE-Setext-Headings.md
+  ~ PREPASSED   setext-not-lazy-in-quote               setext-headings             FEATURE-Setext-Headings.md
+  ~ PREPASSED   setext-quote-then-thematic-break       setext-headings             FEATURE-Setext-Headings.md
+  ~ PREPASSED   setext-empty-is-paragraph              setext-headings             FEATURE-Setext-Headings.md
+  ✓ PASS        items-bullet-items                     list-items                  FEATURE-List-Items.md
+  ✓ PASS        items-ordered-start-number             list-items                  FEATURE-List-Items.md
+  ✓ PASS        items-continuation-paragraph           list-items                  FEATURE-List-Items.md
+  ✓ PASS        items-insufficient-indent-ends-item    list-items                  FEATURE-List-Items.md
+  ✓ PASS        items-empty-items                      list-items                  FEATURE-List-Items.md
+  ✓ PASS        items-nested-and-code                  list-items                  FEATURE-List-Items.md
+  ~ PREPASSED   items-four-spaces-is-code              list-items                  FEATURE-List-Items.md
+  ✓ PASS        lists-corpus-sections                  lists                       FEATURE-Lists.md
+  ~ PREPASSED   lists-changing-marker-starts-new-list  lists                       FEATURE-Lists.md
+  ~ PREPASSED   lists-tight-versus-loose               lists                       FEATURE-Lists.md
+  ~ PREPASSED   lists-blank-inside-item-makes-loose    lists                       FEATURE-Lists.md
+  ~ PREPASSED   lists-blank-in-code-stays-tight        lists                       FEATURE-Lists.md
+  ~ PREPASSED   lists-interrupt-paragraph              lists                       FEATURE-Lists.md
+  ~ PREPASSED   tabs-corpus-and-remaining-sections     cont-tabs-slice             FEATURE-Tabs.md
+  ~ PREPASSED   tabs-indented-code-and-internal-tabs   cont-tabs-slice             FEATURE-Tabs.md
+  ~ PREPASSED   tabs-list-continuation                 cont-tabs-slice             FEATURE-Tabs.md
+  ~ PREPASSED   tabs-after-markers                     cont-tabs-slice             FEATURE-Tabs.md
+  ~ PREPASSED   tabs-as-separators                     cont-tabs-slice             FEATURE-Tabs.md
+  ~ PREPASSED   full-conformance-suite                 verify-conformance          FEATURE-Verification.md
+
+  ~ PREPASSED   autolinks-space-not-autolink
+        intent: A URI containing a space is not an autolink, so no link element is produced.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   rawhtml-illegal-forms-escaped
+        intent: Illegal tag names are not raw HTML, so only the paragraph tags contribute angle brackets.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   rawhtml-closing-tag-with-attributes
+        intent: A closing tag with attributes is not raw HTML, so no extra angle brackets appear in the output.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   codespans-unclosed-literal
+        intent: An unmatched backtick run is literal text and produces no code element.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   escapes-punctuation-inert
+        intent: An escaped asterisk prevents emphasis.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   escapes-non-punctuation-literal
+        intent: A backslash before a non-punctuation character is kept as a literal backslash.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   escapes-block-markers
+        intent: An escaped heading marker does not start a heading.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   escapes-inert-in-code-span
+        intent: A backslash in a code span is not an escape.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   entities-named-ampersand
+        intent: The named ampersand reference round trips to the same escaped form.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   entities-unknown-stays-literal
+        intent: An unknown entity name is literal text with its ampersand escaped.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   entities-inert-in-code-span
+        intent: A reference inside a code span is not decoded, so its ampersand is escaped.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   emphasis-flanking-whitespace
+        intent: A delimiter run followed or preceded by whitespace does not form emphasis.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   emphasis-code-span-binds-tighter
+        intent: A star inside a code span cannot close emphasis.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   defs-remainder-is-paragraph
+        intent: Text after a definition stays as one paragraph.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   defs-trailing-text-not-definition
+        intent: Extra text after the title means the line is not a definition, so it stays a paragraph.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   defs-cannot-interrupt-paragraph
+        intent: A definition line directly after paragraph text is part of that paragraph.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   defs-title-with-blank-line
+        intent: A title containing a blank line is not valid, so the two halves become two paragraphs.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   links-undefined-reference-literal
+        intent: A shortcut reference with no definition stays literal text.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   links-space-before-parenthesis
+        intent: Whitespace between link text and the parenthesis prevents an inline link.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   breaks-corpus-sections
+        intent: The Soft line breaks and Textual content conformance sections (5 cases) pass in full.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   breaks-soft-break
+        intent: A plain line ending is not a hard break and both lines stay in one paragraph.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   breaks-none-at-block-end
+        intent: Trailing spaces or a trailing backslash at the end of a paragraph do not create a break.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   breaks-inert-in-code-span
+        intent: Trailing spaces before a line ending inside a code span do not create a break.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   thematic-not-a-break
+        intent: Wrong characters, too few characters, mixed characters and trailing text do not produce hr elements.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   atx-not-a-heading
+        intent: Seven hashes, a missing space, and an escaped hash do not produce headings.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   indented-cannot-interrupt-paragraph
+        intent: An indented line directly after paragraph text is a continuation, not a code block.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   fenced-two-backticks-not-a-fence
+        intent: Two backticks do not open a fence; they form a code span instead.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   htmlblock-type7-cannot-interrupt
+        intent: A lone open tag line after paragraph text stays inside the paragraph.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   htmlblock-type6-interrupts-paragraph
+        intent: A block-level tag line interrupts a paragraph.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   htmlblock-four-space-indent-is-code
+        intent: Four spaces of indentation make an indented code block, not an HTML block.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   quote-four-spaces-is-code
+        intent: Four spaces before the marker make an indented code block, not a quote.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   setext-underline-limits
+        intent: Four spaces of indentation or internal spaces disqualify the underline.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   setext-not-lazy-in-quote
+        intent: An unmarked underline after a quote paragraph does not make a heading inside the quote.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   setext-quote-then-thematic-break
+        intent: Dashes after a quote without a marker are a thematic break outside the quote.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   setext-empty-is-paragraph
+        intent: An underline with no content line is not a heading.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   items-four-spaces-is-code
+        intent: A marker indented four spaces is code, not a list item.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   lists-changing-marker-starts-new-list
+        intent: Changing the bullet character or ordered delimiter starts a new list.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   lists-tight-versus-loose
+        intent: Items without blank lines are tight, and a blank line between items makes the list loose.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   lists-blank-inside-item-makes-loose
+        intent: A blank line between two paragraphs of one item makes the whole list loose.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   lists-blank-in-code-stays-tight
+        intent: Blank lines inside a fenced code block do not make a list loose.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   lists-interrupt-paragraph
+        intent: A bullet list interrupts a paragraph, and an ordered list does so only when it starts at one.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   tabs-corpus-and-remaining-sections
+        intent: The Tabs, Link reference definitions, Backslash escapes, Entity and numeric character references, Raw HTML, HTML blocks, Paragraphs, Blank lines and Hard line breaks conformance sections (roughly 160 cases) pass in full.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   tabs-indented-code-and-internal-tabs
+        intent: A leading tab opens indented code, and internal tabs inside it are kept as tabs.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   tabs-list-continuation
+        intent: A tab-indented continuation paragraph belongs to the list item.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   tabs-after-markers
+        intent: A tab after a quote marker or list marker is consumed as columns, leaving code inside the container.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   tabs-as-separators
+        intent: Tabs between a heading marker and its text, and between thematic break characters, act as spaces.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  ~ PREPASSED   full-conformance-suite
+        intent: The complete supplied conformance suite passes when run unfiltered through sources/full_test.sh.
+        green at this block&#x27;s baseline too, before its code existed — confirm the criterion exercises the story&#x27;s work
+
+  Run `drydock score ac commonmark --full` for untruncated output per failure.
+
+
+  Proof coverage: 79 of 126 criteria are proof — green here, and observed red before the work that turned them green.
+    47 are not. Each names a story whose acceptance did not test it.
+
+    PREPASSED  autolinks-space-not-autolink  autolinks  FEATURE-Autolinks.md
+               green before its block built
+    PREPASSED  rawhtml-illegal-forms-escaped  raw-html-inline  FEATURE-Raw-HTML.md
+               green before its block built
+    PREPASSED  rawhtml-closing-tag-with-attributes  raw-html-inline  FEATURE-Raw-HTML.md
+               green before its block built
+    PREPASSED  codespans-unclosed-literal  code-spans  FEATURE-Code-Spans.md
+               green before its block built
+    PREPASSED  escapes-punctuation-inert  backslash-escapes  FEATURE-Backslash-Escapes.md
+               green before its block built
+    PREPASSED  escapes-non-punctuation-literal  backslash-escapes  FEATURE-Backslash-Escapes.md
+               green before its block built
+    PREPASSED  escapes-block-markers  backslash-escapes  FEATURE-Backslash-Escapes.md
+               green before its block built
+    PREPASSED  escapes-inert-in-code-span  backslash-escapes  FEATURE-Backslash-Escapes.md
+               green before its block built
+    PREPASSED  entities-named-ampersand  entities  FEATURE-Entities.md
+               green before its block built
+    PREPASSED  entities-unknown-stays-literal  entities  FEATURE-Entities.md
+               green before its block built
+    PREPASSED  entities-inert-in-code-span  entities  FEATURE-Entities.md
+               green before its block built
+    PREPASSED  emphasis-flanking-whitespace  emphasis  FEATURE-Emphasis.md
+               green before its block built
+    PREPASSED  emphasis-code-span-binds-tighter  emphasis  FEATURE-Emphasis.md
+               green before its block built
+    PREPASSED  defs-remainder-is-paragraph  link-reference-definitions  FEATURE-Link-Reference-Definitions.md
+               green before its block built
+    PREPASSED  defs-trailing-text-not-definition  link-reference-definitions  FEATURE-Link-Reference-Definitions.md
+               green before its block built
+    PREPASSED  defs-cannot-interrupt-paragraph  link-reference-definitions  FEATURE-Link-Reference-Definitions.md
+               green before its block built
+    PREPASSED  defs-title-with-blank-line  link-reference-definitions  FEATURE-Link-Reference-Definitions.md
+               green before its block built
+    PREPASSED  links-undefined-reference-literal  links  FEATURE-Links.md
+               green before its block built
+    PREPASSED  links-space-before-parenthesis  links  FEATURE-Links.md
+               green before its block built
+    PREPASSED  breaks-corpus-sections  line-breaks-text  FEATURE-Line-Breaks-Text.md
+               green before its block built
+    PREPASSED  breaks-soft-break  line-breaks-text  FEATURE-Line-Breaks-Text.md
+               green before its block built
+    PREPASSED  breaks-none-at-block-end  line-breaks-text  FEATURE-Line-Breaks-Text.md
+               green before its block built
+    PREPASSED  breaks-inert-in-code-span  line-breaks-text  FEATURE-Line-Breaks-Text.md
+               green before its block built
+    PREPASSED  thematic-not-a-break  thematic-breaks  FEATURE-Thematic-Breaks.md
+               green before its block built
+    PREPASSED  atx-not-a-heading  atx-headings  FEATURE-ATX-Headings.md
+               green before its block built
+    PREPASSED  indented-cannot-interrupt-paragraph  indented-code  FEATURE-Indented-Code.md
+               green before its block built
+    PREPASSED  fenced-two-backticks-not-a-fence  fenced-code  FEATURE-Fenced-Code.md
+               green before its block built
+    PREPASSED  htmlblock-type7-cannot-interrupt  html-blocks  FEATURE-HTML-Blocks.md
+               green before its block built
+    PREPASSED  htmlblock-type6-interrupts-paragraph  html-blocks  FEATURE-HTML-Blocks.md
+               green before its block built
+    PREPASSED  htmlblock-four-space-indent-is-code  html-blocks  FEATURE-HTML-Blocks.md
+               green before its block built
+    PREPASSED  quote-four-spaces-is-code  block-quotes  FEATURE-Block-Quotes.md
+               green before its block built
+    PREPASSED  setext-underline-limits  setext-headings  FEATURE-Setext-Headings.md
+               green before its block built
+    PREPASSED  setext-not-lazy-in-quote  setext-headings  FEATURE-Setext-Headings.md
+               green before its block built
+    PREPASSED  setext-quote-then-thematic-break  setext-headings  FEATURE-Setext-Headings.md
+               green before its block built
+    PREPASSED  setext-empty-is-paragraph  setext-headings  FEATURE-Setext-Headings.md
+               green before its block built
+    PREPASSED  items-four-spaces-is-code  list-items  FEATURE-List-Items.md
+               green before its block built
+    PREPASSED  lists-changing-marker-starts-new-list  lists  FEATURE-Lists.md
+               green before its block built
+    PREPASSED  lists-tight-versus-loose  lists  FEATURE-Lists.md
+               green before its block built
+    PREPASSED  lists-blank-inside-item-makes-loose  lists  FEATURE-Lists.md
+               green before its block built
+    PREPASSED  lists-blank-in-code-stays-tight  lists  FEATURE-Lists.md
+               green before its block built
+    PREPASSED  lists-interrupt-paragraph  lists  FEATURE-Lists.md
+               green before its block built
+    PREPASSED  tabs-corpus-and-remaining-sections  cont-tabs-slice  FEATURE-Tabs.md
+               green before its block built
+    PREPASSED  tabs-indented-code-and-internal-tabs  cont-tabs-slice  FEATURE-Tabs.md
+               green before its block built
+    PREPASSED  tabs-list-continuation  cont-tabs-slice  FEATURE-Tabs.md
+               green before its block built
+    PREPASSED  tabs-after-markers  cont-tabs-slice  FEATURE-Tabs.md
+               green before its block built
+    PREPASSED  tabs-as-separators  cont-tabs-slice  FEATURE-Tabs.md
+               green before its block built
+    PREPASSED  full-conformance-suite  verify-conformance  FEATURE-Verification.md
+               green before its block built
+
+Soundings: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/workspace/targets/commonmark/SOUNDINGS.md
+Target - committed project workspace git store
+</pre></article>
+</main>
+</body>
+</html>

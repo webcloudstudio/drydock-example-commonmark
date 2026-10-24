@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_atx_headings.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_atx_headings.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_atx_headings.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;ATX heading tests: the six declared checks from FEATURE-ATX-Headings.md, then block-tree and
+exact-output tests through the `commonmark` executable.
+
+The declared checks are transcribed first, with their assertions unchanged. The rest act on the
+block tree returned by `parse_lines` and on the exact stdout bytes, which is the state handed back.
+&quot;&quot;&quot;
+
+import subprocess
+from pathlib import Path
+
+import pytest
+
+from mdparser.blocks import ATX_HEADING, INDENTED_CODE, PARAGRAPH, parse_lines
+
+
+def run_commonmark(project_root: Path, source: str) -&gt; subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=source,
+        capture_output=True,
+        text=True,
+        cwd=project_root,
+        check=False,
+    )
+
+
+def kinds(lines: list[str]) -&gt; list[str]:
+    &quot;&quot;&quot;Names of the top-level block types that `lines` produce, in order.&quot;&quot;&quot;
+    return [child.kind.name for child in parse_lines(lines).children]
+
+
+def render(project_root: Path, source: str) -&gt; str:
+    result = run_commonmark(project_root, source)
+    assert result.returncode == 0
+    return result.stdout
+
+
+# --- Declared acceptance checks (transcribed from FEATURE-ATX-Headings.md) ---
+
+
+@pytest.mark.parametrize(&quot;level&quot;, range(1, 7))
+def test_atx_levels_one_to_six(project_root: Path, level: int) -&gt; None:
+    &quot;&quot;&quot;Each opening-sequence length from 1 to 6 renders exactly one heading of that level.&quot;&quot;&quot;
+    source = &quot;#&quot; * level + &quot; foo\n&quot;
+    result = run_commonmark(project_root, source)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;h&quot; + str(level) + &quot;&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;h&quot;) == 1
+
+
+def test_atx_not_a_heading(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Seven hashes, a missing space, and an escaped hash do not produce headings.&quot;&quot;&quot;
+    source = &quot;####### foo\n\n#hashtag\n\n\\## foo\n&quot;
+    result = run_commonmark(project_root, source)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;h&quot;) == 0
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 3
+
+
+def test_atx_closing_sequence(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A closing hash sequence is removed from the heading content.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot;## foo ##\n&quot;)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;h2&gt;&quot;) == 1
+    assert result.stdout.count(&quot;#&quot;) == 0
+
+
+def test_atx_empty_heading(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Empty headings are allowed, one per line.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot;#\n\n##\n&quot;)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;h1&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;h2&gt;&quot;) == 1
+
+
+def test_atx_interrupts_paragraph(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A heading splits a paragraph without blank lines, leaving two paragraphs around it.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot;Foo bar\n# baz\nBar foo\n&quot;)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;h1&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 2
+
+
+def test_atx_indentation_limit(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Up to three spaces of indentation are allowed before the opening sequence, and four are not.&quot;&quot;&quot;
+    allowed = run_commonmark(project_root, &quot;   # foo\n&quot;)
+    refused = run_commonmark(project_root, &quot;    # foo\n&quot;)
+    print(allowed.stdout)
+    print(refused.stdout)
+    assert allowed.returncode == 0
+    assert refused.returncode == 0
+    assert allowed.stdout.count(&quot;&lt;h1&gt;&quot;) == 1
+    assert refused.stdout.count(&quot;&lt;h1&gt;&quot;) == 0
+
+
+# --- Block tree: opening sequence ---
+
+
+@pytest.mark.parametrize(&quot;level&quot;, range(1, 7))
+def test_opening_run_of_each_length_is_a_heading(level: int) -&gt; None:
+    assert kinds([&quot;#&quot; * level + &quot; foo&quot;]) == [ATX_HEADING.name]
+
+
+@pytest.mark.parametrize(&quot;level&quot;, range(1, 7))
+def test_heading_block_records_its_level(level: int) -&gt; None:
+    (block,) = parse_lines([&quot;#&quot; * level + &quot; foo&quot;]).children
+    assert block.level == level
+
+
+def test_seven_hashes_is_not_a_heading() -&gt; None:
+    assert kinds([&quot;####### foo&quot;]) == [PARAGRAPH.name]
+
+
+def test_hash_without_following_space_is_not_a_heading() -&gt; None:
+    assert kinds([&quot;#hashtag&quot;]) == [PARAGRAPH.name]
+
+
+def test_hash_followed_by_tab_is_a_heading() -&gt; None:
+    assert kinds([&quot;#\tfoo&quot;]) == [ATX_HEADING.name]
+
+
+def test_lone_hash_is_an_empty_heading() -&gt; None:
+    (block,) = parse_lines([&quot;#&quot;]).children
+    assert block.kind is ATX_HEADING
+    assert block.level == 1
+    assert block.content == &quot;&quot;
+
+
+@pytest.mark.parametrize(&quot;indent&quot;, [1, 2, 3])
+def test_up_to_three_spaces_of_indentation_form_a_heading(indent: int) -&gt; None:
+    assert kinds([&quot; &quot; * indent + &quot;# foo&quot;]) == [ATX_HEADING.name]
+
+
+def test_four_spaces_of_indentation_is_not_a_heading() -&gt; None:
+    assert kinds([&quot;    # foo&quot;]) == [INDENTED_CODE.name]
+
+
+def test_one_tab_of_indentation_is_not_a_heading() -&gt; None:
+    assert kinds([&quot;\t# foo&quot;]) == [INDENTED_CODE.name]
+
+
+def test_escaped_hash_is_not_a_heading() -&gt; None:
+    assert kinds([&quot;\\# foo&quot;]) == [PARAGRAPH.name]
+
+
+# --- Block tree: content and closing sequence ---
+
+
+@pytest.mark.parametrize(
+    (&quot;line&quot;, &quot;content&quot;),
+    [
+        (&quot;# foo&quot;, &quot;foo&quot;),
+        (&quot;#   foo   &quot;, &quot;foo&quot;),
+        (&quot;#\tfoo\t&quot;, &quot;foo&quot;),
+        (&quot;# foo ##&quot;, &quot;foo&quot;),
+        (&quot;# foo #&quot;, &quot;foo&quot;),
+        (&quot;# foo ##   &quot;, &quot;foo&quot;),
+        (&quot;# foo \t#\t&quot;, &quot;foo&quot;),
+        (&quot;# foo ## bar&quot;, &quot;foo ## bar&quot;),
+        (&quot;# foo#&quot;, &quot;foo#&quot;),
+        (&quot;# foo\\#&quot;, &quot;foo\\#&quot;),
+        (&quot;# foo \\#&quot;, &quot;foo \\#&quot;),
+        (&quot;# ##&quot;, &quot;&quot;),
+        (&quot;# #&quot;, &quot;&quot;),
+        (&quot;#&quot;, &quot;&quot;),
+    ],
+)
+def test_heading_content_after_stripping_and_closing_sequence(line: str, content: str) -&gt; None:
+    (block,) = parse_lines([line]).children
+    assert block.content == content
+
+
+def test_heading_block_holds_no_children_or_lines() -&gt; None:
+    (block,) = parse_lines([&quot;# foo&quot;]).children
+    assert block.children == []
+    assert block.lines == []
+
+
+# --- Block tree: interaction with paragraphs and neighbours ---
+
+
+def test_heading_directly_after_paragraph_closes_the_paragraph() -&gt; None:
+    assert kinds([&quot;Foo&quot;, &quot;# bar&quot;]) == [PARAGRAPH.name, ATX_HEADING.name]
+
+
+def test_paragraph_resumes_after_heading_without_blank_line() -&gt; None:
+    assert kinds([&quot;Foo&quot;, &quot;# bar&quot;, &quot;baz&quot;]) == [PARAGRAPH.name, ATX_HEADING.name, PARAGRAPH.name]
+
+
+def test_consecutive_headings_are_separate_blocks() -&gt; None:
+    assert kinds([&quot;# a&quot;, &quot;## b&quot;, &quot;### c&quot;]) == [ATX_HEADING.name] * 3
+
+
+def test_heading_followed_by_blank_line_stays_one_block() -&gt; None:
+    assert kinds([&quot;# a&quot;, &quot;&quot;]) == [ATX_HEADING.name]
+
+
+def test_text_after_heading_without_blank_line_is_a_new_paragraph() -&gt; None:
+    assert kinds([&quot;# a&quot;, &quot;b&quot;]) == [ATX_HEADING.name, PARAGRAPH.name]
+
+
+def test_indented_hash_after_paragraph_is_paragraph_text() -&gt; None:
+    assert kinds([&quot;Foo&quot;, &quot;    # bar&quot;]) == [PARAGRAPH.name]
+
+
+# --- Exact output through the executable ---
+
+
+@pytest.mark.parametrize(&quot;level&quot;, range(1, 7))
+def test_heading_renders_exactly_at_each_level(project_root: Path, level: int) -&gt; None:
+    assert render(project_root, &quot;#&quot; * level + &quot; foo\n&quot;) == f&quot;&lt;h{level}&gt;foo&lt;/h{level}&gt;\n&quot;
+
+
+def test_heading_content_is_parsed_as_inlines(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;# *foo* `bar`\n&quot;) == &quot;&lt;h1&gt;&lt;em&gt;foo&lt;/em&gt; &lt;code&gt;bar&lt;/code&gt;&lt;/h1&gt;\n&quot;
+
+
+def test_heading_content_is_escaped(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;# a &lt; b\n&quot;) == &quot;&lt;h1&gt;a &amp;lt; b&lt;/h1&gt;\n&quot;
+
+
+def test_closing_sequence_is_removed_exactly(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;## foo ##\n&quot;) == &quot;&lt;h2&gt;foo&lt;/h2&gt;\n&quot;
+
+
+def test_escaped_closing_hash_is_kept_exactly(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;### foo \\###\n&quot;) == &quot;&lt;h3&gt;foo ###&lt;/h3&gt;\n&quot;
+
+
+def test_empty_headings_render_exactly(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;#\n\n##\n&quot;) == &quot;&lt;h1&gt;&lt;/h1&gt;\n&lt;h2&gt;&lt;/h2&gt;\n&quot;
+
+
+def test_heading_between_paragraphs_renders_exactly(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;Foo bar\n# baz\nBar foo\n&quot;) == (
+        &quot;&lt;p&gt;Foo bar&lt;/p&gt;\n&lt;h1&gt;baz&lt;/h1&gt;\n&lt;p&gt;Bar foo&lt;/p&gt;\n&quot;
+    )
+
+
+def test_heading_trailing_whitespace_renders_exactly(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;#   foo   \n&quot;) == &quot;&lt;h1&gt;foo&lt;/h1&gt;\n&quot;
+
+
+def test_seven_hashes_renders_as_paragraph_exactly(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;####### foo\n&quot;) == &quot;&lt;p&gt;####### foo&lt;/p&gt;\n&quot;
+</pre></article>
+</main>
+</body>
+</html>

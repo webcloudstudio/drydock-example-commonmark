@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Images.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Images.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Images.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Images</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>Render images with plain-text alt attributes and verify links, images and emphasis against the conformance corpus.</td></tr><tr><td>Depends On</td><td>FEATURE-Links.md</td></tr><tr><td>Provides</td><td>image rendering</td></tr><tr><td>Consumes</td><td>look_for_link_or_image procedure</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement the Images section of the spec on top of the shared link machinery, and gate the Emphasis, Links and Images corpus sections, which are all satisfiable once images exist.</p>
+<h2>Rules</h2>
+<ul><li>An image description starts with <code>![</code> and follows the same bracket rules as link text, except it may contain links.</li><li>All four forms apply: inline, full reference, collapsed and shortcut.</li><li>Render <code>&lt;img src=&quot;...&quot; alt=&quot;...&quot; /&gt;</code> with <code>title=&quot;...&quot;</code> only when a title exists. The src is percent-encoded and HTML-escaped like a link href.</li><li>The alt value is the plain-text content of the description: emphasis, links and nested images are reduced to their text content (nested images contribute their own alt), code spans contribute their content, and the result is HTML-escaped.</li><li><code>\![foo]</code> is a literal <code>!</code> followed by a link; <code>!\[foo]</code> is literal text.</li></ul>
+<h2>Reads</h2>
+<ul><li>The inline tree built by the links story, the reference map.</li></ul>
+<h2>Writes</h2>
+<ul><li>Image nodes in the inline tree.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>The Link reference definitions section is gated in the tabs story because its examples need headings and quotes.</p>
+<p>=== AC images-corpus-sections ===<br>Intent: The Emphasis and strong emphasis, Links and Images conformance sections (roughly 240 cases) pass in full.<br>Suite: scoped<br>Probe: --dump-tests<br>Probe Count: lines</p>
+<p>import os import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.getcwd() + &quot;/commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;^Emphasis and strong emphasis$|^Links$|^Images$&quot;, ], capture_output=True, text=True, env={**os.environ}, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC images-corpus-sections ===</p>
+<p>=== AC images-inline-image ===<br>Intent: An inline image renders one img element carrying the supplied src, alt and title.</p>
+<p>import subprocess</p>
+<p>alt = &quot;my alt&quot; src = &quot;/path/pic.jpg&quot; title = &quot;a title&quot; source = &quot;![&quot; + alt + &quot;](&quot; + src + &#x27; &quot;&#x27; + title + &#x27;&quot;)\n&#x27; result = subprocess.run([&quot;./commonmark&quot;], input=source, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;img &quot;) == 1 assert (&#x27;src=&quot;&#x27; + src + &#x27;&quot;&#x27;) in result.stdout assert (&#x27;alt=&quot;&#x27; + alt + &#x27;&quot;&#x27;) in result.stdout assert (&#x27;title=&quot;&#x27; + title + &#x27;&quot;&#x27;) in result.stdout === END AC images-inline-image ===</p>
+<p>=== AC images-alt-is-plain-text ===<br>Intent: Emphasis inside an image description does not appear as markup in the alt attribute.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;!<a href="/u">foo <em>bar</em></a>\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;img &quot;) == 1 assert result.stdout.count(&quot;&lt;em&gt;&quot;) == 0 === END AC images-alt-is-plain-text ===</p>
+<p>=== AC images-reference-forms ===<br>Intent: Full, collapsed and shortcut image references each resolve against a definition.</p>
+<p>import subprocess</p>
+<p>definition = &quot;\n\n[foo]: /url\n&quot; for use in (&quot;![text][foo]&quot;, &quot;![foo][]&quot;, &quot;![foo]&quot;): result = subprocess.run([&quot;./commonmark&quot;], input=use + definition, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;img &quot;) == 1 === END AC images-reference-forms ===</p>
+<p>=== AC images-inside-link ===<br>Intent: An image inside a link produces one a element containing one img element.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;<a href="moon.jpg">![moon</a>](/uri)\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;a &quot;) == 1 assert result.stdout.count(&quot;&lt;img &quot;) == 1 === END AC images-inside-link ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>The alt attribute must contain plain text only, never markup.</li><li>Do not skip, filter or reinterpret corpus examples.</li></ul></article>
+</main>
+</body>
+</html>

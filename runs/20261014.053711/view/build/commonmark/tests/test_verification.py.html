@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_verification.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_verification.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_verification.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Verification tests: the terminal conformance gate from FEATURE-Verification.md.
+
+The declared check runs the complete, unfiltered CommonMark 0.31.2 suite through the supplied scoring
+entry point and reads back its exit status. The captured output is printed only for diagnosis; no test
+matches on the text of the runner&#x27;s summary.
+&quot;&quot;&quot;
+
+import subprocess
+from pathlib import Path
+
+
+# --- Declared acceptance checks (transcribed from FEATURE-Verification.md) ---
+
+
+def test_full_conformance_suite(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC full-conformance-suite: the complete supplied suite passes when run unfiltered.&quot;&quot;&quot;
+    result = subprocess.run(
+        [&quot;sh&quot;, &quot;sources/full_test.sh&quot;],
+        capture_output=True,
+        text=True,
+        cwd=project_root,
+        check=False,
+    )
+    print(result.stdout)
+    print(result.stderr)
+    assert result.returncode == 0, f&quot;full_test.sh exited {result.returncode}&quot;
+</pre></article>
+</main>
+</body>
+</html>

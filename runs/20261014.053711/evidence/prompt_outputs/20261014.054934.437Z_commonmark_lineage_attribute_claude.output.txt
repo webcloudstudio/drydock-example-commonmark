@@ -1,0 +1,53 @@
+<requirement name="pipe-markdown-through-program" stories="executable-interface">
+def pipe_through_prog(prog, text):
+    p1 = Popen(prog.split(), stdout=PIPE, stdin=PIPE, stderr=PIPE)
+    [result, err] = p1.communicate(input=text.encode('utf-8'))
+    return [p1.returncode, result, err]
+</requirement>
+<requirement name="select-backend" stories="">
+        if prog:
+            self.to_html = lambda x: pipe_through_prog(prog, x)
+        else:
+</requirement>
+<requirement name="locate-cmark-library" stories="">
+            sysname = platform.system()
+            if sysname == 'Darwin':
+                libname = "libcmark.dylib"
+            elif sysname == 'Windows':
+                libname = "cmark.dll"
+            else:
+                libname = "libcmark.so"
+            if library_dir:
+                libpath = os.path.join(library_dir, libname)
+            else:
+                libpath = os.path.join("build", "src", libname)
+</requirement>
+<requirement name="call-cmark-library" stories="">
+def use_library(lib, text):
+    textbytes = text.encode('utf-8')
+    textlen = len(textbytes)
+    return [0, lib(textbytes, textlen, 0), '']
+</requirement>
+<unattached story="foundation"/>
+<unattached story="block-engine"/>
+<unattached story="autolinks"/>
+<unattached story="raw-html-inline"/>
+<unattached story="code-spans"/>
+<unattached story="backslash-escapes"/>
+<unattached story="entities"/>
+<unattached story="emphasis"/>
+<unattached story="link-reference-definitions"/>
+<unattached story="links"/>
+<unattached story="images"/>
+<unattached story="line-breaks-text"/>
+<unattached story="thematic-breaks"/>
+<unattached story="atx-headings"/>
+<unattached story="indented-code"/>
+<unattached story="fenced-code"/>
+<unattached story="html-blocks"/>
+<unattached story="block-quotes"/>
+<unattached story="setext-headings"/>
+<unattached story="list-items"/>
+<unattached story="lists"/>
+<unattached story="cont-tabs-slice"/>
+<unattached story="verify-conformance"/>

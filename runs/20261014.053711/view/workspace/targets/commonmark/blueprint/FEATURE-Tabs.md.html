@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Tabs.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Tabs.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Tabs.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Tabs</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>Make tabs behave as four-column tab stops for block structure while leaving tabs untouched in content, and gate the remaining corpus sections.</td></tr><tr><td>Depends On</td><td>FEATURE-Lists.md</td></tr><tr><td>Provides</td><td>tab-stop-aware column handling</td></tr><tr><td>Consumes</td><td>block container rules</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement the Tabs section of the spec, audit every block rule&#x27;s column handling, and gate the corpus sections whose examples needed all block and inline stories.</p>
+<h2>Rules</h2>
+<ul><li>Tabs are never expanded into spaces in output. Inside code and text, a tab is passed through as a literal tab.</li><li>Where spaces define block structure (indented code, block quote markers, list marker spacing, list item continuation, ATX heading and thematic break separators), a tab advances to the next multiple of 4 columns.</li><li>A tab that is only partly consumed (for example after a <code>&gt;</code> marker or a list marker) leaves its remaining columns as virtual spaces of indentation for the rest of the line.</li><li>All block start and continue rules use the one shared column-aware helper from the block engine.</li></ul>
+<h2>Reads</h2>
+<ul><li>Lines handed to the block engine.</li></ul>
+<h2>Writes</h2>
+<ul><li>No new nodes; this story corrects column handling in existing rules.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC tabs-corpus-and-remaining-sections ===<br>Intent: The Tabs, Link reference definitions, Backslash escapes, Entity and numeric character references, Raw HTML, HTML blocks, Paragraphs, Blank lines and Hard line breaks conformance sections (roughly 160 cases) pass in full.<br>Suite: scoped<br>Probe: --dump-tests<br>Probe Count: lines</p>
+<p>import os import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.getcwd() + &quot;/commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;^Tabs$|^Link reference definitions$|^Backslash escapes$|^Entity and numeric character references$|^Raw HTML$|^HTML blocks$|^Paragraphs$|^Blank lines$|^Hard line breaks$&quot;, ], capture_output=True, text=True, env={**os.environ}, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC tabs-corpus-and-remaining-sections ===</p>
+<p>=== AC tabs-indented-code-and-internal-tabs ===<br>Intent: A leading tab opens indented code, and internal tabs inside it are kept as tabs.</p>
+<p>import subprocess</p>
+<p>inner = &quot;a\ta&quot; result = subprocess.run([&quot;./commonmark&quot;], input=&quot;\t&quot; + inner + &quot;\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1 assert inner in result.stdout === END AC tabs-indented-code-and-internal-tabs ===</p>
+<p>=== AC tabs-list-continuation ===<br>Intent: A tab-indented continuation paragraph belongs to the list item.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;  - foo\n\n\tbar\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;li&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 2 === END AC tabs-list-continuation ===</p>
+<p>=== AC tabs-after-markers ===<br>Intent: A tab after a quote marker or list marker is consumed as columns, leaving code inside the container.</p>
+<p>import subprocess</p>
+<p>quote = subprocess.run([&quot;./commonmark&quot;], input=&quot;&gt;\t\tfoo\n&quot;, capture_output=True, text=True) item = subprocess.run([&quot;./commonmark&quot;], input=&quot;-\t\tfoo\n&quot;, capture_output=True, text=True) print(quote.stdout) print(item.stdout) assert quote.returncode == 0 assert item.returncode == 0 assert quote.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 1 assert quote.stdout.count(&quot;&lt;pre&gt;&quot;) == 1 assert item.stdout.count(&quot;&lt;li&gt;&quot;) == 1 assert item.stdout.count(&quot;&lt;pre&gt;&quot;) == 1 === END AC tabs-after-markers ===</p>
+<p>=== AC tabs-as-separators ===<br>Intent: Tabs between a heading marker and its text, and between thematic break characters, act as spaces.</p>
+<p>import subprocess</p>
+<p>heading = subprocess.run([&quot;./commonmark&quot;], input=&quot;#\tFoo\n&quot;, capture_output=True, text=True) rule = subprocess.run([&quot;./commonmark&quot;], input=&quot;<em>\t</em>\t*\t\n&quot;, capture_output=True, text=True) print(heading.stdout) print(rule.stdout) assert heading.returncode == 0 assert rule.returncode == 0 assert heading.stdout.count(&quot;&lt;h1&gt;&quot;) == 1 assert rule.stdout.count(&quot;&lt;hr /&gt;&quot;) == 1 === END AC tabs-as-separators ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Never expand tabs into spaces in rendered content.</li><li>Do not skip, filter or reinterpret corpus examples.</li></ul></article>
+</main>
+</body>
+</html>

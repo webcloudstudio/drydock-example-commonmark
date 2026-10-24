@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261014.060854.186Z_commonmark_build_claude.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261014.060854.186Z_commonmark_build_claude.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261014.060854.186Z_commonmark_build_claude.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>Baseline is green (263 passed). Now I&#x27;ll add the code span construct to the inline scanner.Now the test file, with the four declared acceptance checks transcribed plus the scoped corpus gate and finer coverage.Before running, I re-derived several expected values by hand and found some wrong. Fixing those now so the tests assert the spec behaviour, not my first guesses.Now I&#x27;ll run the new tests, then the full project suite to check for regressions in the earlier blocks.The implementation is right here and my expectation was wrong: the trailing backtick has no partner, so it stays literal. Correcting the assertion.The scoped gate passes and the full project suite is green. I wrote a scratch log to `/tmp`, which is outside the authorized build directory, so I&#x27;m removing it.RESULT: SUCCESS
+
+FILES CHANGED:
+- mdparser/inlines.py
+- tests/test_code_spans.py
+
+SUMMARY:
+- Code spans are added to the inline scanner in `mdparser/inlines.py`. At a backtick, the scanner takes the whole maximal run and looks for the next run of exactly the same length. The content is normalized (line endings become spaces, then one leading and one trailing U+0020 is removed only when the content is not all spaces), HTML-escaped, and rendered as `&lt;code&gt;`. Backslashes and entities stay inert inside the span.
+- An unmatched run is emitted as literal escaped text and the whole run is consumed, so a shorter run inside it cannot open a span by mistake.
+- Precedence is left to right: the scanner tries code span, autolink and raw HTML at whichever special character comes first, so the first one found wins. A backslash before a backtick still makes that backtick literal.
+- `tests/test_code_spans.py` transcribes the four declared acceptance checks plus the scoped corpus gate, and adds unit tests for run matching, normalization, escapes, and precedence against autolinks and raw HTML.
+
+Test results:
+- Declared gate, exact invocation `spec_tests.py --pattern &#x27;^Code spans$|^Inlines$&#x27;`: exit 0, 23 passed, 0 failed, 0 errored, 632 skipped.
+- Project suite `pytest -q`: 291 passed (baseline was 263 before this step).
+- I did not run the unscoped `sources/full_test.sh`, since this step&#x27;s criteria only declare the scoped invocation. The Precedence section needs lists and is gated in the lists story.
+
+Choices I made:
+- Unmatched backtick runs are consumed as a whole, not one backtick at a time. Reading them one at a time would let a shorter tail of the run open a span wrongly.
+- Only the `\n` line separator is handled in code content. `split_lines` already normalizes CR and CRLF, so no other line-ending cases arise here.
+
+Staged assets in `sources/`, the guardrail files, and git history were not touched. Nothing was staged or committed.</pre></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_code_spans.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_code_spans.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_code_spans.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Code span tests: backtick matching by length, content normalization, literal unmatched runs,
+inert backslashes and entities, and precedence against autolinks and raw HTML.
+
+Each test compares a returned string or the executable&#x27;s stdout bytes with its exact expected
+value. No test matches a substring of output.
+&quot;&quot;&quot;
+
+import subprocess
+import sys
+from pathlib import Path
+
+import pytest
+
+from mdparser import inlines
+
+
+def run_executable(project_root: Path, data: str) -&gt; subprocess.CompletedProcess[bytes]:
+    return subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=data.encode(&quot;utf-8&quot;),
+        capture_output=True,
+        cwd=project_root,
+        check=False,
+    )
+
+
+# --- Declared acceptance checks (transcribed from FEATURE-Code-Spans.md) ---
+
+
+def test_codespans_corpus_sections_pass_in_full(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC codespans-corpus-sections: the scoped Code spans and Inlines sections exit 0.&quot;&quot;&quot;
+    result = subprocess.run(
+        [
+            sys.executable,
+            &quot;sources/spec_tests.py&quot;,
+            &quot;--program&quot;,
+            str(project_root / &quot;commonmark&quot;),
+            &quot;--spec&quot;,
+            &quot;sources/spec.txt&quot;,
+            &quot;--pattern&quot;,
+            &quot;^Code spans$|^Inlines$&quot;,
+        ],
+        capture_output=True,
+        cwd=project_root,
+        check=False,
+    )
+    assert result.returncode == 0
+
+
+def test_codespans_simple(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC codespans-simple: a single-backtick span renders one code element with its content.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;`some code`\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;) == &quot;&lt;p&gt;&lt;code&gt;some code&lt;/code&gt;&lt;/p&gt;\n&quot;
+
+
+def test_codespans_backtick_length_match(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC codespans-backtick-length-match: a double-backtick span keeps a single backtick inside.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;``a`b``\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;) == &quot;&lt;p&gt;&lt;code&gt;a`b&lt;/code&gt;&lt;/p&gt;\n&quot;
+
+
+def test_codespans_unclosed_literal(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC codespans-unclosed-literal: an unmatched backtick run is literal text, no code element.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;```foo``\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;) == &quot;&lt;p&gt;```foo``&lt;/p&gt;\n&quot;
+
+
+def test_codespans_escapes_inert(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC codespans-escapes-inert: a backslash inside a code span is kept literally.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;`\\[`\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;) == &quot;&lt;p&gt;&lt;code&gt;\\[&lt;/code&gt;&lt;/p&gt;\n&quot;
+
+
+# --- Opening and closing runs ---
+
+
+def test_codespans_run_with_no_content_is_literal(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Adjacent runs form one maximal run with no content, so no span can open or close on it.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;````&quot;) == &quot;````&quot;
+
+
+def test_codespans_longer_run_does_not_close_shorter(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A run of three does not close a span opened by a run of one, so the span stays unmatched.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;`a```&quot;) == &quot;`a```&quot;
+
+
+def test_codespans_unclosed_run_consumes_whole_run(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;An unclosed run is literal as a whole and is not reread as a shorter opener.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;``foo`&quot;) == &quot;``foo`&quot;
+
+
+def test_codespans_unclosed_run_then_later_span(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A literal run does not block a later code span of its own length.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;`` x `y`&quot;) == &quot;`` x &lt;code&gt;y&lt;/code&gt;&quot;
+
+
+def test_codespans_adjacent_spans(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Two spans separated by a space each render as their own code element.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;`a` `b`&quot;) == &quot;&lt;code&gt;a&lt;/code&gt; &lt;code&gt;b&lt;/code&gt;&quot;
+
+
+# --- Content normalization ---
+
+
+@pytest.mark.parametrize(
+    (&quot;raw&quot;, &quot;expected&quot;),
+    [
+        (&quot; a &quot;, &quot;&lt;code&gt;a&lt;/code&gt;&quot;),
+        (&quot;  a  &quot;, &quot;&lt;code&gt; a &lt;/code&gt;&quot;),
+        (&quot;a &quot;, &quot;&lt;code&gt;a &lt;/code&gt;&quot;),
+        (&quot; a&quot;, &quot;&lt;code&gt; a&lt;/code&gt;&quot;),
+    ],
+)
+def test_codespans_strip_only_one_space_from_each_end(
+    raw: str, expected: str
+) -&gt; None:
+    &quot;&quot;&quot;One space is removed from each end only when both ends are spaces.&quot;&quot;&quot;
+    assert inlines.parse_inline(f&quot;`{raw}`&quot;) == expected
+
+
+@pytest.mark.parametrize(&quot;raw&quot;, [&quot; &quot;, &quot;   &quot;])
+def test_codespans_all_spaces_are_not_stripped(raw: str) -&gt; None:
+    &quot;&quot;&quot;Content made entirely of spaces keeps every space.&quot;&quot;&quot;
+    assert inlines.parse_inline(f&quot;`{raw}`&quot;) == f&quot;&lt;code&gt;{raw}&lt;/code&gt;&quot;
+
+
+def test_codespans_only_ascii_space_is_stripped(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A tab at either end is not stripped.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;`\ta\t`&quot;) == &quot;&lt;code&gt;\ta\t&lt;/code&gt;&quot;
+
+
+def test_codespans_line_ending_becomes_space(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A line ending inside a span becomes a space, and interior spaces are not collapsed.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;`a\nb  c`&quot;) == &quot;&lt;code&gt;a b  c&lt;/code&gt;&quot;
+
+
+def test_codespans_content_is_html_escaped(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Angle brackets, ampersands and quotes in the content are escaped.&quot;&quot;&quot;
+    assert inlines.parse_inline(&#x27;`&lt;a href=&quot;&amp;&quot;&gt;`&#x27;) == &quot;&lt;code&gt;&amp;lt;a href=&amp;quot;&amp;amp;&amp;quot;&amp;gt;&lt;/code&gt;&quot;
+
+
+def test_codespans_entities_are_inert(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;An entity inside a span is shown as written, with its ampersand escaped.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;`&amp;amp;`&quot;) == &quot;&lt;code&gt;&amp;amp;amp;&lt;/code&gt;&quot;
+
+
+def test_codespans_backslash_before_closing_run_is_content(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A backslash just before the closing run stays in the content and does not escape it.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;`foo\\`bar`&quot;) == &quot;&lt;code&gt;foo\\&lt;/code&gt;bar`&quot;
+
+
+def test_codespans_escaped_opener_is_literal(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A backslash before a backtick makes that backtick literal and opens no span.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;\\`foo`&quot;) == &quot;`foo`&quot;
+
+
+# --- Precedence against autolinks and raw HTML ---
+
+
+def test_codespans_backtick_first_beats_raw_html(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;When a span starts before a tag, the span takes the tag&#x27;s characters as content.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;`&lt;a&gt;`&quot;) == &quot;&lt;code&gt;&amp;lt;a&amp;gt;&lt;/code&gt;&quot;
+
+
+def test_codespans_raw_html_first_beats_backtick(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A tag that starts before a backtick is taken whole, even when it holds a backtick.&quot;&quot;&quot;
+    assert inlines.parse_inline(&#x27;&lt;a t=&quot;`&quot;&gt;`&#x27;) == &#x27;&lt;a t=&quot;`&quot;&gt;`&#x27;
+
+
+def test_codespans_backtick_first_beats_autolink(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A span that starts before an autolink keeps the autolink&#x27;s text as code content.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;`&lt;http://a.b&gt;`&quot;) == &quot;&lt;code&gt;&amp;lt;http://a.b&amp;gt;&lt;/code&gt;&quot;
+
+
+def test_codespans_autolink_first_beats_backtick(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;An autolink that starts before a backtick is taken whole, and the backtick is literal.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;&lt;http://a.b`&gt;`&quot;) == &#x27;&lt;a href=&quot;http://a.b%60&quot;&gt;http://a.b`&lt;/a&gt;`&#x27;
+
+
+def test_codespans_backtick_inside_raw_html_attribute_is_not_an_opener(
+    project_root: Path,
+) -&gt; None:
+    &quot;&quot;&quot;A backtick inside a raw HTML tag is part of the tag, so no span opens there.&quot;&quot;&quot;
+    assert inlines.parse_inline(&#x27;&lt;a href=&quot;`&quot;&gt;x`&#x27;) == &#x27;&lt;a href=&quot;`&quot;&gt;x`&#x27;
+
+
+# --- Executable boundary ---
+
+
+def test_codespans_whole_document_stdout(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A paragraph with a span renders as one paragraph element on stdout.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;Use `x` here\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;) == &quot;&lt;p&gt;Use &lt;code&gt;x&lt;/code&gt; here&lt;/p&gt;\n&quot;
+</pre></article>
+</main>
+</body>
+</html>

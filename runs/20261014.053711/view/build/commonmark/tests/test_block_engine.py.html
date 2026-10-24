@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_block_engine.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_block_engine.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_block_engine.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Block-engine acceptance and end-to-end tests: paragraphs, blank lines, and HTML escaping through
+the `commonmark` executable.
+
+The four declared checks from FEATURE-Block-Engine.md are transcribed first, with their
+assertions unchanged. The remaining tests compare the exact stdout bytes, which is the state
+the executable hands back.
+&quot;&quot;&quot;
+
+import subprocess
+from pathlib import Path
+
+
+def run_commonmark(project_root: Path, source: str) -&gt; subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=source,
+        capture_output=True,
+        text=True,
+        cwd=project_root,
+        check=False,
+    )
+
+
+# --- Declared acceptance checks (transcribed from FEATURE-Block-Engine.md) ---
+
+
+def test_engine_paragraph_count(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Blank-line-separated paragraphs render as one p element each.&quot;&quot;&quot;
+    paragraphs = [&quot;alpha beta&quot;, &quot;gamma delta&quot;, &quot;epsilon&quot;]
+    source = &quot;\n\n&quot;.join(paragraphs) + &quot;\n&quot;
+    result = run_commonmark(project_root, source)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == len(paragraphs)
+    assert result.stdout.count(&quot;&lt;/p&gt;&quot;) == len(paragraphs)
+    for text in paragraphs:
+        assert text in result.stdout
+
+
+def test_engine_multiline_paragraph(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Consecutive non-blank lines with arbitrary indentation after the first stay in one paragraph.&quot;&quot;&quot;
+    first = &quot;first line&quot;
+    second = &quot;second line&quot;
+    third = &quot;third line&quot;
+    source = first + &quot;\n&quot; + &quot;             &quot; + second + &quot;\n&quot; + third + &quot;\n&quot;
+    result = run_commonmark(project_root, source)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+    for text in (first, second, third):
+        assert text in result.stdout
+
+
+def test_engine_blank_lines_ignored(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Leading, trailing and repeated blank lines add no blocks; a blank-only document gives no paragraph.&quot;&quot;&quot;
+    word = &quot;content&quot;
+    padded = &quot;\n  \n\n&quot; + word + &quot;\n\n\n  \n&quot;
+    result = run_commonmark(project_root, padded)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+
+    blank = run_commonmark(project_root, &quot;\n \n\t\n&quot;)
+    assert blank.returncode == 0
+    assert blank.stdout.count(&quot;&lt;p&gt;&quot;) == 0
+
+
+def test_engine_html_escaping(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Special characters in paragraph text are escaped, so only the paragraph tags contribute angle brackets.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot;x &lt; y &gt; z &amp; w\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;&quot;) == 2
+    assert result.stdout.count(&quot;&gt;&quot;) == 2
+
+
+# --- Exact output through the executable ---
+
+
+def test_single_paragraph_output_is_exact(project_root: Path) -&gt; None:
+    assert run_commonmark(project_root, &quot;hello world\n&quot;).stdout == &quot;&lt;p&gt;hello world&lt;/p&gt;\n&quot;
+
+
+def test_two_paragraphs_output_is_exact(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;one\n\ntwo\n&quot;)
+    assert result.stdout == &quot;&lt;p&gt;one&lt;/p&gt;\n&lt;p&gt;two&lt;/p&gt;\n&quot;
+
+
+def test_multiline_paragraph_output_is_exact(project_root: Path) -&gt; None:
+    source = &quot;first line\n             second line\nthird line\n&quot;
+    result = run_commonmark(project_root, source)
+    assert result.stdout == &quot;&lt;p&gt;first line\nsecond line\nthird line&lt;/p&gt;\n&quot;
+
+
+def test_escaped_paragraph_output_is_exact(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;x &lt; y &gt; z &amp; w\n&quot;)
+    assert result.stdout == &quot;&lt;p&gt;x &amp;lt; y &amp;gt; z &amp;amp; w&lt;/p&gt;\n&quot;
+
+
+def test_padded_document_output_is_exact(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;\n  \n\ncontent\n\n\n  \n&quot;)
+    assert result.stdout == &quot;&lt;p&gt;content&lt;/p&gt;\n&quot;
+
+
+def test_blank_only_document_output_is_empty(project_root: Path) -&gt; None:
+    assert run_commonmark(project_root, &quot;\n \n\t\n&quot;).stdout == &quot;&quot;
+
+
+def test_paragraph_leading_and_trailing_whitespace_is_removed(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;  word \t  \n&quot;)
+    assert result.stdout == &quot;&lt;p&gt;word&lt;/p&gt;\n&quot;
+
+
+def test_crlf_document_renders_the_same_as_lf(project_root: Path) -&gt; None:
+    lf = run_commonmark(project_root, &quot;one\ntwo\n\nthree\n&quot;)
+    crlf = run_commonmark(project_root, &quot;one\r\ntwo\r\n\r\nthree\r\n&quot;)
+    assert lf.stdout == crlf.stdout == &quot;&lt;p&gt;one\ntwo&lt;/p&gt;\n&lt;p&gt;three&lt;/p&gt;\n&quot;
+</pre></article>
+</main>
+</body>
+</html>

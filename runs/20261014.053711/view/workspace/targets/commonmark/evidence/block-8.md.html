@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-8.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-8.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-8.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 8 · Service (block-8)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-14</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 5130</li><li>execution id: 20261014.061513.130Z-7ed6f384</li></ul>
+<h2>Stories built</h2>
+<ul><li>Decode HTML5 named, decimal and hexadecimal character references. (entities) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1072)</li><li>implements: FEATURE-Entities.md (SP 1874)</li><li>context: ARCHITECTURE_compact.md (SP 335)</li><li>stack: common_compact.md (SP 1199)</li><li>stack: python_compact.md (SP 390)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>mdparser/entities.py</li><li>mdparser/inlines.py</li><li>tests/test_entities.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: entities-decimal-reference (FEATURE-Entities.md)</li></ul>
+<p>intent: A decimal reference decodes to the character with the bound code point. return code: 1 stdout: &lt;p&gt;x &amp;amp;#65; y&lt;/p&gt; stderr: --- drydock: values at failure --- code_point = 65 result = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;x &amp;amp;#65; y&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;entities-decimal-reference.py&quot;, line 7, in &lt;module&gt; assert chr(code_point) in result.stdout ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: entities-hex-reference (FEATURE-Entities.md)</li></ul>
+<p>intent: Lowercase and uppercase hexadecimal references decode to the same character. return code: 1 stdout: &lt;p&gt;&amp;amp;#x42;&lt;/p&gt; stderr: --- drydock: values at failure --- code_point = 66 first = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;&amp;amp;#x42;&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;entities-hex-reference.py&quot;, line 11, in &lt;module&gt; assert chr(code_point) in first.stdout ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>GREEN (prepassed): entities-named-ampersand (FEATURE-Entities.md)</li></ul>
+<p>intent: The named ampersand reference round trips to the same escaped form. return code: 0 stdout: &lt;p&gt;a &amp;amp;amp; b&lt;/p&gt;</p>
+<ul><li>GREEN (prepassed): entities-unknown-stays-literal (FEATURE-Entities.md)</li></ul>
+<p>intent: An unknown entity name is literal text with its ampersand escaped. return code: 0 stdout: &lt;p&gt;&amp;amp;MadeUpEntity;&lt;/p&gt;</p>
+<ul><li>RED: entities-nul-reference-replaced (FEATURE-Entities.md)</li></ul>
+<p>intent: The reference for code point zero decodes to the same output as a literal U+FFFD character. return code: 1 stdout: &lt;p&gt;&amp;amp;#0;&lt;/p&gt; stderr: --- drydock: values at failure --- first = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;&amp;amp;#0;&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) second = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;�&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;entities-nul-reference-replaced.py&quot;, line 10, in &lt;module&gt; assert first.stdout == second.stdout ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>GREEN (prepassed): entities-inert-in-code-span (FEATURE-Entities.md)</li></ul>
+<p>intent: A reference inside a code span is not decoded, so its ampersand is escaped. return code: 0 stdout: &lt;p&gt;&lt;code&gt;&amp;amp;amp;&lt;/code&gt;&lt;/p&gt;</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: entities-decimal-reference (FEATURE-Entities.md)</li></ul>
+<p>intent: A decimal reference decodes to the character with the bound code point. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;x A y&lt;/p&gt;</p>
+<ul><li>PASS: entities-hex-reference (FEATURE-Entities.md)</li></ul>
+<p>intent: Lowercase and uppercase hexadecimal references decode to the same character. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;B&lt;/p&gt;</p>
+<ul><li>PASS: entities-named-ampersand (FEATURE-Entities.md)</li></ul>
+<p>intent: The named ampersand reference round trips to the same escaped form. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;a &amp;amp; b&lt;/p&gt;</p>
+<ul><li>PASS: entities-unknown-stays-literal (FEATURE-Entities.md)</li></ul>
+<p>intent: An unknown entity name is literal text with its ampersand escaped. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;&amp;amp;MadeUpEntity;&lt;/p&gt;</p>
+<ul><li>PASS: entities-nul-reference-replaced (FEATURE-Entities.md)</li></ul>
+<p>intent: The reference for code point zero decodes to the same output as a literal U+FFFD character. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;�&lt;/p&gt;</p>
+<ul><li>PASS: entities-inert-in-code-span (FEATURE-Entities.md)</li></ul>
+<p>intent: A reference inside a code span is not decoded, so its ampersand is escaped. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;&lt;code&gt;&amp;amp;amp;&lt;/code&gt;&lt;/p&gt;</p>
+<h2>Build summary</h2>
+<p>I&#x27;ll start by checking the build directory and the existing application files.The earlier blocks are already built. Next I&#x27;ll look at the existing <code>mdparser</code> package, tests, and whether an entities module exists yet.The package already has <code>unescape</code> and <code>ASCII_PUNCTUATION</code> in <code>entities.py</code>, and the inline loop escapes <code>&amp;</code> as plain text. Before changing anything I&#x27;ll record the baseline test result so any regression is visible.Baseline is green: 358 tests pass. I&#x27;ll read the two files I need to edit so the edit tool accepts them.Now I&#x27;ll write the entity decoder into <code>entities.py</code>, keeping the existing <code>unescape</code> and <code>ASCII_PUNCTUATION</code> unchanged.Next, I&#x27;ll hook the reference decoder into the inline loop as a plain-text branch, so decoded characters are escaped and never treated as markup.I&#x27;ll also mention the reference rule in the <code>parse_inline</code> docstring so it matches the module&#x27;s existing style.Before writing tests, a quick smoke check of the executable and the two-codepoint entity.The output matches the spec rules. Now I&#x27;ll write <code>tests/test_entities.py</code>. It transcribes the six declared acceptance checks and adds finer tests that compare exact returned strings and exact stdout.Before running, I checked several expected values by hand and found three mistakes in my own test file: two reference end offsets are off by one (<code>&amp;#0000065;</code> is 10 characters, not 11), and <code>&amp;AMP;</code> is actually in the HTML5 table, so it is not a good case-sensitivity example. I&#x27;ll fix those and clarify one misnamed test.Now I&#x27;ll run the new entity tests, then the full project suite to check for regressions in the earlier blocks.All 419 tests pass: the 358 existing tests plus 61 new ones. I&#x27;ll confirm the changed-file set and that no staged assets were touched.Block 8 (entities) is implemented. The full project suite passes, 419 tests, and I did not run the conformance runner because no criterion in this block invokes it.</p>
+<p><strong>What changed</strong></p>
+<ul><li><code>mdparser/entities.py</code>: added <code>match_reference</code>, which decodes HTML5 named references (semicolon-terminated names only, looked up in <code>html.entities.html5</code>), 1–7 digit decimal references, and 1–6 digit hex references. Zero, surrogates and values above U+10FFFF become U+FFFD. I also added <code>unescape_and_decode</code>, the shared helper for destinations, titles and info strings. The existing <code>unescape</code> and <code>ASCII_PUNCTUATION</code> are unchanged.</li><li><code>mdparser/inlines.py</code>: the inline loop now has an <code>&amp;</code> branch. A recognized reference is decoded and its character is HTML-escaped as plain text, so <code>&amp;#42;</code> cannot open emphasis and <code>&amp;#35;</code> cannot start a heading. Code spans already keep <code>&amp;</code> literal, so they are unaffected.</li><li><code>tests/test_entities.py</code>: new. It transcribes all six declared acceptance checks, then adds finer tests for named, decimal and hex references, boundaries (7 vs 8 decimal digits, 6 vs 7 hex digits, the last valid code point), invalid code points, decoded text as plain text, and the helper&#x27;s single-pass behaviour.</li></ul>
+<p><strong>Choices I made</strong></p>
+<ul><li><code>unescape_and_decode</code> runs backslash escapes and references in one left-to-right pass. Two separate passes would turn <code>\&amp;amp;</code> into <code>&amp;</code> when it should stay the literal text <code>&amp;amp;</code>.</li><li>Tests compare exact returned strings and exact stdout bytes, not substrings.</li></ul>
+<p><strong>Not done in this block</strong></p>
+<ul><li>The corpus-level conformance check for entities is gated in a later block, so I did not invoke <code>sources/full_test.sh</code>.</li><li>The helper <code>unescape_and_decode</code> has no caller yet. The destination, title and info-string stories will call it when they are built.</li></ul>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>mdparser/entities.py</li><li>mdparser/inlines.py</li><li>tests/test_entities.py</li></ul>
+<p>SUMMARY: Implemented HTML5 named, decimal and hexadecimal character reference decoding. Entity references decode in the inline loop as escaped plain text, are inert in code spans, and are exposed through the shared <code>unescape_and_decode</code> helper for later stories. Test runs: <code>pytest -q</code> over the whole project, 419 passed (358 existing, 61 new in <code>tests/test_entities.py</code>, including all six declared acceptance checks). Staged <code>sources/</code> assets are untouched. The conformance runner was not invoked because no criterion in this block calls it.</p>
+<p>&lt;blueprint-decisions&gt; [{&quot;spec&quot;:&quot;FEATURE-Entities.md&quot;,&quot;severity&quot;:&quot;Low&quot;,&quot;subject&quot;:&quot;Shared destination/title/info-string helper design&quot;,&quot;decision&quot;:&quot;The spec asks for a shared helper but does not define its shape. I added <code>unescape_and_decode</code> in <code>mdparser/entities.py</code>, a single left-to-right pass that applies backslash escapes and character references together, so an escaped ampersand is not re-read as a reference. The existing backslash-only <code>unescape</code> is kept unchanged. Is that acceptable, or should the helper be split into two passes?&quot;}] &lt;/blueprint-decisions&gt;</p></article>
+</main>
+</body>
+</html>

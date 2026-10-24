@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/mdparser/cli.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/mdparser/cli.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/mdparser/cli.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Process I/O boundary for the `commonmark` executable.
+
+Responsibility: read raw bytes from `sys.stdin.buffer`, decode UTF-8 with U+FFFD replacement,
+normalize line endings, replace U+0000, and write HTML to `sys.stdout.buffer`. Diagnostics go to
+`sys.stderr` only, and the exit status is 0 for every input.
+&quot;&quot;&quot;
+
+import re
+import sys
+
+from mdparser import blocks, inlines, render
+
+REPLACEMENT_CHARACTER = &quot;�&quot;
+LINE_ENDING_PATTERN = re.compile(r&quot;\r\n|\r|\n&quot;)
+
+
+def decode_source(data: bytes) -&gt; str:
+    &quot;&quot;&quot;Decode raw input bytes as UTF-8, replacing each invalid byte with U+FFFD.&quot;&quot;&quot;
+    return data.decode(&quot;utf-8&quot;, errors=&quot;replace&quot;)
+
+
+def split_lines(text: str) -&gt; list[str]:
+    &quot;&quot;&quot;Split text on LF, CR, or CRLF, and replace each U+0000 with U+FFFD.&quot;&quot;&quot;
+    text = text.replace(&quot;\x00&quot;, REPLACEMENT_CHARACTER)
+    return LINE_ENDING_PATTERN.split(text)
+
+
+def render_lines(lines: list[str]) -&gt; str:
+    &quot;&quot;&quot;Parse the lines into a block tree and return the HTML document.
+
+    A final line ending terminates the last line rather than starting an empty one, so the one empty
+    entry that `split_lines` leaves after it is dropped. Otherwise an unclosed fenced code block would
+    gain a blank line.
+    &quot;&quot;&quot;
+    if lines and lines[-1] == &quot;&quot;:
+        lines = lines[:-1]
+    root = blocks.parse_lines(lines)
+    return render.render_document(root, lambda raw: inlines.parse_inline(raw, root.references))
+
+
+def main() -&gt; int:
+    &quot;&quot;&quot;Run the executable: stdin Markdown to stdout HTML. Always returns 0.&quot;&quot;&quot;
+    data = sys.stdin.buffer.read()
+    try:
+        lines = split_lines(decode_source(data))
+        html = render_lines(lines)
+    except Exception as exc:
+        print(f&quot;commonmark: internal error: {exc!r}&quot;, file=sys.stderr)
+        html = &quot;&quot;
+    sys.stdout.buffer.write(html.encode(&quot;utf-8&quot;))
+    sys.stdout.buffer.flush()
+    return 0
+
+
+if __name__ == &quot;__main__&quot;:
+    sys.exit(main())
+</pre></article>
+</main>
+</body>
+</html>

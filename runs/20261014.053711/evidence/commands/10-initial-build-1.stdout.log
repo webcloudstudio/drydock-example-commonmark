@@ -1,0 +1,276 @@
+Drydock 0.2.0  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Build: commonmark
+scope: entire project
+frontier: foundation
+git: baseline commonmark 7e0d42eb604d
+git: baseline commonmark d26cd8140f36
+
+BLOCK block-1  name="Block 1 · Foundational"  calls_max=7
+  story=foundation  "Stand up the Python project tree, the mdparser package skeleton, and the pytest runner."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.055305.566Z-d7256828
+    acceptance=1/1
+git: block-1 | ARCHITECTURE.md | call=1 | app=f594cdf4d463 target=c850c9848678
+
+  DONE  story=foundation  state=closed/verified  execution=20261014.055305.566Z-d7256828  elapsed=1m41s
+git: block-1 | ARCHITECTURE.md | step_completed | app=unchanged target=178014a168bc
+
+BLOCK block-2  name="Block 2 · Service"  calls_max=7
+  story=executable-interface  "Provide the executable ./commonmark: UTF-8 stdin to HTML stdout, line intake, and README."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.055500.842Z-fcb0e42e
+    acceptance=5/5
+git: block-2 | FEATURE-Executable.md | call=1 | app=006a6558fcf0 target=17336def4524
+
+  DONE  story=executable-interface  state=closed/verified  execution=20261014.055500.842Z-fcb0e42e  elapsed=1m53s
+git: block-2 | FEATURE-Executable.md | step_completed | app=unchanged target=9077020cc888
+
+BLOCK block-3  name="Block 3 · Service"  calls_max=7
+  story=block-engine  "Implement the Appendix phase 1 block engine and paragraph rendering with HTML escaping."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.055651.247Z-954e899e
+    acceptance=4/4
+git: block-3 | FEATURE-Block-Engine.md | call=1 | app=f6fae8e64850 target=b2162b73a54f
+
+  DONE  story=block-engine  state=closed/verified  execution=20261014.055651.247Z-954e899e  elapsed=5m21s
+git: block-3 | FEATURE-Block-Engine.md | step_completed | app=unchanged target=2c0d3f27dea4
+
+BLOCK block-4  name="Block 4 · Service"  calls_max=7
+  story=autolinks  "Parse URI and email autolinks."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.060217.836Z-1b64b62b
+    acceptance=4/4
+git: block-4 | FEATURE-Autolinks.md | call=1 | app=911400e5f1e3 target=c1bc7046c429
+
+  DONE  story=autolinks  state=closed/verified  execution=20261014.060217.836Z-1b64b62b  elapsed=2m51s
+git: block-4 | FEATURE-Autolinks.md | step_completed | app=unchanged target=6728fa10e327
+
+BLOCK block-5  name="Block 5 · Service"  calls_max=7
+  story=raw-html-inline  "Parse raw inline HTML tags, comments, processing instructions, declarations and CDATA."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.060510.463Z-6890125c
+    acceptance=5/5
+git: block-5 | FEATURE-Raw-HTML.md | call=1 | app=456874347f41 target=c19f41e13332
+
+  DONE  story=raw-html-inline  state=closed/verified  execution=20261014.060510.463Z-6890125c  elapsed=3m37s
+git: block-5 | FEATURE-Raw-HTML.md | step_completed | app=unchanged target=2674f5a0cb91
+
+BLOCK block-6  name="Block 6 · Service"  calls_max=7
+  story=code-spans  "Parse code spans and establish the inline precedence order."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.060854.186Z-5eadb737
+    acceptance=5/5
+git: block-6 | FEATURE-Code-Spans.md | call=1 | app=bf92696ecebb target=a9d248a082c5
+
+  DONE  story=code-spans  state=closed/verified  execution=20261014.060854.186Z-5eadb737  elapsed=3m17s
+git: block-6 | FEATURE-Code-Spans.md | step_completed | app=unchanged target=ee5b26c3219a
+
+BLOCK block-7  name="Block 7 · Service"  calls_max=7
+  story=backslash-escapes  "Implement backslash escapes in text, destinations, titles and info strings."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.061208.498Z-b93a5c10
+    acceptance=4/4
+git: block-7 | FEATURE-Backslash-Escapes.md | call=1 | app=c6e9b6b87281 target=24f8b7e45f96
+
+  DONE  story=backslash-escapes  state=closed/verified  execution=20261014.061208.498Z-b93a5c10  elapsed=2m59s
+git: block-7 | FEATURE-Backslash-Escapes.md | step_completed | app=unchanged target=fba057f5c79e
+
+BLOCK block-8  name="Block 8 · Service"  calls_max=7
+  story=entities  "Decode HTML5 named, decimal and hexadecimal character references."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.061513.130Z-7ed6f384
+    acceptance=6/6
+git: block-8 | FEATURE-Entities.md | call=1 | app=6e8de0b2051f target=9a38f953f320
+
+  DONE  story=entities  state=closed/verified  execution=20261014.061513.130Z-7ed6f384  elapsed=3m27s
+git: block-8 | FEATURE-Entities.md | step_completed | app=unchanged target=0cf73516a324
+
+BLOCK block-9  name="Block 9 · Service"  calls_max=7
+  story=emphasis  "Implement the delimiter stack, flanking rules, and the process-emphasis algorithm."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.061842.732Z-41490866
+    acceptance=6/6
+git: block-9 | FEATURE-Emphasis.md | call=1 | app=77445ad609c4 target=49f59a85416e
+
+  DONE  story=emphasis  state=closed/verified  execution=20261014.061842.732Z-41490866  elapsed=8m09s
+git: block-9 | FEATURE-Emphasis.md | step_completed | app=unchanged target=b72ed4f87ebc
+
+BLOCK block-10  name="Block 10 · Service"  calls_max=7
+  story=link-reference-definitions  "Extract link reference definitions when a paragraph closes and provide label normalization."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.062650.566Z-58173721
+    acceptance=5/5
+git: block-10 | FEATURE-Link-Reference-Definitions.md | call=1 | app=02fa0e70fb83 target=2263521fceca
+
+  DONE  story=link-reference-definitions  state=closed/verified  execution=20261014.062650.566Z-58173721  elapsed=5m49s
+git: block-10 | FEATURE-Link-Reference-Definitions.md | step_completed | app=unchanged target=e1fcff52fd37
+
+BLOCK block-11  name="Block 11 · Service"  calls_max=7
+  story=links  "Implement link and image bracket handling: inline, full, collapsed and shortcut forms."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.063246.323Z-3e8c174e
+    acceptance=6/6
+git: block-11 | FEATURE-Links.md | call=1 | app=6f79c7768650 target=968f99234d9b
+
+  DONE  story=links  state=closed/verified  execution=20261014.063246.323Z-3e8c174e  elapsed=6m34s
+git: block-11 | FEATURE-Links.md | step_completed | app=unchanged target=04c075196506
+
+BLOCK block-12  name="Block 12 · Service"  calls_max=7
+  story=images  "Render images with plain-text alt and verify links, images and emphasis against the corpus."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.064009.029Z-03c1a38f
+    acceptance=5/5
+git: block-12 | FEATURE-Images.md | call=1 | app=9ab1e089c541 target=1072c93b902a
+
+  DONE  story=images  state=closed/verified  execution=20261014.064009.029Z-03c1a38f  elapsed=10m00s
+git: block-12 | FEATURE-Images.md | step_completed | app=unchanged target=02d7bd76cbb6
+
+BLOCK block-13  name="Block 13 · Service"  calls_max=7
+  story=line-breaks-text  "Implement hard and soft line breaks and plain textual content."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.064927.125Z-407c8dc1
+    acceptance=6/6
+git: block-13 | FEATURE-Line-Breaks-Text.md | call=1 | app=6430abe947b8 target=f504ed4e7122
+
+  DONE  story=line-breaks-text  state=closed/verified  execution=20261014.064927.125Z-407c8dc1  elapsed=8m46s
+git: block-13 | FEATURE-Line-Breaks-Text.md | step_completed | app=unchanged target=b9dd3971eb13
+
+BLOCK block-14  name="Block 14 · Service"  calls_max=7
+  story=thematic-breaks  "Parse thematic breaks."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.065812.667Z-3615fdb5
+    acceptance=4/4
+git: block-14 | FEATURE-Thematic-Breaks.md | call=1 | app=b1c7eaf350a8 target=1c9782196501
+
+  DONE  story=thematic-breaks  state=closed/verified  execution=20261014.065812.667Z-3615fdb5  elapsed=6m45s
+git: block-14 | FEATURE-Thematic-Breaks.md | step_completed | app=unchanged target=5980d5ce551b
+
+BLOCK block-15  name="Block 15 · Service"  calls_max=7
+  story=atx-headings  "Parse ATX headings."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.070515.046Z-5a98a58e
+    acceptance=6/6
+git: block-15 | FEATURE-ATX-Headings.md | call=1 | app=8a37d7ed3c5b target=1c8ed0953fd8
+
+  DONE  story=atx-headings  state=closed/verified  execution=20261014.070515.046Z-5a98a58e  elapsed=7m37s
+git: block-15 | FEATURE-ATX-Headings.md | step_completed | app=unchanged target=b3c9b81e7d96
+
+BLOCK block-16  name="Block 16 · Service"  calls_max=7
+  story=indented-code  "Parse indented code blocks."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.071239.579Z-22987f6e
+    acceptance=5/5
+git: block-16 | FEATURE-Indented-Code.md | call=1 | app=6228371d054a target=7a180a04277d
+
+  DONE  story=indented-code  state=closed/verified  execution=20261014.071239.579Z-22987f6e  elapsed=9m46s
+git: block-16 | FEATURE-Indented-Code.md | step_completed | app=unchanged target=1d2007420e29
+
+BLOCK block-17  name="Block 17 · Service"  calls_max=7
+  story=fenced-code  "Parse fenced code blocks with info strings."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.072230.899Z-217d5e6f
+    acceptance=7/7
+git: block-17 | FEATURE-Fenced-Code.md | call=1 | app=13cbc988132c target=920d91afa6a4
+
+  DONE  story=fenced-code  state=closed/verified  execution=20261014.072230.899Z-217d5e6f  elapsed=10m36s
+git: block-17 | FEATURE-Fenced-Code.md | step_completed | app=unchanged target=02da4a65e197
+
+BLOCK block-18  name="Block 18 · Service"  calls_max=7
+  story=html-blocks  "Parse the seven kinds of HTML block."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.073309.155Z-f06ed154
+    acceptance=7/7
+git: block-18 | FEATURE-HTML-Blocks.md | call=1 | app=79b5b2ece214 target=63b1143a1c9a
+
+  DONE  story=html-blocks  state=closed/verified  execution=20261014.073309.155Z-f06ed154  elapsed=11m02s
+git: block-18 | FEATURE-HTML-Blocks.md | step_completed | app=unchanged target=d6a82677f507
+
+BLOCK block-19  name="Block 19 · Service"  calls_max=7
+  story=block-quotes  "Parse block quotes with laziness and consecutiveness rules."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.074416.111Z-9e39bf16
+    acceptance=8/8
+git: block-19 | FEATURE-Block-Quotes.md | call=1 | app=f93a5042cba4 target=744b2b4d6cf3
+
+  DONE  story=block-quotes  state=closed/verified  execution=20261014.074416.111Z-9e39bf16  elapsed=10m35s
+git: block-19 | FEATURE-Block-Quotes.md | step_completed | app=unchanged target=7ab25a22f8d9
+
+BLOCK block-20  name="Block 20 · Service"  calls_max=7
+  story=setext-headings  "Parse setext headings, including multiline content and underline precedence."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.075451.866Z-23e771a2
+    acceptance=8/8
+git: block-20 | FEATURE-Setext-Headings.md | call=1 | app=9a6d5fab59d1 target=063fd7e902fa
+
+  DONE  story=setext-headings  state=closed/verified  execution=20261014.075451.866Z-23e771a2  elapsed=9m54s
+git: block-20 | FEATURE-Setext-Headings.md | step_completed | app=unchanged target=06fd5071257e
+
+BLOCK block-21  name="Block 21 · Service"  calls_max=7
+  story=list-items  "Parse list items: markers, indentation rules, empty items, start numbers and laziness."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.080449.725Z-6c39d976
+    acceptance=7/7
+git: block-21 | FEATURE-List-Items.md | call=1 | app=7c68128fed97 target=25fbeac198af
+
+  DONE  story=list-items  state=closed/verified  execution=20261014.080449.725Z-6c39d976  elapsed=12m25s
+git: block-21 | FEATURE-List-Items.md | step_completed | app=unchanged target=24e5b42cc079
+
+BLOCK block-22  name="Block 22 · Service"  calls_max=7
+  story=lists  "Group list items into lists and compute tight or loose rendering."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.081755.926Z-878f99f4
+    acceptance=6/6
+git: block-22 | FEATURE-Lists.md | call=1 | app=e8abd00b16ab target=def0342b8fd1
+
+  DONE  story=lists  state=closed/verified  execution=20261014.081755.926Z-878f99f4  elapsed=16m27s
+git: block-22 | FEATURE-Lists.md | step_completed | app=unchanged target=1bbcd5b7544f
+
+BLOCK block-23  name="Block 23 · Service"  calls_max=7
+  story=cont-tabs-slice  "Make tab columns work for block structure and verify the remaining corpus sections."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.083418.725Z-16326237
+    acceptance=5/5
+git: block-23 | FEATURE-Tabs.md | call=1 | app=f2348fc5ccd4 target=f3da4e94cc0e
+
+  DONE  story=cont-tabs-slice  state=closed/verified  execution=20261014.083418.725Z-16326237  elapsed=9m25s
+git: block-23 | FEATURE-Tabs.md | step_completed | app=unchanged target=28a76a222e0a
+
+BLOCK block-24  name="Block 24 · Feature"  calls_max=7
+  story=verify-conformance  "Run the complete supplied CommonMark conformance suite unfiltered."
+
+  [call 1/7]  kind=initial  llm=claude/claude-haiku-5-5
+    result=ok  rc=0  execution=20261014.084531.261Z-0cd98f1c
+    acceptance=1/1
+git: block-24 | FEATURE-Verification.md | call=1 | app=03427c7e7530 target=9cc8c53d0ed9
+
+  DONE  story=verify-conformance  state=closed/verified  execution=20261014.084531.261Z-0cd98f1c  elapsed=19m10s
+git: block-24 | FEATURE-Verification.md | step_completed | app=unchanged target=bd33bfcfc2c9
+git: build complete commonmark e9d2b96c72a5
+git: build complete commonmark fdb573f1bdf9
+
+result: 24 built, 0 failed, 0 unchanged
+elapsed: 3 hours 9 minutes 46 seconds
+Target - committed project workspace git store

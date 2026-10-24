@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261014.055651.247Z_commonmark_build_claude.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261014.055651.247Z_commonmark_build_claude.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261014.055651.247Z_commonmark_build_claude.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>The build directory already has the executable, the `mdparser` skeleton, and placeholder tests from earlier blocks. I&#x27;ll read the remaining module files before I write anything.Before changing anything, I&#x27;ll get a baseline test run.Baseline is 47 passing. Now the block engine: a registry of block types, a cursor with tab-stop-aware columns, and the per-line procedure.Next, the renderer (escaping, URL percent-encoding, phase 2 walk), the inline hook, and wiring in the CLI.The earlier placeholder tests assert that nothing renders yet, so they must change with the engine. I&#x27;ll update those assertions and the no-behavior module list.Now the tests. Block-engine tests read back the tree structure and content; render tests check exact return values.I left a meaningless assertion (`... or True`) in the raw-block test and an awkward double comprehension. Fixing both now.Now the render and inline-hook tests, then the declared acceptance checks transcribed as tests, plus exact end-to-end output checks.Running the full suite through the project&#x27;s declared runner.All 132 pass. Before reporting, I&#x27;ll spot-check the executable directly on a few inputs the tests touch only indirectly, and confirm the staged assets are untouched.&lt;blueprint-decisions&gt;
+[{&quot;spec&quot;:&quot;FEATURE-Block-Engine.md&quot;,&quot;severity&quot;:&quot;Low&quot;,&quot;subject&quot;:&quot;Leading whitespace on paragraph continuation lines&quot;,&quot;decision&quot;:&quot;Stripped at block level when a line joins a paragraph (the Appendix procedure advances past indentation before adding text). Trailing spaces and tabs are stripped from the whole paragraph at close, and interior trailing spaces are kept for later hard-break handling. The spec says only initial and final whitespace is removed, so this is the reading I took. Is that acceptable, or should continuation indentation pass through to the inline hook?&quot;},{&quot;spec&quot;:&quot;FEATURE-Block-Engine.md&quot;,&quot;severity&quot;:&quot;Low&quot;,&quot;subject&quot;:&quot;Partially consumed tabs&quot;,&quot;decision&quot;:&quot;Cursor.advance_columns consumes a tab that straddles the target column whole, so the column can overshoot. Partial-tab handling is needed only by block stories that split tabs, such as list item and indented code. Should that story replace this behavior?&quot;},{&quot;spec&quot;:&quot;FEATURE-Block-Engine.md&quot;,&quot;severity&quot;:&quot;Low&quot;,&quot;subject&quot;:&quot;Where the inline hook lives&quot;,&quot;decision&quot;:&quot;The hook is parse_inline in mdparser/inlines.py, which returns escape_html(raw). render_document takes it as an argument, so render does not import inlines and the import graph has no cycle. cli wires the two together.&quot;}]
+&lt;/blueprint-decisions&gt;
+
+The block engine and paragraph rendering are implemented, and the project suite passes: 132 tests, up from 47. The four declared acceptance checks pass as transcribed, and the staged `sources/` files are unchanged. I did not run `sources/full_test.sh`, because no criterion in this step invokes it.
+
+**What was built**
+- `mdparser/blocks.py`: a `BlockType` record (start, continue, and finalize rules, plus flags for leaf, interruptible, and lazy), a `BlockRegistry`, a `Cursor` with tab-stop-4 column tracking, and a `DocumentParser` implementing the three-step per-line procedure. Start rules are tried before any unmatched block is closed, and lazy continuation is handled. Paragraphs are the only registered text leaf.
+- `mdparser/render.py`: `escape_html` (ampersand first, then `&lt;`, `&gt;`, `&quot;`), `percent_encode_url` for the link stories, and the phase 2 walk that renders `&lt;p&gt;…&lt;/p&gt;\n` per paragraph.
+- `mdparser/inlines.py`: `parse_inline`, the hook, which currently returns the escaped text.
+- `mdparser/cli.py`: `render_lines` now parses and renders. Its exit status and error handling are unchanged.
+
+**Existing tests I changed**
+Some earlier placeholder tests asserted that nothing renders yet, so they had to change:
+- `test_executable.py`: the &quot;runs from another working directory&quot; test and the invalid-UTF-8 test now expect rendered paragraphs. The placeholder render test now checks two paragraphs.
+- `test_foundation.py`: `blocks`, `render`, and `inlines` are removed from the no-behavior list.
+
+**New tests**
+- `tests/test_blocks.py`: column helpers, the cursor, paragraph rules, registry extensibility, and lazy continuation through a test-only quote container.
+- `tests/test_render.py`: escaping, percent-encoding, the phase 2 hook wiring, and the inline hook.
+- `tests/test_block_engine.py`: the four declared checks transcribed with their assertions unchanged, plus exact-output checks through the executable.
+
+**Files changed**
+- `mdparser/blocks.py`, `mdparser/render.py`, `mdparser/inlines.py`, `mdparser/cli.py`
+- `tests/test_executable.py`, `tests/test_foundation.py`
+- New: `tests/test_blocks.py`, `tests/test_render.py`, `tests/test_block_engine.py`
+
+I did not commit, per the build rules.
+
+RESULT: SUCCESS
+
+FILES CHANGED:
+- mdparser/blocks.py
+- mdparser/render.py
+- mdparser/inlines.py
+- mdparser/cli.py
+- tests/test_executable.py
+- tests/test_foundation.py
+- tests/test_blocks.py
+- tests/test_render.py
+- tests/test_block_engine.py
+
+SUMMARY:
+Implemented the phase 1 block engine with an extensible block-type registry, paragraph and blank-line handling, tab-aware columns, and HTML rendering with escaping. Also added the URL percent-encoding helper for the link stories. Project suite via `bin/test.sh`: 132 passed. Declared checks engine-paragraph-count, engine-multiline-paragraph, engine-blank-lines-ignored, and engine-html-escaping pass. Conformance suite not run: no criterion in this step invokes it. Placeholder tests asserting empty output were updated to the rendered output.
+
+BLOCKERS:
+- None.</pre></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261014.084531.261Z_commonmark_build_claude.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261014.084531.261Z_commonmark_build_claude.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261014.084531.261Z_commonmark_build_claude.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>The terminal story only needs the declared acceptance check transcribed as a test, plus the suite run through its declared invocation. I&#x27;ll add `tests/test_verification.py` now.The declared check passed. I&#x27;ll read the conformance tally directly from the same declared invocation and run the whole project test suite to confirm it is green.The complete CommonMark 0.31.2 suite passes unfiltered: `sh sources/full_test.sh` exits 0 and reports `655 passed, 0 failed, 0 errored, 0 skipped`.
+
+I added the one test this story declares, `tests/test_verification.py`. It runs `sh sources/full_test.sh` through subprocess, prints the captured output, and asserts only the exit status. Nothing else was written, and no staged assets were touched.
+
+Full project suite (`.venv/bin/python -m pytest -q`): 1174 passed, 1 skipped. The skip is `tests/test_foundation.py:38` (&quot;got empty parameter set for (name)&quot;). It predates this step and I did not change it.
+
+RESULT: SUCCESS
+
+FILES CHANGED:
+- tests/test_verification.py
+
+SUMMARY:
+- Transcribed the declared AC `full-conformance-suite` as `test_full_conformance_suite`, with its assertion unchanged.
+- Ran the suite through its declared invocation: `full_test.sh` exit 0, tally 655 passed / 0 failed / 0 errored / 0 skipped.
+- Ran the whole project test suite: 1174 passed, 1 skipped (pre-existing skip noted above).
+- No parser code changes were needed in this step; the existing parser already passes the full suite.
+
+BLOCKERS:
+- None.</pre></article>
+</main>
+</body>
+</html>

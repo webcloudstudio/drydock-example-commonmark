@@ -1,0 +1,24 @@
+Baseline is green (649 passed, 1 skipped). Now I'll add the thematic-break block type as a registered start rule in `blocks.py`.Now the tests: the four declared acceptance checks transcribed unchanged, plus block-tree and exact-output tests for the boundaries.One existing test pins the default registry to zero start rules, which this step intentionally changes. Let me look at it.Now the full project suite, run in the background since it takes about two minutes.Thematic breaks now parse and render as `<hr />`. The full project suite passes: 687 passed, 1 skipped (the skip was already there before this change).
+
+I did not run `sources/full_test.sh`. The feature's acceptance is gated on the lists story, and the conformance corpus needs lists and setext headings.
+
+**What changed**
+- `mdparser/blocks.py`: a new `thematic_break` block type with a start rule. It accepts up to three spaces of indentation, then three or more matching `*`, `-` or `_`, with spaces or tabs allowed between and after, and nothing else. It is registered in `DEFAULT_REGISTRY`, so it takes precedence over paragraph text, and it closes on the next line.
+- `mdparser/render.py`: renders the block as `<hr />\n`.
+- `tests/test_thematic_breaks.py` (new): the four declared checks transcribed with their assertions unchanged, plus boundary tests for marker counts, indentation, mixed and trailing characters, paragraph interaction, and exact output.
+- `tests/test_blocks.py`: one existing test asserted the default registry had no start rules. That is now false by design, so I changed it to expect exactly the thematic-break rule. I did not weaken any declared assertion.
+
+**Choices I made**
+- The start rule lives in `blocks.py` next to `PARAGRAPH`, following the existing pattern, rather than in a new module.
+- The setext precedence and list precedence are not wired, as the spec says; they belong to the later stories.
+
+RESULT: SUCCESS
+
+FILES CHANGED:
+- mdparser/blocks.py
+- mdparser/render.py
+- tests/test_blocks.py
+- tests/test_thematic_breaks.py
+
+SUMMARY:
+Added the thematic-break block type as a registered start rule, rendered it as `<hr />`, and added tests. Declared acceptance checks (thematic-three-markers, thematic-not-a-break, thematic-interrupts-paragraph, thematic-trailing-whitespace) are transcribed in `tests/test_thematic_breaks.py` and pass. Full pytest run: 687 passed, 1 skipped (pre-existing skip). Baseline before the change was 649 passed, 1 skipped. Conformance corpus (`sources/full_test.sh`) was not run because this step's criteria gate it in the lists story.

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Executable.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Executable.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Executable.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Executable</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>The commonmark executable reads UTF-8 Markdown on stdin, normalizes lines, and writes only HTML to stdout.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md</td></tr><tr><td>Provides</td><td>./commonmark</td></tr><tr><td>Consumes</td><td>mdparser.cli</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Deliver the executable <code>commonmark</code> at the application root. It takes no arguments.</p>
+<h2>Trigger</h2>
+<p>A process runs <code>./commonmark</code> with Markdown on stdin.</p>
+<h2>Sequence</h2>
+<ol><li>Read all of stdin as bytes.</li><li>Decode as UTF-8 with U+FFFD replacement for invalid bytes.</li><li>Treat LF, CR and CRLF as line endings. Replace U+0000 with U+FFFD.</li><li>Pass the lines to the parser entry point in <code>mdparser.cli</code>. Until the block engine story lands this may be a placeholder that renders no blocks.</li><li>Write the rendered HTML to stdout as UTF-8 and exit 0.</li></ol>
+<h2>Interface</h2>
+<ul><li>File <code>commonmark</code> at the application root: python3 shebang, executable bit set, puts its own directory on <code>sys.path</code>, and does not need an activated virtual environment.</li><li>stdin: UTF-8 Markdown. stdout: HTML only. stderr: diagnostics only.</li><li>Exit status 0 for all input, including empty input and invalid UTF-8, with no traceback.</li><li><code>README.md</code> at the project root concisely describes the stdin/stdout interface. README content is not an acceptance criterion.</li></ul>
+<h2>Reads</h2>
+<ul><li>Standard input.</li></ul>
+<h2>Writes</h2>
+<ul><li>Standard output only. No files.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC executable-empty-input ===<br>Intent: Empty standard input produces empty standard output and exit status 0 (AC-001).</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;&quot;, capture_output=True, text=True) print(result.stdout) print(result.stderr) assert result.returncode == 0 assert len(result.stdout) == 0 === END AC executable-empty-input ===</p>
+<p>=== AC executable-invalid-utf8 ===<br>Intent: Bytes that are not valid UTF-8 are decoded with replacement and the program exits 0 with decodable output (AC-002).</p>
+<p>import subprocess</p>
+<p>payload = b&quot;\xff\xfe text \xc3\x28 end\n&quot; result = subprocess.run([&quot;./commonmark&quot;], input=payload, capture_output=True) print(result.stdout) print(result.stderr) assert result.returncode == 0 result.stdout.decode(&quot;utf-8&quot;) === END AC executable-invalid-utf8 ===</p>
+<p>=== AC executable-stdout-is-html-only ===<br>Intent: A normal run exits 0 and its stdout is valid UTF-8 text while diagnostics stay on stderr (AC-003).</p>
+<p>import subprocess</p>
+<p>source = &quot;hello world\n\nsecond paragraph\n&quot; result = subprocess.run([&quot;./commonmark&quot;], input=source.encode(&quot;utf-8&quot;), capture_output=True) print(result.stdout) print(result.stderr) assert result.returncode == 0 result.stdout.decode(&quot;utf-8&quot;) === END AC executable-stdout-is-html-only ===</p>
+<p>=== AC executable-line-endings ===<br>Intent: LF, CR and CRLF line endings yield identical output for the same document.</p>
+<p>import subprocess</p>
+<p>lines = &quot;one&quot;, &quot;two&quot;, &quot;&quot;, &quot;three&quot; variants = [&quot;\n&quot;.join(lines) + &quot;\n&quot;, &quot;\r\n&quot;.join(lines) + &quot;\r\n&quot;, &quot;\r&quot;.join(lines) + &quot;\r&quot;] outputs = [] for source in variants: result = subprocess.run([&quot;./commonmark&quot;], input=source.encode(&quot;utf-8&quot;), capture_output=True) print(result.stdout) assert result.returncode == 0 outputs.append(result.stdout) assert outputs[0] == outputs[1] == outputs[2] === END AC executable-line-endings ===</p>
+<p>=== AC executable-nul-replacement ===<br>Intent: U+0000 on input is treated exactly like U+FFFD (the spec&#x27;s Insecure characters rule).<br>Encoding: utf-8</p>
+<p>import subprocess</p>
+<p>with_nul = &quot;a\x00b\n&quot; with_replacement = &quot;a\ufffdb\n&quot; first = subprocess.run([&quot;./commonmark&quot;], input=with_nul, capture_output=True, text=True, encoding=&quot;utf-8&quot;) second = subprocess.run([&quot;./commonmark&quot;], input=with_replacement, capture_output=True, text=True, encoding=&quot;utf-8&quot;) print(first.stdout) assert first.returncode == 0 assert second.returncode == 0 assert first.stdout == second.stdout === END AC executable-nul-replacement ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Never write anything but rendered HTML to stdout.</li><li>Never require command-line arguments.</li><li>Never exit non-zero or emit a traceback because of input content.</li></ul></article>
+</main>
+</body>
+</html>

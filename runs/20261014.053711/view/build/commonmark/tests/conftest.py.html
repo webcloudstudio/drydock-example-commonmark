@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/conftest.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/conftest.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/conftest.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Shared pytest fixtures for the mdparser test suite.&quot;&quot;&quot;
+
+from pathlib import Path
+
+import pytest
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+
+@pytest.fixture
+def project_root() -&gt; Path:
+    &quot;&quot;&quot;Absolute path to the application root, where `commonmark` and `pyproject.toml` live.&quot;&quot;&quot;
+    return PROJECT_ROOT
+</pre></article>
+</main>
+</body>
+</html>

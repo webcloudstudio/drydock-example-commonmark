@@ -1,0 +1,28 @@
+Baseline is green (991 passed, 1 skipped). Now I'll add the setext rule to the block engine, register it ahead of thematic breaks so dashes after a paragraph win, and render the new block kind.Now the test file: the declared acceptance checks transcribed unchanged, plus block-tree and exact-output tests.Two expectations I wrote need correcting before I run them: a trailing-space hard break *between* heading lines is valid (only the last line's trailing spaces are dropped), and one test name is misleading.Both failures are mistakes in my test expectations, not the engine. `"  \tFoo  "` is four columns of indentation, so it's an indented code block; and paragraph lines drop their leading whitespace, so the content is `Foo\n===`. Fixing the tests:Now the new file, then the whole project suite in the background to check for regressions against the 991-pass baseline.Same mistake again: a space followed by a tab reaches column 4, so it's still indented code. The single-space case is the one I meant to test, so I'll use that.The new file is green (48 passed). Waiting on the full-suite run:The background run started before my last test fix, so the `strips_surrounding` failure there is stale. The real regression is an existing registry-order test in `test_blocks.py`, which pins the start-rule list. Let me look at it.This test pins the old start-rule order. Adding the setext rule ahead of thematic break is an intended change, so I'll update the expectation (it isn't a declared acceptance check) and rename it to match.RESULT: SUCCESS
+
+FILES CHANGED:
+- mdparser/blocks.py
+- mdparser/render.py
+- tests/test_blocks.py
+- tests/test_setext_headings.py
+
+SUMMARY:
+Setext headings are implemented as a registered block type, `setext_heading`, with a start rule that runs only when the open container is a paragraph.
+
+- **Underline rule:** the line must have at most three columns of indentation, one run of a single `=` or `-`, and only trailing spaces or tabs. Internal spaces disqualify it. `=` gives level 1 and `-` gives level 2.
+- **Whole-paragraph content:** the heading content is all paragraph lines joined, with surrounding spaces and tabs stripped. Leading link reference definitions are extracted into the document map first and do not become heading text.
+- **Empty guard:** if no text remains after definitions, the rule declines. The underline then stays paragraph text, or becomes a thematic break for dashes.
+- **Precedence:** the setext rule is registered before the thematic-break rule, so dashes after paragraph text make a heading.
+- **Lazy continuation:** the rule never fires for a lazy line, so `> foo\nbar\n===` stays a paragraph inside the quote.
+- **Tree mechanics:** the paragraph's lines are cleared, so it closes empty and leaves the tree. The heading is attached in its place.
+- **Rendering:** `render.py` emits `<hN>` for `setext_heading` the same way it does for ATX headings.
+
+Tests:
+- `tests/test_setext_headings.py` (new, 48 tests) transcribes the seven declared acceptance checks unchanged and adds block-tree and exact-output tests. It passes 48/48.
+- `tests/test_blocks.py`: I updated one existing test that pinned the old start-rule order to include the new rule first, and renamed it to match. This is an intended change, not a weakened assertion.
+- Full project suite: 1037 passed, 1 skipped, 2 failed. One failure was the registry-order test I then updated. The other was a bad input in my own new test, which I then fixed. After those edits, the affected files (test_blocks, test_setext_headings, test_thematic_breaks, test_atx_headings, test_block_quotes, test_block_engine) pass 253/253. I did not rerun the entire suite after the last two edits.
+
+Not run: `sources/full_test.sh` and `spec_tests.py`. The setext corpus examples are gated in the lists story, so I did not invoke the staged corpus here. No commits were made.
+
+BLOCKERS:
+- none

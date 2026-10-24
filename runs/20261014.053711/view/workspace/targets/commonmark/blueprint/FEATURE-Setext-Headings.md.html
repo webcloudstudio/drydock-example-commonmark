@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Setext-Headings.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Setext-Headings.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Setext-Headings.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Setext Headings</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>Parse setext headings, including multiline content and the precedence and laziness exclusions.</td></tr><tr><td>Depends On</td><td>FEATURE-Block-Quotes.md</td></tr><tr><td>Provides</td><td>setext heading block</td></tr><tr><td>Consumes</td><td>paragraph block, thematic break block</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement the Setext headings section of the spec.</p>
+<h2>Rules</h2>
+<ul><li>A setext heading is one or more lines of paragraph text followed by an underline of <code>=</code> (level 1) or <code>-</code> (level 2) characters, with up to three spaces of indentation and only trailing spaces or tabs after. The underline cannot contain internal spaces.</li><li>The text lines must be such that, without the underline, they would form a paragraph. The first line has at most three spaces of indentation.</li><li>The underline applies to the whole accumulated paragraph, so multiple lines become one heading. The heading content is the paragraph&#x27;s raw text with leading and trailing spaces and tabs removed, parsed as inlines. Trailing spaces or a backslash on the last content line are not a hard break.</li><li>An underline of dashes takes precedence over a thematic break reading of the same line when it follows paragraph text. Without paragraph text it is a thematic break. A setext heading cannot be empty, so <code>====</code> alone is a paragraph.</li><li>The underline cannot be a lazy continuation line of a container: after a quote or list item, an unmarked underline does not underline the container&#x27;s paragraph.</li><li>Link reference definitions already extracted from the paragraph&#x27;s start do not become heading text.</li></ul>
+<h2>Reads</h2>
+<ul><li>Lines handed to the block engine; the open paragraph.</li></ul>
+<h2>Writes</h2>
+<ul><li>Heading nodes of level 1 or 2 in the block tree.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>The corpus section has examples that use lists, so it is gated in the lists story. The checks here are bounded.</p>
+<p>=== AC setext-both-levels ===<br>Intent: Equals underlines give h1 and dash underlines give h2.</p>
+<p>import subprocess</p>
+<p>equals = subprocess.run([&quot;./commonmark&quot;], input=&quot;Foo <em>bar</em>\n=========\n&quot;, capture_output=True, text=True) dashes = subprocess.run([&quot;./commonmark&quot;], input=&quot;Foo <em>bar</em>\n---------\n&quot;, capture_output=True, text=True) print(equals.stdout) print(dashes.stdout) assert equals.returncode == 0 assert dashes.returncode == 0 assert equals.stdout.count(&quot;&lt;h1&gt;&quot;) == 1 assert dashes.stdout.count(&quot;&lt;h2&gt;&quot;) == 1 assert equals.stdout.count(&quot;&lt;em&gt;&quot;) == 1 === END AC setext-both-levels ===</p>
+<p>=== AC setext-multiline-content ===<br>Intent: Several paragraph lines before the underline become one heading with no paragraph.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;Foo\nBar\n---\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;h2&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 0 === END AC setext-multiline-content ===</p>
+<p>=== AC setext-underline-beats-thematic-break ===<br>Intent: Dashes after paragraph text make a heading, not a thematic break.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;Foo\n---\nbar\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;h2&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;hr /&gt;&quot;) == 0 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1 === END AC setext-underline-beats-thematic-break ===</p>
+<p>=== AC setext-sequence-with-thematic-breaks ===<br>Intent: Dashes with no preceding paragraph are thematic breaks, mixed with two setext headings and a paragraph.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;---\nFoo\n---\nBar\n---\nBaz\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;hr /&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;h2&gt;&quot;) == 2 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1 === END AC setext-sequence-with-thematic-breaks ===</p>
+<p>=== AC setext-underline-limits ===<br>Intent: Four spaces of indentation or internal spaces disqualify the underline.</p>
+<p>import subprocess</p>
+<p>for source in (&quot;Foo\n    ---\n&quot;, &quot;Foo\n= =\n&quot;): result = subprocess.run([&quot;./commonmark&quot;], input=source, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;h1&gt;&quot;) == 0 assert result.stdout.count(&quot;&lt;h2&gt;&quot;) == 0 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1 === END AC setext-underline-limits ===</p>
+<p>=== AC setext-not-lazy-in-quote ===<br>Intent: An unmarked underline after a quote paragraph does not make a heading inside the quote.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;&gt; foo\nbar\n===\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;h1&gt;&quot;) == 0 assert result.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1 === END AC setext-not-lazy-in-quote ===</p>
+<p>=== AC setext-quote-then-thematic-break ===<br>Intent: Dashes after a quote without a marker are a thematic break outside the quote.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;&gt; Foo\n---\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;hr /&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;h2&gt;&quot;) == 0 === END AC setext-quote-then-thematic-break ===</p>
+<p>=== AC setext-empty-is-paragraph ===<br>Intent: An underline with no content line is not a heading.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;\n====\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;h1&gt;&quot;) == 0 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1 === END AC setext-empty-is-paragraph ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>A setext underline must never act through lazy continuation.</li><li>A setext heading must never be empty.</li><li>Do not skip, filter or reinterpret corpus examples.</li></ul></article>
+</main>
+</body>
+</html>

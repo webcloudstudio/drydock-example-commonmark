@@ -1,0 +1,20 @@
+All 19 Autolinks examples pass. Now I'll tighten one long docstring and write the project tests, including the declared acceptance checks.Before running, I re-checked some of my hand-written expectations and found errors: the `%`/`^`/`~` encoding in the complicated email href, a body case that is actually a valid autolink, and an email label computed through the code under test. Fixing those now.All 182 tests pass. Checking the working tree for only the intended changes and any over-long lines:RESULT: SUCCESS
+
+FILES CHANGED:
+- mdparser/inlines.py
+- tests/test_autolinks.py
+
+SUMMARY:
+- `parse_inline` now scans left to right. At a `<` it tries a URI autolink (scheme of 2 to 32 characters, then a colon, then a body with no control characters, space, `<` or `>`), then an email autolink (the spec's HTML5 regex, with `mailto:` prepended). Matches become `<a href>` with the href percent-encoded and then HTML-escaped, and the label HTML-escaped. Anything else stays escaped text.
+- Backslash escapes are inert inside an autolink because the whole autolink is consumed first. Outside autolinks, a backslash before ASCII punctuation yields that character, so `\<` does not open an autolink.
+- Gate: `python3 sources/spec_tests.py --program ./commonmark --spec sources/spec.txt --pattern '^Autolinks$'` gives 19 passed, 0 failed, 0 errored, exit 0.
+- Tests: `tests/test_autolinks.py` has the three declared acceptance checks as tests, plus the scoped corpus gate run as a subprocess. Finer tests cover scheme length boundaries (2, 32, 33 characters), email label length (63 and 64), malformed emails, percent-encoding of non-ASCII, backtick and existing `%XX`, control characters, `&` escaping, and left-to-right scanning. Each test compares a return value or stdout bytes exactly.
+- `.venv/bin/python -m pytest -q` gives 182 passed. Only `mdparser/inlines.py` changed and the new test file was added; nothing under `sources/` was touched.
+- I did not run `sources/full_test.sh`, because this step declares only the scoped gate.
+
+BLOCKERS:
+- None.
+
+<blueprint-decisions>
+[{"spec":"FEATURE-Autolinks.md","severity":"Low","subject":"Minimal backslash-escape handling in the inline scanner","decision":"The Autolinks section's example `<foo\\+@bar.example.com>` expects the backslash in front of `+` to be removed outside the autolink, and the gate requires that example to pass. I therefore added a minimal rule to the inline scanner: a backslash before ASCII punctuation yields that character. A full backslash-escape story would replace this, and autolink behaviour does not depend on it. Is that acceptable, or should it move to the entities module on replan?"}]
+</blueprint-decisions>

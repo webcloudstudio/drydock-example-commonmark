@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Link-Reference-Definitions.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Link-Reference-Definitions.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Link-Reference-Definitions.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Link Reference Definitions</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>Extract link reference definitions when a paragraph closes and provide the document-wide reference map and label normalization.</td></tr><tr><td>Depends On</td><td>FEATURE-Block-Engine.md</td></tr><tr><td>Provides</td><td>reference map, normalize_label</td></tr><tr><td>Consumes</td><td>block tree builder</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement the Link reference definitions section of the spec and the label matching shared with links and images.</p>
+<h2>Rules</h2>
+<ul><li>When a paragraph closes, repeatedly parse a definition at the start of its text: up to three spaces of indentation, a link label, a colon, optional whitespace with up to one line ending, a link destination, optional whitespace with up to one line ending, and an optional title. Nothing else may follow on the final line.</li><li>A link label has 1 to 999 characters, at least one non-whitespace character, and no unescaped brackets. A destination is either <code>&lt;...&gt;</code> with no line ending or unescaped <code>&lt;</code> or <code>&gt;</code>, or a nonempty run with no spaces or control characters and balanced parentheses. An empty <code>&lt;&gt;</code> destination is allowed.</li><li>A title is double-quoted, single-quoted or parenthesized, may span lines, must not contain a blank line, and must be separated from the destination by whitespace.</li><li>If the title does not parse, but the destination ends its line, the definition has no title and the rest of the paragraph remains. If anything else follows the title on its line, the whole attempt fails and the text stays a paragraph.</li><li>The first definition for a normalized label wins. Definitions in containers go into the same document-wide map. A definition cannot interrupt a paragraph, which follows from extracting only at the start of the paragraph&#x27;s text.</li><li>Remaining text becomes a paragraph. A paragraph that consists only of definitions disappears.</li><li><code>normalize_label</code> strips the brackets, applies <code>str.casefold()</code>, strips, and collapses internal spaces, tabs and line endings to one space. Matching compares normalized strings, not parsed inlines.</li><li>Destination and title go through the shared unescape and entity helpers. The stored destination is percent-encoded at render time by the link story.</li></ul>
+<h2>Reads</h2>
+<ul><li>Closed paragraph text.</li></ul>
+<h2>Writes</h2>
+<ul><li>Entries in the reference map.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>The corpus section needs headings, quotes, setext headings and links, so it is gated in the tabs story. The checks here are bounded and use paragraph counts.</p>
+<p>=== AC defs-definition-only-renders-nothing ===<br>Intent: A document that is only a definition, with or without a title or angle brackets, renders no paragraph.</p>
+<p>import subprocess</p>
+<p>for source in [&#x27;[foo]: /url &quot;title&quot;\n&#x27;, &quot;[foo]:\n/url\n&#x27;title&#x27;\n&quot;, &quot;[foo]: &lt;&gt;\n&quot;]: result = subprocess.run([&quot;./commonmark&quot;], input=source, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 0 === END AC defs-definition-only-renders-nothing ===</p>
+<p>=== AC defs-remainder-is-paragraph ===<br>Intent: Text after a definition stays as one paragraph.</p>
+<p>import subprocess</p>
+<p>rest = &quot;remaining text&quot; result = subprocess.run([&quot;./commonmark&quot;], input=&quot;[foo]: /url\n&quot; + rest + &quot;\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1 assert rest in result.stdout === END AC defs-remainder-is-paragraph ===</p>
+<p>=== AC defs-trailing-text-not-definition ===<br>Intent: Extra text after the title means the line is not a definition, so it stays a paragraph.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&#x27;[foo]: /url &quot;title&quot; ok\n&#x27;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1 === END AC defs-trailing-text-not-definition ===</p>
+<p>=== AC defs-cannot-interrupt-paragraph ===<br>Intent: A definition line directly after paragraph text is part of that paragraph.</p>
+<p>import subprocess</p>
+<p>definition = &quot;[bar]: /baz&quot; result = subprocess.run([&quot;./commonmark&quot;], input=&quot;Foo\n&quot; + definition + &quot;\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1 assert definition in result.stdout === END AC defs-cannot-interrupt-paragraph ===</p>
+<p>=== AC defs-title-with-blank-line ===<br>Intent: A title containing a blank line is not valid, so the two halves become two paragraphs.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run( [&quot;./commonmark&quot;], input=&quot;[foo]: /url &#x27;title\n\nwith blank line&#x27;\n&quot;, capture_output=True, text=True, ) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 2 === END AC defs-title-with-blank-line ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>A definition must never interrupt a paragraph.</li><li>Label matching is on normalized strings only, never on parsed inline content.</li><li>Do not skip, filter or reinterpret corpus examples.</li></ul></article>
+</main>
+</body>
+</html>

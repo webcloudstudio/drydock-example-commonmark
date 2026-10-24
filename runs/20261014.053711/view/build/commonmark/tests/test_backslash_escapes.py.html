@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_backslash_escapes.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_backslash_escapes.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_backslash_escapes.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Backslash escape tests: escaped ASCII punctuation in text, literal backslashes before other
+characters, inertness inside code spans, and the shared `unescape` helper used for link
+destinations, titles and info strings.
+
+Each test compares a returned string or the executable&#x27;s stdout bytes with its exact expected
+value. The declared acceptance checks are transcribed from FEATURE-Backslash-Escapes.md.
+&quot;&quot;&quot;
+
+import string
+import subprocess
+from pathlib import Path
+
+import pytest
+
+from mdparser import inlines
+from mdparser.entities import ASCII_PUNCTUATION, unescape
+
+
+def run_executable(project_root: Path, data: str) -&gt; subprocess.CompletedProcess[bytes]:
+    return subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=data.encode(&quot;utf-8&quot;),
+        capture_output=True,
+        cwd=project_root,
+        check=False,
+    )
+
+
+# --- Declared acceptance checks (transcribed from FEATURE-Backslash-Escapes.md) ---
+
+
+def test_escapes_punctuation_inert(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC escapes-punctuation-inert: an escaped asterisk prevents emphasis.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;\\*not emphasized*\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;).count(&quot;&lt;em&gt;&quot;) == 0
+    assert result.stdout.decode(&quot;utf-8&quot;).count(&quot;\\&quot;) == 0
+
+
+def test_escapes_non_punctuation_literal(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC escapes-non-punctuation-literal: a backslash before a non-punctuation character is kept.&quot;&quot;&quot;
+    text = &quot;\\A\\a\\3&quot;
+    result = run_executable(project_root, text + &quot;\n&quot;)
+    assert result.returncode == 0
+    assert text in result.stdout.decode(&quot;utf-8&quot;)
+
+
+def test_escapes_block_markers(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC escapes-block-markers: an escaped heading marker does not start a heading.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;\\# word\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;).count(&quot;&lt;h1&gt;&quot;) == 0
+    assert result.stdout.decode(&quot;utf-8&quot;).count(&quot;&lt;p&gt;&quot;) == 1
+
+
+def test_escapes_inert_in_code_span(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC escapes-inert-in-code-span: a backslash in a code span is not an escape.&quot;&quot;&quot;
+    content = &quot;\\*&quot;
+    result = run_executable(project_root, &quot;`&quot; + content + &quot;`\n&quot;)
+    assert result.returncode == 0
+    assert content in result.stdout.decode(&quot;utf-8&quot;)
+
+
+# --- Escaped punctuation in text ---
+
+
+HTML_TEXT_FORM = {&quot;&amp;&quot;: &quot;&amp;amp;&quot;, &quot;&lt;&quot;: &quot;&amp;lt;&quot;, &quot;&gt;&quot;: &quot;&amp;gt;&quot;, &#x27;&quot;&#x27;: &quot;&amp;quot;&quot;}
+
+
+@pytest.mark.parametrize(&quot;char&quot;, sorted(string.punctuation))
+def test_escaped_punctuation_yields_the_character(char: str) -&gt; None:
+    &quot;&quot;&quot;Every ASCII punctuation character escaped by a backslash is plain text, without the backslash.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;\\&quot; + char) == HTML_TEXT_FORM.get(char, char)
+
+
+def test_ascii_punctuation_set_matches_the_spec_list() -&gt; None:
+    &quot;&quot;&quot;The escapable set is exactly the 32 ASCII punctuation characters.&quot;&quot;&quot;
+    assert len(ASCII_PUNCTUATION) == 32
+    assert &quot;\\&quot; in ASCII_PUNCTUATION
+    assert &quot; &quot; not in ASCII_PUNCTUATION
+    assert &quot;A&quot; not in ASCII_PUNCTUATION
+
+
+@pytest.mark.parametrize(&quot;char&quot;, [&quot;*&quot;, &quot;_&quot;, &quot;`&quot;, &quot;[&quot;, &quot;]&quot;, &quot;&lt;&quot;, &quot;&amp;&quot;, &quot;#&quot;, &quot;!&quot;, &quot;|&quot;])
+def test_escaped_character_that_opens_a_construct_is_inert(char: str) -&gt; None:
+    &quot;&quot;&quot;A backslash makes a construct-opening character literal, so no construct starts there.&quot;&quot;&quot;
+    assert &quot;\\&quot; not in inlines.parse_inline(&quot;\\&quot; + char + &quot;x&quot; + char)
+
+
+def test_escaped_backslash_leaves_next_character_unescaped() -&gt; None:
+    &quot;&quot;&quot;`\\\\` yields one backslash, and the following backtick is still a live opener.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;\\\\`a`&quot;) == &quot;\\&lt;code&gt;a&lt;/code&gt;&quot;
+
+
+def test_escaped_backtick_does_not_open_a_code_span() -&gt; None:
+    &quot;&quot;&quot;A backslash before a backtick makes it literal, so it cannot open a span.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;\\`a`&quot;) == &quot;`a`&quot;
+
+
+def test_escaped_ampersand_is_escaped_as_text() -&gt; None:
+    &quot;&quot;&quot;An escaped ampersand is shown as a literal ampersand, so an entity-like form is not decoded.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;\\&amp;amp;&quot;) == &quot;&amp;amp;amp;&quot;
+
+
+def test_escaped_quote_renders_as_quot_entity() -&gt; None:
+    &quot;&quot;&quot;An escaped double quote renders as the `&amp;quot;` entity, with no backslash.&quot;&quot;&quot;
+    assert inlines.parse_inline(&#x27;\\&quot;&#x27;) == &quot;&amp;quot;&quot;
+
+
+def test_trailing_lone_backslash_is_literal() -&gt; None:
+    &quot;&quot;&quot;A backslash at the very end of the text is kept, since nothing follows it.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;a\\&quot;) == &quot;a\\&quot;
+
+
+def test_backslash_before_non_punctuation_is_kept() -&gt; None:
+    &quot;&quot;&quot;A backslash before a letter, digit or space stays in the text.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;\\a\\3\\ b&quot;) == &quot;\\a\\3\\ b&quot;
+
+
+def test_escape_inside_a_longer_text_run() -&gt; None:
+    &quot;&quot;&quot;An escape in the middle of plain text consumes only its own two characters.&quot;&quot;&quot;
+    assert inlines.parse_inline(&quot;x\\*y*z&quot;) == &quot;x*y*z&quot;
+
+
+def test_escaped_text_output_is_exact(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;The executable writes exactly the escaped paragraph and nothing else.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;\\*a\\* b\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;) == &quot;&lt;p&gt;*a* b&lt;/p&gt;\n&quot;
+
+
+# --- The shared unescape helper ---
+
+
+@pytest.mark.parametrize(
+    (&quot;text&quot;, &quot;expected&quot;),
+    [
+        (&quot;&quot;, &quot;&quot;),
+        (&quot;plain&quot;, &quot;plain&quot;),
+        (&quot;\\*&quot;, &quot;*&quot;),
+        (&quot;\\\\&quot;, &quot;\\&quot;),
+        (&quot;\\a&quot;, &quot;\\a&quot;),
+        (&quot;a\\&quot;, &quot;a\\&quot;),
+        (&quot;\\\\*&quot;, &quot;\\*&quot;),
+        (&quot;\\*\\_&quot;, &quot;*_&quot;),
+        (&quot;a\\(b\\)&quot;, &quot;a(b)&quot;),
+        (&quot;\\ \\\n&quot;, &quot;\\ \\\n&quot;),
+    ],
+)
+def test_unescape_applies_the_backslash_rule(text: str, expected: str) -&gt; None:
+    &quot;&quot;&quot;The helper yields escaped punctuation and keeps every other backslash.&quot;&quot;&quot;
+    assert unescape(text) == expected
+
+
+def test_unescape_leaves_entities_undecoded() -&gt; None:
+    &quot;&quot;&quot;Entity decoding is separate, so `&amp;amp;` passes through the helper as written.&quot;&quot;&quot;
+    assert unescape(&quot;\\&amp;amp;&quot;) == &quot;&amp;amp;&quot;
+
+
+def test_unescape_is_idempotent_after_one_pass() -&gt; None:
+    &quot;&quot;&quot;A second pass over an unescaped result changes nothing when no backslash is left.&quot;&quot;&quot;
+    once = unescape(&quot;\\*a\\_b&quot;)
+    assert once == &quot;*a_b&quot;
+    assert unescape(once) == once
+
+
+def test_unescape_empty_string_is_empty() -&gt; None:
+    &quot;&quot;&quot;The empty string has no escapes and stays empty.&quot;&quot;&quot;
+    assert unescape(&quot;&quot;) == &quot;&quot;
+</pre></article>
+</main>
+</body>
+</html>

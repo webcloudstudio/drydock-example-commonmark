@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_raw_html.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_raw_html.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_raw_html.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Raw inline HTML tests: open, closing, empty-element and attribute forms, comments, processing
+instructions, declarations and CDATA sections, the rejected forms, and backslash inertness.
+
+Each test compares a returned string or the executable&#x27;s stdout bytes with its exact expected
+value. No test matches a substring of output.
+&quot;&quot;&quot;
+
+import subprocess
+from pathlib import Path
+
+import pytest
+
+from mdparser import inlines
+
+
+def run_executable(project_root: Path, data: str) -&gt; subprocess.CompletedProcess[bytes]:
+    return subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=data.encode(&quot;utf-8&quot;),
+        capture_output=True,
+        cwd=project_root,
+        check=False,
+    )
+
+
+# --- Declared acceptance checks (transcribed from FEATURE-Raw-HTML.md) ---
+
+
+def test_rawhtml_open_and_close_tags_pass_through(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC rawhtml-open-and-close-tags: open, self-closing and closing tags pass through verbatim.&quot;&quot;&quot;
+    tags = &#x27;&lt;a&gt;&lt;bab&gt;&lt;c2c&gt; &lt;a href=&quot;x&quot; data-k=v /&gt; &lt;/a&gt;&lt;/foo &gt;&#x27;
+    result = run_executable(project_root, &quot;Foo &quot; + tags + &quot;\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;) == f&quot;&lt;p&gt;Foo {tags}&lt;/p&gt;\n&quot;
+
+
+@pytest.mark.parametrize(
+    &quot;fragment&quot;,
+    [&quot;&lt;!-- a comment --&gt;&quot;, &quot;&lt;?php echo $a; ?&gt;&quot;, &quot;&lt;!ELEMENT br EMPTY&gt;&quot;, &quot;&lt;![CDATA[&gt;&amp;&lt;]]&gt;&quot;],
+)
+def test_rawhtml_comment_pi_declaration_cdata_pass_through(
+    project_root: Path, fragment: str
+) -&gt; None:
+    &quot;&quot;&quot;AC rawhtml-comment-pi-declaration-cdata: each construct passes through verbatim.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;foo &quot; + fragment + &quot; bar\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;) == f&quot;&lt;p&gt;foo {fragment} bar&lt;/p&gt;\n&quot;
+
+
+def test_rawhtml_illegal_forms_are_escaped(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC rawhtml-illegal-forms-escaped: an illegal tag name is escaped text, not raw HTML.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;&lt;33&gt; &lt;__&gt;\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;) == &quot;&lt;p&gt;&amp;lt;33&amp;gt; &amp;lt;__&amp;gt;&lt;/p&gt;\n&quot;
+
+
+def test_rawhtml_closing_tag_with_attributes_is_escaped(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC rawhtml-closing-tag-with-attributes: a closing tag with attributes is escaped text.&quot;&quot;&quot;
+    result = run_executable(project_root, &#x27;&lt;/a href=&quot;foo&quot;&gt;\n&#x27;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;) == &quot;&lt;p&gt;&amp;lt;/a href=&amp;quot;foo&amp;quot;&amp;gt;&lt;/p&gt;\n&quot;
+
+
+def test_rawhtml_backslash_in_attribute_value_is_inert(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC rawhtml-backslash-inert: a backslash inside a tag attribute value is kept as written.&quot;&quot;&quot;
+    tag = &#x27;&lt;a href=&quot;\\*&quot;&gt;&#x27;
+    result = run_executable(project_root, &quot;foo &quot; + tag + &quot;\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;) == f&quot;&lt;p&gt;foo {tag}&lt;/p&gt;\n&quot;
+
+
+# --- Open, closing and empty-element tags ---
+
+
+@pytest.mark.parametrize(
+    &quot;tag&quot;,
+    [
+        &quot;&lt;a&gt;&quot;,
+        &quot;&lt;a/&gt;&quot;,
+        &quot;&lt;a  /&gt;&quot;,
+        &quot;&lt;b2/&gt;&quot;,
+        &quot;&lt;a-b c-d&gt;&quot;,
+        &quot;&lt;a h=x&gt;&quot;,
+        &quot;&lt;a h=&#x27;x&#x27;&gt;&quot;,
+        &#x27;&lt;a h=&quot;x y&quot;&gt;&#x27;,
+        &quot;&lt;a b&gt;&quot;,
+        &quot;&lt;a b c&gt;&quot;,
+        &quot;&lt;a b = c&gt;&quot;,
+        &quot;&lt;a _b:c.d-e=1&gt;&quot;,
+        &quot;&lt;a\nb&gt;&quot;,
+        &quot;&lt;a  /&gt;&lt;b2\ndata=\&quot;foo\&quot; &gt;&quot;,
+        &quot;&lt;a \n  b=\&quot;c\&quot;&gt;&quot;,
+    ],
+)
+def test_legal_open_tag_passes_through_unchanged(tag: str) -&gt; None:
+    assert inlines.parse_inline(tag) == tag
+
+
+@pytest.mark.parametrize(&quot;tag&quot;, [&quot;&lt;/a&gt;&quot;, &quot;&lt;/a &gt;&quot;, &quot;&lt;/a\n&gt;&quot;, &quot;&lt;/a\t  &gt;&quot;, &quot;&lt;/a-b2&gt;&quot;])
+def test_legal_closing_tag_passes_through_unchanged(tag: str) -&gt; None:
+    assert inlines.parse_inline(tag) == tag
+
+
+@pytest.mark.parametrize(
+    (&quot;source&quot;, &quot;expected&quot;),
+    [
+        (&#x27;&lt;a b=&quot;x&quot;c&gt;&#x27;, &quot;&amp;lt;a b=&amp;quot;x&amp;quot;c&amp;gt;&quot;),
+        (&#x27;&lt;a b=&quot;unclosed&gt;&#x27;, &quot;&amp;lt;a b=&amp;quot;unclosed&amp;gt;&quot;),
+        (&quot;&lt;a b=&gt;&quot;, &quot;&amp;lt;a b=&amp;gt;&quot;),
+        (&quot;&lt;a b=x y=&#x27;z&gt;&quot;, &quot;&amp;lt;a b=x y=&#x27;z&amp;gt;&quot;),
+        (&#x27;&lt;a b=x&quot;y&gt;&#x27;, &quot;&amp;lt;a b=x&amp;quot;y&amp;gt;&quot;),
+        (&quot;&lt;a=b&gt;&quot;, &quot;&amp;lt;a=b&amp;gt;&quot;),
+        (&quot;&lt;1a&gt;&quot;, &quot;&amp;lt;1a&amp;gt;&quot;),
+        (&quot;&lt;-a&gt;&quot;, &quot;&amp;lt;-a&amp;gt;&quot;),
+        (&quot;&lt;a b=c&lt;d&gt;&quot;, &quot;&amp;lt;a b=c&lt;d&gt;&quot;),
+        (&quot;&lt;a b=c`&gt;&quot;, &quot;&amp;lt;a b=c`&amp;gt;&quot;),
+        (&quot;&lt;a\n\nb&gt;&quot;, &quot;&amp;lt;a\n\nb&amp;gt;&quot;),
+        (&quot;&lt;/a/&gt;&quot;, &quot;&amp;lt;/a/&amp;gt;&quot;),
+        (&quot;&lt;/a b&gt;&quot;, &quot;&amp;lt;/a b&amp;gt;&quot;),
+        (&quot;&lt;/&gt;&quot;, &quot;&amp;lt;/&amp;gt;&quot;),
+        (&quot;&lt;a/ &gt;&quot;, &quot;&amp;lt;a/ &amp;gt;&quot;),
+        (&quot;&lt;a b c&quot;, &quot;&amp;lt;a b c&quot;),
+    ],
+)
+def test_illegal_tag_form_is_escaped_text(source: str, expected: str) -&gt; None:
+    assert inlines.parse_inline(source) == expected
+
+
+def test_attribute_value_containing_a_backslash_is_passed_through() -&gt; None:
+    assert inlines.parse_inline(&#x27;&lt;a href=&quot;\\*&quot;&gt;&#x27;) == &#x27;&lt;a href=&quot;\\*&quot;&gt;&#x27;
+
+
+def test_unquoted_attribute_value_containing_a_backslash_is_passed_through() -&gt; None:
+    assert inlines.parse_inline(&quot;&lt;a b=\\*&gt;&quot;) == &quot;&lt;a b=\\*&gt;&quot;
+
+
+def test_entity_text_in_attribute_value_is_passed_through_unchanged() -&gt; None:
+    assert inlines.parse_inline(&#x27;&lt;a title=&quot;&amp;amp;&amp;copy;&quot;&gt;&#x27;) == &#x27;&lt;a title=&quot;&amp;amp;&amp;copy;&quot;&gt;&#x27;
+
+
+def test_quoted_attribute_value_may_span_a_line_ending() -&gt; None:
+    assert inlines.parse_inline(&#x27;&lt;a b=&quot;x\ny&quot;&gt;&#x27;) == &#x27;&lt;a b=&quot;x\ny&quot;&gt;&#x27;
+
+
+# --- Comments ---
+
+
+@pytest.mark.parametrize(
+    &quot;comment&quot;,
+    [
+        &quot;&lt;!--&gt;&quot;,
+        &quot;&lt;!---&gt;&quot;,
+        &quot;&lt;!----&gt;&quot;,
+        &quot;&lt;!-- a comment --&gt;&quot;,
+        &quot;&lt;!-- a -- b --&gt;&quot;,
+        &quot;&lt;!--\nline one\nline two\n--&gt;&quot;,
+        &quot;&lt;!-- &gt; --&gt;&quot;,
+    ],
+)
+def test_legal_comment_passes_through_unchanged(comment: str) -&gt; None:
+    assert inlines.parse_inline(comment) == comment
+
+
+@pytest.mark.parametrize(
+    (&quot;source&quot;, &quot;expected&quot;),
+    [(&quot;&lt;!-- unclosed&quot;, &quot;&amp;lt;!-- unclosed&quot;), (&quot;&lt;!--&quot;, &quot;&amp;lt;!--&quot;), (&quot;&lt;!---&quot;, &quot;&amp;lt;!---&quot;)],
+)
+def test_unclosed_comment_is_escaped_text(source: str, expected: str) -&gt; None:
+    assert inlines.parse_inline(source) == expected
+
+
+# --- Processing instructions ---
+
+
+@pytest.mark.parametrize(&quot;instruction&quot;, [&quot;&lt;?php echo $a; ?&gt;&quot;, &quot;&lt;??&gt;&quot;, &quot;&lt;? x\ny ?&gt;&quot;, &quot;&lt;?&gt;?&gt;&quot;])
+def test_legal_processing_instruction_passes_through_unchanged(instruction: str) -&gt; None:
+    assert inlines.parse_inline(instruction) == instruction
+
+
+def test_unclosed_processing_instruction_is_escaped_text() -&gt; None:
+    assert inlines.parse_inline(&quot;&lt;?php echo&quot;) == &quot;&amp;lt;?php echo&quot;
+
+
+# --- Declarations ---
+
+
+@pytest.mark.parametrize(&quot;declaration&quot;, [&quot;&lt;!ELEMENT br EMPTY&gt;&quot;, &quot;&lt;!DOCTYPE html&gt;&quot;, &quot;&lt;!a&gt;&quot;])
+def test_legal_declaration_passes_through_unchanged(declaration: str) -&gt; None:
+    assert inlines.parse_inline(declaration) == declaration
+
+
+@pytest.mark.parametrize(
+    (&quot;source&quot;, &quot;expected&quot;),
+    [(&quot;&lt;! x&gt;&quot;, &quot;&amp;lt;! x&amp;gt;&quot;), (&quot;&lt;!1x&gt;&quot;, &quot;&amp;lt;!1x&amp;gt;&quot;), (&quot;&lt;!a&quot;, &quot;&amp;lt;!a&quot;), (&quot;&lt;!&gt;&quot;, &quot;&amp;lt;!&amp;gt;&quot;)],
+)
+def test_illegal_declaration_is_escaped_text(source: str, expected: str) -&gt; None:
+    assert inlines.parse_inline(source) == expected
+
+
+# --- CDATA sections ---
+
+
+@pytest.mark.parametrize(&quot;section&quot;, [&quot;&lt;![CDATA[&gt;&amp;&lt;]]&gt;&quot;, &quot;&lt;![CDATA[]]&gt;&quot;, &quot;&lt;![CDATA[a\nb]]&gt;&quot;])
+def test_legal_cdata_section_passes_through_unchanged(section: str) -&gt; None:
+    assert inlines.parse_inline(section) == section
+
+
+@pytest.mark.parametrize(
+    (&quot;source&quot;, &quot;expected&quot;),
+    [
+        (&quot;&lt;![CDATA[ unclosed&quot;, &quot;&amp;lt;![CDATA[ unclosed&quot;),
+        (&quot;&lt;![cdata[x]]&gt;&quot;, &quot;&amp;lt;![cdata[x]]&amp;gt;&quot;),
+    ],
+)
+def test_illegal_cdata_section_is_escaped_text(source: str, expected: str) -&gt; None:
+    assert inlines.parse_inline(source) == expected
+
+
+# --- Backslash handling and precedence ---
+
+
+def test_backslash_before_less_than_prevents_a_raw_tag() -&gt; None:
+    assert inlines.parse_inline(&quot;\\&lt;b&gt;&quot;) == &quot;&amp;lt;b&amp;gt;&quot;
+
+
+def test_raw_tag_text_between_escaped_text_keeps_its_order() -&gt; None:
+    assert inlines.parse_inline(&quot;AT&amp;T &lt;b&gt;x&lt;/b&gt; &amp; &lt;i&gt;&quot;) == &quot;AT&amp;amp;T &lt;b&gt;x&lt;/b&gt; &amp;amp; &lt;i&gt;&quot;
+
+
+def test_raw_tag_inside_text_keeps_surrounding_escapes() -&gt; None:
+    assert inlines.parse_inline(&#x27;say &quot;hi&quot; &lt;b class=&quot;x&quot;&gt;&#x27;) == &#x27;say &amp;quot;hi&amp;quot; &lt;b class=&quot;x&quot;&gt;&#x27;
+
+
+def test_two_raw_tags_in_one_line_both_pass_through() -&gt; None:
+    assert inlines.parse_inline(&quot;&lt;a&gt;&lt;b&gt;&quot;) == &quot;&lt;a&gt;&lt;b&gt;&quot;
+
+
+def test_a_less_than_sign_that_cannot_open_raw_html_does_not_hide_a_later_tag() -&gt; None:
+    assert inlines.parse_inline(&quot;&lt;3 &lt;b&gt;&quot;) == &quot;&amp;lt;3 &lt;b&gt;&quot;
+
+
+def test_empty_content_renders_nothing() -&gt; None:
+    assert inlines.parse_inline(&quot;&quot;) == &quot;&quot;
+</pre></article>
+</main>
+</body>
+</html>

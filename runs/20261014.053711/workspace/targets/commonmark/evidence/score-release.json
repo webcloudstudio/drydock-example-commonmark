@@ -1,0 +1,78 @@
+{
+  "schema_version": 5,
+  "recorded_at": "2026-10-14T09:13:00+00:00",
+  "target": "commonmark",
+  "verdict": "PASSED",
+  "verdict_line": "commonmark: PASSED \u2014 1 of 1",
+  "statement": "commonmark: PASSED \u2014 1 of 1\n\n  st-001  MET       governed_gate full: outcome PASS, return_code 0, timed_out false, duration 151886 ms; governed_gate stdout: \"655 passed, 0 failed, 0 errored, 0 skipped\"; code.dirty false, identity e9d2b96c72a51ed155f642ebd01891734085ca6e",
+  "complete": true,
+  "governed_gate": {
+    "name": "full",
+    "outcome": "PASS",
+    "argv": [
+      "sh",
+      "sources/full_test.sh"
+    ],
+    "return_code": 0,
+    "duration_ms": 151886,
+    "detail": "",
+    "timed_out": false,
+    "build_identity": "5886c579dd5cc064",
+    "stdout": "655 passed, 0 failed, 0 errored, 0 skipped\n",
+    "stderr": ""
+  },
+  "criteria": [
+    {
+      "criterion_id": "st-001",
+      "verdict": "MET",
+      "rationale": "The governed full gate `sh sources/full_test.sh` exited 0 against this tree (identity e9d2b96, clean) with 655 passed, 0 failed, 0 errored, 0 skipped.",
+      "evidence": [
+        "governed_gate full: outcome PASS, return_code 0, timed_out false, duration 151886 ms",
+        "governed_gate stdout: \"655 passed, 0 failed, 0 errored, 0 skipped\"",
+        "code.dirty false, identity e9d2b96c72a51ed155f642ebd01891734085ca6e"
+      ]
+    }
+  ],
+  "guardrail_ids": [],
+  "observations": [],
+  "blockers": [],
+  "attestations": [],
+  "kit_faults": [],
+  "warnings": [],
+  "improvements": [
+    "Name the suite in the criterion (for example, 'the 655-case CommonMark conformance suite run by sh sources/full_test.sh') so a future change to the test script cannot silently shrink what 'every test' means.",
+    "Record the expected test count as a baseline in the trial, so a gate that passes with fewer cases than expected is flagged as a regression."
+  ],
+  "identities": {
+    "code": "e9d2b96c72a51ed155f642ebd01891734085ca6e",
+    "sea_trials": "0bec2486b8d5c48ca1077f9320bc1686045d3e380a44a4bcc777ea6d77ab9d2a",
+    "blueprint": {
+      "ARCHITECTURE.md": "31c9332eb2d8fb03ce59b945037d21a6779e2a57c5095549568689664d6abc2d",
+      "ARCHITECTURE_compact.md": "f125c0c81bb25a35f9caae39e95cdfbc75e1f5c54b8f586bf44ba546cafccd85",
+      "FEATURE-ATX-Headings.md": "f38e539e23f127852aa96e2ffff295746623fa88759bb04dd61b1063fc13ed9f",
+      "FEATURE-Autolinks.md": "837e14f78dbe8a46191cbffa114a286535887d45d22ad5911a0c4861c0baa883",
+      "FEATURE-Backslash-Escapes.md": "3d3b4848e2e7c04f055cde52f81135e972affaee6ddb3d9da1dd43d13d99c9b6",
+      "FEATURE-Block-Engine.md": "cface25880bc50e953b1f1170d0da07dbd137e75e771a3bfad574b1031d7284f",
+      "FEATURE-Block-Quotes.md": "37540defac739da3e9c1b8274b7b7f4e3bcb3fe6b2d8d3b79610e114def531c7",
+      "FEATURE-Code-Spans.md": "9d7abed53365b546937d0e32abecce10bb9596b0a917bb427f21e7d0740389c2",
+      "FEATURE-Emphasis.md": "a519910d6e07bf88dc20f6fad49a7ca60ff60cc7f0a8d1c665754faa9e9336ba",
+      "FEATURE-Entities.md": "4dcadb3b4551e9f7e42ee533bf4f2e1f14e4c2ccd0d6c7002866562f5f3587ab",
+      "FEATURE-Executable.md": "be8f24286c57dc7b53eacb3097477063ed5b6d12931edd0b1b70984541e0fdee",
+      "FEATURE-Fenced-Code.md": "d7c85719ac3bd82768cbd1402009df6a9e2af9e5f70cbd44fac6aed7591c5c50",
+      "FEATURE-HTML-Blocks.md": "c7275028c6971c187a0f0446069c0a98c4bbaaf5a1b2758cdd5e6e841134dd68",
+      "FEATURE-Images.md": "350405e608215a35360404c88c7e299d6b5ed290525743dd8b3ff72aecd20b8e",
+      "FEATURE-Indented-Code.md": "09f949bf85557370735b05603092071796418b325a9b8b7f809b742ec59c39e1",
+      "FEATURE-Line-Breaks-Text.md": "58eea5daa38c74de31e85fa8bfbd9f718e180403aecc7ec90f0c47c8ee26aff6",
+      "FEATURE-Link-Reference-Definitions.md": "415c0ce988fa64fd0f8a2858c00e3d9bde9497b48c6d9ab57f71e0a3075b6ef6",
+      "FEATURE-Links.md": "b0f06341ff2933304dff69e95fceb90f57fcd15de7414661f86e4355ba4f44ea",
+      "FEATURE-List-Items.md": "61a5466988aa214b7009d31cba5c3cb8152097f959af911cecbfe3e0976ca67d",
+      "FEATURE-Lists.md": "ec40fafa15c3f769773240fb32ebb35cfa3304ce5fdafb5114215b12b532eaa2",
+      "FEATURE-Raw-HTML.md": "a0a052ab78644a13c9c97cc82a2848569204389fa372c555e4057415fc99c20a",
+      "FEATURE-Setext-Headings.md": "7d744e1cbb77bb7d68ec6ae26926848283c8b320780ff68ab6239b54da14a6e2",
+      "FEATURE-Tabs.md": "a9f18e39e1fe7c70e184f1e7a2ba76538824e714427011acd992cd017e1f04ad",
+      "FEATURE-Thematic-Breaks.md": "583b0d8d8e3d8400378360686cf5c69301ef7e9f89c25d2b0d1e259c6808d928",
+      "FEATURE-Verification.md": "4b2dbf977ee3b6ff9fad6ae03dd07f40170f8d03b28aeb8cde93e2571ba2f1ca"
+    }
+  },
+  "execution_id": "20261014.091252.966Z-79c92e1a"
+}

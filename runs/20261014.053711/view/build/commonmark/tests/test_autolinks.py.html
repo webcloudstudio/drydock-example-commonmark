@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_autolinks.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_autolinks.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_autolinks.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Autolink tests: URI and email autolinks, the rejected forms, backslash handling, and href
+encoding, plus the executable&#x27;s output for a whole document.
+
+Each test compares a returned string or the executable&#x27;s stdout bytes with its exact expected
+value. No test matches a substring of output.
+&quot;&quot;&quot;
+
+import subprocess
+import sys
+from pathlib import Path
+
+import pytest
+
+from mdparser import inlines
+
+
+def run_executable(project_root: Path, data: str) -&gt; subprocess.CompletedProcess[bytes]:
+    return subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=data.encode(&quot;utf-8&quot;),
+        capture_output=True,
+        cwd=project_root,
+        check=False,
+    )
+
+
+# --- Declared acceptance checks (transcribed from FEATURE-Autolinks.md) ---
+
+
+def test_autolinks_uri_roundtrip(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC autolinks-uri-roundtrip: a URI autolink is one link with the URI as href and text.&quot;&quot;&quot;
+    uri = &quot;http://example.org/path&quot;
+    result = run_executable(project_root, &quot;&lt;&quot; + uri + &quot;&gt;\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;) == f&#x27;&lt;p&gt;&lt;a href=&quot;{uri}&quot;&gt;{uri}&lt;/a&gt;&lt;/p&gt;\n&#x27;
+
+
+def test_autolinks_email_mailto(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC autolinks-email-mailto: an email autolink renders with a mailto href.&quot;&quot;&quot;
+    address = &quot;someone@example.org&quot;
+    result = run_executable(project_root, &quot;&lt;&quot; + address + &quot;&gt;\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;) == f&#x27;&lt;p&gt;&lt;a href=&quot;mailto:{address}&quot;&gt;{address}&lt;/a&gt;&lt;/p&gt;\n&#x27;
+
+
+def test_autolinks_space_not_autolink(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC autolinks-space-not-autolink: a URI containing a space is literal text.&quot;&quot;&quot;
+    result = run_executable(project_root, &quot;&lt;http://example.org/a b&gt;\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;) == &quot;&lt;p&gt;&amp;lt;http://example.org/a b&amp;gt;&lt;/p&gt;\n&quot;
+
+
+def test_autolinks_corpus_section_passes_in_full(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC autolinks-corpus-section: the scoped Autolinks conformance section exits 0.&quot;&quot;&quot;
+    result = subprocess.run(
+        [
+            sys.executable,
+            &quot;sources/spec_tests.py&quot;,
+            &quot;--program&quot;,
+            str(project_root / &quot;commonmark&quot;),
+            &quot;--spec&quot;,
+            &quot;sources/spec.txt&quot;,
+            &quot;--pattern&quot;,
+            &quot;^Autolinks$&quot;,
+        ],
+        capture_output=True,
+        cwd=project_root,
+        check=False,
+    )
+    assert result.returncode == 0
+
+
+# --- URI autolinks ---
+
+
+@pytest.mark.parametrize(
+    (&quot;source&quot;, &quot;expected&quot;),
+    [
+        (&quot;&lt;http://example.org&gt;&quot;, &#x27;&lt;a href=&quot;http://example.org&quot;&gt;http://example.org&lt;/a&gt;&#x27;),
+        (&quot;&lt;ab:x&gt;&quot;, &#x27;&lt;a href=&quot;ab:x&quot;&gt;ab:x&lt;/a&gt;&#x27;),
+        (&quot;&lt;a+b+c:d&gt;&quot;, &#x27;&lt;a href=&quot;a+b+c:d&quot;&gt;a+b+c:d&lt;/a&gt;&#x27;),
+        (&quot;&lt;a.b-c:d&gt;&quot;, &#x27;&lt;a href=&quot;a.b-c:d&quot;&gt;a.b-c:d&lt;/a&gt;&#x27;),
+        (&quot;&lt;MAILTO:FOO@BAR.BAZ&gt;&quot;, &#x27;&lt;a href=&quot;MAILTO:FOO@BAR.BAZ&quot;&gt;MAILTO:FOO@BAR.BAZ&lt;/a&gt;&#x27;),
+        (&quot;&lt;localhost:5001/foo&gt;&quot;, &#x27;&lt;a href=&quot;localhost:5001/foo&quot;&gt;localhost:5001/foo&lt;/a&gt;&#x27;),
+        (&quot;&lt;https://../&gt;&quot;, &#x27;&lt;a href=&quot;https://../&quot;&gt;https://../&lt;/a&gt;&#x27;),
+    ],
+)
+def test_uri_autolink_renders_the_uri_as_href_and_label(source: str, expected: str) -&gt; None:
+    assert inlines.parse_inline(source) == expected
+
+
+def test_uri_scheme_of_32_characters_is_an_autolink() -&gt; None:
+    scheme = &quot;a&quot; + &quot;b&quot; * 31
+    uri = scheme + &quot;:x&quot;
+    assert inlines.parse_inline(&quot;&lt;&quot; + uri + &quot;&gt;&quot;) == f&#x27;&lt;a href=&quot;{uri}&quot;&gt;{uri}&lt;/a&gt;&#x27;
+
+
+def test_uri_scheme_of_33_characters_is_literal_text() -&gt; None:
+    uri = &quot;a&quot; * 33 + &quot;:x&quot;
+    assert inlines.parse_inline(&quot;&lt;&quot; + uri + &quot;&gt;&quot;) == f&quot;&amp;lt;{uri}&amp;gt;&quot;
+
+
+def test_one_letter_scheme_is_literal_text() -&gt; None:
+    assert inlines.parse_inline(&quot;&lt;m:abc&gt;&quot;) == &quot;&amp;lt;m:abc&amp;gt;&quot;
+
+
+def test_scheme_starting_with_a_digit_is_literal_text() -&gt; None:
+    assert inlines.parse_inline(&quot;&lt;1ab:x&gt;&quot;) == &quot;&amp;lt;1ab:x&amp;gt;&quot;
+
+
+def test_uri_query_ampersands_are_escaped_in_href_and_label() -&gt; None:
+    assert inlines.parse_inline(&quot;&lt;https://e.com/?a=1&amp;b=2&gt;&quot;) == (
+        &#x27;&lt;a href=&quot;https://e.com/?a=1&amp;amp;b=2&quot;&gt;https://e.com/?a=1&amp;amp;b=2&lt;/a&gt;&#x27;
+    )
+
+
+def test_uri_non_ascii_characters_are_percent_encoded_in_href_only() -&gt; None:
+    assert inlines.parse_inline(&quot;&lt;http://e.com/é&gt;&quot;) == (
+        &#x27;&lt;a href=&quot;http://e.com/%C3%A9&quot;&gt;http://e.com/é&lt;/a&gt;&#x27;
+    )
+
+
+def test_uri_backtick_is_percent_encoded_in_href_only() -&gt; None:
+    assert inlines.parse_inline(&quot;&lt;http://e.com/`x&gt;&quot;) == (
+        &#x27;&lt;a href=&quot;http://e.com/%60x&quot;&gt;http://e.com/`x&lt;/a&gt;&#x27;
+    )
+
+
+def test_uri_with_an_existing_percent_escape_keeps_it() -&gt; None:
+    assert inlines.parse_inline(&quot;&lt;http://e.com/a%20b&gt;&quot;) == (
+        &#x27;&lt;a href=&quot;http://e.com/a%20b&quot;&gt;http://e.com/a%20b&lt;/a&gt;&#x27;
+    )
+
+
+@pytest.mark.parametrize(&quot;control&quot;, [&quot;\x01&quot;, &quot;\x09&quot;, &quot;\x7f&quot;])
+def test_uri_containing_an_ascii_control_character_is_literal_text(control: str) -&gt; None:
+    assert inlines.parse_inline(&quot;&lt;http://e.com/a&quot; + control + &quot;b&gt;&quot;) == (
+        &quot;&amp;lt;http://e.com/a&quot; + control + &quot;b&amp;gt;&quot;
+    )
+
+
+@pytest.mark.parametrize(
+    (&quot;body&quot;, &quot;expected&quot;),
+    [
+        (&quot;http://e.com/a b&quot;, &quot;&amp;lt;http://e.com/a b&amp;gt;&quot;),
+        # `&lt;a&gt;` is a raw HTML open tag, so only the leading `&lt;` is escaped.
+        (&quot;http://e.com/&lt;a&quot;, &quot;&amp;lt;http://e.com/&lt;a&gt;&quot;),
+    ],
+)
+def test_uri_body_with_space_or_open_angle_bracket_is_not_an_autolink(
+    body: str, expected: str
+) -&gt; None:
+    assert inlines.parse_inline(&quot;&lt;&quot; + body + &quot;&gt;&quot;) == expected
+
+
+def test_uri_body_ending_before_a_close_angle_bracket_is_an_autolink_then_text() -&gt; None:
+    assert inlines.parse_inline(&quot;&lt;http://e.com/a&gt;b&quot;) == (
+        &#x27;&lt;a href=&quot;http://e.com/a&quot;&gt;http://e.com/a&lt;/a&gt;b&#x27;
+    )
+
+
+# --- Email autolinks ---
+
+
+@pytest.mark.parametrize(
+    (&quot;address&quot;, &quot;expected_href&quot;, &quot;expected_label&quot;),
+    [
+        (&quot;foo@bar.example.com&quot;, &quot;mailto:foo@bar.example.com&quot;, &quot;foo@bar.example.com&quot;),
+        (
+            &quot;foo+special@Bar.baz-bar0.com&quot;,
+            &quot;mailto:foo+special@Bar.baz-bar0.com&quot;,
+            &quot;foo+special@Bar.baz-bar0.com&quot;,
+        ),
+        (&quot;a@b&quot;, &quot;mailto:a@b&quot;, &quot;a@b&quot;),
+        (
+            &quot;a.b!#$%&amp;&#x27;*+/=?^_`{|}~-@x.y&quot;,
+            &quot;mailto:a.b!#$%25&amp;amp;&#x27;*+/=?%5E_%60%7B%7C%7D~-@x.y&quot;,
+            &quot;a.b!#$%&amp;amp;&#x27;*+/=?^_`{|}~-@x.y&quot;,
+        ),
+    ],
+)
+def test_email_autolink_renders_mailto_href_and_address_label(
+    address: str, expected_href: str, expected_label: str
+) -&gt; None:
+    assert inlines.parse_inline(&quot;&lt;&quot; + address + &quot;&gt;&quot;) == (
+        f&#x27;&lt;a href=&quot;{expected_href}&quot;&gt;{expected_label}&lt;/a&gt;&#x27;
+    )
+
+
+@pytest.mark.parametrize(
+    &quot;address&quot;,
+    [
+        &quot;foo@-bar.com&quot;,
+        &quot;foo@bar-.com&quot;,
+        &quot;foo@bar..com&quot;,
+        &quot;@bar.com&quot;,
+        &quot;foo@&quot;,
+        &quot;foo bar@x.com&quot;,
+        &quot;foo@bär.com&quot;,
+    ],
+)
+def test_malformed_email_is_literal_text(address: str) -&gt; None:
+    assert inlines.parse_inline(&quot;&lt;&quot; + address + &quot;&gt;&quot;) == f&quot;&amp;lt;{address}&amp;gt;&quot;
+
+
+def test_email_label_longer_than_63_characters_in_a_label_is_literal_text() -&gt; None:
+    label = &quot;a&quot; * 64
+    address = &quot;x@&quot; + label + &quot;.com&quot;
+    assert inlines.parse_inline(&quot;&lt;&quot; + address + &quot;&gt;&quot;) == f&quot;&amp;lt;{address}&amp;gt;&quot;
+
+
+def test_email_label_of_63_characters_is_an_autolink() -&gt; None:
+    label = &quot;a&quot; * 63
+    address = &quot;x@&quot; + label + &quot;.com&quot;
+    assert inlines.parse_inline(&quot;&lt;&quot; + address + &quot;&gt;&quot;) == (
+        f&#x27;&lt;a href=&quot;mailto:{address}&quot;&gt;{address}&lt;/a&gt;&#x27;
+    )
+
+
+# --- Rejected forms and backslash handling ---
+
+
+@pytest.mark.parametrize(
+    (&quot;source&quot;, &quot;expected&quot;),
+    [
+        (&quot;&lt;&gt;&quot;, &quot;&amp;lt;&amp;gt;&quot;),
+        (&quot;&lt; https://foo.bar &gt;&quot;, &quot;&amp;lt; https://foo.bar &amp;gt;&quot;),
+        (&quot;&lt;foo.bar.baz&gt;&quot;, &quot;&amp;lt;foo.bar.baz&amp;gt;&quot;),
+        (&quot;https://example.com&quot;, &quot;https://example.com&quot;),
+        (&quot;foo@bar.example.com&quot;, &quot;foo@bar.example.com&quot;),
+    ],
+)
+def test_text_that_is_not_an_autolink_stays_literal(source: str, expected: str) -&gt; None:
+    assert inlines.parse_inline(source) == expected
+
+
+def test_backslash_is_inert_inside_a_uri_autolink() -&gt; None:
+    assert inlines.parse_inline(&quot;&lt;https://example.com/\\[\\&gt;&quot;) == (
+        &#x27;&lt;a href=&quot;https://example.com/%5C%5B%5C&quot;&gt;https://example.com/\\[\\&lt;/a&gt;&#x27;
+    )
+
+
+def test_backslash_in_a_rejected_email_body_is_an_escape_of_the_next_character() -&gt; None:
+    assert inlines.parse_inline(&quot;&lt;foo\\+@bar.example.com&gt;&quot;) == &quot;&amp;lt;foo+@bar.example.com&amp;gt;&quot;
+
+
+def test_backslash_before_less_than_prevents_an_autolink() -&gt; None:
+    assert inlines.parse_inline(&quot;\\&lt;http://e.com&gt;&quot;) == &quot;&amp;lt;http://e.com&amp;gt;&quot;
+
+
+def test_backslash_before_ordinary_character_is_kept() -&gt; None:
+    assert inlines.parse_inline(&quot;a\\b&quot;) == &quot;a\\b&quot;
+
+
+# --- Left-to-right scanning ---
+
+
+def test_two_autolinks_in_one_line_both_render() -&gt; None:
+    assert inlines.parse_inline(&quot;&lt;http://a.b&gt; and &lt;c@d.ef&gt;&quot;) == (
+        &#x27;&lt;a href=&quot;http://a.b&quot;&gt;http://a.b&lt;/a&gt; and &lt;a href=&quot;mailto:c@d.ef&quot;&gt;c@d.ef&lt;/a&gt;&#x27;
+    )
+
+
+def test_a_less_than_sign_that_cannot_open_an_autolink_does_not_hide_a_later_one() -&gt; None:
+    assert inlines.parse_inline(&quot;&lt;a:b&lt;http://x.y&gt;&quot;) == (
+        &#x27;&amp;lt;a:b&lt;a href=&quot;http://x.y&quot;&gt;http://x.y&lt;/a&gt;&#x27;
+    )
+
+
+def test_empty_content_renders_nothing() -&gt; None:
+    assert inlines.parse_inline(&quot;&quot;) == &quot;&quot;
+</pre></article>
+</main>
+</body>
+</html>

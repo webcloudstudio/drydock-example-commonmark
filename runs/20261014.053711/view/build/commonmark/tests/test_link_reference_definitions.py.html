@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_link_reference_definitions.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_link_reference_definitions.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_link_reference_definitions.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Link reference definitions: label normalization, the reference map, extraction at paragraph close,
+and the `commonmark` executable&#x27;s output for definition-only and definition-plus-paragraph input.
+
+The four declared checks from FEATURE-Link-Reference-Definitions.md are transcribed first, with
+their assertions unchanged. The remaining tests act on the parser and read the reference map or
+the block tree back, or compare the exact stdout bytes the executable hands back.
+&quot;&quot;&quot;
+
+import subprocess
+from pathlib import Path
+
+import pytest
+
+from mdparser import blocks
+from mdparser.refs import LinkReference, ReferenceMap, extract_definitions, normalize_label
+
+
+def run_commonmark(project_root: Path, source: str) -&gt; subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=source,
+        capture_output=True,
+        text=True,
+        cwd=project_root,
+        check=False,
+    )
+
+
+def extract(text: str) -&gt; tuple[str, ReferenceMap]:
+    &quot;&quot;&quot;Run extraction on paragraph text and return the remainder and the map it filled.&quot;&quot;&quot;
+    references = ReferenceMap()
+    remainder = extract_definitions(text, references)
+    return remainder, references
+
+
+# --- Declared acceptance checks (transcribed from FEATURE-Link-Reference-Definitions.md) ---
+
+
+def test_defs_definition_only_renders_nothing(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A document that is only a definition, with or without a title or angle brackets, renders no paragraph.&quot;&quot;&quot;
+    for source in [&#x27;[foo]: /url &quot;title&quot;\n&#x27;, &quot;[foo]:\n/url\n&#x27;title&#x27;\n&quot;, &quot;[foo]: &lt;&gt;\n&quot;]:
+        result = run_commonmark(project_root, source)
+        assert result.returncode == 0
+        assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 0
+
+
+def test_defs_remainder_is_paragraph(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Text after a definition stays as one paragraph.&quot;&quot;&quot;
+    rest = &quot;remaining text&quot;
+    result = run_commonmark(project_root, &quot;[foo]: /url\n&quot; + rest + &quot;\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+    assert rest in result.stdout
+
+
+def test_defs_trailing_text_not_definition(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Extra text after the title means the line is not a definition, so it stays a paragraph.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &#x27;[foo]: /url &quot;title&quot; ok\n&#x27;)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+
+
+def test_defs_cannot_interrupt_paragraph(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A definition line directly after paragraph text is part of that paragraph.&quot;&quot;&quot;
+    definition = &quot;[bar]: /baz&quot;
+    result = run_commonmark(project_root, &quot;Foo\n&quot; + definition + &quot;\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+    assert definition in result.stdout
+
+
+def test_defs_title_with_blank_line(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A title containing a blank line is not valid, so the two halves become two paragraphs.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot;[foo]: /url &#x27;title\n\nwith blank line&#x27;\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 2
+
+
+# --- normalize_label ---
+
+
+def test_normalize_label_strips_the_brackets() -&gt; None:
+    assert normalize_label(&quot;[foo]&quot;) == &quot;foo&quot;
+
+
+def test_normalize_label_leaves_an_unbracketed_label_unchanged() -&gt; None:
+    assert normalize_label(&quot;foo&quot;) == &quot;foo&quot;
+
+
+def test_normalize_label_applies_case_folding() -&gt; None:
+    assert normalize_label(&quot;[Foo]&quot;) == &quot;foo&quot;
+
+
+def test_normalize_label_folds_sharp_s_to_ss() -&gt; None:
+    assert normalize_label(&quot;[ẞ]&quot;) == normalize_label(&quot;[SS]&quot;) == &quot;ss&quot;
+
+
+def test_normalize_label_collapses_internal_whitespace_to_one_space() -&gt; None:
+    assert normalize_label(&quot;[foo  \t bar\nbaz]&quot;) == &quot;foo bar baz&quot;
+
+
+def test_normalize_label_strips_outer_whitespace() -&gt; None:
+    assert normalize_label(&quot;[  foo  ]&quot;) == &quot;foo&quot;
+
+
+def test_normalize_label_keeps_internal_punctuation() -&gt; None:
+    assert normalize_label(&quot;[a-b_c]&quot;) == &quot;a-b_c&quot;
+
+
+# --- ReferenceMap ---
+
+
+def test_reference_map_starts_empty() -&gt; None:
+    assert len(ReferenceMap()) == 0
+
+
+def test_reference_map_get_returns_none_for_an_absent_label() -&gt; None:
+    assert ReferenceMap().get(&quot;foo&quot;) is None
+
+
+def test_reference_map_stores_destination_and_title() -&gt; None:
+    references = ReferenceMap()
+    references.add(&quot;[foo]&quot;, &quot;/url&quot;, &quot;title&quot;)
+    assert references.get(&quot;foo&quot;) == LinkReference(&quot;/url&quot;, &quot;title&quot;)
+
+
+def test_reference_map_stores_an_untitled_definition_with_no_title() -&gt; None:
+    references = ReferenceMap()
+    references.add(&quot;[foo]&quot;, &quot;/url&quot;)
+    assert references.get(&quot;foo&quot;) == LinkReference(&quot;/url&quot;, None)
+
+
+def test_reference_map_matches_on_normalized_labels() -&gt; None:
+    references = ReferenceMap()
+    references.add(&quot;[Foo   Bar]&quot;, &quot;/url&quot;)
+    assert references.get(&quot;[foo bar]&quot;) == LinkReference(&quot;/url&quot;, None)
+
+
+def test_reference_map_first_definition_wins() -&gt; None:
+    references = ReferenceMap()
+    references.add(&quot;[foo]&quot;, &quot;/first&quot;)
+    references.add(&quot;[FOO]&quot;, &quot;/second&quot;)
+    assert references.get(&quot;foo&quot;) == LinkReference(&quot;/first&quot;, None)
+    assert len(references) == 1
+
+
+def test_reference_map_contains_checks_the_normalized_label() -&gt; None:
+    references = ReferenceMap()
+    references.add(&quot;[foo]&quot;, &quot;/url&quot;)
+    assert &quot;FOO&quot; in references
+    assert &quot;bar&quot; not in references
+
+
+def test_reference_map_contains_rejects_non_strings() -&gt; None:
+    assert 3 not in ReferenceMap()
+
+
+def test_reference_maps_are_independent() -&gt; None:
+    first = ReferenceMap()
+    first.add(&quot;[foo]&quot;, &quot;/url&quot;)
+    assert len(ReferenceMap()) == 0
+
+
+# --- Extraction: the definition grammar ---
+
+
+def test_empty_text_has_no_definitions_and_no_remainder() -&gt; None:
+    remainder, references = extract(&quot;&quot;)
+    assert remainder == &quot;&quot;
+    assert len(references) == 0
+
+
+def test_single_definition_consumes_all_text() -&gt; None:
+    remainder, references = extract(&quot;[foo]: /url&quot;)
+    assert remainder == &quot;&quot;
+    assert references.get(&quot;foo&quot;) == LinkReference(&quot;/url&quot;, None)
+
+
+@pytest.mark.parametrize(
+    (&quot;title_source&quot;, &quot;title&quot;),
+    [
+        (&#x27;&quot;title&quot;&#x27;, &quot;title&quot;),
+        (&quot;&#x27;title&#x27;&quot;, &quot;title&quot;),
+        (&quot;(title)&quot;, &quot;title&quot;),
+    ],
+)
+def test_title_may_use_double_single_or_parenthesized_delimiters(title_source: str, title: str) -&gt; None:
+    remainder, references = extract(f&quot;[foo]: /url {title_source}&quot;)
+    assert remainder == &quot;&quot;
+    assert references.get(&quot;foo&quot;) == LinkReference(&quot;/url&quot;, title)
+
+
+def test_title_may_span_lines() -&gt; None:
+    remainder, references = extract(&quot;[foo]: /url &#x27;line one\nline two&#x27;&quot;)
+    assert remainder == &quot;&quot;
+    assert references.get(&quot;foo&quot;) == LinkReference(&quot;/url&quot;, &quot;line one\nline two&quot;)
+
+
+def test_title_may_follow_the_destination_after_a_line_ending() -&gt; None:
+    remainder, references = extract(&quot;[foo]:\n/url\n&#x27;title&#x27;&quot;)
+    assert remainder == &quot;&quot;
+    assert references.get(&quot;foo&quot;) == LinkReference(&quot;/url&quot;, &quot;title&quot;)
+
+
+def test_title_on_a_later_line_is_not_taken_when_it_has_trailing_text() -&gt; None:
+    remainder, references = extract(&#x27;[foo]: /url\n&quot;title&quot; ok&#x27;)
+    assert remainder == &#x27;&quot;title&quot; ok&#x27;
+    assert references.get(&quot;foo&quot;) == LinkReference(&quot;/url&quot;, None)
+
+
+def test_a_failed_title_leaves_the_destination_line_as_the_definition() -&gt; None:
+    remainder, references = extract(&quot;[foo]: /url\n&#x27;title\nnot closed&quot;)
+    assert remainder == &quot;&#x27;title\nnot closed&quot;
+    assert references.get(&quot;foo&quot;) == LinkReference(&quot;/url&quot;, None)
+
+
+def test_title_must_be_separated_from_the_destination_by_whitespace() -&gt; None:
+    remainder, references = extract(&#x27;[foo]: &lt;&gt;&quot;title&quot;&#x27;)
+    assert remainder == &#x27;[foo]: &lt;&gt;&quot;title&quot;&#x27;
+    assert len(references) == 0
+
+
+def test_tab_is_accepted_as_separator_before_a_title() -&gt; None:
+    remainder, references = extract(&quot;[foo]:\t/url\t&#x27;title&#x27;&quot;)
+    assert remainder == &quot;&quot;
+    assert references.get(&quot;foo&quot;) == LinkReference(&quot;/url&quot;, &quot;title&quot;)
+
+
+def test_angle_bracket_destination_may_be_empty() -&gt; None:
+    remainder, references = extract(&quot;[foo]: &lt;&gt;&quot;)
+    assert remainder == &quot;&quot;
+    assert references.get(&quot;foo&quot;) == LinkReference(&quot;&quot;, None)
+
+
+def test_angle_bracket_destination_may_contain_spaces() -&gt; None:
+    _, references = extract(&quot;[foo]: &lt;my url&gt;&quot;)
+    assert references.get(&quot;foo&quot;) == LinkReference(&quot;my url&quot;, None)
+
+
+def test_angle_bracket_destination_cannot_hold_a_line_ending() -&gt; None:
+    remainder, references = extract(&quot;[foo]: &lt;my\nurl&gt;&quot;)
+    assert remainder == &quot;[foo]: &lt;my\nurl&gt;&quot;
+    assert len(references) == 0
+
+
+def test_angle_bracket_destination_cannot_hold_an_unescaped_less_than() -&gt; None:
+    remainder, references = extract(&quot;[foo]: &lt;a&lt;b&gt;&quot;)
+    assert remainder == &quot;[foo]: &lt;a&lt;b&gt;&quot;
+    assert len(references) == 0
+
+
+def test_angle_bracket_destination_may_hold_an_escaped_less_than() -&gt; None:
+    _, references = extract(&quot;[foo]: &lt;a\\&lt;b&gt;&quot;)
+    assert references.get(&quot;foo&quot;) == LinkReference(&quot;a&lt;b&quot;, None)
+
+
+def test_plain_destination_with_balanced_parentheses_is_kept_whole() -&gt; None:
+    _, references = extract(&quot;[foo]: /url(a)&quot;)
+    assert references.get(&quot;foo&quot;) == LinkReference(&quot;/url(a)&quot;, None)
+
+
+def test_plain_destination_with_unbalanced_parenthesis_is_not_a_definition() -&gt; None:
+    remainder, references = extract(&quot;[foo]: /url(a&quot;)
+    assert remainder == &quot;[foo]: /url(a&quot;
+    assert len(references) == 0
+
+
+def test_plain_destination_with_an_escaped_parenthesis_is_kept() -&gt; None:
+    _, references = extract(&quot;[foo]: /url\\(a&quot;)
+    assert references.get(&quot;foo&quot;) == LinkReference(&quot;/url(a&quot;, None)
+
+
+def test_plain_destination_cannot_hold_a_space() -&gt; None:
+    remainder, references = extract(&quot;[foo]: /a b&quot;)
+    assert remainder == &quot;[foo]: /a b&quot;
+    assert len(references) == 0
+
+
+def test_plain_destination_is_unescaped() -&gt; None:
+    _, references = extract(&quot;[foo]: /a\\_b&quot;)
+    assert references.get(&quot;foo&quot;) == LinkReference(&quot;/a_b&quot;, None)
+
+
+def test_destination_entity_is_decoded() -&gt; None:
+    _, references = extract(&quot;[foo]: /a&amp;amp;b&quot;)
+    assert references.get(&quot;foo&quot;) == LinkReference(&quot;/a&amp;b&quot;, None)
+
+
+def test_title_entity_is_decoded() -&gt; None:
+    _, references = extract(&#x27;[foo]: /u &quot;&amp;quot;x&amp;quot;&quot;&#x27;)
+    assert references.get(&quot;foo&quot;) == LinkReference(&quot;/u&quot;, &#x27;&quot;x&quot;&#x27;)
+
+
+def test_destination_with_no_text_is_not_a_definition() -&gt; None:
+    remainder, references = extract(&quot;[foo]:&quot;)
+    assert remainder == &quot;[foo]:&quot;
+    assert len(references) == 0
+
+
+def test_label_with_an_unescaped_bracket_is_not_a_definition() -&gt; None:
+    remainder, references = extract(&quot;[fo[o]]: /url&quot;)
+    assert remainder == &quot;[fo[o]]: /url&quot;
+    assert len(references) == 0
+
+
+def test_label_with_an_escaped_bracket_is_a_definition() -&gt; None:
+    remainder, references = extract(&quot;[fo\\[o]: /url&quot;)
+    assert remainder == &quot;&quot;
+    assert len(references) == 1
+
+
+@pytest.mark.parametrize(&quot;label&quot;, [&quot;[]&quot;, &quot;[ ]&quot;, &quot;[\t\n]&quot;])
+def test_label_with_no_non_whitespace_character_is_not_a_definition(label: str) -&gt; None:
+    remainder, references = extract(f&quot;{label}: /url&quot;)
+    assert remainder == f&quot;{label}: /url&quot;
+    assert len(references) == 0
+
+
+def test_label_of_999_characters_is_a_definition() -&gt; None:
+    label = &quot;a&quot; * 999
+    remainder, references = extract(f&quot;[{label}]: /url&quot;)
+    assert remainder == &quot;&quot;
+    assert references.get(label) == LinkReference(&quot;/url&quot;, None)
+
+
+def test_label_of_1000_characters_is_not_a_definition() -&gt; None:
+    remainder, references = extract(f&quot;[{&#x27;a&#x27; * 1000}]: /url&quot;)
+    assert remainder == f&quot;[{&#x27;a&#x27; * 1000}]: /url&quot;
+    assert len(references) == 0
+
+
+def test_label_without_a_colon_is_not_a_definition() -&gt; None:
+    remainder, references = extract(&quot;[foo] /url&quot;)
+    assert remainder == &quot;[foo] /url&quot;
+    assert len(references) == 0
+
+
+def test_line_after_a_definition_is_extracted_too() -&gt; None:
+    remainder, references = extract(&quot;[a]: /1\n[b]: /2\ntext&quot;)
+    assert remainder == &quot;text&quot;
+    assert references.get(&quot;a&quot;) == LinkReference(&quot;/1&quot;, None)
+    assert references.get(&quot;b&quot;) == LinkReference(&quot;/2&quot;, None)
+
+
+def test_first_definition_for_a_normalized_label_wins_within_one_paragraph() -&gt; None:
+    remainder, references = extract(&quot;[a]: /1\n[A]: /2&quot;)
+    assert remainder == &quot;&quot;
+    assert references.get(&quot;a&quot;) == LinkReference(&quot;/1&quot;, None)
+
+
+def test_text_before_a_definition_stops_extraction() -&gt; None:
+    remainder, references = extract(&quot;Foo\n[bar]: /baz&quot;)
+    assert remainder == &quot;Foo\n[bar]: /baz&quot;
+    assert len(references) == 0
+
+
+def test_remainder_keeps_its_own_line_structure() -&gt; None:
+    remainder, _ = extract(&quot;[foo]: /url\nline one\nline two&quot;)
+    assert remainder == &quot;line one\nline two&quot;
+
+
+# --- Extraction through the block tree ---
+
+
+def test_paragraph_of_only_definitions_leaves_the_tree() -&gt; None:
+    root = blocks.parse_lines([&quot;[foo]: /url&quot;, &quot;[bar]: /baz&quot;])
+    assert root.children == []
+    assert root.references is not None
+    assert root.references.get(&quot;bar&quot;) == LinkReference(&quot;/baz&quot;, None)
+
+
+def test_paragraph_remainder_becomes_its_content() -&gt; None:
+    root = blocks.parse_lines([&quot;[foo]: /url&quot;, &quot;remaining text&quot;])
+    assert [child.content for child in root.children] == [&quot;remaining text&quot;]
+    assert root.references is not None
+    assert root.references.get(&quot;foo&quot;) == LinkReference(&quot;/url&quot;, None)
+
+
+def test_definition_after_a_blank_line_starts_a_new_paragraph() -&gt; None:
+    root = blocks.parse_lines([&quot;Foo&quot;, &quot;&quot;, &quot;[bar]: /baz&quot;])
+    assert [child.content for child in root.children] == [&quot;Foo&quot;]
+    assert root.references is not None
+    assert root.references.get(&quot;bar&quot;) == LinkReference(&quot;/baz&quot;, None)
+
+
+def test_definition_line_directly_after_a_paragraph_is_paragraph_text() -&gt; None:
+    root = blocks.parse_lines([&quot;Foo&quot;, &quot;[bar]: /baz&quot;])
+    assert [child.content for child in root.children] == [&quot;Foo\n[bar]: /baz&quot;]
+    assert root.references is not None
+    assert len(root.references) == 0
+
+
+def test_each_parse_starts_with_an_empty_reference_map() -&gt; None:
+    blocks.parse_lines([&quot;[foo]: /url&quot;])
+    root = blocks.parse_lines([&quot;text&quot;])
+    assert root.references is not None
+    assert len(root.references) == 0
+
+
+# --- Exact output through the executable ---
+
+
+def test_definition_only_output_is_empty(project_root: Path) -&gt; None:
+    assert run_commonmark(project_root, &quot;[foo]: /url\n&quot;).stdout == &quot;&quot;
+
+
+def test_definition_then_paragraph_output_is_exact(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;[foo]: /url\nremaining text\n&quot;)
+    assert result.stdout == &quot;&lt;p&gt;remaining text&lt;/p&gt;\n&quot;
+
+
+def test_paragraph_that_is_not_a_definition_output_is_exact(project_root: Path) -&gt; None:
+    result = run_commonmark(project_root, &quot;Foo\n[bar]: /baz\n&quot;)
+    assert result.stdout == &quot;&lt;p&gt;Foo\n[bar]: /baz&lt;/p&gt;\n&quot;
+</pre></article>
+</main>
+</body>
+</html>

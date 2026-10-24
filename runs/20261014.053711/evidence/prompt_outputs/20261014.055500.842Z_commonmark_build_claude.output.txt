@@ -1,0 +1,24 @@
+The package stubs and the foundation test are in place. `test_foundation.py` asserts that `mdparser.cli` has no public attributes, which this block must change because `cli.main` is required. I'll write the code, then update that one assertion and say so in the summary.Two fixes before moving on: the `re` import belongs at module top, and the error path should emit a one-line diagnostic rather than a traceback, matching the guardrail.Now the root executable, README, and the foundation test adjustment.Now the executable's test file. The five declared acceptance checks are transcribed as-is; the rest cover the helper functions, the in-process `main`, and the executable file itself.I'm dropping one test I just wrote: it pins down how extra arguments are handled, which the spec doesn't define. I'm also removing the unused `argv` parameter from `main`.Next, set the executable bit and run the project's declared test command, `bin/test.sh`.All 47 pass. Now I'll confirm the staged assets are untouched and check what git sees.RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark
+- README.md
+- mdparser/cli.py
+- tests/test_executable.py
+- tests/test_foundation.py
+
+SUMMARY:
+- `./commonmark` is a python3 shebang script with the executable bit set. It puts its own directory on `sys.path` and calls `mdparser.cli.main`. It needs no venv.
+- `mdparser/cli.py` reads stdin bytes, decodes UTF-8 with U+FFFD replacement, splits on LF, CR, or CRLF, and replaces U+0000 with U+FFFD. `render_lines` is the placeholder entry point and returns empty HTML, which the spec allows until the block engine lands. `main()` writes UTF-8 bytes to stdout and always returns 0.
+- `README.md` describes the stdin/stdout interface.
+- `tests/test_executable.py` transcribes the five declared acceptance checks (AC-001, AC-002, AC-003, line endings, NUL replacement) as tests. It also adds tests for the decode and line-split helpers, the in-process `main`, and the executable file itself. Oracles are exit status, stdout bytes, the file mode and shebang, and return values.
+- `tests/test_foundation.py`: `cli` now has a public `main`, so the old "no behavior yet" check would fail on it. I split that check into `NO_BEHAVIOR_MODULES`, which leaves out `cli`. The other modules still must have no public attributes.
+- `bin/test.sh`: 47 passed, 0 failed. I did not run `sources/full_test.sh`, because no criterion in this block invokes the staged conformance suite. The staged `sources/` files are unchanged.
+
+Choices I made that you may want to change:
+- Internal errors during rendering are caught. They print one line to stderr and exit 0, so the "exit 0 for all input" guardrail holds. A bug in the renderer would therefore produce empty output with a stderr line rather than a crash.
+- Extra command-line arguments are ignored; the spec doesn't say what to do with them.
+
+<blueprint-decisions>
+[{"spec":"FEATURE-Executable.md","severity":"Low","subject":"Catch-all for internal rendering errors","decision":"main() catches any exception raised while decoding or rendering, prints one diagnostic line to stderr, writes empty stdout, and returns 0. This keeps the exit-0-for-all-input guardrail. Once the block engine lands, this may hide renderer bugs as empty output, so it could be narrowed or made to exit non-zero then. Is that acceptable, or should it change on replan?"}]
+</blueprint-decisions>

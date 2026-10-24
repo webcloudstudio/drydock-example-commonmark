@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_html_blocks.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_html_blocks.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_html_blocks.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;HTML block tests: the seven declared checks from FEATURE-HTML-Blocks.md, then block-tree and
+exact-output tests through the `commonmark` executable.
+
+The declared checks are transcribed first, with their assertions unchanged. The rest act on the
+block tree returned by `parse_lines` and on the exact stdout bytes, which is the state handed back.
+The corpus section examples that use quotes, lists and indented code are gated in the tabs story
+and are not run here.
+&quot;&quot;&quot;
+
+import subprocess
+from pathlib import Path
+
+import pytest
+
+from mdparser.blocks import HTML_BLOCK, Block, parse_lines
+
+
+def run_commonmark(project_root: Path, source: str) -&gt; subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=source,
+        capture_output=True,
+        text=True,
+        cwd=project_root,
+        check=False,
+    )
+
+
+def kinds(lines: list[str]) -&gt; list[str]:
+    &quot;&quot;&quot;Names of the top-level block types that `lines` produce, in order.&quot;&quot;&quot;
+    return [child.kind.name for child in parse_lines(lines).children]
+
+
+def html_blocks(lines: list[str]) -&gt; list[Block]:
+    &quot;&quot;&quot;The top-level HTML blocks that `lines` produce, in order.&quot;&quot;&quot;
+    return [child for child in parse_lines(lines).children if child.kind is HTML_BLOCK]
+
+
+def html_contents(lines: list[str]) -&gt; list[str]:
+    &quot;&quot;&quot;The content of each top-level HTML block, in order.&quot;&quot;&quot;
+    return [block.content for block in html_blocks(lines)]
+
+
+# --- Declared acceptance checks (transcribed from FEATURE-HTML-Blocks.md) ---
+
+
+def test_htmlblock_type6_raw_lines(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A block-level tag block passes through verbatim and its Markdown is not parsed.&quot;&quot;&quot;
+    block = &quot;&lt;div&gt;\n*foo*\n&lt;/div&gt;&quot;
+    result = run_commonmark(project_root, block + &quot;\n&quot;)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert block in result.stdout
+    assert result.stdout.count(&quot;&lt;em&gt;&quot;) == 0
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 0
+
+
+def test_htmlblock_type6_ends_at_blank_line(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A type 6 block ends at a blank line and Markdown after it is parsed.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot;&lt;div&gt;\nraw\n\n*bar*\n&quot;)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;em&gt;&quot;) == 1
+
+
+def test_htmlblock_comment_spans_blank_lines(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A comment block keeps blank lines until its end marker, and the following line is a paragraph.&quot;&quot;&quot;
+    comment = &quot;&lt;!-- Foo\n\nbar\n   baz --&gt;&quot;
+    result = run_commonmark(project_root, comment + &quot;\nokay\n&quot;)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert comment in result.stdout
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+
+
+def test_htmlblock_pre_spans_blank_lines(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A pre block keeps blank lines and does not parse the Markdown inside it.&quot;&quot;&quot;
+    block = &quot;&lt;pre&gt;\n*x*\n\n_y_\n&lt;/pre&gt;&quot;
+    result = run_commonmark(project_root, block + &quot;\n&quot;)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert block in result.stdout
+    assert result.stdout.count(&quot;&lt;em&gt;&quot;) == 0
+
+
+def test_htmlblock_type7_cannot_interrupt(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A lone open tag line after paragraph text stays inside the paragraph.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &#x27;Foo\n&lt;a href=&quot;bar&quot;&gt;\nbaz\n&#x27;)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+
+
+def test_htmlblock_type6_interrupts_paragraph(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A block-level tag line interrupts a paragraph.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot;Foo\n&lt;div&gt;\nbar\n&lt;/div&gt;\n&quot;)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+
+
+def test_htmlblock_four_space_indent_is_code(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Four spaces of indentation make an indented code block, not an HTML block.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot;    &lt;!-- foo --&gt;\n&quot;)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1
+
+
+# --- Start conditions ---
+
+
+@pytest.mark.parametrize(&quot;opener&quot;, [&quot;&lt;pre&gt;&quot;, &quot;&lt;PRE&gt;&quot;, &quot;&lt;script&gt;&quot;, &quot;&lt;Style&gt;&quot;, &quot;&lt;textarea&gt;&quot;, &quot;&lt;pre class=\&quot;x\&quot;&gt;&quot;])
+def test_type1_start_matches_each_raw_text_tag(opener: str) -&gt; None:
+    &quot;&quot;&quot;Start condition 1 holds for pre, script, style and textarea in any case, and keeps blank lines.&quot;&quot;&quot;
+    assert kinds([opener, &quot;*a*&quot;, &quot;&quot;, &quot;*b*&quot;]) == [&quot;html_block&quot;]
+
+
+def test_type1_start_needs_a_space_tab_or_end_after_the_name() -&gt; None:
+    &quot;&quot;&quot;`&lt;prefix` is not start condition 1, and it is not a complete tag either.&quot;&quot;&quot;
+    assert kinds([&quot;&lt;prefix&quot;, &quot;*a*&quot;]) == [&quot;paragraph&quot;]
+
+
+def test_type1_end_need_not_match_the_start_tag() -&gt; None:
+    &quot;&quot;&quot;A script block ends at a style end tag.&quot;&quot;&quot;
+    assert html_contents([&quot;&lt;script&gt;&quot;, &quot;a&quot;, &quot;&lt;/style&gt;&quot;, &quot;*b*&quot;]) == [&quot;&lt;script&gt;\na\n&lt;/style&gt;\n&quot;]
+
+
+def test_type2_comment_start_and_end() -&gt; None:
+    &quot;&quot;&quot;A comment block ends at the line that contains `--&gt;`.&quot;&quot;&quot;
+    assert html_contents([&quot;&lt;!--&quot;, &quot;a&quot;, &quot;b --&gt;&quot;, &quot;*c*&quot;]) == [&quot;&lt;!--\na\nb --&gt;\n&quot;]
+
+
+def test_type2_start_needs_the_full_marker() -&gt; None:
+    &quot;&quot;&quot;`&lt;!-x` is not a comment start.&quot;&quot;&quot;
+    assert kinds([&quot;&lt;!-x&quot;, &quot;*a*&quot;]) == [&quot;paragraph&quot;]
+
+
+def test_type3_processing_instruction_start_and_end() -&gt; None:
+    &quot;&quot;&quot;A processing instruction block ends at the line that contains `?&gt;`.&quot;&quot;&quot;
+    assert html_contents([&quot;&lt;?php&quot;, &quot;a&quot;, &quot;b ?&gt;&quot;, &quot;*c*&quot;]) == [&quot;&lt;?php\na\nb ?&gt;\n&quot;]
+
+
+def test_type4_declaration_ends_at_the_line_with_a_greater_than() -&gt; None:
+    &quot;&quot;&quot;A declaration starts with `&lt;!` and a letter, and its end line is the one with `&gt;`.&quot;&quot;&quot;
+    assert html_contents([&quot;&lt;!DOCTYPE&quot;, &quot;html&gt;&quot;, &quot;*c*&quot;]) == [&quot;&lt;!DOCTYPE\nhtml&gt;\n&quot;]
+
+
+def test_type4_needs_a_letter_after_the_bang() -&gt; None:
+    &quot;&quot;&quot;`&lt;!1` is not a declaration start.&quot;&quot;&quot;
+    assert kinds([&quot;&lt;!1x&quot;, &quot;*a*&quot;]) == [&quot;paragraph&quot;]
+
+
+def test_type5_cdata_start_and_end() -&gt; None:
+    &quot;&quot;&quot;A CDATA block ends at the line that contains `]]&gt;`.&quot;&quot;&quot;
+    assert html_contents([&quot;&lt;![CDATA[&quot;, &quot;a&quot;, &quot;b ]]&gt;&quot;, &quot;*c*&quot;]) == [&quot;&lt;![CDATA[\na\nb ]]&gt;\n&quot;]
+
+
+def test_type5_needs_the_full_cdata_marker() -&gt; None:
+    &quot;&quot;&quot;`&lt;![CDATA` without its closing bracket is not a CDATA start.&quot;&quot;&quot;
+    assert kinds([&quot;&lt;![CDATA x&quot;, &quot;*a*&quot;]) == [&quot;paragraph&quot;]
+
+
+@pytest.mark.parametrize(&quot;opener&quot;, [&quot;&lt;div&gt;&quot;, &quot;&lt;DIV&gt;&quot;, &quot;&lt;div/&gt;&quot;, &quot;&lt;div class=\&quot;x\&quot;&gt;&quot;, &quot;&lt;div\t&gt;&quot;, &quot;&lt;p&gt;&quot;, &quot;&lt;/div&gt;&quot;])
+def test_type6_start_matches_block_tag_forms(opener: str) -&gt; None:
+    &quot;&quot;&quot;Start condition 6 holds for an open or closing block tag followed by a space, tab, `&gt;` or `/&gt;`.&quot;&quot;&quot;
+    assert kinds([opener, &quot;*a*&quot;]) == [&quot;html_block&quot;]
+
+
+@pytest.mark.parametrize(&quot;opener&quot;, [&quot;&lt;divx&quot;, &quot;&lt;dix&quot;, &quot;&lt;pa&quot;])
+def test_type6_start_needs_the_name_to_end_there(opener: str) -&gt; None:
+    &quot;&quot;&quot;A block tag name followed by other letters is not start condition 6, and an incomplete tag is not type 7.&quot;&quot;&quot;
+    assert kinds([opener, &quot;*a*&quot;]) == [&quot;paragraph&quot;]
+
+
+def test_type6_ends_before_a_blank_line_and_the_blank_is_not_kept() -&gt; None:
+    &quot;&quot;&quot;A type 6 block stops at the blank line, which is not part of its content.&quot;&quot;&quot;
+    assert html_contents([&quot;&lt;div&gt;&quot;, &quot;a&quot;, &quot;&quot;, &quot;*b*&quot;]) == [&quot;&lt;div&gt;\na\n&quot;]
+    assert kinds([&quot;&lt;div&gt;&quot;, &quot;a&quot;, &quot;&quot;, &quot;*b*&quot;]) == [&quot;html_block&quot;, &quot;paragraph&quot;]
+
+
+def test_type6_blank_line_with_spaces_and_tabs_ends_the_block() -&gt; None:
+    &quot;&quot;&quot;A line of only spaces and tabs is a blank line for ending a type 6 block.&quot;&quot;&quot;
+    assert kinds([&quot;&lt;div&gt;&quot;, &quot;  \t &quot;, &quot;*a*&quot;]) == [&quot;html_block&quot;, &quot;paragraph&quot;]
+
+
+@pytest.mark.parametrize(&quot;line&quot;, [&#x27;&lt;a href=&quot;bar&quot;&gt;&#x27;, &quot;&lt;a href=&#x27;x&#x27; title=y data&gt;&quot;, &quot;&lt;custom&gt;  &quot;, &quot;&lt;/a&gt;&quot;, &quot;&lt;a/&gt;&quot;])
+def test_type7_start_matches_a_complete_tag_alone_on_its_line(line: str) -&gt; None:
+    &quot;&quot;&quot;Start condition 7 holds for a complete open tag or closing tag, then spaces and tabs.&quot;&quot;&quot;
+    assert kinds([line, &quot;*a*&quot;]) == [&quot;html_block&quot;]
+
+
+@pytest.mark.parametrize(&quot;line&quot;, [&#x27;&lt;a href=&quot;x&quot;&#x27;, &quot;&lt;a&gt; b&quot;, &quot;&lt;a&gt;&lt;/a&gt;&quot;, &quot;&lt; a&gt;&quot;, &quot;&lt;a b=&gt;&quot;])
+def test_type7_start_refuses_incomplete_or_trailing_content(line: str) -&gt; None:
+    &quot;&quot;&quot;A tag that is not complete, or is followed by other text, is not start condition 7.&quot;&quot;&quot;
+    assert kinds([line, &quot;*a*&quot;]) == [&quot;paragraph&quot;]
+
+
+def test_pre_tag_is_type1_so_a_blank_line_does_not_end_it() -&gt; None:
+    &quot;&quot;&quot;`&lt;pre&gt;` is start condition 1, not 7, so its block keeps going past the blank line.&quot;&quot;&quot;
+    assert html_contents([&quot;&lt;pre&gt;&quot;, &quot;*a*&quot;, &quot;&quot;, &quot;*b*&quot;]) == [&quot;&lt;pre&gt;\n*a*\n\n*b*\n&quot;]
+
+
+# --- Interruption of a paragraph ---
+
+
+@pytest.mark.parametrize(&quot;opener&quot;, [&quot;&lt;pre&gt;&quot;, &quot;&lt;!--&quot;, &quot;&lt;?php&quot;, &quot;&lt;!DOCTYPE html&quot;, &quot;&lt;![CDATA[&quot;, &quot;&lt;div&gt;&quot;])
+def test_types_1_to_6_interrupt_a_paragraph(opener: str) -&gt; None:
+    &quot;&quot;&quot;Types 1 to 6 close an open paragraph and start an HTML block.&quot;&quot;&quot;
+    assert kinds([&quot;Foo&quot;, opener, &quot;*a*&quot;]) == [&quot;paragraph&quot;, &quot;html_block&quot;]
+
+
+@pytest.mark.parametrize(&quot;line&quot;, [&quot;&lt;custom&gt;&quot;, &quot;&lt;/custom&gt;&quot;, &#x27;&lt;a href=&quot;b&quot;&gt;&#x27;])
+def test_type7_cannot_interrupt_a_paragraph(line: str) -&gt; None:
+    &quot;&quot;&quot;A complete tag line after paragraph text stays in the paragraph.&quot;&quot;&quot;
+    assert kinds([&quot;Foo&quot;, line, &quot;baz&quot;]) == [&quot;paragraph&quot;]
+
+
+def test_type7_starts_after_a_blank_line_ends_the_paragraph() -&gt; None:
+    &quot;&quot;&quot;Once a blank line closes the paragraph, type 7 can start a block.&quot;&quot;&quot;
+    assert kinds([&quot;Foo&quot;, &quot;&quot;, &quot;&lt;custom&gt;&quot;, &quot;*a*&quot;]) == [&quot;paragraph&quot;, &quot;html_block&quot;]
+
+
+# --- End conditions and single-line blocks ---
+
+
+@pytest.mark.parametrize(
+    &quot;line&quot;,
+    [&quot;&lt;pre&gt;&lt;/pre&gt;&quot;, &quot;&lt;!-- x --&gt;&quot;, &quot;&lt;? x ?&gt;&quot;, &quot;&lt;!x&gt;&quot;, &quot;&lt;![CDATA[x]]&gt;&quot;],
+)
+def test_types_1_to_5_on_one_line_make_a_single_line_block(line: str) -&gt; None:
+    &quot;&quot;&quot;When the first line meets both start and end conditions, the block is that line alone.&quot;&quot;&quot;
+    assert kinds([line, &quot;*a*&quot;]) == [&quot;html_block&quot;, &quot;paragraph&quot;]
+    assert html_contents([line, &quot;*a*&quot;]) == [line + &quot;\n&quot;]
+
+
+def test_types_1_to_5_end_line_keeps_text_after_the_end_tag() -&gt; None:
+    &quot;&quot;&quot;The end line is part of the block, including anything after its end tag.&quot;&quot;&quot;
+    assert html_contents([&quot;&lt;pre&gt;&quot;, &quot;x&lt;/pre&gt; tail&quot;, &quot;*a*&quot;]) == [&quot;&lt;pre&gt;\nx&lt;/pre&gt; tail\n&quot;]
+
+
+def test_type1_block_runs_to_end_of_document_when_never_closed() -&gt; None:
+    &quot;&quot;&quot;An unclosed type 1 block keeps every line to the end of the document, blank lines included.&quot;&quot;&quot;
+    assert html_contents([&quot;&lt;pre&gt;&quot;, &quot;a&quot;, &quot;&quot;, &quot;b&quot;]) == [&quot;&lt;pre&gt;\na\n\nb\n&quot;]
+
+
+def test_type2_block_runs_to_end_of_document_when_never_closed() -&gt; None:
+    &quot;&quot;&quot;An unclosed comment block keeps every line to the end of the document.&quot;&quot;&quot;
+    assert html_contents([&quot;&lt;!--&quot;, &quot;a&quot;, &quot;&quot;, &quot;b&quot;]) == [&quot;&lt;!--\na\n\nb\n&quot;]
+
+
+def test_type6_block_at_end_of_document_has_no_trailing_blank_line() -&gt; None:
+    &quot;&quot;&quot;A type 6 block with no following blank line ends at the end of the document.&quot;&quot;&quot;
+    assert html_contents([&quot;&lt;div&gt;&quot;, &quot;a&quot;]) == [&quot;&lt;div&gt;\na\n&quot;]
+
+
+# --- Raw lines and state ---
+
+
+def test_lines_keep_their_original_indentation_and_are_not_parsed() -&gt; None:
+    &quot;&quot;&quot;Indentation up to three spaces and inline Markdown are kept as written.&quot;&quot;&quot;
+    assert html_contents([&quot;   &lt;div&gt;&quot;, &quot;  *a* &amp; &lt;b&gt;&quot;, &quot;&lt;/div&gt;&quot;]) == [&quot;   &lt;div&gt;\n  *a* &amp; &lt;b&gt;\n&lt;/div&gt;\n&quot;]
+
+
+def test_tags_inside_a_block_do_not_change_its_state() -&gt; None:
+    &quot;&quot;&quot;A comment start inside a type 6 block is ignored, so the block still ends at the blank line.&quot;&quot;&quot;
+    lines = [&quot;&lt;div&gt;&quot;, &quot;&lt;!--&quot;, &quot;*x*&quot;, &quot;&lt;/div&gt;&quot;, &quot;&quot;, &quot;*y*&quot;]
+    assert kinds(lines) == [&quot;html_block&quot;, &quot;paragraph&quot;]
+    assert html_contents(lines) == [&quot;&lt;div&gt;\n&lt;!--\n*x*\n&lt;/div&gt;\n&quot;]
+
+
+def test_a_three_space_indented_start_is_an_html_block() -&gt; None:
+    &quot;&quot;&quot;Up to three spaces of indentation before the start condition are allowed.&quot;&quot;&quot;
+    assert kinds([&quot;   &lt;!-- x&quot;, &quot;y --&gt;&quot;]) == [&quot;html_block&quot;]
+
+
+def test_type6_block_is_just_its_start_line_when_a_blank_follows() -&gt; None:
+    &quot;&quot;&quot;An HTML block whose start is followed by a blank line holds only the start line.&quot;&quot;&quot;
+    assert html_contents([&quot;&lt;div&gt;&quot;, &quot;&quot;, &quot;*a*&quot;]) == [&quot;&lt;div&gt;\n&quot;]
+
+
+# --- Exact stdout through the executable ---
+
+
+def test_html_block_output_is_the_raw_bytes_with_no_escaping(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;The block goes to stdout exactly as written, with `&amp;` and `&lt;` left unescaped.&quot;&quot;&quot;
+    source = &quot;&lt;div&gt;\n*a* &amp; &lt;b&gt;\n&lt;/div&gt;\n&quot;
+    result = run_commonmark(project_root, source)
+    assert result.returncode == 0
+    assert result.stdout == &quot;&lt;div&gt;\n*a* &amp; &lt;b&gt;\n&lt;/div&gt;\n&quot;
+
+
+def test_html_block_then_paragraph_output_is_exact(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A type 6 block followed by a blank line and a paragraph renders both exactly.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot;&lt;div&gt;\nraw\n\n*bar*\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout == &quot;&lt;div&gt;\nraw\n&lt;p&gt;&lt;em&gt;bar&lt;/em&gt;&lt;/p&gt;\n&quot;
+
+
+def test_html_block_keeps_non_ascii_text_unchanged(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Raw HTML is not percent-encoded or escaped, so non-ASCII text passes through.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot;&lt;div&gt;é&lt;/div&gt;\n&quot;)
+    assert result.returncode == 0
+    assert result.stdout == &quot;&lt;div&gt;é&lt;/div&gt;\n&quot;
+
+
+def test_html_block_with_nested_table_example_output_is_exact(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;A type 6 block ends at its blank line, so the Markdown after it is parsed and the raw text is kept.&quot;&quot;&quot;
+    source = &quot;&lt;table&gt;&lt;tr&gt;&lt;td&gt;\n&lt;pre&gt;\n**Hello**,\n\n_world_.\n&lt;/pre&gt;\n&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;\n&quot;
+    expected = (
+        &quot;&lt;table&gt;&lt;tr&gt;&lt;td&gt;\n&lt;pre&gt;\n**Hello**,\n&quot;
+        &quot;&lt;p&gt;&lt;em&gt;world&lt;/em&gt;.\n&lt;/pre&gt;&lt;/p&gt;\n&quot;
+        &quot;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;\n&quot;
+    )
+    result = run_commonmark(project_root, source)
+    assert result.returncode == 0
+    assert result.stdout == expected
+</pre></article>
+</main>
+</body>
+</html>

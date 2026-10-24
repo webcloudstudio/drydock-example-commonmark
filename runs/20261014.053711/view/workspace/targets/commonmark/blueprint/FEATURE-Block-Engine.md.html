@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Block-Engine.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Block-Engine.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Block-Engine.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Block Engine</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>The phase 1 block engine with an extensible block-type registry, paragraph and blank-line handling, and HTML rendering with escaping.</td></tr><tr><td>Depends On</td><td>FEATURE-Executable.md</td></tr><tr><td>Provides</td><td>block tree builder, block-type registry, paragraph renderer, HTML escaping helper, URL percent-encoding helper</td></tr><tr><td>Consumes</td><td>./commonmark, inline parser hook</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement the per-line procedure from the spec Appendix, &quot;Phase 1: block structure&quot;, and render paragraphs. Later block stories add start, continue and close rules to the registry without changing the loop.</p>
+<h2>Sequence</h2>
+<p>For each line:</p>
+<ol><li>Walk the open blocks from the document down the last-child chain. Each block checks whether the line continues it. Unmatched blocks are not closed yet, because the line may be a lazy continuation.</li><li>Look for new block starts. If one is found, close the unmatched blocks, then create the new block under the last matched container.</li><li>Add the remaining text to the deepest open block. A line that is a lazy paragraph continuation is added to the open paragraph.</li></ol>
+<p>At end of input all open blocks are closed. Phase 2 then walks the tree and calls the inline parser hook for paragraph and heading content. The hook initially returns the escaped text.</p>
+<h2>Rules</h2>
+<ul><li>A paragraph is a sequence of non-blank lines that is not another block. Its raw content strips initial and final spaces and tabs. Lines after the first may have any indentation.</li><li>Blank lines separate paragraphs and are otherwise ignored, including at the start and end of the document.</li><li>Column-aware indentation (tab stop 4) is computed in one shared helper, so later block stories reuse it.</li><li>The renderer emits <code>&lt;p&gt;</code> elements, one line ending between blocks, and escapes <code>&amp;</code>, <code>&lt;</code>, <code>&gt;</code> and <code>&quot;</code> in text.</li><li>The shared URL percent-encoding helper lives here and is reused by the link and autolink stories.</li></ul>
+<h2>Reads</h2>
+<ul><li>Lines produced by <code>mdparser.cli</code>.</li></ul>
+<h2>Writes</h2>
+<ul><li>HTML string returned to <code>mdparser.cli</code>.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>The corpus sections Paragraphs and Blank lines need indented code, hard breaks and ATX headings, so they are gated in the tabs story and the terminal story. The checks here are bounded.</p>
+<p>=== AC engine-paragraph-count ===<br>Intent: Blank-line-separated paragraphs render as one p element each.</p>
+<p>import subprocess</p>
+<p>paragraphs = [&quot;alpha beta&quot;, &quot;gamma delta&quot;, &quot;epsilon&quot;] source = &quot;\n\n&quot;.join(paragraphs) + &quot;\n&quot; result = subprocess.run([&quot;./commonmark&quot;], input=source, capture_output=True, text=True) print(result.stdout) print(result.stderr) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == len(paragraphs) assert result.stdout.count(&quot;&lt;/p&gt;&quot;) == len(paragraphs) for text in paragraphs: assert text in result.stdout === END AC engine-paragraph-count ===</p>
+<p>=== AC engine-multiline-paragraph ===<br>Intent: Consecutive non-blank lines with arbitrary indentation after the first stay in one paragraph.</p>
+<p>import subprocess</p>
+<p>first = &quot;first line&quot; second = &quot;second line&quot; third = &quot;third line&quot; source = first + &quot;\n&quot; + &quot;             &quot; + second + &quot;\n&quot; + third + &quot;\n&quot; result = subprocess.run([&quot;./commonmark&quot;], input=source, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1 for text in (first, second, third): assert text in result.stdout === END AC engine-multiline-paragraph ===</p>
+<p>=== AC engine-blank-lines-ignored ===<br>Intent: Leading, trailing and repeated blank lines produce no extra blocks, and a blank-only document produces no paragraph.</p>
+<p>import subprocess</p>
+<p>word = &quot;content&quot; padded = &quot;\n  \n\n&quot; + word + &quot;\n\n\n  \n&quot; result = subprocess.run([&quot;./commonmark&quot;], input=padded, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1</p>
+<p>blank = subprocess.run([&quot;./commonmark&quot;], input=&quot;\n \n\t\n&quot;, capture_output=True, text=True) assert blank.returncode == 0 assert blank.stdout.count(&quot;&lt;p&gt;&quot;) == 0 === END AC engine-blank-lines-ignored ===</p>
+<p>=== AC engine-html-escaping ===<br>Intent: Special characters in paragraph text are escaped, so only the paragraph tags contribute angle brackets.</p>
+<p>import subprocess</p>
+<p>source = &quot;x &lt; y &gt; z &amp; w\n&quot; result = subprocess.run([&quot;./commonmark&quot;], input=source, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;&quot;) == 2 assert result.stdout.count(&quot;&gt;&quot;) == 2 === END AC engine-html-escaping ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not hard-code block handling in the main loop; every block type is registered through the registry.</li><li>Never close an unmatched block before new block starts have been tried.</li><li>Never write anything but rendered HTML to stdout.</li></ul></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Code-Spans.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Code-Spans.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Code-Spans.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Code Spans</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>Parse code spans and establish the left-to-right inline scanner with code, autolink and raw HTML precedence.</td></tr><tr><td>Depends On</td><td>FEATURE-Autolinks.md, FEATURE-Raw-HTML.md</td></tr><tr><td>Provides</td><td>code span inline construct, inline scanner loop</td></tr><tr><td>Consumes</td><td>autolink inline construct, raw inline HTML construct</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement the Code spans and Inlines sections of the spec, and the inline scanner loop that later inline stories extend.</p>
+<h2>Rules</h2>
+<ul><li>The scanner walks the text left to right. At a backtick, <code>&lt;</code> or other special character it tries the matching construct; the first construct that matches wins.</li><li>A backtick string is a maximal run of backticks. A code span opens at a backtick string and closes at the next backtick string of exactly the same length. If none exists, the opening run is literal text.</li><li>Content normalization: convert line endings to spaces; then, if the content both begins and ends with a space and is not entirely spaces, remove one space from each end. Only U+0020 counts, not other whitespace. Interior spaces are not collapsed.</li><li>Content is HTML-escaped. Backslash escapes and entities are inert inside code spans.</li><li>Code spans, raw HTML and autolinks have equal precedence: whichever starts first is parsed first. Bracket and emphasis handling is lower precedence and is added by later stories.</li></ul>
+<h2>Reads</h2>
+<ul><li>Inline text of paragraphs and headings.</li></ul>
+<h2>Writes</h2>
+<ul><li>Code nodes in the inline tree.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>The Precedence section needs lists and is gated in the lists story.</p>
+<p>=== AC codespans-corpus-sections ===<br>Intent: The Code spans and Inlines conformance sections (23 cases) pass in full.<br>Suite: scoped<br>Probe: --dump-tests<br>Probe Count: lines</p>
+<p>import os import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.getcwd() + &quot;/commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;^Code spans$|^Inlines$&quot;, ], capture_output=True, text=True, env={**os.environ}, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC codespans-corpus-sections ===</p>
+<p>=== AC codespans-simple ===<br>Intent: A single-backtick span renders one code element containing the supplied content.</p>
+<p>import subprocess</p>
+<p>content = &quot;some code&quot; result = subprocess.run([&quot;./commonmark&quot;], input=&quot;<code>&quot; + content + &quot;</code>\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;code&gt;&quot;) == 1 assert content in result.stdout === END AC codespans-simple ===</p>
+<p>=== AC codespans-backtick-length-match ===<br>Intent: A double-backtick span may contain a single backtick, which is kept inside one code element.</p>
+<p>import subprocess</p>
+<p>inner = &quot;a<code>b&quot; result = subprocess.run([&quot;./commonmark&quot;], input=&quot;</code><code>&quot; + inner + &quot;</code>`\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;code&gt;&quot;) == 1 assert inner in result.stdout === END AC codespans-backtick-length-match ===</p>
+<p>=== AC codespans-unclosed-literal ===<br>Intent: An unmatched backtick run is literal text and produces no code element.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;<code>`foo</code>\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;code&gt;&quot;) == 0 === END AC codespans-unclosed-literal ===</p>
+<p>=== AC codespans-escapes-inert ===<br>Intent: A backslash inside a code span is kept literally.</p>
+<p>import subprocess</p>
+<p>content = &quot;\\[&quot; result = subprocess.run([&quot;./commonmark&quot;], input=&quot;<code>&quot; + content + &quot;</code>\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;code&gt;&quot;) == 1 assert content in result.stdout === END AC codespans-escapes-inert ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Never strip more than one leading and one trailing space, and never strip when the content is entirely spaces.</li><li>Never process escapes, entities or emphasis inside a code span.</li><li>Do not skip, filter or reinterpret corpus examples.</li></ul></article>
+</main>
+</body>
+</html>

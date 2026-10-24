@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-6.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-6.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-6.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 6 · Service (block-6)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-14</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 4814</li><li>execution id: 20261014.060854.186Z-5eadb737</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse code spans and establish the inline precedence order. (code-spans) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1072)</li><li>implements: FEATURE-Code-Spans.md (SP 1620)</li><li>context: ARCHITECTURE_compact.md (SP 335)</li><li>stack: common_compact.md (SP 1199)</li><li>stack: python_compact.md (SP 390)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>mdparser/inlines.py</li><li>tests/test_code_spans.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: codespans-corpus-sections (FEATURE-Code-Spans.md)</li></ul>
+<p>intent: The Code spans and Inlines conformance sections (23 cases) pass in full. return code: 1 stdout: Example 329 (lines 5876-5880) Inlines <code>hi</code>lo`</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;hi&lt;/code&gt;lo<code>&lt;/p&gt; +&lt;p&gt;</code>hi<code>lo</code>&lt;/p&gt;</p>
+<p>Example 330 (lines 5908-5912) Code spans <code>foo</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;foo&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;<code>foo</code>&lt;/p&gt;</p>
+<p>Example 331 (lines 5919-5923) Code spans <code>foo ` bar</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;foo <code>bar&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;</code><code>foo</code> bar ``&lt;/p&gt;</p>
+<p>Example 332 (lines 5929-5933) Code spans <code></code><code></code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;<code>&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;`</code> `&lt;/p&gt;</p>
+<p>Example 333 (lines 5937-5941) Code spans <code></code><code></code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt; <code>&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;`</code> `&lt;/p&gt;</p>
+<p>Example 334 (lines 5946-5950) Code spans <code>a</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt; a&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;<code>a</code>&lt;/p&gt;</p>
+<p>Example 335 (lines 5955-5959) Code spans <code>b</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt; b &lt;/code&gt;&lt;/p&gt; +&lt;p&gt;<code>b</code>&lt;/p&gt;</p>
+<p>Example 336 (lines 5963-5969) Code spans <code></code> <code></code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt; &lt;/code&gt; &lt;code&gt; &lt;/code&gt;&lt;/p&gt; +&lt;p&gt;<code></code> <code></code>&lt;/p&gt;</p>
+<p>Example 337 (lines 5974-5982) Code spans <code>foo bar baz</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;foo bar baz&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;<code>foo bar baz</code>&lt;/p&gt;</p>
+<p>Example 338 (lines 5984-5990) Code spans <code>foo</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;foo &lt;/code&gt;&lt;/p&gt; +&lt;p&gt;<code>foo</code>&lt;/p&gt;</p>
+<p>Example 339 (lines 5995-6000) Code spans <code>foo   bar baz</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;foo bar baz&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;<code>foo bar baz</code>&lt;/p&gt;</p>
+<p>Example 340 (lines 6012-6016) Code spans <code>foo\</code>bar`</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;foo\&lt;/code&gt;bar<code>&lt;/p&gt; +&lt;p&gt;</code>foo<code>bar</code>&lt;/p&gt;</p>
+<p>Example 341 (lines 6023-6027) Code spans <code>foo`bar</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;foo<code>bar&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;</code><code>foo</code>bar``&lt;/p&gt;</p>
+<p>Example 342 (lines 6029-6033) Code spans <code>foo</code><code>bar</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;foo <code>bar&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;` foo</code> bar `&lt;/p&gt;</p>
+<p>Example 343 (lines 6041-6045) Code spans *foo<code>*</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>foo&lt;code&gt;</em>&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;*foo<code>*</code>&lt;/p&gt;</p>
+<p>Example 344 (lines 6050-6054) Code spans [not a <code>link](/foo</code>)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="/foo&amp;lt;/code&amp;gt;">not a &lt;code&gt;link</a>&lt;/p&gt; +&lt;p&gt;[not a <code>link](/foo</code>)&lt;/p&gt;</p>
+<p>Example 345 (lines 6060-6064) Code spans <code>&lt;a href=&quot;</code>&quot;&gt;`</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;&amp;lt;a href=&amp;quot;&lt;/code&gt;&amp;quot;&amp;gt;<code>&lt;/p&gt; +&lt;p&gt;</code>&lt;a href=&quot;<code>&quot;&gt;</code>&lt;/p&gt;</p>
+<p>Example 347 (lines 6078-6082) Code spans <code>&lt;https://foo.bar.</code>baz&gt;`</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;&amp;lt;https://foo.bar.&lt;/code&gt;baz&amp;gt;<code>&lt;/p&gt; +&lt;p&gt;</code>&lt;a href=&quot;https://foo.bar.%60baz&quot;&gt;https://foo.bar.<code>baz&lt;/a&gt;</code>&lt;/p&gt;</p>
+<p>Example 351 (lines 6113-6117) Code spans <code>foo</code><code>bar</code>`</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<code>foo&lt;code&gt;bar&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;</code>foo<code>bar</code>&lt;/p&gt;</p>
+<p>4 passed, 19 failed, 0 errored, 632 skipped stderr: --- drydock: progress --- cases: pass=4 fail=19 error=0 skip=632 total=655 from=result.stdout --- drydock: end progress --- --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;^Code spans$|^Inlines$&#x27;], returncode=19, stdout=&#x27;Example 329 (lines 5876-5880) Inli… (+3144 chars) --- drydock: end values --- Traceback (most recent call last): File &quot;codespans-corpus-sections.py&quot;, line 22, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: codespans-simple (FEATURE-Code-Spans.md)</li></ul>
+<p>intent: A single-backtick span renders one code element containing the supplied content. return code: 1 stdout: &lt;p&gt;<code>some code</code>&lt;/p&gt; stderr: --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;<code>some code</code>&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;codespans-simple.py&quot;, line 7, in &lt;module&gt; assert result.stdout.count(&quot;&lt;code&gt;&quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: codespans-backtick-length-match (FEATURE-Code-Spans.md)</li></ul>
+<p>intent: A double-backtick span may contain a single backtick, which is kept inside one code element. return code: 1 stdout: &lt;p&gt;<code>a`b</code>&lt;/p&gt; stderr: --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;<code>a`b</code>&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;codespans-backtick-length-match.py&quot;, line 7, in &lt;module&gt; assert result.stdout.count(&quot;&lt;code&gt;&quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>GREEN (prepassed): codespans-unclosed-literal (FEATURE-Code-Spans.md)</li></ul>
+<p>intent: An unmatched backtick run is literal text and produces no code element. return code: 0 stdout: &lt;p&gt;<code>`foo</code>&lt;/p&gt;</p>
+<ul><li>RED: codespans-escapes-inert (FEATURE-Code-Spans.md)</li></ul>
+<p>intent: A backslash inside a code span is kept literally. return code: 1 stdout: &lt;p&gt;<code>[</code>&lt;/p&gt; stderr: --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;<code>[</code>&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;codespans-escapes-inert.py&quot;, line 7, in &lt;module&gt; assert result.stdout.count(&quot;&lt;code&gt;&quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: codespans-corpus-sections (FEATURE-Code-Spans.md)</li></ul>
+<p>intent: The Code spans and Inlines conformance sections (23 cases) pass in full. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: 23 passed, 0 failed, 0 errored, 632 skipped</p>
+<ul><li>PASS: codespans-simple (FEATURE-Code-Spans.md)</li></ul>
+<p>intent: A single-backtick span renders one code element containing the supplied content. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;&lt;code&gt;some code&lt;/code&gt;&lt;/p&gt;</p>
+<ul><li>PASS: codespans-backtick-length-match (FEATURE-Code-Spans.md)</li></ul>
+<p>intent: A double-backtick span may contain a single backtick, which is kept inside one code element. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;&lt;code&gt;a`b&lt;/code&gt;&lt;/p&gt;</p>
+<ul><li>PASS: codespans-unclosed-literal (FEATURE-Code-Spans.md)</li></ul>
+<p>intent: An unmatched backtick run is literal text and produces no code element. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;<code>`foo</code>&lt;/p&gt;</p>
+<ul><li>PASS: codespans-escapes-inert (FEATURE-Code-Spans.md)</li></ul>
+<p>intent: A backslash inside a code span is kept literally. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;&lt;code&gt;\[&lt;/code&gt;&lt;/p&gt;</p>
+<h2>Build summary</h2>
+<p>Baseline is green (263 passed). Now I&#x27;ll add the code span construct to the inline scanner.Now the test file, with the four declared acceptance checks transcribed plus the scoped corpus gate and finer coverage.Before running, I re-derived several expected values by hand and found some wrong. Fixing those now so the tests assert the spec behaviour, not my first guesses.Now I&#x27;ll run the new tests, then the full project suite to check for regressions in the earlier blocks.The implementation is right here and my expectation was wrong: the trailing backtick has no partner, so it stays literal. Correcting the assertion.The scoped gate passes and the full project suite is green. I wrote a scratch log to <code>/tmp</code>, which is outside the authorized build directory, so I&#x27;m removing it.RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>mdparser/inlines.py</li><li>tests/test_code_spans.py</li></ul>
+<p>SUMMARY:</p>
+<ul><li>Code spans are added to the inline scanner in <code>mdparser/inlines.py</code>. At a backtick, the scanner takes the whole maximal run and looks for the next run of exactly the same length. The content is normalized (line endings become spaces, then one leading and one trailing U+0020 is removed only when the content is not all spaces), HTML-escaped, and rendered as <code>&lt;code&gt;</code>. Backslashes and entities stay inert inside the span.</li><li>An unmatched run is emitted as literal escaped text and the whole run is consumed, so a shorter run inside it cannot open a span by mistake.</li><li>Precedence is left to right: the scanner tries code span, autolink and raw HTML at whichever special character comes first, so the first one found wins. A backslash before a backtick still makes that backtick literal.</li><li><code>tests/test_code_spans.py</code> transcribes the four declared acceptance checks plus the scoped corpus gate, and adds unit tests for run matching, normalization, escapes, and precedence against autolinks and raw HTML.</li></ul>
+<p>Test results:</p>
+<ul><li>Declared gate, exact invocation <code>spec_tests.py --pattern &#x27;^Code spans$|^Inlines$&#x27;</code>: exit 0, 23 passed, 0 failed, 0 errored, 632 skipped.</li><li>Project suite <code>pytest -q</code>: 291 passed (baseline was 263 before this step).</li><li>I did not run the unscoped <code>sources/full_test.sh</code>, since this step&#x27;s criteria only declare the scoped invocation. The Precedence section needs lists and is gated in the lists story.</li></ul>
+<p>Choices I made:</p>
+<ul><li>Unmatched backtick runs are consumed as a whole, not one backtick at a time. Reading them one at a time would let a shorter tail of the run open a span wrongly.</li><li>Only the <code>\n</code> line separator is handled in code content. <code>split_lines</code> already normalizes CR and CRLF, so no other line-ending cases arise here.</li></ul>
+<p>Staged assets in <code>sources/</code>, the guardrail files, and git history were not touched. Nothing was staged or committed.</p></article>
+</main>
+</body>
+</html>

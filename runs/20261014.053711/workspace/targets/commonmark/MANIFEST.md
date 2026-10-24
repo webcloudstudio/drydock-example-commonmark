@@ -1,0 +1,776 @@
+# MANIFEST: commonmark
+updated:     2026-10-14T05:48:48+00:00
+state:       approved
+blocks:      24
+
+applied_specs: |
+  ARCHITECTURE.md sha256=31c9332eb2d8fb03ce59b945037d21a6779e2a57c5095549568689664d6abc2d commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-1 applied_at=2026-10-14T05:54:43+00:00 build_sha256=94135ce98a98137a17b86534796fda8b6bfa697b3907576aee8ba8a99b7e8499
+  ARCHITECTURE_compact.md sha256=f125c0c81bb25a35f9caae39e95cdfbc75e1f5c54b8f586bf44ba546cafccd85 commit=178014a168bc6d3ed79b00935af0fcb0a1e2aeb9 applied_by=block-24 applied_at=2026-10-14T09:02:06+00:00 build_sha256=f125c0c81bb25a35f9caae39e95cdfbc75e1f5c54b8f586bf44ba546cafccd85
+  FEATURE-ATX-Headings.md sha256=f38e539e23f127852aa96e2ffff295746623fa88759bb04dd61b1063fc13ed9f commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-15 applied_at=2026-10-14T07:12:25+00:00 build_sha256=6818c0b6c5ebdcbea9a92683956cb87224aa8ed6ebefecc6a7b61d5e7b9c0edc
+  FEATURE-Autolinks.md sha256=837e14f78dbe8a46191cbffa114a286535887d45d22ad5911a0c4861c0baa883 commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-4 applied_at=2026-10-14T06:04:54+00:00 build_sha256=fa23cf5483685af44ca82a82e4d96c0807a7182f37a9f70d666e40339418e4d3
+  FEATURE-Backslash-Escapes.md sha256=3d3b4848e2e7c04f055cde52f81135e972affaee6ddb3d9da1dd43d13d99c9b6 commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-7 applied_at=2026-10-14T06:14:56+00:00 build_sha256=0d05bf01365cb773897636e6c34346d46ffb884771c3a7cda19b9570df08b539
+  FEATURE-Block-Engine.md sha256=cface25880bc50e953b1f1170d0da07dbd137e75e771a3bfad574b1031d7284f commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-3 applied_at=2026-10-14T06:02:02+00:00 build_sha256=655dc566fb71154e5cc17365cc076522c8ed5b83ea693a2600354f550e73206a
+  FEATURE-Block-Quotes.md sha256=37540defac739da3e9c1b8274b7b7f4e3bcb3fe6b2d8d3b79610e114def531c7 commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-19 applied_at=2026-10-14T07:54:31+00:00 build_sha256=0166957e379313e98743e37d518c7c0d7eb8bb04f6f2655cbb305493bfc01b75
+  FEATURE-Code-Spans.md sha256=9d7abed53365b546937d0e32abecce10bb9596b0a917bb427f21e7d0740389c2 commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-6 applied_at=2026-10-14T06:11:55+00:00 build_sha256=37d299a1c244f137d1e368fcc8d27e8688affeb6b4990d893604bc344b76f153
+  FEATURE-Emphasis.md sha256=a519910d6e07bf88dc20f6fad49a7ca60ff60cc7f0a8d1c665754faa9e9336ba commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-9 applied_at=2026-10-14T06:26:37+00:00 build_sha256=6e7116b04e0ecb52f782321988eace5cb6526e625ca6956bd28066c82c3a9e1f
+  FEATURE-Entities.md sha256=4dcadb3b4551e9f7e42ee533bf4f2e1f14e4c2ccd0d6c7002866562f5f3587ab commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-8 applied_at=2026-10-14T06:18:26+00:00 build_sha256=680811ebf2cc6e7c37227d2960157a8109d7803deb675e60a79a7a8ff1adcf6c
+  FEATURE-Executable.md sha256=be8f24286c57dc7b53eacb3097477063ed5b6d12931edd0b1b70984541e0fdee commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-2 applied_at=2026-10-14T05:56:38+00:00 build_sha256=1a83c48c9d7608b582b13ebb8b11271d876312679a94b8899a67aa7b7b9e764c
+  FEATURE-Fenced-Code.md sha256=d7c85719ac3bd82768cbd1402009df6a9e2af9e5f70cbd44fac6aed7591c5c50 commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-17 applied_at=2026-10-14T07:32:51+00:00 build_sha256=4ef9fbb32bd321596919a31bc30760bc14c89afbbe266c75e828f6c45fe067fe
+  FEATURE-HTML-Blocks.md sha256=c7275028c6971c187a0f0446069c0a98c4bbaaf5a1b2758cdd5e6e841134dd68 commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-18 applied_at=2026-10-14T07:43:54+00:00 build_sha256=a2a2608218487125a4c1d754b250a43d7befa1343ba525e145d58ccc3c4b40ff
+  FEATURE-Images.md sha256=350405e608215a35360404c88c7e299d6b5ed290525743dd8b3ff72aecd20b8e commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-12 applied_at=2026-10-14T06:49:09+00:00 build_sha256=54417098d31d1c7e8b40ccd3312aa6e5eefa6305fc7dd2f8eda44a0d29704ed7
+  FEATURE-Indented-Code.md sha256=09f949bf85557370735b05603092071796418b325a9b8b7f809b742ec59c39e1 commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-16 applied_at=2026-10-14T07:22:13+00:00 build_sha256=7634aea192339d18a943ef06fec4af08fcc70712c4ba3353ed9d2826b82abe91
+  FEATURE-Line-Breaks-Text.md sha256=58eea5daa38c74de31e85fa8bfbd9f718e180403aecc7ec90f0c47c8ee26aff6 commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-13 applied_at=2026-10-14T06:57:58+00:00 build_sha256=facd6532c7443b4bed8a1bb933b44d9d6fa276f6e472c4db26fc63a1eaf27321
+  FEATURE-Link-Reference-Definitions.md sha256=415c0ce988fa64fd0f8a2858c00e3d9bde9497b48c6d9ab57f71e0a3075b6ef6 commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-10 applied_at=2026-10-14T06:32:27+00:00 build_sha256=a947e483f152ccdbd3939f347ee18bd1e324ee14d797fad577cb8364a38b6d88
+  FEATURE-Links.md sha256=b0f06341ff2933304dff69e95fceb90f57fcd15de7414661f86e4355ba4f44ea commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-11 applied_at=2026-10-14T06:39:03+00:00 build_sha256=1c87f216022bfa781ff836e80ffecdcbde6965f44cc9f20ae477db00078898aa
+  FEATURE-List-Items.md sha256=61a5466988aa214b7009d31cba5c3cb8152097f959af911cecbfe3e0976ca67d commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-21 applied_at=2026-10-14T08:16:56+00:00 build_sha256=56d53aa16d28ccc695ed40b58575eb598d58dae23f68727f6d584ac982b442bf
+  FEATURE-Lists.md sha256=ec40fafa15c3f769773240fb32ebb35cfa3304ce5fdafb5114215b12b532eaa2 commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-22 applied_at=2026-10-14T08:33:25+00:00 build_sha256=1fab2a6245a27051723cd106fae74c6523436b4cf794ff43dc0d2a962e9d5c5d
+  FEATURE-Raw-HTML.md sha256=a0a052ab78644a13c9c97cc82a2848569204389fa372c555e4057415fc99c20a commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-5 applied_at=2026-10-14T06:08:35+00:00 build_sha256=93a91911198efc0dec57c34ba21d9b974487d9ca32cebf5c825fc1d9af2c1546
+  FEATURE-Setext-Headings.md sha256=7d744e1cbb77bb7d68ec6ae26926848283c8b320780ff68ab6239b54da14a6e2 commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-20 applied_at=2026-10-14T08:04:29+00:00 build_sha256=d393bf3ed15bbe0ba178f84a192eeebf7c45d8d8db1ade77a5c38b7d82e123fe
+  FEATURE-Tabs.md sha256=a9f18e39e1fe7c70e184f1e7a2ba76538824e714427011acd992cd017e1f04ad commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-23 applied_at=2026-10-14T08:42:53+00:00 build_sha256=b256bba82571c2e9aad38b45f7485961525301799657617ecfa6a7c74aa0e42d
+  FEATURE-Thematic-Breaks.md sha256=583b0d8d8e3d8400378360686cf5c69301ef7e9f89c25d2b0d1e259c6808d928 commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-14 applied_at=2026-10-14T07:04:45+00:00 build_sha256=8f5d5c370fb9ce06a295b96d979f6cacfbd9ce257d7c53375ac700cd9e360129
+  FEATURE-Verification.md sha256=4b2dbf977ee3b6ff9fad6ae03dd07f40170f8d03b28aeb8cde93e2571ba2f1ca commit=bbbd92e2bf99130369e38a3bae1484307d7a93fc applied_by=block-24 applied_at=2026-10-14T09:02:06+00:00 build_sha256=4bf83bd202a24b3c67900df16f8441aca7316d59e3ee7324be59681219eee341
+## story 1: Stand up the Python project tree, the mdparser package skeleton, and the pytest runner.
+id:           foundation
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-1.md
+summary:      Stand up the Python project tree, the mdparser package skeleton, and the pytest runner.
+type:         foundational
+kind:         capability
+phase:        1
+block:        1
+implements:   ARCHITECTURE.md
+instructions: |
+  Create the language foundation at the project root: pyproject.toml, a committed uv.lock, a .venv created
+  by uv venv, launchers under bin/, and a tests/ directory with a conftest.py. Use only the Python standard
+  library at runtime.
+
+  Create an empty importable package named mdparser. Do not name it commonmark, so it cannot be mistaken
+  for a public Markdown library. Reserve these modules with documented responsibilities and no behavior yet:
+  blocks, inlines, refs, entities, render, and cli.
+
+  ARCHITECTURE.md records the two-phase design from the spec Appendix: phase 1 builds the block tree and
+  collects link reference definitions, and phase 2 parses inlines with the delimiter stack. It also records
+  these decisions:
+  - Entities come from the Python standard library table html.entities.html5. No public Markdown
+    implementation is used.
+  - Label matching uses str.casefold plus whitespace collapse.
+  - Unicode punctuation is classified with unicodedata categories P* and S*.
+  - Soft breaks are rendered as a line ending.
+  - The executable must run under plain python3 with no virtual environment activated.
+stack:        common.md, python.md
+stack_mode:   builder
+size:         6705
+provides:     mdparser package, pytest test runner
+acceptance:   yes
+state: closed/implemented
+
+## story 2: Provide the executable ./commonmark: UTF-8 stdin to HTML stdout, line intake, and README.
+id: executable-interface
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-2.md
+summary: Provide the executable ./commonmark: UTF-8 stdin to HTML stdout, line intake, and README.
+type: service
+kind: capability
+phase: 1
+block: 2
+implements: FEATURE-Executable.md
+covers: CMK-001
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 6555
+provides: ./commonmark (stdin Markdown to stdout HTML)
+consumes: mdparser package
+instructions: |
+  Create the executable file commonmark at the application root. It has a python3 shebang, the executable
+  bit set, and puts its own directory on sys.path so it works without any activated environment.
+  
+  Read all of stdin as bytes and decode as UTF-8 with U+FFFD replacement for invalid bytes. Normalize line
+  endings: LF, CR and CRLF are all line endings. Replace U+0000 with U+FFFD. Pass the lines to the parser
+  entry point in mdparser.cli and write only the rendered HTML to stdout as UTF-8. Diagnostics go to stderr
+  only. Exit 0 on all input, with no traceback. Empty input gives empty output and exit 0.
+  
+  Until the block engine story lands, the parser entry point may be a minimal placeholder that renders no
+  blocks. Write a concise README.md describing the stdin/stdout interface. README content is not an
+  acceptance criterion.
+  
+  Surfaced criteria to carry as bounded acceptance checks, using subprocess with input=:
+  - AC-001: empty stdin gives empty stdout and exit status 0.
+  - AC-002: invalid UTF-8 bytes give exit status 0, no traceback on stderr, and no failure.
+  - AC-003: stdout carries only rendered HTML. Check this through the exit status, and by confirming the
+    output contains no diagnostic marker the criterion itself supplied.
+acceptance: yes
+depends: foundation
+state: closed/implemented
+
+## story 3: Implement the Appendix phase 1 block engine and paragraph rendering with HTML escaping.
+id: block-engine
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-3.md
+summary: Implement the Appendix phase 1 block engine and paragraph rendering with HTML escaping.
+type: service
+kind: capability
+phase: 1
+block: 3
+implements: FEATURE-Block-Engine.md
+covers: CMK-002
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 6837
+provides: block tree builder, paragraph renderer, HTML escaping and URL percent-encoding helpers
+consumes: ./commonmark
+instructions: |
+  Implement the per-line procedure from the Appendix:
+  1. Match the open blocks, without closing unmatched ones yet because of lazy continuation.
+  2. Look for new block starts and close the unmatched blocks before creating them.
+  3. Add the remaining text to the deepest open block.
+  
+  Use a document tree with an extensible block-type registry, so each later block story only adds a start
+  rule, a continue rule and a close rule. Implement document, paragraph and blank-line handling. Paragraph
+  raw content strips initial and final spaces and tabs. Later paragraph lines may have any indentation.
+  
+  The renderer emits p elements, escapes & < > and ", and holds the shared URL percent-encoding helper that
+  link stories reuse. Phase 2 walks the tree and calls an inline parser hook. Until the inline stories land,
+  that hook returns the escaped text.
+  
+  Acceptance for this story is bounded and uses state oracles:
+  - Count p elements for a supplied number of blank-line-separated paragraphs.
+  - Check that exit status is 0.
+  - Check that supplied special characters appear escaped, not raw.
+  
+  The Paragraphs and Blank lines corpus sections need indented code, hard breaks and ATX headings. They are
+  gated in the cont-tabs-slice story and in the terminal story, not here.
+acceptance: yes
+depends: executable-interface
+state: closed/implemented
+
+## story 4: Parse URI and email autolinks.
+id: autolinks
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-4.md
+summary: Parse URI and email autolinks.
+type: service
+kind: capability
+phase: 2
+block: 4
+implements: FEATURE-Autolinks.md
+covers: INL-007
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 6090
+provides: autolink inline construct
+consumes: inline parser hook
+instructions: |
+  Implement URI autolinks (scheme of 2 to 32 characters, then a colon, then no control characters, space,
+  < or >) and email autolinks (the HTML5 regex from the spec, rendered with a mailto: prefix). Backslash
+  escapes are inert inside autolinks. Percent-encode non-ASCII and unsafe characters in the href with the
+  shared helper, and HTML-escape the link text.
+  
+  Gate: python3 sources/spec_tests.py --program ./commonmark --spec sources/spec.txt --pattern '^Autolinks$'
+  with Suite: scoped. The section needs only paragraphs.
+acceptance: yes
+depends: block-engine
+state: closed/implemented
+
+## story 5: Parse raw inline HTML tags, comments, processing instructions, declarations and CDATA.
+id: raw-html-inline
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-5.md
+summary: Parse raw inline HTML tags, comments, processing instructions, declarations and CDATA.
+type: service
+kind: capability
+phase: 2
+block: 5
+implements: FEATURE-Raw-HTML.md
+covers: INL-008
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 6456
+provides: raw inline HTML construct
+consumes: inline parser hook
+instructions: |
+  Implement the open tag, closing tag, comment (including the <!--> and <!---> forms), processing
+  instruction, declaration and CDATA grammars exactly as given in the spec, including attributes with up to
+  one line ending in whitespace positions. Matching tags are emitted unescaped. Everything else is escaped
+  text. Backslash escapes are inert in raw HTML.
+  
+  Acceptance is bounded: supplied tag strings pass through, and supplied illegal forms are escaped,
+  checked with state oracles. The corpus section Raw HTML has one example that needs block quotes. It is
+  gated in the cont-tabs-slice story.
+acceptance: yes
+depends: block-engine
+state: closed/implemented
+
+## story 6: Parse code spans and establish the inline precedence order.
+id: code-spans
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-6.md
+summary: Parse code spans and establish the inline precedence order.
+type: service
+kind: capability
+phase: 2
+block: 6
+implements: FEATURE-Code-Spans.md
+covers: INL-001
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 6328
+provides: code span inline construct, inline scanner loop
+consumes: autolink inline construct, raw inline HTML construct
+instructions: |
+  Implement the inline scanner: a left-to-right loop where code spans, autolinks and raw HTML bind
+  equally tightly and the first one found wins. Backtick strings must match by exact length. Convert line
+  endings to spaces, then strip one leading and one trailing space only when the content is not all spaces.
+  Backslash escapes are inert in code spans. Unmatched backtick runs are literal.
+  
+  Gate: --pattern '^Code spans$|^Inlines$' with Suite: scoped. The Precedence section needs lists and is
+  gated in the lists story.
+acceptance: yes
+depends: autolinks, raw-html-inline
+state: closed/implemented
+
+## story 7: Implement backslash escapes in text, destinations, titles and info strings.
+id: backslash-escapes
+finding: ADVISORY: implemented, not verified — every binding criterion this story passed was already green before the story built, so none measured the work. Repair the criteria in the Blueprint to exercise this story and rebuild to obtain a verdict.
+evidence: evidence/block-7.md
+summary: Implement backslash escapes in text, destinations, titles and info strings.
+type: service
+kind: capability
+phase: 2
+block: 7
+implements: FEATURE-Backslash-Escapes.md
+covers: INL-002
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 5938
+provides: backslash escape inline rule, shared unescape helper
+consumes: inline scanner loop
+instructions: |
+  Any ASCII punctuation may be escaped. A backslash before any other character is literal. A backslash at
+  the end of a line is a hard break marker, handled by the line-breaks story. Expose a reusable unescape
+  helper for link destinations, titles and info strings. The corpus section Backslash escapes needs fenced
+  code, links and definitions. It is gated in the cont-tabs-slice story.
+  
+  Acceptance is bounded: escape a supplied punctuation character and check that no emphasis, em, or code
+  element is produced for it, and that the backslash is consumed.
+acceptance: yes
+depends: code-spans
+state: closed/implemented
+
+## story 8: Decode HTML5 named, decimal and hexadecimal character references.
+id: entities
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-8.md
+summary: Decode HTML5 named, decimal and hexadecimal character references.
+type: service
+kind: capability
+phase: 2
+block: 8
+implements: FEATURE-Entities.md
+covers: INL-003
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 6643
+provides: entity decoding rule, shared entity helper
+consumes: inline scanner loop
+instructions: |
+  Use html.entities.html5 for names (only forms that end in a semicolon), decimal references of 1 to 7
+  digits and hexadecimal references of 1 to 6 digits. Replace invalid code points and U+0000 with U+FFFD.
+  Unrecognized references stay literal with & escaped. Decoded characters are always plain text and never
+  structure. Expose the helper for link destinations, titles and info strings. Entities are inert in code
+  spans and code blocks.
+  
+  Acceptance is bounded and derived from supplied inputs: for example, a numeric reference built from a
+  bound code point must yield the chr() of that value, HTML-escaped where needed. The corpus section is
+  gated in the cont-tabs-slice story.
+acceptance: yes
+depends: backslash-escapes
+state: closed/implemented
+
+## story 9: Implement the delimiter stack, flanking rules, and the process-emphasis algorithm.
+id: emphasis
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-9.md
+summary: Implement the delimiter stack, flanking rules, and the process-emphasis algorithm.
+type: service
+kind: capability
+phase: 2
+block: 9
+implements: FEATURE-Emphasis.md
+covers: INL-004
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 6935
+provides: delimiter stack, process_emphasis procedure
+consumes: inline scanner loop
+instructions: |
+  Follow the Appendix algorithm. Delimiter runs of * and _ are text nodes pushed on the stack with
+  can_open and can_close computed from the flanking rules (Unicode whitespace and punctuation). Implement
+  process emphasis with stack_bottom, openers_bottom indexed by delimiter type, closer length mod 3 and
+  closer-can-open, the multiple-of-3 rule, strong versus regular emphasis selection, and removal of
+  delimiters between the matched pair. The stack must also accept [ and ![ entries, so the links story can
+  reuse it. Expose process_emphasis(stack_bottom).
+  
+  Acceptance is bounded and structural: em and strong element counts for supplied simple inputs. The
+  corpus section Emphasis and strong emphasis needs links and is gated in the images story.
+acceptance: yes
+depends: entities
+state: closed/implemented
+
+## story 10: Extract link reference definitions when a paragraph closes and provide label normalization.
+id: link-reference-definitions
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-10.md
+summary: Extract link reference definitions when a paragraph closes and provide label normalization.
+type: service
+kind: capability
+phase: 2
+block: 10
+implements: FEATURE-Link-Reference-Definitions.md
+covers: LEAF-007
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 6848
+provides: reference map, normalize_label
+consumes: block tree builder
+instructions: |
+  On paragraph close, repeatedly parse leading definitions: a label (at most 999 characters, no unescaped
+  brackets, at least one non-whitespace character), a colon, an optional line ending, a destination (angle
+  form or plain, balanced parentheses), an optional title (double, single or parenthesized, may span lines
+  but contains no blank line), and then end of line. The first definition for a normalized label wins. A
+  definition cannot interrupt a paragraph, which follows from extracting only at the start of the
+  paragraph's text. Any remainder stays a paragraph, and an all-definition paragraph disappears.
+  
+  normalize_label strips the brackets, applies str.casefold(), strips, and collapses internal spaces, tabs
+  and line endings to a single space. Definitions in containers still go in the one document-wide map. The
+  inline stories consume the map.
+  
+  Acceptance is bounded: a document that consists only of a definition renders nothing (empty stdout apart
+  from whitespace), and a definition followed by a supplied paragraph renders one p element. The corpus
+  section is gated in the cont-tabs-slice story because its examples need headings, quotes and links.
+acceptance: yes
+depends: block-engine
+state: closed/implemented
+
+## story 11: Implement link and image bracket handling: inline, full, collapsed and shortcut forms.
+id: links
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-11.md
+summary: Implement link and image bracket handling: inline, full, collapsed and shortcut forms.
+type: service
+kind: capability
+phase: 2
+block: 11
+implements: FEATURE-Links.md
+covers: INL-005
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 7104
+provides: look_for_link_or_image procedure, link destination and title grammar
+consumes: delimiter stack, process_emphasis procedure, reference map, normalize_label
+instructions: |
+  On ] run look-for-link-or-image per the Appendix: find the nearest [ or ![ opener, handle inactive
+  openers, then try an inline link (destination grammar including the angle form, balanced parentheses,
+  up to one line ending, and a title), a full reference, a collapsed reference, then a shortcut reference
+  through the reference map. Run process_emphasis with the opener as stack_bottom. After a successful
+  link (not image), deactivate earlier [ openers. Handle ![ openers with the same machinery, but leave
+  image rendering to the images story. Destinations and titles go through unescape, entity decoding and
+  URL percent-encoding of non-ASCII and unsafe characters. Backslash-escaped brackets and code spans,
+  autolinks and raw HTML bind more tightly than brackets.
+  
+  Acceptance is bounded: inline links with supplied text and destination (checked as an a element count
+  and returned state), links in links not nested, and an unresolved shortcut reference staying literal.
+  The Links corpus section needs images. It is gated in the images story.
+acceptance: yes
+depends: emphasis, link-reference-definitions
+state: closed/implemented
+
+## story 12: Render images with plain-text alt and verify links, images and emphasis against the corpus.
+id: images
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-12.md
+summary: Render images with plain-text alt and verify links, images and emphasis against the corpus.
+type: service
+kind: capability
+phase: 2
+block: 12
+implements: FEATURE-Images.md
+covers: INL-006
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 6327
+provides: image rendering
+consumes: look_for_link_or_image procedure
+instructions: |
+  Render img with src, alt and optional title. The alt is the plain-text content of the description, with
+  formatting and nested links reduced to their text content and HTML-escaped. All four link forms apply to
+  images.
+  
+  Gate: --pattern '^Emphasis and strong emphasis$|^Links$|^Images$' with Suite: scoped. All three sections
+  are satisfiable at this point with the inline stories and the reference map. The Link reference
+  definitions section is gated in the cont-tabs-slice story.
+acceptance: yes
+depends: links
+state: closed/implemented
+
+## story 13: Implement hard and soft line breaks and plain textual content.
+id: line-breaks-text
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-13.md
+summary: Implement hard and soft line breaks and plain textual content.
+type: service
+kind: capability
+phase: 2
+block: 13
+implements: FEATURE-Line-Breaks-Text.md
+covers: INL-009
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 6446
+provides: hard break and soft break inline nodes
+consumes: inline scanner loop
+instructions: |
+  A line ending preceded by two or more spaces or a backslash, not at the end of a block, is a hard break
+  rendered as <br /> followed by a line ending. Leading spaces on the next line are dropped. Any other line
+  ending is a soft break rendered as a line ending, with spaces dropped on both sides. Breaks are inert in
+  code spans and raw HTML. Plain text keeps internal spaces verbatim.
+  
+  Gate: --pattern '^Soft line breaks$|^Textual content$' with Suite: scoped. The Hard line breaks section
+  uses ATX headings and is gated in the cont-tabs-slice story.
+acceptance: yes
+depends: images
+state: closed/implemented
+
+## story 14: Parse thematic breaks.
+id: thematic-breaks
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-14.md
+summary: Parse thematic breaks.
+type: service
+kind: capability
+phase: 3
+block: 14
+implements: FEATURE-Thematic-Breaks.md
+covers: LEAF-001
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 5970
+provides: thematic break block
+consumes: block-type registry
+instructions: |
+  Up to three spaces of indentation, then three or more matching -, _ or * characters with optional spaces
+  or tabs between and after them, and no other characters. A thematic break interrupts a paragraph and
+  takes precedence over a list item start. The setext-underline precedence is wired in the setext story.
+  
+  Acceptance is bounded and uses state oracles on hr element counts for supplied marker lines. The corpus
+  section needs lists and setext, so it is gated in the lists story.
+acceptance: yes
+depends: line-breaks-text
+state: closed/implemented
+
+## story 15: Parse ATX headings.
+id: atx-headings
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-15.md
+summary: Parse ATX headings.
+type: service
+kind: capability
+phase: 3
+block: 15
+implements: FEATURE-ATX-Headings.md
+covers: LEAF-002
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 6468
+provides: ATX heading block
+consumes: block-type registry, inline parser hook
+instructions: |
+  Opening run of 1 to 6 # followed by space, tab or end of line, with up to three spaces of indentation. Drop
+  an optional closing run of unescaped # preceded by whitespace, and strip the content before inline
+  parsing. A heading interrupts a paragraph and can be empty.
+  
+  Gate: --pattern '^ATX headings$' with Suite: scoped. This is satisfiable because indented code is a
+  plain paragraph fallthrough for the single indented example only if the indented-code story has landed.
+  To avoid that coupling, the acceptance is bounded here (heading level counts for supplied levels and the
+  seven-hash case). The corpus section is gated in the lists story.
+acceptance: yes
+depends: thematic-breaks
+state: closed/implemented
+
+## story 16: Parse indented code blocks.
+id: indented-code
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-16.md
+summary: Parse indented code blocks.
+type: service
+kind: capability
+phase: 3
+block: 16
+implements: FEATURE-Indented-Code.md
+covers: LEAF-004
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 6210
+provides: indented code block
+consumes: block-type registry
+instructions: |
+  Four or more columns of indentation, column-aware with tab stops of 4, on a non-blank line that is not
+  a paragraph continuation. Chunks are separated by blank lines. Interior blank lines keep indentation
+  beyond four columns, and leading and trailing blank lines are dropped. Content is literal and escaped.
+  There is no info string.
+  
+  Acceptance is bounded. The corpus section needs lists and is gated in the lists story.
+acceptance: yes
+depends: atx-headings
+state: closed/implemented
+
+## story 17: Parse fenced code blocks with info strings.
+id: fenced-code
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-17.md
+summary: Parse fenced code blocks with info strings.
+type: service
+kind: capability
+phase: 3
+block: 17
+implements: FEATURE-Fenced-Code.md
+covers: LEAF-005
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 6788
+provides: fenced code block
+consumes: block-type registry, backslash and entity helpers
+instructions: |
+  An opening fence is at least three backticks or tildes with up to three spaces of indentation. Backtick
+  info strings may not contain backticks. A closing fence uses the same character, is at least as long,
+  and has up to three spaces of indentation followed only by spaces or tabs. Remove up to N spaces of
+  indentation from content lines, where N is the opening fence indentation. An unclosed fence runs to the
+  end of the document or container. The first word of the info string, after unescape and entity decoding,
+  becomes class="language-WORD". A fence can interrupt a paragraph.
+  
+  Acceptance is bounded. The corpus section needs code spans, quotes, lists and setext, and is gated in the
+  lists story.
+acceptance: yes
+depends: indented-code
+state: closed/implemented
+
+## story 18: Parse the seven kinds of HTML block.
+id: html-blocks
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-18.md
+summary: Parse the seven kinds of HTML block.
+type: service
+kind: capability
+phase: 3
+block: 18
+implements: FEATURE-HTML-Blocks.md
+covers: LEAF-006
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 6715
+provides: HTML block
+consumes: block-type registry
+instructions: |
+  Implement start and end conditions 1 to 7 exactly as given, including the case-insensitive type 6 tag
+  list, the complete-tag requirement for type 7, and the rule that type 7 cannot interrupt a paragraph.
+  Lines are emitted raw. Block types 1 to 5 end on the end-condition line, and types 6 and 7 end before a
+  blank line. Blocks end at the end of the container.
+  
+  Acceptance is bounded. The corpus section needs quotes, lists and indented code, and is gated in the
+  cont-tabs-slice story.
+acceptance: yes
+depends: fenced-code
+state: closed/implemented
+
+## story 19: Parse block quotes with laziness and consecutiveness rules.
+id: block-quotes
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-19.md
+summary: Parse block quotes with laziness and consecutiveness rules.
+type: service
+kind: capability
+phase: 3
+block: 19
+implements: FEATURE-Block-Quotes.md
+covers: CONT-001
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 6809
+provides: block quote container
+consumes: block-type registry, lazy continuation check
+instructions: |
+  A marker is > with up to three spaces of indentation and an optional following space (a tab counts as
+  columns). Implement the container continue rule, lazy paragraph continuation (only when the line would
+  continue a paragraph), and the blank-line separation rule. Nested quotes can omit the leading > on lazy
+  lines.
+  
+  Acceptance is bounded: blockquote element counts and nesting depth for supplied inputs. The corpus
+  section needs lists and is gated in the lists story.
+acceptance: yes
+depends: html-blocks
+state: closed/implemented
+
+## story 20: Parse setext headings, including multiline content and underline precedence.
+id: setext-headings
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-20.md
+summary: Parse setext headings, including multiline content and underline precedence.
+type: service
+kind: capability
+phase: 3
+block: 20
+implements: FEATURE-Setext-Headings.md
+covers: LEAF-003
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 6954
+provides: setext heading block
+consumes: paragraph block, thematic break block
+instructions: |
+  An underline of = (level 1) or - (level 2) with up to three spaces of indentation and trailing whitespace
+  only, which follows a paragraph that is not itself in a lazy-continuation position, turns the whole
+  paragraph (multiple lines) into a heading. It takes precedence over a thematic break. Link definitions
+  that were already extracted from the paragraph's start do not become heading text.
+  
+  Acceptance is bounded. The corpus section is gated in the lists story.
+acceptance: yes
+depends: block-quotes
+state: closed/implemented
+
+## story 21: Parse list items: markers, indentation rules, empty items, start numbers and laziness.
+id: list-items
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-21.md
+summary: Parse list items: markers, indentation rules, empty items, start numbers and laziness.
+type: service
+kind: capability
+phase: 3
+block: 21
+implements: FEATURE-List-Items.md
+covers: CONT-002
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 7038
+provides: list item container
+consumes: block-type registry
+instructions: |
+  Bullet markers are -, + and *. Ordered markers are 1 to 9 digits followed by . or ). Implement the
+  content-offset computation (W + N for 1 to 4 spaces, W + 1 when the content is 5 or more spaces
+  because it starts with an indented code block, and W + 1 for an item starting with a blank line), the
+  column-aware continuation, at-most-one leading blank line, lazy continuation, and the interruption
+  rules: an empty item or a non-1 ordered start cannot interrupt a paragraph, and the thematic break takes
+  precedence.
+  
+  Acceptance is bounded. The List items corpus section needs list grouping and is gated in the lists
+  story.
+acceptance: yes
+depends: setext-headings
+state: closed/implemented
+
+## story 22: Group list items into lists and compute tight or loose rendering.
+id: lists
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
+evidence: evidence/block-22.md
+summary: Group list items into lists and compute tight or loose rendering.
+type: service
+kind: capability
+phase: 3
+block: 22
+implements: FEATURE-Lists.md
+covers: CONT-003
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 6975
+provides: list container, tight/loose computation
+consumes: list item container
+instructions: |
+  Group items of the same type: the same bullet character, or the same ordered delimiter. A start number
+  is taken from the first item and emitted as the start attribute only when it is not 1. A list is loose if
+  any two items are separated by a blank line, or if an item directly contains two block children with a
+  blank line between them. Blank lines inside fenced code, inside nested lists' own children, or inside
+  quotes do not count. In a tight list, paragraphs render without p tags. Output the exact structure
+  required by the spec examples.
+  
+  Gate: --pattern '^Lists$|^List items$|^Block quotes$|^Thematic breaks$|^ATX headings$|^Setext
+  headings$|^Indented code blocks$|^Fenced code blocks$|^Precedence$' with Suite: scoped. All block
+  constructs and all inline constructs those sections use have been built by this point.
+acceptance: yes
+depends: list-items
+state: closed/implemented
+
+## story 23: Make tab columns work for block structure and verify the remaining corpus sections.
+id: cont-tabs-slice
+finding: ADVISORY: implemented, not verified — every binding criterion this story passed was already green before the story built, so none measured the work. Repair the criteria in the Blueprint to exercise this story and rebuild to obtain a verdict.
+evidence: evidence/block-23.md
+summary: Make tab columns work for block structure and verify the remaining corpus sections.
+type: service
+kind: capability
+phase: 3
+block: 23
+implements: FEATURE-Tabs.md
+covers: CONT-004
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 6469
+provides: tab-stop-aware column handling
+consumes: block container rules
+instructions: |
+  Tabs are never expanded in content. In places where spaces define structure (indented code, block quote
+  and list continuation, and list marker content offsets) a tab advances to the next multiple of 4
+  columns, and a partially consumed tab leaves its remaining columns as spaces. Audit all the block
+  stories' column handling for this.
+  
+  Gate: --pattern '^Tabs$|^Link reference definitions$|^Backslash escapes$|^Entity and numeric character
+  references$|^Raw HTML$|^HTML blocks$|^Paragraphs$|^Blank lines$|^Hard line breaks$' with Suite: scoped.
+  Together with the other stories' slices this covers every example section.
+acceptance: yes
+depends: lists
+state: closed/implemented
+
+## story 24: Run the complete supplied CommonMark conformance suite unfiltered.
+id: verify-conformance
+finding: ADVISORY: implemented, not verified — every binding criterion this story passed was already green before the story built, so none measured the work. Repair the criteria in the Blueprint to exercise this story and rebuild to obtain a verdict.
+evidence: evidence/block-24.md
+summary: Run the complete supplied CommonMark conformance suite unfiltered.
+type: feature
+kind: integration
+phase: 4
+block: 24
+implements: FEATURE-Verification.md
+covers: VER-001
+accepts: st-001
+context: ARCHITECTURE_compact.md
+stack: common.md, python.md
+stack_mode: consumer
+size: 5576
+consumes: ./commonmark
+instructions: |
+  Assembly story and the terminal story. Its one Programmatic Acceptance block declares Suite: full, runs
+  sh sources/full_test.sh from the build directory with subprocess (text=True, capture_output=True),
+  prints the captured stdout and stderr, and asserts only result.returncode == 0. Do not invoke
+  full_test.sh from any other story. Do not add file-presence or staged-asset checks. If the suite
+  fails, the repair belongs in the parser, never in the supplied scoring assets.
+acceptance: yes
+depends: foundation, executable-interface, block-engine, autolinks, raw-html-inline, code-spans, backslash-escapes, entities, emphasis, link-reference-definitions, links, images, line-breaks-text, thematic-breaks, atx-headings, indented-code, fenced-code, html-blocks, block-quotes, setext-headings, list-items, lists, cont-tabs-slice
+state: closed/implemented

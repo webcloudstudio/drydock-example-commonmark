@@ -1,0 +1,611 @@
+=== BEGIN ARTIFACT TOPOLOGY.md ===
+## Declarations
+
+## story foundation
+summary:      Stand up the Python project tree, the mdparser package skeleton, and the pytest runner.
+type:         foundational
+kind:         capability
+phase:        1
+implements:   ARCHITECTURE.md
+stack:        common.md, python.md
+provides:     mdparser package, pytest test runner
+acceptance:   yes
+instructions: |
+  Create the language foundation at the project root: pyproject.toml, a committed uv.lock, a .venv created
+  by uv venv, launchers under bin/, and a tests/ directory with a conftest.py. Use only the Python standard
+  library at runtime.
+
+  Create an empty importable package named mdparser. Do not name it commonmark, so it cannot be mistaken
+  for a public Markdown library. Reserve these modules with documented responsibilities and no behavior yet:
+  blocks, inlines, refs, entities, render, and cli.
+
+  ARCHITECTURE.md records the two-phase design from the spec Appendix: phase 1 builds the block tree and
+  collects link reference definitions, and phase 2 parses inlines with the delimiter stack. It also records
+  these decisions:
+  - Entities come from the Python standard library table html.entities.html5. No public Markdown
+    implementation is used.
+  - Label matching uses str.casefold plus whitespace collapse.
+  - Unicode punctuation is classified with unicodedata categories P* and S*.
+  - Soft breaks are rendered as a line ending.
+  - The executable must run under plain python3 with no virtual environment activated.
+
+## story executable-interface
+summary:      Provide the executable ./commonmark: UTF-8 stdin to HTML stdout, line intake, and README.
+type:         service
+kind:         capability
+phase:        1
+implements:   FEATURE-Executable.md
+covers:       CMK-001
+stack:        common.md, python.md
+provides:     ./commonmark (stdin Markdown to stdout HTML)
+consumes:     mdparser package
+depends:      foundation
+acceptance:   yes
+instructions: |
+  Create the executable file commonmark at the application root. It has a python3 shebang, the executable
+  bit set, and puts its own directory on sys.path so it works without any activated environment.
+
+  Read all of stdin as bytes and decode as UTF-8 with U+FFFD replacement for invalid bytes. Normalize line
+  endings: LF, CR and CRLF are all line endings. Replace U+0000 with U+FFFD. Pass the lines to the parser
+  entry point in mdparser.cli and write only the rendered HTML to stdout as UTF-8. Diagnostics go to stderr
+  only. Exit 0 on all input, with no traceback. Empty input gives empty output and exit 0.
+
+  Until the block engine story lands, the parser entry point may be a minimal placeholder that renders no
+  blocks. Write a concise README.md describing the stdin/stdout interface. README content is not an
+  acceptance criterion.
+
+  Surfaced criteria to carry as bounded acceptance checks, using subprocess with input=:
+  - AC-001: empty stdin gives empty stdout and exit status 0.
+  - AC-002: invalid UTF-8 bytes give exit status 0, no traceback on stderr, and no failure.
+  - AC-003: stdout carries only rendered HTML. Check this through the exit status, and by confirming the
+    output contains no diagnostic marker the criterion itself supplied.
+
+## story block-engine
+summary:      Implement the Appendix phase 1 block engine and paragraph rendering with HTML escaping.
+type:         service
+kind:         capability
+phase:        1
+implements:   FEATURE-Block-Engine.md
+covers:       CMK-002
+stack:        common.md, python.md
+provides:     block tree builder, paragraph renderer, HTML escaping and URL percent-encoding helpers
+consumes:     ./commonmark
+depends:      executable-interface
+acceptance:   yes
+instructions: |
+  Implement the per-line procedure from the Appendix:
+  1. Match the open blocks, without closing unmatched ones yet because of lazy continuation.
+  2. Look for new block starts and close the unmatched blocks before creating them.
+  3. Add the remaining text to the deepest open block.
+
+  Use a document tree with an extensible block-type registry, so each later block story only adds a start
+  rule, a continue rule and a close rule. Implement document, paragraph and blank-line handling. Paragraph
+  raw content strips initial and final spaces and tabs. Later paragraph lines may have any indentation.
+
+  The renderer emits p elements, escapes & < > and ", and holds the shared URL percent-encoding helper that
+  link stories reuse. Phase 2 walks the tree and calls an inline parser hook. Until the inline stories land,
+  that hook returns the escaped text.
+
+  Acceptance for this story is bounded and uses state oracles:
+  - Count p elements for a supplied number of blank-line-separated paragraphs.
+  - Check that exit status is 0.
+  - Check that supplied special characters appear escaped, not raw.
+
+  The Paragraphs and Blank lines corpus sections need indented code, hard breaks and ATX headings. They are
+  gated in the cont-tabs-slice story and in the terminal story, not here.
+
+## story autolinks
+summary:      Parse URI and email autolinks.
+type:         service
+kind:         capability
+phase:        2
+implements:   FEATURE-Autolinks.md
+covers:       INL-007
+stack:        common.md, python.md
+provides:     autolink inline construct
+consumes:     inline parser hook
+depends:      block-engine
+acceptance:   yes
+instructions: |
+  Implement URI autolinks (scheme of 2 to 32 characters, then a colon, then no control characters, space,
+  < or >) and email autolinks (the HTML5 regex from the spec, rendered with a mailto: prefix). Backslash
+  escapes are inert inside autolinks. Percent-encode non-ASCII and unsafe characters in the href with the
+  shared helper, and HTML-escape the link text.
+
+  Gate: python3 sources/spec_tests.py --program ./commonmark --spec sources/spec.txt --pattern '^Autolinks$'
+  with Suite: scoped. The section needs only paragraphs.
+
+## story raw-html-inline
+summary:      Parse raw inline HTML tags, comments, processing instructions, declarations and CDATA.
+type:         service
+kind:         capability
+phase:        2
+implements:   FEATURE-Raw-HTML.md
+covers:       INL-008
+stack:        common.md, python.md
+provides:     raw inline HTML construct
+consumes:     inline parser hook
+depends:      block-engine
+acceptance:   yes
+instructions: |
+  Implement the open tag, closing tag, comment (including the <!--> and <!---> forms), processing
+  instruction, declaration and CDATA grammars exactly as given in the spec, including attributes with up to
+  one line ending in whitespace positions. Matching tags are emitted unescaped. Everything else is escaped
+  text. Backslash escapes are inert in raw HTML.
+
+  Acceptance is bounded: supplied tag strings pass through, and supplied illegal forms are escaped,
+  checked with state oracles. The corpus section Raw HTML has one example that needs block quotes. It is
+  gated in the cont-tabs-slice story.
+
+## story code-spans
+summary:      Parse code spans and establish the inline precedence order.
+type:         service
+kind:         capability
+phase:        2
+implements:   FEATURE-Code-Spans.md
+covers:       INL-001
+stack:        common.md, python.md
+provides:     code span inline construct, inline scanner loop
+consumes:     autolink inline construct, raw inline HTML construct
+depends:      autolinks, raw-html-inline
+acceptance:   yes
+instructions: |
+  Implement the inline scanner: a left-to-right loop where code spans, autolinks and raw HTML bind
+  equally tightly and the first one found wins. Backtick strings must match by exact length. Convert line
+  endings to spaces, then strip one leading and one trailing space only when the content is not all spaces.
+  Backslash escapes are inert in code spans. Unmatched backtick runs are literal.
+
+  Gate: --pattern '^Code spans$|^Inlines$' with Suite: scoped. The Precedence section needs lists and is
+  gated in the lists story.
+
+## story backslash-escapes
+summary:      Implement backslash escapes in text, destinations, titles and info strings.
+type:         service
+kind:         capability
+phase:        2
+implements:   FEATURE-Backslash-Escapes.md
+covers:       INL-002
+stack:        common.md, python.md
+provides:     backslash escape inline rule, shared unescape helper
+consumes:     inline scanner loop
+depends:      code-spans
+acceptance:   yes
+instructions: |
+  Any ASCII punctuation may be escaped. A backslash before any other character is literal. A backslash at
+  the end of a line is a hard break marker, handled by the line-breaks story. Expose a reusable unescape
+  helper for link destinations, titles and info strings. The corpus section Backslash escapes needs fenced
+  code, links and definitions. It is gated in the cont-tabs-slice story.
+
+  Acceptance is bounded: escape a supplied punctuation character and check that no emphasis, em, or code
+  element is produced for it, and that the backslash is consumed.
+
+## story entities
+summary:      Decode HTML5 named, decimal and hexadecimal character references.
+type:         service
+kind:         capability
+phase:        2
+implements:   FEATURE-Entities.md
+covers:       INL-003
+stack:        common.md, python.md
+provides:     entity decoding rule, shared entity helper
+consumes:     inline scanner loop
+depends:      backslash-escapes
+acceptance:   yes
+instructions: |
+  Use html.entities.html5 for names (only forms that end in a semicolon), decimal references of 1 to 7
+  digits and hexadecimal references of 1 to 6 digits. Replace invalid code points and U+0000 with U+FFFD.
+  Unrecognized references stay literal with & escaped. Decoded characters are always plain text and never
+  structure. Expose the helper for link destinations, titles and info strings. Entities are inert in code
+  spans and code blocks.
+
+  Acceptance is bounded and derived from supplied inputs: for example, a numeric reference built from a
+  bound code point must yield the chr() of that value, HTML-escaped where needed. The corpus section is
+  gated in the cont-tabs-slice story.
+
+## story emphasis
+summary:      Implement the delimiter stack, flanking rules, and the process-emphasis algorithm.
+type:         service
+kind:         capability
+phase:        2
+implements:   FEATURE-Emphasis.md
+covers:       INL-004
+stack:        common.md, python.md
+provides:     delimiter stack, process_emphasis procedure
+consumes:     inline scanner loop
+depends:      entities
+acceptance:   yes
+instructions: |
+  Follow the Appendix algorithm. Delimiter runs of * and _ are text nodes pushed on the stack with
+  can_open and can_close computed from the flanking rules (Unicode whitespace and punctuation). Implement
+  process emphasis with stack_bottom, openers_bottom indexed by delimiter type, closer length mod 3 and
+  closer-can-open, the multiple-of-3 rule, strong versus regular emphasis selection, and removal of
+  delimiters between the matched pair. The stack must also accept [ and ![ entries, so the links story can
+  reuse it. Expose process_emphasis(stack_bottom).
+
+  Acceptance is bounded and structural: em and strong element counts for supplied simple inputs. The
+  corpus section Emphasis and strong emphasis needs links and is gated in the images story.
+
+## story link-reference-definitions
+summary:      Extract link reference definitions when a paragraph closes and provide label normalization.
+type:         service
+kind:         capability
+phase:        2
+implements:   FEATURE-Link-Reference-Definitions.md
+covers:       LEAF-007
+stack:        common.md, python.md
+provides:     reference map, normalize_label
+consumes:     block tree builder
+depends:      block-engine
+acceptance:   yes
+instructions: |
+  On paragraph close, repeatedly parse leading definitions: a label (at most 999 characters, no unescaped
+  brackets, at least one non-whitespace character), a colon, an optional line ending, a destination (angle
+  form or plain, balanced parentheses), an optional title (double, single or parenthesized, may span lines
+  but contains no blank line), and then end of line. The first definition for a normalized label wins. A
+  definition cannot interrupt a paragraph, which follows from extracting only at the start of the
+  paragraph's text. Any remainder stays a paragraph, and an all-definition paragraph disappears.
+
+  normalize_label strips the brackets, applies str.casefold(), strips, and collapses internal spaces, tabs
+  and line endings to a single space. Definitions in containers still go in the one document-wide map. The
+  inline stories consume the map.
+
+  Acceptance is bounded: a document that consists only of a definition renders nothing (empty stdout apart
+  from whitespace), and a definition followed by a supplied paragraph renders one p element. The corpus
+  section is gated in the cont-tabs-slice story because its examples need headings, quotes and links.
+
+## story links
+summary:      Implement link and image bracket handling: inline, full, collapsed and shortcut forms.
+type:         service
+kind:         capability
+phase:        2
+implements:   FEATURE-Links.md
+covers:       INL-005
+stack:        common.md, python.md
+provides:     look_for_link_or_image procedure, link destination and title grammar
+consumes:     delimiter stack, process_emphasis procedure, reference map, normalize_label
+depends:      emphasis, link-reference-definitions
+acceptance:   yes
+instructions: |
+  On ] run look-for-link-or-image per the Appendix: find the nearest [ or ![ opener, handle inactive
+  openers, then try an inline link (destination grammar including the angle form, balanced parentheses,
+  up to one line ending, and a title), a full reference, a collapsed reference, then a shortcut reference
+  through the reference map. Run process_emphasis with the opener as stack_bottom. After a successful
+  link (not image), deactivate earlier [ openers. Handle ![ openers with the same machinery, but leave
+  image rendering to the images story. Destinations and titles go through unescape, entity decoding and
+  URL percent-encoding of non-ASCII and unsafe characters. Backslash-escaped brackets and code spans,
+  autolinks and raw HTML bind more tightly than brackets.
+
+  Acceptance is bounded: inline links with supplied text and destination (checked as an a element count
+  and returned state), links in links not nested, and an unresolved shortcut reference staying literal.
+  The Links corpus section needs images. It is gated in the images story.
+
+## story images
+summary:      Render images with plain-text alt and verify links, images and emphasis against the corpus.
+type:         service
+kind:         capability
+phase:        2
+implements:   FEATURE-Images.md
+covers:       INL-006
+stack:        common.md, python.md
+provides:     image rendering
+consumes:     look_for_link_or_image procedure
+depends:      links
+acceptance:   yes
+instructions: |
+  Render img with src, alt and optional title. The alt is the plain-text content of the description, with
+  formatting and nested links reduced to their text content and HTML-escaped. All four link forms apply to
+  images.
+
+  Gate: --pattern '^Emphasis and strong emphasis$|^Links$|^Images$' with Suite: scoped. All three sections
+  are satisfiable at this point with the inline stories and the reference map. The Link reference
+  definitions section is gated in the cont-tabs-slice story.
+
+## story line-breaks-text
+summary:      Implement hard and soft line breaks and plain textual content.
+type:         service
+kind:         capability
+phase:        2
+implements:   FEATURE-Line-Breaks-Text.md
+covers:       INL-009
+stack:        common.md, python.md
+provides:     hard break and soft break inline nodes
+consumes:     inline scanner loop
+depends:      images
+acceptance:   yes
+instructions: |
+  A line ending preceded by two or more spaces or a backslash, not at the end of a block, is a hard break
+  rendered as <br /> followed by a line ending. Leading spaces on the next line are dropped. Any other line
+  ending is a soft break rendered as a line ending, with spaces dropped on both sides. Breaks are inert in
+  code spans and raw HTML. Plain text keeps internal spaces verbatim.
+
+  Gate: --pattern '^Soft line breaks$|^Textual content$' with Suite: scoped. The Hard line breaks section
+  uses ATX headings and is gated in the cont-tabs-slice story.
+
+## story thematic-breaks
+summary:      Parse thematic breaks.
+type:         service
+kind:         capability
+phase:        3
+implements:   FEATURE-Thematic-Breaks.md
+covers:       LEAF-001
+stack:        common.md, python.md
+provides:     thematic break block
+consumes:     block-type registry
+depends:      line-breaks-text
+acceptance:   yes
+instructions: |
+  Up to three spaces of indentation, then three or more matching -, _ or * characters with optional spaces
+  or tabs between and after them, and no other characters. A thematic break interrupts a paragraph and
+  takes precedence over a list item start. The setext-underline precedence is wired in the setext story.
+
+  Acceptance is bounded and uses state oracles on hr element counts for supplied marker lines. The corpus
+  section needs lists and setext, so it is gated in the lists story.
+
+## story atx-headings
+summary:      Parse ATX headings.
+type:         service
+kind:         capability
+phase:        3
+implements:   FEATURE-ATX-Headings.md
+covers:       LEAF-002
+stack:        common.md, python.md
+provides:     ATX heading block
+consumes:     block-type registry, inline parser hook
+depends:      thematic-breaks
+acceptance:   yes
+instructions: |
+  Opening run of 1 to 6 # followed by space, tab or end of line, with up to three spaces of indentation. Drop
+  an optional closing run of unescaped # preceded by whitespace, and strip the content before inline
+  parsing. A heading interrupts a paragraph and can be empty.
+
+  Gate: --pattern '^ATX headings$' with Suite: scoped. This is satisfiable because indented code is a
+  plain paragraph fallthrough for the single indented example only if the indented-code story has landed.
+  To avoid that coupling, the acceptance is bounded here (heading level counts for supplied levels and the
+  seven-hash case). The corpus section is gated in the lists story.
+
+## story indented-code
+summary:      Parse indented code blocks.
+type:         service
+kind:         capability
+phase:        3
+implements:   FEATURE-Indented-Code.md
+covers:       LEAF-004
+stack:        common.md, python.md
+provides:     indented code block
+consumes:     block-type registry
+depends:      atx-headings
+acceptance:   yes
+instructions: |
+  Four or more columns of indentation, column-aware with tab stops of 4, on a non-blank line that is not
+  a paragraph continuation. Chunks are separated by blank lines. Interior blank lines keep indentation
+  beyond four columns, and leading and trailing blank lines are dropped. Content is literal and escaped.
+  There is no info string.
+
+  Acceptance is bounded. The corpus section needs lists and is gated in the lists story.
+
+## story fenced-code
+summary:      Parse fenced code blocks with info strings.
+type:         service
+kind:         capability
+phase:        3
+implements:   FEATURE-Fenced-Code.md
+covers:       LEAF-005
+stack:        common.md, python.md
+provides:     fenced code block
+consumes:     block-type registry, backslash and entity helpers
+depends:      indented-code
+acceptance:   yes
+instructions: |
+  An opening fence is at least three backticks or tildes with up to three spaces of indentation. Backtick
+  info strings may not contain backticks. A closing fence uses the same character, is at least as long,
+  and has up to three spaces of indentation followed only by spaces or tabs. Remove up to N spaces of
+  indentation from content lines, where N is the opening fence indentation. An unclosed fence runs to the
+  end of the document or container. The first word of the info string, after unescape and entity decoding,
+  becomes class="language-WORD". A fence can interrupt a paragraph.
+
+  Acceptance is bounded. The corpus section needs code spans, quotes, lists and setext, and is gated in the
+  lists story.
+
+## story html-blocks
+summary:      Parse the seven kinds of HTML block.
+type:         service
+kind:         capability
+phase:        3
+implements:   FEATURE-HTML-Blocks.md
+covers:       LEAF-006
+stack:        common.md, python.md
+provides:     HTML block
+consumes:     block-type registry
+depends:      fenced-code
+acceptance:   yes
+instructions: |
+  Implement start and end conditions 1 to 7 exactly as given, including the case-insensitive type 6 tag
+  list, the complete-tag requirement for type 7, and the rule that type 7 cannot interrupt a paragraph.
+  Lines are emitted raw. Block types 1 to 5 end on the end-condition line, and types 6 and 7 end before a
+  blank line. Blocks end at the end of the container.
+
+  Acceptance is bounded. The corpus section needs quotes, lists and indented code, and is gated in the
+  cont-tabs-slice story.
+
+## story block-quotes
+summary:      Parse block quotes with laziness and consecutiveness rules.
+type:         service
+kind:         capability
+phase:        3
+implements:   FEATURE-Block-Quotes.md
+covers:       CONT-001
+stack:        common.md, python.md
+provides:     block quote container
+consumes:     block-type registry, lazy continuation check
+depends:      html-blocks
+acceptance:   yes
+instructions: |
+  A marker is > with up to three spaces of indentation and an optional following space (a tab counts as
+  columns). Implement the container continue rule, lazy paragraph continuation (only when the line would
+  continue a paragraph), and the blank-line separation rule. Nested quotes can omit the leading > on lazy
+  lines.
+
+  Acceptance is bounded: blockquote element counts and nesting depth for supplied inputs. The corpus
+  section needs lists and is gated in the lists story.
+
+## story setext-headings
+summary:      Parse setext headings, including multiline content and underline precedence.
+type:         service
+kind:         capability
+phase:        3
+implements:   FEATURE-Setext-Headings.md
+covers:       LEAF-003
+stack:        common.md, python.md
+provides:     setext heading block
+consumes:     paragraph block, thematic break block
+depends:      block-quotes
+acceptance:   yes
+instructions: |
+  An underline of = (level 1) or - (level 2) with up to three spaces of indentation and trailing whitespace
+  only, which follows a paragraph that is not itself in a lazy-continuation position, turns the whole
+  paragraph (multiple lines) into a heading. It takes precedence over a thematic break. Link definitions
+  that were already extracted from the paragraph's start do not become heading text.
+
+  Acceptance is bounded. The corpus section is gated in the lists story.
+
+## story list-items
+summary:      Parse list items: markers, indentation rules, empty items, start numbers and laziness.
+type:         service
+kind:         capability
+phase:        3
+implements:   FEATURE-List-Items.md
+covers:       CONT-002
+stack:        common.md, python.md
+provides:     list item container
+consumes:     block-type registry
+depends:      setext-headings
+acceptance:   yes
+instructions: |
+  Bullet markers are -, + and *. Ordered markers are 1 to 9 digits followed by . or ). Implement the
+  content-offset computation (W + N for 1 to 4 spaces, W + 1 when the content is 5 or more spaces
+  because it starts with an indented code block, and W + 1 for an item starting with a blank line), the
+  column-aware continuation, at-most-one leading blank line, lazy continuation, and the interruption
+  rules: an empty item or a non-1 ordered start cannot interrupt a paragraph, and the thematic break takes
+  precedence.
+
+  Acceptance is bounded. The List items corpus section needs list grouping and is gated in the lists
+  story.
+
+## story lists
+summary:      Group list items into lists and compute tight or loose rendering.
+type:         service
+kind:         capability
+phase:        3
+implements:   FEATURE-Lists.md
+covers:       CONT-003
+stack:        common.md, python.md
+provides:     list container, tight/loose computation
+consumes:     list item container
+depends:      list-items
+acceptance:   yes
+instructions: |
+  Group items of the same type: the same bullet character, or the same ordered delimiter. A start number
+  is taken from the first item and emitted as the start attribute only when it is not 1. A list is loose if
+  any two items are separated by a blank line, or if an item directly contains two block children with a
+  blank line between them. Blank lines inside fenced code, inside nested lists' own children, or inside
+  quotes do not count. In a tight list, paragraphs render without p tags. Output the exact structure
+  required by the spec examples.
+
+  Gate: --pattern '^Lists$|^List items$|^Block quotes$|^Thematic breaks$|^ATX headings$|^Setext
+  headings$|^Indented code blocks$|^Fenced code blocks$|^Precedence$' with Suite: scoped. All block
+  constructs and all inline constructs those sections use have been built by this point.
+
+## story cont-tabs-slice
+summary:      Make tab columns work for block structure and verify the remaining corpus sections.
+type:         service
+kind:         capability
+phase:        3
+implements:   FEATURE-Tabs.md
+covers:       CONT-004
+stack:        common.md, python.md
+provides:     tab-stop-aware column handling
+consumes:     block container rules
+depends:      lists
+acceptance:   yes
+instructions: |
+  Tabs are never expanded in content. In places where spaces define structure (indented code, block quote
+  and list continuation, and list marker content offsets) a tab advances to the next multiple of 4
+  columns, and a partially consumed tab leaves its remaining columns as spaces. Audit all the block
+  stories' column handling for this.
+
+  Gate: --pattern '^Tabs$|^Link reference definitions$|^Backslash escapes$|^Entity and numeric character
+  references$|^Raw HTML$|^HTML blocks$|^Paragraphs$|^Blank lines$|^Hard line breaks$' with Suite: scoped.
+  Together with the other stories' slices this covers every example section.
+
+## story verify-conformance
+summary:      Run the complete supplied CommonMark conformance suite unfiltered.
+type:         feature
+kind:         integration
+phase:        4
+implements:   FEATURE-Verification.md
+accepts:      st-001
+stack:        common.md, python.md
+consumes:     ./commonmark
+depends:      foundation, executable-interface, block-engine, autolinks, raw-html-inline, code-spans, backslash-escapes, entities, emphasis, link-reference-definitions, links, images, line-breaks-text, thematic-breaks, atx-headings, indented-code, fenced-code, html-blocks, block-quotes, setext-headings, list-items, lists, cont-tabs-slice
+acceptance:   yes
+instructions: |
+  Assembly story and the terminal story. Its one Programmatic Acceptance block declares Suite: full, runs
+  sh sources/full_test.sh from the build directory with subprocess (text=True, capture_output=True),
+  prints the captured stdout and stderr, and asserts only result.returncode == 0. Do not invoke
+  full_test.sh from any other story. Do not add file-presence or staged-asset checks. If the suite
+  fails, the repair belongs in the parser, never in the supplied scoring assets.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT DECISIONS.json ===
+[
+  {
+    "id": "Q-001",
+    "type": "choice",
+    "severity": "low",
+    "blueprint": "ARCHITECTURE.md",
+    "story": "foundation",
+    "title": "Implementation language and package name",
+    "description": "The sources do not name a language. The harness only needs an executable ./commonmark and already requires python3. I considered Python 3 with a shebang script versus a compiled language. I picked Python 3, consistent with TECHNOLOGY_STACK.md, with the package named mdparser to avoid any resemblance to a public Markdown library.",
+    "options": [
+      { "value": "python-mdparser", "label": "Python 3 script plus mdparser package" },
+      { "value": "other", "label": "Another language" }
+    ],
+    "system_choice": "python-mdparser"
+  },
+  {
+    "id": "Q-002",
+    "type": "choice",
+    "severity": "low",
+    "blueprint": "FEATURE-Line-Breaks-Text.md",
+    "story": "line-breaks-text",
+    "title": "Soft break rendering",
+    "description": "The spec allows a soft break to render as a line ending or a space, and the normalizer collapses both. I picked a line ending, which matches the spec's examples.",
+    "options": [
+      { "value": "newline", "label": "Line ending" },
+      { "value": "space", "label": "Space" }
+    ],
+    "system_choice": "newline"
+  },
+  {
+    "id": "Q-003",
+    "type": "text",
+    "severity": "material",
+    "blueprint": "FEATURE-Block-Engine.md",
+    "story": "block-engine",
+    "title": "Corpus section ownership differs from ANALYSIS.md",
+    "description": "Nearly every spec section has examples that use constructs from other sections, and some pairs are circular (links and definitions, lists and quotes). A section cannot be gated until all constructs its examples use exist. I kept the analyzed story boundaries but reassigned where each section's corpus slice runs. Sections whose examples are self-contained are gated at their own story: Autolinks, Code spans, Inlines, Soft line breaks, Textual content. Cross-coupled sections are gated at the first story after all their constructs exist: Emphasis, Links and Images at images; the block sections at lists; Tabs, Link reference definitions, Backslash escapes, Entities, Raw HTML, HTML blocks, Paragraphs, Blank lines and Hard line breaks at cont-tabs-slice. Stories before their section's gate carry bounded state-oracle checks. Every section belongs to exactly one slice, and the terminal story runs the whole suite.",
+    "options": [],
+    "system_choice": "Per-story slices as described, with the full suite only in verify-conformance."
+  },
+  {
+    "id": "Q-004",
+    "type": "text",
+    "severity": "low",
+    "blueprint": "FEATURE-Executable.md",
+    "story": "executable-interface",
+    "title": "Exit status and error channel",
+    "description": "The sources do not state a response contract for odd input. I picked exit status 0 for all input, with invalid UTF-8 decoded using U+FFFD replacement, and stdout carrying only HTML, with diagnostics on stderr. This follows the surfaced criteria AC-001 to AC-003.",
+    "options": [],
+    "system_choice": "Exit 0 always; U+FFFD replacement; diagnostics to stderr only."
+  }
+]
+=== END ARTIFACT ===

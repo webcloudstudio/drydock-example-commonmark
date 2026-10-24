@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_executable.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_executable.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_executable.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Executable block tests: the `commonmark` entry point, input decoding, and line intake.
+
+Each test acts on the system and reads the state back: an exit status, stdout bytes, the file
+mode and shebang, or a returned value. No test matches on stderr text.
+&quot;&quot;&quot;
+
+import io
+import os
+import subprocess
+import types
+from pathlib import Path
+
+import pytest
+
+from mdparser import cli
+
+
+def run_executable(project_root: Path, data: bytes) -&gt; subprocess.CompletedProcess[bytes]:
+    return subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=data,
+        capture_output=True,
+        cwd=project_root,
+        check=False,
+    )
+
+
+# --- Declared acceptance checks (transcribed from FEATURE-Executable.md) ---
+
+
+def test_executable_empty_input(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC-001: empty stdin gives empty stdout and exit status 0.&quot;&quot;&quot;
+    result = subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=&quot;&quot;,
+        capture_output=True,
+        text=True,
+        cwd=project_root,
+        check=False,
+    )
+    assert result.returncode == 0
+    assert len(result.stdout) == 0
+
+
+def test_executable_invalid_utf8(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC-002: invalid UTF-8 bytes are decoded with replacement and the program exits 0.&quot;&quot;&quot;
+    payload = b&quot;\xff\xfe text \xc3\x28 end\n&quot;
+    result = run_executable(project_root, payload)
+    assert result.returncode == 0
+    result.stdout.decode(&quot;utf-8&quot;)
+
+
+def test_executable_stdout_is_html_only(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;AC-003: a normal run exits 0 and its stdout is valid UTF-8 text.&quot;&quot;&quot;
+    source = &quot;hello world\n\nsecond paragraph\n&quot;
+    result = run_executable(project_root, source.encode(&quot;utf-8&quot;))
+    assert result.returncode == 0
+    result.stdout.decode(&quot;utf-8&quot;)
+
+
+def test_executable_line_endings(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;LF, CR and CRLF line endings yield identical output for the same document.&quot;&quot;&quot;
+    lines = &quot;one&quot;, &quot;two&quot;, &quot;&quot;, &quot;three&quot;
+    variants = [&quot;\n&quot;.join(lines) + &quot;\n&quot;, &quot;\r\n&quot;.join(lines) + &quot;\r\n&quot;, &quot;\r&quot;.join(lines) + &quot;\r&quot;]
+    outputs = []
+    for source in variants:
+        result = run_executable(project_root, source.encode(&quot;utf-8&quot;))
+        assert result.returncode == 0
+        outputs.append(result.stdout)
+    assert outputs[0] == outputs[1] == outputs[2]
+
+
+def test_executable_nul_replacement(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;U+0000 on input is treated exactly like U+FFFD.&quot;&quot;&quot;
+    with_nul = &quot;a\x00b\n&quot;
+    with_replacement = &quot;a�b\n&quot;
+    first = run_executable(project_root, with_nul.encode(&quot;utf-8&quot;))
+    second = run_executable(project_root, with_replacement.encode(&quot;utf-8&quot;))
+    assert first.returncode == 0
+    assert second.returncode == 0
+    assert first.stdout == second.stdout
+
+
+# --- Executable file ---
+
+
+def test_executable_file_has_execute_bit(project_root: Path) -&gt; None:
+    assert os.access(project_root / &quot;commonmark&quot;, os.X_OK)
+
+
+def test_executable_file_has_python3_shebang(project_root: Path) -&gt; None:
+    first_line = (project_root / &quot;commonmark&quot;).read_bytes().splitlines()[0]
+    assert first_line == b&quot;#!/usr/bin/env python3&quot;
+
+
+def test_executable_runs_from_another_working_directory(project_root: Path, tmp_path: Path) -&gt; None:
+    result = subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=b&quot;text\n&quot;,
+        capture_output=True,
+        cwd=tmp_path,
+        check=False,
+    )
+    assert result.returncode == 0
+    assert result.stdout == b&quot;&lt;p&gt;text&lt;/p&gt;\n&quot;
+
+
+# --- Decoding ---
+
+
+def test_decode_source_keeps_valid_utf8() -&gt; None:
+    assert cli.decode_source(&quot;café ✓&quot;.encode(&quot;utf-8&quot;)) == &quot;café ✓&quot;
+
+
+def test_decode_source_replaces_invalid_bytes() -&gt; None:
+    assert cli.decode_source(b&quot;\xff&quot;) == &quot;�&quot;
+
+
+def test_decode_source_replaces_truncated_sequence_without_eating_next_byte() -&gt; None:
+    assert cli.decode_source(b&quot;\xc3\x28&quot;) == &quot;�(&quot;
+
+
+def test_decode_source_empty_bytes_gives_empty_text() -&gt; None:
+    assert cli.decode_source(b&quot;&quot;) == &quot;&quot;
+
+
+# --- Line intake ---
+
+
+def test_split_lines_empty_text_is_one_empty_line() -&gt; None:
+    assert cli.split_lines(&quot;&quot;) == [&quot;&quot;]
+
+
+def test_split_lines_lf() -&gt; None:
+    assert cli.split_lines(&quot;a\nb&quot;) == [&quot;a&quot;, &quot;b&quot;]
+
+
+def test_split_lines_crlf_is_one_break() -&gt; None:
+    assert cli.split_lines(&quot;a\r\nb&quot;) == [&quot;a&quot;, &quot;b&quot;]
+
+
+def test_split_lines_cr_alone_is_a_break() -&gt; None:
+    assert cli.split_lines(&quot;a\rb&quot;) == [&quot;a&quot;, &quot;b&quot;]
+
+
+def test_split_lines_mixed_endings() -&gt; None:
+    assert cli.split_lines(&quot;a\r\nb\rc\nd&quot;) == [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]
+
+
+def test_split_lines_trailing_newline_gives_trailing_empty_line() -&gt; None:
+    assert cli.split_lines(&quot;a\n&quot;) == [&quot;a&quot;, &quot;&quot;]
+
+
+def test_split_lines_blank_lines_are_kept() -&gt; None:
+    assert cli.split_lines(&quot;a\n\n\nb&quot;) == [&quot;a&quot;, &quot;&quot;, &quot;&quot;, &quot;b&quot;]
+
+
+def test_split_lines_replaces_nul_with_replacement_character() -&gt; None:
+    assert cli.split_lines(&quot;a\x00b&quot;) == [&quot;a�b&quot;]
+
+
+def test_split_lines_nul_is_not_a_line_break() -&gt; None:
+    assert cli.split_lines(&quot;\x00&quot;) == [&quot;�&quot;]
+
+
+def test_split_lines_is_idempotent_on_its_joined_output() -&gt; None:
+    once = cli.split_lines(&quot;a\r\nb\rc&quot;)
+    twice = cli.split_lines(&quot;\n&quot;.join(once))
+    assert once == twice
+
+
+# --- Rendering placeholder ---
+
+
+def test_render_lines_renders_each_paragraph() -&gt; None:
+    assert cli.render_lines([&quot;alpha&quot;, &quot;&quot;, &quot;beta&quot;]) == &quot;&lt;p&gt;alpha&lt;/p&gt;\n&lt;p&gt;beta&lt;/p&gt;\n&quot;
+
+
+def test_render_lines_empty_list_gives_empty_html() -&gt; None:
+    assert cli.render_lines([]) == &quot;&quot;
+
+
+# --- In-process main ---
+
+
+def invoke_main(monkeypatch: pytest.MonkeyPatch, data: bytes) -&gt; tuple[int, bytes]:
+    stdin = types.SimpleNamespace(buffer=io.BytesIO(data))
+    stdout_buffer = io.BytesIO()
+    stdout = types.SimpleNamespace(buffer=stdout_buffer)
+    monkeypatch.setattr(cli.sys, &quot;stdin&quot;, stdin)
+    monkeypatch.setattr(cli.sys, &quot;stdout&quot;, stdout)
+    status = cli.main()
+    return status, stdout_buffer.getvalue()
+
+
+def test_main_returns_zero_and_writes_empty_html_for_empty_input(monkeypatch: pytest.MonkeyPatch) -&gt; None:
+    status, out = invoke_main(monkeypatch, b&quot;&quot;)
+    assert status == 0
+    assert out == b&quot;&quot;
+
+
+def test_main_returns_zero_for_invalid_utf8(monkeypatch: pytest.MonkeyPatch) -&gt; None:
+    status, out = invoke_main(monkeypatch, b&quot;\xff\xfe\x00&quot;)
+    assert status == 0
+    assert out == &quot;&lt;p&gt;���&lt;/p&gt;\n&quot;.encode(&quot;utf-8&quot;)
+
+
+def test_main_returns_zero_when_rendering_fails(monkeypatch: pytest.MonkeyPatch) -&gt; None:
+    def broken_render(lines: list[str]) -&gt; str:
+        raise RuntimeError(&quot;boom&quot;)
+
+    monkeypatch.setattr(cli, &quot;render_lines&quot;, broken_render)
+    status, out = invoke_main(monkeypatch, b&quot;text\n&quot;)
+    assert status == 0
+    assert out == b&quot;&quot;
+
+
+def test_main_writes_rendered_html_as_utf8(monkeypatch: pytest.MonkeyPatch) -&gt; None:
+    monkeypatch.setattr(cli, &quot;render_lines&quot;, lambda lines: &quot;&lt;p&gt;&quot; + &quot;\n&quot;.join(lines) + &quot;&lt;/p&gt;\n&quot;)
+    status, out = invoke_main(monkeypatch, &quot;é\n&quot;.encode(&quot;utf-8&quot;))
+    assert status == 0
+    assert out.decode(&quot;utf-8&quot;) == &quot;&lt;p&gt;é\n&lt;/p&gt;\n&quot;
+</pre></article>
+</main>
+</body>
+</html>

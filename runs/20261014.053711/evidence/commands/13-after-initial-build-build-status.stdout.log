@@ -1,0 +1,33 @@
+Drydock 0.2.0  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Next: (no actionable steps — all done or blocked)
+
+Blueprint: commonmark
+Target: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/workspace/targets/commonmark
+Rows: <state> <type>  <Name>  [<id>]   — pass [<id>] to --step
+Block: Build Block 1 · Foundational  [block-1]   — [built] story Stand up the Python project tree, the mdparser package skeleton, and the pytest runner.  [foundation] — complete
+Block: Build Block 2 · Service  [block-2]   — [built] story Provide the executable ./commonmark: UTF-8 stdin to HTML stdout, line intake, and README.  [executable-interface] — complete
+Block: Build Block 3 · Service  [block-3]   — [built] story Implement the Appendix phase 1 block engine and paragraph rendering with HTML escaping.  [block-engine] — complete
+Block: Build Block 4 · Service  [block-4]   — [built] story Parse URI and email autolinks.  [autolinks] — complete
+Block: Build Block 5 · Service  [block-5]   — [built] story Parse raw inline HTML tags, comments, processing instructions, declarations and CDATA.  [raw-html-inline] — complete
+Block: Build Block 6 · Service  [block-6]   — [built] story Parse code spans and establish the inline precedence order.  [code-spans] — complete
+Block: Build Block 7 · Service  [block-7]   — [built] story Implement backslash escapes in text, destinations, titles and info strings.  [backslash-escapes] — complete
+Block: Build Block 8 · Service  [block-8]   — [built] story Decode HTML5 named, decimal and hexadecimal character references.  [entities] — complete
+Block: Build Block 9 · Service  [block-9]   — [built] story Implement the delimiter stack, flanking rules, and the process-emphasis algorithm.  [emphasis] — complete
+Block: Build Block 10 · Service  [block-10]   — [built] story Extract link reference definitions when a paragraph closes and provide label normalization.  [link-reference-definitions] — complete
+Block: Build Block 11 · Service  [block-11]   — [built] story Implement link and image bracket handling: inline, full, collapsed and shortcut forms.  [links] — complete
+Block: Build Block 12 · Service  [block-12]   — [built] story Render images with plain-text alt and verify links, images and emphasis against the corpus.  [images] — complete
+Block: Build Block 13 · Service  [block-13]   — [built] story Implement hard and soft line breaks and plain textual content.  [line-breaks-text] — complete
+Block: Build Block 14 · Service  [block-14]   — [built] story Parse thematic breaks.  [thematic-breaks] — complete
+Block: Build Block 15 · Service  [block-15]   — [built] story Parse ATX headings.  [atx-headings] — complete
+Block: Build Block 16 · Service  [block-16]   — [built] story Parse indented code blocks.  [indented-code] — complete
+Block: Build Block 17 · Service  [block-17]   — [built] story Parse fenced code blocks with info strings.  [fenced-code] — complete
+Block: Build Block 18 · Service  [block-18]   — [built] story Parse the seven kinds of HTML block.  [html-blocks] — complete
+Block: Build Block 19 · Service  [block-19]   — [built] story Parse block quotes with laziness and consecutiveness rules.  [block-quotes] — complete
+Block: Build Block 20 · Service  [block-20]   — [built] story Parse setext headings, including multiline content and underline precedence.  [setext-headings] — complete
+Block: Build Block 21 · Service  [block-21]   — [built] story Parse list items: markers, indentation rules, empty items, start numbers and laziness.  [list-items] — complete
+Block: Build Block 22 · Service  [block-22]   — [built] story Group list items into lists and compute tight or loose rendering.  [lists] — complete
+Block: Build Block 23 · Service  [block-23]   — [built] story Make tab columns work for block structure and verify the remaining corpus sections.  [cont-tabs-slice] — complete
+Block: Build Block 24 · Feature  [block-24]   — [built] story Run the complete supplied CommonMark conformance suite unfiltered.  [verify-conformance] — complete
+
+Steps: 24 total — 0 done, 24 built (await verify), 0 in review, 0 pending, 0 blocked by questions, 0 failed (0% complete)
+Buildable now: (none)

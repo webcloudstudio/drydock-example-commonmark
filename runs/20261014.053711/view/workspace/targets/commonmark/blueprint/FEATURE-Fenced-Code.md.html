@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Fenced-Code.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Fenced-Code.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Fenced-Code.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Fenced Code</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>Parse fenced code blocks delimited by backtick or tilde fences with info strings and indentation stripping.</td></tr><tr><td>Depends On</td><td>FEATURE-Indented-Code.md</td></tr><tr><td>Provides</td><td>fenced code block</td></tr><tr><td>Consumes</td><td>block-type registry, shared unescape and entity helpers</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement the Fenced code blocks section of the spec.</p>
+<h2>Rules</h2>
+<ul><li>An opening fence is at least three consecutive backticks or tildes, with up to three spaces of indentation. Backtick and tilde fences cannot be mixed. The text after the fence is the info string, trimmed. For a backtick fence the info string must not contain a backtick; otherwise the line is not a fence (it is parsed as a paragraph with a code span).</li><li>Content is all following lines until a closing fence of the same character, at least as long as the opening one, with up to three spaces of indentation and followed only by spaces or tabs. Closing fences have no info string.</li><li>If the opening fence is indented by N spaces, up to N spaces of indentation are removed from each content line.</li><li>An unclosed fence runs to the end of the document or the enclosing container.</li><li>A fenced code block can interrupt a paragraph and needs no blank lines around it.</li><li>The first word of the info string, after backslash unescape and entity decoding, becomes <code>class=&quot;language-WORD&quot;</code> on the code element. Content is HTML-escaped and never parsed.</li></ul>
+<h2>Reads</h2>
+<ul><li>Lines handed to the block engine.</li></ul>
+<h2>Writes</h2>
+<ul><li>Code block nodes in the block tree.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>The corpus section examples use quotes, lists and setext headings, so it is gated in the lists story. The checks here are bounded.</p>
+<p>=== AC fenced-backtick-and-tilde ===<br>Intent: Backtick and tilde fences each render one pre element containing the supplied body.</p>
+<p>import subprocess</p>
+<p>body = &quot;some body text&quot; for fence in (&quot;<code>`</code>&quot;, &quot;~~~&quot;): source = fence + &quot;\n&quot; + body + &quot;\n&quot; + fence + &quot;\n&quot; result = subprocess.run([&quot;./commonmark&quot;], input=source, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1 assert body in result.stdout === END AC fenced-backtick-and-tilde ===</p>
+<p>=== AC fenced-info-string-language-class ===<br>Intent: The first word of the info string becomes the language class.</p>
+<p>import subprocess</p>
+<p>language = &quot;ruby&quot; source = &quot;<code>&quot; + language + &quot; extra words\ncode\n</code>\n&quot; result = subprocess.run([&quot;./commonmark&quot;], input=source, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert (&#x27;class=&quot;language-&#x27; + language + &#x27;&quot;&#x27;) in result.stdout === END AC fenced-info-string-language-class ===</p>
+<p>=== AC fenced-closing-fence-rules ===<br>Intent: A fence of the other character, or a shorter fence, does not close the block.</p>
+<p>import subprocess</p>
+<p>other = &quot;~~~&quot; shorter = &quot;<code>&quot; source = &quot;</code>`\naaa\n&quot; + other + &quot;\n&quot; + shorter + &quot;\n&quot; result = subprocess.run([&quot;./commonmark&quot;], input=source, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1 assert other in result.stdout assert shorter in result.stdout === END AC fenced-closing-fence-rules ===</p>
+<p>=== AC fenced-unclosed-runs-to-end ===<br>Intent: An unclosed fence consumes the rest of the document as code.</p>
+<p>import subprocess</p>
+<p>trailing = &quot;still code&quot; result = subprocess.run([&quot;./commonmark&quot;], input=&quot;<code>`</code>\nfirst\n\n&quot; + trailing + &quot;\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 0 assert trailing in result.stdout === END AC fenced-unclosed-runs-to-end ===</p>
+<p>=== AC fenced-interrupts-paragraph ===<br>Intent: A fence interrupts a paragraph and text after it starts a new paragraph.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;foo\n<code>\nbar\n</code>\nbaz\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 2 === END AC fenced-interrupts-paragraph ===</p>
+<p>=== AC fenced-two-backticks-not-a-fence ===<br>Intent: Two backticks do not open a fence; they form a code span instead.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;<code>\nfoo\n</code>\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 0 assert result.stdout.count(&quot;&lt;code&gt;&quot;) == 1 === END AC fenced-two-backticks-not-a-fence ===</p>
+<p>=== AC fenced-indentation-stripped ===<br>Intent: Content indentation up to the fence indentation is removed, and unindented lines are kept.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot; <code>\n aaa\naaa\n</code>\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1 assert result.stdout.count(&quot;aaa&quot;) == 2 assert result.stdout.count(&quot; aaa&quot;) == 0 === END AC fenced-indentation-stripped ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Never parse fenced content as Markdown.</li><li>Never let a closing fence carry an info string.</li><li>Do not skip, filter or reinterpret corpus examples.</li></ul></article>
+</main>
+</body>
+</html>

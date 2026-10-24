@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-23.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-23.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-23.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 23 · Service (block-23)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-14</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 4956</li><li>execution id: 20261014.083418.725Z-16326237</li></ul>
+<h2>Stories built</h2>
+<ul><li>Make tab columns work for block structure and verify the remaining corpus sections. (cont-tabs-slice) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1072)</li><li>implements: FEATURE-Tabs.md (SP 1723)</li><li>context: ARCHITECTURE_compact.md (SP 335)</li><li>stack: common_compact.md (SP 1199)</li><li>stack: python_compact.md (SP 390)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>tests/test_tabs.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>GREEN (prepassed): tabs-corpus-and-remaining-sections (FEATURE-Tabs.md)</li></ul>
+<p>intent: The Tabs, Link reference definitions, Backslash escapes, Entity and numeric character references, Raw HTML, HTML blocks, Paragraphs, Blank lines and Hard line breaks conformance sections (roughly 160 cases) pass in full. return code: 0 stdout: 159 passed, 0 failed, 0 errored, 496 skipped</p>
+<ul><li>GREEN (prepassed): tabs-indented-code-and-internal-tabs (FEATURE-Tabs.md)</li></ul>
+<p>intent: A leading tab opens indented code, and internal tabs inside it are kept as tabs. return code: 0 stdout: &lt;pre&gt;&lt;code&gt;a	a &lt;/code&gt;&lt;/pre&gt;</p>
+<ul><li>GREEN (prepassed): tabs-list-continuation (FEATURE-Tabs.md)</li></ul>
+<p>intent: A tab-indented continuation paragraph belongs to the list item. return code: 0 stdout: &lt;ul&gt; &lt;li&gt; &lt;p&gt;foo&lt;/p&gt; &lt;p&gt;bar&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt;</p>
+<ul><li>GREEN (prepassed): tabs-after-markers (FEATURE-Tabs.md)</li></ul>
+<p>intent: A tab after a quote marker or list marker is consumed as columns, leaving code inside the container. return code: 0 stdout: &lt;blockquote&gt; &lt;pre&gt;&lt;code&gt;  foo &lt;/code&gt;&lt;/pre&gt; &lt;/blockquote&gt;</p>
+<p>&lt;ul&gt; &lt;li&gt;&lt;pre&gt;&lt;code&gt;  foo &lt;/code&gt;&lt;/pre&gt; &lt;/li&gt; &lt;/ul&gt;</p>
+<ul><li>GREEN (prepassed): tabs-as-separators (FEATURE-Tabs.md)</li></ul>
+<p>intent: Tabs between a heading marker and its text, and between thematic break characters, act as spaces. return code: 0 stdout: &lt;h1&gt;Foo&lt;/h1&gt;</p>
+<p>&lt;hr /&gt;</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: tabs-corpus-and-remaining-sections (FEATURE-Tabs.md)</li></ul>
+<p>intent: The Tabs, Link reference definitions, Backslash escapes, Entity and numeric character references, Raw HTML, HTML blocks, Paragraphs, Blank lines and Hard line breaks conformance sections (roughly 160 cases) pass in full. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: 159 passed, 0 failed, 0 errored, 496 skipped</p>
+<ul><li>PASS: tabs-indented-code-and-internal-tabs (FEATURE-Tabs.md)</li></ul>
+<p>intent: A leading tab opens indented code, and internal tabs inside it are kept as tabs. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;pre&gt;&lt;code&gt;a	a &lt;/code&gt;&lt;/pre&gt;</p>
+<ul><li>PASS: tabs-list-continuation (FEATURE-Tabs.md)</li></ul>
+<p>intent: A tab-indented continuation paragraph belongs to the list item. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;ul&gt; &lt;li&gt; &lt;p&gt;foo&lt;/p&gt; &lt;p&gt;bar&lt;/p&gt; &lt;/li&gt; &lt;/ul&gt;</p>
+<ul><li>PASS: tabs-after-markers (FEATURE-Tabs.md)</li></ul>
+<p>intent: A tab after a quote marker or list marker is consumed as columns, leaving code inside the container. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;blockquote&gt; &lt;pre&gt;&lt;code&gt;  foo &lt;/code&gt;&lt;/pre&gt; &lt;/blockquote&gt;</p>
+<p>&lt;ul&gt; &lt;li&gt;&lt;pre&gt;&lt;code&gt;  foo &lt;/code&gt;&lt;/pre&gt; &lt;/li&gt; &lt;/ul&gt;</p>
+<ul><li>PASS: tabs-as-separators (FEATURE-Tabs.md)</li></ul>
+<p>intent: Tabs between a heading marker and its text, and between thematic break characters, act as spaces. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;h1&gt;Foo&lt;/h1&gt;</p>
+<p>&lt;hr /&gt;</p>
+<h2>Build summary</h2>
+<p>The column helpers already exist. Let me run the scoped gate to see where things stand before changing anything.The scoped gate already passes (159 passed, 0 failed, 0 errored). Next I&#x27;ll check the four declared acceptance assertions and the existing project tests.All four declared assertions pass, and the full project suite is green (1142 passed, 1 skipped). Now I&#x27;ll check whether any existing test covers tab columns, since the spec asks for tests beside the code.Existing tests cover tabs only incidentally, and there is no dedicated tab test file. I&#x27;ll check the outputs for a set of spec tab cases, then write <code>tests/test_tabs.py</code> with exact-output assertions.Every probed output matches the spec examples. I&#x27;ll write <code>tests/test_tabs.py</code>: exact-output tests through the executable, plus direct tests of the column helpers and the partial-tab cursor state.All 31 new tests pass. I&#x27;ll confirm the only file change is the new test file and that no staged assets were touched.RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>tests/test_tabs.py</li></ul>
+<p>SUMMARY: The tab column handling was already in place from earlier blocks: <code>next_column</code>, <code>indent_columns</code>, the <code>Cursor</code> split-tab state (<code>in_tab</code> and <code>rest</code>), and the block rules that use them. I verified it rather than changing it, and I added the tab test file that was missing.</p>
+<p>Declared gate (<code>Suite: scoped</code>, the nine-section <code>--pattern</code>): <strong>159 passed, 0 failed, 0 errored, 496 skipped</strong>. Exit status 0.</p>
+<p>Declared acceptance assertions, all passing:</p>
+<ul><li>tabs-indented-code-and-internal-tabs: pass</li><li>tabs-list-continuation: pass</li><li>tabs-after-markers: pass</li><li>tabs-as-separators: pass</li></ul>
+<p>Project tests:</p>
+<ul><li>New <code>tests/test_tabs.py</code>: 31 tests, all passing. They cover <code>next_column</code>, <code>indent_columns</code>, partial-tab <code>Cursor</code> state, and exact stdout for indented code, list continuation, quote and bullet markers, and tab separators. Expected outputs were checked against the spec examples.</li><li>Full <code>pytest -q</code>: 1142 passed, 1 skipped (the skip is pre-existing in <code>test_foundation.py</code>).</li></ul>
+<p>I did not run <code>sources/full_test.sh</code>. The block&#x27;s declared invocation is the scoped gate, and the staged suite&#x27;s unscoped run belongs to a later block.</p>
+<p>Choices I made:</p>
+<ul><li>Tests check exact bytes of the whole output, not substrings.</li><li>Helper tests read back returned columns and <code>rest</code> text directly.</li></ul>
+<p>No staged assets, protected paths, or Git history were touched. <code>tests/test_tabs.py</code> is untracked and not committed.</p></article>
+</main>
+</body>
+</html>

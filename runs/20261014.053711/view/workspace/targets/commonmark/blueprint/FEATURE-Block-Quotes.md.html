@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Block-Quotes.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Block-Quotes.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Block-Quotes.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Block Quotes</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>Parse block quotes with marker handling, lazy continuation and the blank-line consecutiveness rule.</td></tr><tr><td>Depends On</td><td>FEATURE-HTML-Blocks.md</td></tr><tr><td>Provides</td><td>block quote container</td></tr><tr><td>Consumes</td><td>block-type registry, lazy continuation check</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement the Block quotes section of the spec as a registered container block.</p>
+<h2>Rules</h2>
+<ul><li>A block quote marker is <code>&gt;</code> with up to three spaces of indentation, optionally followed by one space of indentation. A following tab is treated column-aware, so a partly consumed tab leaves its remaining columns as content indentation.</li><li>Continue rule: a line continues the quote if it has a marker. A line without a marker is a lazy continuation only if it would be paragraph continuation text of the deepest open paragraph. Headings, fences, thematic breaks, list items and indented code do not continue lazily.</li><li>A blank line (or a line with only a marker) behaves as in the spec: a fully blank line ends the quote, so two quotes separated by a blank line stay separate.</li><li>Block quotes can interrupt paragraphs and nest. Any number of leading <code>&gt;</code> may be omitted on a lazy line of a nested quote.</li><li>A quote can be empty. It renders as <code>&lt;blockquote&gt;</code> and <code>&lt;/blockquote&gt;</code> with contents on separate lines.</li></ul>
+<h2>Reads</h2>
+<ul><li>Lines handed to the block engine.</li></ul>
+<h2>Writes</h2>
+<ul><li>Block quote nodes in the block tree.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>The corpus section has examples that use lists, so it is gated in the lists story. The checks here are bounded.</p>
+<p>=== AC quote-basic-content ===<br>Intent: A quote with a heading and paragraph lines renders one blockquote containing one h1 and one paragraph.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;&gt; # Foo\n&gt; bar\n&gt; baz\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;h1&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1 === END AC quote-basic-content ===</p>
+<p>=== AC quote-marker-space-optional ===<br>Intent: The space after the marker is optional, and up to three spaces of indentation are allowed.</p>
+<p>import subprocess</p>
+<p>for source in (&quot;&gt;# Foo\n&gt;bar\n&quot;, &quot;   &gt; # Foo\n   &gt; bar\n&quot;): result = subprocess.run([&quot;./commonmark&quot;], input=source, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;h1&gt;&quot;) == 1 === END AC quote-marker-space-optional ===</p>
+<p>=== AC quote-lazy-continuation ===<br>Intent: An unmarked paragraph continuation line stays in the quote&#x27;s paragraph.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;&gt; bar\nbaz\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1 === END AC quote-lazy-continuation ===</p>
+<p>=== AC quote-nested-lazy ===<br>Intent: Omitted markers on a nested quote&#x27;s continuation line still keep three nesting levels and one paragraph.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;&gt; &gt; &gt; foo\nbar\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 3 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1 === END AC quote-nested-lazy ===</p>
+<p>=== AC quote-blank-line-separates ===<br>Intent: A blank line separates two quotes, and adjacent marked lines form one quote.</p>
+<p>import subprocess</p>
+<p>separated = subprocess.run([&quot;./commonmark&quot;], input=&quot;&gt; foo\n\n&gt; bar\n&quot;, capture_output=True, text=True) joined = subprocess.run([&quot;./commonmark&quot;], input=&quot;&gt; foo\n&gt; bar\n&quot;, capture_output=True, text=True) print(separated.stdout) print(joined.stdout) assert separated.returncode == 0 assert joined.returncode == 0 assert separated.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 2 assert joined.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 1 === END AC quote-blank-line-separates ===</p>
+<p>=== AC quote-interrupts-paragraph ===<br>Intent: A quote interrupts a paragraph, leaving one paragraph before it and one inside it.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;foo\n&gt; bar\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 2 === END AC quote-interrupts-paragraph ===</p>
+<p>=== AC quote-four-spaces-is-code ===<br>Intent: Four spaces before the marker make an indented code block, not a quote.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;    &gt; foo\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 0 assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 1 === END AC quote-four-spaces-is-code ===</p>
+<p>=== AC quote-no-lazy-code ===<br>Intent: Laziness does not apply to indented code, so the unmarked indented line becomes its own code block.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;&gt;     foo\n    bar\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;pre&gt;&quot;) == 2 === END AC quote-no-lazy-code ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Laziness must apply only to paragraph continuation text.</li><li>Two quotes must never merge across a blank line.</li><li>Do not skip, filter or reinterpret corpus examples.</li></ul></article>
+</main>
+</body>
+</html>

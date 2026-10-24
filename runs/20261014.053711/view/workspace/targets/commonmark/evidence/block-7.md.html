@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-7.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-7.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-7.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 7 · Service (block-7)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-14</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 4425</li><li>execution id: 20261014.061208.498Z-b93a5c10</li></ul>
+<h2>Stories built</h2>
+<ul><li>Implement backslash escapes in text, destinations, titles and info strings. (backslash-escapes) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1072)</li><li>implements: FEATURE-Backslash-Escapes.md (SP 1218)</li><li>context: ARCHITECTURE_compact.md (SP 335)</li><li>stack: common_compact.md (SP 1199)</li><li>stack: python_compact.md (SP 390)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>mdparser/entities.py</li><li>mdparser/inlines.py</li><li>tests/test_backslash_escapes.py</li><li>tests/test_foundation.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>GREEN (prepassed): escapes-punctuation-inert (FEATURE-Backslash-Escapes.md)</li></ul>
+<p>intent: An escaped asterisk prevents emphasis. return code: 0 stdout: &lt;p&gt;<em>not emphasized</em>&lt;/p&gt;</p>
+<ul><li>GREEN (prepassed): escapes-non-punctuation-literal (FEATURE-Backslash-Escapes.md)</li></ul>
+<p>intent: A backslash before a non-punctuation character is kept as a literal backslash. return code: 0 stdout: &lt;p&gt;\A\a\3&lt;/p&gt;</p>
+<ul><li>GREEN (prepassed): escapes-block-markers (FEATURE-Backslash-Escapes.md)</li></ul>
+<p>intent: An escaped heading marker does not start a heading. return code: 0 stdout: &lt;p&gt;# word&lt;/p&gt;</p>
+<ul><li>GREEN (prepassed): escapes-inert-in-code-span (FEATURE-Backslash-Escapes.md)</li></ul>
+<p>intent: A backslash in a code span is not an escape. return code: 0 stdout: &lt;p&gt;&lt;code&gt;\*&lt;/code&gt;&lt;/p&gt;</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: escapes-punctuation-inert (FEATURE-Backslash-Escapes.md)</li></ul>
+<p>intent: An escaped asterisk prevents emphasis. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;<em>not emphasized</em>&lt;/p&gt;</p>
+<ul><li>PASS: escapes-non-punctuation-literal (FEATURE-Backslash-Escapes.md)</li></ul>
+<p>intent: A backslash before a non-punctuation character is kept as a literal backslash. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;\A\a\3&lt;/p&gt;</p>
+<ul><li>PASS: escapes-block-markers (FEATURE-Backslash-Escapes.md)</li></ul>
+<p>intent: An escaped heading marker does not start a heading. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;# word&lt;/p&gt;</p>
+<ul><li>PASS: escapes-inert-in-code-span (FEATURE-Backslash-Escapes.md)</li></ul>
+<p>intent: A backslash in a code span is not an escape. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;&lt;code&gt;\*&lt;/code&gt;&lt;/p&gt;</p>
+<h2>Build summary</h2>
+<p>I&#x27;ll start by inspecting the build directory and the existing state of the project.The inline scanner already has a backslash branch from the code-spans step. Next I&#x27;ll check what exists for <code>unescape</code>, whether the current suite is green, and how the earlier tests are organised.The suite is green at 291 passed. Before changing anything, I&#x27;ll check how the four declared acceptance checks behave on the current code, and whether anything else already imports <code>ASCII_PUNCTUATION</code>.The inline escape behaviour already matches the spec for all the declared cases. What&#x27;s missing is the shared <code>unescape</code> helper that <code>entities.py</code> is supposed to provide for destinations, titles and info strings. I&#x27;ll put the punctuation set in <code>entities.py</code> as the single definition, add <code>unescape</code> there, and have <code>inlines.py</code> import the set rather than define its own copy.Now the tests. I&#x27;ll transcribe the four declared acceptance checks as they&#x27;re written, then add coverage for every punctuation character, the non-punctuation case, the helper&#x27;s boundaries, and the idempotence-style edge cases.I wrote two sloppy expectations in that file: the punctuation parametrisation builds its expected value with a convoluted chain of <code>replace</code> calls, and the quote test slices a string literal. I&#x27;ll replace both with explicit values.Now I&#x27;ll run the new file, then the full project suite.The failure is a foundation guard that was written to hold <code>entities</code> behaviour-free until this step. Its own comment says a module leaves that list when it gains behaviour, which is what this step does. I&#x27;ll update the list to match and say so in the summary, rather than leave the suite red.Backslash escapes are in place. The four declared acceptance checks pass, and the full project suite is green at 358 passed.</p>
+<p><strong>What was already there:</strong> the inline scanner from the code-spans step already handled <code>\</code> before ASCII punctuation in paragraph text. I checked it against every declared case and it was already correct, so I left its behaviour alone.</p>
+<p><strong>What I added:</strong></p>
+<ul><li><code>mdparser/entities.py</code>: the single <code>ASCII_PUNCTUATION</code> set, and a shared <code>unescape()</code> helper for backslash escapes only. It leaves entities undecoded and keeps any backslash that is not followed by punctuation.</li><li><code>mdparser/inlines.py</code>: now imports <code>ASCII_PUNCTUATION</code> from <code>entities</code> instead of defining its own copy.</li><li><code>tests/test_backslash_escapes.py</code>: the four declared acceptance checks, transcribed as written. Also covers all 32 punctuation characters, constructs that stay inert when escaped, a doubled backslash, a trailing lone backslash, and the <code>unescape</code> boundaries and idempotence.</li><li><code>tests/test_foundation.py</code>: <code>entities</code> is removed from the &quot;no behaviour yet&quot; list. That list&#x27;s own comment says a module leaves it when it gains behaviour, and this step gives <code>entities</code> a public helper. I changed the guard rather than deleting it; the other modules on the list are still checked.</li></ul>
+<p><strong>Choices you may want to redirect:</strong></p>
+<ul><li><code>unescape</code> has no caller yet. Link destinations, titles and info strings are built in later stories, which will call it. Until then it is covered only by its own tests.</li><li>Hard breaks for a trailing backslash are left to the line-breaks story, as the spec says. A trailing backslash currently renders as a literal backslash.</li></ul>
+<p>I did not run <code>sources/full_test.sh</code> or <code>spec_tests.py</code>. None of this step&#x27;s acceptance checks invoke the staged suite, and the build notes place the backslash-escape corpus section under a later story&#x27;s gate.</p>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>mdparser/entities.py</li><li>mdparser/inlines.py</li><li>tests/test_backslash_escapes.py</li><li>tests/test_foundation.py</li></ul>
+<p>SUMMARY: Implemented backslash escapes per FEATURE-Backslash-Escapes.md. The inline escape rule in <code>inlines.py</code> already met the spec, so the build adds the shared <code>unescape</code> helper in <code>entities.py</code> (with <code>ASCII_PUNCTUATION</code> moved there as the single definition), plus tests for the four declared acceptance checks and the escape and helper boundaries. The project suite is green at 358 passed (<code>.venv/bin/python -m pytest -q</code>). The foundation guard that held <code>entities</code> behaviour-free was updated to match. The staged conformance suite was not run because no criterion in this step invokes it.</p>
+<p>&lt;blueprint-decisions&gt; [{&quot;spec&quot;:&quot;FEATURE-Backslash-Escapes.md&quot;,&quot;severity&quot;:&quot;Low&quot;,&quot;subject&quot;:&quot;Location of the shared unescape helper and punctuation set&quot;,&quot;decision&quot;:&quot;Placed ASCII_PUNCTUATION and unescape() in mdparser/entities.py, which the ARCHITECTURE assigns backslash unescape to, and made inlines.py import the set rather than keep its own copy. unescape() has no caller until the link and info-string stories are built. Is that acceptable, or should it live elsewhere on replan?&quot;}] &lt;/blueprint-decisions&gt;</p>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>mdparser/entities.py</li><li>mdparser/inlines.py</li><li>tests/test_backslash_escapes.py</li><li>tests/test_foundation.py</li></ul>
+<p>SUMMARY: Implemented backslash escapes per FEATURE-Backslash-Escapes.md. The inline escape rule in <code>inlines.py</code> already met the spec, so this step adds the shared <code>unescape</code> helper in <code>entities.py</code> (with <code>ASCII_PUNCTUATION</code> moved there as the single definition), plus tests for the four declared acceptance checks and the escape and helper boundaries. Project suite: 358 passed (<code>.venv/bin/python -m pytest -q</code>). The staged conformance suite was not run because no criterion in this step invokes it.</p></article>
+</main>
+</body>
+</html>

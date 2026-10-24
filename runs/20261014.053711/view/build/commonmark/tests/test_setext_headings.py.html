@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_setext_headings.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_setext_headings.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_setext_headings.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Setext heading tests: the seven declared checks from FEATURE-Setext-Headings.md, then block-tree and
+exact-output tests through the `commonmark` executable.
+
+The declared checks are transcribed first, with their assertions unchanged. The rest act on the
+block tree returned by `parse_lines` and on the exact stdout bytes, which is the state handed back.
+&quot;&quot;&quot;
+
+import subprocess
+from pathlib import Path
+
+import pytest
+
+from mdparser.blocks import PARAGRAPH, SETEXT_HEADING, THEMATIC_BREAK, parse_lines
+
+
+def run_commonmark(project_root: Path, source: str) -&gt; subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [str(project_root / &quot;commonmark&quot;)],
+        input=source,
+        capture_output=True,
+        text=True,
+        cwd=project_root,
+        check=False,
+    )
+
+
+def kinds(lines: list[str]) -&gt; list[str]:
+    &quot;&quot;&quot;Names of the top-level block types that `lines` produce, in order.&quot;&quot;&quot;
+    return [child.kind.name for child in parse_lines(lines).children]
+
+
+def render(project_root: Path, source: str) -&gt; str:
+    result = run_commonmark(project_root, source)
+    assert result.returncode == 0
+    return result.stdout
+
+
+# --- Declared acceptance checks (transcribed from FEATURE-Setext-Headings.md) ---
+
+
+def test_setext_both_levels(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Equals underlines give h1 and dash underlines give h2.&quot;&quot;&quot;
+    equals = run_commonmark(project_root, &quot;Foo *bar*\n=========\n&quot;)
+    dashes = run_commonmark(project_root, &quot;Foo *bar*\n---------\n&quot;)
+    print(equals.stdout)
+    print(dashes.stdout)
+    assert equals.returncode == 0
+    assert dashes.returncode == 0
+    assert equals.stdout.count(&quot;&lt;h1&gt;&quot;) == 1
+    assert dashes.stdout.count(&quot;&lt;h2&gt;&quot;) == 1
+    assert equals.stdout.count(&quot;&lt;em&gt;&quot;) == 1
+
+
+def test_setext_multiline_content(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Several paragraph lines before the underline become one heading with no paragraph.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot;Foo\nBar\n---\n&quot;)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;h2&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 0
+
+
+def test_setext_underline_beats_thematic_break(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Dashes after paragraph text make a heading, not a thematic break.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot;Foo\n---\nbar\n&quot;)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;h2&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;hr /&gt;&quot;) == 0
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+
+
+def test_setext_sequence_with_thematic_breaks(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Dashes with no preceding paragraph are thematic breaks, mixed with two setext headings and a paragraph.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot;---\nFoo\n---\nBar\n---\nBaz\n&quot;)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;hr /&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;h2&gt;&quot;) == 2
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+
+
+def test_setext_underline_limits(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Four spaces of indentation or internal spaces disqualify the underline.&quot;&quot;&quot;
+    for source in (&quot;Foo\n    ---\n&quot;, &quot;Foo\n= =\n&quot;):
+        result = run_commonmark(project_root, source)
+        print(result.stdout)
+        assert result.returncode == 0
+        assert result.stdout.count(&quot;&lt;h1&gt;&quot;) == 0
+        assert result.stdout.count(&quot;&lt;h2&gt;&quot;) == 0
+        assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+
+
+def test_setext_not_lazy_in_quote(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;An unmarked underline after a quote paragraph does not make a heading inside the quote.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot;&gt; foo\nbar\n===\n&quot;)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;h1&gt;&quot;) == 0
+    assert result.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+
+
+def test_setext_quote_then_thematic_break(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;Dashes after a quote without a marker are a thematic break outside the quote.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot;&gt; Foo\n---\n&quot;)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;blockquote&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;hr /&gt;&quot;) == 1
+    assert result.stdout.count(&quot;&lt;h2&gt;&quot;) == 0
+
+
+def test_setext_empty_is_paragraph(project_root: Path) -&gt; None:
+    &quot;&quot;&quot;An underline with no content line is not a heading.&quot;&quot;&quot;
+    result = run_commonmark(project_root, &quot;\n====\n&quot;)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count(&quot;&lt;h1&gt;&quot;) == 0
+    assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 1
+
+
+# --- Block tree: underline levels and shape ---
+
+
+@pytest.mark.parametrize((&quot;marker&quot;, &quot;level&quot;), [(&quot;=&quot;, 1), (&quot;-&quot;, 2)])
+def test_underline_run_makes_setext_heading_at_its_level(marker: str, level: int) -&gt; None:
+    (block,) = parse_lines([&quot;Foo&quot;, marker * 3]).children
+    assert block.kind is SETEXT_HEADING
+    assert block.level == level
+
+
+@pytest.mark.parametrize(&quot;length&quot;, [1, 2, 9])
+def test_underline_of_any_length_is_a_heading(length: int) -&gt; None:
+    assert kinds([&quot;Foo&quot;, &quot;=&quot; * length]) == [SETEXT_HEADING.name]
+
+
+def test_heading_content_is_all_paragraph_lines_joined() -&gt; None:
+    (block,) = parse_lines([&quot;Foo&quot;, &quot;Bar&quot;, &quot;---&quot;]).children
+    assert block.content == &quot;Foo\nBar&quot;
+
+
+def test_heading_content_strips_surrounding_spaces_and_tabs() -&gt; None:
+    (block,) = parse_lines([&quot; Foo \t&quot;, &quot;===&quot;]).children
+    assert block.content == &quot;Foo&quot;
+
+
+def test_heading_block_holds_no_children_or_lines() -&gt; None:
+    (block,) = parse_lines([&quot;Foo&quot;, &quot;===&quot;]).children
+    assert block.children == []
+    assert block.lines == []
+
+
+def test_trailing_spaces_on_underline_are_allowed() -&gt; None:
+    assert kinds([&quot;Foo&quot;, &quot;===   \t&quot;]) == [SETEXT_HEADING.name]
+
+
+@pytest.mark.parametrize(&quot;indent&quot;, [1, 2, 3])
+def test_up_to_three_spaces_before_underline(indent: int) -&gt; None:
+    assert kinds([&quot;Foo&quot;, &quot; &quot; * indent + &quot;===&quot;]) == [SETEXT_HEADING.name]
+
+
+def test_four_spaces_before_underline_is_paragraph_text() -&gt; None:
+    (block,) = parse_lines([&quot;Foo&quot;, &quot;    ===&quot;]).children
+    assert block.kind is PARAGRAPH
+    assert block.content == &quot;Foo\n===&quot;
+
+
+def test_internal_space_in_underline_is_paragraph_text() -&gt; None:
+    (block,) = parse_lines([&quot;Foo&quot;, &quot;= =&quot;]).children
+    assert block.kind is PARAGRAPH
+
+
+def test_underline_with_other_characters_is_paragraph_text() -&gt; None:
+    assert kinds([&quot;Foo&quot;, &quot;=-=&quot;]) == [PARAGRAPH.name]
+
+
+def test_mixed_marker_underline_is_not_setext() -&gt; None:
+    assert kinds([&quot;Foo&quot;, &quot;-=-&quot;]) == [PARAGRAPH.name]
+
+
+# --- Block tree: precedence over thematic break ---
+
+
+def test_dashes_after_paragraph_are_not_a_thematic_break() -&gt; None:
+    assert kinds([&quot;Foo&quot;, &quot;---&quot;]) == [SETEXT_HEADING.name]
+
+
+def test_dashes_without_paragraph_are_a_thematic_break() -&gt; None:
+    assert kinds([&quot;---&quot;]) == [THEMATIC_BREAK.name]
+
+
+def test_asterisks_after_paragraph_are_a_thematic_break() -&gt; None:
+    assert kinds([&quot;Foo&quot;, &quot;***&quot;]) == [PARAGRAPH.name, THEMATIC_BREAK.name]
+
+
+def test_underscores_after_paragraph_are_a_thematic_break() -&gt; None:
+    assert kinds([&quot;Foo&quot;, &quot;___&quot;]) == [PARAGRAPH.name, THEMATIC_BREAK.name]
+
+
+def test_equals_alone_is_paragraph_text() -&gt; None:
+    assert kinds([&quot;====&quot;]) == [PARAGRAPH.name]
+
+
+def test_empty_setext_heading_is_never_produced() -&gt; None:
+    assert kinds([&quot;&quot;, &quot;====&quot;]) == [PARAGRAPH.name]
+
+
+# --- Block tree: neighbours and continuation ---
+
+
+def test_paragraph_resumes_after_setext_heading() -&gt; None:
+    assert kinds([&quot;Foo&quot;, &quot;===&quot;, &quot;bar&quot;]) == [SETEXT_HEADING.name, PARAGRAPH.name]
+
+
+def test_setext_heading_followed_by_blank_line_stays_one_block() -&gt; None:
+    assert kinds([&quot;Foo&quot;, &quot;===&quot;, &quot;&quot;]) == [SETEXT_HEADING.name]
+
+
+def test_paragraph_before_setext_heading_is_replaced_not_kept() -&gt; None:
+    assert kinds([&quot;Foo&quot;, &quot;Bar&quot;, &quot;===&quot;]) == [SETEXT_HEADING.name]
+
+
+def test_second_underline_after_new_paragraph_makes_second_heading() -&gt; None:
+    assert kinds([&quot;Foo&quot;, &quot;===&quot;, &quot;Bar&quot;, &quot;===&quot;]) == [SETEXT_HEADING.name, SETEXT_HEADING.name]
+
+
+def test_heading_inside_quote_when_underline_is_marked() -&gt; None:
+    (quote,) = parse_lines([&quot;&gt; Foo&quot;, &quot;&gt; ===&quot;]).children
+    assert quote.kind.name == &quot;block_quote&quot;
+    assert [child.kind.name for child in quote.children] == [SETEXT_HEADING.name]
+
+
+def test_link_definition_is_not_heading_text() -&gt; None:
+    (block,) = parse_lines([&quot;[foo]: /url&quot;, &quot;Bar&quot;, &quot;===&quot;]).children
+    assert block.kind is SETEXT_HEADING
+    assert block.content == &quot;Bar&quot;
+
+
+def test_link_definition_only_makes_underline_paragraph_text() -&gt; None:
+    assert kinds([&quot;[foo]: /url&quot;, &quot;===&quot;]) == [PARAGRAPH.name]
+
+
+def test_link_definition_only_with_dashes_is_a_thematic_break() -&gt; None:
+    assert kinds([&quot;[foo]: /url&quot;, &quot;---&quot;]) == [THEMATIC_BREAK.name]
+
+
+# --- Exact output through the executable ---
+
+
+@pytest.mark.parametrize((&quot;marker&quot;, &quot;level&quot;), [(&quot;=&quot;, 1), (&quot;-&quot;, 2)])
+def test_setext_renders_exactly_at_each_level(project_root: Path, marker: str, level: int) -&gt; None:
+    assert render(project_root, f&quot;Foo\n{marker * 3}\n&quot;) == f&quot;&lt;h{level}&gt;Foo&lt;/h{level}&gt;\n&quot;
+
+
+def test_setext_content_is_parsed_as_inlines(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;Foo *bar*\n=========\n&quot;) == &quot;&lt;h1&gt;Foo &lt;em&gt;bar&lt;/em&gt;&lt;/h1&gt;\n&quot;
+
+
+def test_setext_multiline_renders_with_soft_line_break(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;Foo\nBar\n---\n&quot;) == &quot;&lt;h2&gt;Foo\nBar&lt;/h2&gt;\n&quot;
+
+
+def test_setext_trailing_spaces_on_last_line_are_not_a_hard_break(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;Foo\nBar  \n---\n&quot;) == &quot;&lt;h2&gt;Foo\nBar&lt;/h2&gt;\n&quot;
+
+
+def test_setext_trailing_spaces_on_inner_line_are_a_hard_break(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;Foo  \nBar\n---\n&quot;) == &quot;&lt;h2&gt;Foo&lt;br /&gt;\nBar&lt;/h2&gt;\n&quot;
+
+
+def test_setext_content_is_escaped(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;a &lt; b\n===\n&quot;) == &quot;&lt;h1&gt;a &amp;lt; b&lt;/h1&gt;\n&quot;
+
+
+def test_setext_sequence_renders_exactly(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;---\nFoo\n---\nBar\n---\nBaz\n&quot;) == (
+        &quot;&lt;hr /&gt;\n&lt;h2&gt;Foo&lt;/h2&gt;\n&lt;h2&gt;Bar&lt;/h2&gt;\n&lt;p&gt;Baz&lt;/p&gt;\n&quot;
+    )
+
+
+def test_setext_link_definition_renders_exactly(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;[foo]: /url\nBar\n===\n&quot;) == &quot;&lt;h1&gt;Bar&lt;/h1&gt;\n&quot;
+
+
+def test_underline_only_renders_as_paragraph_exactly(project_root: Path) -&gt; None:
+    assert render(project_root, &quot;====\n&quot;) == &quot;&lt;p&gt;====&lt;/p&gt;\n&quot;
+</pre></article>
+</main>
+</body>
+</html>

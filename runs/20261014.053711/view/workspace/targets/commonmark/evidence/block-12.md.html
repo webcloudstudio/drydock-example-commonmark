@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-12.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-12.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-12.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 12 · Service (block-12)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-14</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 4813</li><li>execution id: 20261014.064009.029Z-03c1a38f</li></ul>
+<h2>Stories built</h2>
+<ul><li>Render images with plain-text alt and verify links, images and emphasis against the corpus. (images) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>compass: COMPASS.md (SP 1072)</li><li>implements: FEATURE-Images.md (SP 1634)</li><li>context: ARCHITECTURE_compact.md (SP 335)</li><li>stack: common_compact.md (SP 1199)</li><li>stack: python_compact.md (SP 390)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>mdparser/inlines.py</li><li>tests/test_images.py</li><li>tests/test_links.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: images-corpus-sections (FEATURE-Images.md)</li></ul>
+<p>intent: The Emphasis and strong emphasis, Links and Images conformance sections (roughly 240 cases) pass in full. return code: 1 stdout: Example 519 (lines 7902-7906) Links <a href="moon.jpg">![moon</a>](/uri)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;&lt;img alt=&quot;moon&quot; src=&quot;moon.jpg&quot;&gt;&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;!<a href="moon.jpg">moon</a>&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 522 (lines 7925-7929) Links !<a href="uri1">[[foo</a>](uri2)](uri3)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;<a href="uri2">foo</a>&quot; src=&quot;uri3&quot;&gt;&lt;/p&gt; +&lt;p&gt;!<a href="uri1">[[foo</a>](uri2)](uri3)&lt;/p&gt;</p>
+<p>Example 533 (lines 8058-8064) Links <a href="moon.jpg">![moon</a>][ref]</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;&lt;img alt=&quot;moon&quot; src=&quot;moon.jpg&quot;&gt;&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;!<a href="moon.jpg">moon</a>&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 574 (lines 8566-8570) Images ![foo](/url &quot;title&quot;)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;foo&quot; src=&quot;/url&quot; title=&quot;title&quot;&gt;&lt;/p&gt; +&lt;p&gt;![foo](/url &amp;quot;title&amp;quot;)&lt;/p&gt;</p>
+<p>Example 575 (lines 8573-8579) Images ![foo <em>bar</em>]</p>
+<p>[foo <em>bar</em>]: train.jpg &quot;train &amp; tracks&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;foo bar&quot; src=&quot;train.jpg&quot; title=&quot;train &amp;amp; tracks&quot;&gt;&lt;/p&gt; +&lt;p&gt;![foo <em>bar</em>]&lt;/p&gt;</p>
+<p>Example 576 (lines 8582-8586) Images !<a href="/url">foo ![bar</a>](/url2)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;foo bar&quot; src=&quot;/url2&quot;&gt;&lt;/p&gt; +&lt;p&gt;!<a href="/url">foo ![bar</a>](/url2)&lt;/p&gt;</p>
+<p>Example 577 (lines 8589-8593) Images !<a href="/url">foo [bar</a>](/url2)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;foo bar&quot; src=&quot;/url2&quot;&gt;&lt;/p&gt; +&lt;p&gt;!<a href="/url">foo [bar</a>](/url2)&lt;/p&gt;</p>
+<p>Example 578 (lines 8603-8609) Images ![foo <em>bar</em>][]</p>
+<p>[foo <em>bar</em>]: train.jpg &quot;train &amp; tracks&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;foo bar&quot; src=&quot;train.jpg&quot; title=&quot;train &amp;amp; tracks&quot;&gt;&lt;/p&gt; +&lt;p&gt;![foo <em>bar</em>][]&lt;/p&gt;</p>
+<p>Example 579 (lines 8612-8618) Images ![foo <em>bar</em>][foobar]</p>
+<p>[FOOBAR]: train.jpg &quot;train &amp; tracks&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;foo bar&quot; src=&quot;train.jpg&quot; title=&quot;train &amp;amp; tracks&quot;&gt;&lt;/p&gt; +&lt;p&gt;![foo <em>bar</em>][foobar]&lt;/p&gt;</p>
+<p>Example 580 (lines 8621-8625) Images !<a href="train.jpg">foo</a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;foo&quot; src=&quot;train.jpg&quot;&gt;&lt;/p&gt; +&lt;p&gt;!<a href="train.jpg">foo</a>&lt;/p&gt;</p>
+<p>Example 581 (lines 8628-8632) Images My ![foo bar](/path/to/train.jpg  &quot;title&quot;   )</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;My &lt;img alt=&quot;foo bar&quot; src=&quot;/path/to/train.jpg&quot; title=&quot;title&quot;&gt;&lt;/p&gt; +&lt;p&gt;My ![foo bar](/path/to/train.jpg &amp;quot;title&amp;quot; )&lt;/p&gt;</p>
+<p>Example 582 (lines 8635-8639) Images !<a href="&amp;lt;url&amp;gt;">foo</a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;foo&quot; src=&quot;url&quot;&gt;&lt;/p&gt; +&lt;p&gt;!<a href="&amp;amp;lt;url&amp;amp;gt;">foo</a>&lt;/p&gt;</p>
+<p>Example 583 (lines 8642-8646) Images !<a href="/url"></a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;&quot; src=&quot;/url&quot;&gt;&lt;/p&gt; +&lt;p&gt;!<a href="/url"></a>&lt;/p&gt;</p>
+<p>Example 584 (lines 8651-8657) Images ![foo][bar]</p>
+<p>[bar]: /url</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;foo&quot; src=&quot;/url&quot;&gt;&lt;/p&gt; +&lt;p&gt;![foo][bar]&lt;/p&gt;</p>
+<p>Example 585 (lines 8660-8666) Images ![foo][bar]</p>
+<p>[BAR]: /url</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;foo&quot; src=&quot;/url&quot;&gt;&lt;/p&gt; +&lt;p&gt;![foo][bar]&lt;/p&gt;</p>
+<p>Example 586 (lines 8671-8677) Images ![foo][]</p>
+<p>[foo]: /url &quot;title&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;foo&quot; src=&quot;/url&quot; title=&quot;title&quot;&gt;&lt;/p&gt; +&lt;p&gt;![foo][]&lt;/p&gt;</p>
+<p>Example 587 (lines 8680-8686) Images ![<em>foo</em> bar][]</p>
+<p>[<em>foo</em> bar]: /url &quot;title&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;foo bar&quot; src=&quot;/url&quot; title=&quot;title&quot;&gt;&lt;/p&gt; +&lt;p&gt;![<em>foo</em> bar][]&lt;/p&gt;</p>
+<p>Example 588 (lines 8691-8697) Images ![Foo][]</p>
+<p>[foo]: /url &quot;title&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;Foo&quot; src=&quot;/url&quot; title=&quot;title&quot;&gt;&lt;/p&gt; +&lt;p&gt;![Foo][]&lt;/p&gt;</p>
+<p>Example 589 (lines 8703-8711) Images ![foo] []</p>
+<p>[foo]: /url &quot;title&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;foo&quot; src=&quot;/url&quot; title=&quot;title&quot;&gt; []&lt;/p&gt; +&lt;p&gt;![foo] []&lt;/p&gt;</p>
+<p>Example 590 (lines 8716-8722) Images ![foo]</p>
+<p>[foo]: /url &quot;title&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;foo&quot; src=&quot;/url&quot; title=&quot;title&quot;&gt;&lt;/p&gt; +&lt;p&gt;![foo]&lt;/p&gt;</p>
+<p>Example 591 (lines 8725-8731) Images ![<em>foo</em> bar]</p>
+<p>[<em>foo</em> bar]: /url &quot;title&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;foo bar&quot; src=&quot;/url&quot; title=&quot;title&quot;&gt;&lt;/p&gt; +&lt;p&gt;![<em>foo</em> bar]&lt;/p&gt;</p>
+<p>Example 593 (lines 8748-8754) Images ![Foo]</p>
+<p>[foo]: /url &quot;title&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;Foo&quot; src=&quot;/url&quot; title=&quot;title&quot;&gt;&lt;/p&gt; +&lt;p&gt;![Foo]&lt;/p&gt;</p>
+<p>222 passed, 22 failed, 0 errored, 411 skipped stderr: --- drydock: progress --- cases: pass=222 fail=22 error=0 skip=411 total=655 from=result.stdout --- drydock: end progress --- --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;^Emphasis and strong emphasis$|^Links$|^Images$&#x27;], returncode=22, stdout=&#x27;Example 5… (+4557 chars) --- drydock: end values --- Traceback (most recent call last): File &quot;images-corpus-sections.py&quot;, line 22, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: images-inline-image (FEATURE-Images.md)</li></ul>
+<p>intent: An inline image renders one img element carrying the supplied src, alt and title. return code: 1 stdout: &lt;p&gt;![my alt](/path/pic.jpg &amp;quot;a title&amp;quot;)&lt;/p&gt; stderr: --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;![my alt](/path/pic.jpg &amp;quot;a title&amp;quot;)&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;images-inline-image.py&quot;, line 10, in &lt;module&gt; assert result.stdout.count(&quot;&lt;img &quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: images-alt-is-plain-text (FEATURE-Images.md)</li></ul>
+<p>intent: Emphasis inside an image description does not appear as markup in the alt attribute. return code: 1 stdout: &lt;p&gt;!<a href="/u">foo <em>bar</em></a>&lt;/p&gt; stderr: --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;!<a href="/u">foo <em>bar</em></a>&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;images-alt-is-plain-text.py&quot;, line 6, in &lt;module&gt; assert result.stdout.count(&quot;&lt;img &quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: images-reference-forms (FEATURE-Images.md)</li></ul>
+<p>intent: Full, collapsed and shortcut image references each resolve against a definition. return code: 1 stdout: &lt;p&gt;![text][foo]&lt;/p&gt; stderr: --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;![text][foo]&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;images-reference-forms.py&quot;, line 8, in &lt;module&gt; assert result.stdout.count(&quot;&lt;img &quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: images-inside-link (FEATURE-Images.md)</li></ul>
+<p>intent: An image inside a link produces one a element containing one img element. return code: 1 stdout: &lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;!<a href="moon.jpg">moon</a>&lt;/a&gt;&lt;/p&gt; stderr: --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;./commonmark&#x27;], returncode=0, stdout=&#x27;&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;!<a href="moon.jpg">moon</a>&lt;/a&gt;&lt;/p&gt;\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;images-inside-link.py&quot;, line 7, in &lt;module&gt; assert result.stdout.count(&quot;&lt;img &quot;) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: images-corpus-sections (FEATURE-Images.md)</li></ul>
+<p>intent: The Emphasis and strong emphasis, Links and Images conformance sections (roughly 240 cases) pass in full. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: 244 passed, 0 failed, 0 errored, 411 skipped</p>
+<ul><li>PASS: images-inline-image (FEATURE-Images.md)</li></ul>
+<p>intent: An inline image renders one img element carrying the supplied src, alt and title. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;&lt;img src=&quot;/path/pic.jpg&quot; alt=&quot;my alt&quot; title=&quot;a title&quot; /&gt;&lt;/p&gt;</p>
+<ul><li>PASS: images-alt-is-plain-text (FEATURE-Images.md)</li></ul>
+<p>intent: Emphasis inside an image description does not appear as markup in the alt attribute. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;&lt;img src=&quot;/u&quot; alt=&quot;foo bar&quot; /&gt;&lt;/p&gt;</p>
+<ul><li>PASS: images-reference-forms (FEATURE-Images.md)</li></ul>
+<p>intent: Full, collapsed and shortcut image references each resolve against a definition. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;&lt;img src=&quot;/url&quot; alt=&quot;text&quot; /&gt;&lt;/p&gt;</p>
+<p>&lt;p&gt;&lt;img src=&quot;/url&quot; alt=&quot;foo&quot; /&gt;&lt;/p&gt;</p>
+<p>&lt;p&gt;&lt;img src=&quot;/url&quot; alt=&quot;foo&quot; /&gt;&lt;/p&gt;</p>
+<ul><li>PASS: images-inside-link (FEATURE-Images.md)</li></ul>
+<p>intent: An image inside a link produces one a element containing one img element. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261014.053711/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: &lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;&lt;img src=&quot;moon.jpg&quot; alt=&quot;moon&quot; /&gt;&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Build summary</h2>
+<p>Images are currently kept as literal source. I&#x27;ll replace that with a real <code>Image</code> node. Its alt text needs plain text, which the current <code>Html</code> nodes don&#x27;t carry, so <code>Html</code> gets a <code>text</code> field too.Now the <code>parse_inline</code> construction sites, so every <code>Html</code> node carries its plain text.Next, rendering, the bracket close for images, and the matcher helpers.Now I&#x27;ll update the interim test that pinned the old literal-image behaviour, then check for leftover single-argument <code>Html(</code> calls.Now the test file. The four declared acceptance checks are transcribed as written, and the remaining tests cover the behaviour around them.Running the project&#x27;s test suite, which includes the scoped corpus check.One more interim assertion from the links story expected the image to stay literal. The new output is the correct rendering, so I&#x27;ll update that expectation.The scoped gate passes. Let me confirm the set of files I changed.RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>mdparser/inlines.py</li><li>tests/test_links.py</li><li>tests/test_images.py</li></ul>
+<p>SUMMARY: Images are now real nodes instead of literal source. An <code>![</code> opener that closes with an inline, full, collapsed or shortcut tail renders <code>&lt;img src alt title /&gt;</code>. The src is percent-encoded and escaped like a link href, and the title is omitted when empty. The alt is the plain text of the description: emphasis, links and nested images contribute their text, code spans contribute their content, and the result is escaped.</p>
+<p>To get plain text, <code>Html</code> nodes now carry a <code>text</code> field alongside their rendered HTML. The helpers <code>_text</code> and <code>_raw</code> build them. The code-span and autolink matchers now return <code>Html</code> nodes. Images inside links, and <code>\![foo]</code> and <code>!\[foo]</code>, behave as the spec requires.</p>
+<p>Two interim assertions from the links story pinned the old literal-image output. I updated them to the rendered output: <code>test_image_construct_is_rendered_as_an_image_not_a_link</code> and <code>test_image_opener_does_not_deactivate_earlier_link_openers</code>. Neither is a declared acceptance assertion.</p>
+<p><code>tests/test_images.py</code> transcribes the four declared checks with their assertions kept as written. It adds finer tests for attributes, alt rules, reference forms, nesting and the executable.</p>
+<p>Verification:</p>
+<ul><li>Scoped corpus gate <code>sources/spec_tests.py --pattern &quot;^Emphasis and strong emphasis$|^Links$|^Images$&quot;</code>: exit 0, 244 passed, 0 failed (411 skipped by the pattern).</li><li>Project suite <code>.venv/bin/python -m pytest -q</code>: 611 passed, 1 skipped (<code>test_foundation.py</code>, pre-existing parametrization skip), 1 failure, which I then fixed. The final run of <code>test_links.py</code> and <code>test_images.py</code> passed 89 of 89.</li><li>I did not run <code>sources/full_test.sh</code>, since the criteria declare the scoped invocation only.</li><li>Nothing was committed.</li></ul>
+<p>Choices I made:</p>
+<ul><li>Raw HTML inside an image description contributes its source text to alt, escaped. This follows cmark&#x27;s plain-text behaviour. The spec has no example for it, so it is untested.</li></ul>
+<p>BLOCKERS:</p>
+<ul><li>None.</li></ul>
+<p>&lt;blueprint-decisions&gt; [{&quot;spec&quot;:&quot;FEATURE-Images.md&quot;,&quot;severity&quot;:&quot;Low&quot;,&quot;subject&quot;:&quot;Raw HTML inside an image description&quot;,&quot;decision&quot;:&quot;Raw inline HTML contributes its literal source text to alt, escaped, as cmark does in plain-text mode. The spec gives no example for this case. Is that acceptable?&quot;}] &lt;/blueprint-decisions&gt;</p></article>
+</main>
+</body>
+</html>

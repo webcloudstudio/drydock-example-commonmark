@@ -1,0 +1,632 @@
+=== BEGIN ARTIFACT FEATURE-Links.md ===
+# FEATURE: Links
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Implement the look-for-link-or-image procedure and the inline, full, collapsed and shortcut link forms with the destination and title grammar. |
+| Depends On  | FEATURE-Emphasis.md, FEATURE-Link-Reference-Definitions.md |
+| Provides    | look_for_link_or_image procedure, link destination and title grammar |
+| Consumes    | delimiter stack, process_emphasis procedure, reference map, normalize_label |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the Links section of the spec following the Appendix "look for link or image" procedure. The `![` machinery is shared with images; image rendering belongs to the images story.
+
+## Procedure
+
+- On `]`, search the delimiter stack from the top for a `[` or `![` opener. If none is found, emit literal `]`. If the opener is inactive, remove it and emit literal `]`.
+- Otherwise parse ahead for, in order: an inline link `(`destination, title`)`; a full reference `[label]`; a collapsed reference `[]`; a shortcut reference. References resolve through `normalize_label` and the reference map. A full reference whose label is not defined falls back to the shortcut form of the link text only if it is not followed by a label.
+- On success, build the link node from the inlines after the opener, run `process_emphasis` with the opener as `stack_bottom`, and remove the opener. For a link (not an image), set every earlier `[` opener inactive, so links never nest.
+- On failure, remove the opener and emit literal `]`.
+
+## Grammar
+
+- A destination is `<...>` with no line ending and no unescaped `<` or `>`, or a nonempty run with no space or control characters and balanced unescaped parentheses (at least three levels). An empty destination is allowed.
+- A title is double-quoted, single-quoted or parenthesized, with backslash-escaped delimiters, and no blank line inside.
+- Whitespace (spaces, tabs, at most one line ending) is allowed around the destination and title; destination and title must be separated by whitespace.
+- A link label has at most 999 characters and no unescaped brackets. No whitespace is allowed between link text and a following label or `()`.
+- Brackets inside link text must be balanced or backslash-escaped. Code spans, autolinks and raw HTML bind tighter than brackets.
+- Destination and title go through the shared unescape and entity helpers. The href is percent-encoded for non-ASCII and unsafe characters with the shared helper (an existing `%XX` stays as is), and the href and title are HTML-escaped.
+
+## Reads
+
+- Inline text, the reference map.
+
+## Writes
+
+- Link nodes in the inline tree.
+
+## Programmatic Acceptance
+
+The Links corpus section includes image examples, so it is gated in the images story. The checks here are bounded.
+
+=== AC links-inline-destination-and-title ===
+Intent: An inline link renders one a element carrying the supplied destination, title and text.
+
+import subprocess
+
+text = "label"
+dest = "/uri"
+title = "the title"
+source = "[" + text + "](" + dest + ' "' + title + '")\n'
+result = subprocess.run(["./commonmark"], input=source, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<a ") == 1
+assert ('href="' + dest + '"') in result.stdout
+assert ('title="' + title + '"') in result.stdout
+assert (">" + text + "</a>") in result.stdout
+=== END AC links-inline-destination-and-title ===
+
+=== AC links-reference-forms ===
+Intent: Full, collapsed and shortcut references each resolve against a definition and render one a element.
+
+import subprocess
+
+definition = "\n\n[foo]: /url\n"
+for use in ("[text][foo]", "[foo][]", "[foo]"):
+    result = subprocess.run(["./commonmark"], input=use + definition, capture_output=True, text=True)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count("<a ") == 1
+=== END AC links-reference-forms ===
+
+=== AC links-reference-case-insensitive ===
+Intent: Label matching ignores case.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="[FOO]\n\n[foo]: /url\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<a ") == 1
+=== END AC links-reference-case-insensitive ===
+
+=== AC links-undefined-reference-literal ===
+Intent: A shortcut reference with no definition stays literal text.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="[nothing defined]\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<a ") == 0
+=== END AC links-undefined-reference-literal ===
+
+=== AC links-no-nested-links ===
+Intent: A link inside link text wins and the outer brackets stay literal, so only one a element appears.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="[foo [bar](/uri)](/uri)\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<a ") == 1
+=== END AC links-no-nested-links ===
+
+=== AC links-space-before-parenthesis ===
+Intent: Whitespace between link text and the parenthesis prevents an inline link.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="[link] (/uri)\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<a ") == 0
+=== END AC links-space-before-parenthesis ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Links must never contain other links at any level of nesting.
+- Matching is on normalized label strings, not parsed inlines.
+- Follow the Appendix procedure; do not backtrack across the whole document.
+- Do not skip, filter or reinterpret corpus examples.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Images.md ===
+# FEATURE: Images
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Render images with plain-text alt attributes and verify links, images and emphasis against the conformance corpus. |
+| Depends On  | FEATURE-Links.md |
+| Provides    | image rendering |
+| Consumes    | look_for_link_or_image procedure |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the Images section of the spec on top of the shared link machinery, and gate the Emphasis, Links and Images corpus sections, which are all satisfiable once images exist.
+
+## Rules
+
+- An image description starts with `![` and follows the same bracket rules as link text, except it may contain links.
+- All four forms apply: inline, full reference, collapsed and shortcut.
+- Render `<img src="..." alt="..." />` with ` title="..."` only when a title exists. The src is percent-encoded and HTML-escaped like a link href.
+- The alt value is the plain-text content of the description: emphasis, links and nested images are reduced to their text content (nested images contribute their own alt), code spans contribute their content, and the result is HTML-escaped.
+- `\![foo]` is a literal `!` followed by a link; `!\[foo]` is literal text.
+
+## Reads
+
+- The inline tree built by the links story, the reference map.
+
+## Writes
+
+- Image nodes in the inline tree.
+
+## Programmatic Acceptance
+
+The Link reference definitions section is gated in the tabs story because its examples need headings and quotes.
+
+=== AC images-corpus-sections ===
+Intent: The Emphasis and strong emphasis, Links and Images conformance sections (roughly 240 cases) pass in full.
+Suite: scoped
+Probe: --dump-tests
+Probe Count: lines
+
+import os
+import subprocess
+import sys
+
+result = subprocess.run(
+    [
+        sys.executable,
+        "sources/spec_tests.py",
+        "--program",
+        os.getcwd() + "/commonmark",
+        "--spec",
+        "sources/spec.txt",
+        "--pattern",
+        "^Emphasis and strong emphasis$|^Links$|^Images$",
+    ],
+    capture_output=True,
+    text=True,
+    env={**os.environ},
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC images-corpus-sections ===
+
+=== AC images-inline-image ===
+Intent: An inline image renders one img element carrying the supplied src, alt and title.
+
+import subprocess
+
+alt = "my alt"
+src = "/path/pic.jpg"
+title = "a title"
+source = "![" + alt + "](" + src + ' "' + title + '")\n'
+result = subprocess.run(["./commonmark"], input=source, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<img ") == 1
+assert ('src="' + src + '"') in result.stdout
+assert ('alt="' + alt + '"') in result.stdout
+assert ('title="' + title + '"') in result.stdout
+=== END AC images-inline-image ===
+
+=== AC images-alt-is-plain-text ===
+Intent: Emphasis inside an image description does not appear as markup in the alt attribute.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="![foo *bar*](/u)\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<img ") == 1
+assert result.stdout.count("<em>") == 0
+=== END AC images-alt-is-plain-text ===
+
+=== AC images-reference-forms ===
+Intent: Full, collapsed and shortcut image references each resolve against a definition.
+
+import subprocess
+
+definition = "\n\n[foo]: /url\n"
+for use in ("![text][foo]", "![foo][]", "![foo]"):
+    result = subprocess.run(["./commonmark"], input=use + definition, capture_output=True, text=True)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count("<img ") == 1
+=== END AC images-reference-forms ===
+
+=== AC images-inside-link ===
+Intent: An image inside a link produces one a element containing one img element.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="[![moon](moon.jpg)](/uri)\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<a ") == 1
+assert result.stdout.count("<img ") == 1
+=== END AC images-inside-link ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- The alt attribute must contain plain text only, never markup.
+- Do not skip, filter or reinterpret corpus examples.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Line-Breaks-Text.md ===
+# FEATURE: Line Breaks and Text
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Implement hard line breaks, soft line breaks and plain textual content in inline parsing. |
+| Depends On  | FEATURE-Images.md |
+| Provides    | hard break and soft break inline nodes |
+| Consumes    | inline scanner loop |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the Hard line breaks, Soft line breaks and Textual content sections of the spec.
+
+## Rules
+
+- A line ending preceded by two or more spaces, or by a backslash, that is not at the end of the block is a hard break, rendered as `<br />` followed by a line ending. The spaces or backslash are consumed. Leading spaces on the following line are dropped.
+- Any other line ending inside a block is a soft break, rendered as a line ending. Spaces at the end of the line and at the start of the next line are removed.
+- A hard-break marker at the end of a paragraph or heading is not a break: trailing spaces are dropped and a trailing backslash stays literal.
+- Breaks work inside emphasis and link text. They are inert inside code spans (the line ending becomes a space) and inside raw HTML tags.
+- All other characters are plain text. Internal spaces are preserved verbatim.
+
+## Reads
+
+- Inline text of paragraphs and headings.
+
+## Writes
+
+- Break and text nodes in the inline tree.
+
+## Programmatic Acceptance
+
+The Hard line breaks section has an ATX heading example, so it is gated in the tabs story. The checks here are bounded.
+
+=== AC breaks-corpus-sections ===
+Intent: The Soft line breaks and Textual content conformance sections (5 cases) pass in full.
+Suite: scoped
+Probe: --dump-tests
+Probe Count: lines
+
+import os
+import subprocess
+import sys
+
+result = subprocess.run(
+    [
+        sys.executable,
+        "sources/spec_tests.py",
+        "--program",
+        os.getcwd() + "/commonmark",
+        "--spec",
+        "sources/spec.txt",
+        "--pattern",
+        "^Soft line breaks$|^Textual content$",
+    ],
+    capture_output=True,
+    text=True,
+    env={**os.environ},
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC breaks-corpus-sections ===
+
+=== AC breaks-hard-break-spaces ===
+Intent: Two or more trailing spaces before a line ending give one br element between the two lines.
+
+import subprocess
+
+first = "alpha"
+second = "beta"
+result = subprocess.run(["./commonmark"], input=first + "   \n" + second + "\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<br />") == 1
+assert first in result.stdout
+assert second in result.stdout
+=== END AC breaks-hard-break-spaces ===
+
+=== AC breaks-hard-break-backslash ===
+Intent: A backslash before a line ending gives one br element.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="alpha\\\nbeta\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<br />") == 1
+=== END AC breaks-hard-break-backslash ===
+
+=== AC breaks-soft-break ===
+Intent: A plain line ending is not a hard break and both lines stay in one paragraph.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="alpha\nbeta\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<br />") == 0
+assert result.stdout.count("<p>") == 1
+=== END AC breaks-soft-break ===
+
+=== AC breaks-none-at-block-end ===
+Intent: Trailing spaces or a trailing backslash at the end of a paragraph do not create a break.
+
+import subprocess
+
+for source in ("alpha  \n", "alpha\\\n"):
+    result = subprocess.run(["./commonmark"], input=source, capture_output=True, text=True)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count("<br />") == 0
+=== END AC breaks-none-at-block-end ===
+
+=== AC breaks-inert-in-code-span ===
+Intent: Trailing spaces before a line ending inside a code span do not create a break.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="`code  \nspan`\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<br />") == 0
+assert result.stdout.count("<code>") == 1
+=== END AC breaks-inert-in-code-span ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- A hard break must never occur at the end of a block.
+- Spaces in the middle of a text line must never be collapsed.
+- Do not skip, filter or reinterpret corpus examples.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Thematic-Breaks.md ===
+# FEATURE: Thematic Breaks
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Parse thematic breaks of three or more matching -, _ or * characters and render them as hr elements. |
+| Depends On  | FEATURE-Line-Breaks-Text.md |
+| Provides    | thematic break block |
+| Consumes    | block-type registry |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the Thematic breaks section of the spec as a registered block start rule.
+
+## Rules
+
+- A thematic break is a line with up to three spaces of indentation, then three or more matching `-`, `_` or `*` characters, each optionally followed by any number of spaces or tabs. No other characters may appear on the line.
+- All non-space characters must be the same. Four or more spaces of indentation is not a thematic break.
+- A thematic break can interrupt a paragraph and needs no blank lines around it.
+- When a line could be a thematic break or a list item, the thematic break wins. When a line of dashes could be a thematic break or a setext underline, the setext heading wins; that wiring is added by the setext story.
+- It renders as `<hr />`.
+
+## Reads
+
+- Lines handed to the block engine.
+
+## Writes
+
+- Thematic break nodes in the block tree.
+
+## Programmatic Acceptance
+
+The corpus section needs lists, setext headings and emphasis, so it is gated in the lists story. The checks here are bounded.
+
+=== AC thematic-three-markers ===
+Intent: Lines of three or more matching marker characters each render one hr element.
+
+import subprocess
+
+lines = ["***", "---", "___", "_____________", " - - -", " **  * ** * ** * **"]
+source = "\n\n".join(lines) + "\n"
+result = subprocess.run(["./commonmark"], input=source, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<hr />") == len(lines)
+=== END AC thematic-three-markers ===
+
+=== AC thematic-not-a-break ===
+Intent: Wrong characters, too few characters, mixed characters and trailing text do not produce hr elements.
+
+import subprocess
+
+source = "+++\n\n--\n\n_ _ _ _ a\n\na------\n\n *-*\n"
+result = subprocess.run(["./commonmark"], input=source, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<hr />") == 0
+=== END AC thematic-not-a-break ===
+
+=== AC thematic-interrupts-paragraph ===
+Intent: A thematic break directly after paragraph text splits it into two paragraphs around one hr.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="Foo\n***\nbar\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<hr />") == 1
+assert result.stdout.count("<p>") == 2
+=== END AC thematic-interrupts-paragraph ===
+
+=== AC thematic-trailing-whitespace ===
+Intent: Trailing spaces and tabs after the marker characters are allowed.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="- - - -    \t\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<hr />") == 1
+=== END AC thematic-trailing-whitespace ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Mixed marker characters on one line must never form a thematic break.
+- Four spaces of indentation must never form a thematic break.
+- Do not skip, filter or reinterpret corpus examples.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-ATX-Headings.md ===
+# FEATURE: ATX Headings
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261014 V1 |
+| Description | Parse ATX headings of levels 1 to 6 with optional closing sequences and render them as h1 to h6 elements. |
+| Depends On  | FEATURE-Thematic-Breaks.md |
+| Provides    | ATX heading block |
+| Consumes    | block-type registry, inline parser hook |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement the ATX headings section of the spec as a registered block start rule whose content is parsed as inlines.
+
+## Rules
+
+- An opening sequence of 1 to 6 `#` characters, preceded by up to three spaces of indentation, must be followed by a space, a tab or the end of the line. Seven or more `#` is not a heading, and `#hashtag` is not a heading.
+- The content is stripped of leading and trailing spaces and tabs before inline parsing.
+- An optional closing sequence of `#` characters must be preceded by a space or tab and followed only by spaces or tabs. Backslash-escaped `#` characters are not part of the closing sequence. A `#` run followed by other text is content.
+- The heading level equals the number of opening `#` characters. A heading can be empty.
+- An ATX heading can interrupt a paragraph and needs no blank lines around it.
+- It renders as `<hN>content</hN>`.
+
+## Reads
+
+- Lines handed to the block engine.
+
+## Writes
+
+- Heading nodes in the block tree; inline content is parsed in phase 2.
+
+## Programmatic Acceptance
+
+The corpus section uses indented code and thematic break interactions, so it is gated in the lists story. The checks here are bounded.
+
+=== AC atx-levels-one-to-six ===
+Intent: Each opening-sequence length from 1 to 6 renders exactly one heading of that level.
+
+import subprocess
+
+for level in range(1, 7):
+    source = "#" * level + " foo\n"
+    result = subprocess.run(["./commonmark"], input=source, capture_output=True, text=True)
+    print(result.stdout)
+    assert result.returncode == 0
+    assert result.stdout.count("<h" + str(level) + ">") == 1
+    assert result.stdout.count("<h") == 1
+=== END AC atx-levels-one-to-six ===
+
+=== AC atx-not-a-heading ===
+Intent: Seven hashes, a missing space, and an escaped hash do not produce headings.
+
+import subprocess
+
+source = "####### foo\n\n#hashtag\n\n\\## foo\n"
+result = subprocess.run(["./commonmark"], input=source, capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<h") == 0
+assert result.stdout.count("<p>") == 3
+=== END AC atx-not-a-heading ===
+
+=== AC atx-closing-sequence ===
+Intent: A closing hash sequence is removed from the heading content.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="## foo ##\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<h2>") == 1
+assert result.stdout.count("#") == 0
+=== END AC atx-closing-sequence ===
+
+=== AC atx-empty-heading ===
+Intent: Empty headings are allowed, one per line.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="#\n\n##\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<h1>") == 1
+assert result.stdout.count("<h2>") == 1
+=== END AC atx-empty-heading ===
+
+=== AC atx-interrupts-paragraph ===
+Intent: A heading splits a paragraph without blank lines, leaving two paragraphs around it.
+
+import subprocess
+
+result = subprocess.run(["./commonmark"], input="Foo bar\n# baz\nBar foo\n", capture_output=True, text=True)
+print(result.stdout)
+assert result.returncode == 0
+assert result.stdout.count("<h1>") == 1
+assert result.stdout.count("<p>") == 2
+=== END AC atx-interrupts-paragraph ===
+
+=== AC atx-indentation-limit ===
+Intent: Up to three spaces of indentation are allowed before the opening sequence, and four are not.
+
+import subprocess
+
+allowed = subprocess.run(["./commonmark"], input="   # foo\n", capture_output=True, text=True)
+refused = subprocess.run(["./commonmark"], input="    # foo\n", capture_output=True, text=True)
+print(allowed.stdout)
+print(refused.stdout)
+assert allowed.returncode == 0
+assert refused.returncode == 0
+assert allowed.stdout.count("<h1>") == 1
+assert refused.stdout.count("<h1>") == 0
+=== END AC atx-indentation-limit ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- A closing sequence must be preceded by whitespace; `foo#` keeps its hash.
+- Heading content must go through inline parsing, never be emitted raw.
+- Do not skip, filter or reinterpret corpus examples.
+=== END ARTIFACT ===

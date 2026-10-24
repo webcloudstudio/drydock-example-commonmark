@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-ATX-Headings.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-ATX-Headings.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-ATX-Headings.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: ATX Headings</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>Parse ATX headings of levels 1 to 6 with optional closing sequences and render them as h1 to h6 elements.</td></tr><tr><td>Depends On</td><td>FEATURE-Thematic-Breaks.md</td></tr><tr><td>Provides</td><td>ATX heading block</td></tr><tr><td>Consumes</td><td>block-type registry, inline parser hook</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement the ATX headings section of the spec as a registered block start rule whose content is parsed as inlines.</p>
+<h2>Rules</h2>
+<ul><li>An opening sequence of 1 to 6 <code>#</code> characters, preceded by up to three spaces of indentation, must be followed by a space, a tab or the end of the line. Seven or more <code>#</code> is not a heading, and <code>#hashtag</code> is not a heading.</li><li>The content is stripped of leading and trailing spaces and tabs before inline parsing.</li><li>An optional closing sequence of <code>#</code> characters must be preceded by a space or tab and followed only by spaces or tabs. Backslash-escaped <code>#</code> characters are not part of the closing sequence. A <code>#</code> run followed by other text is content.</li><li>The heading level equals the number of opening <code>#</code> characters. A heading can be empty.</li><li>An ATX heading can interrupt a paragraph and needs no blank lines around it.</li><li>It renders as <code>&lt;hN&gt;content&lt;/hN&gt;</code>.</li></ul>
+<h2>Reads</h2>
+<ul><li>Lines handed to the block engine.</li></ul>
+<h2>Writes</h2>
+<ul><li>Heading nodes in the block tree; inline content is parsed in phase 2.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>The corpus section uses indented code and thematic break interactions, so it is gated in the lists story. The checks here are bounded.</p>
+<p>=== AC atx-levels-one-to-six ===<br>Intent: Each opening-sequence length from 1 to 6 renders exactly one heading of that level.</p>
+<p>import subprocess</p>
+<p>for level in range(1, 7): source = &quot;#&quot; * level + &quot; foo\n&quot; result = subprocess.run([&quot;./commonmark&quot;], input=source, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;h&quot; + str(level) + &quot;&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;h&quot;) == 1 === END AC atx-levels-one-to-six ===</p>
+<p>=== AC atx-not-a-heading ===<br>Intent: Seven hashes, a missing space, and an escaped hash do not produce headings.</p>
+<p>import subprocess</p>
+<p>source = &quot;####### foo\n\n#hashtag\n\n\\## foo\n&quot; result = subprocess.run([&quot;./commonmark&quot;], input=source, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;h&quot;) == 0 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 3 === END AC atx-not-a-heading ===</p>
+<p>=== AC atx-closing-sequence ===<br>Intent: A closing hash sequence is removed from the heading content.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;## foo ##\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;h2&gt;&quot;) == 1 assert result.stdout.count(&quot;#&quot;) == 0 === END AC atx-closing-sequence ===</p>
+<p>=== AC atx-empty-heading ===<br>Intent: Empty headings are allowed, one per line.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;#\n\n##\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;h1&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;h2&gt;&quot;) == 1 === END AC atx-empty-heading ===</p>
+<p>=== AC atx-interrupts-paragraph ===<br>Intent: A heading splits a paragraph without blank lines, leaving two paragraphs around it.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;Foo bar\n# baz\nBar foo\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;h1&gt;&quot;) == 1 assert result.stdout.count(&quot;&lt;p&gt;&quot;) == 2 === END AC atx-interrupts-paragraph ===</p>
+<p>=== AC atx-indentation-limit ===<br>Intent: Up to three spaces of indentation are allowed before the opening sequence, and four are not.</p>
+<p>import subprocess</p>
+<p>allowed = subprocess.run([&quot;./commonmark&quot;], input=&quot;   # foo\n&quot;, capture_output=True, text=True) refused = subprocess.run([&quot;./commonmark&quot;], input=&quot;    # foo\n&quot;, capture_output=True, text=True) print(allowed.stdout) print(refused.stdout) assert allowed.returncode == 0 assert refused.returncode == 0 assert allowed.stdout.count(&quot;&lt;h1&gt;&quot;) == 1 assert refused.stdout.count(&quot;&lt;h1&gt;&quot;) == 0 === END AC atx-indentation-limit ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>A closing sequence must be preceded by whitespace; <code>foo#</code> keeps its hash.</li><li>Heading content must go through inline parsing, never be emitted raw.</li><li>Do not skip, filter or reinterpret corpus examples.</li></ul></article>
+</main>
+</body>
+</html>

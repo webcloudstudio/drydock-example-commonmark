@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Links.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Links.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Links.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Links</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261014 V1</td></tr><tr><td>Description</td><td>Implement the look-for-link-or-image procedure and the inline, full, collapsed and shortcut link forms with the destination and title grammar.</td></tr><tr><td>Depends On</td><td>FEATURE-Emphasis.md, FEATURE-Link-Reference-Definitions.md</td></tr><tr><td>Provides</td><td>look_for_link_or_image procedure, link destination and title grammar</td></tr><tr><td>Consumes</td><td>delimiter stack, process_emphasis procedure, reference map, normalize_label</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Implement the Links section of the spec following the Appendix &quot;look for link or image&quot; procedure. The <code>![</code> machinery is shared with images; image rendering belongs to the images story.</p>
+<h2>Procedure</h2>
+<ul><li>On <code>]</code>, search the delimiter stack from the top for a <code>[</code> or <code>![</code> opener. If none is found, emit literal <code>]</code>. If the opener is inactive, remove it and emit literal <code>]</code>.</li><li>Otherwise parse ahead for, in order: an inline link <code>(</code>destination, title<code>)</code>; a full reference <code>[label]</code>; a collapsed reference <code>[]</code>; a shortcut reference. References resolve through <code>normalize_label</code> and the reference map. A full reference whose label is not defined falls back to the shortcut form of the link text only if it is not followed by a label.</li><li>On success, build the link node from the inlines after the opener, run <code>process_emphasis</code> with the opener as <code>stack_bottom</code>, and remove the opener. For a link (not an image), set every earlier <code>[</code> opener inactive, so links never nest.</li><li>On failure, remove the opener and emit literal <code>]</code>.</li></ul>
+<h2>Grammar</h2>
+<ul><li>A destination is <code>&lt;...&gt;</code> with no line ending and no unescaped <code>&lt;</code> or <code>&gt;</code>, or a nonempty run with no space or control characters and balanced unescaped parentheses (at least three levels). An empty destination is allowed.</li><li>A title is double-quoted, single-quoted or parenthesized, with backslash-escaped delimiters, and no blank line inside.</li><li>Whitespace (spaces, tabs, at most one line ending) is allowed around the destination and title; destination and title must be separated by whitespace.</li><li>A link label has at most 999 characters and no unescaped brackets. No whitespace is allowed between link text and a following label or <code>()</code>.</li><li>Brackets inside link text must be balanced or backslash-escaped. Code spans, autolinks and raw HTML bind tighter than brackets.</li><li>Destination and title go through the shared unescape and entity helpers. The href is percent-encoded for non-ASCII and unsafe characters with the shared helper (an existing <code>%XX</code> stays as is), and the href and title are HTML-escaped.</li></ul>
+<h2>Reads</h2>
+<ul><li>Inline text, the reference map.</li></ul>
+<h2>Writes</h2>
+<ul><li>Link nodes in the inline tree.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>The Links corpus section includes image examples, so it is gated in the images story. The checks here are bounded.</p>
+<p>=== AC links-inline-destination-and-title ===<br>Intent: An inline link renders one a element carrying the supplied destination, title and text.</p>
+<p>import subprocess</p>
+<p>text = &quot;label&quot; dest = &quot;/uri&quot; title = &quot;the title&quot; source = &quot;[&quot; + text + &quot;](&quot; + dest + &#x27; &quot;&#x27; + title + &#x27;&quot;)\n&#x27; result = subprocess.run([&quot;./commonmark&quot;], input=source, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;a &quot;) == 1 assert (&#x27;href=&quot;&#x27; + dest + &#x27;&quot;&#x27;) in result.stdout assert (&#x27;title=&quot;&#x27; + title + &#x27;&quot;&#x27;) in result.stdout assert (&quot;&gt;&quot; + text + &quot;&lt;/a&gt;&quot;) in result.stdout === END AC links-inline-destination-and-title ===</p>
+<p>=== AC links-reference-forms ===<br>Intent: Full, collapsed and shortcut references each resolve against a definition and render one a element.</p>
+<p>import subprocess</p>
+<p>definition = &quot;\n\n[foo]: /url\n&quot; for use in (&quot;[text][foo]&quot;, &quot;[foo][]&quot;, &quot;[foo]&quot;): result = subprocess.run([&quot;./commonmark&quot;], input=use + definition, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;a &quot;) == 1 === END AC links-reference-forms ===</p>
+<p>=== AC links-reference-case-insensitive ===<br>Intent: Label matching ignores case.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;[FOO]\n\n[foo]: /url\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;a &quot;) == 1 === END AC links-reference-case-insensitive ===</p>
+<p>=== AC links-undefined-reference-literal ===<br>Intent: A shortcut reference with no definition stays literal text.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;[nothing defined]\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;a &quot;) == 0 === END AC links-undefined-reference-literal ===</p>
+<p>=== AC links-no-nested-links ===<br>Intent: A link inside link text wins and the outer brackets stay literal, so only one a element appears.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;<a href="/uri">foo [bar</a>](/uri)\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;a &quot;) == 1 === END AC links-no-nested-links ===</p>
+<p>=== AC links-space-before-parenthesis ===<br>Intent: Whitespace between link text and the parenthesis prevents an inline link.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run([&quot;./commonmark&quot;], input=&quot;[link] (/uri)\n&quot;, capture_output=True, text=True) print(result.stdout) assert result.returncode == 0 assert result.stdout.count(&quot;&lt;a &quot;) == 0 === END AC links-space-before-parenthesis ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Links must never contain other links at any level of nesting.</li><li>Matching is on normalized label strings, not parsed inlines.</li><li>Follow the Appendix procedure; do not backtrack across the whole document.</li><li>Do not skip, filter or reinterpret corpus examples.</li></ul></article>
+</main>
+</body>
+</html>

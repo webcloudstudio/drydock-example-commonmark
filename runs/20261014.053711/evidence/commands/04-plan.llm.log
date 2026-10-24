@@ -1,0 +1,83 @@
+--- llm 1/14 · plan · claude sonnet · 20261014.053924.719Z-c425a4da ---
+2026-10-14 01:39:24 EDT  Calling CLAUDE/sonnet (plan · topology)...
+  upgraded=prompt_limit claude-haiku-5-5->sonnet (145,747 > 98% of 100,000)
+  Claude session: start id=d123737e-122e-4c84-83cc-cc0b875c9821
+  Completed CLAUDE/claude-sonnet-5-5 (plan · topology)  rc=0
+    elapsed=3m 4.3s   provider=3m 2.1s   turns=1   cached=1,454 (100% hit)   uncached=2   write 140,097   out=25,356   cost=$0.8141   tps=137.6
+
+--- llm 2/14 · plan · claude claude-haiku-5-5 · 20261014.054229.084Z-7512804f ---
+2026-10-14 01:42:29 EDT  Calling CLAUDE/claude-haiku-5-5 (plan · declaration repair)...
+  Claude session: start id=e9dcbfa5-003a-447b-a64f-200553b6016e
+  Completed CLAUDE/claude-haiku-5-5 (plan · declaration repair)  rc=0
+    elapsed=31.6s   provider=29.9s   turns=1   cached=2,234 (100% hit)   uncached=2   write 10,668   out=10,476   cost=$0.0074   tps=331.1
+
+--- llm 3/14 · plan · claude sonnet · 20261014.054300.763Z-9deb0257 ---
+2026-10-14 01:43:00 EDT  Calling CLAUDE/sonnet (plan · blueprint batch 1)...
+  upgraded=prompt_limit claude-haiku-5-5->sonnet (142,603 > 98% of 100,000)
+  Claude session: resume id=d123737e-122e-4c84-83cc-cc0b875c9821
+  Completed CLAUDE/claude-sonnet-5-5 (plan · blueprint batch 1)  rc=0
+    elapsed=1m 24.9s   provider=1m 22.8s   turns=1   cached=141,551 (100% hit)   uncached=2   write 26,417   out=12,614   cost=$1.0601   tps=148.5
+
+--- llm 4/14 · plan · claude sonnet · 20261014.054425.781Z-1b1b80de ---
+2026-10-14 01:44:25 EDT  Calling CLAUDE/sonnet (plan · blueprint batch 2)...
+  upgraded=prompt_limit claude-haiku-5-5->sonnet (169,071 > 98% of 100,000)
+  Claude session: resume id=d123737e-122e-4c84-83cc-cc0b875c9821
+  Completed CLAUDE/claude-sonnet-5-5 (plan · blueprint batch 2)  rc=0
+    elapsed=1m 5.3s   provider=1m 3.0s   turns=1   cached=167,968 (100% hit)   uncached=2   write 13,756   out=10,840   cost=$1.2403   tps=166.1
+
+--- llm 5/14 · plan · claude sonnet · 20261014.054531.189Z-8ceb7a2e ---
+2026-10-14 01:45:31 EDT  Calling CLAUDE/sonnet (plan · blueprint batch 3)...
+  upgraded=prompt_limit claude-haiku-5-5->sonnet (182,869 > 98% of 100,000)
+  Claude session: resume id=d123737e-122e-4c84-83cc-cc0b875c9821
+  Completed CLAUDE/claude-sonnet-5-5 (plan · blueprint batch 3)  rc=0
+    elapsed=59.9s   provider=57.4s   turns=1   cached=181,724 (100% hit)   uncached=2   write 12,058   out=10,198   cost=$1.4087   tps=170.3
+
+--- llm 6/14 · plan · claude sonnet · 20261014.054631.188Z-2fb3c4bb ---
+2026-10-14 01:46:31 EDT  Calling CLAUDE/sonnet (plan · blueprint batch 4)...
+  upgraded=prompt_limit claude-haiku-5-5->sonnet (194,981 > 98% of 100,000)
+  Claude session: resume id=d123737e-122e-4c84-83cc-cc0b875c9821
+  Completed CLAUDE/claude-sonnet-5-5 (plan · blueprint batch 4)  rc=0
+    elapsed=1m 13.2s   provider=1m 11.5s   turns=1   cached=193,782 (100% hit)   uncached=2   write 11,504   out=12,131   cost=$1.5954   tps=165.8
+
+--- llm 7/14 · plan · claude sonnet · 20261014.054744.596Z-19766597 ---
+2026-10-14 01:47:44 EDT  Calling CLAUDE/sonnet (plan · blueprint batch 5)...
+  upgraded=prompt_limit claude-haiku-5-5->sonnet (206,511 > 98% of 100,000)
+  Claude session: resume id=d123737e-122e-4c84-83cc-cc0b875c9821
+  Completed CLAUDE/claude-sonnet-5-5 (plan · blueprint batch 5)  rc=0
+    elapsed=51.5s   provider=49.4s   turns=1   cached=205,286 (100% hit)   uncached=2   write 13,485   out=8,752   cost=$1.7574   tps=170.0
+
+--- llm 8/14 · plan · claude claude-haiku-5-5 · 20261014.054836.740Z-0d57bf37 ---
+2026-10-14 01:48:36 EDT  Calling CLAUDE/claude-haiku-5-5 (plan · artifact repair)...
+  Claude session: start id=68962b3d-a8c4-42b7-8236-a321023affad
+  Completed CLAUDE/claude-haiku-5-5 (plan · artifact repair)  rc=0
+    elapsed=11.1s   provider=9.6s   turns=1   cached=2,234 (100% hit)   uncached=2   write 3,991   out=2,849   cost=$0.0022   tps=256.2
+
+--- llm 9/14 · lineage_attribute · claude claude-haiku-5-5 · 20261014.054902.112Z-5673422b ---
+2026-10-14 01:49:02 EDT  Calling CLAUDE/claude-haiku-5-5 (lineage_attribute)...
+  Completed CLAUDE/claude-haiku-5-5 (lineage_attribute)  rc=0
+    elapsed=32.3s   provider=30.5s   turns=1   cached=2,234 (100% hit)   uncached=2   write 4,502   out=7,783   cost=$0.0048   tps=241.3
+
+--- llm 10/14 · lineage_attribute · claude claude-haiku-5-5 · 20261014.054934.437Z-b7071b21 ---
+2026-10-14 01:49:34 EDT  Calling CLAUDE/claude-haiku-5-5 (lineage_attribute)...
+  Completed CLAUDE/claude-haiku-5-5 (lineage_attribute)  rc=0
+    elapsed=19.5s   provider=17.4s   turns=1   cached=2,234 (100% hit)   uncached=2   write 3,858   out=4,189   cost=$0.0029   tps=215.2
+
+--- llm 11/14 · lineage_attribute · claude claude-haiku-5-5 · 20261014.054954.017Z-07cec33d ---
+2026-10-14 01:49:54 EDT  Calling CLAUDE/claude-haiku-5-5 (lineage_attribute)...
+  Completed CLAUDE/claude-haiku-5-5 (lineage_attribute)  rc=0
+    elapsed=14.8s   provider=12.7s   turns=1   cached=2,234 (100% hit)   uncached=2   write 4,115   out=2,930   cost=$0.0023   tps=198.2
+
+--- llm 12/14 · lineage_attribute · claude claude-haiku-5-5 · 20261014.055009.063Z-23332133 ---
+2026-10-14 01:50:09 EDT  Calling CLAUDE/claude-haiku-5-5 (lineage_attribute)...
+  Completed CLAUDE/claude-haiku-5-5 (lineage_attribute)  rc=0
+    elapsed=16.5s   provider=15.0s   turns=1   cached=2,234 (100% hit)   uncached=2   write 5,924   out=3,597   cost=$0.0030   tps=217.8
+
+--- llm 13/14 · lineage_attribute · claude claude-haiku-5-5 · 20261014.055025.658Z-089087e4 ---
+2026-10-14 01:50:25 EDT  Calling CLAUDE/claude-haiku-5-5 (lineage_attribute)...
+  Completed CLAUDE/claude-haiku-5-5 (lineage_attribute)  rc=0
+    elapsed=10.9s   provider=9.4s   turns=1   cached=2,234 (100% hit)   uncached=2   write 82,635   out=2,474   cost=$0.0178   tps=226.0
+
+--- llm 14/14 · lineage_attribute · claude claude-haiku-5-5 · 20261014.055036.721Z-6bbb841f ---
+2026-10-14 01:50:36 EDT  Calling CLAUDE/claude-haiku-5-5 (lineage_attribute)...
+  Completed CLAUDE/claude-haiku-5-5 (lineage_attribute)  rc=0
+    elapsed=19.2s   provider=17.3s   turns=1   cached=2,234 (100% hit)   uncached=2   write 5,600   out=4,079   cost=$0.0032   tps=212.3
