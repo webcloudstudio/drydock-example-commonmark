@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-CLI.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-CLI.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-CLI.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Command-line Interface</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261024 V1</td></tr><tr><td>Description</td><td>Provides the root executable for converting Markdown from standard input to HTML on standard output.</td></tr><tr><td>Depends On</td><td>—</td></tr><tr><td>Provides</td><td>commonmark</td></tr><tr><td>Consumes</td><td>—</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>The <code>commonmark</code> executable at the application root reads Markdown from standard input and writes the rendered HTML to standard output. The input is UTF-8 Markdown. Do not use a public Markdown implementation.</p>
+<h2>Interface</h2>
+<p>Invoke the executable directly as <code>./commonmark</code>. It reads until standard input reaches end of file and writes the resulting HTML to standard output.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC cli-empty-input ===<br>Intent: The root executable accepts empty standard input and exits successfully.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run( [&quot;./commonmark&quot;], input=&quot;&quot;, capture_output=True, text=True ) assert result.returncode == 0 === END AC cli-empty-input ===</p>
+<p>=== AC cli-markdown-input ===<br>Intent: The root executable accepts Markdown on standard input and exits successfully.</p>
+<p>import subprocess</p>
+<p>source = &quot;hello\n&quot; result = subprocess.run( [&quot;./commonmark&quot;], input=source, capture_output=True, text=True ) assert result.returncode == 0 === END AC cli-markdown-input ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>The deliverable is an executable named <code>commonmark</code> at the application root.</li><li>Read Markdown from standard input and write HTML to standard output.</li><li>Do not use a public Markdown implementation.</li><li>Do not stage <code>sources/INSTRUCTIONS.md</code> into the application.</li><li>Preserve supplied scoring assets unchanged.</li></ul></article>
+</main>
+</body>
+</html>

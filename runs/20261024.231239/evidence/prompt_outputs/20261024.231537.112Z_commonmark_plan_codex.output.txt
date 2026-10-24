@@ -1,0 +1,280 @@
+=== BEGIN ARTIFACT FEATURE-BLOCK-QUOTES.md ===
+# FEATURE: Block Quotes
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261024 V1 |
+| Description | Parses block quote containers and their contents according to CommonMark 0.31.2. |
+| Depends On  | FEATURE-PARAGRAPHS.md, FEATURE-ATX-HEADINGS.md, FEATURE-BLANK-LINES.md |
+| Provides    | block quote parsing and rendering |
+| Consumes    | commonmark |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Parse block quotes as containers around the same block types supported at the document level. A block quote marker is `>` preceded by up to three spaces, optionally followed by one space. The marker may be omitted on paragraph continuation lines when CommonMark laziness rules allow it.
+
+## Behavior
+
+- Consecutive quoted lines form one block quote; a blank line separates adjacent block quotes.
+- Quotes may interrupt paragraphs and contain initial or final blank lines.
+- Support nested block quotes and lazy paragraph continuation. Laziness applies only when a line continues paragraph text; it cannot continue a heading, code block, list, or other block construct.
+- Parse the resulting contents using the document’s block parser and render them inside `<blockquote>` and `</blockquote>`.
+
+## Programmatic Acceptance
+
+=== AC block-quotes-conformance ===
+Intent: All supplied Block quotes examples pass through the executable.
+Suite: scoped
+Probe: --list
+Probe Count: summary
+
+import os
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, "sources/spec_tests.py", "--program", "./commonmark",
+     "--spec", "sources/spec.txt", "--pattern", "Block quotes"],
+    capture_output=True, text=True,
+    env={**os.environ, "PYTHONPATH": f"{os.getcwd()}/sources"},
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC block-quotes-conformance ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Preserve quoted content and nesting; do not parse content as inline text until block structure and document link definitions are available.
+- Do not modify supplied scoring assets.
+- Do not use a public Markdown implementation.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-LIST-ITEMS.md ===
+# FEATURE: List Items
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261024 V1 |
+| Description | Parses CommonMark list item boundaries, continuation, nesting, and laziness. |
+| Depends On  | FEATURE-BLOCK-QUOTES.md, FEATURE-BLANK-LINES.md |
+| Provides    | list item parsing and nesting |
+| Consumes    | commonmark |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Recognize bullet markers (`-`, `+`, `*`) and ordered markers of one to nine digits followed by `.` or `)`. Parse each item’s content as blocks, including nested blocks, continuation paragraphs, and lazy continuation lines.
+
+## Behavior
+
+- A list marker may be preceded by up to three spaces and must be followed by one to four spaces of content indentation, or be an empty item.
+- Support items beginning with indented code or a blank line under the specification’s distinct indentation rules.
+- Continuation indentation is based on marker width and the spaces following the marker. Support nested items and lazy continuation only for paragraph continuation text.
+- An item cannot interrupt a paragraph when empty; ordered lists interrupt paragraphs only when the marker number is 1.
+- A thematic break takes precedence over a list item when both interpretations are possible.
+- Render item contents within `<li>` elements; list wrapper grouping and tightness are defined by FEATURE-LISTS.md.
+
+## Programmatic Acceptance
+
+=== AC list-items-conformance ===
+Intent: All supplied List items examples pass through the executable.
+Suite: scoped
+Probe: --list
+Probe Count: summary
+
+import os
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, "sources/spec_tests.py", "--program", "./commonmark",
+     "--spec", "sources/spec.txt", "--pattern", "List items"],
+    capture_output=True, text=True,
+    env={**os.environ, "PYTHONPATH": f"{os.getcwd()}/sources"},
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC list-items-conformance ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Do not conflate list item boundaries with list grouping or tight/loose rendering.
+- Do not modify supplied scoring assets.
+- Do not use a public Markdown implementation.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-LISTS.md ===
+# FEATURE: Lists
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261024 V1 |
+| Description | Groups list items and renders ordered and bullet lists with CommonMark tightness. |
+| Depends On  | FEATURE-LIST-ITEMS.md, FEATURE-BLANK-LINES.md |
+| Provides    | bullet and ordered list rendering |
+| Consumes    | list item parsing and nesting |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Group adjacent list items of the same type into lists, determine ordered-list start numbers, and render tight or loose lists according to CommonMark 0.31.2.
+
+## Behavior
+
+- Items belong to the same list only when their bullet character matches, or their ordered delimiter matches.
+- The first ordered item sets the list start number; subsequent item numbers do not change it. Emit a `start` attribute when required by the conformance examples.
+- A list is loose when items are separated by blank lines or when an item has directly contained blocks separated by a blank line. Otherwise it is tight.
+- Tight lists omit paragraph wrappers for item paragraphs; loose lists retain them. Nested lists determine tightness independently.
+- A thematic break that takes precedence over a list item ends the current list.
+
+## Programmatic Acceptance
+
+=== AC lists-conformance ===
+Intent: All supplied Lists examples pass through the executable.
+Suite: scoped
+Probe: --list
+Probe Count: summary
+
+import os
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, "sources/spec_tests.py", "--program", "./commonmark",
+     "--spec", "sources/spec.txt", "--pattern", "Lists"],
+    capture_output=True, text=True,
+    env={**os.environ, "PYTHONPATH": f"{os.getcwd()}/sources"},
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC lists-conformance ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Keep nested list tightness local to each list.
+- Do not modify supplied scoring assets.
+- Do not use a public Markdown implementation.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-BACKSLASH-ESCAPES.md ===
+# FEATURE: Backslash Escapes
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261024 V1 |
+| Description | Parses CommonMark backslash escapes and hard breaks from trailing backslashes. |
+| Depends On  | FEATURE-PARAGRAPHS.md |
+| Provides    | backslash escape parsing, hard breaks from escaped line endings |
+| Consumes    | commonmark |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Treat a backslash followed by an ASCII punctuation character as an escape in inline content. A backslash before other characters remains literal. A backslash immediately before a line ending creates a hard line break unless the block ends there.
+
+## Behavior
+
+- Escaped punctuation renders as the punctuation character with HTML text escaping applied where needed.
+- Escapes remove Markdown meaning from the escaped punctuation.
+- Backslash escapes are inactive in code blocks, code spans, autolinks, and raw HTML.
+- Escapes remain active in link destinations, titles, reference definitions, and fenced-code info strings as applicable to those constructs.
+- Preserve an escaped backslash while leaving the following character unescaped.
+- A terminal backslash at the end of a block remains literal.
+
+## Programmatic Acceptance
+
+=== AC backslash-escapes-conformance ===
+Intent: All supplied Backslash escapes examples pass through the executable.
+Suite: scoped
+Probe: --list
+Probe Count: summary
+
+import os
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, "sources/spec_tests.py", "--program", "./commonmark",
+     "--spec", "sources/spec.txt", "--pattern", "Backslash escapes"],
+    capture_output=True, text=True,
+    env={**os.environ, "PYTHONPATH": f"{os.getcwd()}/sources"},
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC block-quotes-conformance ===
+=== BEGIN ARTIFACT FEATURE-CHARACTER-REFERENCES.md ===
+# FEATURE: Character References
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261024 V1 |
+| Description | Parses HTML entity and decimal or hexadecimal numeric character references in inline content. |
+| Depends On  | FEATURE-BACKSLASH-ESCAPES.md |
+| Provides    | entity and numeric character reference parsing |
+| Consumes    | commonmark |
+| Requires    | python-package=html5lib; scope=runtime |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Recognize valid HTML5 named entity references and decimal or hexadecimal numeric references in inline content. Do not recognize semicolon-less entities or malformed references.
+
+## Behavior
+
+- Named entities use the complete HTML5 entity-name set and require a trailing semicolon.
+- Decimal references contain one to seven decimal digits; hexadecimal references contain one to six hexadecimal digits after `x` or `X`. Both require semicolons.
+- Replace U+0000 and invalid Unicode scalar values with U+FFFD.
+- References render as their corresponding characters, with characters such as `&`, `<`, `>`, and quotes escaped as required in HTML text.
+- Do not interpret references inside code spans or code blocks, and do not allow references to stand in for Markdown structural markers.
+
+## Programmatic Acceptance
+
+=== AC character-references-conformance ===
+Intent: All supplied Entity and numeric character references examples pass through the executable.
+Suite: scoped
+Probe: --list
+Probe Count: summary
+
+import os
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, "sources/spec_tests.py", "--program", "./commonmark",
+     "--spec", "sources/spec.txt", "--pattern", "Entity and numeric character references"],
+    capture_output=True, text=True,
+    env={**os.environ, "PYTHONPATH": f"{os.getcwd()}/sources"},
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC character-references-conformance ===

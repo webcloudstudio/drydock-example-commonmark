@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/LINEAGE.json</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/LINEAGE.json</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../workspace/targets/commonmark/LINEAGE.json">Raw file</a></div></header>
+<article class="doc"><pre>{
+  &quot;version&quot;: 1,
+  &quot;import&quot;: {
+    &quot;root&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261024.231239/sources&quot;,
+    &quot;format&quot;: &quot;markdown&quot;
+  },
+  &quot;sources&quot;: {
+    &quot;INSTRUCTIONS.md&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;f7207b9&quot;,
+          &quot;date&quot;: &quot;2026-10-24&quot;,
+          &quot;hash&quot;: &quot;10b172786a92ad4dc012e88358cf96fcead95bcd919f2677df3a03405782fb0a&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;commonmark-executable&quot;,
+              &quot;text&quot;: &quot;The parser reads Markdown from\nstandard input and writes HTML to standard output. Do not use a public Markdown implementation.\n\nThe deliverable is an executable named `commonmark` at the application root.&quot;,
+              &quot;stories&quot;: [
+                &quot;cli-001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;thematic-breaks&quot;,
+              &quot;text&quot;: &quot;paragraphs, thematic breaks, ATX headings, setext headings, indented code, fenced&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;atx-headings&quot;,
+              &quot;text&quot;: &quot;ATX headings&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-002&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;setext-headings&quot;,
+              &quot;text&quot;: &quot;setext headings&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-003&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;indented-code-blocks&quot;,
+              &quot;text&quot;: &quot;indented code&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-004&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;fenced-code-blocks&quot;,
+              &quot;text&quot;: &quot;fenced&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-005&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;html-blocks&quot;,
+              &quot;text&quot;: &quot;HTML blocks&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-006&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;link-reference-definitions&quot;,
+              &quot;text&quot;: &quot;link reference definitions&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;paragraphs&quot;,
+              &quot;text&quot;: &quot;paragraphs&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-008&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;block-quotes&quot;,
+              &quot;text&quot;: &quot;block quotes&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-010&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;lists&quot;,
+              &quot;text&quot;: &quot;lists \u2014 the hardest block construct, with lazy continuation, nesting, and tightness.&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-011&quot;,
+                &quot;blk-012&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;backslash-escapes&quot;,
+              &quot;text&quot;: &quot;backslash escapes&quot;,
+              &quot;stories&quot;: [
+                &quot;inl-001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;character-references&quot;,
+              &quot;text&quot;: &quot;entity and numeric references&quot;,
+              &quot;stories&quot;: [
+                &quot;inl-002&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;code-spans&quot;,
+              &quot;text&quot;: &quot;code spans&quot;,
+              &quot;stories&quot;: [
+                &quot;inl-003&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;emphasis&quot;,
+              &quot;text&quot;: &quot;emphasis and strong&quot;,
+              &quot;stories&quot;: [
+                &quot;inl-004&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;links-and-images&quot;,
+              &quot;text&quot;: &quot;links and images&quot;,
+              &quot;stories&quot;: [
+                &quot;inl-005&quot;,
+                &quot;inl-006&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;autolinks&quot;,
+              &quot;text&quot;: &quot;autolinks&quot;,
+              &quot;stories&quot;: [
+                &quot;inl-007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;raw-html&quot;,
+              &quot;text&quot;: &quot;raw HTML&quot;,
+              &quot;stories&quot;: [
+                &quot;inl-008&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;hard-breaks&quot;,
+              &quot;text&quot;: &quot;hard breaks.&quot;,
+              &quot;stories&quot;: [
+                &quot;inl-009&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;full-conformance-suite&quot;,
+              &quot;text&quot;: &quot;runs `sh sources/full_test.sh`, prints captured standard output and standard error, and asserts\nonly `result.returncode == 0`; and&quot;,
+              &quot;stories&quot;: [
+                &quot;con-001&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;cmark.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;f7207b9&quot;,
+          &quot;date&quot;: &quot;2026-10-24&quot;,
+          &quot;hash&quot;: &quot;c5fb45e7c64fd7670b2a3c49a151e46f4af9d0ad3004bedb37ecf9cdc34d2f00&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;convert-markdown-to-html&quot;,
+              &quot;text&quot;: &quot;markdown = cmark.cmark_markdown_to_html&quot;,
+              &quot;stories&quot;: [
+                &quot;cli-001&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;full_test.sh&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;f7207b9&quot;,
+          &quot;date&quot;: &quot;2026-10-24&quot;,
+          &quot;hash&quot;: &quot;5b634a1c78117313283acceda8faad9de02b594e54949439c73697b058941a93&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;commonmark-executable&quot;,
+              &quot;text&quot;: &quot;The deliverable is an executable named commonmark that reads UTF-8 Markdown on stdin\nand writes HTML to stdout.&quot;,
+              &quot;stories&quot;: [
+                &quot;cli-001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;pass-complete-conformance-suite&quot;,
+              &quot;text&quot;: &quot;spec_tests.py exits with failed + errored, so exit 0 means the complete CommonMark 0.31.2 suite passed.&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-001&quot;,
+                &quot;blk-002&quot;,
+                &quot;blk-003&quot;,
+                &quot;blk-004&quot;,
+                &quot;blk-005&quot;,
+                &quot;blk-006&quot;,
+                &quot;blk-007&quot;,
+                &quot;blk-008&quot;,
+                &quot;blk-009&quot;,
+                &quot;blk-010&quot;,
+                &quot;blk-011&quot;,
+                &quot;blk-012&quot;,
+                &quot;inl-001&quot;,
+                &quot;inl-002&quot;,
+                &quot;inl-003&quot;,
+                &quot;inl-004&quot;,
+                &quot;inl-005&quot;,
+                &quot;inl-006&quot;,
+                &quot;inl-007&quot;,
+                &quot;inl-008&quot;,
+                &quot;inl-009&quot;,
+                &quot;inl-010&quot;,
+                &quot;inl-011&quot;,
+                &quot;con-001&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;normalize.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;f7207b9&quot;,
+          &quot;date&quot;: &quot;2026-10-24&quot;,
+          &quot;hash&quot;: &quot;94a9dd253907e3dab7c02fc11e934f06112dcf0f3804255d09d732c8c7c4b5f4&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;collapse-inner-whitespace&quot;,
+              &quot;text&quot;: &quot;Multiple inner whitespaces are collapsed to a single space (except\nin pre tags):&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;remove-block-whitespace&quot;,
+              &quot;text&quot;: &quot;Whitespace surrounding block-level tags is removed.&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;convert-self-closing-tags&quot;,
+              &quot;text&quot;: &quot;Self-closing tags are converted to open tags.&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;sort-and-lowercase-attributes&quot;,
+              &quot;text&quot;: &quot;Attributes are sorted and lowercased.&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;convert-character-references&quot;,
+              &quot;text&quot;: &quot;References are converted to unicode, except that &#x27;&lt;&#x27;, &#x27;&gt;&#x27;, &#x27;&amp;&#x27;, and\n      &#x27;\&quot;&#x27; are rendered using entities.&quot;,
+              &quot;stories&quot;: [
+                &quot;inl-002&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;spec.txt&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;f7207b9&quot;,
+          &quot;date&quot;: &quot;2026-10-24&quot;,
+          &quot;hash&quot;: &quot;43fad3e0ac5190a3b0bc6a41f7b1a853201a26ec2e6b74871f5d96239a8c34cf&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;markdown-to-html-cli&quot;,
+              &quot;text&quot;: &quot;Provide the root commonmark executable for Markdown input and HTML output.&quot;,
+              &quot;stories&quot;: [
+                &quot;cli-001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-thematic-breaks&quot;,
+              &quot;text&quot;: &quot;Parse thematic breaks.&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-atx-headings&quot;,
+              &quot;text&quot;: &quot;Parse ATX headings.&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-002&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-setext-headings&quot;,
+              &quot;text&quot;: &quot;Parse setext headings.&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-003&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-indented-code-blocks&quot;,
+              &quot;text&quot;: &quot;Parse indented code blocks.&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-004&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-fenced-code-blocks&quot;,
+              &quot;text&quot;: &quot;Parse fenced code blocks.&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-005&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-html-blocks&quot;,
+              &quot;text&quot;: &quot;Parse HTML blocks.&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-006&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-link-reference-definitions&quot;,
+              &quot;text&quot;: &quot;Parse link reference definitions.&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-paragraphs&quot;,
+              &quot;text&quot;: &quot;Parse paragraphs.&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-008&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;handle-blank-lines&quot;,
+              &quot;text&quot;: &quot;Handle blank lines between blocks.&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-009&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-block-quotes&quot;,
+              &quot;text&quot;: &quot;Parse block quotes.&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-010&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-list-items&quot;,
+              &quot;text&quot;: &quot;Parse list items.&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-011&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-lists-and-tightness&quot;,
+              &quot;text&quot;: &quot;Parse lists and list tightness.&quot;,
+              &quot;stories&quot;: [
+                &quot;blk-012&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-backslash-escapes&quot;,
+              &quot;text&quot;: &quot;Parse backslash escapes.&quot;,
+              &quot;stories&quot;: [
+                &quot;inl-001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-character-references&quot;,
+              &quot;text&quot;: &quot;Parse entity and numeric character references.&quot;,
+              &quot;stories&quot;: [
+                &quot;inl-002&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-code-spans&quot;,
+              &quot;text&quot;: &quot;Parse code spans.&quot;,
+              &quot;stories&quot;: [
+                &quot;inl-003&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-emphasis&quot;,
+              &quot;text&quot;: &quot;Parse emphasis and strong emphasis.&quot;,
+              &quot;stories&quot;: [
+                &quot;inl-004&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-links&quot;,
+              &quot;text&quot;: &quot;Parse links.&quot;,
+              &quot;stories&quot;: [
+                &quot;inl-005&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-images&quot;,
+              &quot;text&quot;: &quot;Parse images.&quot;,
+              &quot;stories&quot;: [
+                &quot;inl-006&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-autolinks&quot;,
+              &quot;text&quot;: &quot;Parse autolinks.&quot;,
+              &quot;stories&quot;: [
+                &quot;inl-007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;preserve-raw-html&quot;,
+              &quot;text&quot;: &quot;Preserve raw HTML inline.&quot;,
+              &quot;stories&quot;: [
+                &quot;inl-008&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-hard-line-breaks&quot;,
+              &quot;text&quot;: &quot;Parse hard line breaks.&quot;,
+              &quot;stories&quot;: [
+                &quot;inl-009&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-soft-line-breaks&quot;,
+              &quot;text&quot;: &quot;Parse soft line breaks.&quot;,
+              &quot;stories&quot;: [
+                &quot;inl-010&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;preserve-textual-content&quot;,
+              &quot;text&quot;: &quot;Preserve textual content.&quot;,
+              &quot;stories&quot;: [
+                &quot;inl-011&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;pass-conformance-suite&quot;,
+              &quot;text&quot;: &quot;Pass the complete CommonMark conformance suite.&quot;,
+              &quot;stories&quot;: [
+                &quot;con-001&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;spec_tests.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;f7207b9&quot;,
+          &quot;date&quot;: &quot;2026-10-24&quot;,
+          &quot;hash&quot;: &quot;9db1ea4a3ee79c5ec74eebc09c5985eb252427e8d9d19ef45e5cc3f2ae410855&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;configure-test-runner&quot;,
+              &quot;text&quot;: &quot;Support command-line options for selecting the program, specification file, section pattern, dynamic library directory, normalization behavior, test dumping, normalization debugging, an individual example number, and change tracking.&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;parse-spec-examples&quot;,
+              &quot;text&quot;: &quot;Read the specification file, extract Markdown examples and expected HTML, and associate each test with its example number, source lines, and section.&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;run-and-compare-tests&quot;,
+              &quot;text&quot;: &quot;Run each selected Markdown example through the CommonMark program, compare its HTML output with expected HTML, and report failures or errors.&quot;,
+              &quot;stories&quot;: [
+                &quot;cli-001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;normalize-html&quot;,
+              &quot;text&quot;: &quot;Normalize actual and expected HTML before comparison, unless normalization is disabled.&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;dump-tests-as-json&quot;,
+              &quot;text&quot;: &quot;Dump the selected tests in JSON format.&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;debug-html-normalization&quot;,
+              &quot;text&quot;: &quot;Filter standard input through the HTML normalizer in debug-normalization mode.&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;track-test-result-changes&quot;,
+              &quot;text&quot;: &quot;Track test results in a JSON file and report only changes from previous results.&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;report-test-counts&quot;,
+              &quot;text&quot;: &quot;Report the counts of passed, failed, errored, and skipped tests, and exit with the sum of failures and errors.&quot;,
+              &quot;stories&quot;: []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+</pre></article>
+</main>
+</body>
+</html>

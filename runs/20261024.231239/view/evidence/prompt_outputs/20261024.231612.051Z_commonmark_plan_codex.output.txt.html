@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261024.231612.051Z_commonmark_plan_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261024.231612.051Z_commonmark_plan_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261024.231612.051Z_commonmark_plan_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>=== BEGIN ARTIFACT FEATURE-EMPHASIS.md ===
+# FEATURE: Emphasis
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261024 V1 |
+| Description | Parse CommonMark emphasis and strong emphasis in inline content. |
+| Depends On  | FEATURE-CLI.md, FEATURE-THEMATIC-BREAKS.md, FEATURE-ATX-HEADINGS.md, FEATURE-SETEXT-HEADINGS.md, FEATURE-INDENTED-CODE.md, FEATURE-FENCED-CODE.md, FEATURE-HTML-BLOCKS.md, FEATURE-LINK-REFERENCE-DEFINITIONS.md, FEATURE-PARAGRAPHS.md, FEATURE-BLANK-LINES.md, FEATURE-BLOCK-QUOTES.md, FEATURE-LIST-ITEMS.md, FEATURE-LISTS.md, FEATURE-BACKSLASH-ESCAPES.md, FEATURE-CHARACTER-REFERENCES.md, FEATURE-CODE-SPANS.md |
+| Provides    | CommonMark emphasis and strong emphasis |
+| Consumes    | CommonMark inline content |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Interpret `*` and `_` delimiter runs as emphasis or strong emphasis according to the CommonMark delimiter-run rules. Support nested spans, Unicode whitespace and punctuation, intraword `*` emphasis, the restrictions on intraword `_` emphasis, and the specified precedence and ambiguity rules.
+
+## Parsing and rendering
+
+- Determine left- and right-flanking runs from neighboring Unicode whitespace and punctuation.
+- Apply the opener and closer rules for `*`, `_`, `**`, and `__`, including the rule of three.
+- Use the smallest valid delimiter spans and minimize nesting where the rules require it. Preserve unmatched delimiter characters as text.
+- Render emphasis with `&lt;em&gt;` and strong emphasis with `&lt;strong&gt;`. Parse their contents as inline content, including other emphasis constructs.
+- Code spans, links, images, and HTML tags bind more tightly than emphasis.
+
+## Programmatic Acceptance
+
+=== AC emphasis-suite ===
+Intent: All supplied examples in the “Emphasis and strong emphasis” section pass.
+Suite: scoped
+Probe: --dump-tests
+Probe Count: lines
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;,
+     &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Emphasis and strong emphasis&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC emphasis-suite ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Use the supplied CommonMark 0.31.2 rules and examples as authoritative.
+- Preserve escaped delimiter characters and unmatched runs as literal text.
+- Do not use a public Markdown implementation.
+- Do not modify supplied scoring assets.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-LINKS.md ===
+# FEATURE: Links
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261024 V1 |
+| Description | Parse inline and reference-style CommonMark links. |
+| Depends On  | FEATURE-CLI.md, FEATURE-THEMATIC-BREAKS.md, FEATURE-ATX-HEADINGS.md, FEATURE-SETEXT-HEADINGS.md, FEATURE-INDENTED-CODE.md, FEATURE-FENCED-CODE.md, FEATURE-HTML-BLOCKS.md, FEATURE-LINK-REFERENCE-DEFINITIONS.md, FEATURE-PARAGRAPHS.md, FEATURE-BLANK-LINES.md, FEATURE-BLOCK-QUOTES.md, FEATURE-LIST-ITEMS.md, FEATURE-LISTS.md, FEATURE-BACKSLASH-ESCAPES.md, FEATURE-CHARACTER-REFERENCES.md, FEATURE-CODE-SPANS.md, FEATURE-EMPHASIS.md |
+| Provides    | Inline and reference links |
+| Consumes    | Document link reference definitions |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Parse inline links and full, collapsed, and shortcut reference links. Resolve reference labels against the document-wide definitions collected during block parsing.
+
+## Link behavior
+
+- Parse inline destinations in angle-bracket or balanced-parenthesis form, optional titles, escapes, and character references as specified.
+- Match reference labels after Unicode case folding, trimming, and collapsing whitespace. The first matching definition wins.
+- Support links with empty text or destinations when allowed by the syntax.
+- Bracketed link text may contain balanced brackets and inline elements. Links cannot contain nested links; code spans, autolinks, and raw HTML tags bind more tightly than link brackets.
+- Render destinations as `href` and optional titles as `title`, escaping attribute values for HTML. Render link text as inline HTML.
+- Images use the same syntax but are specified and implemented by the image capability.
+
+## Programmatic Acceptance
+
+=== AC links-suite ===
+Intent: All supplied examples in the “Links” section pass.
+Suite: scoped
+Probe: --dump-tests
+Probe Count: lines
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;,
+     &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Links&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC links-suite ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Do not create links when the syntax is invalid or the reference label is undefined.
+- Do not allow links to contain nested links.
+- Do not use a public Markdown implementation or modify supplied scoring assets.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-IMAGES.md ===
+# FEATURE: Images
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261024 V1 |
+| Description | Parse inline and reference-style CommonMark images. |
+| Depends On  | FEATURE-CLI.md, FEATURE-THEMATIC-BREAKS.md, FEATURE-ATX-HEADINGS.md, FEATURE-SETEXT-HEADINGS.md, FEATURE-INDENTED-CODE.md, FEATURE-FENCED-CODE.md, FEATURE-HTML-BLOCKS.md, FEATURE-LINK-REFERENCE-DEFINITIONS.md, FEATURE-PARAGRAPHS.md, FEATURE-BLANK-LINES.md, FEATURE-BLOCK-QUOTES.md, FEATURE-LIST-ITEMS.md, FEATURE-LISTS.md, FEATURE-BACKSLASH-ESCAPES.md, FEATURE-CHARACTER-REFERENCES.md, FEATURE-CODE-SPANS.md, FEATURE-EMPHASIS.md, FEATURE-LINKS.md |
+| Provides    | Inline and reference images |
+| Consumes    | Document link reference definitions |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Parse inline and reference-style images using the CommonMark link and label rules, including full, collapsed, and shortcut references.
+
+## Image behavior
+
+- Support empty descriptions and descriptions containing inline elements, links, and nested image syntax where valid.
+- Render images as `&lt;img&gt;` elements with `src`, plain-text `alt`, and an optional `title`. The alt text is the description&#x27;s plain textual content without inline formatting or markup.
+- Resolve reference labels using the document-wide definitions and matching rules.
+- Escape `src`, `alt`, and `title` attribute values for HTML.
+
+## Programmatic Acceptance
+
+=== AC images-suite ===
+Intent: All supplied examples in the “Images” section pass.
+Suite: scoped
+Probe: --dump-tests
+Probe Count: lines
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;,
+     &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Images&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC images-suite ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Preserve the distinction between links and images; image descriptions render as plain-text alt attributes.
+- Do not use a public Markdown implementation or modify supplied scoring assets.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-AUTOLINKS.md ===
+# FEATURE: Autolinks
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261024 V1 |
+| Description | Convert valid URI and email autolinks into HTML links. |
+| Depends On  | FEATURE-CLI.md, FEATURE-THEMATIC-BREAKS.md, FEATURE-ATX-HEADINGS.md, FEATURE-SETEXT-HEADINGS.md, FEATURE-INDENTED-CODE.md, FEATURE-FENCED-CODE.md, FEATURE-HTML-BLOCKS.md, FEATURE-LINK-REFERENCE-DEFINITIONS.md, FEATURE-PARAGRAPHS.md, FEATURE-BLANK-LINES.md, FEATURE-BLOCK-QUOTES.md, FEATURE-LIST-ITEMS.md, FEATURE-LISTS.md, FEATURE-BACKSLASH-ESCAPES.md, FEATURE-CHARACTER-REFERENCES.md, FEATURE-CODE-SPANS.md, FEATURE-EMPHASIS.md, FEATURE-LINKS.md, FEATURE-IMAGES.md |
+| Provides    | URI and email autolinks |
+| Consumes    | CommonMark inline content |
+ 
+## Questions
+
+- None.
+
+## Purpose
+
+Recognize valid absolute URI and email address autolinks enclosed in angle brackets. Render them as links whose visible text is the URI or address; email links use the `mailto:` scheme.
+
+## Autolink rules
+
+- URI schemes begin with an ASCII letter, contain 2–32 characters, and use only ASCII letters, digits, `+`, `.`, or `-`.
+- URI contents exclude ASCII control characters, spaces, `&lt;`, and `&gt;`.
+- Email autolinks follow the email address grammar in the CommonMark specification.
+- Backslash escapes are not interpreted inside autolinks.
+- Invalid autolinks remain ordinary text and are escaped as HTML text.
+
+## Programmatic Acceptance
+
+=== AC autolinks-suite ===
+Intent: All supplied examples in the “Autolinks” section pass.
+Suite: scoped
+Probe: --dump-tests
+Probe Count: lines
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;,
+     &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Autolinks&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC autolinks-suite ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Do not turn plain URI or email text without angle brackets into links.
+- Do not use a public Markdown implementation or modify supplied scoring assets.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-RAW-HTML.md ===
+# FEATURE: Raw HTML
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261024 V1 |
+| Description | Preserve valid inline HTML tags and raw HTML constructs in Markdown output. |
+| Depends On  | FEATURE-CLI.md, FEATURE-THEMATIC-BREAKS.md, FEATURE-ATX-HEADINGS.md, FEATURE-SETEXT-HEADINGS.md, FEATURE-INDENTED-CODE.md, FEATURE-FENCED-CODE.md, FEATURE-HTML-BLOCKS.md, FEATURE-LINK-REFERENCE-DEFINITIONS.md, FEATURE-PARAGRAPHS.md, FEATURE-BLANK-LINES.md, FEATURE-BLOCK-QUOTES.md, FEATURE-LIST-ITEMS.md, FEATURE-LISTS.md |
+| Provides    | Raw inline HTML |
+| Consumes    | CommonMark inline content |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Recognize valid CommonMark inline HTML tags and constructs, including open and closing tags, comments, processing instructions, declarations, and CDATA sections. Preserve recognized markup literally in HTML output.
+
+## Inline HTML behavior
+
+- Apply the grammar for tag names, attributes, attribute values, comments, processing instructions, declarations, and CDATA sections.
+- Raw HTML binds more tightly than emphasis and link bracket parsing.
+- Text that does not form a valid raw HTML construct is escaped as ordinary text.
+- Block HTML handling remains owned by the HTML blocks capability.
+
+## Programmatic Acceptance
+
+=== AC raw-html-suite ===
+Intent: All supplied examples in the “Raw HTML” section pass.
+Suite: scoped
+Probe: --dump-tests
+Probe Count: lines
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;,
+     &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Raw HTML&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC raw-html-suite ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Preserve recognized raw HTML verbatim and escape invalid tag-like text.
+- Do not use a public Markdown implementation or modify supplied scoring assets.
+=== END ARTIFACT===&quot;</pre></article>
+</main>
+</body>
+</html>

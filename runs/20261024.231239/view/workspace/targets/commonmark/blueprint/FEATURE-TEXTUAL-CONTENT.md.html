@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-TEXTUAL-CONTENT.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-TEXTUAL-CONTENT.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-TEXTUAL-CONTENT.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Textual Content</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261024 V1</td></tr><tr><td>Description</td><td>Preserves and safely renders plain textual content.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md</td></tr><tr><td>Provides</td><td>textual content</td></tr><tr><td>Consumes</td><td>—</td></tr></tbody></table></div>
+<h2>Behavior</h2>
+<ul><li>Preserve characters not assigned another CommonMark interpretation.</li><li>Escape text characters as required for safe HTML text output.</li><li>Preserve internal spaces verbatim.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC textual-content-conformance ===<br>Intent: All supplied Textual content examples pass.<br>Suite: scoped<br>Probe: --list<br>Probe Count: summary</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Textual content&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC textual-content-conformance ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not use a public Markdown implementation.</li><li>Keep supplied scoring assets unchanged.</li></ul></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-SOFT-LINE-BREAKS.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-SOFT-LINE-BREAKS.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-SOFT-LINE-BREAKS.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Soft Line Breaks</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261024 V1</td></tr><tr><td>Description</td><td>Preserves regular line endings between inline content.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md</td></tr><tr><td>Provides</td><td>soft line breaks</td></tr><tr><td>Consumes</td><td>—</td></tr></tbody></table></div>
+<h2>Behavior</h2>
+<ul><li>Parse a regular line ending not covered by hard-break rules as a soft line break.</li><li>Remove trailing spaces and leading spaces around soft line breaks.</li><li>Render soft line breaks as line endings in HTML, consistent with the supplied examples.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC soft-line-breaks-conformance ===<br>Intent: All supplied Soft line breaks examples pass.<br>Suite: scoped<br>Probe: --list<br>Probe Count: summary</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Soft line breaks&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC soft-line-breaks-conformance ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not use a public Markdown implementation.</li><li>Keep supplied scoring assets unchanged.</li></ul></article>
+</main>
+</body>
+</html>

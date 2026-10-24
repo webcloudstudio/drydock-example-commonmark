@@ -1,0 +1,1943 @@
+{
+  "artifacts": {
+    "Evidence": [
+      {
+        "bytes": 291,
+        "path": "evidence/README.md",
+        "sha256": "6d504b799df307a1eca389f6618191352ba68ced6d0ab9ae0bf725169c9f3d7f"
+      },
+      {
+        "bytes": 0,
+        "path": "evidence/commands/01-init.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 587,
+        "path": "evidence/commands/01-init.stdout.log",
+        "sha256": "f8add4edbb88b511420e9a2aa6e48738df3e0ec0b7e60b87eb0f7342402c574b"
+      },
+      {
+        "bytes": 0,
+        "path": "evidence/commands/02-import-sources.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 457,
+        "path": "evidence/commands/02-import-sources.stdout.log",
+        "sha256": "1166a4629acf7bcf65c6d3c3a8d60ed7f4744fea7dc5a9a232f14e45e86c3bf7"
+      },
+      {
+        "bytes": 274,
+        "path": "evidence/commands/03-analyze.llm.log",
+        "sha256": "2e98b441c11880821b42cc76fc7284709eab1f49fd436033355f92f7e0187774"
+      },
+      {
+        "bytes": 0,
+        "path": "evidence/commands/03-analyze.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 593,
+        "path": "evidence/commands/03-analyze.stdout.log",
+        "sha256": "f81e6491304414845cd485e2894eb735fdbc2fd4d8a63a4c286649986ecdbc6e"
+      },
+      {
+        "bytes": 3958,
+        "path": "evidence/commands/04-plan.llm.log",
+        "sha256": "28ee7df12cfadf4a1931e3699cfd543b56102db07cba4cd0851bb7d886de4690"
+      },
+      {
+        "bytes": 0,
+        "path": "evidence/commands/04-plan.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 10799,
+        "path": "evidence/commands/04-plan.stdout.log",
+        "sha256": "e9fb84415f515e476c65f778baf82235ad1f781caeaab661847c07789b4e632c"
+      },
+      {
+        "bytes": 0,
+        "path": "evidence/commands/05-plan-verify.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 4735,
+        "path": "evidence/commands/05-plan-verify.stdout.log",
+        "sha256": "013e7ff84a6d21ecf19b760de7d538f54a5d726d36480495edae11accf7b848a"
+      },
+      {
+        "bytes": 285,
+        "path": "evidence/commands/06-plan-repair.llm.log",
+        "sha256": "ee0c632a164e8a1ac8056e206e5431a4dcdccb17aab31e949e9bd527392be51d"
+      },
+      {
+        "bytes": 0,
+        "path": "evidence/commands/06-plan-repair.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 14593,
+        "path": "evidence/commands/06-plan-repair.stdout.log",
+        "sha256": "4c8af6d100df1f618c1096085cb1f2b73c21e542b0ea316c309571caac2f173c"
+      },
+      {
+        "bytes": 0,
+        "path": "evidence/commands/07-plan-verify-after-repair.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 4735,
+        "path": "evidence/commands/07-plan-verify-after-repair.stdout.log",
+        "sha256": "013e7ff84a6d21ecf19b760de7d538f54a5d726d36480495edae11accf7b848a"
+      },
+      {
+        "bytes": 1272,
+        "path": "evidence/commands/08-after-plan-build-status.stderr.log",
+        "sha256": "f4e6ef9628e2820b892a2848dfb32012b0ea289d2735be725036fe18a14cdedf"
+      },
+      {
+        "bytes": 73,
+        "path": "evidence/commands/08-after-plan-build-status.stdout.log",
+        "sha256": "c0946adb967f28346456234ece30b073da00805a29fab8ea7036ea6c468209bc"
+      },
+      {
+        "bytes": 85847,
+        "path": "evidence/llm.jsonl",
+        "sha256": "a6c78de1646607f8c9329cb61c8540c20ad2164bf0538adbd4486d0b0697ba40"
+      },
+      {
+        "bytes": 194,
+        "path": "evidence/llm_logs/20261024.231325.467Z_commonmark_analyze_codex.llm.log",
+        "sha256": "5267db01088623a27aa4b8dc4821b48da6814fc5960cf3dc1e5ce0d8ceb96780"
+      },
+      {
+        "bytes": 212,
+        "path": "evidence/llm_logs/20261024.231424.750Z_commonmark_plan_codex.llm.log",
+        "sha256": "d3da4c77e5d7d2ca76b214a9440abc4b023c6f0fa192a2216e76eb3b2dd698d2"
+      },
+      {
+        "bytes": 230,
+        "path": "evidence/llm_logs/20261024.231500.475Z_commonmark_plan_codex.llm.log",
+        "sha256": "c7e260d4e3b55d68edbeef0b0a6a659e6864947cea9befd47d296d8cbb4f42d8"
+      },
+      {
+        "bytes": 230,
+        "path": "evidence/llm_logs/20261024.231521.302Z_commonmark_plan_codex.llm.log",
+        "sha256": "89e33b7cdbd27bca79ecacddcc6a45d97d5cb1b9af7fa45773f5b205ae035036"
+      },
+      {
+        "bytes": 230,
+        "path": "evidence/llm_logs/20261024.231537.112Z_commonmark_plan_codex.llm.log",
+        "sha256": "a961a26d6f3462613b9965e710d3040ead5b6bb7b5e43a40b88ab30826aed0b3"
+      },
+      {
+        "bytes": 230,
+        "path": "evidence/llm_logs/20261024.231555.998Z_commonmark_plan_codex.llm.log",
+        "sha256": "19216ec1dde60fcf204b1bfca4580a6f33221a6ddad2de3ad989dbbf7fef8735"
+      },
+      {
+        "bytes": 230,
+        "path": "evidence/llm_logs/20261024.231612.051Z_commonmark_plan_codex.llm.log",
+        "sha256": "27a963cd402d36f12f041564e1d280c9343e4c4fd3e67d3208fd550c61929a59"
+      },
+      {
+        "bytes": 230,
+        "path": "evidence/llm_logs/20261024.231633.428Z_commonmark_plan_codex.llm.log",
+        "sha256": "28ac60499729b0acbdbc4d08012d99bc8e7e7e7f6d44bdfa70fc257a24ca21da"
+      },
+      {
+        "bytes": 212,
+        "path": "evidence/llm_logs/20261024.231704.644Z_commonmark_lineage_attribute_codex.llm.log",
+        "sha256": "29313dfaea790fb8cea500875eaa7c0b33fa92d442d24511a88fd7dc6fdffd81"
+      },
+      {
+        "bytes": 209,
+        "path": "evidence/llm_logs/20261024.231715.833Z_commonmark_lineage_attribute_codex.llm.log",
+        "sha256": "c00fa7917270ce9b7147a9931892c78e743041155ce1567d4816718e915fa4b9"
+      },
+      {
+        "bytes": 209,
+        "path": "evidence/llm_logs/20261024.231725.846Z_commonmark_lineage_attribute_codex.llm.log",
+        "sha256": "bd6c8cfa0ffc6643907c410ae3e65c6a85a04923934d57ba62a5c580ab4da87f"
+      },
+      {
+        "bytes": 209,
+        "path": "evidence/llm_logs/20261024.231733.641Z_commonmark_lineage_attribute_codex.llm.log",
+        "sha256": "12422bb7e8dc478622fec9c56f05cadbf6fe6df09d336320c790ed8a06429ea7"
+      },
+      {
+        "bytes": 210,
+        "path": "evidence/llm_logs/20261024.231743.029Z_commonmark_lineage_attribute_codex.llm.log",
+        "sha256": "3c9c1733c8fdf76daf079fe41121ee6d45e280180769ea8ec9d22bce8fef1dce"
+      },
+      {
+        "bytes": 209,
+        "path": "evidence/llm_logs/20261024.231750.034Z_commonmark_lineage_attribute_codex.llm.log",
+        "sha256": "32f7cd5752b5c060ca54aa5fa70d664752be6765460e7bee841bb9e62fc54f10"
+      },
+      {
+        "bytes": 201,
+        "path": "evidence/llm_logs/20261024.231914.511Z_commonmark_plan-repair_codex.llm.log",
+        "sha256": "c910d1de030cc5db1c695b7f03aab909f7dc02254857b4dc2b9951345b3fc12c"
+      },
+      {
+        "bytes": 14823,
+        "path": "evidence/prompt_outputs/20261024.231325.467Z_commonmark_analyze_codex.output.txt",
+        "sha256": "2aaf0dac2f18dc9b97d4349907eeed24d174e9c0ca6cedf7b8b6fd4b3fe1692c"
+      },
+      {
+        "bytes": 17294,
+        "path": "evidence/prompt_outputs/20261024.231424.750Z_commonmark_plan_codex.output.txt",
+        "sha256": "77485370b95d06a020b99bbd18e5d4702d97c629d36c4b07eae56ad51fff2632"
+      },
+      {
+        "bytes": 7731,
+        "path": "evidence/prompt_outputs/20261024.231500.475Z_commonmark_plan_codex.output.txt",
+        "sha256": "382fc03ab2e2800b6a01f6d8250da089ac104f0119c73d5c5bf04a7a5ea13a0b"
+      },
+      {
+        "bytes": 8468,
+        "path": "evidence/prompt_outputs/20261024.231521.302Z_commonmark_plan_codex.output.txt",
+        "sha256": "affa284dc048233508a2b1eec88d864b6a07c84db0db6aa6b2f48efd68bb8f65"
+      },
+      {
+        "bytes": 10352,
+        "path": "evidence/prompt_outputs/20261024.231537.112Z_commonmark_plan_codex.output.txt",
+        "sha256": "bc82d561240b04591f8925d349734d840292b6d5ee5153204bea7e59f46c4465"
+      },
+      {
+        "bytes": 8234,
+        "path": "evidence/prompt_outputs/20261024.231555.998Z_commonmark_plan_codex.output.txt",
+        "sha256": "c6c8a7abeabc447c4c644178eedc55815312e784768a5f2d1629ea8a528261cd"
+      },
+      {
+        "bytes": 11429,
+        "path": "evidence/prompt_outputs/20261024.231612.051Z_commonmark_plan_codex.output.txt",
+        "sha256": "c4b67124b1c89928383ba4c44c14e8f785d4d3d376769203b39dfa5d58c83410"
+      },
+      {
+        "bytes": 6614,
+        "path": "evidence/prompt_outputs/20261024.231633.428Z_commonmark_plan_codex.output.txt",
+        "sha256": "303693feb4e28791a6d25d4cba0ca1447b5ef4ac87fcd9cbf65149f2e598b80e"
+      },
+      {
+        "bytes": 2237,
+        "path": "evidence/prompt_outputs/20261024.231704.644Z_commonmark_lineage_attribute_codex.output.txt",
+        "sha256": "024145f727a149e45f0353c857f53425390ff9a59a3e3d8c7f0659847933f794"
+      },
+      {
+        "bytes": 838,
+        "path": "evidence/prompt_outputs/20261024.231715.833Z_commonmark_lineage_attribute_codex.output.txt",
+        "sha256": "e2d4c3dfbf6d120eb31b6c3ab24496fc8f75301cc62974be361209988449a33c"
+      },
+      {
+        "bytes": 561,
+        "path": "evidence/prompt_outputs/20261024.231725.846Z_commonmark_lineage_attribute_codex.output.txt",
+        "sha256": "e13f4b9696d8e4778a9e5dd3f9f16bddec0c139c771535933e0c8dbff2eae0c3"
+      },
+      {
+        "bytes": 1420,
+        "path": "evidence/prompt_outputs/20261024.231733.641Z_commonmark_lineage_attribute_codex.output.txt",
+        "sha256": "c3f3adaeeddab168575c9685c6c4667cd901c1048773d5a95961f28306e1c3bb"
+      },
+      {
+        "bytes": 2559,
+        "path": "evidence/prompt_outputs/20261024.231743.029Z_commonmark_lineage_attribute_codex.output.txt",
+        "sha256": "cc769f193f5fb370243d00e786d027332afcb48aa6b38e610c94665efa98ceb2"
+      },
+      {
+        "bytes": 2195,
+        "path": "evidence/prompt_outputs/20261024.231750.034Z_commonmark_lineage_attribute_codex.output.txt",
+        "sha256": "f070b95615810be96112196e8490d38b465ae1b391550352156a558d384b8342"
+      },
+      {
+        "bytes": 11104,
+        "path": "evidence/prompt_outputs/20261024.231914.511Z_commonmark_plan-repair_codex.output.txt",
+        "sha256": "3304bb329dc5800ce7917cf41685ce72cffbf7f29d78cacc0b661abec17fff4d"
+      },
+      {
+        "bytes": 287814,
+        "path": "evidence/prompts/20261024.231325.467Z_commonmark_analyze_codex.prompt.md",
+        "sha256": "3f29376b613d85e86928d9f80fd9e4306c614e4abe677d14f6c3003a8a63cc6a"
+      },
+      {
+        "bytes": 384218,
+        "path": "evidence/prompts/20261024.231424.750Z_commonmark_plan_codex.prompt.md",
+        "sha256": "b2950f790d2c5237048dee6016c1f27bf277a5fedf77be0ce871ac8e95803be1"
+      },
+      {
+        "bytes": 407459,
+        "path": "evidence/prompts/20261024.231500.475Z_commonmark_plan_codex.prompt.md",
+        "sha256": "f887b25aba660b5ddcc560f4ba11c57f1315493c389f5ea48ac1d0cdafd13377"
+      },
+      {
+        "bytes": 407589,
+        "path": "evidence/prompts/20261024.231521.302Z_commonmark_plan_codex.prompt.md",
+        "sha256": "4808766ee0a292de0360950c8cb06cb50426e41372f77168c92f1ebd49fb4f9e"
+      },
+      {
+        "bytes": 407724,
+        "path": "evidence/prompts/20261024.231537.112Z_commonmark_plan_codex.prompt.md",
+        "sha256": "381b1015da9d1d61e2c15085208f53a7882812e95ffd85b7b260ebeee25146a8"
+      },
+      {
+        "bytes": 407788,
+        "path": "evidence/prompts/20261024.231555.998Z_commonmark_plan_codex.prompt.md",
+        "sha256": "7f7ae72ccff885f0bfb285ffc972152ca358f6d17b8399f660b6d13f9428ec37"
+      },
+      {
+        "bytes": 407853,
+        "path": "evidence/prompts/20261024.231612.051Z_commonmark_plan_codex.prompt.md",
+        "sha256": "c91769fc467f9012465229ad7773f0bddedbe04f2c8b3e5ac452ea360ca78468"
+      },
+      {
+        "bytes": 408455,
+        "path": "evidence/prompts/20261024.231633.428Z_commonmark_plan_codex.prompt.md",
+        "sha256": "691fc551cd938ec2c168046f7ed3553ca0e4fac031e0c15df62ad75441cd869f"
+      },
+      {
+        "bytes": 8344,
+        "path": "evidence/prompts/20261024.231704.644Z_commonmark_lineage_attribute_codex.prompt.md",
+        "sha256": "eeaa184d00f1bee4607bda1e8d1f6b80f7ce83cbf9072e4cee36b0d217a7b44a"
+      },
+      {
+        "bytes": 6252,
+        "path": "evidence/prompts/20261024.231715.833Z_commonmark_lineage_attribute_codex.prompt.md",
+        "sha256": "4008e7f61164610e50f9d10a82d2a5271ac82ac362843ec564cd290fa804f29c"
+      },
+      {
+        "bytes": 6937,
+        "path": "evidence/prompts/20261024.231725.846Z_commonmark_lineage_attribute_codex.prompt.md",
+        "sha256": "2a59788f1058baf73f9b0cca5d1c7a20971189b943f713dc8549bcf25cf782d5"
+      },
+      {
+        "bytes": 11424,
+        "path": "evidence/prompts/20261024.231733.641Z_commonmark_lineage_attribute_codex.prompt.md",
+        "sha256": "e93f87a7d1851699d203adc60e96f859e6700f91bc5574376cec5a085e5d6d88"
+      },
+      {
+        "bytes": 211006,
+        "path": "evidence/prompts/20261024.231743.029Z_commonmark_lineage_attribute_codex.prompt.md",
+        "sha256": "275f6afe4277bbb7be4e276ad6eb5701e9dfa5214a0a7082f87b2940a4ce0ec3"
+      },
+      {
+        "bytes": 11336,
+        "path": "evidence/prompts/20261024.231750.034Z_commonmark_lineage_attribute_codex.prompt.md",
+        "sha256": "c809e4ff39e247a36b37937c280164e8d7cd9af04ef237b554d66f95a7474b35"
+      },
+      {
+        "bytes": 27204,
+        "path": "evidence/prompts/20261024.231914.511Z_commonmark_plan-repair_codex.prompt.md",
+        "sha256": "14e665a652f6a7e6ae72c0d224a0043d21bddf60b0d4cdb901f7eadcd42f7626"
+      },
+      {
+        "bytes": 15371,
+        "path": "evidence/provider_raw/20261024.231325.467Z_commonmark_analyze_codex.raw.jsonl",
+        "sha256": "a4a33847574c4bd6520bcc4ac943fd12f2a117baebc1dc9aa1e6ac037ca2f240"
+      },
+      {
+        "bytes": 18073,
+        "path": "evidence/provider_raw/20261024.231424.750Z_commonmark_plan_codex.raw.jsonl",
+        "sha256": "cf706205f834a3ebe241df641f26534bce9f31893724c3e1590c55816ef2d33a"
+      },
+      {
+        "bytes": 8424,
+        "path": "evidence/provider_raw/20261024.231500.475Z_commonmark_plan_codex.raw.jsonl",
+        "sha256": "0f782d141f4a449996d77c878e65a55243aa7d0292b2ce16a33aaf1a3548f1e8"
+      },
+      {
+        "bytes": 9162,
+        "path": "evidence/provider_raw/20261024.231521.302Z_commonmark_plan_codex.raw.jsonl",
+        "sha256": "fa6a3698f39eb24f527bb67adc5108379619f50a3514623c3348caddd9269170"
+      },
+      {
+        "bytes": 11068,
+        "path": "evidence/provider_raw/20261024.231537.112Z_commonmark_plan_codex.raw.jsonl",
+        "sha256": "efbb39548585e4387ab60959a69d0cf79764902ef94d85c51270d9894453eb9c"
+      },
+      {
+        "bytes": 8927,
+        "path": "evidence/provider_raw/20261024.231555.998Z_commonmark_plan_codex.raw.jsonl",
+        "sha256": "8a7b95d22a021d64f6335ecebb7565567961ec836d1cd25e125851b38c0ca305"
+      },
+      {
+        "bytes": 12133,
+        "path": "evidence/provider_raw/20261024.231612.051Z_commonmark_plan_codex.raw.jsonl",
+        "sha256": "9e7c30e3988d8f2f8dd649c8eaf9ccd90cdb8c0f042c5db0af5faf4c81dd3d39"
+      },
+      {
+        "bytes": 7277,
+        "path": "evidence/provider_raw/20261024.231633.428Z_commonmark_plan_codex.raw.jsonl",
+        "sha256": "cdff7ac9acd1d699d66a06f004bdc1aa0b36de55efd80339661fa3c2ce7ef29f"
+      },
+      {
+        "bytes": 2737,
+        "path": "evidence/provider_raw/20261024.231704.644Z_commonmark_lineage_attribute_codex.raw.jsonl",
+        "sha256": "0dd3c27b850f4002728066634526443d24800854f1229006c6e0118470bb4e9a"
+      },
+      {
+        "bytes": 1263,
+        "path": "evidence/provider_raw/20261024.231715.833Z_commonmark_lineage_attribute_codex.raw.jsonl",
+        "sha256": "e5e9305c83cb31de6166f9ea3e6782ab646ffadb0ec282b2a7dea53592d908c8"
+      },
+      {
+        "bytes": 922,
+        "path": "evidence/provider_raw/20261024.231725.846Z_commonmark_lineage_attribute_codex.raw.jsonl",
+        "sha256": "8bad6e1e945e3c949cf71fcbb7f6d753f0d80fee4671851dfe0b0065d3884b1f"
+      },
+      {
+        "bytes": 1876,
+        "path": "evidence/provider_raw/20261024.231733.641Z_commonmark_lineage_attribute_codex.raw.jsonl",
+        "sha256": "d2e44995afa79ddbd5dd4547c064f178cc3d7ca1202e0e56c35e5f1e3c6821d3"
+      },
+      {
+        "bytes": 3078,
+        "path": "evidence/provider_raw/20261024.231743.029Z_commonmark_lineage_attribute_codex.raw.jsonl",
+        "sha256": "7308b5a57013d8c4305ade015938e85f2da05c5e801205e4e8db5f8a125dc0d2"
+      },
+      {
+        "bytes": 2667,
+        "path": "evidence/provider_raw/20261024.231750.034Z_commonmark_lineage_attribute_codex.raw.jsonl",
+        "sha256": "dcb9ef078ec76f3dfdab1e1a3f02cba9688bdd85996dc37d15f4329b0fb8722b"
+      },
+      {
+        "bytes": 12119,
+        "path": "evidence/provider_raw/20261024.231914.511Z_commonmark_plan-repair_codex.raw.jsonl",
+        "sha256": "ce09811b039ec2fb371018557d975a3ae9eeb1ce5d10442ffe88589ec25634cf"
+      }
+    ],
+    "Inputs": [
+      {
+        "bytes": 659,
+        "path": "inputs/DECISIONS.json",
+        "sha256": "4d8b08f56c01c46830117dda95be5bef4f7bfa23cc81c1bb28c4c7f0d70c6ba3"
+      },
+      {
+        "bytes": 438,
+        "path": "inputs/SEA_TRIALS.md",
+        "sha256": "0bec2486b8d5c48ca1077f9320bc1686045d3e380a44a4bcc777ea6d77ab9d2a"
+      },
+      {
+        "bytes": 808,
+        "path": "inputs/TECHNOLOGY_STACK.md",
+        "sha256": "8fdbb82fa196efe9d844d90ec8e1fae02633bd5b6b0a841e6297dead38dfbbc4"
+      }
+    ],
+    "Run record": [
+      {
+        "bytes": 5752,
+        "path": "result.json",
+        "sha256": "858440c6e85e996368132de3f0770d474181ed3ba6eef7f8658c06d753f6803b"
+      }
+    ],
+    "Sources": [
+      {
+        "bytes": 3439,
+        "path": "sources/INSTRUCTIONS.md",
+        "sha256": "10b172786a92ad4dc012e88358cf96fcead95bcd919f2677df3a03405782fb0a"
+      },
+      {
+        "bytes": 1354,
+        "path": "sources/cmark.py",
+        "sha256": "c5fb45e7c64fd7670b2a3c49a151e46f4af9d0ad3004bedb37ecf9cdc34d2f00"
+      },
+      {
+        "bytes": 2035,
+        "path": "sources/full_test.sh",
+        "sha256": "5b634a1c78117313283acceda8faad9de02b594e54949439c73697b058941a93"
+      },
+      {
+        "bytes": 6522,
+        "path": "sources/normalize.py",
+        "sha256": "94a9dd253907e3dab7c02fc11e934f06112dcf0f3804255d09d732c8c7c4b5f4"
+      },
+      {
+        "bytes": 206108,
+        "path": "sources/spec.txt",
+        "sha256": "43fad3e0ac5190a3b0bc6a41f7b1a853201a26ec2e6b74871f5d96239a8c34cf"
+      },
+      {
+        "bytes": 6433,
+        "path": "sources/spec_tests.py",
+        "sha256": "9db1ea4a3ee79c5ec74eebc09c5985eb252427e8d9d19ef45e5cc3f2ae410855"
+      }
+    ],
+    "Workspace": [
+      {
+        "bytes": 2401,
+        "path": "workspace/logs/history.jsonl",
+        "sha256": "52b8024a5e945916bb3ca319780213112c7e64440c89edfa06bff81a2a741545"
+      },
+      {
+        "bytes": 22,
+        "path": "workspace/targets/commonmark/.git/COMMIT_EDITMSG",
+        "sha256": "14535be99c11586efdfe01a3aaf96a28ec4f23fed4f77ed33557a81e85a0e988"
+      },
+      {
+        "bytes": 23,
+        "path": "workspace/targets/commonmark/.git/HEAD",
+        "sha256": "f6f2b945f6c411b02ba3da9c7ace88dcf71b6af65ba2e0d89aa82900042b5a10"
+      },
+      {
+        "bytes": 112,
+        "path": "workspace/targets/commonmark/.git/config",
+        "sha256": "16ede81ff8225a028ea47d7da268da123355decf7cc0fa7b66b8cc4060005fa6"
+      },
+      {
+        "bytes": 73,
+        "path": "workspace/targets/commonmark/.git/description",
+        "sha256": "85ab6c163d43a17ea9cf7788308bca1466f1b0a8d1cc92e26e9bf63da4062aee"
+      },
+      {
+        "bytes": 478,
+        "path": "workspace/targets/commonmark/.git/hooks/applypatch-msg.sample",
+        "sha256": "0223497a0b8b033aa58a3a521b8629869386cf7ab0e2f101963d328aa62193f7"
+      },
+      {
+        "bytes": 896,
+        "path": "workspace/targets/commonmark/.git/hooks/commit-msg.sample",
+        "sha256": "1f74d5e9292979b573ebd59741d46cb93ff391acdd083d340b94370753d92437"
+      },
+      {
+        "bytes": 4655,
+        "path": "workspace/targets/commonmark/.git/hooks/fsmonitor-watchman.sample",
+        "sha256": "f3c0228d8e827f1c5260ac59fdd92c3d425c46e54711ef713c5a54ae0a4db2b4"
+      },
+      {
+        "bytes": 189,
+        "path": "workspace/targets/commonmark/.git/hooks/post-update.sample",
+        "sha256": "81765af2daef323061dcbc5e61fc16481cb74b3bac9ad8a174b186523586f6c5"
+      },
+      {
+        "bytes": 424,
+        "path": "workspace/targets/commonmark/.git/hooks/pre-applypatch.sample",
+        "sha256": "e15c5b469ea3e0a695bea6f2c82bcf8e62821074939ddd85b77e0007ff165475"
+      },
+      {
+        "bytes": 1643,
+        "path": "workspace/targets/commonmark/.git/hooks/pre-commit.sample",
+        "sha256": "f9af7d95eb1231ecf2eba9770fedfa8d4797a12b02d7240e98d568201251244a"
+      },
+      {
+        "bytes": 416,
+        "path": "workspace/targets/commonmark/.git/hooks/pre-merge-commit.sample",
+        "sha256": "d3825a70337940ebbd0a5c072984e13245920cdf8898bd225c8d27a6dfc9cb53"
+      },
+      {
+        "bytes": 1374,
+        "path": "workspace/targets/commonmark/.git/hooks/pre-push.sample",
+        "sha256": "ecce9c7e04d3f5dd9d8ada81753dd1d549a9634b26770042b58dda00217d086a"
+      },
+      {
+        "bytes": 4898,
+        "path": "workspace/targets/commonmark/.git/hooks/pre-rebase.sample",
+        "sha256": "4febce867790052338076f4e66cc47efb14879d18097d1d61c8261859eaaa7b3"
+      },
+      {
+        "bytes": 544,
+        "path": "workspace/targets/commonmark/.git/hooks/pre-receive.sample",
+        "sha256": "a4c3d2b9c7bb3fd8d1441c31bd4ee71a595d66b44fcf49ddb310252320169989"
+      },
+      {
+        "bytes": 1492,
+        "path": "workspace/targets/commonmark/.git/hooks/prepare-commit-msg.sample",
+        "sha256": "e9ddcaa4189fddd25ed97fc8c789eca7b6ca16390b2392ae3276f0c8e1aa4619"
+      },
+      {
+        "bytes": 2783,
+        "path": "workspace/targets/commonmark/.git/hooks/push-to-checkout.sample",
+        "sha256": "a53d0741798b287c6dd7afa64aee473f305e65d3f49463bb9d7408ec3b12bf5f"
+      },
+      {
+        "bytes": 3650,
+        "path": "workspace/targets/commonmark/.git/hooks/update.sample",
+        "sha256": "8d5f2fa83e103cf08b57eaa67521df9194f45cbdbcb37da52ad586097a14d106"
+      },
+      {
+        "bytes": 6064,
+        "path": "workspace/targets/commonmark/.git/index",
+        "sha256": "6b7429ed25ddd38017bfd0fb4830e752e57e3224e73afc75f0a19bd42bef232d"
+      },
+      {
+        "bytes": 240,
+        "path": "workspace/targets/commonmark/.git/info/exclude",
+        "sha256": "6671fe83b7a07c8932ee89164d1f2793b2318058eb8b98dc5c06ee0a5a3b0ec1"
+      },
+      {
+        "bytes": 1519,
+        "path": "workspace/targets/commonmark/.git/logs/HEAD",
+        "sha256": "d633ce78f843d4ca6f3e44c0d020d673f8e89e31f2f53200dca5b052b1db9af8"
+      },
+      {
+        "bytes": 1519,
+        "path": "workspace/targets/commonmark/.git/logs/refs/heads/master",
+        "sha256": "d633ce78f843d4ca6f3e44c0d020d673f8e89e31f2f53200dca5b052b1db9af8"
+      },
+      {
+        "bytes": 295,
+        "path": "workspace/targets/commonmark/.git/objects/04/5b165d6cc6b260ff6b6f73610f7b068b208f31",
+        "sha256": "346753ff8b542cc4455ed277d65bbc08a87715a71cf796e8fe6456ffb309791b"
+      },
+      {
+        "bytes": 1058,
+        "path": "workspace/targets/commonmark/.git/objects/05/547cce531e0a60c6e1a89011a542470110e5d7",
+        "sha256": "0c1b0634036dc50373e8e5c450a6e7834b1921c8371cc9cec99d1cdf9112f297"
+      },
+      {
+        "bytes": 848,
+        "path": "workspace/targets/commonmark/.git/objects/06/ae5cdf6d55c6024e1b30d26952189b0f0d81c1",
+        "sha256": "6bfe51d5250fddb73d481e21ae8f5afb4c37757990a092525b983ea506fafc46"
+      },
+      {
+        "bytes": 34,
+        "path": "workspace/targets/commonmark/.git/objects/0d/23f6980875533d17a8bd6f203fd5fb2ebe3402",
+        "sha256": "5467db09e39f6d4e0e97ec923be5c9e14499190b192e543d4c7149ad4cb70b77"
+      },
+      {
+        "bytes": 265,
+        "path": "workspace/targets/commonmark/.git/objects/0d/d2011ae810c4bd5b1225f0eea5fc996ef8356a",
+        "sha256": "ca8e14b3a68ca50858943040d412e30e2972b724b5122b67255207d425e048a1"
+      },
+      {
+        "bytes": 1113,
+        "path": "workspace/targets/commonmark/.git/objects/14/05728fc2530690193b06aabb5666857d92956a",
+        "sha256": "1471d3efe867e2353e3a4d17e9de0b29daafe7fe1000c5cca8d899c506245819"
+      },
+      {
+        "bytes": 670,
+        "path": "workspace/targets/commonmark/.git/objects/14/1576f13cc2b3f7ad814ecff716171549cf9361",
+        "sha256": "b652b38a29f91e697959b90e989e22152bd7d7266a9ff1b487cc952f007b61e4"
+      },
+      {
+        "bytes": 1062,
+        "path": "workspace/targets/commonmark/.git/objects/14/207a3b12b4198673d844af1f8a4a1d88de1fde",
+        "sha256": "3c5fd6ff06759edeff4de2b1fc25958ae76d3cbbaee10b1b834e5e063637696a"
+      },
+      {
+        "bytes": 308,
+        "path": "workspace/targets/commonmark/.git/objects/19/899bbd5331715de0687a14ccf0c8eb52a1f7d4",
+        "sha256": "df038119f180734103d3b077d36c2cfdd546f4a13586f99f425281dee1a9caab"
+      },
+      {
+        "bytes": 170,
+        "path": "workspace/targets/commonmark/.git/objects/1e/889fd327ba850cbb8692ff33b944787b067550",
+        "sha256": "7236661184c1538bd9447f145cfeb93f4d0d3dd6c9acf57353e64398a2d9dee8"
+      },
+      {
+        "bytes": 61,
+        "path": "workspace/targets/commonmark/.git/objects/1f/df62a9e0f25d47447972d91aa7bb348dfa030e",
+        "sha256": "9c5d8ff7f1b36eff4be619324bc9035af6a1e494db04a7de5d473674acf0c037"
+      },
+      {
+        "bytes": 809,
+        "path": "workspace/targets/commonmark/.git/objects/27/d6f0321b24cd7fbf931ce598e5243bd1b01324",
+        "sha256": "5ba198d59f56b8c97cef540c1ed062f77f65003ad7ef61f2c100f5fcb4760dac"
+      },
+      {
+        "bytes": 772,
+        "path": "workspace/targets/commonmark/.git/objects/28/5eb5ae94a8754882cbb338d6c7bb2ff56e6755",
+        "sha256": "479fbeeeb68ef662325551761a18586410f84f39e63a063b19c9d24aa149c82f"
+      },
+      {
+        "bytes": 255,
+        "path": "workspace/targets/commonmark/.git/objects/29/3c8d603deab0d1a93a68bc49d9f6cbbeb3453e",
+        "sha256": "b7e80de16615f4a1d692b9958d5ee3bf25e9e4e1e2194672808d276e2f714cb2"
+      },
+      {
+        "bytes": 58,
+        "path": "workspace/targets/commonmark/.git/objects/2c/1c7a7d45f2fa75f5e8fe07b4523fa3650fa3b3",
+        "sha256": "8089c93396265bbf82b9a8ec8ba9feebeab7fb24ba6b1d7683f876c23425a52a"
+      },
+      {
+        "bytes": 140,
+        "path": "workspace/targets/commonmark/.git/objects/2d/2c021b9e1b7c4a7c59aba449052e79ef25144c",
+        "sha256": "ea44bde310cf4f20de290be45de3b2a4b41d0faafa9ce387388f2c2fd460488c"
+      },
+      {
+        "bytes": 5700,
+        "path": "workspace/targets/commonmark/.git/objects/2d/b4f9b751e8ebff5ea645c4075cb6c41e5f6fea",
+        "sha256": "7dedcd49d509396037dc6b74dbc5b29baf8cfe2075024cd1eaeef21380fa59e1"
+      },
+      {
+        "bytes": 766,
+        "path": "workspace/targets/commonmark/.git/objects/2d/d8274e03bb0ab4e5308d7a03bf8f4c5f741f31",
+        "sha256": "d85f859275a8b12cac010f8768be786f3b31a654e4ac40b5c95c268d7d05bc4e"
+      },
+      {
+        "bytes": 670,
+        "path": "workspace/targets/commonmark/.git/objects/30/8985f07a3cc73f512686d3b1438d87687de803",
+        "sha256": "ff5340b365cc0065053222cf7f720230d2caead13cb45758741c45e15fddfecf"
+      },
+      {
+        "bytes": 779,
+        "path": "workspace/targets/commonmark/.git/objects/30/a2d783757e32b23002e097ab78f62c30427471",
+        "sha256": "54f4bcb464c0a723ecf5ed49ff4ae3920ba3abeb9d15dec9baf6af483e049966"
+      },
+      {
+        "bytes": 731,
+        "path": "workspace/targets/commonmark/.git/objects/33/cda7a0e931302f680de8d9ee527c0ab678420e",
+        "sha256": "2c8def99368a28ebe16c9de65388fe64c96f302df4461a6cadd43d99b9a335ce"
+      },
+      {
+        "bytes": 1163,
+        "path": "workspace/targets/commonmark/.git/objects/33/f336c06910482b187f30df72adb1a29dc8d431",
+        "sha256": "4a3680fdfafa364edd39f284c16edddf0d8cb4f17f5d4b8f91c472f3717a4488"
+      },
+      {
+        "bytes": 173,
+        "path": "workspace/targets/commonmark/.git/objects/34/39ce590cc4920b8d1ab1ae5e6dbc2b909db542",
+        "sha256": "626f4eeabe2481589a9813f6da5cf4a82f34492acd64aad3df933be6477dd745"
+      },
+      {
+        "bytes": 495,
+        "path": "workspace/targets/commonmark/.git/objects/35/7fde115a9e58ec2c505ebf4bfde7703a4daa75",
+        "sha256": "5e8b6e45d60d62b4ff971d6636a43f4f2355bc9a7ad7a16c7bcf4c646a58e9f7"
+      },
+      {
+        "bytes": 575,
+        "path": "workspace/targets/commonmark/.git/objects/37/55e1b0df1508e6091fd60f1965ffb9d533d451",
+        "sha256": "f22fbcbc7096c50088116af304448fbc0d32b63051cf08e232c9b7caa93e9b9e"
+      },
+      {
+        "bytes": 594,
+        "path": "workspace/targets/commonmark/.git/objects/38/a310cf593476fc70847d6a540eab274e7c483e",
+        "sha256": "1af816cb75363d229a837efe5209a3a3ac4fdf88c64a4b0889b5886c9acdc157"
+      },
+      {
+        "bytes": 230,
+        "path": "workspace/targets/commonmark/.git/objects/3e/b6e2983113f65b91333a819603dc2e5573e029",
+        "sha256": "b1060b4c0a9b0ec2d9b8713b5aef5f98c1a0220b33df8c2e91562f438380616c"
+      },
+      {
+        "bytes": 1551,
+        "path": "workspace/targets/commonmark/.git/objects/40/14cde05a88823e0e70787611a04dd3f9643072",
+        "sha256": "065394fbd9e874a7b00beed4f4134e321eee48ede7e3d9f4f7b08f8c34ceb099"
+      },
+      {
+        "bytes": 920,
+        "path": "workspace/targets/commonmark/.git/objects/40/77719001d6197534361652b673057abd0f63db",
+        "sha256": "a367c9baf569cfe3558b755ab0a6673df5a686458a03c9543783881f01c17183"
+      },
+      {
+        "bytes": 1082,
+        "path": "workspace/targets/commonmark/.git/objects/42/e23d4c299a001bbf2a0249d3c8fc60c3930834",
+        "sha256": "adfbe8f65500af3f39939bd6c0d40a4b2a18c5358e221b228c12e67fc0cd90b5"
+      },
+      {
+        "bytes": 614,
+        "path": "workspace/targets/commonmark/.git/objects/46/dc5099f8ddfc237c2ea5b280cd49b66d11b8fd",
+        "sha256": "e4575cc25b244d669e263acd83f2761638de96e1a309c9d15f75555aac6233cd"
+      },
+      {
+        "bytes": 175,
+        "path": "workspace/targets/commonmark/.git/objects/49/ee1215df996b291af6ac33062615a268492e78",
+        "sha256": "552680e981b544e45f0712672bea95f4a150554291e6c54d0b1173b4861bbb87"
+      },
+      {
+        "bytes": 203,
+        "path": "workspace/targets/commonmark/.git/objects/4c/bb21d2fe77d03a7cd56f2664d0f3bd0e9bf968",
+        "sha256": "2f60ff25aa1ae5c21249f02162d6a34dcf2dfa19c04073614ce2af3c2507727a"
+      },
+      {
+        "bytes": 782,
+        "path": "workspace/targets/commonmark/.git/objects/4e/bf9df3d151d703a620fd4079724d3b8addb191",
+        "sha256": "4c275d0409e1a3538d4419f8ccabd376d2da90cdbecacdf1dd9f4fbe7d579c9c"
+      },
+      {
+        "bytes": 181,
+        "path": "workspace/targets/commonmark/.git/objects/54/a7c5db5a5c1ff1dfb10d7b195f22e0b39b0c9d",
+        "sha256": "23727cd2712c82160dd47a2d82f708a5201ddb30564e0eac77919c3eefd92075"
+      },
+      {
+        "bytes": 1004,
+        "path": "workspace/targets/commonmark/.git/objects/56/fe28a8c779550e8f8cf0bf9462697bdfdf40b7",
+        "sha256": "f1b6b960c976df8bb4d935087ac30ed7c8958baeb1faf535363fa4cac2501f4c"
+      },
+      {
+        "bytes": 1096,
+        "path": "workspace/targets/commonmark/.git/objects/58/813b2ad05f420967ed77ef57bfac76de026276",
+        "sha256": "c34d056e1b1b56ae72c7f4946ccd7ee500b07d08f943016916639966d77c9398"
+      },
+      {
+        "bytes": 1243,
+        "path": "workspace/targets/commonmark/.git/objects/59/0f15e324b4e6f71f67419d30035417708256c4",
+        "sha256": "9cf22af97d28a6afa551b58ad8941b3ab8cb7922f2647b0ff760a73a4ec16a13"
+      },
+      {
+        "bytes": 131,
+        "path": "workspace/targets/commonmark/.git/objects/5f/289e019150e1d7dc53eb02879d66711c70600a",
+        "sha256": "a40932f494dbfc61f656df1bcd4733debbaa940645b3ebd8224700c5b664a82b"
+      },
+      {
+        "bytes": 384,
+        "path": "workspace/targets/commonmark/.git/objects/5f/c88893ab56e5cbd81905644e04cf77d877af1d",
+        "sha256": "82381a52989a111f7feb23fa888603da3197f7b2e9b1a045fbbbf68efd327ae9"
+      },
+      {
+        "bytes": 312,
+        "path": "workspace/targets/commonmark/.git/objects/62/d4456183a28e030202f7e8754ebdbc17c74a35",
+        "sha256": "e6f78efbf384178ef080d5e53af5d9e14019547b4b476957b9ba1229425cd8ae"
+      },
+      {
+        "bytes": 58,
+        "path": "workspace/targets/commonmark/.git/objects/64/82dcf2b171e82603a8f8d4a161830053c4e319",
+        "sha256": "16aa9bbb78d8bd703141ef1ab1d32fc329c883a04f7efc4a442a1a5604f1a2d4"
+      },
+      {
+        "bytes": 1078,
+        "path": "workspace/targets/commonmark/.git/objects/66/899f8a95925c0b6a56a095ad9d35a72a0a6834",
+        "sha256": "c819ac2ab4a1b6706f3782c288c904069744c9e9c42609f4f80102ea075085d2"
+      },
+      {
+        "bytes": 384,
+        "path": "workspace/targets/commonmark/.git/objects/69/fc26f382fe7e47c67b38037deb66337f119bbb",
+        "sha256": "5d753ea2f8b3cf40a6c3e512d1dc544d06daa2c02d479b8ab8803e1835e9709a"
+      },
+      {
+        "bytes": 212,
+        "path": "workspace/targets/commonmark/.git/objects/6d/96be7f94da78e24c52b1c0bea18efb4b685509",
+        "sha256": "febbce9e5107999ae98b3b904ca8f92aad2854fad782ab32cfb512d28aa3ba10"
+      },
+      {
+        "bytes": 31,
+        "path": "workspace/targets/commonmark/.git/objects/6f/bbc8fa4e531f1a81bf472b4f947550dec0d68a",
+        "sha256": "1dea0fc084ec946e05cfb282283b6a910d2e715b5b4f87a1b2fa188952a458d8"
+      },
+      {
+        "bytes": 2997,
+        "path": "workspace/targets/commonmark/.git/objects/70/4150f3e850ff19496c2f8b452f501b86f32a72",
+        "sha256": "0e12c0c8d0f314f47cda3ac1134b57dec01a74ec6cfdbe1e255feb0e89400777"
+      },
+      {
+        "bytes": 641,
+        "path": "workspace/targets/commonmark/.git/objects/78/cfbbfb74116f32a7c9e38dc0a9aecdcd02307d",
+        "sha256": "783a8c98242d5d3acc1e178a4eee63a2b14d050d3f04306d87cebe2f1a5fffbb"
+      },
+      {
+        "bytes": 173,
+        "path": "workspace/targets/commonmark/.git/objects/7b/5c2f0bd71f43a38866948a7d69368cfe744d22",
+        "sha256": "e6dd986fd18206f2500f41b8270d19777ad103fa15d394c06a2dc49887e24fb0"
+      },
+      {
+        "bytes": 88,
+        "path": "workspace/targets/commonmark/.git/objects/7d/cd93e94554d7c21a75030af8c569cb00f5b71a",
+        "sha256": "f39a2acf196aa7c43bb8573eb9da4e7108a030af583de27e2e7b2f515b369c86"
+      },
+      {
+        "bytes": 5811,
+        "path": "workspace/targets/commonmark/.git/objects/7d/cf01db74dd9b9e0b33e7c0b5e305c677bff363",
+        "sha256": "7c00d627537a224bbe7ab5eae9aa0b13adb12f3b80ed1ce142cf55e365e537cc"
+      },
+      {
+        "bytes": 154,
+        "path": "workspace/targets/commonmark/.git/objects/7f/a04a9522e07f2243be5b04f8772bda43e1792f",
+        "sha256": "be9a9641ce6c654507efe703d0ce441cc48e4196c79406d0feae25a45868c375"
+      },
+      {
+        "bytes": 667,
+        "path": "workspace/targets/commonmark/.git/objects/81/8ef060121b2daa7919f841b93cb5dfb7f2a663",
+        "sha256": "013aa366b5612c9d46203cb6ab92b549c8532167295d20266139256b8e88abe7"
+      },
+      {
+        "bytes": 153,
+        "path": "workspace/targets/commonmark/.git/objects/88/f8795c47fb58fdeb235538751a76ef9b3dbde9",
+        "sha256": "65d0042d4ce1dcd521a7c363a0adc2b90334178b3bd73a9c98a8f40be227c8fd"
+      },
+      {
+        "bytes": 1062,
+        "path": "workspace/targets/commonmark/.git/objects/89/64345acdea5a25d5cded61f88ec85344489ff5",
+        "sha256": "cc69c23f45c6ddd749df3f5e53ee2d4144d6d6aec082fb6aa721efdd904e24ac"
+      },
+      {
+        "bytes": 715,
+        "path": "workspace/targets/commonmark/.git/objects/89/92e206ddfeb6a3c1686c2e6228727959fde980",
+        "sha256": "480696584c4cd0913591551b8ec01193a80dcb63371b4ba158dd9c5be3379ba9"
+      },
+      {
+        "bytes": 805,
+        "path": "workspace/targets/commonmark/.git/objects/8b/6e21234fe0b970d9ff9a8457af99f542660d0b",
+        "sha256": "d3d5e2743969bd81f8b9e6599ed8d873d0dd0a15b50e0ba7cbe68f16756b32fd"
+      },
+      {
+        "bytes": 816,
+        "path": "workspace/targets/commonmark/.git/objects/93/897be9d7b6c511d2e227acde864131a0d1c60c",
+        "sha256": "2f981c514b6b102ddba4a646ca0f9f13c135ed1d82f323fecf5225a9a30345d2"
+      },
+      {
+        "bytes": 3171,
+        "path": "workspace/targets/commonmark/.git/objects/94/b5316a5531bf87c34981527817736894cf7cb4",
+        "sha256": "072b7815aee4f37c0527473f2ef2f1db182604d6a74e8a7bc23c15182af382d3"
+      },
+      {
+        "bytes": 1202,
+        "path": "workspace/targets/commonmark/.git/objects/98/a2110c2aaeaea91d59d4009d088725383e035f",
+        "sha256": "9f7963ab64eb9e86f7fd8fcd413960f9346ae27e63efcfe9d55adb402709dbc9"
+      },
+      {
+        "bytes": 174,
+        "path": "workspace/targets/commonmark/.git/objects/9c/5722c499eec8ad261c10ed5c8975fc0f201d62",
+        "sha256": "a2f45f3c096cc78a417855a0e8a5bb926ac847e264cfe1cb1fabccc45a3306e1"
+      },
+      {
+        "bytes": 100,
+        "path": "workspace/targets/commonmark/.git/objects/9d/a55649987c473958e17c717979262f59fd045d",
+        "sha256": "b0fb3142e620a1fb7d384fa3e643b942ebed94a04db2f0729ccb9f515d535e24"
+      },
+      {
+        "bytes": 384,
+        "path": "workspace/targets/commonmark/.git/objects/a1/b2b9a93acb0c76fac5b401d12e4f4a84e8dd90",
+        "sha256": "5900294e624f5cef560a43eeef4cfae9f12aaa1f45cca67a598b7acdaeea7b41"
+      },
+      {
+        "bytes": 623,
+        "path": "workspace/targets/commonmark/.git/objects/a3/196dd6633533f15a147e82cd805f3cf1b3a46f",
+        "sha256": "75cd139797e78a93205bf167eb295eae84c25c05c8e471a4bb564d3ca90da00c"
+      },
+      {
+        "bytes": 173,
+        "path": "workspace/targets/commonmark/.git/objects/a3/6dfce48c839cc3b4a7e12c6a8a5d86b93a65e7",
+        "sha256": "d56ec82aed9d3a2395396ea490b9c1e777cb05d45682c7e178d2280d929f6b7c"
+      },
+      {
+        "bytes": 2323,
+        "path": "workspace/targets/commonmark/.git/objects/a5/f1bd21df3007e0a078ebadd98550d4c600709d",
+        "sha256": "cf5d51946bf1e63e8e811645e9f515f50ca1a61970b94bb093f5014e60c53021"
+      },
+      {
+        "bytes": 309,
+        "path": "workspace/targets/commonmark/.git/objects/a8/af3386297230e6143027f05609ebdd52aef868",
+        "sha256": "947191151ffeee32e0d6599e4fa19d96a36ef82b62ea63b2254cc73df4cfafd5"
+      },
+      {
+        "bytes": 292,
+        "path": "workspace/targets/commonmark/.git/objects/ab/13ae4773e38b684320f2380739aa7bfb1532ad",
+        "sha256": "6b5c6620e7ea4ca82ae2d26972779a8e92bbabbb14fa7eb1eef820ea40c6cfb6"
+      },
+      {
+        "bytes": 810,
+        "path": "workspace/targets/commonmark/.git/objects/ab/abf4d91602cdabd75fdd8df75b6b228e0fafe7",
+        "sha256": "83cf948f02d3dff949ab692cc5947f81685c876e826b5a921d3fb1e8bd397447"
+      },
+      {
+        "bytes": 958,
+        "path": "workspace/targets/commonmark/.git/objects/b1/c56e7f5b4bbda6d22897b720c3a3a93b6ad9cc",
+        "sha256": "4eb7a363393f4dbdd50f4d17cabf1520f060ae82a19101ff5e902cb0fd6bf051"
+      },
+      {
+        "bytes": 4530,
+        "path": "workspace/targets/commonmark/.git/objects/b3/40f182f37a0ea5a533d7d61c30c67c28405885",
+        "sha256": "5e90f5ac89679a987a7bb457e295bbaf3970b21a3a35fcf61b477b76e1175ec3"
+      },
+      {
+        "bytes": 731,
+        "path": "workspace/targets/commonmark/.git/objects/b4/31eec31d6982fcfe2d17a39b7f1dd85ac580bf",
+        "sha256": "18a68aafd9785681129674d9cb8f15fdc0581c061acbfe713b12c66f8b319e7a"
+      },
+      {
+        "bytes": 686,
+        "path": "workspace/targets/commonmark/.git/objects/bc/051ac53d2fea43561668c744e2948b9bd342e8",
+        "sha256": "45cd9574d123a774bc9552d74da0627d105e37b2eb86cd25ac469882aab99ce7"
+      },
+      {
+        "bytes": 2267,
+        "path": "workspace/targets/commonmark/.git/objects/be/cdef8873a3053c71f8b1794c6b7ffd8e75224c",
+        "sha256": "d2bbf12b38f4e705d0f576e84f27232b79bada52fe377e257dcd486a58e32823"
+      },
+      {
+        "bytes": 56354,
+        "path": "workspace/targets/commonmark/.git/objects/bf/752d89f878014ebc47b37299016e8a7e2dd99e",
+        "sha256": "9ed22551bf3b013c1e4dcb0e7686f9c9119d8b2011545e025dc7ebe5c74a2ae8"
+      },
+      {
+        "bytes": 4171,
+        "path": "workspace/targets/commonmark/.git/objects/c9/79ce06831cb226a72a109ea7d507564bfa8052",
+        "sha256": "cbf40aadfc1ceedb963091a190cb0958fc28363029af30599c092f9f5ac8ab86"
+      },
+      {
+        "bytes": 174,
+        "path": "workspace/targets/commonmark/.git/objects/cc/055dde308d7dad56cad4e920363f5846651544",
+        "sha256": "a3cc5582887d96f8eae76474d94fb2ca07c25698952f713b0a0d55d52d362621"
+      },
+      {
+        "bytes": 79,
+        "path": "workspace/targets/commonmark/.git/objects/ce/97d63f54a36e054289886d6a6508b53223c1e3",
+        "sha256": "2c0bed0bd339f8497407327810c5a7fdc966805f2019707087d9ca3374398e61"
+      },
+      {
+        "bytes": 53,
+        "path": "workspace/targets/commonmark/.git/objects/d5/64d0bc3dd917926892c55e3706cc116d5b165e",
+        "sha256": "1c934bf438aa6350a37a1ae73345b22ff97940a19a14016595971149740becc0"
+      },
+      {
+        "bytes": 670,
+        "path": "workspace/targets/commonmark/.git/objects/d5/9e906371025b0bcf1615363524dbd9aa080e00",
+        "sha256": "dd72717b52503c3648f87bed304057096052ba02ff9763cf444b303c2bfc9699"
+      },
+      {
+        "bytes": 36,
+        "path": "workspace/targets/commonmark/.git/objects/d6/fb7daa01448de1dbb7ee1b5f77bb26be27ae44",
+        "sha256": "5eaea4cedb0069bae70a8439455841bd6760716edca3b0bd63dff9cb7f0c14b5"
+      },
+      {
+        "bytes": 3001,
+        "path": "workspace/targets/commonmark/.git/objects/d8/437592b2fd4982b3d55e67ee333291fff65c62",
+        "sha256": "b8f1497ac0d1a628bc256c0cf4646b0a741e422750ab1cbdf410bd81af92739c"
+      },
+      {
+        "bytes": 592,
+        "path": "workspace/targets/commonmark/.git/objects/db/4a61015b076148029c812496a6a69b93c63acd",
+        "sha256": "ec2765fcc22310175a42df636d167599956c39273e032826f25ee1119df19fd3"
+      },
+      {
+        "bytes": 15,
+        "path": "workspace/targets/commonmark/.git/objects/e6/9de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+        "sha256": "164c5fa8067facf1a43f09ce3d0e35ebf53a7f5723ecbf15a8667cfc53c26f6c"
+      },
+      {
+        "bytes": 172,
+        "path": "workspace/targets/commonmark/.git/objects/ea/6ee807ac91f5d67aab463b1c8f0f8c96a7c8f4",
+        "sha256": "2f146b50f0ccc46a5019ffba806b1669f32bd4eccef3f760d28a40ffeeed1757"
+      },
+      {
+        "bytes": 285,
+        "path": "workspace/targets/commonmark/.git/objects/ea/ef581f4967eb2ff06bed919b0dbd6d118651dc",
+        "sha256": "f59551df5159e8faeb160c6a106092838d88358f00e97efcc64f43302539179d"
+      },
+      {
+        "bytes": 2454,
+        "path": "workspace/targets/commonmark/.git/objects/eb/4f9eebed27fcb1191dec01026a6f1955b177b2",
+        "sha256": "ff1f13997eb7527020ba6ab4005dd1a4cce13dc9a8aab1f5eda90afb9d0bfd38"
+      },
+      {
+        "bytes": 1676,
+        "path": "workspace/targets/commonmark/.git/objects/ec/a04a2f897c2d989227db7225370d89fb0c3194",
+        "sha256": "256241b92a02cef0e8dbe65442c6b8616dacf84eb55a66d2b1a2d3f46d3624fb"
+      },
+      {
+        "bytes": 670,
+        "path": "workspace/targets/commonmark/.git/objects/f0/519ab3083450549912523bbd9c605b33852b4b",
+        "sha256": "cb28e311f561ab036f8668214acd9124ce1118aea10b76ea81b44d44287249d8"
+      },
+      {
+        "bytes": 212,
+        "path": "workspace/targets/commonmark/.git/objects/f6/044c1663c05cba6567bf3463ded3463a42e4ee",
+        "sha256": "72f7bd52a7422136c92602febd29378c4cb2f7245e204187302cc2293743da72"
+      },
+      {
+        "bytes": 173,
+        "path": "workspace/targets/commonmark/.git/objects/f7/207b9a94aaa41c88def3ff5d02574c63a7dfe8",
+        "sha256": "5bc5a02635b8a51efd7711ddcbcd8a642e56ac09e6a4d4fc1d9499eceb3f83d9"
+      },
+      {
+        "bytes": 2189,
+        "path": "workspace/targets/commonmark/.git/objects/f8/cb709244a318be26ca8407aede4f85d6cf5d43",
+        "sha256": "577ccc7e59d0cd9d20f5b23f55634b422c3eb7f6a01ca990085299b09bec69b2"
+      },
+      {
+        "bytes": 359,
+        "path": "workspace/targets/commonmark/.git/objects/fc/b4da0c2f2903c779cc4fc28b67041cc1b75cbe",
+        "sha256": "efa5d61d820ccfe725b66deea4ef6b096dc52a6fdb022eee062d8362e7c0b6c1"
+      },
+      {
+        "bytes": 134,
+        "path": "workspace/targets/commonmark/.git/objects/ff/e73bdd78d5b10d0aa6398323f9c9b193cb6252",
+        "sha256": "2fba0e2067d1707f3995d2ea9d85be4f2f67da2d3ed1d6881b590b86db022804"
+      },
+      {
+        "bytes": 41,
+        "path": "workspace/targets/commonmark/.git/refs/heads/master",
+        "sha256": "673f8144c20172b79cf72bbe182fe47d032a8db3c97c91c6ef67436769a3cf46"
+      },
+      {
+        "bytes": 57,
+        "path": "workspace/targets/commonmark/ACCEPTANCE.json",
+        "sha256": "2bc210550e12c43a44f39a044cf9cfb7b2a80220cf3e66eb73b809b9d4fea884"
+      },
+      {
+        "bytes": 13710,
+        "path": "workspace/targets/commonmark/ANALYSIS.md",
+        "sha256": "33931ba649b1b810c454c58771ad5290a179acd07720f1ab06330705b5651003"
+      },
+      {
+        "bytes": 18,
+        "path": "workspace/targets/commonmark/ANALYZE_COMPASS.md",
+        "sha256": "d0e0ada0cb20f1b26f01cf14ca9bd616306e3714489c16926cb4df903a2fc83b"
+      },
+      {
+        "bytes": 345,
+        "path": "workspace/targets/commonmark/BLOCKERS.md",
+        "sha256": "960adae24429564ba76dd44dad481a0ecccc7030586ca3a539cac922071b4653"
+      },
+      {
+        "bytes": 2115,
+        "path": "workspace/targets/commonmark/COMPASS.md",
+        "sha256": "04b5b51643e8d5a6f77a769ecc9bf9236631424a1f92e38cfc97dbd8d3b23c4e"
+      },
+      {
+        "bytes": 659,
+        "path": "workspace/targets/commonmark/DECISIONS.json",
+        "sha256": "4d8b08f56c01c46830117dda95be5bef4f7bfa23cc81c1bb28c4c7f0d70c6ba3"
+      },
+      {
+        "bytes": 5038,
+        "path": "workspace/targets/commonmark/ERRORS.md",
+        "sha256": "502c0e25cdfa375071b7d666f4d0b70127b513104b594880c631c94d0298dcf2"
+      },
+      {
+        "bytes": 162,
+        "path": "workspace/targets/commonmark/EXCLUDE_FILES.md",
+        "sha256": "856e43f06b22025f1fd16ae254f1ed8ff12f01798cc2f64d5c863746aa8130c6"
+      },
+      {
+        "bytes": 15973,
+        "path": "workspace/targets/commonmark/LINEAGE.json",
+        "sha256": "9342b15dc637004ff6f73f13ff63910f3b19e6deabfca21640897399bb78c075"
+      },
+      {
+        "bytes": 16579,
+        "path": "workspace/targets/commonmark/MANIFEST.md",
+        "sha256": "6d45cdd9b4014984e9700c235d01795364796d1f1935f102a46c35ab6649344b"
+      },
+      {
+        "bytes": 444,
+        "path": "workspace/targets/commonmark/METADATA.md",
+        "sha256": "3e731cdc8c464d24392b99d1f07e3df1d0b068638693842da2ea77190284560d"
+      },
+      {
+        "bytes": 15,
+        "path": "workspace/targets/commonmark/PLAN_COMPASS.md",
+        "sha256": "aa2892befcade0dc6d56d5b387423c53157daffffab3ed9162c34d81eb48cc56"
+      },
+      {
+        "bytes": 903,
+        "path": "workspace/targets/commonmark/PROJECT_STATUS.jsonl",
+        "sha256": "2b09405c6d291008bdb875eb49c10ebb54154cb3b1d140e51d8fe55bb4897d1d"
+      },
+      {
+        "bytes": 19861,
+        "path": "workspace/targets/commonmark/QuarterDeck/commanders_chair.html",
+        "sha256": "3a607c64c58ad46230308a02248dac0cb0771c71a158e4880444c0c84ff46d09"
+      },
+      {
+        "bytes": 6069,
+        "path": "workspace/targets/commonmark/QuarterDeck/console.yaml",
+        "sha256": "b014f86b93a3ee4e39ffcba42c0f19f5c1af063d3d63089702dfcb96b8a33d4e"
+      },
+      {
+        "bytes": 0,
+        "path": "workspace/targets/commonmark/QuarterDeck/data/.gitkeep",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 195,
+        "path": "workspace/targets/commonmark/QuarterDeck/planning-session.md",
+        "sha256": "40c053d1c601726f7e56187a844931f985e7b37818894ec5a9992b54d93fbddd"
+      },
+      {
+        "bytes": 42,
+        "path": "workspace/targets/commonmark/README.md",
+        "sha256": "41cdadc3c1757ea020c18e8714124d830d9d6eeb7c7314583e15a4f6ea77934f"
+      },
+      {
+        "bytes": 438,
+        "path": "workspace/targets/commonmark/SEA_TRIALS.md",
+        "sha256": "0bec2486b8d5c48ca1077f9320bc1686045d3e380a44a4bcc777ea6d77ab9d2a"
+      },
+      {
+        "bytes": 20,
+        "path": "workspace/targets/commonmark/STORY_GUIDANCE.json",
+        "sha256": "ac1eb731f91f41d33a1902462f822114eeaba4a5350a0c990b3b36546b5c983c"
+      },
+      {
+        "bytes": 808,
+        "path": "workspace/targets/commonmark/TECHNOLOGY_STACK.md",
+        "sha256": "8fdbb82fa196efe9d844d90ec8e1fae02633bd5b6b0a841e6297dead38dfbbc4"
+      },
+      {
+        "bytes": 1339,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-ATX-HEADINGS.md",
+        "sha256": "72ecca2cd3dac728064d3a80952453642f3f53ed1e20ea241e5dcb9b70a6e123"
+      },
+      {
+        "bytes": 2096,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-AUTOLINKS.md",
+        "sha256": "00473178fa00b7b3522eb28995f51f56fe38a08251344a9523b4e16ceacf4f1a"
+      },
+      {
+        "bytes": 1860,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-BACKSLASH-ESCAPES.md",
+        "sha256": "e1d06b5e2e1d73e7d2d96f66971dd12d3fd3698df07cde77d06efa44aa665621"
+      },
+      {
+        "bytes": 1409,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-BLANK-LINES.md",
+        "sha256": "07d84806ede2ba69d8d9ae6186d77dfb99dc601d6cd360ba55749025c7cdd722"
+      },
+      {
+        "bytes": 2078,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-BLOCK-QUOTES.md",
+        "sha256": "e791c3a9eea207ce73b63643a958efebbffb2e17908151436e0541ce4c4f51b2"
+      },
+      {
+        "bytes": 1538,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-CHARACTER-REFERENCES.md",
+        "sha256": "f1ff95020d2e9669597242aa8504623e43e0841b8ee3f67cae2afa7fcad7cdb4"
+      },
+      {
+        "bytes": 1667,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-CLI.md",
+        "sha256": "f78706356607d89c2eb0b67cca795851589316588c0587dd6d48a4d53f0d4ff4"
+      },
+      {
+        "bytes": 1387,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-CODE-SPANS.md",
+        "sha256": "20d15b36b998b406484f7c58d7e2e778fe6c5f76d879cc286fbf32df9454b131"
+      },
+      {
+        "bytes": 2438,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-EMPHASIS.md",
+        "sha256": "180ccf0a7b17f7e9dee09d91dffdd46ee4f1bfe28a3214a3801f06d2ecddeeca"
+      },
+      {
+        "bytes": 1900,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-FENCED-CODE.md",
+        "sha256": "1d8505b2a42af827142596482644f7c2f5acdb0a782fc27cb09c261cc2ab35af"
+      },
+      {
+        "bytes": 1299,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-HARD-LINE-BREAKS.md",
+        "sha256": "4ecda14f4f37fb2e602d9ecec3d119485bfb969ca1d781bef18c73cf0f56fa66"
+      },
+      {
+        "bytes": 1515,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-HTML-BLOCKS.md",
+        "sha256": "fe627f5fc96b93bc41fb4fd4b98192eb6a4d1fa952d354865713317bf44e3ef9"
+      },
+      {
+        "bytes": 2097,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-IMAGES.md",
+        "sha256": "ed933a3286f338d92b88fd8d06a2afa27f2efe5251d92d63db626647d2724387"
+      },
+      {
+        "bytes": 1505,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-INDENTED-CODE.md",
+        "sha256": "145e64b46b24ce613631596b675d9f123429ff3f35d263cf2b5398a739f070fa"
+      },
+      {
+        "bytes": 1760,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-LINK-REFERENCE-DEFINITIONS.md",
+        "sha256": "f35f29d65dd59991b5caefbc15c562962999ef1b017046b64192f82e9257b943"
+      },
+      {
+        "bytes": 2427,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-LINKS.md",
+        "sha256": "55a26914313ac56dc7b22970a2dd80093384d78854cea3c6b86fb328dd1a559d"
+      },
+      {
+        "bytes": 2181,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-LIST-ITEMS.md",
+        "sha256": "ff392b81b4b0a644ff76a5b6f8f326bca12dcff460ee4ab9253677f1a1ec5d68"
+      },
+      {
+        "bytes": 1961,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-LISTS.md",
+        "sha256": "4a98bf971939d6a43325a196a9daa19ab034bed6de81d2e3ab78b9e9088994a8"
+      },
+      {
+        "bytes": 1427,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-PARAGRAPHS.md",
+        "sha256": "0815999a9a83acb124aab98cd3425450b95f06a27afcbac226e0ec3775b088a4"
+      },
+      {
+        "bytes": 1418,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-RAW-HTML.md",
+        "sha256": "9542f646f4604c8a15484032ddb3a734a45901110ad380e8be8a4f7805a9ff29"
+      },
+      {
+        "bytes": 1463,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-SETEXT-HEADINGS.md",
+        "sha256": "04821e9f94c159be90c626342983199adedc547ff5b92c13f90c44eba170ebb5"
+      },
+      {
+        "bytes": 1204,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-SOFT-LINE-BREAKS.md",
+        "sha256": "56237f47822ba246636e764769bf51f6c62bd3bfde7c3f86ac88b015a78190d3"
+      },
+      {
+        "bytes": 1123,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-TEXTUAL-CONTENT.md",
+        "sha256": "7bf194d3f4e1c901a4203430da3f871aed45d1c6dcda35b1a9666ae1c554b4e7"
+      },
+      {
+        "bytes": 1305,
+        "path": "workspace/targets/commonmark/blueprint/FEATURE-THEMATIC-BREAKS.md",
+        "sha256": "587956d29f5d29156a2daccf163ff3eb8fd774fe6002be13cd7793c4b8a89e66"
+      },
+      {
+        "bytes": 1122,
+        "path": "workspace/targets/commonmark/blueprint/VERIFICATION.md",
+        "sha256": "74859fb4e1d6ba754ebfad25af3417b3c7d08ad644e254d30859000161267d65"
+      },
+      {
+        "bytes": 0,
+        "path": "workspace/targets/commonmark/blueprint/changes/.gitkeep",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 1354,
+        "path": "workspace/targets/commonmark/blueprint/cmark.py",
+        "sha256": "c5fb45e7c64fd7670b2a3c49a151e46f4af9d0ad3004bedb37ecf9cdc34d2f00"
+      },
+      {
+        "bytes": 2035,
+        "path": "workspace/targets/commonmark/blueprint/full_test.sh",
+        "sha256": "5b634a1c78117313283acceda8faad9de02b594e54949439c73697b058941a93"
+      },
+      {
+        "bytes": 6522,
+        "path": "workspace/targets/commonmark/blueprint/normalize.py",
+        "sha256": "94a9dd253907e3dab7c02fc11e934f06112dcf0f3804255d09d732c8c7c4b5f4"
+      },
+      {
+        "bytes": 0,
+        "path": "workspace/targets/commonmark/blueprint/sources/.gitkeep",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 3439,
+        "path": "workspace/targets/commonmark/blueprint/sources/INSTRUCTIONS.md",
+        "sha256": "10b172786a92ad4dc012e88358cf96fcead95bcd919f2677df3a03405782fb0a"
+      },
+      {
+        "bytes": 1354,
+        "path": "workspace/targets/commonmark/blueprint/sources/cmark.py",
+        "sha256": "c5fb45e7c64fd7670b2a3c49a151e46f4af9d0ad3004bedb37ecf9cdc34d2f00"
+      },
+      {
+        "bytes": 2035,
+        "path": "workspace/targets/commonmark/blueprint/sources/full_test.sh",
+        "sha256": "5b634a1c78117313283acceda8faad9de02b594e54949439c73697b058941a93"
+      },
+      {
+        "bytes": 6522,
+        "path": "workspace/targets/commonmark/blueprint/sources/normalize.py",
+        "sha256": "94a9dd253907e3dab7c02fc11e934f06112dcf0f3804255d09d732c8c7c4b5f4"
+      },
+      {
+        "bytes": 206108,
+        "path": "workspace/targets/commonmark/blueprint/sources/spec.txt",
+        "sha256": "43fad3e0ac5190a3b0bc6a41f7b1a853201a26ec2e6b74871f5d96239a8c34cf"
+      },
+      {
+        "bytes": 6433,
+        "path": "workspace/targets/commonmark/blueprint/sources/spec_tests.py",
+        "sha256": "9db1ea4a3ee79c5ec74eebc09c5985eb252427e8d9d19ef45e5cc3f2ae410855"
+      },
+      {
+        "bytes": 206108,
+        "path": "workspace/targets/commonmark/blueprint/spec.txt",
+        "sha256": "43fad3e0ac5190a3b0bc6a41f7b1a853201a26ec2e6b74871f5d96239a8c34cf"
+      },
+      {
+        "bytes": 6433,
+        "path": "workspace/targets/commonmark/blueprint/spec_tests.py",
+        "sha256": "9db1ea4a3ee79c5ec74eebc09c5985eb252427e8d9d19ef45e5cc3f2ae410855"
+      },
+      {
+        "bytes": 0,
+        "path": "workspace/targets/commonmark/evidence/.gitkeep",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 0,
+        "path": "workspace/targets/commonmark/logs/.gitkeep",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  "commands": [
+    {
+      "argv": [
+        "/mnt/c/Users/barlo/projects/drydock/.venv/bin/python",
+        "-m",
+        "drydock",
+        "init",
+        "commonmark"
+      ],
+      "cwd": "workspace",
+      "elapsed_ms": 11057,
+      "label": "01-init",
+      "returncode": 0,
+      "sequence": 1,
+      "stderr": {
+        "bytes": 0,
+        "path": "evidence/commands/01-init.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 587,
+        "path": "evidence/commands/01-init.stdout.log",
+        "sha256": "f8add4edbb88b511420e9a2aa6e48738df3e0ec0b7e60b87eb0f7342402c574b"
+      }
+    },
+    {
+      "argv": [
+        "/mnt/c/Users/barlo/projects/drydock/.venv/bin/python",
+        "-m",
+        "drydock",
+        "import",
+        "commonmark",
+        "sources",
+        "--format",
+        "markdown"
+      ],
+      "cwd": "workspace",
+      "elapsed_ms": 24644,
+      "label": "02-import-sources",
+      "returncode": 0,
+      "sequence": 2,
+      "stderr": {
+        "bytes": 0,
+        "path": "evidence/commands/02-import-sources.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 457,
+        "path": "evidence/commands/02-import-sources.stdout.log",
+        "sha256": "1166a4629acf7bcf65c6d3c3a8d60ed7f4744fea7dc5a9a232f14e45e86c3bf7"
+      }
+    },
+    {
+      "argv": [
+        "/mnt/c/Users/barlo/projects/drydock/.venv/bin/python",
+        "-m",
+        "drydock",
+        "analyze",
+        "commonmark"
+      ],
+      "cwd": "workspace",
+      "elapsed_ms": 51375,
+      "label": "03-analyze",
+      "returncode": 0,
+      "sequence": 3,
+      "stderr": {
+        "bytes": 0,
+        "path": "evidence/commands/03-analyze.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 593,
+        "path": "evidence/commands/03-analyze.stdout.log",
+        "sha256": "f81e6491304414845cd485e2894eb735fdbc2fd4d8a63a4c286649986ecdbc6e"
+      }
+    },
+    {
+      "argv": [
+        "/mnt/c/Users/barlo/projects/drydock/.venv/bin/python",
+        "-m",
+        "drydock",
+        "plan",
+        "commonmark",
+        "--override"
+      ],
+      "cwd": "workspace",
+      "elapsed_ms": 265050,
+      "label": "04-plan",
+      "returncode": 0,
+      "sequence": 4,
+      "stderr": {
+        "bytes": 0,
+        "path": "evidence/commands/04-plan.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 10799,
+        "path": "evidence/commands/04-plan.stdout.log",
+        "sha256": "e9fb84415f515e476c65f778baf82235ad1f781caeaab661847c07789b4e632c"
+      }
+    },
+    {
+      "argv": [
+        "/mnt/c/Users/barlo/projects/drydock/.venv/bin/python",
+        "-m",
+        "drydock",
+        "plan",
+        "verify",
+        "commonmark"
+      ],
+      "cwd": "workspace",
+      "elapsed_ms": 14935,
+      "label": "05-plan-verify",
+      "returncode": 1,
+      "sequence": 5,
+      "stderr": {
+        "bytes": 0,
+        "path": "evidence/commands/05-plan-verify.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 4735,
+        "path": "evidence/commands/05-plan-verify.stdout.log",
+        "sha256": "013e7ff84a6d21ecf19b760de7d538f54a5d726d36480495edae11accf7b848a"
+      }
+    },
+    {
+      "argv": [
+        "/mnt/c/Users/barlo/projects/drydock/.venv/bin/python",
+        "-m",
+        "drydock",
+        "plan",
+        "repair",
+        "commonmark"
+      ],
+      "cwd": "workspace",
+      "elapsed_ms": 78840,
+      "label": "06-plan-repair",
+      "returncode": 1,
+      "sequence": 6,
+      "stderr": {
+        "bytes": 0,
+        "path": "evidence/commands/06-plan-repair.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 14593,
+        "path": "evidence/commands/06-plan-repair.stdout.log",
+        "sha256": "4c8af6d100df1f618c1096085cb1f2b73c21e542b0ea316c309571caac2f173c"
+      }
+    },
+    {
+      "argv": [
+        "/mnt/c/Users/barlo/projects/drydock/.venv/bin/python",
+        "-m",
+        "drydock",
+        "plan",
+        "verify",
+        "commonmark"
+      ],
+      "cwd": "workspace",
+      "elapsed_ms": 12593,
+      "label": "07-plan-verify-after-repair",
+      "returncode": 1,
+      "sequence": 7,
+      "stderr": {
+        "bytes": 0,
+        "path": "evidence/commands/07-plan-verify-after-repair.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 4735,
+        "path": "evidence/commands/07-plan-verify-after-repair.stdout.log",
+        "sha256": "013e7ff84a6d21ecf19b760de7d538f54a5d726d36480495edae11accf7b848a"
+      }
+    },
+    {
+      "argv": [
+        "/mnt/c/Users/barlo/projects/drydock/.venv/bin/python",
+        "-m",
+        "drydock",
+        "build",
+        "status",
+        "commonmark"
+      ],
+      "cwd": "workspace",
+      "elapsed_ms": 398,
+      "label": "08-after-plan-build-status",
+      "returncode": 1,
+      "sequence": 8,
+      "stderr": {
+        "bytes": 1272,
+        "path": "evidence/commands/08-after-plan-build-status.stderr.log",
+        "sha256": "f4e6ef9628e2820b892a2848dfb32012b0ea289d2735be725036fe18a14cdedf"
+      },
+      "stdout": {
+        "bytes": 73,
+        "path": "evidence/commands/08-after-plan-build-status.stdout.log",
+        "sha256": "c0946adb967f28346456234ece30b073da00805a29fab8ea7036ea6c468209bc"
+      }
+    }
+  ],
+  "environment": {
+    "drydock_version": "0.8.0",
+    "effort": "",
+    "finished_at": "2026-10-24T23:20:25.957500Z",
+    "git_commit": "bc7ba16714465a34fcdadd849994503aef44ba7a",
+    "model": "gpt-6-luna",
+    "plan_model": "",
+    "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+    "provider": "codex",
+    "python_version": "3.12.13",
+    "requested_model": "gpt-6-luna",
+    "started_at": "2026-10-24T23:12:41.108096Z"
+  },
+  "llm_artifacts": [
+    {
+      "bytes": 287814,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261024.231325.467Z_commonmark_analyze_codex.prompt.md",
+      "sha256": "3f29376b613d85e86928d9f80fd9e4306c614e4abe677d14f6c3003a8a63cc6a"
+    },
+    {
+      "bytes": 384218,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261024.231424.750Z_commonmark_plan_codex.prompt.md",
+      "sha256": "b2950f790d2c5237048dee6016c1f27bf277a5fedf77be0ce871ac8e95803be1"
+    },
+    {
+      "bytes": 407459,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261024.231500.475Z_commonmark_plan_codex.prompt.md",
+      "sha256": "f887b25aba660b5ddcc560f4ba11c57f1315493c389f5ea48ac1d0cdafd13377"
+    },
+    {
+      "bytes": 407589,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261024.231521.302Z_commonmark_plan_codex.prompt.md",
+      "sha256": "4808766ee0a292de0360950c8cb06cb50426e41372f77168c92f1ebd49fb4f9e"
+    },
+    {
+      "bytes": 407724,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261024.231537.112Z_commonmark_plan_codex.prompt.md",
+      "sha256": "381b1015da9d1d61e2c15085208f53a7882812e95ffd85b7b260ebeee25146a8"
+    },
+    {
+      "bytes": 407788,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261024.231555.998Z_commonmark_plan_codex.prompt.md",
+      "sha256": "7f7ae72ccff885f0bfb285ffc972152ca358f6d17b8399f660b6d13f9428ec37"
+    },
+    {
+      "bytes": 407853,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261024.231612.051Z_commonmark_plan_codex.prompt.md",
+      "sha256": "c91769fc467f9012465229ad7773f0bddedbe04f2c8b3e5ac452ea360ca78468"
+    },
+    {
+      "bytes": 408455,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261024.231633.428Z_commonmark_plan_codex.prompt.md",
+      "sha256": "691fc551cd938ec2c168046f7ed3553ca0e4fac031e0c15df62ad75441cd869f"
+    },
+    {
+      "bytes": 8344,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261024.231704.644Z_commonmark_lineage_attribute_codex.prompt.md",
+      "sha256": "eeaa184d00f1bee4607bda1e8d1f6b80f7ce83cbf9072e4cee36b0d217a7b44a"
+    },
+    {
+      "bytes": 6252,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261024.231715.833Z_commonmark_lineage_attribute_codex.prompt.md",
+      "sha256": "4008e7f61164610e50f9d10a82d2a5271ac82ac362843ec564cd290fa804f29c"
+    },
+    {
+      "bytes": 6937,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261024.231725.846Z_commonmark_lineage_attribute_codex.prompt.md",
+      "sha256": "2a59788f1058baf73f9b0cca5d1c7a20971189b943f713dc8549bcf25cf782d5"
+    },
+    {
+      "bytes": 11424,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261024.231733.641Z_commonmark_lineage_attribute_codex.prompt.md",
+      "sha256": "e93f87a7d1851699d203adc60e96f859e6700f91bc5574376cec5a085e5d6d88"
+    },
+    {
+      "bytes": 211006,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261024.231743.029Z_commonmark_lineage_attribute_codex.prompt.md",
+      "sha256": "275f6afe4277bbb7be4e276ad6eb5701e9dfa5214a0a7082f87b2940a4ce0ec3"
+    },
+    {
+      "bytes": 11336,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261024.231750.034Z_commonmark_lineage_attribute_codex.prompt.md",
+      "sha256": "c809e4ff39e247a36b37937c280164e8d7cd9af04ef237b554d66f95a7474b35"
+    },
+    {
+      "bytes": 27204,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261024.231914.511Z_commonmark_plan-repair_codex.prompt.md",
+      "sha256": "14e665a652f6a7e6ae72c0d224a0043d21bddf60b0d4cdb901f7eadcd42f7626"
+    },
+    {
+      "bytes": 14823,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261024.231325.467Z_commonmark_analyze_codex.output.txt",
+      "sha256": "2aaf0dac2f18dc9b97d4349907eeed24d174e9c0ca6cedf7b8b6fd4b3fe1692c"
+    },
+    {
+      "bytes": 17294,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261024.231424.750Z_commonmark_plan_codex.output.txt",
+      "sha256": "77485370b95d06a020b99bbd18e5d4702d97c629d36c4b07eae56ad51fff2632"
+    },
+    {
+      "bytes": 7731,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261024.231500.475Z_commonmark_plan_codex.output.txt",
+      "sha256": "382fc03ab2e2800b6a01f6d8250da089ac104f0119c73d5c5bf04a7a5ea13a0b"
+    },
+    {
+      "bytes": 8468,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261024.231521.302Z_commonmark_plan_codex.output.txt",
+      "sha256": "affa284dc048233508a2b1eec88d864b6a07c84db0db6aa6b2f48efd68bb8f65"
+    },
+    {
+      "bytes": 10352,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261024.231537.112Z_commonmark_plan_codex.output.txt",
+      "sha256": "bc82d561240b04591f8925d349734d840292b6d5ee5153204bea7e59f46c4465"
+    },
+    {
+      "bytes": 8234,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261024.231555.998Z_commonmark_plan_codex.output.txt",
+      "sha256": "c6c8a7abeabc447c4c644178eedc55815312e784768a5f2d1629ea8a528261cd"
+    },
+    {
+      "bytes": 11429,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261024.231612.051Z_commonmark_plan_codex.output.txt",
+      "sha256": "c4b67124b1c89928383ba4c44c14e8f785d4d3d376769203b39dfa5d58c83410"
+    },
+    {
+      "bytes": 6614,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261024.231633.428Z_commonmark_plan_codex.output.txt",
+      "sha256": "303693feb4e28791a6d25d4cba0ca1447b5ef4ac87fcd9cbf65149f2e598b80e"
+    },
+    {
+      "bytes": 2237,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261024.231704.644Z_commonmark_lineage_attribute_codex.output.txt",
+      "sha256": "024145f727a149e45f0353c857f53425390ff9a59a3e3d8c7f0659847933f794"
+    },
+    {
+      "bytes": 838,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261024.231715.833Z_commonmark_lineage_attribute_codex.output.txt",
+      "sha256": "e2d4c3dfbf6d120eb31b6c3ab24496fc8f75301cc62974be361209988449a33c"
+    },
+    {
+      "bytes": 561,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261024.231725.846Z_commonmark_lineage_attribute_codex.output.txt",
+      "sha256": "e13f4b9696d8e4778a9e5dd3f9f16bddec0c139c771535933e0c8dbff2eae0c3"
+    },
+    {
+      "bytes": 1420,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261024.231733.641Z_commonmark_lineage_attribute_codex.output.txt",
+      "sha256": "c3f3adaeeddab168575c9685c6c4667cd901c1048773d5a95961f28306e1c3bb"
+    },
+    {
+      "bytes": 2559,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261024.231743.029Z_commonmark_lineage_attribute_codex.output.txt",
+      "sha256": "cc769f193f5fb370243d00e786d027332afcb48aa6b38e610c94665efa98ceb2"
+    },
+    {
+      "bytes": 2195,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261024.231750.034Z_commonmark_lineage_attribute_codex.output.txt",
+      "sha256": "f070b95615810be96112196e8490d38b465ae1b391550352156a558d384b8342"
+    },
+    {
+      "bytes": 11104,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261024.231914.511Z_commonmark_plan-repair_codex.output.txt",
+      "sha256": "3304bb329dc5800ce7917cf41685ce72cffbf7f29d78cacc0b661abec17fff4d"
+    },
+    {
+      "bytes": 15371,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261024.231325.467Z_commonmark_analyze_codex.raw.jsonl",
+      "sha256": "a4a33847574c4bd6520bcc4ac943fd12f2a117baebc1dc9aa1e6ac037ca2f240"
+    },
+    {
+      "bytes": 18073,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261024.231424.750Z_commonmark_plan_codex.raw.jsonl",
+      "sha256": "cf706205f834a3ebe241df641f26534bce9f31893724c3e1590c55816ef2d33a"
+    },
+    {
+      "bytes": 8424,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261024.231500.475Z_commonmark_plan_codex.raw.jsonl",
+      "sha256": "0f782d141f4a449996d77c878e65a55243aa7d0292b2ce16a33aaf1a3548f1e8"
+    },
+    {
+      "bytes": 9162,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261024.231521.302Z_commonmark_plan_codex.raw.jsonl",
+      "sha256": "fa6a3698f39eb24f527bb67adc5108379619f50a3514623c3348caddd9269170"
+    },
+    {
+      "bytes": 11068,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261024.231537.112Z_commonmark_plan_codex.raw.jsonl",
+      "sha256": "efbb39548585e4387ab60959a69d0cf79764902ef94d85c51270d9894453eb9c"
+    },
+    {
+      "bytes": 8927,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261024.231555.998Z_commonmark_plan_codex.raw.jsonl",
+      "sha256": "8a7b95d22a021d64f6335ecebb7565567961ec836d1cd25e125851b38c0ca305"
+    },
+    {
+      "bytes": 12133,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261024.231612.051Z_commonmark_plan_codex.raw.jsonl",
+      "sha256": "9e7c30e3988d8f2f8dd649c8eaf9ccd90cdb8c0f042c5db0af5faf4c81dd3d39"
+    },
+    {
+      "bytes": 7277,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261024.231633.428Z_commonmark_plan_codex.raw.jsonl",
+      "sha256": "cdff7ac9acd1d699d66a06f004bdc1aa0b36de55efd80339661fa3c2ce7ef29f"
+    },
+    {
+      "bytes": 2737,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261024.231704.644Z_commonmark_lineage_attribute_codex.raw.jsonl",
+      "sha256": "0dd3c27b850f4002728066634526443d24800854f1229006c6e0118470bb4e9a"
+    },
+    {
+      "bytes": 1263,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261024.231715.833Z_commonmark_lineage_attribute_codex.raw.jsonl",
+      "sha256": "e5e9305c83cb31de6166f9ea3e6782ab646ffadb0ec282b2a7dea53592d908c8"
+    },
+    {
+      "bytes": 922,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261024.231725.846Z_commonmark_lineage_attribute_codex.raw.jsonl",
+      "sha256": "8bad6e1e945e3c949cf71fcbb7f6d753f0d80fee4671851dfe0b0065d3884b1f"
+    },
+    {
+      "bytes": 1876,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261024.231733.641Z_commonmark_lineage_attribute_codex.raw.jsonl",
+      "sha256": "d2e44995afa79ddbd5dd4547c064f178cc3d7ca1202e0e56c35e5f1e3c6821d3"
+    },
+    {
+      "bytes": 3078,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261024.231743.029Z_commonmark_lineage_attribute_codex.raw.jsonl",
+      "sha256": "7308b5a57013d8c4305ade015938e85f2da05c5e801205e4e8db5f8a125dc0d2"
+    },
+    {
+      "bytes": 2667,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261024.231750.034Z_commonmark_lineage_attribute_codex.raw.jsonl",
+      "sha256": "dcb9ef078ec76f3dfdab1e1a3f02cba9688bdd85996dc37d15f4329b0fb8722b"
+    },
+    {
+      "bytes": 12119,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261024.231914.511Z_commonmark_plan-repair_codex.raw.jsonl",
+      "sha256": "ce09811b039ec2fb371018557d975a3ae9eeb1ce5d10442ffe88589ec25634cf"
+    },
+    {
+      "bytes": 194,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261024.231325.467Z_commonmark_analyze_codex.llm.log",
+      "sha256": "5267db01088623a27aa4b8dc4821b48da6814fc5960cf3dc1e5ce0d8ceb96780"
+    },
+    {
+      "bytes": 212,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261024.231424.750Z_commonmark_plan_codex.llm.log",
+      "sha256": "d3da4c77e5d7d2ca76b214a9440abc4b023c6f0fa192a2216e76eb3b2dd698d2"
+    },
+    {
+      "bytes": 230,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261024.231500.475Z_commonmark_plan_codex.llm.log",
+      "sha256": "c7e260d4e3b55d68edbeef0b0a6a659e6864947cea9befd47d296d8cbb4f42d8"
+    },
+    {
+      "bytes": 230,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261024.231521.302Z_commonmark_plan_codex.llm.log",
+      "sha256": "89e33b7cdbd27bca79ecacddcc6a45d97d5cb1b9af7fa45773f5b205ae035036"
+    },
+    {
+      "bytes": 230,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261024.231537.112Z_commonmark_plan_codex.llm.log",
+      "sha256": "a961a26d6f3462613b9965e710d3040ead5b6bb7b5e43a40b88ab30826aed0b3"
+    },
+    {
+      "bytes": 230,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261024.231555.998Z_commonmark_plan_codex.llm.log",
+      "sha256": "19216ec1dde60fcf204b1bfca4580a6f33221a6ddad2de3ad989dbbf7fef8735"
+    },
+    {
+      "bytes": 230,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261024.231612.051Z_commonmark_plan_codex.llm.log",
+      "sha256": "27a963cd402d36f12f041564e1d280c9343e4c4fd3e67d3208fd550c61929a59"
+    },
+    {
+      "bytes": 230,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261024.231633.428Z_commonmark_plan_codex.llm.log",
+      "sha256": "28ac60499729b0acbdbc4d08012d99bc8e7e7e7f6d44bdfa70fc257a24ca21da"
+    },
+    {
+      "bytes": 212,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261024.231704.644Z_commonmark_lineage_attribute_codex.llm.log",
+      "sha256": "29313dfaea790fb8cea500875eaa7c0b33fa92d442d24511a88fd7dc6fdffd81"
+    },
+    {
+      "bytes": 209,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261024.231715.833Z_commonmark_lineage_attribute_codex.llm.log",
+      "sha256": "c00fa7917270ce9b7147a9931892c78e743041155ce1567d4816718e915fa4b9"
+    },
+    {
+      "bytes": 209,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261024.231725.846Z_commonmark_lineage_attribute_codex.llm.log",
+      "sha256": "bd6c8cfa0ffc6643907c410ae3e65c6a85a04923934d57ba62a5c580ab4da87f"
+    },
+    {
+      "bytes": 209,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261024.231733.641Z_commonmark_lineage_attribute_codex.llm.log",
+      "sha256": "12422bb7e8dc478622fec9c56f05cadbf6fe6df09d336320c790ed8a06429ea7"
+    },
+    {
+      "bytes": 210,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261024.231743.029Z_commonmark_lineage_attribute_codex.llm.log",
+      "sha256": "3c9c1733c8fdf76daf079fe41121ee6d45e280180769ea8ec9d22bce8fef1dce"
+    },
+    {
+      "bytes": 209,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261024.231750.034Z_commonmark_lineage_attribute_codex.llm.log",
+      "sha256": "32f7cd5752b5c060ca54aa5fa70d664752be6765460e7bee841bb9e62fc54f10"
+    },
+    {
+      "bytes": 201,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261024.231914.511Z_commonmark_plan-repair_codex.llm.log",
+      "sha256": "c910d1de030cc5db1c695b7f03aab909f7dc02254857b4dc2b9951345b3fc12c"
+    },
+    {
+      "bytes": 85847,
+      "kind": "llm_execution_records",
+      "path": "evidence/llm.jsonl",
+      "sha256": "a6c78de1646607f8c9329cb61c8540c20ad2164bf0538adbd4486d0b0697ba40"
+    }
+  ],
+  "schema_version": 1
+}

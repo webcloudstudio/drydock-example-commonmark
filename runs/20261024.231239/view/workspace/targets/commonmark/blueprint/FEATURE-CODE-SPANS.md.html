@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-CODE-SPANS.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-CODE-SPANS.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-CODE-SPANS.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Code Spans</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261024 V1</td></tr><tr><td>Description</td><td>Parses and renders inline CommonMark code spans.</td></tr><tr><td>Depends On</td><td>FEATURE-CLI.md, FEATURE-PARAGRAPHS.md</td></tr><tr><td>Provides</td><td>inline code spans</td></tr><tr><td>Consumes</td><td>commonmark</td></tr></tbody></table></div>
+<h2>Behavior</h2>
+<p>Match opening and closing backtick runs of equal length. Convert line endings in the contents to spaces. Remove one leading and trailing ASCII space only when both are present and the content is not entirely spaces. Preserve all other content literally, escaping it for HTML. Backslash escapes and character references are not processed inside code spans.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC code-span-conformance ===<br>Intent: All supplied Code spans examples pass.<br>Suite: scoped<br>Probe: --list<br>Probe Count: summary</p>
+<p>import os import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Code spans&quot;], capture_output=True, text=True, env={**os.environ, &quot;PYTHONPATH&quot;: f&quot;{os.getcwd()}/sources&quot;}, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC code-span-conformance ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not use a public Markdown implementation.</li><li>Keep all supplied scoring assets unchanged.</li></ul></article>
+</main>
+</body>
+</html>

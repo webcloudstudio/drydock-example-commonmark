@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-EMPHASIS.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-EMPHASIS.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-EMPHASIS.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Emphasis</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261024 V1</td></tr><tr><td>Description</td><td>Parse CommonMark emphasis and strong emphasis in inline content.</td></tr><tr><td>Depends On</td><td>FEATURE-CLI.md, FEATURE-THEMATIC-BREAKS.md, FEATURE-ATX-HEADINGS.md, FEATURE-SETEXT-HEADINGS.md, FEATURE-INDENTED-CODE.md, FEATURE-FENCED-CODE.md, FEATURE-HTML-BLOCKS.md, FEATURE-LINK-REFERENCE-DEFINITIONS.md, FEATURE-PARAGRAPHS.md, FEATURE-BLANK-LINES.md, FEATURE-BLOCK-QUOTES.md, FEATURE-LIST-ITEMS.md, FEATURE-LISTS.md, FEATURE-BACKSLASH-ESCAPES.md, FEATURE-CHARACTER-REFERENCES.md, FEATURE-CODE-SPANS.md</td></tr><tr><td>Provides</td><td>CommonMark emphasis and strong emphasis</td></tr><tr><td>Consumes</td><td>CommonMark inline content</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Interpret <code>*</code> and <code>_</code> delimiter runs as emphasis or strong emphasis according to the CommonMark delimiter-run rules. Support nested spans, Unicode whitespace and punctuation, intraword <code>*</code> emphasis, the restrictions on intraword <code>_</code> emphasis, and the specified precedence and ambiguity rules.</p>
+<h2>Parsing and rendering</h2>
+<ul><li>Determine left- and right-flanking runs from neighboring Unicode whitespace and punctuation.</li><li>Apply the opener and closer rules for <code>*</code>, <code>_</code>, <code>**</code>, and <code>__</code>, including the rule of three.</li><li>Use the smallest valid delimiter spans and minimize nesting where the rules require it. Preserve unmatched delimiter characters as text.</li><li>Render emphasis with <code>&lt;em&gt;</code> and strong emphasis with <code>&lt;strong&gt;</code>. Parse their contents as inline content, including other emphasis constructs.</li><li>Code spans, links, images, and HTML tags bind more tightly than emphasis.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC emphasis-suite ===<br>Intent: All supplied examples in the “Emphasis and strong emphasis” section pass.<br>Suite: scoped<br>Probe: --dump-tests<br>Probe Count: lines</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Emphasis and strong emphasis&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC emphasis-suite ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Use the supplied CommonMark 0.31.2 rules and examples as authoritative.</li><li>Preserve escaped delimiter characters and unmatched runs as literal text.</li><li>Do not use a public Markdown implementation.</li><li>Do not modify supplied scoring assets.</li></ul></article>
+</main>
+</body>
+</html>

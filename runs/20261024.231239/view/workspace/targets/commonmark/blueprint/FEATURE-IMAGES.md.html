@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-IMAGES.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-IMAGES.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-IMAGES.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Images</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261024 V1</td></tr><tr><td>Description</td><td>Parse inline and reference-style CommonMark images.</td></tr><tr><td>Depends On</td><td>FEATURE-CLI.md, FEATURE-THEMATIC-BREAKS.md, FEATURE-ATX-HEADINGS.md, FEATURE-SETEXT-HEADINGS.md, FEATURE-INDENTED-CODE.md, FEATURE-FENCED-CODE.md, FEATURE-HTML-BLOCKS.md, FEATURE-LINK-REFERENCE-DEFINITIONS.md, FEATURE-PARAGRAPHS.md, FEATURE-BLANK-LINES.md, FEATURE-BLOCK-QUOTES.md, FEATURE-LIST-ITEMS.md, FEATURE-LISTS.md, FEATURE-BACKSLASH-ESCAPES.md, FEATURE-CHARACTER-REFERENCES.md, FEATURE-CODE-SPANS.md, FEATURE-EMPHASIS.md, FEATURE-LINKS.md</td></tr><tr><td>Provides</td><td>Inline and reference images</td></tr><tr><td>Consumes</td><td>Document link reference definitions</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Parse inline and reference-style images using the CommonMark link and label rules, including full, collapsed, and shortcut references.</p>
+<h2>Image behavior</h2>
+<ul><li>Support empty descriptions and descriptions containing inline elements, links, and nested image syntax where valid.</li><li>Render images as <code>&lt;img&gt;</code> elements with <code>src</code>, plain-text <code>alt</code>, and an optional <code>title</code>. The alt text is the description&#x27;s plain textual content without inline formatting or markup.</li><li>Resolve reference labels using the document-wide definitions and matching rules.</li><li>Escape <code>src</code>, <code>alt</code>, and <code>title</code> attribute values for HTML.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC images-suite ===<br>Intent: All supplied examples in the “Images” section pass.<br>Suite: scoped<br>Probe: --dump-tests<br>Probe Count: lines</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Images&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC images-suite ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Preserve the distinction between links and images; image descriptions render as plain-text alt attributes.</li><li>Do not use a public Markdown implementation or modify supplied scoring assets.</li></ul></article>
+</main>
+</body>
+</html>

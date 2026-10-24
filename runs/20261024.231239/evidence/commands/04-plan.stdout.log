@@ -1,0 +1,140 @@
+Drydock 0.8.0  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+2026-10-24 19:14:24 EDT  Calling CODEX/gpt-6-luna (plan · topology)...
+[output] artifacts repaired: DECISIONS.json: completed final `=== END ARTIFACT` as `=== END ARTIFACT ===`
+  Completed CODEX/gpt-6-luna (plan · topology)  rc=0
+========================================================================
+PLAN PROGRESS  ·  STAGE 1 · TOPOLOGY
+========================================================================
+Topology Created:  True
+Blueprints Created: 0 / 25
+Manifest Created:  False
+Blueprints Remaining: 25
+Batch Result:       Topology accepted
+========================================================================
+2026-10-24 19:15:00 EDT  Calling CODEX/gpt-6-luna (plan · blueprint batch 1)...
+  Completed CODEX/gpt-6-luna (plan · blueprint batch 1)  rc=0
+========================================================================
+PLAN PROGRESS  ·  STAGE 2 · BLUEPRINT BATCH 1
+========================================================================
+Topology Created:  True
+Blueprints Created: 5 / 25
+Manifest Created:  False
+Blueprints Remaining: 20
+Batch Result:       Accepted 5 Blueprint(s)
+========================================================================
+2026-10-24 19:15:21 EDT  Calling CODEX/gpt-6-luna (plan · blueprint batch 2)...
+[output] artifacts repaired: FEATURE-BLANK-LINES.md: completed final `=== END ARTIFACT` as `=== END ARTIFACT ===`
+  Completed CODEX/gpt-6-luna (plan · blueprint batch 2)  rc=0
+========================================================================
+PLAN PROGRESS  ·  STAGE 2 · BLUEPRINT BATCH 2
+========================================================================
+Topology Created:  True
+Blueprints Created: 10 / 25
+Manifest Created:  False
+Blueprints Remaining: 15
+Batch Result:       Accepted 5 Blueprint(s)
+========================================================================
+2026-10-24 19:15:37 EDT  Calling CODEX/gpt-6-luna (plan · blueprint batch 3)...
+  Completed CODEX/gpt-6-luna (plan · blueprint batch 3)  rc=0
+========================================================================
+PLAN PROGRESS  ·  STAGE 2 · BLUEPRINT BATCH 3
+========================================================================
+Topology Created:  True
+Blueprints Created: 13 / 25
+Manifest Created:  False
+Blueprints Remaining: 12
+Batch Result:       Accepted 3 Blueprint(s)
+========================================================================
+2026-10-24 19:15:56 EDT  Calling CODEX/gpt-6-luna (plan · blueprint batch 4)...
+  Completed CODEX/gpt-6-luna (plan · blueprint batch 4)  rc=0
+========================================================================
+PLAN PROGRESS  ·  STAGE 2 · BLUEPRINT BATCH 4
+========================================================================
+Topology Created:  True
+Blueprints Created: 16 / 25
+Manifest Created:  False
+Blueprints Remaining: 9
+Batch Result:       Accepted 3 Blueprint(s)
+========================================================================
+2026-10-24 19:16:12 EDT  Calling CODEX/gpt-6-luna (plan · blueprint batch 5)...
+  Completed CODEX/gpt-6-luna (plan · blueprint batch 5)  rc=0
+[plan] artifact rejected — FEATURE-RAW-HTML.md: incomplete or nested artifact envelope; emit one complete body ending with `=== END ARTIFACT ===` on its own line
+========================================================================
+PLAN PROGRESS  ·  STAGE 2 · BLUEPRINT BATCH 5
+========================================================================
+Topology Created:  True
+Blueprints Created: 20 / 25
+Manifest Created:  False
+Blueprints Remaining: 5
+Batch Result:       Accepted 4 Blueprint(s)
+========================================================================
+2026-10-24 19:16:33 EDT  Calling CODEX/gpt-6-luna (plan · blueprint batch 6)...
+[output] artifacts repaired: VERIFICATION.md: completed final `=== END ARTIFACT` as `=== END ARTIFACT ===`
+  Completed CODEX/gpt-6-luna (plan · blueprint batch 6)  rc=0
+========================================================================
+PLAN PROGRESS  ·  STAGE 2 · BLUEPRINT BATCH 6
+========================================================================
+Topology Created:  True
+Blueprints Created: 25 / 25
+Manifest Created:  False
+Blueprints Remaining: 0
+Batch Result:       Accepted 5 Blueprint(s)
+========================================================================
+========================================================================
+PLAN PROGRESS  ·  STAGE 3 · MANIFEST
+========================================================================
+Topology Created:  True
+Blueprints Created: 25 / 25
+Manifest Created:  True
+Blueprints Remaining: 0
+Batch Result:       Manifest validated and serialized
+========================================================================
+2026-10-24 19:17:04 EDT  Calling CODEX/gpt-6-luna (lineage_attribute)...
+  Completed CODEX/gpt-6-luna (lineage_attribute)  rc=0
+2026-10-24 19:17:15 EDT  Calling CODEX/gpt-6-luna (lineage_attribute)...
+  Completed CODEX/gpt-6-luna (lineage_attribute)  rc=0
+2026-10-24 19:17:25 EDT  Calling CODEX/gpt-6-luna (lineage_attribute)...
+  Completed CODEX/gpt-6-luna (lineage_attribute)  rc=0
+2026-10-24 19:17:33 EDT  Calling CODEX/gpt-6-luna (lineage_attribute)...
+  Completed CODEX/gpt-6-luna (lineage_attribute)  rc=0
+2026-10-24 19:17:43 EDT  Calling CODEX/gpt-6-luna (lineage_attribute)...
+  Completed CODEX/gpt-6-luna (lineage_attribute)  rc=0
+2026-10-24 19:17:50 EDT  Calling CODEX/gpt-6-luna (lineage_attribute)...
+  Completed CODEX/gpt-6-luna (lineage_attribute)  rc=0
+
+Mode: OVERWRITE (Blueprint specs regenerated from analysis)
+Provider: codex / gpt-6-luna
+Graph: 0 features, 25 stories, 0 spikes, 0 acceptance gates
+Warnings: 3
+Outcome: updated
+Execution: 20261024.231424.750Z-c775fcbc
+Elapsed: 4 minutes 13 seconds
+Review: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261024.231239/workspace/targets/commonmark/QuarterDeck
+
+⚠  Plan written but not buildable — the Manifest is draft and Build refuses it.
+plan verify: commonmark
+  19 criteria cannot run as written
+  ✗  FEATURE-ATX-HEADINGS.md [atx-headings-conformance]: line 4: sources/spec_tests.py --program './commonmark' selects a subset of a staged corpus: probe output does not match the declared 'summary' protocol
+  ✗  FEATURE-BACKSLASH-ESCAPES.md [backslash-escape-conformance]: line 5: sources/spec_tests.py --program './commonmark' selects a subset of a staged corpus: probe exited 2: spec_tests.py: error: unrecognized arguments: --list
+  ✗  FEATURE-BLANK-LINES.md [blank-lines-conformance]: line 4: sources/spec_tests.py --program './commonmark' selects a subset of a staged corpus: probe exited 2: spec_tests.py: error: unrecognized arguments: --list
+  ✗  FEATURE-BLOCK-QUOTES.md [block-quotes-conformance]: line 5: sources/spec_tests.py --program './commonmark' selects a subset of a staged corpus: probe exited 2: spec_tests.py: error: unrecognized arguments: --list
+  ✗  FEATURE-CHARACTER-REFERENCES.md [character-reference-conformance]: line 5: sources/spec_tests.py --program './commonmark' selects a subset of a staged corpus: probe exited 2: spec_tests.py: error: unrecognized arguments: --list
+  ✗  FEATURE-CODE-SPANS.md [code-span-conformance]: line 5: sources/spec_tests.py --program './commonmark' selects a subset of a staged corpus: probe exited 2: spec_tests.py: error: unrecognized arguments: --list
+  ✗  FEATURE-FENCED-CODE.md [fenced-code-conformance]: line 4: sources/spec_tests.py --program './commonmark' selects a subset of a staged corpus: probe exited 2: spec_tests.py: error: unrecognized arguments: --list
+  ✗  FEATURE-HARD-LINE-BREAKS.md [hard-line-breaks-conformance]: line 4: sources/spec_tests.py --program './commonmark' selects a subset of a staged corpus: probe exited 2: spec_tests.py: error: unrecognized arguments: --list
+  ✗  FEATURE-HTML-BLOCKS.md [html-block-conformance]: line 4: sources/spec_tests.py --program './commonmark' selects a subset of a staged corpus: probe exited 2: spec_tests.py: error: unrecognized arguments: --list
+  ✗  FEATURE-INDENTED-CODE.md [indented-code-conformance]: line 4: sources/spec_tests.py --program './commonmark' selects a subset of a staged corpus: probe output does not match the declared 'summary' protocol
+  ✗  FEATURE-LINK-REFERENCE-DEFINITIONS.md [link-reference-definition-conformance]: line 4: sources/spec_tests.py --program './commonmark' selects a subset of a staged corpus: probe exited 2: spec_tests.py: error: unrecognized arguments: --list
+  ✗  FEATURE-LIST-ITEMS.md [list-items-conformance]: line 5: sources/spec_tests.py --program './commonmark' selects a subset of a staged corpus: probe exited 2: spec_tests.py: error: unrecognized arguments: --list
+  ✗  FEATURE-LISTS.md [lists-conformance]: line 5: sources/spec_tests.py --program './commonmark' selects a subset of a staged corpus: probe exited 2: spec_tests.py: error: unrecognized arguments: --list
+  ✗  FEATURE-PARAGRAPHS.md [paragraph-conformance]: line 4: sources/spec_tests.py --program './commonmark' selects a subset of a staged corpus: probe exited 2: spec_tests.py: error: unrecognized arguments: --list
+  ✗  FEATURE-RAW-HTML.md [raw-html-conformance]: line 4: sources/spec_tests.py --program './commonmark' selects a subset of a staged corpus: probe exited 2: spec_tests.py: error: unrecognized arguments: --list
+  ✗  FEATURE-SETEXT-HEADINGS.md [setext-headings-conformance]: line 4: sources/spec_tests.py --program './commonmark' selects a subset of a staged corpus: probe output does not match the declared 'summary' protocol
+  ✗  FEATURE-SOFT-LINE-BREAKS.md [soft-line-breaks-conformance]: line 4: sources/spec_tests.py --program './commonmark' selects a subset of a staged corpus: probe exited 2: spec_tests.py: error: unrecognized arguments: --list
+  ✗  FEATURE-TEXTUAL-CONTENT.md [textual-content-conformance]: line 4: sources/spec_tests.py --program './commonmark' selects a subset of a staged corpus: probe exited 2: spec_tests.py: error: unrecognized arguments: --list
+  ✗  FEATURE-THEMATIC-BREAKS.md [thematic-breaks-conformance]: line 4: sources/spec_tests.py --program './commonmark' selects a subset of a staged corpus: probe output does not match the declared 'summary' protocol
+  ⚠  FEATURE-CLI.md [cli-empty-input]: captures a program's output and prints none of it; print its pass/fail counts before asserting so repair can see progress
+  ⚠  FEATURE-CLI.md [cli-markdown-input]: captures a program's output and prints none of it; print its pass/fail counts before asserting so repair can see progress
+  Run: drydock plan repair commonmark
+Next step: drydock plan verify commonmark || drydock plan repair commonmark
+Target - committed project workspace git store

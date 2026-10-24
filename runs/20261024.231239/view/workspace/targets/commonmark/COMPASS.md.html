@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/COMPASS.md</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/COMPASS.md</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../workspace/targets/commonmark/COMPASS.md">Raw file</a></div></header>
+<article class="doc"><h1>COMPASS: CommonMark</h1>
+<h2>Compass</h2>
+<p>CommonMark is a command-line parser for converting CommonMark Markdown into HTML. It serves callers that provide Markdown on standard input and consume HTML on standard output, with conformance to the supplied CommonMark 0.31.2 specification as the project goal.</p>
+<h2>Constraints</h2>
+<ul><li>Deliver an executable named <code>commonmark</code> at the application root.</li><li>Read Markdown from standard input and write HTML to standard output.</li><li>Preserve the supplied scoring assets unchanged; they are restored and hash-verified before grading.</li><li>Keep the instructions file out of the staged application; stage the specified runtime conformance assets.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not use a public Markdown implementation.</li><li>Do not modify or replace <code>sources/full_test.sh</code> or other supplied scoring assets.</li><li>Do not run the full suite from scoped implementation checks; reserve it for the terminal verification story.</li></ul>
+<p>&lt;!-- drydock:build-write-guardrail:start --&gt;</p>
+<h2>Build Write Guardrail</h2>
+<ul><li>Authorized build directory: <code>/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261024.231239/build/commonmark</code></li><li>Authorized Target directory: <code>/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261024.231239/workspace/targets/commonmark</code></li><li>Build agents have permission to create, modify, and remove files required by the active build block inside these authorized directories.</li><li>No path outside these authorized directories may be modified.</li><li>Protected Drydock artifacts:<ul><li><code>/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261024.231239/workspace/targets/commonmark/blueprint/</code></li><li><code>/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261024.231239/workspace/targets/commonmark/MANIFEST.md</code></li><li><code>/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261024.231239/workspace/targets/commonmark/COMPASS.md</code></li><li><code>/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261024.231239/workspace/targets/commonmark/QuarterDeck/</code></li><li><code>/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261024.231239/workspace/targets/commonmark/evidence/</code></li></ul></li></ul>
+<p>&lt;!-- drydock:build-write-guardrail:end --&gt;</p></article>
+</main>
+</body>
+</html>

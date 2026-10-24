@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-INDENTED-CODE.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-INDENTED-CODE.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-INDENTED-CODE.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Indented Code Blocks</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261024 V1</td></tr><tr><td>Description</td><td>Parses and renders CommonMark indented code blocks.</td></tr><tr><td>Depends On</td><td>FEATURE-CLI.md, FEATURE-THEMATIC-BREAKS.md, FEATURE-ATX-HEADINGS.md, FEATURE-SETEXT-HEADINGS.md</td></tr><tr><td>Provides</td><td>Indented code block parsing and rendering</td></tr><tr><td>Consumes</td><td>commonmark</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Recognize indented code blocks from nonblank lines indented by at least four spaces, including chunks separated by blank lines. Remove the required indentation, retain literal contents and applicable trailing whitespace, and render contents as escaped code without inline parsing. An indented code block cannot interrupt a paragraph.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC indented-code-conformance ===<br>Intent: The executable passes every supplied example in the Indented code blocks section.<br>Suite: scoped<br>Probe: --dump-tests<br>Probe Count: summary</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Indented code blocks&quot;, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC indented-code-conformance ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Follow CommonMark 0.31.2 indented code block rules.</li><li>Preserve supplied scoring assets unchanged.</li></ul></article>
+</main>
+</body>
+</html>

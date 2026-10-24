@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261024.231500.475Z_commonmark_plan_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261024.231500.475Z_commonmark_plan_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261024.231500.475Z_commonmark_plan_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>=== BEGIN ARTIFACT FEATURE-CLI.md ===
+# FEATURE: Command-line Interface
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261024 V1 |
+| Description | Provides the root executable for converting Markdown from standard input to HTML on standard output. |
+| Depends On  | — |
+| Provides    | commonmark |
+| Consumes    | — |
+
+## Questions
+
+- None.
+
+## Purpose
+
+The `commonmark` executable at the application root reads Markdown from standard input and writes the rendered HTML to standard output. The input is UTF-8 Markdown. Do not use a public Markdown implementation.
+
+## Interface
+
+Invoke the executable directly as `./commonmark`. It reads until standard input reaches end of file and writes the resulting HTML to standard output.
+
+## Programmatic Acceptance
+
+=== AC cli-empty-input ===
+Intent: The root executable accepts empty standard input and exits successfully.
+
+import subprocess
+
+result = subprocess.run(
+    [&quot;./commonmark&quot;], input=&quot;&quot;, capture_output=True, text=True
+)
+assert result.returncode == 0
+=== END AC cli-empty-input ===
+
+=== AC cli-markdown-input ===
+Intent: The root executable accepts Markdown on standard input and exits successfully.
+
+import subprocess
+
+source = &quot;hello\n&quot;
+result = subprocess.run(
+    [&quot;./commonmark&quot;], input=source, capture_output=True, text=True
+)
+assert result.returncode == 0
+=== END AC cli-markdown-input ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- The deliverable is an executable named `commonmark` at the application root.
+- Read Markdown from standard input and write HTML to standard output.
+- Do not use a public Markdown implementation.
+- Do not stage `sources/INSTRUCTIONS.md` into the application.
+- Preserve supplied scoring assets unchanged.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-THEMATIC-BREAKS.md ===
+# FEATURE: Thematic Breaks
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261024 V1 |
+| Description | Parses and renders CommonMark thematic breaks. |
+| Depends On  | FEATURE-CLI.md |
+| Provides    | Thematic break parsing and rendering |
+| Consumes    | commonmark |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Recognize a thematic break as a line with up to three leading spaces, at least three matching `-`, `_`, or `*` characters, and optional spaces or tabs between and after those characters. Render each thematic break as an HTML thematic break.
+
+## Programmatic Acceptance
+
+=== AC thematic-breaks-conformance ===
+Intent: The executable passes every supplied example in the Thematic breaks section.
+Suite: scoped
+Probe: --dump-tests
+Probe Count: summary
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [
+        sys.executable,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;, &quot;./commonmark&quot;,
+        &quot;--spec&quot;, &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;, &quot;Thematic breaks&quot;,
+    ],
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC thematic-breaks-conformance ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Follow CommonMark 0.31.2 thematic-break rules.
+- Preserve supplied scoring assets unchanged.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-ATX-HEADINGS.md ===
+# FEATURE: ATX Headings
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261024 V1 |
+| Description | Parses and renders CommonMark ATX headings. |
+| Depends On  | FEATURE-CLI.md, FEATURE-THEMATIC-BREAKS.md |
+| Provides    | ATX heading parsing and rendering |
+| Consumes    | commonmark |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Recognize ATX headings with one to six unescaped opening `#` characters, up to three leading spaces, and a space, tab, or end of line after the opening sequence. Strip permitted closing hashes and surrounding heading whitespace before parsing the content as inline text.
+
+## Programmatic Acceptance
+
+=== AC atx-headings-conformance ===
+Intent: The executable passes every supplied example in the ATX headings section.
+Suite: scoped
+Probe: --dump-tests
+Probe Count: summary
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [
+        sys.executable,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;, &quot;./commonmark&quot;,
+        &quot;--spec&quot;, &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;, &quot;ATX headings&quot;,
+    ],
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC atx-headings-conformance ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Follow CommonMark 0.31.2 ATX heading rules.
+- Preserve supplied scoring assets unchanged.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-SETEXT-HEADINGS.md ===
+# FEATURE: Setext Headings
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261024 V1 |
+| Description | Parses and renders CommonMark setext headings. |
+| Depends On  | FEATURE-CLI.md, FEATURE-THEMATIC-BREAKS.md, FEATURE-ATX-HEADINGS.md |
+| Provides    | Setext heading parsing and rendering |
+| Consumes    | commonmark |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Recognize setext headings formed by paragraph text followed by an underline of `=` or `-` characters, with up to three leading spaces and optional trailing spaces or tabs. Parse the accumulated heading content as inline text. Where an underline could be either a setext heading or a thematic break, apply CommonMark precedence and context rules.
+
+## Programmatic Acceptance
+
+=== AC setext-headings-conformance ===
+Intent: The executable passes every supplied example in the Setext headings section.
+Suite: scoped
+Probe: --dump-tests
+Probe Count: summary
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [
+        sys.executable,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;, &quot;./commonmark&quot;,
+        &quot;--spec&quot;, &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;, &quot;Setext headings&quot;,
+    ],
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC setext-headings-conformance ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Follow CommonMark 0.31.2 setext heading rules.
+- Preserve supplied scoring assets unchanged.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-INDENTED-CODE.md ===
+# FEATURE: Indented Code Blocks
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261024 V1 |
+| Description | Parses and renders CommonMark indented code blocks. |
+| Depends On  | FEATURE-CLI.md, FEATURE-THEMATIC-BREAKS.md, FEATURE-ATX-HEADINGS.md, FEATURE-SETEXT-HEADINGS.md |
+| Provides    | Indented code block parsing and rendering |
+| Consumes    | commonmark |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Recognize indented code blocks from nonblank lines indented by at least four spaces, including chunks separated by blank lines. Remove the required indentation, retain literal contents and applicable trailing whitespace, and render contents as escaped code without inline parsing. An indented code block cannot interrupt a paragraph.
+
+## Programmatic Acceptance
+
+=== AC indented-code-conformance ===
+Intent: The executable passes every supplied example in the Indented code blocks section.
+Suite: scoped
+Probe: --dump-tests
+Probe Count: summary
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [
+        sys.executable,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;, &quot;./commonmark&quot;,
+        &quot;--spec&quot;, &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;, &quot;Indented code blocks&quot;,
+    ],
+    capture_output=True,
+    text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC indented-code-conformance ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Follow CommonMark 0.31.2 indented code block rules.
+- Preserve supplied scoring assets unchanged.
+=== END ARTIFACT ===</pre></article>
+</main>
+</body>
+</html>

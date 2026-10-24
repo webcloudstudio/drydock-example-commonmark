@@ -1,0 +1,41 @@
+<requirement name="collapse-inner-whitespace" stories="">
+Multiple inner whitespaces are collapsed to a single space (except
+in pre tags):
+</requirement>
+<requirement name="remove-block-whitespace" stories="">
+Whitespace surrounding block-level tags is removed.
+</requirement>
+<requirement name="convert-self-closing-tags" stories="">
+Self-closing tags are converted to open tags.
+</requirement>
+<requirement name="sort-and-lowercase-attributes" stories="">
+Attributes are sorted and lowercased.
+</requirement>
+<requirement name="convert-character-references" stories="inl-002">
+References are converted to unicode, except that '<', '>', '&', and
+      '"' are rendered using entities.
+</requirement>
+<unattached story="cli-001"/>
+<unattached story="blk-001"/>
+<unattached story="blk-002"/>
+<unattached story="blk-003"/>
+<unattached story="blk-004"/>
+<unattached story="blk-005"/>
+<unattached story="blk-006"/>
+<unattached story="blk-007"/>
+<unattached story="blk-008"/>
+<unattached story="blk-009"/>
+<unattached story="blk-010"/>
+<unattached story="blk-011"/>
+<unattached story="blk-012"/>
+<unattached story="inl-001"/>
+<unattached story="inl-003"/>
+<unattached story="inl-004"/>
+<unattached story="inl-005"/>
+<unattached story="inl-006"/>
+<unattached story="inl-007"/>
+<unattached story="inl-008"/>
+<unattached story="inl-009"/>
+<unattached story="inl-010"/>
+<unattached story="inl-011"/>
+<unattached story="con-001"/>

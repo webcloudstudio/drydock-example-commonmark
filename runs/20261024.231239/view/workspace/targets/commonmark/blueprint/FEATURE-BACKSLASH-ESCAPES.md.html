@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-BACKSLASH-ESCAPES.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-BACKSLASH-ESCAPES.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-BACKSLASH-ESCAPES.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Backslash Escapes</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261024 V1</td></tr><tr><td>Description</td><td>Parses CommonMark backslash escapes and trailing-backslash hard breaks.</td></tr><tr><td>Depends On</td><td>FEATURE-CLI.md, FEATURE-PARAGRAPHS.md</td></tr><tr><td>Provides</td><td>inline backslash escapes, trailing-backslash hard breaks</td></tr><tr><td>Consumes</td><td>commonmark</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Render a backslash followed by an ASCII punctuation character as that literal character. Preserve a backslash before any other character. In code spans, code blocks, autolinks, and raw HTML, backslashes remain literal. A backslash immediately before a line ending creates a hard break when the line continues within the same inline block.</p>
+<h2>Behavior</h2>
+<ul><li>Parse escapes after block structure has been determined.</li><li>Escape the resulting literal character for HTML text as needed.</li><li>Render a trailing-backslash hard break as <code>&lt;br /&gt;</code> followed by a line ending and the next line’s content.</li><li>A trailing backslash at the end of a block remains literal.</li><li>Do not interpret escapes inside code spans, code blocks, autolinks, or raw HTML.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC backslash-escape-conformance ===<br>Intent: All supplied Backslash escapes examples pass.<br>Suite: scoped<br>Probe: --list<br>Probe Count: summary</p>
+<p>import os import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Backslash escapes&quot;], capture_output=True, text=True, env={**os.environ, &quot;PYTHONPATH&quot;: f&quot;{os.getcwd()}/sources&quot;}, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC backslash-escape-conformance ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not use a public Markdown implementation.</li><li>Keep all supplied scoring assets unchanged.</li></ul></article>
+</main>
+</body>
+</html>

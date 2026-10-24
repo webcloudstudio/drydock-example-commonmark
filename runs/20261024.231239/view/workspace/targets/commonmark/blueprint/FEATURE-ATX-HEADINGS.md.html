@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-ATX-HEADINGS.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-ATX-HEADINGS.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-ATX-HEADINGS.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: ATX Headings</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261024 V1</td></tr><tr><td>Description</td><td>Parses and renders CommonMark ATX headings.</td></tr><tr><td>Depends On</td><td>FEATURE-CLI.md, FEATURE-THEMATIC-BREAKS.md</td></tr><tr><td>Provides</td><td>ATX heading parsing and rendering</td></tr><tr><td>Consumes</td><td>commonmark</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Recognize ATX headings with one to six unescaped opening <code>#</code> characters, up to three leading spaces, and a space, tab, or end of line after the opening sequence. Strip permitted closing hashes and surrounding heading whitespace before parsing the content as inline text.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC atx-headings-conformance ===<br>Intent: The executable passes every supplied example in the ATX headings section.<br>Suite: scoped<br>Probe: --dump-tests<br>Probe Count: summary</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;ATX headings&quot;, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC atx-headings-conformance ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Follow CommonMark 0.31.2 ATX heading rules.</li><li>Preserve supplied scoring assets unchanged.</li></ul></article>
+</main>
+</body>
+</html>
