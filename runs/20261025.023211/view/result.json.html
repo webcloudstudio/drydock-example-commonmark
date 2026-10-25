@@ -19,7 +19,7 @@
     &quot;unverified&quot;: 0
   },
   &quot;attestations&quot;: [],
-  &quot;build_passes&quot;: 2,
+  &quot;build_passes&quot;: 3,
   &quot;commands&quot;: [
     {
       &quot;argv&quot;: [
@@ -175,7 +175,7 @@
         &quot;--ready&quot;
       ],
       &quot;cwd&quot;: &quot;workspace&quot;,
-      &quot;elapsed_ms&quot;: 2998,
+      &quot;elapsed_ms&quot;: 6139,
       &quot;label&quot;: &quot;09-initial-ready&quot;,
       &quot;llm_executions&quot;: [],
       &quot;returncode&quot;: 0,
@@ -194,14 +194,18 @@
         &quot;21&quot;
       ],
       &quot;cwd&quot;: &quot;workspace&quot;,
-      &quot;elapsed_ms&quot;: 3881708,
+      &quot;elapsed_ms&quot;: 10455068,
       &quot;label&quot;: &quot;10-initial-build-1&quot;,
       &quot;llm_executions&quot;: [
-        &quot;20261025.160905.231Z-b2bc58e5&quot;,
-        &quot;20261025.161719.114Z-3fae6f5b&quot;,
-        &quot;20261025.162829.901Z-c46c1fc6&quot;,
-        &quot;20261025.163226.481Z-b39804d2&quot;,
-        &quot;20261025.164854.657Z-a69502d1&quot;
+        &quot;20261025.175921.642Z-fbba13da&quot;,
+        &quot;20261025.181124.359Z-7b214157&quot;,
+        &quot;20261025.182504.140Z-45c03c49&quot;,
+        &quot;20261025.183758.644Z-694e6542&quot;,
+        &quot;20261025.185551.038Z-2714a319&quot;,
+        &quot;20261025.191400.391Z-c5e52921&quot;,
+        &quot;20261025.193600.121Z-0d91b7b7&quot;,
+        &quot;20261025.195518.212Z-5134d595&quot;,
+        &quot;20261025.201222.574Z-df20ce13&quot;
       ],
       &quot;returncode&quot;: 1,
       &quot;stderr_path&quot;: &quot;evidence/commands/10-initial-build-1.stderr.log&quot;,
@@ -217,7 +221,7 @@
         &quot;commonmark&quot;
       ],
       &quot;cwd&quot;: &quot;workspace&quot;,
-      &quot;elapsed_ms&quot;: 531,
+      &quot;elapsed_ms&quot;: 1021,
       &quot;label&quot;: &quot;11-after-initial-build-build-status&quot;,
       &quot;llm_executions&quot;: [],
       &quot;returncode&quot;: 1,
@@ -228,19 +232,19 @@
   &quot;degraded&quot;: [
     &quot;initial-build-1 exited 1&quot;
   ],
-  &quot;elapsed_ms&quot;: 3893646,
+  &quot;elapsed_ms&quot;: 10476764,
   &quot;environment&quot;: {
     &quot;drydock_version&quot;: &quot;0.8.0&quot;,
     &quot;effort&quot;: &quot;&quot;,
-    &quot;finished_at&quot;: &quot;2026-10-25T17:02:29.596265Z&quot;,
-    &quot;git_commit&quot;: &quot;6ee2a8524bb31026c46c582fa3d5edd5827ecbee&quot;,
+    &quot;finished_at&quot;: &quot;2026-10-25T20:32:49.648553Z&quot;,
+    &quot;git_commit&quot;: &quot;1f448a3d04acd527299b0309ca2d43f70128e7bb&quot;,
     &quot;model&quot;: &quot;gpt-6-luna&quot;,
     &quot;plan_model&quot;: &quot;&quot;,
     &quot;platform&quot;: &quot;Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.35&quot;,
     &quot;provider&quot;: &quot;codex&quot;,
     &quot;python_version&quot;: &quot;3.12.13&quot;,
     &quot;requested_model&quot;: &quot;gpt-6-luna&quot;,
-    &quot;started_at&quot;: &quot;2026-10-25T15:57:35.737858Z&quot;
+    &quot;started_at&quot;: &quot;2026-10-25T17:38:12.745057Z&quot;
   },
   &quot;error&quot;: &quot;CommonMark: stopped at initial-build-1: drydock build commonmark exited 1.\n\nstderr:\nerror: build failed for commonmark: 4 step(s)\n  block_parsing \u2014 closed/failed: programmatic acceptance failed: block-parsing-conformance, inline-parsing-conformance, full-commonmark-suite\n\nEvidence:\n  stderr: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/evidence/commands/10-initial-build-1.stderr.log\n  stdout: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/evidence/commands/10-initial-build-1.stdout.log&quot;,
   &quot;evidence_dir&quot;: &quot;evidence&quot;,
@@ -256,13 +260,13 @@
   &quot;status&quot;: &quot;failed&quot;,
   &quot;target&quot;: &quot;commonmark&quot;,
   &quot;usage&quot;: {
-    &quot;cached_input_tokens&quot;: 32739840,
-    &quot;calls&quot;: 23,
-    &quot;fresh_input_tokens&quot;: 2278759,
-    &quot;input_tokens&quot;: 35018599,
+    &quot;cached_input_tokens&quot;: 54457856,
+    &quot;calls&quot;: 32,
+    &quot;fresh_input_tokens&quot;: 3961441,
+    &quot;input_tokens&quot;: 58419297,
     &quot;invalid_records&quot;: 0,
-    &quot;llm_elapsed_ms&quot;: 5293657,
-    &quot;output_tokens&quot;: 68582
+    &quot;llm_elapsed_ms&quot;: 9049464,
+    &quot;output_tokens&quot;: 104400
   }
 }
 </pre></article>

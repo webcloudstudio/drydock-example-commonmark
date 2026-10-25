@@ -9,7 +9,7 @@ ENTITY=re.compile(r'&(?:#[xX][0-9A-Fa-f]{1,6}|#[0-9]{1,7}|[A-Za-z][A-Za-z0-9]+);
 _NAME = r'[A-Za-z][A-Za-z0-9-]*'
 _ATTR = r'''[A-Za-z_:][A-Za-z0-9_.:-]*(?:[ \t\n]*=[ \t\n]*(?:[^\s"'=<>`]+|'[^']*'|"[^"]*"))?'''
 TAG=re.compile(
-    r'(?:<!--(?:.|\n)*?-->|<!-->|<!--->|<\?(?:.|\n)*?\?>|'
+    r'(?:<!-->|<!--->|<!--(?:.|\n)*?-->|<\?(?:.|\n)*?\?>|'
     r'<![A-Za-z](?:.|\n)*?>|<!\[CDATA\[(?:.|\n)*?\]\]>|'
     r'</'+_NAME+r'[ \t\n]*>|<'+_NAME+r'(?:[ \t\n]+'+_ATTR+r')*[ \t\n]*/?>)'
 )
@@ -78,17 +78,26 @@ def inline(src, refs, depth=0):
                 continue
             # The HTML tag grammar requires whitespace between attributes;
             # reject malformed tag-shaped text instead of passing it raw.
+            if tag.startswith('</'):
+                # A closing tag has no attributes: only whitespace may occur
+                # between its name and the final angle bracket.
+                if not re.fullmatch(r'</'+_NAME+r'[ \t\n]*>', tag):
+                    out.append(_esc(src[i])); i+=1; continue
+                after=src[i+len(tag)-1:]
+                if re.match(r'[^>]', after):
+                    out.append(_esc(src[i])); i+=1; continue
             if tag.startswith('<') and not tag.startswith(('<!--','<?','<!','</')):
                 inside=tag[1:-1].rstrip('/')
                 # Backslash has no escaping role in HTML attributes. A quote
                 # preceded by a backslash still closes the value; if that
                 # leaves an unterminated/adjacent attribute, the whole tag is
                 # invalid CommonMark raw HTML and must be emitted as text.
-                if re.search(r'''['"][^'\"]*['"][A-Za-z_:]''', inside) or any(
-                    (lambda j: j % 2 == 1)(len(tag[:k]) - len(tag[:k].rstrip('\\')))
-                    for k, c in enumerate(tag) if c in "'\""
-                ):
-                    out.append(_esc(src[i])); i+=1; continue
+                # Backslashes do not escape HTML quotes. Validate attributes
+                # with a small scanner so a quote immediately after a slash
+                # still closes its value and any following quote is rejected.
+                # TAG already recognizes only complete tags with the CommonMark
+                # attribute grammar.  The secondary scanner used to reject
+                # valid quoted values containing markup-like text.
             out.append(tag); i=tm.end(); continue
         em=ENTITY.match(src,i)
         if em:
@@ -126,8 +135,7 @@ def inline(src, refs, depth=0):
                     tag='img' if image else 'a'
                     attrs=attr+'="'+html.escape(_dest(dest),quote=True)+'"'
                     if image:
-                        plain=re.sub(r'<[^>]*>|[*_~`]','',label)
-                        attrs+=' alt="'+html.escape(html.unescape(plain),quote=True)+'"'
+                        attrs+=' alt="'+html.escape(_plain_text(label, refs),quote=True)+'"'
                     if title is not None: attrs+=' title="'+html.escape(html.unescape(title),quote=True)+'"'
                     out.append('<'+tag+attrs+' />' if image else '<a'+attrs+'>'+val+'</a>')
                     i=end; continue
@@ -140,6 +148,12 @@ def inline(src, refs, depth=0):
             can_open=left and (ch=='*' or not (not before.isspace() and not punct(before)))
             if can_open:
                 close=_find_em(src,i+length,ch,length)
+                if close != -1:
+                    # Link text brackets bind more tightly than emphasis. If
+                    # this delimiter would close inside a bracketed link
+                    # label, leave it for the link parser to consume.
+                    if '[' in src[i+length:close[0]] and re.match(r'\]\s*(?:\(|\[)', src[close[0]+close[1]:]):
+                        close = -1
                 if close != -1:
                     use=2 if length>=2 and close[1]>=2 else 1
                     tag='strong' if use==2 else 'em'
@@ -161,6 +175,40 @@ def _closing_bracket(s,start):
             level-=1
         i+=1
     return -1
+
+def _plain_text(source, refs):
+    """Extract rendered text for an image description, including nested links."""
+    rendered = inline(source, refs, 1)
+    rendered = re.sub(r'<br\s*/?>', '', rendered)
+    rendered = re.sub(r'<img\b[^>]*\balt="([^"]*)"[^>]*/?>', r'\1', rendered)
+    rendered = re.sub(r'<[^>]*>', '', rendered)
+    return html.unescape(rendered)
+
+def _valid_open_tag(tag):
+    m=re.match(r'<'+_NAME, tag)
+    if not m: return False
+    i=m.end(); end=len(tag)-1
+    while i<end:
+        if tag[i] in ' \t\n': i+=1; continue
+        if tag[i]=='/' and i==end-1: return True
+        a=re.match(r'[A-Za-z_:][A-Za-z0-9_.:-]*',tag[i:end])
+        if not a: return False
+        i+=len(a.group())
+        while i<end and tag[i] in ' \t\n': i+=1
+        if i<end and tag[i]=='=':
+            i+=1
+            while i<end and tag[i] in ' \t\n': i+=1
+            if i>=end: return False
+            if tag[i] in "'\"":
+                q=tag[i]; i+=1; j=tag.find(q,i,end)
+                if j<0: return False
+                i=j+1
+            else:
+                v=re.match(r'[^\s"\'=<>`]+',tag[i:end])
+                if not v: return False
+                i+=len(v.group())
+        if i<end and tag[i] not in ' \t\n/': return False
+    return True
 
 def _inline_target(s,pos):
     i=pos+1

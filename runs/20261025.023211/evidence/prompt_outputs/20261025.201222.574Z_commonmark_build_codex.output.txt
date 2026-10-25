@@ -1,0 +1,15 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- src/commonmark/block_parser.py
+
+SUMMARY:
+- Corrected the list-item indentation handling for a first block that is indented code.
+- The inline conformance slice completed with 279 passed and 77 failed. The block slice completed before the fix with 74 passed and 25 failed.
+- `sh sources/full_test.sh` did not finish; it was still running after several minutes and was interrupted.
+
+BLOCKERS:
+- The parser still has substantial block and inline conformance failures. The full suite result is unknown.
+
+FAILURE_SUMMARY: CommonMark conformance checks remain failing
+FAILURE_DETAIL: The scoped runs reported 25 block failures and 77 inline failures. The required full suite produced no result after several minutes, so its check remains unverified. Continue fixing general parser behavior and rerun both scoped slices and `sh sources/full_test.sh`.

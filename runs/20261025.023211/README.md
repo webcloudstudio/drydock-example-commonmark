@@ -12,19 +12,19 @@
 | Lifecycle completed | FAIL | 11 lifecycle commands executed; the run ended at 11-after-initial-build-build-status. | [result.json](result.json) |
 | External conformance suite passed | UNPROVEN | The configured external conformance suite was not executed. | — |
 | Release score passed | UNPROVEN | No release score was recorded for this run. | — |
-| Integrity verification passed | PASS | 428 files digested; verify with sha256sum -c SHA256SUMS. | [SHA256SUMS](SHA256SUMS) |
+| Integrity verification passed | PASS | 498 files digested; verify with sha256sum -c SHA256SUMS. | [SHA256SUMS](SHA256SUMS) |
 
 ## Run facts
 
-- Drydock: `0.8.0` (commit `6ee2a8524bb31026c46c582fa3d5edd5827ecbee`)
+- Drydock: `0.8.0` (commit `1f448a3d04acd527299b0309ca2d43f70128e7bb`)
 - Provider and model: `codex` / `gpt-6-luna`
 - Platform: `Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.35` on Python `3.12.13`
 - Run: `20261025.023211`
-- Elapsed: 3893.6s
-- LLM calls: 23
-- Tokens: cached 32,739,840; uncached 2,278,759; output 68,582
-- LLM elapsed: 5293.7s
-- Build passes: 2; repairs: 21 attempts allowed
+- Elapsed: 10476.8s
+- LLM calls: 32
+- Tokens: cached 54,457,856; uncached 3,961,441; output 104,400
+- LLM elapsed: 9049.5s
+- Build passes: 3; repairs: 21 attempts allowed
 - Conformance: not executed
 - Advisory scores: none recorded
 
@@ -50,9 +50,9 @@
 | 06-after-plan-build-status | `/mnt/c/Users/barlo/projects/drydock/.venv/bin/python -m drydock build status commonmark` | 0 | 0.9s | [stdout](evidence/commands/06-after-plan-build-status.stdout.log) · [stderr](evidence/commands/06-after-plan-build-status.stderr.log) |
 | 07-after-plan-target-status | `/mnt/c/Users/barlo/projects/drydock/.venv/bin/python -m drydock status commonmark` | 0 | 0.7s | [stdout](evidence/commands/07-after-plan-target-status.stdout.log) · [stderr](evidence/commands/07-after-plan-target-status.stderr.log) |
 | 08-after-plan-workspace-status | `/mnt/c/Users/barlo/projects/drydock/.venv/bin/python -m drydock status` | 0 | 0.5s | [stdout](evidence/commands/08-after-plan-workspace-status.stdout.log) · [stderr](evidence/commands/08-after-plan-workspace-status.stderr.log) |
-| 09-initial-ready | `/mnt/c/Users/barlo/projects/drydock/.venv/bin/python -m drydock status commonmark --ready` | 0 | 3.0s | [stdout](evidence/commands/09-initial-ready.stdout.log) · [stderr](evidence/commands/09-initial-ready.stderr.log) |
-| 10-initial-build-1 | `/mnt/c/Users/barlo/projects/drydock/.venv/bin/python -m drydock build commonmark --override --repair-attempts 21` | 1 | 3881.7s | [stdout](evidence/commands/10-initial-build-1.stdout.log) · [stderr](evidence/commands/10-initial-build-1.stderr.log) · [llm](evidence/commands/10-initial-build-1.llm.log) |
-| 11-after-initial-build-build-status | `/mnt/c/Users/barlo/projects/drydock/.venv/bin/python -m drydock build status commonmark` | 1 | 0.5s | [stdout](evidence/commands/11-after-initial-build-build-status.stdout.log) · [stderr](evidence/commands/11-after-initial-build-build-status.stderr.log) |
+| 09-initial-ready | `/mnt/c/Users/barlo/projects/drydock/.venv/bin/python -m drydock status commonmark --ready` | 0 | 6.1s | [stdout](evidence/commands/09-initial-ready.stdout.log) · [stderr](evidence/commands/09-initial-ready.stderr.log) |
+| 10-initial-build-1 | `/mnt/c/Users/barlo/projects/drydock/.venv/bin/python -m drydock build commonmark --override --repair-attempts 21` | 1 | 10455.1s | [stdout](evidence/commands/10-initial-build-1.stdout.log) · [stderr](evidence/commands/10-initial-build-1.stderr.log) · [llm](evidence/commands/10-initial-build-1.llm.log) |
+| 11-after-initial-build-build-status | `/mnt/c/Users/barlo/projects/drydock/.venv/bin/python -m drydock build status commonmark` | 1 | 1.0s | [stdout](evidence/commands/11-after-initial-build-build-status.stdout.log) · [stderr](evidence/commands/11-after-initial-build-build-status.stderr.log) |
 
 ## Evidence
 

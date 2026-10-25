@@ -1,0 +1,13 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- None
+
+SUMMARY:
+The declared block and inline conformance slices completed with 37 and 77 failures. The required unfiltered `sh sources/full_test.sh` completed with 533 passed, 122 failed, and 0 errored. Remaining failures span block/list parsing, references, inline delimiter handling, and link behavior.
+
+BLOCKERS:
+- The existing parser does not yet conform to the supplied CommonMark suite.
+
+FAILURE_SUMMARY: CommonMark conformance checks fail
+FAILURE_DETAIL: The existing implementation failed both scoped checks and the full harness. The full run exited 1 with 122 failing examples; repair the parser’s block/list/reference handling and inline parsing, then rerun all declared checks.

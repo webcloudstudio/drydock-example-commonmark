@@ -20,7 +20,7 @@ ENTITY=re.compile(r&#x27;&amp;(?:#[xX][0-9A-Fa-f]{1,6}|#[0-9]{1,7}|[A-Za-z][A-Za
 _NAME = r&#x27;[A-Za-z][A-Za-z0-9-]*&#x27;
 _ATTR = r&#x27;&#x27;&#x27;[A-Za-z_:][A-Za-z0-9_.:-]*(?:[ \t\n]*=[ \t\n]*(?:[^\s&quot;&#x27;=&lt;&gt;`]+|&#x27;[^&#x27;]*&#x27;|&quot;[^&quot;]*&quot;))?&#x27;&#x27;&#x27;
 TAG=re.compile(
-    r&#x27;(?:&lt;!--(?:.|\n)*?--&gt;|&lt;!--&gt;|&lt;!---&gt;|&lt;\?(?:.|\n)*?\?&gt;|&#x27;
+    r&#x27;(?:&lt;!--&gt;|&lt;!---&gt;|&lt;!--(?:.|\n)*?--&gt;|&lt;\?(?:.|\n)*?\?&gt;|&#x27;
     r&#x27;&lt;![A-Za-z](?:.|\n)*?&gt;|&lt;!\[CDATA\[(?:.|\n)*?\]\]&gt;|&#x27;
     r&#x27;&lt;/&#x27;+_NAME+r&#x27;[ \t\n]*&gt;|&lt;&#x27;+_NAME+r&#x27;(?:[ \t\n]+&#x27;+_ATTR+r&#x27;)*[ \t\n]*/?&gt;)&#x27;
 )
@@ -89,17 +89,26 @@ def inline(src, refs, depth=0):
                 continue
             # The HTML tag grammar requires whitespace between attributes;
             # reject malformed tag-shaped text instead of passing it raw.
+            if tag.startswith(&#x27;&lt;/&#x27;):
+                # A closing tag has no attributes: only whitespace may occur
+                # between its name and the final angle bracket.
+                if not re.fullmatch(r&#x27;&lt;/&#x27;+_NAME+r&#x27;[ \t\n]*&gt;&#x27;, tag):
+                    out.append(_esc(src[i])); i+=1; continue
+                after=src[i+len(tag)-1:]
+                if re.match(r&#x27;[^&gt;]&#x27;, after):
+                    out.append(_esc(src[i])); i+=1; continue
             if tag.startswith(&#x27;&lt;&#x27;) and not tag.startswith((&#x27;&lt;!--&#x27;,&#x27;&lt;?&#x27;,&#x27;&lt;!&#x27;,&#x27;&lt;/&#x27;)):
                 inside=tag[1:-1].rstrip(&#x27;/&#x27;)
                 # Backslash has no escaping role in HTML attributes. A quote
                 # preceded by a backslash still closes the value; if that
                 # leaves an unterminated/adjacent attribute, the whole tag is
                 # invalid CommonMark raw HTML and must be emitted as text.
-                if re.search(r&#x27;&#x27;&#x27;[&#x27;&quot;][^&#x27;\&quot;]*[&#x27;&quot;][A-Za-z_:]&#x27;&#x27;&#x27;, inside) or any(
-                    (lambda j: j % 2 == 1)(len(tag[:k]) - len(tag[:k].rstrip(&#x27;\\&#x27;)))
-                    for k, c in enumerate(tag) if c in &quot;&#x27;\&quot;&quot;
-                ):
-                    out.append(_esc(src[i])); i+=1; continue
+                # Backslashes do not escape HTML quotes. Validate attributes
+                # with a small scanner so a quote immediately after a slash
+                # still closes its value and any following quote is rejected.
+                # TAG already recognizes only complete tags with the CommonMark
+                # attribute grammar.  The secondary scanner used to reject
+                # valid quoted values containing markup-like text.
             out.append(tag); i=tm.end(); continue
         em=ENTITY.match(src,i)
         if em:
@@ -137,8 +146,7 @@ def inline(src, refs, depth=0):
                     tag=&#x27;img&#x27; if image else &#x27;a&#x27;
                     attrs=attr+&#x27;=&quot;&#x27;+html.escape(_dest(dest),quote=True)+&#x27;&quot;&#x27;
                     if image:
-                        plain=re.sub(r&#x27;&lt;[^&gt;]*&gt;|[*_~`]&#x27;,&#x27;&#x27;,label)
-                        attrs+=&#x27; alt=&quot;&#x27;+html.escape(html.unescape(plain),quote=True)+&#x27;&quot;&#x27;
+                        attrs+=&#x27; alt=&quot;&#x27;+html.escape(_plain_text(label, refs),quote=True)+&#x27;&quot;&#x27;
                     if title is not None: attrs+=&#x27; title=&quot;&#x27;+html.escape(html.unescape(title),quote=True)+&#x27;&quot;&#x27;
                     out.append(&#x27;&lt;&#x27;+tag+attrs+&#x27; /&gt;&#x27; if image else &#x27;&lt;a&#x27;+attrs+&#x27;&gt;&#x27;+val+&#x27;&lt;/a&gt;&#x27;)
                     i=end; continue
@@ -151,6 +159,12 @@ def inline(src, refs, depth=0):
             can_open=left and (ch==&#x27;*&#x27; or not (not before.isspace() and not punct(before)))
             if can_open:
                 close=_find_em(src,i+length,ch,length)
+                if close != -1:
+                    # Link text brackets bind more tightly than emphasis. If
+                    # this delimiter would close inside a bracketed link
+                    # label, leave it for the link parser to consume.
+                    if &#x27;[&#x27; in src[i+length:close[0]] and re.match(r&#x27;\]\s*(?:\(|\[)&#x27;, src[close[0]+close[1]:]):
+                        close = -1
                 if close != -1:
                     use=2 if length&gt;=2 and close[1]&gt;=2 else 1
                     tag=&#x27;strong&#x27; if use==2 else &#x27;em&#x27;
@@ -172,6 +186,40 @@ def _closing_bracket(s,start):
             level-=1
         i+=1
     return -1
+
+def _plain_text(source, refs):
+    &quot;&quot;&quot;Extract rendered text for an image description, including nested links.&quot;&quot;&quot;
+    rendered = inline(source, refs, 1)
+    rendered = re.sub(r&#x27;&lt;br\s*/?&gt;&#x27;, &#x27;&#x27;, rendered)
+    rendered = re.sub(r&#x27;&lt;img\b[^&gt;]*\balt=&quot;([^&quot;]*)&quot;[^&gt;]*/?&gt;&#x27;, r&#x27;\1&#x27;, rendered)
+    rendered = re.sub(r&#x27;&lt;[^&gt;]*&gt;&#x27;, &#x27;&#x27;, rendered)
+    return html.unescape(rendered)
+
+def _valid_open_tag(tag):
+    m=re.match(r&#x27;&lt;&#x27;+_NAME, tag)
+    if not m: return False
+    i=m.end(); end=len(tag)-1
+    while i&lt;end:
+        if tag[i] in &#x27; \t\n&#x27;: i+=1; continue
+        if tag[i]==&#x27;/&#x27; and i==end-1: return True
+        a=re.match(r&#x27;[A-Za-z_:][A-Za-z0-9_.:-]*&#x27;,tag[i:end])
+        if not a: return False
+        i+=len(a.group())
+        while i&lt;end and tag[i] in &#x27; \t\n&#x27;: i+=1
+        if i&lt;end and tag[i]==&#x27;=&#x27;:
+            i+=1
+            while i&lt;end and tag[i] in &#x27; \t\n&#x27;: i+=1
+            if i&gt;=end: return False
+            if tag[i] in &quot;&#x27;\&quot;&quot;:
+                q=tag[i]; i+=1; j=tag.find(q,i,end)
+                if j&lt;0: return False
+                i=j+1
+            else:
+                v=re.match(r&#x27;[^\s&quot;\&#x27;=&lt;&gt;`]+&#x27;,tag[i:end])
+                if not v: return False
+                i+=len(v.group())
+        if i&lt;end and tag[i] not in &#x27; \t\n/&#x27;: return False
+    return True
 
 def _inline_target(s,pos):
     i=pos+1

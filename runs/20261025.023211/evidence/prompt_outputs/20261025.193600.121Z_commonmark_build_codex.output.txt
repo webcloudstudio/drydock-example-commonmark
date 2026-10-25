@@ -1,0 +1,17 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- src/commonmark/block_parser.py
+- src/commonmark/inline_parser.py
+
+SUMMARY:
+- Adjusted list-marker indentation, lazy block quote continuation, and link/emphasis precedence.
+- The block parsing slice completed with 249 passed and 37 failed.
+- An inline slice covering Links, Images, Autolinks, and Raw HTML completed with 136 passed and 16 failed. Raw HTML alone passed: 21 passed, 0 failed.
+- The required full suite completed with 533 passed and 122 failed. Remaining failures include tab handling, list behavior, reference definitions, and nested links.
+
+BLOCKERS:
+- CommonMark conformance remains incomplete; the failed examples require further general parser and renderer fixes.
+
+FAILURE_SUMMARY: CommonMark conformance checks still fail
+FAILURE_DETAIL: The declared block slice and inline subset reported failures, and `sh sources/full_test.sh` exited nonzero with 122 failures. Continue fixing block/list/reference parsing and inline link behavior, then rerun the declared acceptance checks and full suite.

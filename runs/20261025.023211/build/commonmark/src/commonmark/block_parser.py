@@ -37,7 +37,7 @@ def _parse(lines, refs):
                              not re.match(r'^ {0,3}(?:`{3,}|~{3,})', q[-1]) and
                              not re.match(r'^ {0,3}(?:#|`{3,}|~{3,}|[-+*] |[0-9]{1,9}[.)] |>)(?:.*)$', lines[i])
                              and not HR.match(lines[i])
-                             and not re.match(r'^ {0,3}(?:=+|-+)[ \t]*$', lines[i]))):
+                             )):
                 x=lines[i]
                 if re.match(r'^ {0,3}>',x): x=re.sub(r'^ {0,3}> ?', '',x, count=1)
                 q.append(x); i+=1
@@ -71,7 +71,20 @@ def _parse(lines, refs):
                 if HR.match(lines[i]): break
                 mm=LIST.match(lines[i])
                 if not mm or mm.group(2)[-1]!=delim or mm.group(2)[0].isdigit()!=ordered: break
-                content=mm.group(3) or ''; i+=1; item=[content] if content else []
+                content=mm.group(3) or ''
+                marker_end=len(mm.group(1))+len(mm.group(2))
+                raw_spaces=len(lines[i][marker_end:])-len(lines[i][marker_end:].lstrip(' \t'))
+                if raw_spaces >= 2:
+                    # The first separator is structural.  For a first block
+                    # that is indented code, the remaining indentation is
+                    # measured from the list item's content edge.
+                    content=lines[i][marker_end+raw_spaces:]
+                i+=1
+                # When the first block is indented code, the list marker's
+                # single required separator is structural; four additional
+                # columns belong to the code block and are removed by its
+                # normal indentation rule.
+                item=[content] if content else []
                 while i<n:
                     # A thematic break is never a list item or list continuation.
                     if HR.match(lines[i]): break
@@ -100,8 +113,8 @@ def _parse(lines, refs):
             elif re.match(r'^<![A-Za-z]',h): kind=4; endmark='>'
             elif h.startswith('<![CDATA['): kind=5; endmark=r']]>'
             elif re.match(r'(?i)^</?(?:address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|nav|noframes|ol|optgroup|option|p|param|search|section|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul)(?:[ \t]|$|>|/>)',h): kind=6
-            elif re.match(r'^</?[A-Za-z][A-Za-z0-9-]*(?:[ \t]+[^<>]*?)?[ \t]*/?>[ \t]*$',h): kind=7
-        if kind and not (kind == 7 and out and out[-1]['type'] == 'paragraph'):
+            elif _standalone_tag(h): kind=7
+        if kind:
             body=[]
             while i<n:
                 cur=lines[i]
@@ -113,6 +126,14 @@ def _parse(lines, refs):
         para=[line.lstrip(' \t')]; i+=1
         while i<n and lines[i].strip():
             if re.match(r'^ {0,3}(?:=+|-+)[ \t]*$',lines[i]):
+                # An unmarked line can lazily continue a quoted paragraph;
+                # an underline then belongs to that paragraph too.
+                if out and out[-1]['type'] == 'quote' and para:
+                    para.append(lines[i].lstrip(' \t')); i+=1
+                    if i<n and re.match(r'^ {0,3}(?:=+|-+)[ \t]*$', lines[i]):
+                        para.append(lines[i].lstrip(' \t')); i+=1
+                    out[-1]['children'].append(_node('paragraph', text='\n'.join(para).strip(' \t')))
+                    para=[]; break
                 out.append(_node('heading',level=1 if '=' in lines[i] else 2,text='\n'.join(para).strip(' \t')))
                 i+=1; para=[]; break
             if REF.match(lines[i]) or HR.match(lines[i]) or ATX.match(lines[i]) or FENCE.match(lines[i]) or re.match(r'^ {0,3}>',lines[i]): break
@@ -136,3 +157,34 @@ def _parse(lines, refs):
         joined='\n'.join(para).strip(' \t')
         if para: out.append(_node('paragraph',text=joined))
     return out
+
+def _standalone_tag(s):
+    s=s.rstrip(' \t')
+    if re.fullmatch(r'</[A-Za-z][A-Za-z0-9-]*[ \t]*>',s): return True
+    m=re.match(r'<([A-Za-z][A-Za-z0-9-]*)',s)
+    if not m or not s.endswith('>'): return False
+    i=m.end(); end=len(s)-1
+    # Attribute productions begin with whitespace.  In particular, a colon
+    # immediately after the tag name is not an attribute separator.
+    if i < end and s[i] not in ' \t/': return False
+    while i<end:
+        if s[i] in ' \t\n': i+=1; continue
+        if s[i]=='/' and i==end-1: return True
+        a=re.match(r'[A-Za-z_:][A-Za-z0-9_.:-]*',s[i:end])
+        if not a: return False
+        i+=len(a.group())
+        while i<end and s[i] in ' \t\n': i+=1
+        if i<end and s[i]=='=':
+            i+=1
+            while i<end and s[i] in ' \t\n': i+=1
+            if i>=end: return False
+            if s[i] in "'\"":
+                q=s[i]; j=s.find(q,i+1,end)
+                if j<0: return False
+                i=j+1
+            else:
+                v=re.match(r'[^\s"\'=<>`]+',s[i:end])
+                if not v:return False
+                i+=len(v.group())
+        if i<end and s[i] not in ' \t/': return False
+    return True
