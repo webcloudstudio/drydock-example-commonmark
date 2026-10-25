@@ -8,7 +8,7 @@
     "unverified": 0
   },
   "attestations": [],
-  "build_passes": 1,
+  "build_passes": 2,
   "commands": [
     {
       "argv": [
@@ -164,7 +164,7 @@
         "--ready"
       ],
       "cwd": "workspace",
-      "elapsed_ms": 752,
+      "elapsed_ms": 2998,
       "label": "09-initial-ready",
       "llm_executions": [],
       "returncode": 0,
@@ -180,20 +180,17 @@
         "commonmark",
         "--override",
         "--repair-attempts",
-        "6"
+        "21"
       ],
       "cwd": "workspace",
-      "elapsed_ms": 5182617,
+      "elapsed_ms": 3881708,
       "label": "10-initial-build-1",
       "llm_executions": [
-        "20261025.023455.117Z-2c95b885",
-        "20261025.023605.681Z-de5167ab",
-        "20261025.025556.110Z-3eb535c8",
-        "20261025.030521.327Z-23a2bc97",
-        "20261025.032110.944Z-ac3bab81",
-        "20261025.033050.523Z-fd9650fa",
-        "20261025.034243.229Z-7d797458",
-        "20261025.034642.361Z-1f8a7ec9"
+        "20261025.160905.231Z-b2bc58e5",
+        "20261025.161719.114Z-3fae6f5b",
+        "20261025.162829.901Z-c46c1fc6",
+        "20261025.163226.481Z-b39804d2",
+        "20261025.164854.657Z-a69502d1"
       ],
       "returncode": 1,
       "stderr_path": "evidence/commands/10-initial-build-1.stderr.log",
@@ -209,7 +206,7 @@
         "commonmark"
       ],
       "cwd": "workspace",
-      "elapsed_ms": 674,
+      "elapsed_ms": 531,
       "label": "11-after-initial-build-build-status",
       "llm_executions": [],
       "returncode": 1,
@@ -220,11 +217,11 @@
   "degraded": [
     "initial-build-1 exited 1"
   ],
-  "elapsed_ms": 5325519,
+  "elapsed_ms": 3893646,
   "environment": {
     "drydock_version": "0.8.0",
     "effort": "",
-    "finished_at": "2026-10-25T04:00:57.792334Z",
+    "finished_at": "2026-10-25T17:02:29.596265Z",
     "git_commit": "6ee2a8524bb31026c46c582fa3d5edd5827ecbee",
     "model": "gpt-6-luna",
     "plan_model": "",
@@ -232,7 +229,7 @@
     "provider": "codex",
     "python_version": "3.12.13",
     "requested_model": "gpt-6-luna",
-    "started_at": "2026-10-25T02:32:12.063677Z"
+    "started_at": "2026-10-25T15:57:35.737858Z"
   },
   "error": "CommonMark: stopped at initial-build-1: drydock build commonmark exited 1.\n\nstderr:\nerror: build failed for commonmark: 4 step(s)\n  block_parsing \u2014 closed/failed: programmatic acceptance failed: block-parsing-conformance, inline-parsing-conformance, full-commonmark-suite\n\nEvidence:\n  stderr: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/evidence/commands/10-initial-build-1.stderr.log\n  stdout: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/evidence/commands/10-initial-build-1.stdout.log",
   "evidence_dir": "evidence",
@@ -242,18 +239,18 @@
   "observed_verdict": "ERROR",
   "output_dir": ".",
   "release_verdict": "",
-  "resumed_from": "",
+  "resumed_from": "build",
   "run_id": "20261025.023211",
   "score_exit_codes": {},
   "status": "failed",
   "target": "commonmark",
   "usage": {
-    "cached_input_tokens": 23009408,
-    "calls": 17,
-    "fresh_input_tokens": 1168763,
-    "input_tokens": 24178171,
+    "cached_input_tokens": 32739840,
+    "calls": 23,
+    "fresh_input_tokens": 2278759,
+    "input_tokens": 35018599,
     "invalid_records": 0,
-    "llm_elapsed_ms": 3424297,
-    "output_tokens": 51683
+    "llm_elapsed_ms": 5293657,
+    "output_tokens": 68582
   }
 }

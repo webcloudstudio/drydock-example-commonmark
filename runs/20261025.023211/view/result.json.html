@@ -19,7 +19,7 @@
     &quot;unverified&quot;: 0
   },
   &quot;attestations&quot;: [],
-  &quot;build_passes&quot;: 1,
+  &quot;build_passes&quot;: 2,
   &quot;commands&quot;: [
     {
       &quot;argv&quot;: [
@@ -175,7 +175,7 @@
         &quot;--ready&quot;
       ],
       &quot;cwd&quot;: &quot;workspace&quot;,
-      &quot;elapsed_ms&quot;: 752,
+      &quot;elapsed_ms&quot;: 2998,
       &quot;label&quot;: &quot;09-initial-ready&quot;,
       &quot;llm_executions&quot;: [],
       &quot;returncode&quot;: 0,
@@ -191,20 +191,17 @@
         &quot;commonmark&quot;,
         &quot;--override&quot;,
         &quot;--repair-attempts&quot;,
-        &quot;6&quot;
+        &quot;21&quot;
       ],
       &quot;cwd&quot;: &quot;workspace&quot;,
-      &quot;elapsed_ms&quot;: 5182617,
+      &quot;elapsed_ms&quot;: 3881708,
       &quot;label&quot;: &quot;10-initial-build-1&quot;,
       &quot;llm_executions&quot;: [
-        &quot;20261025.023455.117Z-2c95b885&quot;,
-        &quot;20261025.023605.681Z-de5167ab&quot;,
-        &quot;20261025.025556.110Z-3eb535c8&quot;,
-        &quot;20261025.030521.327Z-23a2bc97&quot;,
-        &quot;20261025.032110.944Z-ac3bab81&quot;,
-        &quot;20261025.033050.523Z-fd9650fa&quot;,
-        &quot;20261025.034243.229Z-7d797458&quot;,
-        &quot;20261025.034642.361Z-1f8a7ec9&quot;
+        &quot;20261025.160905.231Z-b2bc58e5&quot;,
+        &quot;20261025.161719.114Z-3fae6f5b&quot;,
+        &quot;20261025.162829.901Z-c46c1fc6&quot;,
+        &quot;20261025.163226.481Z-b39804d2&quot;,
+        &quot;20261025.164854.657Z-a69502d1&quot;
       ],
       &quot;returncode&quot;: 1,
       &quot;stderr_path&quot;: &quot;evidence/commands/10-initial-build-1.stderr.log&quot;,
@@ -220,7 +217,7 @@
         &quot;commonmark&quot;
       ],
       &quot;cwd&quot;: &quot;workspace&quot;,
-      &quot;elapsed_ms&quot;: 674,
+      &quot;elapsed_ms&quot;: 531,
       &quot;label&quot;: &quot;11-after-initial-build-build-status&quot;,
       &quot;llm_executions&quot;: [],
       &quot;returncode&quot;: 1,
@@ -231,11 +228,11 @@
   &quot;degraded&quot;: [
     &quot;initial-build-1 exited 1&quot;
   ],
-  &quot;elapsed_ms&quot;: 5325519,
+  &quot;elapsed_ms&quot;: 3893646,
   &quot;environment&quot;: {
     &quot;drydock_version&quot;: &quot;0.8.0&quot;,
     &quot;effort&quot;: &quot;&quot;,
-    &quot;finished_at&quot;: &quot;2026-10-25T04:00:57.792334Z&quot;,
+    &quot;finished_at&quot;: &quot;2026-10-25T17:02:29.596265Z&quot;,
     &quot;git_commit&quot;: &quot;6ee2a8524bb31026c46c582fa3d5edd5827ecbee&quot;,
     &quot;model&quot;: &quot;gpt-6-luna&quot;,
     &quot;plan_model&quot;: &quot;&quot;,
@@ -243,7 +240,7 @@
     &quot;provider&quot;: &quot;codex&quot;,
     &quot;python_version&quot;: &quot;3.12.13&quot;,
     &quot;requested_model&quot;: &quot;gpt-6-luna&quot;,
-    &quot;started_at&quot;: &quot;2026-10-25T02:32:12.063677Z&quot;
+    &quot;started_at&quot;: &quot;2026-10-25T15:57:35.737858Z&quot;
   },
   &quot;error&quot;: &quot;CommonMark: stopped at initial-build-1: drydock build commonmark exited 1.\n\nstderr:\nerror: build failed for commonmark: 4 step(s)\n  block_parsing \u2014 closed/failed: programmatic acceptance failed: block-parsing-conformance, inline-parsing-conformance, full-commonmark-suite\n\nEvidence:\n  stderr: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/evidence/commands/10-initial-build-1.stderr.log\n  stdout: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/evidence/commands/10-initial-build-1.stdout.log&quot;,
   &quot;evidence_dir&quot;: &quot;evidence&quot;,
@@ -253,19 +250,19 @@
   &quot;observed_verdict&quot;: &quot;ERROR&quot;,
   &quot;output_dir&quot;: &quot;.&quot;,
   &quot;release_verdict&quot;: &quot;&quot;,
-  &quot;resumed_from&quot;: &quot;&quot;,
+  &quot;resumed_from&quot;: &quot;build&quot;,
   &quot;run_id&quot;: &quot;20261025.023211&quot;,
   &quot;score_exit_codes&quot;: {},
   &quot;status&quot;: &quot;failed&quot;,
   &quot;target&quot;: &quot;commonmark&quot;,
   &quot;usage&quot;: {
-    &quot;cached_input_tokens&quot;: 23009408,
-    &quot;calls&quot;: 17,
-    &quot;fresh_input_tokens&quot;: 1168763,
-    &quot;input_tokens&quot;: 24178171,
+    &quot;cached_input_tokens&quot;: 32739840,
+    &quot;calls&quot;: 23,
+    &quot;fresh_input_tokens&quot;: 2278759,
+    &quot;input_tokens&quot;: 35018599,
     &quot;invalid_records&quot;: 0,
-    &quot;llm_elapsed_ms&quot;: 3424297,
-    &quot;output_tokens&quot;: 51683
+    &quot;llm_elapsed_ms&quot;: 5293657,
+    &quot;output_tokens&quot;: 68582
   }
 }
 </pre></article>

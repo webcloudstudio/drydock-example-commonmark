@@ -42,14 +42,19 @@ def _parse(lines, refs):
             refs.setdefault(_refkey(label), (dest[1:-1] if dest.startswith(&#x27;&lt;&#x27;) else dest, title)); i+=1; continue
         if line.startswith(&#x27;&gt;&#x27;) or re.match(r&#x27;^ {0,3}&gt;&#x27;,line):
             q=[]
-            while i&lt;n and (not lines[i].strip() or re.match(r&#x27;^ {0,3}&gt;&#x27;,lines[i])):
+            while i&lt;n and (re.match(r&#x27;^ {0,3}&gt;&#x27;,lines[i]) or
+                            (lines[i].strip() and q and q[-1].strip() and
+                             len(q[-1])-len(q[-1].lstrip(&#x27; &#x27;)) &lt; 4 and
+                             not re.match(r&#x27;^ {0,3}(?:`{3,}|~{3,})&#x27;, q[-1]) and
+                             not re.match(r&#x27;^ {0,3}(?:#|`{3,}|~{3,}|[-+*] |[0-9]{1,9}[.)] |&gt;)(?:.*)$&#x27;, lines[i])
+                             and not HR.match(lines[i])
+                             and not re.match(r&#x27;^ {0,3}(?:=+|-+)[ \t]*$&#x27;, lines[i]))):
                 x=lines[i]
                 if re.match(r&#x27;^ {0,3}&gt;&#x27;,x): x=re.sub(r&#x27;^ {0,3}&gt; ?&#x27;, &#x27;&#x27;,x, count=1)
-                elif not q: break
                 q.append(x); i+=1
             out.append(_node(&#x27;quote&#x27;, children=_parse(q,refs))); continue
         fm=FENCE.match(line)
-        if fm:
+        if fm and not (fm.group(1).startswith(&#x27;`&#x27;) and &#x27;`&#x27; in fm.group(2)):
             fence,info=fm.groups(); ch=fence[0]; j=i+1; body=[]
             while j&lt;n and not re.match(r&#x27;^ {0,3}&#x27;+re.escape(ch)+&#x27;{&#x27;+str(len(fence))+r&#x27;,}[ \t]*$&#x27;,lines[j]): body.append(re.sub(r&#x27;^ {0,&#x27;+str(len(line)-len(line.lstrip()))+&#x27;}&#x27;, &#x27;&#x27;,lines[j])); j+=1
             lang=info.strip().split()[0] if info.strip() else &#x27;&#x27;

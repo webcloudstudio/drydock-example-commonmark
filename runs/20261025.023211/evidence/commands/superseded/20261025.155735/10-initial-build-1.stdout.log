@@ -1,0 +1,18 @@
+Drydock 0.8.0  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Target - setup project workspace git store
+Target - committed project workspace git store
+Build: commonmark
+scope: entire project
+frontier: resume block-2
+git: baseline commonmark c93eda057fb9
+git: baseline commonmark 0cd79565bfc8
+
+BLOCK block-2  name="Block 2 · Service"  calls_max=22
+  story=block_parsing  "Parse CommonMark block structure and collect link reference definitions."
+  story=inline_parsing  "Parse CommonMark inline syntax and render inline HTML."
+  story=executable  "Provide the commonmark stdin/stdout executable."
+  story=full_conformance  "Verify the completed parser against the full CommonMark suite."
+
+  [call 1/22]  kind=resume  llm=codex/gpt-6-luna
+    fixing=block-parsing-conformance(232/655),inline-parsing-conformance(259/655),full-commonmark-suite(496/655)
+    result=ok  rc=0  execution=20261025.064844.101Z-62ee0856

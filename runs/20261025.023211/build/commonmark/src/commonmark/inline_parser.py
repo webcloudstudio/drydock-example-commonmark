@@ -31,7 +31,7 @@ def _dest(s):
     s=html.unescape(s)
     s=re.sub(r'\\([!"#$%&\'()*+,-./:;<=>?@\[\\\]^_`{|}~])',r'\1',s)
     return quote(s, safe=";/?:@&=+$,#-_.!~*'()%")
-def _esc(s): return html.escape(s, quote=False)
+def _esc(s): return html.escape(s, quote=True).replace('&#x27;', '&#39;')
 def _label(s): return ' '.join(s.split()).casefold()
 
 def inline(src, refs, depth=0):
@@ -68,7 +68,28 @@ def inline(src, refs, depth=0):
             auto_url=quote(url, safe=";/?:@&=+$,#-_.!~*'()%")
             out.append('<a href="'+html.escape(auto_url,quote=True)+'">'+html.escape(x,quote=False)+'</a>'); i=am.end(); continue
         tm=TAG.match(src,i)
-        if tm: out.append(tm.group()); i=tm.end(); continue
+        if tm:
+            tag=tm.group()
+            # HTML comments with the two permitted short forms end at the
+            # first >; any trailing characters remain ordinary inline text.
+            if tag in ('<!-->', '<!--->'):
+                out.append(tag)
+                i += len(tag)
+                continue
+            # The HTML tag grammar requires whitespace between attributes;
+            # reject malformed tag-shaped text instead of passing it raw.
+            if tag.startswith('<') and not tag.startswith(('<!--','<?','<!','</')):
+                inside=tag[1:-1].rstrip('/')
+                # Backslash has no escaping role in HTML attributes. A quote
+                # preceded by a backslash still closes the value; if that
+                # leaves an unterminated/adjacent attribute, the whole tag is
+                # invalid CommonMark raw HTML and must be emitted as text.
+                if re.search(r'''['"][^'\"]*['"][A-Za-z_:]''', inside) or any(
+                    (lambda j: j % 2 == 1)(len(tag[:k]) - len(tag[:k].rstrip('\\')))
+                    for k, c in enumerate(tag) if c in "'\""
+                ):
+                    out.append(_esc(src[i])); i+=1; continue
+            out.append(tag); i=tm.end(); continue
         em=ENTITY.match(src,i)
         if em:
             name=em.group()[1:-1]
@@ -113,7 +134,10 @@ def inline(src, refs, depth=0):
         # emphasis: find a valid matching delimiter and recurse
         if src[i] in '*_':
             ch=src[i]; run=re.match(re.escape(ch)+'+',src[i:]).group(); length=len(run)
-            can_open=i+length<n and not src[i+length].isspace() and (ch=='*' or i==0 or not src[i-1].isalnum())
+            before=src[i-1] if i else '\n'; after=src[i+length] if i+length<n else '\n'
+            punct=lambda c: unicodedata.category(c)[0] in ('P','S')
+            left=(not after.isspace() and (not punct(after) or before.isspace() or punct(before)))
+            can_open=left and (ch=='*' or not (not before.isspace() and not punct(before)))
             if can_open:
                 close=_find_em(src,i+length,ch,length)
                 if close != -1:
@@ -181,7 +205,12 @@ def _find_em(s,start,ch,length):
         if s[i]=='\\':i+=2;continue
         if s[i]==ch:
             m=re.match(re.escape(ch)+'+',s[i:]); r=len(m.group())
-            if i>start and not s[i-1].isspace() and (i+r==len(s) or not s[i+r].isalnum()): return i,r
+            before=s[i-1] if i else '\n'; after=s[i+r] if i+r<len(s) else '\n'
+            close_ok=not before.isspace() and (not unicodedata.category(before).startswith(('P','S')) or after.isspace() or unicodedata.category(after).startswith(('P','S')))
+            if i>start and close_ok:
+                if ch=='_' and i+r<len(s) and s[i+r].isalnum():
+                    i+=r; continue
+                return i,r
             i+=r
         else:i+=1
     return -1

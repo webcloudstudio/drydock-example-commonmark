@@ -10,29 +10,16 @@
 <main>
 <header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-2.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-2.md">Raw file</a></div></header>
 <article class="doc"><h1>Evidence: Block 2 · Service (block-2)</h1>
-<ul><li>block type: block</li><li>date: 2026-10-24</li><li>resulting state: closed/failed</li><li>story points (combined assembled cost): 60024</li><li>execution id: 20261025.034642.361Z-1f8a7ec9</li></ul>
+<ul><li>block type: block</li><li>date: 2026-10-25</li><li>resulting state: closed/failed</li><li>story points (combined assembled cost): 60024</li><li>execution id: 20261025.164854.657Z-a69502d1</li></ul>
 <h2>Stories built</h2>
 <ul><li>Parse CommonMark block structure and collect link reference definitions. (block_parsing) [story]</li><li>Parse CommonMark inline syntax and render inline HTML. (inline_parsing) [story]</li><li>Provide the commonmark stdin/stdout executable. (executable) [story]</li><li>Verify the completed parser against the full CommonMark suite. (full_conformance) [story]</li></ul>
 <h2>Stacked context</h2>
 <ul><li>stack: python_compact.md (SP 601)</li><li>compass: COMPASS.md (SP 462)</li><li>implements: FEATURE-Block-Parsing.md (SP 540)</li><li>context: spec_tests.py (SP 1609)</li><li>context: cmark.py (SP 339)</li><li>context: normalize.py (SP 1631)</li><li>context: spec.txt (SP 51527)</li><li>context: ARCHITECTURE_compact.md (SP 204)</li><li>stack: common_compact.md (SP 1079)</li><li>implements: FEATURE-Inline-Parsing.md (SP 527)</li><li>implements: FEATURE-Executable.md (SP 453)</li><li>implements: VERIFICATION.md (SP 341)</li><li>context: full_test.sh (SP 509)</li></ul>
 <h2>Build directory changes</h2>
-<ul><li>commonmark</li><li>pyproject.toml</li><li>src/commonmark/<strong>init</strong>.py</li><li>src/commonmark/<strong>main</strong>.py</li><li>src/commonmark/block_parser.py</li><li>src/commonmark/cli.py</li><li>src/commonmark/inline_parser.py</li><li>src/commonmark/model.py</li><li>src/commonmark/parser.py</li><li>src/commonmark/renderer.py</li><li>src/commonmark.egg-info/PKG-INFO</li><li>src/commonmark.egg-info/SOURCES.txt</li><li>src/commonmark.egg-info/dependency_links.txt</li><li>src/commonmark.egg-info/entry_points.txt</li><li>src/commonmark.egg-info/top_level.txt</li><li>tests/test_parser_behavior.py</li><li>commonmark/<strong>init</strong>.py</li><li>commonmark/<strong>main</strong>.py</li><li>commonmark/block_parser.py</li><li>commonmark/cli.py</li><li>commonmark/inline_parser.py</li><li>commonmark/model.py</li><li>commonmark/parser.py</li><li>commonmark/renderer.py</li></ul>
+<ul><li>src/commonmark/block_parser.py</li><li>src/commonmark/inline_parser.py</li></ul>
 <h2>Pre-build acceptance observation</h2>
 <ul><li>RED: block-parsing-conformance (FEATURE-Block-Parsing.md)</li></ul>
-<p>intent: All supplied cases in the block parsing sections pass (the complete block capability slice). return code: 1 stderr: Traceback (most recent call last): File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/sources/spec_tests.py&quot;, line 164, in &lt;module&gt; result = do_test(test, args.normalize, previous.get(str(test[&#x27;example&#x27;]))) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/sources/spec_tests.py&quot;, line 44, in do_test [retcode, actual_html_bytes, err] = cmark.to_html(test[&#x27;markdown&#x27;]) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/sources/cmark.py&quot;, line 23, in &lt;lambda&gt; self.to_html = lambda x: pipe_through_prog(prog, x) ^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/sources/cmark.py&quot;, line 10, in pipe_through_prog p1 = Popen(prog.split(), stdout=PIPE, stdin=PIPE, stderr=PIPE) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/home/barlo/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/subprocess.py&quot;, line 1026, in <strong>init</strong> self._execute_child(args, executable, preexec_fn, close_fds, File &quot;/home/barlo/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/subprocess.py&quot;, line 1955, in _execute_child raise child_exception_type(errno_num, err_msg, err_filename)<br>PermissionError: [Errno 13] Permission denied: &#x27;./commonmark&#x27;</p>
-<p>--- drydock: values at failure --- result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;./commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;Thematic breaks|ATX headings|Setext headings|Indented code blocks|Fenced code blocks|HTML blocks|Link reference definitions|Paragraphs|Blank lines|Block quotes|List items… (+1677 chars) --- drydock: end values --- Traceback (most recent call last): File &quot;block-parsing-conformance.py&quot;, line 18, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
-<ul><li>RED: inline-parsing-conformance (FEATURE-Inline-Parsing.md)</li></ul>
-<p>intent: All supplied cases in the inline parsing sections pass (the complete inline capability slice). return code: 1 stderr: Traceback (most recent call last): File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/sources/spec_tests.py&quot;, line 164, in &lt;module&gt; result = do_test(test, args.normalize, previous.get(str(test[&#x27;example&#x27;]))) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/sources/spec_tests.py&quot;, line 44, in do_test [retcode, actual_html_bytes, err] = cmark.to_html(test[&#x27;markdown&#x27;]) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/sources/cmark.py&quot;, line 23, in &lt;lambda&gt; self.to_html = lambda x: pipe_through_prog(prog, x) ^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/sources/cmark.py&quot;, line 10, in pipe_through_prog p1 = Popen(prog.split(), stdout=PIPE, stdin=PIPE, stderr=PIPE) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/home/barlo/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/subprocess.py&quot;, line 1026, in <strong>init</strong> self._execute_child(args, executable, preexec_fn, close_fds, File &quot;/home/barlo/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/subprocess.py&quot;, line 1955, in _execute_child raise child_exception_type(errno_num, err_msg, err_filename)<br>PermissionError: [Errno 13] Permission denied: &#x27;./commonmark&#x27;</p>
-<p>--- drydock: values at failure --- result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;./commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;Backslash escapes|Entity and numeric character references|Code spans|Emphasis and strong emphasis|Links|Images|Autolinks|Raw HTML|Hard line breaks|Soft line breaks|Textua… (+1680 chars) --- drydock: end values --- Traceback (most recent call last): File &quot;inline-parsing-conformance.py&quot;, line 18, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
-<ul><li>RED: executable-stdin-stdout (FEATURE-Executable.md)</li></ul>
-<p>intent: The root executable accepts Markdown on standard input and emits converted output on standard output. return code: 1 stderr: --- drydock: values at failure --- errno_num = 13 err_msg = &#x27;Permission denied&#x27; err_filename = &#x27;./commonmark&#x27; --- drydock: end values --- Traceback (most recent call last): File &quot;executable-stdin-stdout.py&quot;, line 4, in &lt;module&gt; result = subprocess.run( ^^^^^^^^^^^^^^^ File &quot;/home/barlo/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/subprocess.py&quot;, line 548, in run with Popen(*popenargs, **kwargs) as process: ^^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/home/barlo/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/subprocess.py&quot;, line 1026, in <strong>init</strong> self._execute_child(args, executable, preexec_fn, close_fds, File &quot;/home/barlo/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/subprocess.py&quot;, line 1955, in _execute_child raise child_exception_type(errno_num, err_msg, err_filename)<br>PermissionError: [Errno 13] Permission denied: &#x27;./commonmark&#x27;</p>
-<ul><li>RED: executable-errors (FEATURE-Executable.md)</li></ul>
-<p>intent: Invalid UTF-8 input is reported as an unsuccessful process invocation. return code: 1 stderr: --- drydock: values at failure --- errno_num = 13 err_msg = &#x27;Permission denied&#x27; err_filename = &#x27;./commonmark&#x27; --- drydock: end values --- Traceback (most recent call last): File &quot;executable-errors.py&quot;, line 3, in &lt;module&gt; result = subprocess.run( ^^^^^^^^^^^^^^^ File &quot;/home/barlo/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/subprocess.py&quot;, line 548, in run with Popen(*popenargs, **kwargs) as process: ^^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/home/barlo/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/subprocess.py&quot;, line 1026, in <strong>init</strong> self._execute_child(args, executable, preexec_fn, close_fds, File &quot;/home/barlo/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/subprocess.py&quot;, line 1955, in _execute_child raise child_exception_type(errno_num, err_msg, err_filename)<br>PermissionError: [Errno 13] Permission denied: &#x27;./commonmark&#x27;</p>
-<ul><li>RED: full-commonmark-suite (VERIFICATION.md)</li></ul>
-<p>intent: The supplied full CommonMark conformance suite completes successfully. return code: 1 stdout: Traceback (most recent call last): File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/sources/spec_tests.py&quot;, line 164, in &lt;module&gt; result = do_test(test, args.normalize, previous.get(str(test[&#x27;example&#x27;]))) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/sources/spec_tests.py&quot;, line 44, in do_test [retcode, actual_html_bytes, err] = cmark.to_html(test[&#x27;markdown&#x27;]) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/sources/cmark.py&quot;, line 23, in &lt;lambda&gt; self.to_html = lambda x: pipe_through_prog(prog, x) ^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/sources/cmark.py&quot;, line 10, in pipe_through_prog p1 = Popen(prog.split(), stdout=PIPE, stdin=PIPE, stderr=PIPE) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File &quot;/home/barlo/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/subprocess.py&quot;, line 1026, in <strong>init</strong> self._execute_child(args, executable, preexec_fn, close_fds, File &quot;/home/barlo/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/subprocess.py&quot;, line 1955, in _execute_child raise child_exception_type(errno_num, err_msg, err_filename)<br>PermissionError: [Errno 13] Permission denied: &#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/commonmark&#x27; stderr: --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;sh&#x27;, &#x27;sources/full_test.sh&#x27;], returncode=1, stdout=&#x27;Traceback (most recent call last):\n  File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/sources/spec_tests.py&quot;, line 164, in &lt;module&gt;\n    result = do_test(test, args.normalize, previous.get(str(test[\&#x27;example\&#x27;])))\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^… (+1408 chars) --- drydock: end values --- Traceback (most recent call last): File &quot;full-commonmark-suite.py&quot;, line 10, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
-<h2>Post-build programmatic acceptance</h2>
-<ul><li>FAIL: block-parsing-conformance (FEATURE-Block-Parsing.md)</li></ul>
-<p>intent: All supplied cases in the block parsing sections pass (the complete block capability slice). target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python provisioning: not required return code: 1 stdout: Example 91 (lines 1497-1510) Setext headings <code>Foo ----</code></p>
+<p>intent: All supplied cases in the block parsing sections pass (the complete block capability slice). return code: 1 stdout: Example 91 (lines 1497-1510) Setext headings <code>Foo ----</code></p>
 <p>&lt;a title=&quot;a lot --- of dashes&quot;/&gt;</p>
 <p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;h2&gt;<code>Foo&lt;/h2&gt;&lt;p&gt;</code>&lt;/p&gt;&lt;h2&gt;&amp;lt;a title=&amp;quot;a lot&lt;/h2&gt;&lt;p&gt;of dashes&amp;quot;/&amp;gt;&lt;/p&gt; +&lt;h2&gt;<code>Foo&lt;/h2&gt;&lt;p&gt;</code>&lt;/p&gt;&lt;h2&gt;&amp;lt;a title=&quot;a lot&lt;/h2&gt;&lt;p&gt;of dashes&quot;/&amp;gt;&lt;/p&gt;</p>
 <p>Example 93 (lines 1527-1537) Setext headings &gt; foo bar ===</p>
@@ -219,8 +206,8 @@
 <p>bar</p>
 <p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;ol&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt;foo +&lt;ol&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt; foo &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;</p>
 <p>232 passed, 54 failed, 0 errored, 369 skipped stderr: --- drydock: progress --- cases: pass=232 fail=54 error=0 skip=369 total=655 from=result.stdout --- drydock: end progress --- --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;./commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;Thematic breaks|ATX headings|Setext headings|Indented code blocks|Fenced code blocks|HTML blocks|Link reference definitions|Paragraphs|Blank lines|Block quotes|List items… (+14443 chars) --- drydock: end values --- Traceback (most recent call last): File &quot;block-parsing-conformance.py&quot;, line 18, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
-<ul><li>FAIL: inline-parsing-conformance (FEATURE-Inline-Parsing.md)</li></ul>
-<p>intent: All supplied cases in the inline parsing sections pass (the complete inline capability slice). target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python provisioning: not required return code: 1 stdout: Example 14 (lines 509-529) Backslash escapes \<em>not emphasized</em> \&lt;br/&gt; not a tag \<a href="/foo">not a link</a> \<code>not code</code> 1\. not a list \* not a list \# not a heading \[foo]: /url &quot;not a reference&quot; \&amp;ouml; not a character entity</p>
+<ul><li>RED: inline-parsing-conformance (FEATURE-Inline-Parsing.md)</li></ul>
+<p>intent: All supplied cases in the inline parsing sections pass (the complete inline capability slice). return code: 1 stdout: Example 14 (lines 509-529) Backslash escapes \<em>not emphasized</em> \&lt;br/&gt; not a tag \<a href="/foo">not a link</a> \<code>not code</code> 1\. not a list \* not a list \# not a heading \[foo]: /url &quot;not a reference&quot; \&amp;ouml; not a character entity</p>
 <p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>not emphasized</em> &amp;lt;br/&amp;gt; not a tag <a href="/foo">not a link</a> <code>not code</code> 1. not a list * not a list # not a heading [foo]: /url &amp;quot;not a reference&amp;quot; &amp;amp;ouml; not a character entity&lt;/p&gt; +&lt;p&gt;<em>not emphasized</em> &amp;lt;br/&amp;gt; not a tag <a href="/foo">not a link</a> <code>not code</code> 1. not a list * not a list # not a heading [foo]: /url &quot;not a reference&quot; &amp;amp;ouml; not a character entity&lt;/p&gt;</p>
 <p>Example 23 (lines 604-610) Backslash escapes [foo]</p>
 <p>[foo]: /bar\* &quot;ti\*tle&quot;</p>
@@ -427,12 +414,12 @@
 <p>Example 634 (lines 9223-9227) Raw HTML &lt;a href=&quot;\&quot;&quot;&gt;</p>
 <p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a href=&amp;quot;&amp;quot;&amp;quot;&amp;gt;&lt;/p&gt; +&lt;a &quot; href=&quot;\&quot;&gt;</p>
 <p>259 passed, 97 failed, 0 errored, 299 skipped stderr: --- drydock: progress --- cases: pass=259 fail=97 error=0 skip=299 total=655 from=result.stdout --- drydock: end progress --- --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;./commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;Backslash escapes|Entity and numeric character references|Code spans|Emphasis and strong emphasis|Links|Images|Autolinks|Raw HTML|Hard line breaks|Soft line breaks|Textua… (+20991 chars) --- drydock: end values --- Traceback (most recent call last): File &quot;inline-parsing-conformance.py&quot;, line 18, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
-<ul><li>PASS: executable-stdin-stdout (FEATURE-Executable.md)</li></ul>
-<p>intent: The root executable accepts Markdown on standard input and emits converted output on standard output. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
-<ul><li>PASS: executable-errors (FEATURE-Executable.md)</li></ul>
-<p>intent: Invalid UTF-8 input is reported as an unsuccessful process invocation. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: Traceback (most recent call last): File &quot;&lt;frozen runpy&gt;&quot;, line 198, in _run_module_as_main File &quot;&lt;frozen runpy&gt;&quot;, line 88, in _run_code File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/src/commonmark/cli.py&quot;, line 15, in &lt;module&gt; raise SystemExit(main()) ^^^^^^ File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/src/commonmark/cli.py&quot;, line 10, in main source = sys.stdin.buffer.read().decode(&quot;utf-8&quot;) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br>UnicodeDecodeError: &#x27;utf-8&#x27; codec can&#x27;t decode byte 0xff in position 0: invalid start byte</p>
-<ul><li>FAIL: full-commonmark-suite (VERIFICATION.md)</li></ul>
-<p>intent: The supplied full CommonMark conformance suite completes successfully. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python provisioning: not required return code: 1 stdout: Example 1 (lines 355-360) Tabs foo	baz		bim</p>
+<ul><li>GREEN (prepassed): executable-stdin-stdout (FEATURE-Executable.md)</li></ul>
+<p>intent: The root executable accepts Markdown on standard input and emits converted output on standard output. return code: 0</p>
+<ul><li>GREEN (prepassed): executable-errors (FEATURE-Executable.md)</li></ul>
+<p>intent: Invalid UTF-8 input is reported as an unsuccessful process invocation. return code: 0 stdout: Traceback (most recent call last): File &quot;&lt;frozen runpy&gt;&quot;, line 198, in _run_module_as_main File &quot;&lt;frozen runpy&gt;&quot;, line 88, in _run_code File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/src/commonmark/cli.py&quot;, line 15, in &lt;module&gt; raise SystemExit(main()) ^^^^^^ File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/src/commonmark/cli.py&quot;, line 10, in main source = sys.stdin.buffer.read().decode(&quot;utf-8&quot;) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br>UnicodeDecodeError: &#x27;utf-8&#x27; codec can&#x27;t decode byte 0xff in position 0: invalid start byte</p>
+<ul><li>RED: full-commonmark-suite (VERIFICATION.md)</li></ul>
+<p>intent: The supplied full CommonMark conformance suite completes successfully. return code: 1 stdout: Example 1 (lines 355-360) Tabs foo	baz		bim</p>
 <p>--- expected HTML +++ actual HTML @@ -1,2 +1 @@ -&lt;pre&gt;&lt;code&gt;foo	baz		bim -&lt;/code&gt;&lt;/pre&gt; +&lt;p&gt;foo baz bim&lt;/p&gt;</p>
 <p>Example 2 (lines 362-367) Tabs foo	baz		bim</p>
 <p>--- expected HTML +++ actual HTML @@ -1,2 +1 @@ -&lt;pre&gt;&lt;code&gt;foo	baz		bim -&lt;/code&gt;&lt;/pre&gt; +&lt;p&gt;foo baz bim&lt;/p&gt;</p>
@@ -847,33 +834,740 @@
 <p>Example 634 (lines 9223-9227) Raw HTML &lt;a href=&quot;\&quot;&quot;&gt;</p>
 <p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a href=&amp;quot;&amp;quot;&amp;quot;&amp;gt;&lt;/p&gt; +&lt;a &quot; href=&quot;\&quot;&gt;</p>
 <p>496 passed, 159 failed, 0 errored, 0 skipped stderr: --- drydock: progress --- cases: pass=496 fail=159 error=0 skip=0 total=655 from=result.stdout --- drydock: end progress --- --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;sh&#x27;, &#x27;sources/full_test.sh&#x27;], returncode=1, stdout=&#x27;Example 1 (lines 355-360) Tabs\n\tfoo\tbaz\t\tbim\n\n--- expected HTML\n+++ actual HTML\n@@ -1,2 +1 @@\n-&lt;pre&gt;&lt;code&gt;foo\tbaz\t\tbim\n-&lt;/code&gt;&lt;/pre&gt;\n+&lt;p&gt;foo baz bim&lt;/p&gt;\n\nExample 2 (lines 362-367) Tabs\n  \tfoo\tbaz\t\tbim\n\n--- expected HTML\n+++ actual HTML\n@@ -1,2 +1 @@\n-&lt;pre&gt;&lt;code&gt;foo\tbaz\t\tbim\n-&lt;/code&gt;&lt;/pre&gt;\n+… (+36475 chars) --- drydock: end values --- Traceback (most recent call last): File &quot;full-commonmark-suite.py&quot;, line 10, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>FAIL: block-parsing-conformance (FEATURE-Block-Parsing.md)</li></ul>
+<p>intent: All supplied cases in the block parsing sections pass (the complete block capability slice). target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python provisioning: not required return code: 1 stdout: Example 93 (lines 1527-1537) Setext headings &gt; foo bar ===</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;blockquote&gt;&lt;p&gt;foo bar ===&lt;/p&gt;&lt;/blockquote&gt; +&lt;blockquote&gt;&lt;p&gt;foo bar&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;===&lt;/p&gt;</p>
+<p>Example 168 (lines 2707-2717) HTML blocks &lt;del&gt;</p>
+<p><em>foo</em></p>
+<p>&lt;/del&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;del&gt;&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;&lt;/p&gt;&lt;/del&gt; +&lt;del&gt;&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;&lt;/p&gt;&lt;p&gt;&lt;/del&gt;&lt;/p&gt;</p>
+<p>Example 195 (lines 3210-3218) Link reference definitions [foo]: /url &#x27;the title&#x27;</p>
+<p>[foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot;the title&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo]: /url&lt;br&gt;&#x27;the title&#x27;&lt;/p&gt;&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 196 (lines 3221-3227) Link reference definitions [Foo*bar\]]:my_(url) &#x27;title (with parens)&#x27;</p>
+<p>[Foo*bar\]]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;my_(url)&quot; title=&quot;title (with parens)&quot;&gt;Foo*bar]&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[Foo*bar]]:my_(url) &#x27;title (with parens)&#x27;&lt;/p&gt;&lt;p&gt;[Foo*bar]]&lt;/p&gt;</p>
+<p>Example 197 (lines 3230-3238) Link reference definitions [Foo bar]: &lt;my url&gt; &#x27;title&#x27;</p>
+<p>[Foo bar]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;my%20url&quot; title=&quot;title&quot;&gt;Foo bar&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[Foo bar]: &lt;my url&gt; &#x27;title&#x27;&lt;/p&gt;&lt;p&gt;[Foo bar]&lt;/p&gt;</p>
+<p>Example 198 (lines 3243-3257) Link reference definitions [foo]: /url &#x27; title line1 line2 &#x27;</p>
+<p>[foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1,5 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot; -title -line1 -line2 -&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo]: /url &#x27; title line1 line2 &#x27;&lt;/p&gt;&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 200 (lines 3277-3284) Link reference definitions [foo]: /url</p>
+<p>[foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo]: /url&lt;/p&gt;&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 203 (lines 3312-3319) Link reference definitions [foo]: &lt;bar&gt;(baz)</p>
+<p>[foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo]: &lt;bar&gt;(baz)&lt;/p&gt;&lt;p&gt;[foo]&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;bar%3E(baz&quot;&gt;foo&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 204 (lines 3325-3331) Link reference definitions [foo]: /url\bar\*baz &quot;foo\&quot;bar\baz&quot;</p>
+<p>[foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url%5Cbar*baz&quot; title=&quot;foo&amp;quot;bar\baz&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo]: /url\bar*baz &amp;quot;foo&amp;quot;bar\baz&amp;quot;&lt;/p&gt;&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 210 (lines 3393-3400) Link reference definitions [ foo ]: /url bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;bar&lt;/p&gt; +&lt;p&gt;[ foo ]: /url bar&lt;/p&gt;</p>
+<p>Example 213 (lines 3426-3434) Link reference definitions [foo]: /url &quot;title&quot;</p>
+<p>[foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;pre&gt;&lt;code&gt;[foo]: /url &amp;quot;title&amp;quot; +&lt;pre&gt;&lt;code&gt;[foo]: /url &quot;title&quot; &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 215 (lines 3455-3464) Link reference definitions Foo [bar]: /baz</p>
+<p>[bar]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;Foo [bar]: /baz&lt;/p&gt;&lt;p&gt;[bar]&lt;/p&gt; +&lt;p&gt;Foo&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;/baz&quot;&gt;bar&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 219 (lines 3504-3517) Link reference definitions [foo]: /foo-url &quot;foo&quot; [bar]: /bar-url &quot;bar&quot; [baz]: /baz-url</p>
+<p>[foo], [bar], [baz]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/foo-url&quot; title=&quot;foo&quot;&gt;foo&lt;/a&gt;, &lt;a href=&quot;/bar-url&quot; title=&quot;bar&quot;&gt;bar&lt;/a&gt;, &lt;a href=&quot;/baz-url&quot;&gt;baz&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&amp;quot;bar&amp;quot;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;/foo-url&quot; title=&quot;foo&quot;&gt;foo&lt;/a&gt;, &lt;a href=&quot;/bar-url&quot;&gt;bar&lt;/a&gt;, &lt;a href=&quot;/baz-url&quot;&gt;baz&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 259 (lines 4238-4248) List items</p>
+<ul><li>one</li></ul>
+<p>two</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1 @@ -&lt;ul&gt;&lt;li&gt;one&lt;/li&gt;&lt;/ul&gt;&lt;pre&gt;&lt;code&gt; two -&lt;/code&gt;&lt;/pre&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;one&lt;/p&gt;&lt;p&gt;two&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 264 (lines 4332-4344) List items</p>
+<ul><li>foo</li></ul>
+<p>bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;bar&lt;/p&gt;</p>
+<p>Example 266 (lines 4377-4395) List items</p>
+<ul><li>Foo</li></ul>
+<p>bar</p>
+<p>baz</p>
+<p>--- expected HTML +++ actual HTML @@ -1,5 +1,2 @@ -&lt;ul&gt;&lt;li&gt;&lt;p&gt;Foo&lt;/p&gt;&lt;pre&gt;&lt;code&gt;bar - - -baz -&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;Foo&lt;/p&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;pre&gt;&lt;code&gt;  baz +&lt;/code&gt;&lt;/pre&gt;</p>
+<p>Example 272 (lines 4460-4472) List items</p>
+<ul><li>foo</li></ul>
+<p>bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;pre&gt;&lt;code&gt;bar -&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 273 (lines 4477-4489) List items</p>
+<ol><li>foo</li></ol>
+<p>bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;ol start=&quot;10&quot;&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;pre&gt;&lt;code&gt;bar +&lt;ol start=&quot;10&quot;&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;pre&gt;&lt;code&gt;   bar &lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 275 (lines 4511-4527) List items</p>
+<ol><li>indented code</li></ol>
+<p>paragraph</p>
+<p>more code</p>
+<p>--- expected HTML +++ actual HTML @@ -1,3 +1 @@ -&lt;ol&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt;indented code -&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;paragraph&lt;/p&gt;&lt;pre&gt;&lt;code&gt;more code -&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ol&gt; +&lt;ol&gt;&lt;li&gt;&lt;p&gt;indented code&lt;/p&gt;&lt;p&gt;paragraph&lt;/p&gt;&lt;p&gt;more code&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 276 (lines 4533-4549) List items</p>
+<ol><li>indented code</li></ol>
+<p>paragraph</p>
+<p>more code</p>
+<p>--- expected HTML +++ actual HTML @@ -1,3 +1 @@ -&lt;ol&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt; indented code -&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;paragraph&lt;/p&gt;&lt;pre&gt;&lt;code&gt;more code -&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ol&gt; +&lt;ol&gt;&lt;li&gt;&lt;p&gt;indented code&lt;/p&gt;&lt;p&gt;paragraph&lt;/p&gt;&lt;p&gt;more code&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 278 (lines 4570-4579) List items</p>
+<ul><li>foo</li></ul>
+<p>bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;bar&lt;/p&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 282 (lines 4654-4663) List items -</p>
+<p>foo</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;foo&lt;/p&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 288 (lines 4745-4764) List items</p>
+<ol><li>A paragraph</li></ol>
+<p>with two lines.</p>
+<p>indented code</p>
+<p>&gt; A block quote.</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;indented code +&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt; indented code &lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;&lt;p&gt;A block quote.&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 289 (lines 4769-4788) List items</p>
+<ol><li>A paragraph</li></ol>
+<p>with two lines.</p>
+<p>indented code</p>
+<p>&gt; A block quote.</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;indented code +&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;  indented code &lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;&lt;p&gt;A block quote.&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 290 (lines 4793-4812) List items</p>
+<ol><li>A paragraph</li></ol>
+<p>with two lines.</p>
+<p>indented code</p>
+<p>&gt; A block quote.</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;indented code +&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;   indented code &lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;&lt;p&gt;A block quote.&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 292 (lines 4847-4866) List items</p>
+<ol><li>A paragraph</li></ol>
+<p>with two lines.</p>
+<p>indented code</p>
+<p>&gt; A block quote.</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;indented code +&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;  indented code &lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;&lt;p&gt;A block quote.&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 296 (lines 4929-4950) List items</p>
+<ul><li>foo<ul><li>bar<ul><li>baz<ul><li>boo</li></ul></li></ul></li></ul></li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;foo&lt;ul&gt;&lt;li&gt;bar&lt;ul&gt;&lt;li&gt;baz&lt;ul&gt;&lt;li&gt;boo&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;foo&lt;ul&gt;&lt;li&gt;bar&lt;/li&gt;&lt;li&gt;baz&lt;ul&gt;&lt;li&gt;boo&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 297 (lines 4955-4967) List items</p>
+<ul><li>foo<ul><li>bar<ul><li>baz<ul><li>boo</li></ul></li></ul></li></ul></li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;li&gt;baz&lt;/li&gt;&lt;li&gt;boo&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;foo&lt;ul&gt;&lt;li&gt;bar&lt;/li&gt;&lt;li&gt;baz&lt;/li&gt;&lt;li&gt;boo&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 299 (lines 4988-4998) List items</p>
+<ol><li>foo<ul><li>bar</li></ul></li></ol>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ol start=&quot;10&quot;&gt;&lt;li&gt;foo&lt;/li&gt;&lt;/ol&gt;&lt;ul&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt; +&lt;ol start=&quot;10&quot;&gt;&lt;li&gt;foo&lt;ul&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 302 (lines 5035-5049) List items</p>
+<ul><li># Foo</li><li>Bar</li></ul>
+<p>--- baz</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;h1&gt;Foo&lt;/h1&gt;&lt;/li&gt;&lt;li&gt;&lt;h2&gt;Bar&lt;/h2&gt;baz&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;h1&gt;Foo&lt;/h1&gt;&lt;/li&gt;&lt;li&gt;Bar&lt;/li&gt;&lt;/ul&gt;&lt;hr&gt;&lt;p&gt;baz&lt;/p&gt;</p>
+<p>Example 308 (lines 5406-5425) Lists</p>
+<ul><li>foo</li></ul>
+<ul><li>bar</li></ul>
+<ul><li>baz</li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;baz&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;ul&gt;&lt;li&gt;baz&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 309 (lines 5427-5449) Lists</p>
+<ul><li>foo<ul><li>bar<ul><li>baz</li></ul></li></ul></li></ul>
+<p>bim</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1,2 @@ -&lt;ul&gt;&lt;li&gt;foo&lt;ul&gt;&lt;li&gt;bar&lt;ul&gt;&lt;li&gt;&lt;p&gt;baz&lt;/p&gt;&lt;p&gt;bim&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;foo&lt;ul&gt;&lt;li&gt;bar&lt;/li&gt;&lt;li&gt;baz&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;pre&gt;&lt;code&gt;  bim +&lt;/code&gt;&lt;/pre&gt;</p>
+<p>Example 312 (lines 5509-5527) Lists</p>
+<ul><li>a<ul><li>b<ul><li>c<ul><li>d</li></ul></li><li>e</li></ul></li><li>f</li></ul></li><li>g</li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;a&lt;/li&gt;&lt;li&gt;b&lt;/li&gt;&lt;li&gt;c&lt;/li&gt;&lt;li&gt;d&lt;/li&gt;&lt;li&gt;e&lt;/li&gt;&lt;li&gt;f&lt;/li&gt;&lt;li&gt;g&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;a&lt;ul&gt;&lt;li&gt;b&lt;/li&gt;&lt;li&gt;c&lt;/li&gt;&lt;li&gt;d&lt;/li&gt;&lt;li&gt;e&lt;/li&gt;&lt;li&gt;f&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;g&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 314 (lines 5554-5568) Lists</p>
+<ul><li>a<ul><li>b<ul><li>c<ul><li>d<ul><li>e</li></ul></li></ul></li></ul></li></ul></li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;a&lt;/li&gt;&lt;li&gt;b&lt;/li&gt;&lt;li&gt;c&lt;/li&gt;&lt;li&gt;d - e&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;a&lt;ul&gt;&lt;li&gt;b&lt;/li&gt;&lt;li&gt;c&lt;/li&gt;&lt;li&gt;d&lt;/li&gt;&lt;li&gt;e&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 315 (lines 5574-5591) Lists</p>
+<ol><li>a</li></ol>
+<ol><li>b</li></ol>
+<ol><li>c</li></ol>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1 @@ -&lt;ol&gt;&lt;li&gt;&lt;p&gt;a&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;b&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;&lt;pre&gt;&lt;code&gt;3. c -&lt;/code&gt;&lt;/pre&gt; +&lt;ol&gt;&lt;li&gt;&lt;p&gt;a&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;b&lt;/p&gt;&lt;ol start=&quot;3&quot;&gt;&lt;li&gt;c&lt;/li&gt;&lt;/ol&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 320 (lines 5686-5705) Lists</p>
+<ul><li>a</li><li><code>`</code></li></ul>
+<p>b</p>
+<p><code>`</code></p>
+<ul><li>c</li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1,4 +1,3 @@ &lt;ul&gt;&lt;li&gt;a&lt;/li&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt;b - - -&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;li&gt;c&lt;/li&gt;&lt;/ul&gt; +&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ul&gt;&lt;pre&gt;&lt;code&gt;- c +&lt;/code&gt;&lt;/pre&gt;</p>
+<p>Example 321 (lines 5712-5730) Lists</p>
+<ul><li>a<ul><li>b</li></ul></li></ul>
+<p>c</p>
+<ul><li>d</li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;a&lt;ul&gt;&lt;li&gt;&lt;p&gt;b&lt;/p&gt;&lt;p&gt;c&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;d&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;a&lt;/p&gt;&lt;ul&gt;&lt;li&gt;b&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;c&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;d&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 326 (lines 5805-5819) Lists</p>
+<ol><li><code>`</code></li></ol>
+<p>foo <code>`</code></p>
+<p>bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;ol&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt;foo +&lt;ol&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt; foo &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>248 passed, 38 failed, 0 errored, 369 skipped stderr: --- drydock: progress --- cases: pass=248 fail=38 error=0 skip=369 total=655 from=result.stdout --- drydock: end progress --- --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;./commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;Thematic breaks|ATX headings|Setext headings|Indented code blocks|Fenced code blocks|HTML blocks|Link reference definitions|Paragraphs|Blank lines|Block quotes|List items… (+10407 chars) --- drydock: end values --- Traceback (most recent call last): File &quot;block-parsing-conformance.py&quot;, line 18, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>FAIL: inline-parsing-conformance (FEATURE-Inline-Parsing.md)</li></ul>
+<p>intent: All supplied cases in the inline parsing sections pass (the complete inline capability slice). target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python provisioning: not required return code: 1 stdout: Example 23 (lines 604-610) Backslash escapes [foo]</p>
+<p>[foo]: /bar\* &quot;ti\*tle&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/bar*&quot; title=&quot;ti*tle&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/bar*&quot; title=&quot;ti\*tle&quot;&gt;foo&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 24 (lines 613-620) Backslash escapes <code>foo\+bar foo</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;pre&gt;&lt;code class=&quot;language-foo+bar&quot;&gt;foo +&lt;pre&gt;&lt;code class=&quot;language-foo\+bar&quot;&gt;foo &lt;/code&gt;&lt;/pre&gt;</p>
+<p>Example 34 (lines 751-758) Entity and numeric character references <code>f&amp;ouml;&amp;ouml; foo</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;pre&gt;&lt;code class=&quot;language-föö&quot;&gt;foo +&lt;pre&gt;&lt;code class=&quot;language-f&amp;amp;ouml;&amp;amp;ouml;&quot;&gt;foo &lt;/code&gt;&lt;/pre&gt;</p>
+<p>Example 343 (lines 6041-6045) Code spans *foo<code>*</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>foo&lt;code&gt;</em>&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo<code>&lt;/em&gt;</code>&lt;/p&gt;</p>
+<p>Example 345 (lines 6060-6064) Code spans <code>&lt;a href=&quot;</code>&quot;&gt;`</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;&amp;lt;a href=&amp;quot;&lt;/code&gt;&amp;quot;&amp;gt;<code>&lt;/p&gt; +&lt;p&gt;&lt;code&gt;&amp;lt;a href=&quot;&lt;/code&gt;&amp;quot;&amp;gt;</code>&lt;/p&gt;</p>
+<p>Example 349 (lines 6097-6101) Code spans <code>`foo</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<code>`foo</code>&lt;/p&gt; +&lt;p&gt;`&lt;code&gt;foo&lt;/code&gt;&lt;/p&gt;</p>
+<p>Example 371 (lines 6521-6525) Emphasis and strong emphasis *(<em>foo</em>)*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;(&lt;em&gt;foo&lt;/em&gt;)&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;(<em>foo&lt;/em&gt;)</em>&lt;/p&gt;</p>
+<p>Example 375 (lines 6562-6566) Emphasis and strong emphasis _(_foo_)_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;(&lt;em&gt;foo&lt;/em&gt;)&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;(_foo&lt;/em&gt;)_&lt;/p&gt;</p>
+<p>Example 382 (lines 6626-6630) Emphasis and strong emphasis a<strong>&quot;foo&quot;</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;a<strong>&amp;quot;foo&amp;quot;</strong>&lt;/p&gt; +&lt;p&gt;a*&lt;em&gt;&amp;quot;foo&amp;quot;&lt;/em&gt;*&lt;/p&gt;</p>
+<p>Example 387 (lines 6674-6678) Emphasis and strong emphasis a<strong>&quot;foo&quot;</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;a<strong>&amp;quot;foo&amp;quot;</strong>&lt;/p&gt; +&lt;p&gt;a_&lt;em&gt;&amp;quot;foo&amp;quot;&lt;/em&gt;_&lt;/p&gt;</p>
+<p>Example 388 (lines 6683-6687) Emphasis and strong emphasis foo<strong>bar</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo<strong>bar</strong>&lt;/p&gt; +&lt;p&gt;foo_&lt;em&gt;bar&lt;/em&gt;_&lt;/p&gt;</p>
+<p>Example 390 (lines 6697-6701) Emphasis and strong emphasis пристаням<strong>стремятся</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;пристаням<strong>стремятся</strong>&lt;/p&gt; +&lt;p&gt;пристаням_&lt;em&gt;стремятся&lt;/em&gt;_&lt;/p&gt;</p>
+<p>Example 391 (lines 6704-6708) Emphasis and strong emphasis <strong>foo, __bar</strong>, baz__</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo, &lt;strong&gt;bar&lt;/strong&gt;, baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo, <strong>bar&lt;/strong&gt;, baz</strong>&lt;/p&gt;</p>
+<p>Example 395 (lines 6751-6755) Emphasis and strong emphasis <em>(<strong>foo</strong>)</em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;(&lt;strong&gt;foo&lt;/strong&gt;)&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;(**foo&lt;/em&gt;&lt;em&gt;)&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 396 (lines 6758-6764) Emphasis and strong emphasis <strong>Gomphocarpus (<em>Gomphocarpus physocarpus</em>, syn. <em>Asclepias physocarpa</em>)</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;Gomphocarpus (&lt;em&gt;Gomphocarpus physocarpus&lt;/em&gt;, syn. &lt;em&gt;Asclepias physocarpa&lt;/em&gt;)&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;*Gomphocarpus (*Gomphocarpus physocarpus&lt;/em&gt;, syn. &lt;em&gt;Asclepias physocarpa&lt;/em&gt;)**&lt;/p&gt;</p>
+<p>Example 397 (lines 6767-6771) Emphasis and strong emphasis <strong>foo &quot;<em>bar</em>&quot; foo</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &amp;quot;&lt;em&gt;bar&lt;/em&gt;&amp;quot; foo&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;*foo &amp;quot;*bar&lt;/em&gt;&amp;quot; foo**&lt;/p&gt;</p>
+<p>Example 401 (lines 6808-6812) Emphasis and strong emphasis _(<strong>foo</strong>)_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;(&lt;strong&gt;foo&lt;/strong&gt;)&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;(__foo&lt;/em&gt;&lt;em&gt;)&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 408 (lines 6873-6877) Emphasis and strong emphasis _foo <strong>bar</strong> baz_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo &lt;strong&gt;bar&lt;/strong&gt; baz&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo __bar&lt;/em&gt;_ baz_&lt;/p&gt;</p>
+<p>Example 409 (lines 6880-6884) Emphasis and strong emphasis _foo _bar_ baz_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo &lt;em&gt;bar&lt;/em&gt; baz&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo _bar&lt;/em&gt; baz_&lt;/p&gt;</p>
+<p>Example 410 (lines 6887-6891) Emphasis and strong emphasis __foo_ bar_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;&lt;em&gt;foo&lt;/em&gt; bar&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;_foo&lt;/em&gt; bar_&lt;/p&gt;</p>
+<p>Example 411 (lines 6894-6898) Emphasis and strong emphasis *foo *bar**</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo &lt;em&gt;bar&lt;/em&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo <em>bar&lt;/em&gt;</em>&lt;/p&gt;</p>
+<p>Example 412 (lines 6901-6905) Emphasis and strong emphasis <em>foo <strong>bar</strong> baz</em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo &lt;strong&gt;bar&lt;/strong&gt; baz&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo **bar&lt;/em&gt;* baz*&lt;/p&gt;</p>
+<p>Example 413 (lines 6907-6911) Emphasis and strong emphasis <em>foo<strong>bar</strong>baz</em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo&lt;strong&gt;bar&lt;/strong&gt;baz&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;&lt;em&gt;bar&lt;/em&gt;&lt;em&gt;baz&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 414 (lines 6931-6935) Emphasis and strong emphasis *foo**bar*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo**bar&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;&lt;em&gt;bar&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 415 (lines 6944-6948) Emphasis and strong emphasis <strong><em>foo</strong> bar</em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;&lt;strong&gt;foo&lt;/strong&gt; bar&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<em>foo&lt;/strong&gt; bar</em>&lt;/p&gt;</p>
+<p>Example 416 (lines 6951-6955) Emphasis and strong emphasis <em>foo <strong>bar</strong></em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo &lt;strong&gt;bar&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo <strong>bar&lt;/em&gt;</strong>&lt;/p&gt;</p>
+<p>Example 417 (lines 6958-6962) Emphasis and strong emphasis <em>foo<strong>bar</strong></em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo&lt;strong&gt;bar&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;&lt;em&gt;bar&lt;/em&gt;**&lt;/p&gt;</p>
+<p>Example 418 (lines 6969-6973) Emphasis and strong emphasis foo<strong>*bar</strong>*baz</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo&lt;em&gt;&lt;strong&gt;bar&lt;/strong&gt;&lt;/em&gt;baz&lt;/p&gt; +&lt;p&gt;foo&lt;strong&gt;*bar&lt;/strong&gt;*baz&lt;/p&gt;</p>
+<p>Example 419 (lines 6975-6979) Emphasis and strong emphasis foo<strong>*</strong><em>bar<strong></em></strong>****baz</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo&lt;strong&gt;&lt;strong&gt;&lt;strong&gt;bar&lt;/strong&gt;&lt;/strong&gt;&lt;/strong&gt;<strong><em>baz&lt;/p&gt; +&lt;p&gt;foo&lt;strong&gt;</strong><strong>bar&lt;/strong&gt;</strong><strong></em></strong>baz&lt;/p&gt;</p>
+<p>Example 420 (lines 6984-6988) Emphasis and strong emphasis *foo <strong>bar <em>baz</em> bim</strong> bop*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo &lt;strong&gt;bar &lt;em&gt;baz&lt;/em&gt; bim&lt;/strong&gt; bop&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo <strong>bar <em>baz&lt;/em&gt; bim</strong> bop</em>&lt;/p&gt;</p>
+<p>Example 421 (lines 6991-6995) Emphasis and strong emphasis *foo <a href="/url"><em>bar</em></a>*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo &lt;a href=&quot;/url&quot;&gt;&lt;em&gt;bar&lt;/em&gt;&lt;/a&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo <a href="/url"><em>bar&lt;/em&gt;</a></em>&lt;/p&gt;</p>
+<p>Example 426 (lines 7039-7043) Emphasis and strong emphasis <strong>foo _bar_ baz</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;em&gt;bar&lt;/em&gt; baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;_foo _bar&lt;/em&gt; baz__&lt;/p&gt;</p>
+<p>Example 427 (lines 7046-7050) Emphasis and strong emphasis <strong>foo __bar</strong> baz__</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;strong&gt;bar&lt;/strong&gt; baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo <strong>bar&lt;/strong&gt; baz</strong>&lt;/p&gt;</p>
+<p>Example 428 (lines 7053-7057) Emphasis and strong emphasis <strong>__foo</strong> bar__</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;&lt;strong&gt;foo&lt;/strong&gt; bar&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<strong>foo&lt;/strong&gt; bar</strong>&lt;/p&gt;</p>
+<p>Example 429 (lines 7060-7064) Emphasis and strong emphasis <strong>foo **bar</strong>**</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;strong&gt;bar&lt;/strong&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo <strong>bar&lt;/strong&gt;</strong>&lt;/p&gt;</p>
+<p>Example 430 (lines 7067-7071) Emphasis and strong emphasis <strong>foo <em>bar</em> baz</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;em&gt;bar&lt;/em&gt; baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;*foo *bar&lt;/em&gt; baz**&lt;/p&gt;</p>
+<p>Example 431 (lines 7074-7078) Emphasis and strong emphasis <strong>foo*bar*baz</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo&lt;em&gt;bar&lt;/em&gt;baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;<em>foo&lt;/em&gt;bar&lt;em&gt;baz&lt;/em&gt;</em>&lt;/p&gt;</p>
+<p>Example 432 (lines 7081-7085) Emphasis and strong emphasis <strong><em>foo</em> bar</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;&lt;em&gt;foo&lt;/em&gt; bar&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;<strong>foo&lt;/em&gt; bar</strong>&lt;/p&gt;</p>
+<p>Example 433 (lines 7088-7092) Emphasis and strong emphasis <strong>foo <em>bar</strong></em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;em&gt;bar&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo <em>bar&lt;/strong&gt;</em>&lt;/p&gt;</p>
+<p>Example 434 (lines 7097-7103) Emphasis and strong emphasis <strong>foo *bar **baz</strong> bim* bop**</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;em&gt;bar &lt;strong&gt;baz&lt;/strong&gt; bim&lt;/em&gt; bop&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo <em>bar <strong>baz&lt;/strong&gt; bim</em> bop</strong>&lt;/p&gt;</p>
+<p>Example 435 (lines 7106-7110) Emphasis and strong emphasis <strong>foo <a href="/url"><em>bar</em></a></strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;a href=&quot;/url&quot;&gt;&lt;em&gt;bar&lt;/em&gt;&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;*foo <a href="/url">*bar&lt;/em&gt;</a>**&lt;/p&gt;</p>
+<p>Example 444 (lines 7178-7182) Emphasis and strong emphasis **foo*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;*&lt;em&gt;foo&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;*foo&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 446 (lines 7192-7196) Emphasis and strong emphasis <strong>*foo</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;*&lt;strong&gt;foo&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;*foo&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 447 (lines 7199-7203) Emphasis and strong emphasis ****foo*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<strong>*&lt;em&gt;foo&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;</strong>*foo&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 456 (lines 7265-7269) Emphasis and strong emphasis __foo_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;_&lt;em&gt;foo&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;_foo&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 458 (lines 7283-7287) Emphasis and strong emphasis <strong>_foo</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;_&lt;strong&gt;foo&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;_foo&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 459 (lines 7290-7294) Emphasis and strong emphasis ____foo_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<strong>_&lt;em&gt;foo&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;</strong>_foo&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 466 (lines 7345-7349) Emphasis and strong emphasis <strong>**foo</strong>**</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<strong>foo&lt;/strong&gt;</strong>&lt;/p&gt;</p>
+<p>Example 467 (lines 7352-7356) Emphasis and strong emphasis <strong>__foo</strong>__</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<strong>foo&lt;/strong&gt;</strong>&lt;/p&gt;</p>
+<p>Example 468 (lines 7363-7367) Emphasis and strong emphasis <strong>*</strong><em>foo<strong></em></strong>*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;&lt;strong&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/strong&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<strong>**foo&lt;/strong&gt;</strong>**&lt;/p&gt;</p>
+<p>Example 469 (lines 7372-7376) Emphasis and strong emphasis <strong><em>foo</strong></em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<em>foo&lt;/strong&gt;</em>&lt;/p&gt;</p>
+<p>Example 470 (lines 7379-7383) Emphasis and strong emphasis <strong>_</strong>foo<strong>_</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;&lt;strong&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<strong>_foo&lt;/strong&gt;</strong>_&lt;/p&gt;</p>
+<p>Example 473 (lines 7404-7408) Emphasis and strong emphasis <strong>foo **bar baz</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;**foo &lt;strong&gt;bar baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo **bar baz&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 474 (lines 7411-7415) Emphasis and strong emphasis *foo <em>bar baz</em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;*foo &lt;em&gt;bar baz&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo *bar baz&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 475 (lines 7420-7424) Emphasis and strong emphasis <em><a href="/url">bar</em></a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>&lt;a href=&quot;/url&quot;&gt;bar</em>&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;<a href="/url">bar&lt;/em&gt;</a>&lt;/p&gt;</p>
+<p>Example 476 (lines 7427-7431) Emphasis and strong emphasis _foo <a href="/url">bar_</a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;_foo &lt;a href=&quot;/url&quot;&gt;bar_&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo <a href="/url">bar&lt;/em&gt;</a>&lt;/p&gt;</p>
+<p>Example 477 (lines 7434-7438) Emphasis and strong emphasis <em>&lt;img src=&quot;foo&quot; title=&quot;</em>&quot;/&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>&lt;img src=&quot;foo&quot; title=&quot;</em>&quot;&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;&amp;lt;img src=&amp;quot;foo&amp;quot; title=&amp;quot;&lt;/em&gt;&amp;quot;/&amp;gt;&lt;/p&gt;</p>
+<p>Example 478 (lines 7441-7445) Emphasis and strong emphasis <strong>&lt;a href=&quot;</strong>&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<strong>&lt;a href=&quot;</strong>&quot;&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;&amp;lt;a href=&amp;quot;&lt;/strong&gt;&amp;quot;&amp;gt;&lt;/p&gt;</p>
+<p>Example 479 (lines 7448-7452) Emphasis and strong emphasis <strong>&lt;a href=&quot;</strong>&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<strong>&lt;a href=&quot;</strong>&quot;&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;&amp;lt;a href=&amp;quot;&lt;/strong&gt;&amp;quot;&amp;gt;&lt;/p&gt;</p>
+<p>Example 480 (lines 7455-7459) Emphasis and strong emphasis <em>a <code>*</code></em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;a &lt;code&gt;<em>&lt;/code&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;a <code>&lt;/em&gt;</code></em>&lt;/p&gt;</p>
+<p>Example 481 (lines 7462-7466) Emphasis and strong emphasis _a <code>_</code>_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;a &lt;code&gt;_&lt;/code&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;a <code>&lt;/em&gt;</code>_&lt;/p&gt;</p>
+<p>Example 482 (lines 7469-7473) Emphasis and strong emphasis <strong>a&lt;https://foo.bar/?q=</strong>&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<strong>a&lt;a href=&quot;https://foo.bar/?q=</strong>&quot;&gt;https://foo.bar/?q=**&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;a&amp;lt;https://foo.bar/?q=&lt;/strong&gt;&amp;gt;&lt;/p&gt;</p>
+<p>Example 483 (lines 7476-7480) Emphasis and strong emphasis <strong>a&lt;https://foo.bar/?q=</strong>&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<strong>a&lt;a href=&quot;https://foo.bar/?q=</strong>&quot;&gt;https://foo.bar/?q=__&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;a&amp;lt;https://foo.bar/?q=&lt;/strong&gt;&amp;gt;&lt;/p&gt;</p>
+<p>Example 495 (lines 7652-7656) Links <a href="&amp;lt;foo\&amp;gt;">link</a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="&amp;amp;lt;foo&amp;amp;gt;">link</a>&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;foo%5C&quot;&gt;link&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 509 (lines 7801-7805) Links [link](/url &quot;title&quot;)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url%C2%A0%22title%22&quot;&gt;link&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[link](/url &amp;quot;title&amp;quot;)&lt;/p&gt;</p>
+<p>Example 518 (lines 7895-7899) Links <a href="/uri">link <em>foo <strong>bar</strong> <code>#</code></em></a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;link &lt;em&gt;foo &lt;strong&gt;bar&lt;/strong&gt; &lt;code&gt;#&lt;/code&gt;&lt;/em&gt;&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;link &lt;em&gt;foo **bar&lt;/em&gt;* &lt;code&gt;#&lt;/code&gt;*&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 520 (lines 7911-7915) Links <a href="/uri">foo [bar</a>](/uri)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="/uri">foo &lt;a href=&quot;/uri&quot;&gt;bar&lt;/a&gt;</a>&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;foo &lt;a href=&quot;/uri&quot;&gt;bar&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 521 (lines 7918-7922) Links <a href="/uri">foo <em>[bar [baz</a>](/uri)</em>](/uri)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="/uri">foo &lt;em&gt;[bar &lt;a href=&quot;/uri&quot;&gt;baz&lt;/a&gt;</a>&lt;/em&gt;](/uri)&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;foo &lt;em&gt;&lt;a href=&quot;/uri&quot;&gt;bar &lt;a href=&quot;/uri&quot;&gt;baz&lt;/a&gt;&lt;/a&gt;&lt;/em&gt;&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 522 (lines 7925-7929) Links !<a href="uri1">[[foo</a>](uri2)](uri3)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;<a href="uri2">foo</a>&quot; src=&quot;uri3&quot;&gt;&lt;/p&gt; +&lt;p&gt;&lt;img alt=&quot;<a href="uri1">[foo</a>](uri2)&quot; src=&quot;uri3&quot;&gt;&lt;/p&gt;</p>
+<p>Example 523 (lines 7935-7939) Links <em><a href="/uri">foo</em></a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>&lt;a href=&quot;/uri&quot;&gt;foo</em>&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;<a href="/uri">foo&lt;/em&gt;</a>&lt;/p&gt;</p>
+<p>Example 526 (lines 7962-7966) Links <a href="baz">foo &lt;bar attr=&quot;</a>&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="baz">foo &lt;bar attr=&quot;</a>&quot;&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;baz&quot;&gt;foo &amp;lt;bar attr=&amp;quot;&lt;/a&gt;&amp;quot;&amp;gt;&lt;/p&gt;</p>
+<p>Example 528 (lines 7976-7980) Links <a href="uri">foo&lt;https://example.com/?search=</a>&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="uri">foo&lt;a href=&quot;https://example.com/?search=%5D(uri)&quot;&gt;https://example.com/?search=</a>&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;uri&quot;&gt;foo&amp;lt;https://example.com/?search=&lt;/a&gt;&amp;gt;&lt;/p&gt;</p>
+<p>Example 532 (lines 8049-8055) Links [link <em>foo <strong>bar</strong> <code>#</code></em>][ref]</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;link &lt;em&gt;foo &lt;strong&gt;bar&lt;/strong&gt; &lt;code&gt;#&lt;/code&gt;&lt;/em&gt;&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;link &lt;em&gt;foo **bar&lt;/em&gt;* &lt;code&gt;#&lt;/code&gt;*&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 534 (lines 8069-8075) Links <a href="/uri">foo [bar</a>][ref]</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo &lt;a href=&quot;/uri&quot;&gt;bar&lt;/a&gt;]&lt;a href=&quot;/uri&quot;&gt;ref&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;foo &lt;a href=&quot;/uri&quot;&gt;bar&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 535 (lines 8078-8084) Links [foo <em>bar [baz][ref]</em>][ref]</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo &lt;em&gt;bar &lt;a href=&quot;/uri&quot;&gt;baz&lt;/a&gt;&lt;/em&gt;]&lt;a href=&quot;/uri&quot;&gt;ref&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;foo &lt;em&gt;bar &lt;a href=&quot;/uri&quot;&gt;baz&lt;/a&gt;&lt;/em&gt;&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 536 (lines 8093-8099) Links <em>[foo</em>][ref]</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>&lt;a href=&quot;/uri&quot;&gt;foo</em>&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;[foo&lt;/em&gt;]&lt;a href=&quot;/uri&quot;&gt;ref&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 538 (lines 8114-8120) Links [foo &lt;bar attr=&quot;][ref]&quot;&gt;</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo &lt;bar attr=&quot;][ref]&quot;&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;foo &amp;lt;bar attr=&amp;quot;&lt;/a&gt;&amp;quot;&amp;gt;&lt;/p&gt;</p>
+<p>Example 540 (lines 8132-8138) Links [foo&lt;https://example.com/?search=][ref]&gt;</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo&lt;a href=&quot;https://example.com/?search=%5D%5Bref%5D&quot;&gt;https://example.com/?search=][ref]&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;foo&amp;lt;https://example.com/?search=&lt;/a&gt;&amp;gt;&lt;/p&gt;</p>
+<p>Example 543 (lines 8166-8173) Links [Foo bar]: /url</p>
+<p>[Baz][Foo bar]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot;&gt;Baz&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[Foo bar]: /url&lt;/p&gt;&lt;p&gt;[Baz][Foo bar]&lt;/p&gt;</p>
+<p>Example 548 (lines 8256-8263) Links [foo][ref[]</p>
+<p>[ref[]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo][ref[]&lt;/p&gt;&lt;p&gt;[ref[]: /uri&lt;/p&gt; +&lt;p&gt;[foo][ref[]&lt;/p&gt;</p>
+<p>Example 566 (lines 8468-8474) Links [foo*]: /url</p>
+<p><em>[foo</em>]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>&lt;a href=&quot;/url&quot;&gt;foo</em>&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;[foo&lt;/em&gt;]&lt;/p&gt;</p>
+<p>Example 576 (lines 8582-8586) Images !<a href="/url">foo ![bar</a>](/url2)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;foo bar&quot; src=&quot;/url2&quot;&gt;&lt;/p&gt; +&lt;p&gt;&lt;img alt=&quot;foo !<a href="/url">bar</a>&quot; src=&quot;/url2&quot;&gt;&lt;/p&gt;</p>
+<p>Example 577 (lines 8589-8593) Images !<a href="/url">foo [bar</a>](/url2)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;foo bar&quot; src=&quot;/url2&quot;&gt;&lt;/p&gt; +&lt;p&gt;&lt;img alt=&quot;foo <a href="/url">bar</a>&quot; src=&quot;/url2&quot;&gt;&lt;/p&gt;</p>
+<p>Example 618 (lines 9070-9076) Raw HTML &lt;a foo=&quot;bar&quot; bam = &#x27;baz &lt;em&gt;&quot;&lt;/em&gt;&#x27; _boolean zoop:33=zoop:33 /&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a &#x27;baz &lt;em bam=&quot;&quot; foo=&quot;bar&quot;&gt;&quot;&lt;/em&gt;&#x27; _boolean zoop:33=zoop:33 /&gt;&lt;/p&gt; +&lt;p&gt;&amp;lt;a foo=&amp;quot;bar&amp;quot; bam = &#x27;baz &lt;em&gt;&amp;quot;&lt;/em&gt;&#x27; _boolean zoop:33=zoop:33 /&amp;gt;&lt;/p&gt;</p>
+<p>Example 621 (lines 9099-9103) Raw HTML &lt;a h*#ref=&quot;hi&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a h*#ref=&amp;quot;hi&amp;quot;&amp;gt;&lt;/p&gt; +&lt;a h*#ref=&quot;hi&quot;&gt;</p>
+<p>Example 624 (lines 9132-9136) Raw HTML &lt;a href=&#x27;bar&#x27;title=title&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a href=&#x27;bar&#x27;title=title&amp;gt;&lt;/p&gt; +&lt;a href=&quot;bar&quot; title=&quot;title&quot;&gt;</p>
+<p>Example 626 (lines 9150-9154) Raw HTML &lt;/a href=&quot;foo&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;/a href=&amp;quot;foo&amp;quot;&amp;gt;&lt;/p&gt; +&lt;/a&gt;</p>
+<p>Example 628 (lines 9167-9174) Raw HTML foo &lt;!--&gt; foo --&gt;</p>
+<p>foo &lt;!---&gt; foo --&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;!----&gt; foo --&amp;gt;&lt;/p&gt;&lt;p&gt;foo &lt;!----&gt; foo --&amp;gt;&lt;/p&gt; +&lt;p&gt;foo &lt;!----&gt; foo --&gt;&lt;/p&gt;&lt;p&gt;foo &lt;!----&gt; foo --&gt;&lt;/p&gt;</p>
+<p>Example 634 (lines 9223-9227) Raw HTML &lt;a href=&quot;\&quot;&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a href=&amp;quot;&amp;quot;&amp;quot;&amp;gt;&lt;/p&gt; +&lt;a &quot; href=&quot;\&quot;&gt;</p>
+<p>267 passed, 89 failed, 0 errored, 299 skipped stderr: --- drydock: progress --- cases: pass=267 fail=89 error=0 skip=299 total=655 from=result.stdout --- drydock: end progress --- --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;./commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;Backslash escapes|Entity and numeric character references|Code spans|Emphasis and strong emphasis|Links|Images|Autolinks|Raw HTML|Hard line breaks|Soft line breaks|Textua… (+19254 chars) --- drydock: end values --- Traceback (most recent call last): File &quot;inline-parsing-conformance.py&quot;, line 18, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>PASS: executable-stdin-stdout (FEATURE-Executable.md)</li></ul>
+<p>intent: The root executable accepts Markdown on standard input and emits converted output on standard output. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: executable-errors (FEATURE-Executable.md)</li></ul>
+<p>intent: Invalid UTF-8 input is reported as an unsuccessful process invocation. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: Traceback (most recent call last): File &quot;&lt;frozen runpy&gt;&quot;, line 198, in _run_module_as_main File &quot;&lt;frozen runpy&gt;&quot;, line 88, in _run_code File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/src/commonmark/cli.py&quot;, line 15, in &lt;module&gt; raise SystemExit(main()) ^^^^^^ File &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/src/commonmark/cli.py&quot;, line 10, in main source = sys.stdin.buffer.read().decode(&quot;utf-8&quot;) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br>UnicodeDecodeError: &#x27;utf-8&#x27; codec can&#x27;t decode byte 0xff in position 0: invalid start byte</p>
+<ul><li>FAIL: full-commonmark-suite (VERIFICATION.md)</li></ul>
+<p>intent: The supplied full CommonMark conformance suite completes successfully. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python provisioning: not required return code: 1 stdout: Example 1 (lines 355-360) Tabs foo	baz		bim</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1 @@ -&lt;pre&gt;&lt;code&gt;foo	baz		bim -&lt;/code&gt;&lt;/pre&gt; +&lt;p&gt;foo baz bim&lt;/p&gt;</p>
+<p>Example 2 (lines 362-367) Tabs foo	baz		bim</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1 @@ -&lt;pre&gt;&lt;code&gt;foo	baz		bim -&lt;/code&gt;&lt;/pre&gt; +&lt;p&gt;foo baz bim&lt;/p&gt;</p>
+<p>Example 4 (lines 382-393) Tabs</p>
+<ul><li>foo</li></ul>
+<p>bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;bar&lt;/p&gt;</p>
+<p>Example 5 (lines 395-407) Tabs</p>
+<ul><li>foo</li></ul>
+<p>bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;pre&gt;&lt;code&gt;  bar -&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;bar&lt;/p&gt;</p>
+<p>Example 6 (lines 418-425) Tabs &gt;		foo</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1 @@ -&lt;blockquote&gt;&lt;pre&gt;&lt;code&gt;  foo -&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt; +&lt;blockquote&gt;&lt;p&gt;foo&lt;/p&gt;&lt;/blockquote&gt;</p>
+<p>Example 7 (lines 427-436) Tabs</p>
+<ul><li>foo</li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt;  foo -&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 8 (lines 439-446) Tabs foo bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1,3 +1,2 @@ &lt;pre&gt;&lt;code&gt;foo -bar -&lt;/code&gt;&lt;/pre&gt; +&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;bar&lt;/p&gt;</p>
+<p>Example 9 (lines 448-464) Tabs</p>
+<ul><li>foo<ul><li>bar</li></ul><ul><li>baz</li></ul></li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;foo&lt;ul&gt;&lt;li&gt;bar&lt;ul&gt;&lt;li&gt;baz&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;foo&lt;ul&gt;&lt;li&gt;bar - baz&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 23 (lines 604-610) Backslash escapes [foo]</p>
+<p>[foo]: /bar\* &quot;ti\*tle&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/bar*&quot; title=&quot;ti*tle&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/bar*&quot; title=&quot;ti\*tle&quot;&gt;foo&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 24 (lines 613-620) Backslash escapes <code>foo\+bar foo</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;pre&gt;&lt;code class=&quot;language-foo+bar&quot;&gt;foo +&lt;pre&gt;&lt;code class=&quot;language-foo\+bar&quot;&gt;foo &lt;/code&gt;&lt;/pre&gt;</p>
+<p>Example 34 (lines 751-758) Entity and numeric character references <code>f&amp;ouml;&amp;ouml; foo</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;pre&gt;&lt;code class=&quot;language-föö&quot;&gt;foo +&lt;pre&gt;&lt;code class=&quot;language-f&amp;amp;ouml;&amp;amp;ouml;&quot;&gt;foo &lt;/code&gt;&lt;/pre&gt;</p>
+<p>Example 93 (lines 1527-1537) Setext headings &gt; foo bar ===</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;blockquote&gt;&lt;p&gt;foo bar ===&lt;/p&gt;&lt;/blockquote&gt; +&lt;blockquote&gt;&lt;p&gt;foo bar&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;===&lt;/p&gt;</p>
+<p>Example 168 (lines 2707-2717) HTML blocks &lt;del&gt;</p>
+<p><em>foo</em></p>
+<p>&lt;/del&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;del&gt;&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;&lt;/p&gt;&lt;/del&gt; +&lt;del&gt;&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;&lt;/p&gt;&lt;p&gt;&lt;/del&gt;&lt;/p&gt;</p>
+<p>Example 195 (lines 3210-3218) Link reference definitions [foo]: /url &#x27;the title&#x27;</p>
+<p>[foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot;the title&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo]: /url&lt;br&gt;&#x27;the title&#x27;&lt;/p&gt;&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 196 (lines 3221-3227) Link reference definitions [Foo*bar\]]:my_(url) &#x27;title (with parens)&#x27;</p>
+<p>[Foo*bar\]]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;my_(url)&quot; title=&quot;title (with parens)&quot;&gt;Foo*bar]&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[Foo*bar]]:my_(url) &#x27;title (with parens)&#x27;&lt;/p&gt;&lt;p&gt;[Foo*bar]]&lt;/p&gt;</p>
+<p>Example 197 (lines 3230-3238) Link reference definitions [Foo bar]: &lt;my url&gt; &#x27;title&#x27;</p>
+<p>[Foo bar]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;my%20url&quot; title=&quot;title&quot;&gt;Foo bar&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[Foo bar]: &lt;my url&gt; &#x27;title&#x27;&lt;/p&gt;&lt;p&gt;[Foo bar]&lt;/p&gt;</p>
+<p>Example 198 (lines 3243-3257) Link reference definitions [foo]: /url &#x27; title line1 line2 &#x27;</p>
+<p>[foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1,5 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot; -title -line1 -line2 -&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo]: /url &#x27; title line1 line2 &#x27;&lt;/p&gt;&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 200 (lines 3277-3284) Link reference definitions [foo]: /url</p>
+<p>[foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo]: /url&lt;/p&gt;&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 203 (lines 3312-3319) Link reference definitions [foo]: &lt;bar&gt;(baz)</p>
+<p>[foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo]: &lt;bar&gt;(baz)&lt;/p&gt;&lt;p&gt;[foo]&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;bar%3E(baz&quot;&gt;foo&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 204 (lines 3325-3331) Link reference definitions [foo]: /url\bar\*baz &quot;foo\&quot;bar\baz&quot;</p>
+<p>[foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url%5Cbar*baz&quot; title=&quot;foo&amp;quot;bar\baz&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo]: /url\bar*baz &amp;quot;foo&amp;quot;bar\baz&amp;quot;&lt;/p&gt;&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 210 (lines 3393-3400) Link reference definitions [ foo ]: /url bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;bar&lt;/p&gt; +&lt;p&gt;[ foo ]: /url bar&lt;/p&gt;</p>
+<p>Example 213 (lines 3426-3434) Link reference definitions [foo]: /url &quot;title&quot;</p>
+<p>[foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;pre&gt;&lt;code&gt;[foo]: /url &amp;quot;title&amp;quot; +&lt;pre&gt;&lt;code&gt;[foo]: /url &quot;title&quot; &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 215 (lines 3455-3464) Link reference definitions Foo [bar]: /baz</p>
+<p>[bar]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;Foo [bar]: /baz&lt;/p&gt;&lt;p&gt;[bar]&lt;/p&gt; +&lt;p&gt;Foo&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;/baz&quot;&gt;bar&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 219 (lines 3504-3517) Link reference definitions [foo]: /foo-url &quot;foo&quot; [bar]: /bar-url &quot;bar&quot; [baz]: /baz-url</p>
+<p>[foo], [bar], [baz]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/foo-url&quot; title=&quot;foo&quot;&gt;foo&lt;/a&gt;, &lt;a href=&quot;/bar-url&quot; title=&quot;bar&quot;&gt;bar&lt;/a&gt;, &lt;a href=&quot;/baz-url&quot;&gt;baz&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&amp;quot;bar&amp;quot;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;/foo-url&quot; title=&quot;foo&quot;&gt;foo&lt;/a&gt;, &lt;a href=&quot;/bar-url&quot;&gt;bar&lt;/a&gt;, &lt;a href=&quot;/baz-url&quot;&gt;baz&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 259 (lines 4238-4248) List items</p>
+<ul><li>one</li></ul>
+<p>two</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1 @@ -&lt;ul&gt;&lt;li&gt;one&lt;/li&gt;&lt;/ul&gt;&lt;pre&gt;&lt;code&gt; two -&lt;/code&gt;&lt;/pre&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;one&lt;/p&gt;&lt;p&gt;two&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 264 (lines 4332-4344) List items</p>
+<ul><li>foo</li></ul>
+<p>bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;bar&lt;/p&gt;</p>
+<p>Example 266 (lines 4377-4395) List items</p>
+<ul><li>Foo</li></ul>
+<p>bar</p>
+<p>baz</p>
+<p>--- expected HTML +++ actual HTML @@ -1,5 +1,2 @@ -&lt;ul&gt;&lt;li&gt;&lt;p&gt;Foo&lt;/p&gt;&lt;pre&gt;&lt;code&gt;bar - - -baz -&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;Foo&lt;/p&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;pre&gt;&lt;code&gt;  baz +&lt;/code&gt;&lt;/pre&gt;</p>
+<p>Example 272 (lines 4460-4472) List items</p>
+<ul><li>foo</li></ul>
+<p>bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;pre&gt;&lt;code&gt;bar -&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 273 (lines 4477-4489) List items</p>
+<ol><li>foo</li></ol>
+<p>bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;ol start=&quot;10&quot;&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;pre&gt;&lt;code&gt;bar +&lt;ol start=&quot;10&quot;&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;pre&gt;&lt;code&gt;   bar &lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 275 (lines 4511-4527) List items</p>
+<ol><li>indented code</li></ol>
+<p>paragraph</p>
+<p>more code</p>
+<p>--- expected HTML +++ actual HTML @@ -1,3 +1 @@ -&lt;ol&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt;indented code -&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;paragraph&lt;/p&gt;&lt;pre&gt;&lt;code&gt;more code -&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ol&gt; +&lt;ol&gt;&lt;li&gt;&lt;p&gt;indented code&lt;/p&gt;&lt;p&gt;paragraph&lt;/p&gt;&lt;p&gt;more code&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 276 (lines 4533-4549) List items</p>
+<ol><li>indented code</li></ol>
+<p>paragraph</p>
+<p>more code</p>
+<p>--- expected HTML +++ actual HTML @@ -1,3 +1 @@ -&lt;ol&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt; indented code -&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;paragraph&lt;/p&gt;&lt;pre&gt;&lt;code&gt;more code -&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ol&gt; +&lt;ol&gt;&lt;li&gt;&lt;p&gt;indented code&lt;/p&gt;&lt;p&gt;paragraph&lt;/p&gt;&lt;p&gt;more code&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 278 (lines 4570-4579) List items</p>
+<ul><li>foo</li></ul>
+<p>bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;bar&lt;/p&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 282 (lines 4654-4663) List items -</p>
+<p>foo</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;foo&lt;/p&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 288 (lines 4745-4764) List items</p>
+<ol><li>A paragraph</li></ol>
+<p>with two lines.</p>
+<p>indented code</p>
+<p>&gt; A block quote.</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;indented code +&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt; indented code &lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;&lt;p&gt;A block quote.&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 289 (lines 4769-4788) List items</p>
+<ol><li>A paragraph</li></ol>
+<p>with two lines.</p>
+<p>indented code</p>
+<p>&gt; A block quote.</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;indented code +&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;  indented code &lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;&lt;p&gt;A block quote.&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 290 (lines 4793-4812) List items</p>
+<ol><li>A paragraph</li></ol>
+<p>with two lines.</p>
+<p>indented code</p>
+<p>&gt; A block quote.</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;indented code +&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;   indented code &lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;&lt;p&gt;A block quote.&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 292 (lines 4847-4866) List items</p>
+<ol><li>A paragraph</li></ol>
+<p>with two lines.</p>
+<p>indented code</p>
+<p>&gt; A block quote.</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;indented code +&lt;ol&gt;&lt;li&gt;&lt;p&gt;A paragraph with two lines.&lt;/p&gt;&lt;pre&gt;&lt;code&gt;  indented code &lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;&lt;p&gt;A block quote.&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 296 (lines 4929-4950) List items</p>
+<ul><li>foo<ul><li>bar<ul><li>baz<ul><li>boo</li></ul></li></ul></li></ul></li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;foo&lt;ul&gt;&lt;li&gt;bar&lt;ul&gt;&lt;li&gt;baz&lt;ul&gt;&lt;li&gt;boo&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;foo&lt;ul&gt;&lt;li&gt;bar&lt;/li&gt;&lt;li&gt;baz&lt;ul&gt;&lt;li&gt;boo&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 297 (lines 4955-4967) List items</p>
+<ul><li>foo<ul><li>bar<ul><li>baz<ul><li>boo</li></ul></li></ul></li></ul></li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;li&gt;baz&lt;/li&gt;&lt;li&gt;boo&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;foo&lt;ul&gt;&lt;li&gt;bar&lt;/li&gt;&lt;li&gt;baz&lt;/li&gt;&lt;li&gt;boo&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 299 (lines 4988-4998) List items</p>
+<ol><li>foo<ul><li>bar</li></ul></li></ol>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ol start=&quot;10&quot;&gt;&lt;li&gt;foo&lt;/li&gt;&lt;/ol&gt;&lt;ul&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt; +&lt;ol start=&quot;10&quot;&gt;&lt;li&gt;foo&lt;ul&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 302 (lines 5035-5049) List items</p>
+<ul><li># Foo</li><li>Bar</li></ul>
+<p>--- baz</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;h1&gt;Foo&lt;/h1&gt;&lt;/li&gt;&lt;li&gt;&lt;h2&gt;Bar&lt;/h2&gt;baz&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;h1&gt;Foo&lt;/h1&gt;&lt;/li&gt;&lt;li&gt;Bar&lt;/li&gt;&lt;/ul&gt;&lt;hr&gt;&lt;p&gt;baz&lt;/p&gt;</p>
+<p>Example 308 (lines 5406-5425) Lists</p>
+<ul><li>foo</li></ul>
+<ul><li>bar</li></ul>
+<ul><li>baz</li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;baz&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;ul&gt;&lt;li&gt;baz&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 309 (lines 5427-5449) Lists</p>
+<ul><li>foo<ul><li>bar<ul><li>baz</li></ul></li></ul></li></ul>
+<p>bim</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1,2 @@ -&lt;ul&gt;&lt;li&gt;foo&lt;ul&gt;&lt;li&gt;bar&lt;ul&gt;&lt;li&gt;&lt;p&gt;baz&lt;/p&gt;&lt;p&gt;bim&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;foo&lt;ul&gt;&lt;li&gt;bar&lt;/li&gt;&lt;li&gt;baz&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;pre&gt;&lt;code&gt;  bim +&lt;/code&gt;&lt;/pre&gt;</p>
+<p>Example 312 (lines 5509-5527) Lists</p>
+<ul><li>a<ul><li>b<ul><li>c<ul><li>d</li></ul></li><li>e</li></ul></li><li>f</li></ul></li><li>g</li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;a&lt;/li&gt;&lt;li&gt;b&lt;/li&gt;&lt;li&gt;c&lt;/li&gt;&lt;li&gt;d&lt;/li&gt;&lt;li&gt;e&lt;/li&gt;&lt;li&gt;f&lt;/li&gt;&lt;li&gt;g&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;a&lt;ul&gt;&lt;li&gt;b&lt;/li&gt;&lt;li&gt;c&lt;/li&gt;&lt;li&gt;d&lt;/li&gt;&lt;li&gt;e&lt;/li&gt;&lt;li&gt;f&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;g&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 314 (lines 5554-5568) Lists</p>
+<ul><li>a<ul><li>b<ul><li>c<ul><li>d<ul><li>e</li></ul></li></ul></li></ul></li></ul></li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;a&lt;/li&gt;&lt;li&gt;b&lt;/li&gt;&lt;li&gt;c&lt;/li&gt;&lt;li&gt;d - e&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;a&lt;ul&gt;&lt;li&gt;b&lt;/li&gt;&lt;li&gt;c&lt;/li&gt;&lt;li&gt;d&lt;/li&gt;&lt;li&gt;e&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 315 (lines 5574-5591) Lists</p>
+<ol><li>a</li></ol>
+<ol><li>b</li></ol>
+<ol><li>c</li></ol>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1 @@ -&lt;ol&gt;&lt;li&gt;&lt;p&gt;a&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;b&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;&lt;pre&gt;&lt;code&gt;3. c -&lt;/code&gt;&lt;/pre&gt; +&lt;ol&gt;&lt;li&gt;&lt;p&gt;a&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;b&lt;/p&gt;&lt;ol start=&quot;3&quot;&gt;&lt;li&gt;c&lt;/li&gt;&lt;/ol&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 320 (lines 5686-5705) Lists</p>
+<ul><li>a</li><li><code>`</code></li></ul>
+<p>b</p>
+<p><code>`</code></p>
+<ul><li>c</li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1,4 +1,3 @@ &lt;ul&gt;&lt;li&gt;a&lt;/li&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt;b - - -&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;li&gt;c&lt;/li&gt;&lt;/ul&gt; +&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ul&gt;&lt;pre&gt;&lt;code&gt;- c +&lt;/code&gt;&lt;/pre&gt;</p>
+<p>Example 321 (lines 5712-5730) Lists</p>
+<ul><li>a<ul><li>b</li></ul></li></ul>
+<p>c</p>
+<ul><li>d</li></ul>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;ul&gt;&lt;li&gt;a&lt;ul&gt;&lt;li&gt;&lt;p&gt;b&lt;/p&gt;&lt;p&gt;c&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;d&lt;/li&gt;&lt;/ul&gt; +&lt;ul&gt;&lt;li&gt;&lt;p&gt;a&lt;/p&gt;&lt;ul&gt;&lt;li&gt;b&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;c&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;d&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</p>
+<p>Example 326 (lines 5805-5819) Lists</p>
+<ol><li><code>`</code></li></ol>
+<p>foo <code>`</code></p>
+<p>bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;ol&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt;foo +&lt;ol&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt; foo &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;</p>
+<p>Example 343 (lines 6041-6045) Code spans *foo<code>*</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>foo&lt;code&gt;</em>&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo<code>&lt;/em&gt;</code>&lt;/p&gt;</p>
+<p>Example 345 (lines 6060-6064) Code spans <code>&lt;a href=&quot;</code>&quot;&gt;`</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;&amp;lt;a href=&amp;quot;&lt;/code&gt;&amp;quot;&amp;gt;<code>&lt;/p&gt; +&lt;p&gt;&lt;code&gt;&amp;lt;a href=&quot;&lt;/code&gt;&amp;quot;&amp;gt;</code>&lt;/p&gt;</p>
+<p>Example 349 (lines 6097-6101) Code spans <code>`foo</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<code>`foo</code>&lt;/p&gt; +&lt;p&gt;`&lt;code&gt;foo&lt;/code&gt;&lt;/p&gt;</p>
+<p>Example 371 (lines 6521-6525) Emphasis and strong emphasis *(<em>foo</em>)*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;(&lt;em&gt;foo&lt;/em&gt;)&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;(<em>foo&lt;/em&gt;)</em>&lt;/p&gt;</p>
+<p>Example 375 (lines 6562-6566) Emphasis and strong emphasis _(_foo_)_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;(&lt;em&gt;foo&lt;/em&gt;)&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;(_foo&lt;/em&gt;)_&lt;/p&gt;</p>
+<p>Example 382 (lines 6626-6630) Emphasis and strong emphasis a<strong>&quot;foo&quot;</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;a<strong>&amp;quot;foo&amp;quot;</strong>&lt;/p&gt; +&lt;p&gt;a*&lt;em&gt;&amp;quot;foo&amp;quot;&lt;/em&gt;*&lt;/p&gt;</p>
+<p>Example 387 (lines 6674-6678) Emphasis and strong emphasis a<strong>&quot;foo&quot;</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;a<strong>&amp;quot;foo&amp;quot;</strong>&lt;/p&gt; +&lt;p&gt;a_&lt;em&gt;&amp;quot;foo&amp;quot;&lt;/em&gt;_&lt;/p&gt;</p>
+<p>Example 388 (lines 6683-6687) Emphasis and strong emphasis foo<strong>bar</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo<strong>bar</strong>&lt;/p&gt; +&lt;p&gt;foo_&lt;em&gt;bar&lt;/em&gt;_&lt;/p&gt;</p>
+<p>Example 390 (lines 6697-6701) Emphasis and strong emphasis пристаням<strong>стремятся</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;пристаням<strong>стремятся</strong>&lt;/p&gt; +&lt;p&gt;пристаням_&lt;em&gt;стремятся&lt;/em&gt;_&lt;/p&gt;</p>
+<p>Example 391 (lines 6704-6708) Emphasis and strong emphasis <strong>foo, __bar</strong>, baz__</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo, &lt;strong&gt;bar&lt;/strong&gt;, baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo, <strong>bar&lt;/strong&gt;, baz</strong>&lt;/p&gt;</p>
+<p>Example 395 (lines 6751-6755) Emphasis and strong emphasis <em>(<strong>foo</strong>)</em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;(&lt;strong&gt;foo&lt;/strong&gt;)&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;(**foo&lt;/em&gt;&lt;em&gt;)&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 396 (lines 6758-6764) Emphasis and strong emphasis <strong>Gomphocarpus (<em>Gomphocarpus physocarpus</em>, syn. <em>Asclepias physocarpa</em>)</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;Gomphocarpus (&lt;em&gt;Gomphocarpus physocarpus&lt;/em&gt;, syn. &lt;em&gt;Asclepias physocarpa&lt;/em&gt;)&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;*Gomphocarpus (*Gomphocarpus physocarpus&lt;/em&gt;, syn. &lt;em&gt;Asclepias physocarpa&lt;/em&gt;)**&lt;/p&gt;</p>
+<p>Example 397 (lines 6767-6771) Emphasis and strong emphasis <strong>foo &quot;<em>bar</em>&quot; foo</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &amp;quot;&lt;em&gt;bar&lt;/em&gt;&amp;quot; foo&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;*foo &amp;quot;*bar&lt;/em&gt;&amp;quot; foo**&lt;/p&gt;</p>
+<p>Example 401 (lines 6808-6812) Emphasis and strong emphasis _(<strong>foo</strong>)_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;(&lt;strong&gt;foo&lt;/strong&gt;)&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;(__foo&lt;/em&gt;&lt;em&gt;)&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 408 (lines 6873-6877) Emphasis and strong emphasis _foo <strong>bar</strong> baz_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo &lt;strong&gt;bar&lt;/strong&gt; baz&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo __bar&lt;/em&gt;_ baz_&lt;/p&gt;</p>
+<p>Example 409 (lines 6880-6884) Emphasis and strong emphasis _foo _bar_ baz_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo &lt;em&gt;bar&lt;/em&gt; baz&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo _bar&lt;/em&gt; baz_&lt;/p&gt;</p>
+<p>Example 410 (lines 6887-6891) Emphasis and strong emphasis __foo_ bar_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;&lt;em&gt;foo&lt;/em&gt; bar&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;_foo&lt;/em&gt; bar_&lt;/p&gt;</p>
+<p>Example 411 (lines 6894-6898) Emphasis and strong emphasis *foo *bar**</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo &lt;em&gt;bar&lt;/em&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo <em>bar&lt;/em&gt;</em>&lt;/p&gt;</p>
+<p>Example 412 (lines 6901-6905) Emphasis and strong emphasis <em>foo <strong>bar</strong> baz</em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo &lt;strong&gt;bar&lt;/strong&gt; baz&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo **bar&lt;/em&gt;* baz*&lt;/p&gt;</p>
+<p>Example 413 (lines 6907-6911) Emphasis and strong emphasis <em>foo<strong>bar</strong>baz</em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo&lt;strong&gt;bar&lt;/strong&gt;baz&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;&lt;em&gt;bar&lt;/em&gt;&lt;em&gt;baz&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 414 (lines 6931-6935) Emphasis and strong emphasis *foo**bar*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo**bar&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;&lt;em&gt;bar&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 415 (lines 6944-6948) Emphasis and strong emphasis <strong><em>foo</strong> bar</em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;&lt;strong&gt;foo&lt;/strong&gt; bar&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<em>foo&lt;/strong&gt; bar</em>&lt;/p&gt;</p>
+<p>Example 416 (lines 6951-6955) Emphasis and strong emphasis <em>foo <strong>bar</strong></em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo &lt;strong&gt;bar&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo <strong>bar&lt;/em&gt;</strong>&lt;/p&gt;</p>
+<p>Example 417 (lines 6958-6962) Emphasis and strong emphasis <em>foo<strong>bar</strong></em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo&lt;strong&gt;bar&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;&lt;em&gt;bar&lt;/em&gt;**&lt;/p&gt;</p>
+<p>Example 418 (lines 6969-6973) Emphasis and strong emphasis foo<strong>*bar</strong>*baz</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo&lt;em&gt;&lt;strong&gt;bar&lt;/strong&gt;&lt;/em&gt;baz&lt;/p&gt; +&lt;p&gt;foo&lt;strong&gt;*bar&lt;/strong&gt;*baz&lt;/p&gt;</p>
+<p>Example 419 (lines 6975-6979) Emphasis and strong emphasis foo<strong>*</strong><em>bar<strong></em></strong>****baz</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo&lt;strong&gt;&lt;strong&gt;&lt;strong&gt;bar&lt;/strong&gt;&lt;/strong&gt;&lt;/strong&gt;<strong><em>baz&lt;/p&gt; +&lt;p&gt;foo&lt;strong&gt;</strong><strong>bar&lt;/strong&gt;</strong><strong></em></strong>baz&lt;/p&gt;</p>
+<p>Example 420 (lines 6984-6988) Emphasis and strong emphasis *foo <strong>bar <em>baz</em> bim</strong> bop*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo &lt;strong&gt;bar &lt;em&gt;baz&lt;/em&gt; bim&lt;/strong&gt; bop&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo <strong>bar <em>baz&lt;/em&gt; bim</strong> bop</em>&lt;/p&gt;</p>
+<p>Example 421 (lines 6991-6995) Emphasis and strong emphasis *foo <a href="/url"><em>bar</em></a>*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;foo &lt;a href=&quot;/url&quot;&gt;&lt;em&gt;bar&lt;/em&gt;&lt;/a&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo <a href="/url"><em>bar&lt;/em&gt;</a></em>&lt;/p&gt;</p>
+<p>Example 426 (lines 7039-7043) Emphasis and strong emphasis <strong>foo _bar_ baz</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;em&gt;bar&lt;/em&gt; baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;_foo _bar&lt;/em&gt; baz__&lt;/p&gt;</p>
+<p>Example 427 (lines 7046-7050) Emphasis and strong emphasis <strong>foo __bar</strong> baz__</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;strong&gt;bar&lt;/strong&gt; baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo <strong>bar&lt;/strong&gt; baz</strong>&lt;/p&gt;</p>
+<p>Example 428 (lines 7053-7057) Emphasis and strong emphasis <strong>__foo</strong> bar__</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;&lt;strong&gt;foo&lt;/strong&gt; bar&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<strong>foo&lt;/strong&gt; bar</strong>&lt;/p&gt;</p>
+<p>Example 429 (lines 7060-7064) Emphasis and strong emphasis <strong>foo **bar</strong>**</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;strong&gt;bar&lt;/strong&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo <strong>bar&lt;/strong&gt;</strong>&lt;/p&gt;</p>
+<p>Example 430 (lines 7067-7071) Emphasis and strong emphasis <strong>foo <em>bar</em> baz</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;em&gt;bar&lt;/em&gt; baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;*foo *bar&lt;/em&gt; baz**&lt;/p&gt;</p>
+<p>Example 431 (lines 7074-7078) Emphasis and strong emphasis <strong>foo*bar*baz</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo&lt;em&gt;bar&lt;/em&gt;baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;<em>foo&lt;/em&gt;bar&lt;em&gt;baz&lt;/em&gt;</em>&lt;/p&gt;</p>
+<p>Example 432 (lines 7081-7085) Emphasis and strong emphasis <strong><em>foo</em> bar</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;&lt;em&gt;foo&lt;/em&gt; bar&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;<strong>foo&lt;/em&gt; bar</strong>&lt;/p&gt;</p>
+<p>Example 433 (lines 7088-7092) Emphasis and strong emphasis <strong>foo <em>bar</strong></em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;em&gt;bar&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo <em>bar&lt;/strong&gt;</em>&lt;/p&gt;</p>
+<p>Example 434 (lines 7097-7103) Emphasis and strong emphasis <strong>foo *bar **baz</strong> bim* bop**</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;em&gt;bar &lt;strong&gt;baz&lt;/strong&gt; bim&lt;/em&gt; bop&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo <em>bar <strong>baz&lt;/strong&gt; bim</em> bop</strong>&lt;/p&gt;</p>
+<p>Example 435 (lines 7106-7110) Emphasis and strong emphasis <strong>foo <a href="/url"><em>bar</em></a></strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;foo &lt;a href=&quot;/url&quot;&gt;&lt;em&gt;bar&lt;/em&gt;&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;*foo <a href="/url">*bar&lt;/em&gt;</a>**&lt;/p&gt;</p>
+<p>Example 444 (lines 7178-7182) Emphasis and strong emphasis **foo*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;*&lt;em&gt;foo&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;*foo&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 446 (lines 7192-7196) Emphasis and strong emphasis <strong>*foo</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;*&lt;strong&gt;foo&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;*foo&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 447 (lines 7199-7203) Emphasis and strong emphasis ****foo*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<strong>*&lt;em&gt;foo&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;</strong>*foo&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 456 (lines 7265-7269) Emphasis and strong emphasis __foo_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;_&lt;em&gt;foo&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;_foo&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 458 (lines 7283-7287) Emphasis and strong emphasis <strong>_foo</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;_&lt;strong&gt;foo&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;_foo&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 459 (lines 7290-7294) Emphasis and strong emphasis ____foo_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<strong>_&lt;em&gt;foo&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;</strong>_foo&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 466 (lines 7345-7349) Emphasis and strong emphasis <strong>**foo</strong>**</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<strong>foo&lt;/strong&gt;</strong>&lt;/p&gt;</p>
+<p>Example 467 (lines 7352-7356) Emphasis and strong emphasis <strong>__foo</strong>__</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<strong>foo&lt;/strong&gt;</strong>&lt;/p&gt;</p>
+<p>Example 468 (lines 7363-7367) Emphasis and strong emphasis <strong>*</strong><em>foo<strong></em></strong>*</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;strong&gt;&lt;strong&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/strong&gt;&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<strong>**foo&lt;/strong&gt;</strong>**&lt;/p&gt;</p>
+<p>Example 469 (lines 7372-7376) Emphasis and strong emphasis <strong><em>foo</strong></em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<em>foo&lt;/strong&gt;</em>&lt;/p&gt;</p>
+<p>Example 470 (lines 7379-7383) Emphasis and strong emphasis <strong>_</strong>foo<strong>_</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;&lt;strong&gt;&lt;strong&gt;foo&lt;/strong&gt;&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;<strong>_foo&lt;/strong&gt;</strong>_&lt;/p&gt;</p>
+<p>Example 473 (lines 7404-7408) Emphasis and strong emphasis <strong>foo **bar baz</strong></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;**foo &lt;strong&gt;bar baz&lt;/strong&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;foo **bar baz&lt;/strong&gt;&lt;/p&gt;</p>
+<p>Example 474 (lines 7411-7415) Emphasis and strong emphasis *foo <em>bar baz</em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;*foo &lt;em&gt;bar baz&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo *bar baz&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 475 (lines 7420-7424) Emphasis and strong emphasis <em><a href="/url">bar</em></a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>&lt;a href=&quot;/url&quot;&gt;bar</em>&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;<a href="/url">bar&lt;/em&gt;</a>&lt;/p&gt;</p>
+<p>Example 476 (lines 7427-7431) Emphasis and strong emphasis _foo <a href="/url">bar_</a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;_foo &lt;a href=&quot;/url&quot;&gt;bar_&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;foo <a href="/url">bar&lt;/em&gt;</a>&lt;/p&gt;</p>
+<p>Example 477 (lines 7434-7438) Emphasis and strong emphasis <em>&lt;img src=&quot;foo&quot; title=&quot;</em>&quot;/&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>&lt;img src=&quot;foo&quot; title=&quot;</em>&quot;&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;&amp;lt;img src=&amp;quot;foo&amp;quot; title=&amp;quot;&lt;/em&gt;&amp;quot;/&amp;gt;&lt;/p&gt;</p>
+<p>Example 478 (lines 7441-7445) Emphasis and strong emphasis <strong>&lt;a href=&quot;</strong>&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<strong>&lt;a href=&quot;</strong>&quot;&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;&amp;lt;a href=&amp;quot;&lt;/strong&gt;&amp;quot;&amp;gt;&lt;/p&gt;</p>
+<p>Example 479 (lines 7448-7452) Emphasis and strong emphasis <strong>&lt;a href=&quot;</strong>&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<strong>&lt;a href=&quot;</strong>&quot;&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;&amp;lt;a href=&amp;quot;&lt;/strong&gt;&amp;quot;&amp;gt;&lt;/p&gt;</p>
+<p>Example 480 (lines 7455-7459) Emphasis and strong emphasis <em>a <code>*</code></em></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;a &lt;code&gt;<em>&lt;/code&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;a <code>&lt;/em&gt;</code></em>&lt;/p&gt;</p>
+<p>Example 481 (lines 7462-7466) Emphasis and strong emphasis _a <code>_</code>_</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;em&gt;a &lt;code&gt;_&lt;/code&gt;&lt;/em&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;a <code>&lt;/em&gt;</code>_&lt;/p&gt;</p>
+<p>Example 482 (lines 7469-7473) Emphasis and strong emphasis <strong>a&lt;https://foo.bar/?q=</strong>&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<strong>a&lt;a href=&quot;https://foo.bar/?q=</strong>&quot;&gt;https://foo.bar/?q=**&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;a&amp;lt;https://foo.bar/?q=&lt;/strong&gt;&amp;gt;&lt;/p&gt;</p>
+<p>Example 483 (lines 7476-7480) Emphasis and strong emphasis <strong>a&lt;https://foo.bar/?q=</strong>&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<strong>a&lt;a href=&quot;https://foo.bar/?q=</strong>&quot;&gt;https://foo.bar/?q=__&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;strong&gt;a&amp;lt;https://foo.bar/?q=&lt;/strong&gt;&amp;gt;&lt;/p&gt;</p>
+<p>Example 495 (lines 7652-7656) Links <a href="&amp;lt;foo\&amp;gt;">link</a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="&amp;amp;lt;foo&amp;amp;gt;">link</a>&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;foo%5C&quot;&gt;link&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 509 (lines 7801-7805) Links [link](/url &quot;title&quot;)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url%C2%A0%22title%22&quot;&gt;link&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[link](/url &amp;quot;title&amp;quot;)&lt;/p&gt;</p>
+<p>Example 518 (lines 7895-7899) Links <a href="/uri">link <em>foo <strong>bar</strong> <code>#</code></em></a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;link &lt;em&gt;foo &lt;strong&gt;bar&lt;/strong&gt; &lt;code&gt;#&lt;/code&gt;&lt;/em&gt;&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;link &lt;em&gt;foo **bar&lt;/em&gt;* &lt;code&gt;#&lt;/code&gt;*&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 520 (lines 7911-7915) Links <a href="/uri">foo [bar</a>](/uri)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="/uri">foo &lt;a href=&quot;/uri&quot;&gt;bar&lt;/a&gt;</a>&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;foo &lt;a href=&quot;/uri&quot;&gt;bar&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 521 (lines 7918-7922) Links <a href="/uri">foo <em>[bar [baz</a>](/uri)</em>](/uri)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="/uri">foo &lt;em&gt;[bar &lt;a href=&quot;/uri&quot;&gt;baz&lt;/a&gt;</a>&lt;/em&gt;](/uri)&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;foo &lt;em&gt;&lt;a href=&quot;/uri&quot;&gt;bar &lt;a href=&quot;/uri&quot;&gt;baz&lt;/a&gt;&lt;/a&gt;&lt;/em&gt;&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 522 (lines 7925-7929) Links !<a href="uri1">[[foo</a>](uri2)](uri3)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;<a href="uri2">foo</a>&quot; src=&quot;uri3&quot;&gt;&lt;/p&gt; +&lt;p&gt;&lt;img alt=&quot;<a href="uri1">[foo</a>](uri2)&quot; src=&quot;uri3&quot;&gt;&lt;/p&gt;</p>
+<p>Example 523 (lines 7935-7939) Links <em><a href="/uri">foo</em></a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>&lt;a href=&quot;/uri&quot;&gt;foo</em>&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;<a href="/uri">foo&lt;/em&gt;</a>&lt;/p&gt;</p>
+<p>Example 526 (lines 7962-7966) Links <a href="baz">foo &lt;bar attr=&quot;</a>&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="baz">foo &lt;bar attr=&quot;</a>&quot;&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;baz&quot;&gt;foo &amp;lt;bar attr=&amp;quot;&lt;/a&gt;&amp;quot;&amp;gt;&lt;/p&gt;</p>
+<p>Example 528 (lines 7976-7980) Links <a href="uri">foo&lt;https://example.com/?search=</a>&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="uri">foo&lt;a href=&quot;https://example.com/?search=%5D(uri)&quot;&gt;https://example.com/?search=</a>&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;uri&quot;&gt;foo&amp;lt;https://example.com/?search=&lt;/a&gt;&amp;gt;&lt;/p&gt;</p>
+<p>Example 532 (lines 8049-8055) Links [link <em>foo <strong>bar</strong> <code>#</code></em>][ref]</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;link &lt;em&gt;foo &lt;strong&gt;bar&lt;/strong&gt; &lt;code&gt;#&lt;/code&gt;&lt;/em&gt;&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;link &lt;em&gt;foo **bar&lt;/em&gt;* &lt;code&gt;#&lt;/code&gt;*&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 534 (lines 8069-8075) Links <a href="/uri">foo [bar</a>][ref]</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo &lt;a href=&quot;/uri&quot;&gt;bar&lt;/a&gt;]&lt;a href=&quot;/uri&quot;&gt;ref&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;foo &lt;a href=&quot;/uri&quot;&gt;bar&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 535 (lines 8078-8084) Links [foo <em>bar [baz][ref]</em>][ref]</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo &lt;em&gt;bar &lt;a href=&quot;/uri&quot;&gt;baz&lt;/a&gt;&lt;/em&gt;]&lt;a href=&quot;/uri&quot;&gt;ref&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;foo &lt;em&gt;bar &lt;a href=&quot;/uri&quot;&gt;baz&lt;/a&gt;&lt;/em&gt;&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 536 (lines 8093-8099) Links <em>[foo</em>][ref]</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>&lt;a href=&quot;/uri&quot;&gt;foo</em>&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;[foo&lt;/em&gt;]&lt;a href=&quot;/uri&quot;&gt;ref&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 538 (lines 8114-8120) Links [foo &lt;bar attr=&quot;][ref]&quot;&gt;</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo &lt;bar attr=&quot;][ref]&quot;&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;foo &amp;lt;bar attr=&amp;quot;&lt;/a&gt;&amp;quot;&amp;gt;&lt;/p&gt;</p>
+<p>Example 540 (lines 8132-8138) Links [foo&lt;https://example.com/?search=][ref]&gt;</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo&lt;a href=&quot;https://example.com/?search=%5D%5Bref%5D&quot;&gt;https://example.com/?search=][ref]&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;foo&amp;lt;https://example.com/?search=&lt;/a&gt;&amp;gt;&lt;/p&gt;</p>
+<p>Example 543 (lines 8166-8173) Links [Foo bar]: /url</p>
+<p>[Baz][Foo bar]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot;&gt;Baz&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[Foo bar]: /url&lt;/p&gt;&lt;p&gt;[Baz][Foo bar]&lt;/p&gt;</p>
+<p>Example 548 (lines 8256-8263) Links [foo][ref[]</p>
+<p>[ref[]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo][ref[]&lt;/p&gt;&lt;p&gt;[ref[]: /uri&lt;/p&gt; +&lt;p&gt;[foo][ref[]&lt;/p&gt;</p>
+<p>Example 566 (lines 8468-8474) Links [foo*]: /url</p>
+<p><em>[foo</em>]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>&lt;a href=&quot;/url&quot;&gt;foo</em>&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;[foo&lt;/em&gt;]&lt;/p&gt;</p>
+<p>Example 576 (lines 8582-8586) Images !<a href="/url">foo ![bar</a>](/url2)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;foo bar&quot; src=&quot;/url2&quot;&gt;&lt;/p&gt; +&lt;p&gt;&lt;img alt=&quot;foo !<a href="/url">bar</a>&quot; src=&quot;/url2&quot;&gt;&lt;/p&gt;</p>
+<p>Example 577 (lines 8589-8593) Images !<a href="/url">foo [bar</a>](/url2)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;foo bar&quot; src=&quot;/url2&quot;&gt;&lt;/p&gt; +&lt;p&gt;&lt;img alt=&quot;foo <a href="/url">bar</a>&quot; src=&quot;/url2&quot;&gt;&lt;/p&gt;</p>
+<p>Example 618 (lines 9070-9076) Raw HTML &lt;a foo=&quot;bar&quot; bam = &#x27;baz &lt;em&gt;&quot;&lt;/em&gt;&#x27; _boolean zoop:33=zoop:33 /&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a &#x27;baz &lt;em bam=&quot;&quot; foo=&quot;bar&quot;&gt;&quot;&lt;/em&gt;&#x27; _boolean zoop:33=zoop:33 /&gt;&lt;/p&gt; +&lt;p&gt;&amp;lt;a foo=&amp;quot;bar&amp;quot; bam = &#x27;baz &lt;em&gt;&amp;quot;&lt;/em&gt;&#x27; _boolean zoop:33=zoop:33 /&amp;gt;&lt;/p&gt;</p>
+<p>Example 621 (lines 9099-9103) Raw HTML &lt;a h*#ref=&quot;hi&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a h*#ref=&amp;quot;hi&amp;quot;&amp;gt;&lt;/p&gt; +&lt;a h*#ref=&quot;hi&quot;&gt;</p>
+<p>Example 624 (lines 9132-9136) Raw HTML &lt;a href=&#x27;bar&#x27;title=title&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a href=&#x27;bar&#x27;title=title&amp;gt;&lt;/p&gt; +&lt;a href=&quot;bar&quot; title=&quot;title&quot;&gt;</p>
+<p>Example 626 (lines 9150-9154) Raw HTML &lt;/a href=&quot;foo&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;/a href=&amp;quot;foo&amp;quot;&amp;gt;&lt;/p&gt; +&lt;/a&gt;</p>
+<p>Example 628 (lines 9167-9174) Raw HTML foo &lt;!--&gt; foo --&gt;</p>
+<p>foo &lt;!---&gt; foo --&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;!----&gt; foo --&amp;gt;&lt;/p&gt;&lt;p&gt;foo &lt;!----&gt; foo --&amp;gt;&lt;/p&gt; +&lt;p&gt;foo &lt;!----&gt; foo --&gt;&lt;/p&gt;&lt;p&gt;foo &lt;!----&gt; foo --&gt;&lt;/p&gt;</p>
+<p>Example 634 (lines 9223-9227) Raw HTML &lt;a href=&quot;\&quot;&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a href=&amp;quot;&amp;quot;&amp;quot;&amp;gt;&lt;/p&gt; +&lt;a &quot; href=&quot;\&quot;&gt;</p>
+<p>520 passed, 135 failed, 0 errored, 0 skipped stderr: --- drydock: progress --- cases: pass=520 fail=135 error=0 skip=0 total=655 from=result.stdout --- drydock: end progress --- --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;sh&#x27;, &#x27;sources/full_test.sh&#x27;], returncode=1, stdout=&#x27;Example 1 (lines 355-360) Tabs\n\tfoo\tbaz\t\tbim\n\n--- expected HTML\n+++ actual HTML\n@@ -1,2 +1 @@\n-&lt;pre&gt;&lt;code&gt;foo\tbaz\t\tbim\n-&lt;/code&gt;&lt;/pre&gt;\n+&lt;p&gt;foo baz bim&lt;/p&gt;\n\nExample 2 (lines 362-367) Tabs\n  \tfoo\tbaz\t\tbim\n\n--- expected HTML\n+++ actual HTML\n@@ -1,2 +1 @@\n-&lt;pre&gt;&lt;code&gt;foo\tbaz\t\tbim\n-&lt;/code&gt;&lt;/pre&gt;\n+… (+30702 chars) --- drydock: end values --- Traceback (most recent call last): File &quot;full-commonmark-suite.py&quot;, line 10, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
 <h2>Repair attempts</h2>
-<ul><li>attempt 0 (initial build): failed; 2/5 checks; 865/1965 cases model=gpt-6-luna; execution 20261025.023605.681Z-de5167ab; reason: programmatic acceptance failed: block-parsing-conformance, inline-parsing-conformance, full-commonmark-suite</li><li>attempt 1 (repair 1): failed; 2/5 checks; 869/1965 cases model=gpt-6-luna; execution 20261025.025556.110Z-3eb535c8; reason: programmatic acceptance failed: block-parsing-conformance, inline-parsing-conformance, full-commonmark-suite</li><li>attempt 2 (repair 2): failed; 2/5 checks; 903/1965 cases model=gpt-6-luna; execution 20261025.030521.327Z-23a2bc97; reason: programmatic acceptance failed: block-parsing-conformance, inline-parsing-conformance, full-commonmark-suite</li><li>attempt 3 (repair 3): failed; 2/5 checks; 915/1965 cases model=gpt-6-luna; execution 20261025.032110.944Z-ac3bab81; reason: programmatic acceptance failed: block-parsing-conformance, inline-parsing-conformance, full-commonmark-suite</li><li>attempt 4 (repair 4): failed; 2/5 checks; 959/1965 cases model=gpt-6-luna; execution 20261025.033050.523Z-fd9650fa; reason: programmatic acceptance failed: block-parsing-conformance, inline-parsing-conformance, full-commonmark-suite</li><li>attempt 5 (repair 5): failed; checks not executed (5 declared) model=gpt-6-luna; execution 20261025.034243.229Z-7d797458; reason: target verification interrupted by build agent</li><li>attempt 6 (repair 6): failed; 2/5 checks; 987/1965 cases model=gpt-6-luna; execution 20261025.034642.361Z-1f8a7ec9; reason: programmatic acceptance failed: block-parsing-conformance, inline-parsing-conformance, full-commonmark-suite</li></ul>
+<ul><li>attempt 0 (initial build): failed; 2/5 checks; 991/1965 cases model=gpt-6-luna; execution 20261025.160905.231Z-b2bc58e5; reason: programmatic acceptance failed: block-parsing-conformance, inline-parsing-conformance, full-commonmark-suite</li><li>attempt 1 (repair 1): failed; 2/5 checks; 991/1965 cases model=gpt-6-luna; execution 20261025.161719.114Z-3fae6f5b; reason: programmatic acceptance failed: block-parsing-conformance, inline-parsing-conformance, full-commonmark-suite</li><li>attempt 2 (repair 2): failed; checks not executed (5 declared) model=gpt-6-luna; execution 20261025.162829.901Z-c46c1fc6; reason: target verification interrupted by build agent</li><li>attempt 3 (repair 3): failed; 2/5 checks; 1035/1965 cases model=gpt-6-luna; execution 20261025.163226.481Z-b39804d2; reason: programmatic acceptance failed: block-parsing-conformance, inline-parsing-conformance, full-commonmark-suite</li><li>attempt 4 (repair 4): failed; 2/5 checks; 1035/1965 cases model=gpt-6-luna; execution 20261025.164854.657Z-a69502d1; stopped: deterministic acceptance score did not improve on 2 consecutive calls; reason: programmatic acceptance failed: block-parsing-conformance, inline-parsing-conformance, full-commonmark-suite</li></ul>
 <h2>Agent self-report (advisory)</h2>
 <p>The build agent declared a failure. This report is advisory; Drydock&#x27;s execution and deterministic checks determine the block&#x27;s outcome.</p>
-<ul><li>summary: CommonMark conformance checks remain failing</li><li>detail:</li></ul>
-<p>The declared block, inline, and full suite checks completed but reported failures. Fix the remaining general parsing behavior, then rerun all three checks. The pytest command also failed because pytest is unavailable in the available Python environments.</p>
+<ul><li>summary: CommonMark conformance checks still fail</li><li>detail:</li></ul>
+<p>The declared block, inline, and full suites completed but reported failures. Remaining failures span list continuation and indentation, reference definitions, emphasis, links, code spans, and raw HTML. Continue general parser and renderer repairs before rerunning the build checks.</p>
 <h2>Failure</h2>
 <ul><li>summary: programmatic acceptance failed: block-parsing-conformance, inline-parsing-conformance, full-commonmark-suite</li><li>detail:</li></ul>
 <p>Block &quot;Block 2 · Service&quot; [block-2] failed its acceptance criteria. Story &quot;Parse CommonMark block structure and collect link reference definitions.&quot; [block_parsing] does not meet its own acceptance criteria:</p>
 <ul><li>AC block-parsing-conformance — All supplied cases in the block parsing sections pass (the complete block capability slice).</li></ul>
-<p>assertion: assert result.returncode == 0 → AssertionError cases: pass=232 fail=54 error=0 skip=369 total=655 from=result.stdout raised at: block-parsing-conformance.py:18 process exit code: 1 values at failure: result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;./commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;Thematic breaks|ATX headings|Setext headings|Indented code blocks|Fenced code blocks|HTML blocks|Link reference definitions|Paragraphs|Blank lines|Block quotes|List items… (+14443 chars) observed output: Example 326 (lines 5805-5819) Lists</p>
+<p>assertion: assert result.returncode == 0 → AssertionError cases: pass=248 fail=38 error=0 skip=369 total=655 from=result.stdout raised at: block-parsing-conformance.py:18 process exit code: 1 values at failure: result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;./commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;Thematic breaks|ATX headings|Setext headings|Indented code blocks|Fenced code blocks|HTML blocks|Link reference definitions|Paragraphs|Blank lines|Block quotes|List items… (+10407 chars) observed output: Example 326 (lines 5805-5819) Lists</p>
 <ol><li><code>`</code></li></ol>
-<p>foo <code>`</code> bar --- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;ol&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt;foo +&lt;ol&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt; foo &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt; 232 passed, 54 failed, 0 errored, 369 skipped … 516 earlier line(s) omitted, --full for all check stderr: Traceback (most recent call last): File &quot;block-parsing-conformance.py&quot;, line 18, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError Story &quot;Parse CommonMark inline syntax and render inline HTML.&quot; [inline_parsing] does not meet its own acceptance criteria:</p>
+<p>foo <code>`</code> bar --- expected HTML +++ actual HTML @@ -1,2 +1,2 @@ -&lt;ol&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt;foo +&lt;ol&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt; foo &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt; 248 passed, 38 failed, 0 errored, 369 skipped … 376 earlier line(s) omitted, --full for all check stderr: Traceback (most recent call last): File &quot;block-parsing-conformance.py&quot;, line 18, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError Story &quot;Parse CommonMark inline syntax and render inline HTML.&quot; [inline_parsing] does not meet its own acceptance criteria:</p>
 <ul><li>AC inline-parsing-conformance — All supplied cases in the inline parsing sections pass (the complete inline capability slice).</li></ul>
-<p>assertion: assert result.returncode == 0 → AssertionError cases: pass=259 fail=97 error=0 skip=299 total=655 from=result.stdout raised at: inline-parsing-conformance.py:18 process exit code: 1 values at failure: result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;./commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;Backslash escapes|Entity and numeric character references|Code spans|Emphasis and strong emphasis|Links|Images|Autolinks|Raw HTML|Hard line breaks|Soft line breaks|Textua… (+20991 chars) observed output: +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;!----&gt; foo --&amp;gt;&lt;/p&gt;&lt;p&gt;foo &lt;!----&gt; foo --&amp;gt;&lt;/p&gt; +&lt;p&gt;foo &lt;!----&gt; foo --&gt;&lt;/p&gt;&lt;p&gt;foo &lt;!----&gt; foo --&gt;&lt;/p&gt; Example 634 (lines 9223-9227) Raw HTML &lt;a href=&quot;\&quot;&quot;&gt; --- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a href=&amp;quot;&amp;quot;&amp;quot;&amp;gt;&lt;/p&gt; +&lt;a &quot; href=&quot;\&quot;&gt; 259 passed, 97 failed, 0 errored, 299 skipped … 697 earlier line(s) omitted, --full for all check stderr: Traceback (most recent call last): File &quot;inline-parsing-conformance.py&quot;, line 18, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError Story &quot;Verify the completed parser against the full CommonMark suite.&quot; [full_conformance] does not meet its own acceptance criteria:</p>
+<p>assertion: assert result.returncode == 0 → AssertionError cases: pass=267 fail=89 error=0 skip=299 total=655 from=result.stdout raised at: inline-parsing-conformance.py:18 process exit code: 1 values at failure: result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;./commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;Backslash escapes|Entity and numeric character references|Code spans|Emphasis and strong emphasis|Links|Images|Autolinks|Raw HTML|Hard line breaks|Soft line breaks|Textua… (+19254 chars) observed output: +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;!----&gt; foo --&amp;gt;&lt;/p&gt;&lt;p&gt;foo &lt;!----&gt; foo --&amp;gt;&lt;/p&gt; +&lt;p&gt;foo &lt;!----&gt; foo --&gt;&lt;/p&gt;&lt;p&gt;foo &lt;!----&gt; foo --&gt;&lt;/p&gt; Example 634 (lines 9223-9227) Raw HTML &lt;a href=&quot;\&quot;&quot;&gt; --- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a href=&amp;quot;&amp;quot;&amp;quot;&amp;gt;&lt;/p&gt; +&lt;a &quot; href=&quot;\&quot;&gt; 267 passed, 89 failed, 0 errored, 299 skipped … 633 earlier line(s) omitted, --full for all check stderr: Traceback (most recent call last): File &quot;inline-parsing-conformance.py&quot;, line 18, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError Story &quot;Verify the completed parser against the full CommonMark suite.&quot; [full_conformance] does not meet its own acceptance criteria:</p>
 <ul><li>AC full-commonmark-suite — The supplied full CommonMark conformance suite completes successfully.</li></ul>
-<p>assertion: assert result.returncode == 0 → AssertionError cases: pass=496 fail=159 error=0 skip=0 total=655 from=result.stdout raised at: full-commonmark-suite.py:10 process exit code: 1 values at failure: result = CompletedProcess(args=[&#x27;sh&#x27;, &#x27;sources/full_test.sh&#x27;], returncode=1, stdout=&#x27;Example 1 (lines 355-360) Tabs\n\tfoo\tbaz\t\tbim\n\n--- expected HTML\n+++ actual HTML\n@@ -1,2 +1 @@\n-&lt;pre&gt;&lt;code&gt;foo\tbaz\t\tbim\n-&lt;/code&gt;&lt;/pre&gt;\n+&lt;p&gt;foo baz bim&lt;/p&gt;\n\nExample 2 (lines 362-367) Tabs\n  \tfoo\tbaz\t\tbim\n\n--- expected HTML\n+++ actual HTML\n@@ -1,2 +1 @@\n-&lt;pre&gt;&lt;code&gt;foo\tbaz\t\tbim\n-&lt;/code&gt;&lt;/pre&gt;\n+… (+36475 chars) observed output: +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;!----&gt; foo --&amp;gt;&lt;/p&gt;&lt;p&gt;foo &lt;!----&gt; foo --&amp;gt;&lt;/p&gt; +&lt;p&gt;foo &lt;!----&gt; foo --&gt;&lt;/p&gt;&lt;p&gt;foo &lt;!----&gt; foo --&gt;&lt;/p&gt; Example 634 (lines 9223-9227) Raw HTML &lt;a href=&quot;\&quot;&quot;&gt; --- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a href=&amp;quot;&amp;quot;&amp;quot;&amp;gt;&lt;/p&gt; +&lt;a &quot; href=&quot;\&quot;&gt; 496 passed, 159 failed, 0 errored, 0 skipped … 1292 earlier line(s) omitted, --full for all check stderr: Traceback (most recent call last): File &quot;full-commonmark-suite.py&quot;, line 10, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<p>assertion: assert result.returncode == 0 → AssertionError cases: pass=520 fail=135 error=0 skip=0 total=655 from=result.stdout raised at: full-commonmark-suite.py:10 process exit code: 1 values at failure: result = CompletedProcess(args=[&#x27;sh&#x27;, &#x27;sources/full_test.sh&#x27;], returncode=1, stdout=&#x27;Example 1 (lines 355-360) Tabs\n\tfoo\tbaz\t\tbim\n\n--- expected HTML\n+++ actual HTML\n@@ -1,2 +1 @@\n-&lt;pre&gt;&lt;code&gt;foo\tbaz\t\tbim\n-&lt;/code&gt;&lt;/pre&gt;\n+&lt;p&gt;foo baz bim&lt;/p&gt;\n\nExample 2 (lines 362-367) Tabs\n  \tfoo\tbaz\t\tbim\n\n--- expected HTML\n+++ actual HTML\n@@ -1,2 +1 @@\n-&lt;pre&gt;&lt;code&gt;foo\tbaz\t\tbim\n-&lt;/code&gt;&lt;/pre&gt;\n+… (+30702 chars) observed output: +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;foo &lt;!----&gt; foo --&amp;gt;&lt;/p&gt;&lt;p&gt;foo &lt;!----&gt; foo --&amp;gt;&lt;/p&gt; +&lt;p&gt;foo &lt;!----&gt; foo --&gt;&lt;/p&gt;&lt;p&gt;foo &lt;!----&gt; foo --&gt;&lt;/p&gt; Example 634 (lines 9223-9227) Raw HTML &lt;a href=&quot;\&quot;&quot;&gt; --- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;lt;a href=&amp;quot;&amp;quot;&amp;quot;&amp;gt;&lt;/p&gt; +&lt;a &quot; href=&quot;\&quot;&gt; 520 passed, 135 failed, 0 errored, 0 skipped … 1088 earlier line(s) omitted, --full for all check stderr: Traceback (most recent call last): File &quot;full-commonmark-suite.py&quot;, line 10, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
 <h2>Build summary</h2>
 <p>RESULT: FAILED</p>
 <p>FILES CHANGED:</p>
 <ul><li>src/commonmark/block_parser.py</li><li>src/commonmark/inline_parser.py</li></ul>
-<p>SUMMARY: Fixed several block and inline parsing issues, including empty ATX headings, HTML block boundaries, paragraph interruption, entity handling, and URL escaping. The scoped and full conformance checks still fail:</p>
-<ul><li>Block parsing: 232 passed, 54 failed.</li><li>Inline parsing: 259 passed, 97 failed.</li><li>Full suite: 496 passed, 159 failed.</li></ul>
-<p><code>pytest -q</code> could not collect tests because pytest is not installed in the available Python environments. The source compiled successfully with <code>python3 -m compileall</code>.</p>
+<p>SUMMARY: Reran both scoped conformance suites and the full supplied harness. The block suite reported 248 passed and 38 failed; the inline suite reported 267 passed and 89 failed; the full suite reported 520 passed and 135 failed. I made limited fixes for setext continuation in block quotes and malformed HTML tag recognition, but substantial block and inline parsing gaps remain.</p>
 <p>BLOCKERS:</p>
-<ul><li>The parser still fails CommonMark cases involving list and container continuation, reference definitions, emphasis nesting, and raw HTML handling.</li><li>pytest is unavailable in the configured environment.</li></ul>
-<p>FAILURE_SUMMARY: CommonMark conformance checks remain failing<br>FAILURE_DETAIL: The declared block, inline, and full suite checks completed but reported failures. Fix the remaining general parsing behavior, then rerun all three checks. The pytest command also failed because pytest is unavailable in the available Python environments.</p></article>
+<ul><li>The existing parser does not yet conform to the full CommonMark suite. The full harness exited 1.</li></ul>
+<p>FAILURE_SUMMARY: CommonMark conformance checks still fail<br>FAILURE_DETAIL: The declared block, inline, and full suites completed but reported failures. Remaining failures span list continuation and indentation, reference definitions, emphasis, links, code spans, and raw HTML. Continue general parser and renderer repairs before rerunning the build checks.</p></article>
 </main>
 </body>
 </html>

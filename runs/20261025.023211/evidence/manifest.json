@@ -4,7 +4,7 @@
       {
         "bytes": 215,
         "path": "build/commonmark/.git/COMMIT_EDITMSG",
-        "sha256": "5fdb980f1b8dc3c221bf967c7d8b905edfe2929d02537e888a631d97e528b822"
+        "sha256": "b4166afffad8bb77d5ae2e5a10df6ebc154d5cf0ad567d2282e2c0f46d3a1a50"
       },
       {
         "bytes": 23,
@@ -89,7 +89,7 @@
       {
         "bytes": 1963,
         "path": "build/commonmark/.git/index",
-        "sha256": "531253a57b200a14893f4b2938863b56152d0eb2b91a45a6d657c6a41a5a1032"
+        "sha256": "c4df316a4d0dd789727acb5b8a11e2fef48528ad6f3e9d84793ef38c8d46335e"
       },
       {
         "bytes": 1571,
@@ -97,44 +97,44 @@
         "sha256": "e32489f191da05492872d874a7a0cb62805b1534455a82589db59b5369e39a9b"
       },
       {
-        "bytes": 1959,
+        "bytes": 1503,
         "path": "build/commonmark/.git/logs/HEAD",
-        "sha256": "6902a3f0df523e650bcbf7e32bbf16484ebcca11ead90315e9d7dbad31ff56b8"
+        "sha256": "e30a2cf27c53cc0494d6a647c9ca32d245612d6d8f981b1acde9ec2f280ee1b8"
       },
       {
-        "bytes": 1959,
+        "bytes": 1503,
         "path": "build/commonmark/.git/logs/refs/heads/master",
-        "sha256": "6902a3f0df523e650bcbf7e32bbf16484ebcca11ead90315e9d7dbad31ff56b8"
+        "sha256": "e30a2cf27c53cc0494d6a647c9ca32d245612d6d8f981b1acde9ec2f280ee1b8"
+      },
+      {
+        "bytes": 270,
+        "path": "build/commonmark/.git/objects/02/3916d5f6ef04f9e3623a298502b237b3bb339b",
+        "sha256": "08fc43823349ca19767ae138e9c0144fb1ab11aa3fe48f3ab15e9c35a96d58c2"
+      },
+      {
+        "bytes": 53,
+        "path": "build/commonmark/.git/objects/09/0d8383d7aaacd9ef7c6aa3d7b111ea3eb3ae78",
+        "sha256": "03769571b274ffac6ce434ad35552523831b93b28daf91963add21788b1ef92c"
+      },
+      {
+        "bytes": 269,
+        "path": "build/commonmark/.git/objects/0b/c128944a62e3c9032a42b3a2129ae21afaae2b",
+        "sha256": "69b385132ea94f26935cb456f454dfe0ec8c5b46f0da2da10e90905a8c8822d6"
+      },
+      {
+        "bytes": 276,
+        "path": "build/commonmark/.git/objects/10/f2e84e34c132ee9fa7e08e2c44ff38b2b4ba32",
+        "sha256": "324540c2d6738baf47bbc4c80652c64ee59e339f241636ea4371e4ff81260d00"
+      },
+      {
+        "bytes": 2963,
+        "path": "build/commonmark/.git/objects/11/7e93c4788d9be2de93851f9f21e678719992a3",
+        "sha256": "068bdc3462b9934fb1d85c78ff23eaa68009ba743d432efa6d0b1dc9a2b9fc4a"
       },
       {
         "bytes": 52,
-        "path": "build/commonmark/.git/objects/02/e2bef4b34c2e123ff4d3de94103c2d08683084",
-        "sha256": "a4d4a08916e31ef321131824a3055c3af64ca25eab53cf75eeb5d90946a199b5"
-      },
-      {
-        "bytes": 269,
-        "path": "build/commonmark/.git/objects/07/e282724eecdb394f292c73e2e774462f9745ee",
-        "sha256": "b807efcbb6cde8a001ed893680be88ca918ce7c8328da6d811d3183c75dd0026"
-      },
-      {
-        "bytes": 292,
-        "path": "build/commonmark/.git/objects/08/0d241f4da44897b939607a33b4ae56e7ca5f1a",
-        "sha256": "b82611cce300a2862804b5093ad359b187248ee30c19dbf2e33ab2597c7b1cf8"
-      },
-      {
-        "bytes": 269,
-        "path": "build/commonmark/.git/objects/0b/852890d74f4bf676bca9a4d4768c9868e74095",
-        "sha256": "8595009245f20a77ad698d4e61d68f0e5f745abca504311c5c18cf326263373a"
-      },
-      {
-        "bytes": 291,
-        "path": "build/commonmark/.git/objects/0f/f549598f31679357549a7570f1dbce0f424e57",
-        "sha256": "438c8eb64041f072121f54e19d7bb941cfd7872ff78f08c5db2583918122d708"
-      },
-      {
-        "bytes": 250,
-        "path": "build/commonmark/.git/objects/16/aa261b5b3d069f6d2672ccc8962fe2cc1b8f25",
-        "sha256": "b173235e9ab523386b2c5f865d19946ec58f3d69930bfa892ac6d5439d97a21e"
+        "path": "build/commonmark/.git/objects/11/b964913c08e3ef6d16c5604a2ef7777ab4851c",
+        "sha256": "ae6b3380c08a9627917120c80e02c463c0b7032b61c29c1148100f23eb581425"
       },
       {
         "bytes": 79,
@@ -147,39 +147,9 @@
         "sha256": "6228349948516c7249e16809188bcc6e2ebd4df18329f6810fe993ec3b3a0fe5"
       },
       {
-        "bytes": 255,
-        "path": "build/commonmark/.git/objects/1c/30794c2fd5af0cc899befbfa7f18c15bb9b7e9",
-        "sha256": "3e3e00031411ae0f7143b3b1d5f94b13559f885f9790ff9ba1587e748e42fc64"
-      },
-      {
-        "bytes": 291,
-        "path": "build/commonmark/.git/objects/1e/a3175295cc23a4665938e1ec17e97fae63f506",
-        "sha256": "febac8a848d8af4b66198fec857057312e189a5e8eadd9b9700744fca31019a0"
-      },
-      {
-        "bytes": 52,
-        "path": "build/commonmark/.git/objects/22/b0687638c4e10cd35b1634bf36977b5bf1900b",
-        "sha256": "3d5cd9d6fe9a0356958c6904036e2dba6b2e05bd16cc8869a30dc9b9992f2973"
-      },
-      {
         "bytes": 276,
-        "path": "build/commonmark/.git/objects/24/e2eab0ddddc569af887bcde44d369e6958cc59",
-        "sha256": "9af3d2ded78f8d42d3a444bba954496c70b0bbc845fd1f56030d555460ba4094"
-      },
-      {
-        "bytes": 2003,
-        "path": "build/commonmark/.git/objects/25/f647f7f08c7358ab75afb5ad0ed1df705c211d",
-        "sha256": "08e5838645681f84b958f063b26ff0039a1b8b971b199bcf27c762677d566354"
-      },
-      {
-        "bytes": 276,
-        "path": "build/commonmark/.git/objects/26/57e47aade187fe4a3c2a2ced3438d10c7159f6",
-        "sha256": "4bf9671ba85c04ac04778ee2c7488edb0cb4313286a06f03c46471dfbca86e1c"
-      },
-      {
-        "bytes": 52,
-        "path": "build/commonmark/.git/objects/27/1ed583611e7ca4e97ec47f3e75d5583127af85",
-        "sha256": "e5ea82ae579b7b355a3bb838d7e8628c342d5f4cc79b2dbd23e61fe87d7466b8"
+        "path": "build/commonmark/.git/objects/1c/cce74c5c9ff3634ce464a18b2fad5998486451",
+        "sha256": "ddc394cf5dd50850c0ee7e30c0d216eb749644371627a84cbe3dfeec1360880c"
       },
       {
         "bytes": 390,
@@ -187,29 +157,29 @@
         "sha256": "be1276be61ebe81c3fe71b8f75aabe86736d7f86f715e4f17dd251b90719b6f6"
       },
       {
-        "bytes": 270,
-        "path": "build/commonmark/.git/objects/2a/0d457d50ac3a1dfb41679d070d86ac40c879c7",
-        "sha256": "0b34b8f25e3538e5297a60b03a3a11060dc017edd19d58ed766ac4091254e77a"
-      },
-      {
         "bytes": 120,
         "path": "build/commonmark/.git/objects/2a/5d1d47c8021cd513d132841184d95a22235c00",
         "sha256": "270c15e54b1c50aefb4de72c3d5aedcb19b1756be07deec398a8bf9acd94b9b0"
       },
       {
-        "bytes": 154,
-        "path": "build/commonmark/.git/objects/2b/376818de656eb7c20fb7d0e429d3434838ca17",
-        "sha256": "425c12ea24e5dfd237261aab9cddefa9cc17031e8698bb3a36d0f90480153709"
+        "bytes": 52,
+        "path": "build/commonmark/.git/objects/2c/b995e0769c083619c663e29d3789b9d579f855",
+        "sha256": "39fcd6ce9fec72cf60e59273fc99b1dbdaf07f943ad609d3b16bb789be4f7f31"
       },
       {
-        "bytes": 190,
-        "path": "build/commonmark/.git/objects/2d/1424fcc3ca92b3a147bf774d538e2a3429bdc7",
-        "sha256": "9936b1ea6b15fb3d9127992d6d20960ca2fc1b0bf7a08cb3f944c22f5200ebb4"
+        "bytes": 3607,
+        "path": "build/commonmark/.git/objects/2f/b4ac362618f9c5ca1ff386ba809e4a09c79d64",
+        "sha256": "787c9e691dec5dbf3fa2429e97dd691122d69e65c8a215026173c615f2addcb3"
       },
       {
         "bytes": 292,
-        "path": "build/commonmark/.git/objects/36/a8091bd1c3d55cf70b6ec057c827513375cd60",
-        "sha256": "ee9ac4978e4d1b59384044338e2dd03f8bcb4afbbd5df4ef81f7d4590d2742c7"
+        "path": "build/commonmark/.git/objects/31/8ad073c9f9ef5f81b368da9cac70db183e939c",
+        "sha256": "538d0eceac3b1c6e5ea64f73fdb46ff202b38eab6f3b4171e9309f2a4fb512eb"
+      },
+      {
+        "bytes": 275,
+        "path": "build/commonmark/.git/objects/31/c7c84aafa99522cc789f44ff498d1e5410bbc6",
+        "sha256": "28bbefd35d425b2dccd2671b3af5d03f2bc495d6ed5267ea7cf2e34e9a9a4e17"
       },
       {
         "bytes": 649,
@@ -227,9 +197,9 @@
         "sha256": "e3d878362ad59569ec3a62f2b9ddbb1487d142f8efbf67dc187d69f5a0e6fea1"
       },
       {
-        "bytes": 188,
-        "path": "build/commonmark/.git/objects/3e/7a9b4671aeaf81fba0a0381377aa8fdec3465a",
-        "sha256": "b7750f6a8bcbe3512698de7043fb3a1fc8508d91b53fed45994433bc382e6a31"
+        "bytes": 52,
+        "path": "build/commonmark/.git/objects/3c/db604f5fd8686cc79629aef910b6dd4ecd9fcb",
+        "sha256": "54d11deb8f9cdce86093ed32b7a3ccc6573de1a5dad7b20ca131437ff06a5a49"
       },
       {
         "bytes": 96,
@@ -237,14 +207,14 @@
         "sha256": "cca53d19890c5f2b61a43eb765361cd6141cfa7e198e2cb5082da420159c512f"
       },
       {
-        "bytes": 63,
-        "path": "build/commonmark/.git/objects/41/14688167bfb4bacc723fa46d0485de61554c92",
-        "sha256": "4918b5b8f70432a6f385a64ae47d74fe6c1c5ee1adf8d92c68f8a74e60192c19"
+        "bytes": 291,
+        "path": "build/commonmark/.git/objects/44/4b569b4a32a1b9a0a0d4e8c1f22ebb6145fe31",
+        "sha256": "9c40e72bdd8c8f2575f7a94fd62687b2080e1ac28c13dde6fe8db23bf00aa305"
       },
       {
-        "bytes": 276,
-        "path": "build/commonmark/.git/objects/48/21cb5368a571c756e1d5d7f0d873c4122af0fd",
-        "sha256": "785e8089d4d4955c3125f01037dc9f643ae098a0503a4466311dfb6882c85052"
+        "bytes": 3359,
+        "path": "build/commonmark/.git/objects/46/2c35ae824d8e8a141062e757753183f7c92e1d",
+        "sha256": "3d505b40329ff159516c4c33152b6f2622774f0e886c0382cda6d775bd6a9651"
       },
       {
         "bytes": 3125,
@@ -257,34 +227,29 @@
         "sha256": "127c2a43d3f73e88ff34c1ed5570601a094c669ef26dfd87512a6fcf0e369353"
       },
       {
-        "bytes": 269,
-        "path": "build/commonmark/.git/objects/64/d056ed4689080d72830207c7cb208e68616714",
-        "sha256": "7d7aa9b4e3b358ff2962279add83934613e452ecdf19e6a704140cfc8958775f"
-      },
-      {
-        "bytes": 101,
-        "path": "build/commonmark/.git/objects/65/d4dc16b74d75e89b436d2a235af8370a17d57a",
-        "sha256": "d289c769eaa7be7b798a265545f65f713a284d507d32ab67a1d5a7a82b023f9c"
-      },
-      {
         "bytes": 55,
         "path": "build/commonmark/.git/objects/6d/9920aba801e448a6164d2bebe985102acb9818",
         "sha256": "ad33c82e99121f3f781c09607fb3160fc102f1132475c3b768e5511d6fece269"
       },
       {
-        "bytes": 2862,
-        "path": "build/commonmark/.git/objects/70/96c28358b29c329628c86a335598fe4a38e525",
-        "sha256": "40dafc67b12ddb041197d0da0a7d38b7e9bb4e24117cff4d67570996f6abf82f"
+        "bytes": 2884,
+        "path": "build/commonmark/.git/objects/76/29173f8a7d2d41e14e9a967c878f8b48a31b03",
+        "sha256": "58681a09d91d47bebed9ec383a3db24ec6ae2b744f4e26de17b7ec8704bf0344"
+      },
+      {
+        "bytes": 293,
+        "path": "build/commonmark/.git/objects/78/a90890f943f5029161c552fbbaf1930b1004ae",
+        "sha256": "8893d8d2be6d113a177ff45836548b2f6b9a7d8aadf55cda8507ee143053f584"
+      },
+      {
+        "bytes": 269,
+        "path": "build/commonmark/.git/objects/7b/621898849410ad348344ac869571d56af230e9",
+        "sha256": "cdf09f2d3fa35906402da66634012a9fc42d5fd8813a76432837bc7086ccce96"
       },
       {
         "bytes": 211,
         "path": "build/commonmark/.git/objects/7c/7b0b748af72ff0672a0a51f557de2623003c5c",
         "sha256": "dad2fc87d304d5ed63e375f4902e62b6af272f92096d65c7749b2d0935c51fda"
-      },
-      {
-        "bytes": 2726,
-        "path": "build/commonmark/.git/objects/7c/c4adf1bce32707115891a683804739ccdabe1b",
-        "sha256": "d89f70b96a3713f3550a44e36e6eb1b313c1f51e4543e698121cfd4dd66d66de"
       },
       {
         "bytes": 103,
@@ -297,9 +262,9 @@
         "sha256": "e5542605d5f40df1943a0682514d061bfb7705f623e40e85d168c942a884ecc9"
       },
       {
-        "bytes": 2574,
-        "path": "build/commonmark/.git/objects/86/8b74e4034dd835875d401b0d2c31201459423a",
-        "sha256": "e099a1058ce11632ef37f73aacd74795e50424a11ebbd62fde446a1edb39b19f"
+        "bytes": 3825,
+        "path": "build/commonmark/.git/objects/85/f93709a9873530f0e8df5f5daa0a6a410349e4",
+        "sha256": "63dcbabb6e936719b7587df8c3e797b66c9bc1429f50e2d161d079bee3cf041d"
       },
       {
         "bytes": 1062,
@@ -307,29 +272,29 @@
         "sha256": "cc69c23f45c6ddd749df3f5e53ee2d4144d6d6aec082fb6aa721efdd904e24ac"
       },
       {
-        "bytes": 294,
-        "path": "build/commonmark/.git/objects/94/eb4405c16e720eeef307e5bad780e15ea3149d",
-        "sha256": "fd19c913c168c0c042ed334ed3c9b631496eec52e20f669fe27cb6398567defe"
+        "bytes": 268,
+        "path": "build/commonmark/.git/objects/8e/e0839e7cf2f08d9af502bcc677c5ba85ad90f5",
+        "sha256": "1eb35c87a5c89492deba1becf60a1639309317bba635573a45b092e03f741732"
       },
       {
-        "bytes": 222,
-        "path": "build/commonmark/.git/objects/97/bcdcddb141386abe6d22892cbcf73102a181b8",
-        "sha256": "784f4e0bad6e5cf7b2b47db5b5cb31af6bb3dabfaa653b7a1feaa639457fef72"
+        "bytes": 268,
+        "path": "build/commonmark/.git/objects/8f/3b3948d869f96c7f117d69d5ee9b676dcca23a",
+        "sha256": "dbd5acd1da2a4d4712552ef318a62192021769c29443f8d4b59bd2793c116a58"
       },
       {
         "bytes": 276,
-        "path": "build/commonmark/.git/objects/98/1d874b3dafc644756fc0156cebd88970d724e5",
-        "sha256": "2f916fe5e379ef5cc506a4542940e75e3311ac016a99e87d686256d7c1211925"
+        "path": "build/commonmark/.git/objects/ac/8a3a2cd4ce088409a854d8c6cf4a1fe36d663b",
+        "sha256": "ef7a522b79d7d23ca83891d370d2c72c1ccbe8dbc5080802ed3bbc2fc19073b0"
       },
       {
-        "bytes": 261,
-        "path": "build/commonmark/.git/objects/ad/2fe7049d25d31adc40ffb2545a3530faa04005",
-        "sha256": "7f03ec680fd71183ebc1261f4193dfa546c742b4a4567e64ebb32369d4bb9669"
+        "bytes": 52,
+        "path": "build/commonmark/.git/objects/b1/2a1062eb899cfbaddfa8ef09b419f11df657ba",
+        "sha256": "4d2a29d30e31585ccd3a841d15f78277ff090090c62c22fad7c78465206fa97e"
       },
       {
-        "bytes": 249,
-        "path": "build/commonmark/.git/objects/b8/c28d33d61824abbb1fa6e5dddf3f123bc821a8",
-        "sha256": "c768f4fdde394e7fb7c43861b2da4113f14a97063cb4530e59d00aa8cb80851c"
+        "bytes": 291,
+        "path": "build/commonmark/.git/objects/b4/30174228c0266991c392bf8210a9f5c0e9febe",
+        "sha256": "e4aa481cc973fb9fb826df1bf38dc11b7adc73485750a5ee75340b3a77234929"
       },
       {
         "bytes": 184,
@@ -342,19 +307,9 @@
         "sha256": "d2bbf12b38f4e705d0f576e84f27232b79bada52fe377e257dcd486a58e32823"
       },
       {
-        "bytes": 268,
-        "path": "build/commonmark/.git/objects/be/e9cd39d100751bf986917fa3f80783d956b157",
-        "sha256": "2b4c78d0a922f1d52789ecb72d89c246d86bf7551c4b61e9cc3e4f6e9f4ea219"
-      },
-      {
         "bytes": 56354,
         "path": "build/commonmark/.git/objects/bf/752d89f878014ebc47b37299016e8a7e2dd99e",
         "sha256": "9ed22551bf3b013c1e4dcb0e7686f9c9119d8b2011545e025dc7ebe5c74a2ae8"
-      },
-      {
-        "bytes": 2048,
-        "path": "build/commonmark/.git/objects/c0/0bde57d8986768f0a032a46f808e38e569fee0",
-        "sha256": "aa24a3babca8e885bab8d0507fd147fd584989a59d3819e05c189c11b9105e36"
       },
       {
         "bytes": 52,
@@ -367,14 +322,14 @@
         "sha256": "966653f6b8f20d2b7cf01623721fd8aa8efff7809ce7dae2510d903e9376c24a"
       },
       {
-        "bytes": 293,
-        "path": "build/commonmark/.git/objects/cc/439e6f38683607271a075c0cf9aa0faf9d7d32",
-        "sha256": "66feb6255962af0c8e9094a254abbe1f26ca31bf70237ef178d39d275e8ae5aa"
+        "bytes": 154,
+        "path": "build/commonmark/.git/objects/c9/3eda057fb991cd8da2be9c00cfa3f32d6b7553",
+        "sha256": "35cc170a0c2be779793c5c8882edcfc1cdd9c189071210fd98ea212b80e68011"
       },
       {
-        "bytes": 2031,
-        "path": "build/commonmark/.git/objects/d5/2aebd89796a805bdbc09947185c77859dffb8d",
-        "sha256": "59fa17129bcad5c54d5cf3bf8166eedba81854a09032d3ebfc874be63c8b1ea3"
+        "bytes": 3310,
+        "path": "build/commonmark/.git/objects/d1/e064883f319973bf91c96b2f58d16d181e2add",
+        "sha256": "b553dfd9c55b4d6238f0e3f1cfe85e4f298133adc2e36f88a28b209ebdc2ff06"
       },
       {
         "bytes": 275,
@@ -387,14 +342,14 @@
         "sha256": "6e24395884ba2487760b8dbb82c32bffc4b86de31e6d10762d35cb68fc4a7599"
       },
       {
-        "bytes": 52,
-        "path": "build/commonmark/.git/objects/d7/50ffbdbcae37712c17c7557de40b7eaf5b8758",
-        "sha256": "39b58845168a9cbc7706ffe9cea22e7a51d9e6c2eff5c1d66f8ad7550e5b5a7a"
+        "bytes": 276,
+        "path": "build/commonmark/.git/objects/d7/960c7b7fad21e18d31153b4b4abf9cc02e4ab5",
+        "sha256": "84b5a78ca2b90843806c221e32a12a5b4c6be178eedc215890f90fe80a035d83"
       },
       {
-        "bytes": 2050,
-        "path": "build/commonmark/.git/objects/da/c22b6159edf5cc419e46e5941454c1e444e635",
-        "sha256": "9157fcc46db886e7239a4899c81248c7d2b9e9cc795dbf18b56eda2bff14464d"
+        "bytes": 294,
+        "path": "build/commonmark/.git/objects/d8/8cce3b5569e310935951dbaf6ef1e7a988b03e",
+        "sha256": "8fd78e00b9ea6e26f90b8acfb012e64ed7eabcb170d4a14c9bf1332e49504df2"
       },
       {
         "bytes": 176,
@@ -402,29 +357,9 @@
         "sha256": "9eb7355cf38028983d29533005ee81479eda22f6b176e6509d2e6d7fcc9fbbce"
       },
       {
-        "bytes": 52,
-        "path": "build/commonmark/.git/objects/e4/e8405d53f01132ead4e9e0b880ea540904a6f0",
-        "sha256": "8b10e903c5a4b043479052fde82492538b46d933cbaa44aae602a7e240db78fe"
-      },
-      {
-        "bytes": 275,
-        "path": "build/commonmark/.git/objects/e6/fe897a23949c16f96a784c0daf38985aaf4c80",
-        "sha256": "433c1c3d42a3344db22a2600f7c2664d28a64655c670534a306cae60f692ad6e"
-      },
-      {
-        "bytes": 269,
-        "path": "build/commonmark/.git/objects/e7/8950dd5a56e0941d8ffd1034f123266293ae3a",
-        "sha256": "c6fdec44ce0095d9ad7ca56318d129c66e28de04da40a24f521af6e721bfe3d8"
-      },
-      {
         "bytes": 249,
         "path": "build/commonmark/.git/objects/e8/19baa17650d87a4099b201ecf613213685dd2b",
         "sha256": "aecc8c53a603f848b1124bfe504fe372c631479205993943c2375df62324dec7"
-      },
-      {
-        "bytes": 92,
-        "path": "build/commonmark/.git/objects/f7/da5af958a8373046f0759672ff0ad22902471b",
-        "sha256": "d77c5669bbe4d511f0784fd80d3253369602839b55ba6c8f5820646fc6e49d77"
       },
       {
         "bytes": 2861,
@@ -437,9 +372,14 @@
         "sha256": "577ccc7e59d0cd9d20f5b23f55634b422c3eb7f6a01ca990085299b09bec69b2"
       },
       {
+        "bytes": 2974,
+        "path": "build/commonmark/.git/objects/f9/6f7031067deb873499d59fb1995ce09dbf55ae",
+        "sha256": "9f52459edae02136292ffe0c2e156e2de2abe06b939a1930faeada6a43093451"
+      },
+      {
         "bytes": 41,
         "path": "build/commonmark/.git/refs/heads/master",
-        "sha256": "8897e2efc81efd50204270074f1d7ba19e1449cb5e41205ddd9afe09b970abb0"
+        "sha256": "aae26a929feeec97213cc669ef8092142983fbba5307ae279478a9273b7f5992"
       },
       {
         "bytes": 70,
@@ -657,9 +597,9 @@
         "sha256": "73ca6a85b52f3bbb5d6c36933a15f24fbd4ed41ad28adf01896880cbc567b9ca"
       },
       {
-        "bytes": 8157,
+        "bytes": 8642,
         "path": "build/commonmark/src/commonmark/block_parser.py",
-        "sha256": "cbd6bdee324fe1f8024453790b4a052b44e1d6b0a487d0c5849966953188402e"
+        "sha256": "e47195d9326fbe12052f0eb084d28a2bf527f2ab3302d09f4cd029f0f0bfa3c7"
       },
       {
         "bytes": 347,
@@ -667,9 +607,9 @@
         "sha256": "54e614eab027869de195e35c72bfc21426ed567f0ab529b92ac7e2fe1c9deb57"
       },
       {
-        "bytes": 8396,
+        "bytes": 10171,
         "path": "build/commonmark/src/commonmark/inline_parser.py",
-        "sha256": "0f19e6ae4d7884099886e739f359cbe0727b928b68bd693b6ea43b2cc585a26f"
+        "sha256": "b6c321764b80155ebea68f0296aecf1239ed2010d16a2cac14a4627763dc8a16"
       },
       {
         "bytes": 323,
@@ -731,7 +671,7 @@
       {
         "bytes": 292,
         "path": "evidence/README.md",
-        "sha256": "162a667908d186f3aa403b553628f5fcd092de23f707273d78fc82964d375b89"
+        "sha256": "ead664b8c62aec2144789574ee558c9ad4a404c39e6a6a5bac853510b0500eaa"
       },
       {
         "bytes": 0,
@@ -831,12 +771,12 @@
       {
         "bytes": 48,
         "path": "evidence/commands/09-initial-ready.stdout.log",
-        "sha256": "3df379ca0eb2a093323069edba1af517942fd5af0cd33ebaaea3d10042e89438"
+        "sha256": "984f6d315026424641084d4ea33ec11555d2c2d8153425f66ac483469e7af5d0"
       },
       {
-        "bytes": 2259,
+        "bytes": 1411,
         "path": "evidence/commands/10-initial-build-1.llm.log",
-        "sha256": "5f7cdd92d4502d53f727d02d667fd37c0e6001e84c5ad892e8e798ae479ddcaa"
+        "sha256": "5cccb7376235e11ea100d26594a3365140573403e49b053295e9a8b3319d759e"
       },
       {
         "bytes": 190,
@@ -844,14 +784,14 @@
         "sha256": "3ff916d36b2a30821579dbf1cebb2c5772fe40a362c5b523c5627c004c45eee2"
       },
       {
-        "bytes": 9662,
+        "bytes": 8275,
         "path": "evidence/commands/10-initial-build-1.stdout.log",
-        "sha256": "b89ce602be5515ab250fd6e05e16ea33e2de2f3387d6dd703c8fd83ae2bf9fe1"
+        "sha256": "52ad027b0a34c1cf78ad0f89e3d276d595df5d1a213c193e1745db80848b4cd1"
       },
       {
-        "bytes": 1331,
+        "bytes": 3943,
         "path": "evidence/commands/11-after-initial-build-build-status.stderr.log",
-        "sha256": "a981c17b9acb5386aad9648fbec9460295d5f68d6f30d3f0476178a2c4bb3228"
+        "sha256": "03cd1da107bae19eeb4e3d61bca0a436cb6e05a3f7686da7156b83003efef1fa"
       },
       {
         "bytes": 73,
@@ -859,9 +799,64 @@
         "sha256": "c0946adb967f28346456234ece30b073da00805a29fab8ea7036ea6c468209bc"
       },
       {
-        "bytes": 108516,
+        "bytes": 0,
+        "path": "evidence/commands/superseded/20261025.063047/09-initial-ready.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 48,
+        "path": "evidence/commands/superseded/20261025.063047/09-initial-ready.stdout.log",
+        "sha256": "3df379ca0eb2a093323069edba1af517942fd5af0cd33ebaaea3d10042e89438"
+      },
+      {
+        "bytes": 2259,
+        "path": "evidence/commands/superseded/20261025.063047/10-initial-build-1.llm.log",
+        "sha256": "5f7cdd92d4502d53f727d02d667fd37c0e6001e84c5ad892e8e798ae479ddcaa"
+      },
+      {
+        "bytes": 190,
+        "path": "evidence/commands/superseded/20261025.063047/10-initial-build-1.stderr.log",
+        "sha256": "3ff916d36b2a30821579dbf1cebb2c5772fe40a362c5b523c5627c004c45eee2"
+      },
+      {
+        "bytes": 9662,
+        "path": "evidence/commands/superseded/20261025.063047/10-initial-build-1.stdout.log",
+        "sha256": "b89ce602be5515ab250fd6e05e16ea33e2de2f3387d6dd703c8fd83ae2bf9fe1"
+      },
+      {
+        "bytes": 1331,
+        "path": "evidence/commands/superseded/20261025.063047/11-after-initial-build-build-status.stderr.log",
+        "sha256": "a981c17b9acb5386aad9648fbec9460295d5f68d6f30d3f0476178a2c4bb3228"
+      },
+      {
+        "bytes": 73,
+        "path": "evidence/commands/superseded/20261025.063047/11-after-initial-build-build-status.stdout.log",
+        "sha256": "c0946adb967f28346456234ece30b073da00805a29fab8ea7036ea6c468209bc"
+      },
+      {
+        "bytes": 0,
+        "path": "evidence/commands/superseded/20261025.155735/09-initial-ready.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 48,
+        "path": "evidence/commands/superseded/20261025.155735/09-initial-ready.stdout.log",
+        "sha256": "984f6d315026424641084d4ea33ec11555d2c2d8153425f66ac483469e7af5d0"
+      },
+      {
+        "bytes": 0,
+        "path": "evidence/commands/superseded/20261025.155735/10-initial-build-1.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 924,
+        "path": "evidence/commands/superseded/20261025.155735/10-initial-build-1.stdout.log",
+        "sha256": "c14cc3a0eb33bf1b91e5c36f8c55eb4c2defa5dd48b15b3fc3f484a61af08afb"
+      },
+      {
+        "bytes": 160650,
         "path": "evidence/llm.jsonl",
-        "sha256": "e1b0ecd0cb71ac34339a4821dac66b626d4879310f62dad480564e3fcc828b80"
+        "sha256": "0783e818663cc5e85c938cface6e8e9b474cca1d66ecab228ca14faaee7015ed"
       },
       {
         "bytes": 194,
@@ -949,6 +944,36 @@
         "sha256": "809ca089014994d0bb268e5642a10c07d54625982136bdcd8e0600ad0bb747c0"
       },
       {
+        "bytes": 200,
+        "path": "evidence/llm_logs/20261025.064844.101Z_commonmark_build_codex.llm.log",
+        "sha256": "4d92ce4097bdc10af6cf4f5e8e4beb820aba569e2f9f76eb617e669bb5152256"
+      },
+      {
+        "bytes": 201,
+        "path": "evidence/llm_logs/20261025.160905.231Z_commonmark_build_codex.llm.log",
+        "sha256": "401c858a929610cf5a4c62196a5210a1723eefe00253df9a584a7291f70d2ae1"
+      },
+      {
+        "bytes": 204,
+        "path": "evidence/llm_logs/20261025.161719.114Z_commonmark_build_codex.llm.log",
+        "sha256": "ef538860d6483cafab5346412ea13b2b3b983a7c86167d64c4f2aaac34f75532"
+      },
+      {
+        "bytes": 205,
+        "path": "evidence/llm_logs/20261025.162829.901Z_commonmark_build_codex.llm.log",
+        "sha256": "0b4825c0937561eaaae2e404378e33b95c6d3ce46ad485730bfd981e2a9c4684"
+      },
+      {
+        "bytes": 205,
+        "path": "evidence/llm_logs/20261025.163226.481Z_commonmark_build_codex.llm.log",
+        "sha256": "ca232f62be32ad4457787e3bd4cca5b1e89186baad4a660599a8a4647d251c45"
+      },
+      {
+        "bytes": 202,
+        "path": "evidence/llm_logs/20261025.164854.657Z_commonmark_build_codex.llm.log",
+        "sha256": "003a6dcd4cf0b64a32ffe9a811eba2692c806b7ebb6f97e02748b5da22999311"
+      },
+      {
         "bytes": 11047,
         "path": "evidence/prompt_outputs/20261025.023226.160Z_commonmark_analyze_codex.output.txt",
         "sha256": "b3ebae0edf54deb7761f14d6206e273cbad6af73447fd0301cd8a12abe4bac84"
@@ -1032,6 +1057,36 @@
         "bytes": 1156,
         "path": "evidence/prompt_outputs/20261025.034642.361Z_commonmark_build_codex.output.txt",
         "sha256": "01c1a862617b405ebb28e2ccb31c2e5f3ac52f5304259892721020e0b8e861e8"
+      },
+      {
+        "bytes": 754,
+        "path": "evidence/prompt_outputs/20261025.064844.101Z_commonmark_build_codex.output.txt",
+        "sha256": "a6230c02ba15625dad3e78bdba3b35893c6a537ca2beedab68785233d100701f"
+      },
+      {
+        "bytes": 885,
+        "path": "evidence/prompt_outputs/20261025.160905.231Z_commonmark_build_codex.output.txt",
+        "sha256": "7618f319b783bdd64cf71bf297a9c01e6ae8849031ce67475659cfc4ac63e689"
+      },
+      {
+        "bytes": 943,
+        "path": "evidence/prompt_outputs/20261025.161719.114Z_commonmark_build_codex.output.txt",
+        "sha256": "abec6a4522dafbe0f42f3a8514c79e1fc34cd2a5bff0b2ec6816878d5df9f99e"
+      },
+      {
+        "bytes": 951,
+        "path": "evidence/prompt_outputs/20261025.162829.901Z_commonmark_build_codex.output.txt",
+        "sha256": "19787fdc442c9e34b5911a516e13120843bfae25e544431320b1dc27d756c57e"
+      },
+      {
+        "bytes": 825,
+        "path": "evidence/prompt_outputs/20261025.163226.481Z_commonmark_build_codex.output.txt",
+        "sha256": "acf7eae51a8a9f586aec0a9385e25be7ae8bcc5cba9e91d5e4e5306b45fa224f"
+      },
+      {
+        "bytes": 948,
+        "path": "evidence/prompt_outputs/20261025.164854.657Z_commonmark_build_codex.output.txt",
+        "sha256": "9b466d312c7e222cc08db52cd08f8278ba9e6de71b465b08005e65e4d35f931a"
       },
       {
         "bytes": 287814,
@@ -1119,6 +1174,36 @@
         "sha256": "ce2a94754cf04693780513f224ab7eb3a9ec5e9c5d625ec2bd6b814ba76bd131"
       },
       {
+        "bytes": 259138,
+        "path": "evidence/prompts/20261025.064844.101Z_commonmark_build_codex.prompt.md",
+        "sha256": "9557800c39fba0bd22446787c04c5b6734350bd7b3b0806ca98e2631d276a402"
+      },
+      {
+        "bytes": 259138,
+        "path": "evidence/prompts/20261025.160905.231Z_commonmark_build_codex.prompt.md",
+        "sha256": "9557800c39fba0bd22446787c04c5b6734350bd7b3b0806ca98e2631d276a402"
+      },
+      {
+        "bytes": 262000,
+        "path": "evidence/prompts/20261025.161719.114Z_commonmark_build_codex.prompt.md",
+        "sha256": "b2851000e7aa59956c228357e9d5d21430c50edf9745fd6ecaeac151d4c7bea5"
+      },
+      {
+        "bytes": 264890,
+        "path": "evidence/prompts/20261025.162829.901Z_commonmark_build_codex.prompt.md",
+        "sha256": "61963b668112aa487b3a969af624d988a024a1a50a18e4e9ecfcd5d35f9b8a0c"
+      },
+      {
+        "bytes": 266211,
+        "path": "evidence/prompts/20261025.163226.481Z_commonmark_build_codex.prompt.md",
+        "sha256": "b7dbfa52b72370cb9d6c4cadec297bfe85d8d29cd0c991bb3cb96d2560f8e930"
+      },
+      {
+        "bytes": 269111,
+        "path": "evidence/prompts/20261025.164854.657Z_commonmark_build_codex.prompt.md",
+        "sha256": "9f58747bb2b4d4dd2549de8009574dcd4b51ec36985109bfafca7181cd7168fb"
+      },
+      {
         "bytes": 11644,
         "path": "evidence/provider_raw/20261025.023226.160Z_commonmark_analyze_codex.raw.jsonl",
         "sha256": "48c06c9dd168d73f0496c7589f63e4108c881c20498a4126ea526ed55b9553a5"
@@ -1202,6 +1287,36 @@
         "bytes": 1272497,
         "path": "evidence/provider_raw/20261025.034642.361Z_commonmark_build_codex.raw.jsonl",
         "sha256": "66cfe28fa2dab2be78190bbfd565a0af4c529d6f760299b19b5af8166b1b82de"
+      },
+      {
+        "bytes": 29559,
+        "path": "evidence/provider_raw/20261025.064844.101Z_commonmark_build_codex.raw.jsonl",
+        "sha256": "1b2b78b3ebc4dd6e1cf0890081db1e69e5fdcb4e839f9ef5ea4088edadf75cbd"
+      },
+      {
+        "bytes": 119835,
+        "path": "evidence/provider_raw/20261025.160905.231Z_commonmark_build_codex.raw.jsonl",
+        "sha256": "02a4561ed2ca438c1f2c1a48e187691e3b1cc332be601ffa831c431805d55144"
+      },
+      {
+        "bytes": 139447,
+        "path": "evidence/provider_raw/20261025.161719.114Z_commonmark_build_codex.raw.jsonl",
+        "sha256": "940a2391c7367a995073c4b8b06691e6fa9ce7ede710ae7c551fe55169b782b9"
+      },
+      {
+        "bytes": 93421,
+        "path": "evidence/provider_raw/20261025.162829.901Z_commonmark_build_codex.raw.jsonl",
+        "sha256": "d4b7e012ff03e169d6a45817de5291194e8aec8cd8251d20b8dbdf441156d40c"
+      },
+      {
+        "bytes": 157229,
+        "path": "evidence/provider_raw/20261025.163226.481Z_commonmark_build_codex.raw.jsonl",
+        "sha256": "e2e9c39f215014160147248d135446b30a59c219292d406a9ef2cacce7387c18"
+      },
+      {
+        "bytes": 94497,
+        "path": "evidence/provider_raw/20261025.164854.657Z_commonmark_build_codex.raw.jsonl",
+        "sha256": "b0563bfaf7d15b7029b0d493e42d7bc4b299ca9133cb87d47e0fcd665749d552"
       }
     ],
     "Inputs": [
@@ -1223,9 +1338,9 @@
     ],
     "Run record": [
       {
-        "bytes": 7836,
+        "bytes": 7720,
         "path": "result.json",
-        "sha256": "6308434ce6e78e2107089e344fd8799b3ab29e6d6e570dbf7fe8fe79c41bd4c9"
+        "sha256": "5f84a801de720d8954fa03c731db5de8b0c478cc29fab98d240e24d48bbcc635"
       }
     ],
     "Sources": [
@@ -1277,9 +1392,24 @@
         "sha256": "bc9d6bdb275f37691341b8f22c77bb6a2d81c178aa77a30100ebe3b5dd5a00fd"
       },
       {
-        "bytes": 2460,
+        "bytes": 338,
+        "path": "workspace/logs/20261025.162829.901Z_commonmark_build_codex.stderr.log",
+        "sha256": "1522727cf317cd1f532ad7c97552e56ef8a30c1385acb995e83387a4477cca9f"
+      },
+      {
+        "bytes": 108,
+        "path": "workspace/logs/20261025.163226.481Z_commonmark_build_codex.stderr.log",
+        "sha256": "f769c5dd0087fde82e7e79588bafe9bcab182e421b69a9678fe9974831a05c5c"
+      },
+      {
+        "bytes": 371,
+        "path": "workspace/logs/20261025.164854.657Z_commonmark_build_codex.stderr.log",
+        "sha256": "a2f2126cb87e8a4d2896680c4e60251e849b81fcc89ed2a0fc2c95ef60398879"
+      },
+      {
+        "bytes": 3077,
         "path": "workspace/logs/history.jsonl",
-        "sha256": "5707ea243259e29ce250796ac11363f2b58ccf3b3f0a19c7478eb6a45cf65f82"
+        "sha256": "7bd049f0a8504465e6eb71f2f3b4031d540e94c0a6211d8fd384d4be35939e93"
       },
       {
         "bytes": 23,
@@ -1367,9 +1497,9 @@
         "sha256": "8d5f2fa83e103cf08b57eaa67521df9194f45cbdbcb37da52ad586097a14d106"
       },
       {
-        "bytes": 4536,
+        "bytes": 4260,
         "path": "workspace/targets/commonmark/.git/index",
-        "sha256": "cb1c86563f3f0861674285c55266e0445892dd1da355d10d65ce796782ed5c9f"
+        "sha256": "cfd38e957df31254cbea013b777db5cbd69c7070cdecf0b7ce08ebadeb6aa4bb"
       },
       {
         "bytes": 1571,
@@ -1377,24 +1507,24 @@
         "sha256": "e32489f191da05492872d874a7a0cb62805b1534455a82589db59b5369e39a9b"
       },
       {
-        "bytes": 3852,
+        "bytes": 2294,
         "path": "workspace/targets/commonmark/.git/logs/HEAD",
-        "sha256": "0dcfd653826de09744fc7dff04ad2d8834d4e4c8fe6af3eb8c4850ea44fe0939"
+        "sha256": "3775c17cdf2c9463feb789104016bb154ad864f7683f7b8e2a1881f15d9d952e"
       },
       {
-        "bytes": 3852,
+        "bytes": 2294,
         "path": "workspace/targets/commonmark/.git/logs/refs/heads/master",
-        "sha256": "0dcfd653826de09744fc7dff04ad2d8834d4e4c8fe6af3eb8c4850ea44fe0939"
+        "sha256": "3775c17cdf2c9463feb789104016bb154ad864f7683f7b8e2a1881f15d9d952e"
       },
       {
-        "bytes": 274,
-        "path": "workspace/targets/commonmark/.git/objects/01/f97d94acc2e984eed0c4ac762c4b068eb7e7fd",
-        "sha256": "0ee2e07bc98c53ed955d609d17e8675494020c6a2b297ef6ea4ea71b43587b14"
+        "bytes": 5634,
+        "path": "workspace/targets/commonmark/.git/objects/02/ce6d827c88594c170e0f0492d38d6ce830f839",
+        "sha256": "9049f562200419afe44e78990cdcb50fec1dd4dc33820c506da01ae2d7a3aacd"
       },
       {
-        "bytes": 260,
-        "path": "workspace/targets/commonmark/.git/objects/03/77f1920411f819e6605156c90a409f00e5c52d",
-        "sha256": "d99fa2df530f22292507838f76863f450ad74f8f217d208e14d6d4e841c77d6f"
+        "bytes": 293,
+        "path": "workspace/targets/commonmark/.git/objects/03/1627cdfb0b410b34b397a37b6feda6b74ffff0",
+        "sha256": "f4ae5904b65a7ecd5b6e33bab284c5322891c5aa35917a03728f09646dce47d4"
       },
       {
         "bytes": 295,
@@ -1407,19 +1537,9 @@
         "sha256": "0102e7cf7557ec73f8dba099d38ae83544db45b32fff7c5d3ada795076d076d5"
       },
       {
-        "bytes": 698,
-        "path": "workspace/targets/commonmark/.git/objects/08/8c69aa6247997c14aa3c6d2d7883dcd01f937a",
-        "sha256": "1d814dad1556f0180d043a0add40ec4d5a96f980547bc09e4cba86e88eb7c766"
-      },
-      {
-        "bytes": 5507,
-        "path": "workspace/targets/commonmark/.git/objects/0a/580532131cbad2fbb06e050ad593c216d68f83",
-        "sha256": "6bfff42e4ebfcb288afc5210ba63bca3be9d8ddfbb3049d2599d9aa4651312a3"
-      },
-      {
-        "bytes": 179,
-        "path": "workspace/targets/commonmark/.git/objects/0b/386a8ad8f8be54ee1bbac21b070fc74458a910",
-        "sha256": "ce545a67e298c7162740b035648f9dfe5f1d8707365f58e86c7b0608f186e8b1"
+        "bytes": 184,
+        "path": "workspace/targets/commonmark/.git/objects/0c/d79565bfc8f9e4aed57b5bd920aee60a7a7fad",
+        "sha256": "3f65a969a271e7261a17d892d5cd3949f5591ff22d86e4c9c671ef6e04eb3695"
       },
       {
         "bytes": 34,
@@ -1427,19 +1547,24 @@
         "sha256": "5467db09e39f6d4e0e97ec923be5c9e14499190b192e543d4c7149ad4cb70b77"
       },
       {
-        "bytes": 173,
-        "path": "workspace/targets/commonmark/.git/objects/0d/fbe33b5466559a98b2882af3bd4a91d3401362",
-        "sha256": "d09b9392a233c6f220469f308da7b70bdc4e19e61fda9fdcf6e0e8c41c20365d"
+        "bytes": 268298,
+        "path": "workspace/targets/commonmark/.git/objects/10/2d4f3af76f2462495ebbcb1388c1438fa15867",
+        "sha256": "088b42b07773d566a0fee5d7912179693de20db981a18722c176e189cd9f1fc4"
       },
       {
-        "bytes": 291,
-        "path": "workspace/targets/commonmark/.git/objects/13/4aff817571466d4dda990af61656b9d4297691",
-        "sha256": "da114e620d00baaff2873f8df21da8e7bfc45bbca3e4b7c5b38b87d5765c6722"
+        "bytes": 34041,
+        "path": "workspace/targets/commonmark/.git/objects/13/8a0c44b439513c0a48e05e67d9aed87eb58c00",
+        "sha256": "2bf69363f0965772eecefd7a40c6bcbaa29c013cffc7c38faa92d3359e36c6ef"
       },
       {
-        "bytes": 291,
-        "path": "workspace/targets/commonmark/.git/objects/13/b8d08260d6668d5004a4668a58ae815b983aa9",
-        "sha256": "6ed472e7d4b084ff4b44f610fbcddceb6abdc45b5571378b0724d24426ce6c41"
+        "bytes": 5648,
+        "path": "workspace/targets/commonmark/.git/objects/15/db70f35177bbc2813a7177c959544b35652e6a",
+        "sha256": "4f85dbec22d56ef3a4f39669480386e67d08f9afaea74653b730bea0cc362212"
+      },
+      {
+        "bytes": 728,
+        "path": "workspace/targets/commonmark/.git/objects/16/80ce75b72e336df1756275b86ed7d332758fb9",
+        "sha256": "5ef6444a98de82c3322def9ef420c93f08131fe498694e801c8b61ea0185ed95"
       },
       {
         "bytes": 849,
@@ -1447,29 +1572,9 @@
         "sha256": "489aa6e48456f693600137116a2b072d5b968bce1bf2452f7b5d2b08cad4b5e9"
       },
       {
-        "bytes": 135,
-        "path": "workspace/targets/commonmark/.git/objects/18/9ce0d112fb72d81f7d9fd24f9c62655dbb03a3",
-        "sha256": "234433fc3d8141da5ef8aa4233b1fe4d5a04142ddf65dffbe838ea87ea258092"
-      },
-      {
-        "bytes": 613,
-        "path": "workspace/targets/commonmark/.git/objects/1a/bb511d1543e12a03b5b9ce6a70775a7e9345b8",
-        "sha256": "6ff440d5d3d666ded2b3bc431ffa2c306a4d6ac25cd18c7f2bd093632bb072a9"
-      },
-      {
-        "bytes": 185,
-        "path": "workspace/targets/commonmark/.git/objects/1c/8460de6000b519cfe1d576e291de6998fae906",
-        "sha256": "d4857b58e28a7b6bf42898d3371447708edd011e40ec1d146a739186b8dd0e20"
-      },
-      {
         "bytes": 61,
         "path": "workspace/targets/commonmark/.git/objects/1f/df62a9e0f25d47447972d91aa7bb348dfa030e",
         "sha256": "9c5d8ff7f1b36eff4be619324bc9035af6a1e494db04a7de5d473674acf0c037"
-      },
-      {
-        "bytes": 5534,
-        "path": "workspace/targets/commonmark/.git/objects/1f/fa16b20815d59721d824767110fca617bc09a3",
-        "sha256": "a5dd0a7a1c05b1dc92e45423145c1a2b64cd050ebf81a2cfc15e48e96daa9d36"
       },
       {
         "bytes": 699,
@@ -1477,39 +1582,24 @@
         "sha256": "4b18e07c226bff9130b88f518211a3960053dcb7fbcca7f96ecf785b2a2d103a"
       },
       {
-        "bytes": 145716,
-        "path": "workspace/targets/commonmark/.git/objects/25/9d32a02b9d138f5288e2ec5e38d86d38ce4fbc",
-        "sha256": "adaeda90ff60979f3c8d2f1cffa41bc48aadc7f476d4178dbd7efcc007611770"
-      },
-      {
-        "bytes": 4529,
-        "path": "workspace/targets/commonmark/.git/objects/29/136c130c7a21d0359df67f231389f775244fb5",
-        "sha256": "8ece1a34dd9dbccb9e3eacd1939c07a70c4d4f30d46b57ba4e61a267e7e6584d"
-      },
-      {
         "bytes": 255,
         "path": "workspace/targets/commonmark/.git/objects/29/3c8d603deab0d1a93a68bc49d9f6cbbeb3453e",
         "sha256": "b7e80de16615f4a1d692b9958d5ee3bf25e9e4e1e2194672808d276e2f714cb2"
       },
       {
-        "bytes": 174,
-        "path": "workspace/targets/commonmark/.git/objects/2b/61cdbaffd87fa619a27236d32a84a5e65103d3",
-        "sha256": "93457ba4929a50ed35d86a73d4f55bc42ecf0a3c8d51931742a7f5f2e0e24349"
+        "bytes": 697,
+        "path": "workspace/targets/commonmark/.git/objects/2d/29108b72e9cdb678b445f70b688ed07a14aaa6",
+        "sha256": "e68521525a02ac760b90ee7ee04573b3ab8d7cd85c07449d7176201fe57dc544"
       },
       {
-        "bytes": 58,
-        "path": "workspace/targets/commonmark/.git/objects/2c/1c7a7d45f2fa75f5e8fe07b4523fa3650fa3b3",
-        "sha256": "8089c93396265bbf82b9a8ec8ba9feebeab7fb24ba6b1d7683f876c23425a52a"
+        "bytes": 183,
+        "path": "workspace/targets/commonmark/.git/objects/2f/3dcf9f4fb33fd5f7e205d2968714b3dbc32962",
+        "sha256": "d05c2258fb70bcb199dde5b546c60b735e10dc719a06799ef68d8ff96b9c89dd"
       },
       {
-        "bytes": 384,
-        "path": "workspace/targets/commonmark/.git/objects/33/a121c54d3791edd1d564a50237a5335e3eac4a",
-        "sha256": "9ce102777b632eaa1bd089c124f7b965f2e979ff264a208ba3c318ac3800b599"
-      },
-      {
-        "bytes": 436,
-        "path": "workspace/targets/commonmark/.git/objects/34/cf3f0c23ed295ac3e5915a4f460f0fa7440310",
-        "sha256": "97509af5230edc72ed877eefe8d81fcf4cc18bdee539483e862853f70ae274d9"
+        "bytes": 726,
+        "path": "workspace/targets/commonmark/.git/objects/34/51dd21aca95b1a9414d7d85423f77302040c40",
+        "sha256": "a9f0bdb53c1896a39dee49c90b3438719b62aba3a66e93dc001f9b91c8682a3d"
       },
       {
         "bytes": 495,
@@ -1517,14 +1607,14 @@
         "sha256": "5e8b6e45d60d62b4ff971d6636a43f4f2355bc9a7ad7a16c7bcf4c646a58e9f7"
       },
       {
+        "bytes": 293,
+        "path": "workspace/targets/commonmark/.git/objects/35/ad023078e8058bcf97617346077c9eb383b8cc",
+        "sha256": "fe0f7a00fe6cc2d16905b57d6481aff4ca99a8742f39eceba3bb66e853737edf"
+      },
+      {
         "bytes": 594,
         "path": "workspace/targets/commonmark/.git/objects/38/a310cf593476fc70847d6a540eab274e7c483e",
         "sha256": "1af816cb75363d229a837efe5209a3a3ac4fdf88c64a4b0889b5886c9acdc157"
-      },
-      {
-        "bytes": 384,
-        "path": "workspace/targets/commonmark/.git/objects/39/1f86605fc31a652ca73ac483af8c7f24c04eee",
-        "sha256": "b021c6cf40e2c23e6760eefecf3f6cbf81ec8239da765c726244554a5f80a650"
       },
       {
         "bytes": 21102,
@@ -1532,44 +1622,14 @@
         "sha256": "db5e9e88246fef37bc4666787c6de3129a31402d66e5cef3f21a5d045140a359"
       },
       {
-        "bytes": 698,
-        "path": "workspace/targets/commonmark/.git/objects/3b/e0192688744a01e7281971ac3af8b4dd744a6f",
-        "sha256": "60f106562114ef2d28584c64e72c37fe00cfa57d8f37788bed91c73caa68b9b9"
-      },
-      {
-        "bytes": 173,
-        "path": "workspace/targets/commonmark/.git/objects/3c/1cd1f05bf1c741ec4987bad489e3ba6020f863",
-        "sha256": "bd6ddb54a140282f9401dec75773dd590b425e8160a1449ebefeeadbae000d38"
-      },
-      {
-        "bytes": 293,
-        "path": "workspace/targets/commonmark/.git/objects/3f/96bba02ad85ea3824f6269f12f89cbe83c3b75",
-        "sha256": "e059ee88df390c6201aaea25b29ce887582cfd74c80be564243886bfafe95e60"
-      },
-      {
-        "bytes": 34499,
-        "path": "workspace/targets/commonmark/.git/objects/41/171bc227e640f8cbaf3ceddaab3748c03d38b0",
-        "sha256": "aa5a32e568a63be17a5542a0029fbd0dcff60f12556df4ba5f8b55a5bc2f6291"
-      },
-      {
         "bytes": 192104,
         "path": "workspace/targets/commonmark/.git/objects/45/3fe02fe2985c999a1a28d509ac5d3fd4fcbee7",
         "sha256": "ba491a8335c9ef6ebc16a3e41b5847bfbf0d956c1c8227b298df621ae9163817"
       },
       {
-        "bytes": 698,
-        "path": "workspace/targets/commonmark/.git/objects/49/555c4be4cf371f6998248d80528fb91605df12",
-        "sha256": "f8d43160ec195ec0cd95939defa9cc4d5b74e7ed126aa5bd3960aec3b6bff2af"
-      },
-      {
-        "bytes": 577,
-        "path": "workspace/targets/commonmark/.git/objects/4b/41633db42af8d45093164ce3db48a33cc3231c",
-        "sha256": "2e0823434571de10d41d24c61a8bd4bc9d02f21ecbcbc23e0c7abb829728b0f2"
-      },
-      {
-        "bytes": 173,
-        "path": "workspace/targets/commonmark/.git/objects/4c/275532017d8c3affcbe95d1aab2fa1455d4d2c",
-        "sha256": "44d243da63c6c57221ee79f104781c0c31e1eb775f85cf9016d97717e544e07e"
+        "bytes": 726,
+        "path": "workspace/targets/commonmark/.git/objects/4b/46767cc67bd6743a8626a9074d0a847f523ac2",
+        "sha256": "f0fe6acaf1ba658107b68a803bc3dcb2dd8a09c4fc7bc2d22c6551d102b46050"
       },
       {
         "bytes": 1962,
@@ -1577,34 +1637,14 @@
         "sha256": "83f4ff78f7b6878df4531f9db38d4dfd6315b0a560f49eaf656092118379a234"
       },
       {
-        "bytes": 135,
-        "path": "workspace/targets/commonmark/.git/objects/50/52be002beae89ee28c404c6bc0b6e6e7f9adc8",
-        "sha256": "8e0224f322091f49a1ee3b8e52962ab2392158831f090cc515d9b445b4084cdf"
-      },
-      {
-        "bytes": 100,
-        "path": "workspace/targets/commonmark/.git/objects/50/8820b7ea6f41179a032d2f31f981f098e18557",
-        "sha256": "7f00050c0d38614daa946faca356f0f6e125cb36fc86ba0de3fcab02d47697d4"
-      },
-      {
         "bytes": 4254,
         "path": "workspace/targets/commonmark/.git/objects/52/03a427af98683ffdb2bb8620b46e9e55882b30",
         "sha256": "e29546c78ebcec8de6b5738a1f6f4c2786fe1104676fb1327ef5098bdb39e7b0"
       },
       {
-        "bytes": 174,
-        "path": "workspace/targets/commonmark/.git/objects/57/0c4a26685f9751487fcc7a0e93688f11e260d8",
-        "sha256": "d3027800e931960a84395fcb59b5178d0371dd128dedd1e82f4a07f8d132f028"
-      },
-      {
-        "bytes": 1337,
-        "path": "workspace/targets/commonmark/.git/objects/5e/3c7d539390953d93b91b61e3730d3bff029682",
-        "sha256": "924c0dc6753e8b721db9f274f5788e792801fd35eb4a2cca412201227a47fa16"
-      },
-      {
-        "bytes": 309,
-        "path": "workspace/targets/commonmark/.git/objects/62/15c3fef1221fcfb1299b47802ad57c6c985508",
-        "sha256": "443a9ab86cd5548f7985187e4438179eddfb511028e0170d4f98299319c31a28"
+        "bytes": 378392,
+        "path": "workspace/targets/commonmark/.git/objects/52/c4c0dc5aa57fbdaa915c69d856777d8a602866",
+        "sha256": "3583a949dcbc0e2df0a21b22baae9873a9c939d0e30912f08cbaf72850425186"
       },
       {
         "bytes": 58,
@@ -1612,14 +1652,9 @@
         "sha256": "16aa9bbb78d8bd703141ef1ab1d32fc329c883a04f7efc4a442a1a5604f1a2d4"
       },
       {
-        "bytes": 171646,
-        "path": "workspace/targets/commonmark/.git/objects/66/27926b1746d3df3afd305574d0c4829e701041",
-        "sha256": "284b2754c3188d31808fb62d1ab336080c809dcc4e9d2cff38ef3bfee183af48"
-      },
-      {
-        "bytes": 201,
-        "path": "workspace/targets/commonmark/.git/objects/69/7e1444c5b5c31aec1339167dac8df17135a2ef",
-        "sha256": "ba0cf493c685cc962de202ca5d69352607223f40b88abcaa9ca65ed64202face"
+        "bytes": 261,
+        "path": "workspace/targets/commonmark/.git/objects/6a/4bac1fbc5483bea9ad421f40b026e485b71770",
+        "sha256": "b9c294fbe6d0362262bd76c7012e15966cc96bb9db7b9933a50b1d161ad224ad"
       },
       {
         "bytes": 3429,
@@ -1627,9 +1662,9 @@
         "sha256": "62be1477b6b1f8437bad44d898a79f4a81ee5ae6cae5279cfbd6a5ef3df4bcf7"
       },
       {
-        "bytes": 212,
-        "path": "workspace/targets/commonmark/.git/objects/6d/96be7f94da78e24c52b1c0bea18efb4b685509",
-        "sha256": "febbce9e5107999ae98b3b904ca8f92aad2854fad782ab32cfb512d28aa3ba10"
+        "bytes": 300,
+        "path": "workspace/targets/commonmark/.git/objects/6d/6981885b5ef7e2bce42c1b3f4cb07ae1270888",
+        "sha256": "a14e49bb937b25440a9eddc77c221965f77998458de739764b28f456ae572856"
       },
       {
         "bytes": 31,
@@ -1642,34 +1677,9 @@
         "sha256": "a1a401248447fdd245a4fd27d83c13d0797ce43155554a2ab224f4ba591d9341"
       },
       {
-        "bytes": 291,
-        "path": "workspace/targets/commonmark/.git/objects/75/e03623ceda617e73518d3d8bc5b7c8289b31ec",
-        "sha256": "cff11a2908b4290381daa9c41fc54f8708970860d2f255590f3c1a8a39ba21d6"
-      },
-      {
-        "bytes": 294,
-        "path": "workspace/targets/commonmark/.git/objects/76/78256379d863ec7ed352f6dd97d34f549c81a1",
-        "sha256": "d7f28016c5f5ae901767c41890ef6acc8767680cd566cee494a9cd36c3dd5f46"
-      },
-      {
-        "bytes": 251,
-        "path": "workspace/targets/commonmark/.git/objects/76/837d89af3445b8b357956ae5d40fb33c777d89",
-        "sha256": "d6c29663e2951c0eb54470a8e8423ad3f3152dbd1ea83b2777950ed7b9292602"
-      },
-      {
-        "bytes": 290,
-        "path": "workspace/targets/commonmark/.git/objects/77/b9e0d3bad028e1328dabff50e9d23c0bb5bec8",
-        "sha256": "113794c811a02fe8ae81051fa3f2673b2a606704871234459ce06262846b911a"
-      },
-      {
-        "bytes": 121219,
-        "path": "workspace/targets/commonmark/.git/objects/78/971c772f5bf3d3a20a070210d4660716d5b76f",
-        "sha256": "0c4d4923e84c30e49658bd101446b99616bc1a85cb4173ff09e5f3f563c91c5e"
-      },
-      {
-        "bytes": 4171,
-        "path": "workspace/targets/commonmark/.git/objects/79/0933c1254d67c3ba93288da26850699c7ad358",
-        "sha256": "d426ac9d66137090a4ae496a6bab27c9264ac45d6f602cfeba1587060ea69c5c"
+        "bytes": 470,
+        "path": "workspace/targets/commonmark/.git/objects/73/fa8736579415296fc685166de63520b8ab1050",
+        "sha256": "84b199c9d7d44d50d1e3340f15462b7dc5490a86e91e7e0f4fbd38bd20305b74"
       },
       {
         "bytes": 1083,
@@ -1677,24 +1687,19 @@
         "sha256": "c57a7e02e353d2ed8e57a71ba9d218ed07631092e1e431b8dd759efe445f0d5a"
       },
       {
-        "bytes": 5615,
-        "path": "workspace/targets/commonmark/.git/objects/7b/f992b3f3198096bfb876124b38ddff302ef0f3",
-        "sha256": "ab9392a78b90df8533af26b1c68ce8374248ba5cf67f80155d0880668fb93f49"
+        "bytes": 173,
+        "path": "workspace/targets/commonmark/.git/objects/7b/1272411dbfe75d9b3236c172822c70b45a5e62",
+        "sha256": "ae982510a896869a59645525cfb9d0d0117c827fcae38743777d4500772eb87c"
       },
       {
-        "bytes": 88,
-        "path": "workspace/targets/commonmark/.git/objects/7d/cd93e94554d7c21a75030af8c569cb00f5b71a",
-        "sha256": "f39a2acf196aa7c43bb8573eb9da4e7108a030af583de27e2e7b2f515b369c86"
+        "bytes": 697,
+        "path": "workspace/targets/commonmark/.git/objects/83/326cd053064a055ffd86064300dc17e809a472",
+        "sha256": "580e88da5f9fd90379597a3a9e26024442d9c64f861740846edd9c7d24e518a9"
       },
       {
-        "bytes": 662,
-        "path": "workspace/targets/commonmark/.git/objects/82/f3ff96475d5deea23ecce4919027f2abf12027",
-        "sha256": "3adc72ca854a474dc67cbd9200684ceab8fdb8a18c083740411efb21fc36e764"
-      },
-      {
-        "bytes": 131,
-        "path": "workspace/targets/commonmark/.git/objects/87/ca1c471f3bf146b608795adc3ef236b3c871e6",
-        "sha256": "c2ffd8a04302b7fc1949e13de9aa64f77c3f9bfc43ebad5e4cad84401b76be71"
+        "bytes": 699,
+        "path": "workspace/targets/commonmark/.git/objects/87/ade0a749a853251ec40de7eb81f8ef9ffeabce",
+        "sha256": "79e9ff4e32986eefdf829f0a192f51e9c8fcc531c263fbde6afdbf293bfadac1"
       },
       {
         "bytes": 153,
@@ -1707,9 +1712,9 @@
         "sha256": "cc69c23f45c6ddd749df3f5e53ee2d4144d6d6aec082fb6aa721efdd904e24ac"
       },
       {
-        "bytes": 698,
-        "path": "workspace/targets/commonmark/.git/objects/8b/edcbecc814ff605442495d1d33efa258f03e60",
-        "sha256": "bdc2f33127ca1dd14d351b183ce2a113ed43c4b4d0a948c653e5110c567f5a45"
+        "bytes": 324908,
+        "path": "workspace/targets/commonmark/.git/objects/8b/b4b1b8033879bb6f006027ea1b33f167f1ac95",
+        "sha256": "a3076eabb193c23330150e716b09f1c1dcd68d7e5f3f3eb44a0e4fbd91097db1"
       },
       {
         "bytes": 708,
@@ -1717,34 +1722,14 @@
         "sha256": "123bb084ee19f7eb2c81d77939852ad270b6dc8ada6e3d246ad69abb0d540c2d"
       },
       {
-        "bytes": 697,
-        "path": "workspace/targets/commonmark/.git/objects/8d/53d247277a5979a3db3cdc71dbd1596b2886c9",
-        "sha256": "b5e9f1fce378f9bd3e3727fa8fdbec28c3ce8e3e345e7f3607cecf302052f5b9"
-      },
-      {
-        "bytes": 698,
-        "path": "workspace/targets/commonmark/.git/objects/8d/ffc399d761a154ba5a62cba6f116e3a08d366e",
-        "sha256": "3bff724958cd96332ec2727848e15081a0d769cfe08e40223aecdf1d19ad2c9d"
+        "bytes": 360468,
+        "path": "workspace/targets/commonmark/.git/objects/92/239e05f18347a21439f8788d41b480704d712c",
+        "sha256": "d5cb19240b49512677ab15030a7c9195368a979ee784e6560a36301f3ef2410c"
       },
       {
         "bytes": 5645,
         "path": "workspace/targets/commonmark/.git/objects/92/3f5a99240559a7e374c61ce0b1aa0f399834b9",
         "sha256": "6f0ebf68a1076fc51a3ce2ec442eb96b21d4557c6d194809205aecae0b6eecbc"
-      },
-      {
-        "bytes": 311,
-        "path": "workspace/targets/commonmark/.git/objects/93/3d367067f8fe90dd60d8ff570083bc347ece00",
-        "sha256": "d6b679b8dad628322e86a51a1351cb3b9a5fc2767dfd16746cee3d8560794379"
-      },
-      {
-        "bytes": 173,
-        "path": "workspace/targets/commonmark/.git/objects/95/fa5d2dbb61a612970c6ad24816e34448c81ebb",
-        "sha256": "9049cf4a5359680d37b675de2f022d615ebdcb8e6b23cdb4d04b6b84de819d76"
-      },
-      {
-        "bytes": 1550,
-        "path": "workspace/targets/commonmark/.git/objects/98/7afed2d71c8b812e08bb6001c87bb18ba4b4d4",
-        "sha256": "4b3ed7b5c399d4857e2f417f5fff20dade8d8384fb0a70c6189696e0fb22a00b"
       },
       {
         "bytes": 161,
@@ -1757,29 +1742,24 @@
         "sha256": "4a896c99a138f41834de47850037a6023d498f73ce8c19f138e5047344257099"
       },
       {
-        "bytes": 101,
-        "path": "workspace/targets/commonmark/.git/objects/9e/15f80f0fb3bbd04c34602f08081d36cd2f73e3",
-        "sha256": "18a56b25d4b5e5e75eaaea41f3bac30a0a8ae04d22f0ba0d3e5a105d2d8bcf9b"
+        "bytes": 698,
+        "path": "workspace/targets/commonmark/.git/objects/9c/91579c59b25f4bc3fcadd0170c425cb9936de4",
+        "sha256": "36b674408d9396e8819f061ee2988fb2d6f1b0d9bde8d7b0321c948f8e08cc05"
       },
       {
-        "bytes": 5563,
-        "path": "workspace/targets/commonmark/.git/objects/9f/8766168bccbf13bc6edf86bedaa4133aec9b38",
-        "sha256": "bfe8e6b3b3b0e24cafe831ae065f19d42b760351d1e1cff7b29b7a3a1db18481"
+        "bytes": 294,
+        "path": "workspace/targets/commonmark/.git/objects/9e/86959d7d0ca837c221dd1c105429e9fa198cf9",
+        "sha256": "50a6affb20bc6db995866135256a7a9e52413eb78c2676e19d3fef87cf92837d"
       },
       {
-        "bytes": 293,
-        "path": "workspace/targets/commonmark/.git/objects/a0/018da945f486d6a91024f1c309ede2bdbbf916",
-        "sha256": "d4654478261429df2d12b368a874d33d943f8e14586b44fc9e09c2d2c81647d7"
+        "bytes": 291,
+        "path": "workspace/targets/commonmark/.git/objects/a1/74f9fd705f0b411537f94b4c0ed8e91b5f75d2",
+        "sha256": "5b2f631c179b84bb6ef608863f656a253196ca7c151f8dbcaa0d8264bd0f46cc"
       },
       {
-        "bytes": 174,
-        "path": "workspace/targets/commonmark/.git/objects/a0/ab144d2ff5ef42ad789783dd0a25f08d13259a",
-        "sha256": "a88bfe3e2a5bddbec4cf7a3bae296928a6c19f8673097977af2c8894811cf59a"
-      },
-      {
-        "bytes": 1603,
-        "path": "workspace/targets/commonmark/.git/objects/a1/ee580c82ce8ea1afe493e48c21a7d4e59a1320",
-        "sha256": "86ff56dce877db1bd941a0ff346ca6df460151ac35da846070fb74dce7fb12a1"
+        "bytes": 173,
+        "path": "workspace/targets/commonmark/.git/objects/a2/86fdcfddc70f8487a16722a955177557cd6da8",
+        "sha256": "7e7efaa82981f9cdc68c66c20bce701f67fa35f372f992d9489e467c6d499c8b"
       },
       {
         "bytes": 875,
@@ -1787,29 +1767,29 @@
         "sha256": "5b8ee35881d67af8a745c12fcab7f4269cbaf6e23bd1ecac06f4c66dfe683909"
       },
       {
-        "bytes": 3729,
-        "path": "workspace/targets/commonmark/.git/objects/a4/76c8d86f47ac4e74f4f6525506a08b637bcfee",
-        "sha256": "a0ea16e91f14c84828f35cd69fbb3490a4f340735eeb41acd903ca0e1664f648"
+        "bytes": 230155,
+        "path": "workspace/targets/commonmark/.git/objects/a7/1096630bb741ece9e9f26609af8d84b51b5a2c",
+        "sha256": "601ee656141dc4921271dba104d348eb419678da8af4f47298c5f1535fe36b2d"
       },
       {
-        "bytes": 2323,
-        "path": "workspace/targets/commonmark/.git/objects/a5/f1bd21df3007e0a078ebadd98550d4c600709d",
-        "sha256": "cf5d51946bf1e63e8e811645e9f515f50ca1a61970b94bb093f5014e60c53021"
+        "bytes": 5633,
+        "path": "workspace/targets/commonmark/.git/objects/ad/be6ec01463f2008a72309fc0a25628bf070593",
+        "sha256": "72728f2ae74fa499a0e550e39c501ad9dfe5e1e3b6e35bca050ae9210f7d2f8f"
       },
       {
-        "bytes": 261,
-        "path": "workspace/targets/commonmark/.git/objects/a7/2d04aa253cea2d03a16bb295e081f2777b39e7",
-        "sha256": "7309e0e092c556760fa88a6c66c4f09c448708eaeb6c02926f58d0b3bca07b09"
+        "bytes": 697,
+        "path": "workspace/targets/commonmark/.git/objects/b0/def302804ff919b61cff01746d9af74d09524e",
+        "sha256": "291412392b6818619e4fa468bb15a3bfa18ee6c64fe75d83c13f01631fa21e78"
       },
       {
-        "bytes": 642,
-        "path": "workspace/targets/commonmark/.git/objects/ab/f6a71bd7a285693159a5b82fdd0a424f8bbe2c",
-        "sha256": "2007ad999c81ccd502ea443191e023136516a3a2fce748ab00e07f892aee5bf9"
+        "bytes": 754,
+        "path": "workspace/targets/commonmark/.git/objects/b3/760b756e4afe925094cd4343f9d259db298f42",
+        "sha256": "5e5d918d0bfa33623a9702522c93be6a42ae87f006e3a5b2e3ad21a33b29c034"
       },
       {
-        "bytes": 293,
-        "path": "workspace/targets/commonmark/.git/objects/b7/8bb2e23262ce31aae55fbe561f01591e903c1a",
-        "sha256": "b2f4a685ec607ae7a2e6b05d9bf6f27b0fe342caab7f8cd9b3dc0b648cf3e7cb"
+        "bytes": 260,
+        "path": "workspace/targets/commonmark/.git/objects/b4/e918acd704a939d81651c355d7208d79a8cf0e",
+        "sha256": "b78f3a37e3e9908181279d90e8258c46ee6469feb3e4dcdd13c3380c3b9ecc69"
       },
       {
         "bytes": 1076,
@@ -1817,9 +1797,9 @@
         "sha256": "0d0b5a8264e866ee0a0a4519dbe8d75a26c9d74f437d050b9009d5992a5f7f8e"
       },
       {
-        "bytes": 291,
-        "path": "workspace/targets/commonmark/.git/objects/be/566ee70087e12a20335311ad0168450c3eb3ba",
-        "sha256": "ef3d7c009caf1958a6d35750288813680de44dd6c84e665fcc32fe4a7da85267"
+        "bytes": 698,
+        "path": "workspace/targets/commonmark/.git/objects/be/ac94e9912f443490005cc35edfa5575057d7ee",
+        "sha256": "babfcb15c18725c733f2ddf5275825bb4caf1971eec859af61e505ad94b1f39b"
       },
       {
         "bytes": 2267,
@@ -1837,59 +1817,14 @@
         "sha256": "a627f4a9e3d00fce43aacda09eb0cc1bf0c48df220858618dd982accba4eac6a"
       },
       {
-        "bytes": 151202,
-        "path": "workspace/targets/commonmark/.git/objects/bf/c98678346bd009e2e42b28b16f0a382a06609e",
-        "sha256": "afce7a7108c42bda029932558a13fb444136b55a1c6e375d83450dbebe0ab303"
-      },
-      {
-        "bytes": 93600,
-        "path": "workspace/targets/commonmark/.git/objects/c0/53b25ef000ca871572066e8340700405f640fe",
-        "sha256": "5fd8b3c49872e3a1d8fabcc3d739b2548eeccb74a334b9d393d0f7c52d353c82"
-      },
-      {
-        "bytes": 728,
-        "path": "workspace/targets/commonmark/.git/objects/c1/56c8e0e667886e42feb774241090a91fc6acdd",
-        "sha256": "3e441e03ca1e5d6da31489101f973b20768192008a5521e90f297ce49d111829"
-      },
-      {
-        "bytes": 226,
-        "path": "workspace/targets/commonmark/.git/objects/c1/7374a443c4e69367d1e61eb8370a985bda92a0",
-        "sha256": "5f38add1128c35bc53f3bfe3391750023f609ce83402b3c704cdb3ffb89a011a"
-      },
-      {
-        "bytes": 470,
-        "path": "workspace/targets/commonmark/.git/objects/c8/45841578b2aec5524c2ffda8fb3054dd1d18c2",
-        "sha256": "81098d588c642c16e48391ea9da20339a3796194dbf836da70b49978aaa13ea6"
-      },
-      {
-        "bytes": 635,
-        "path": "workspace/targets/commonmark/.git/objects/ce/4e0c5d9d7d52f62d833a621a9ffbf758a0d428",
-        "sha256": "493f74d07d8bbb10749806c01cf27780fe09414ebf73f13ee2b976d9eea447c1"
-      },
-      {
-        "bytes": 79,
-        "path": "workspace/targets/commonmark/.git/objects/ce/97d63f54a36e054289886d6a6508b53223c1e3",
-        "sha256": "2c0bed0bd339f8497407327810c5a7fdc966805f2019707087d9ca3374398e61"
-      },
-      {
-        "bytes": 154,
-        "path": "workspace/targets/commonmark/.git/objects/ce/bcb91cd4de9cbb456e86ac8278444140c474df",
-        "sha256": "8666bdf27cd03a3f864ae0919a120d9a64c14c6f07aac961a9245207dbecc889"
-      },
-      {
-        "bytes": 728,
-        "path": "workspace/targets/commonmark/.git/objects/d2/2fefd7b23075243f14b11b473807e61cbfcb28",
-        "sha256": "ffb417618461fb2bc6ea9e942985f96366fade5e82f9710bc433909f1ae5be13"
-      },
-      {
         "bytes": 567,
         "path": "workspace/targets/commonmark/.git/objects/d3/3429aeb9907896919bbf40c653d218fe5ecf53",
         "sha256": "83fb30c5bf33319ac8f802e8d2934adf25c0ea7d77e642fc671a00193bc15331"
       },
       {
-        "bytes": 140,
-        "path": "workspace/targets/commonmark/.git/objects/d4/74e8911992e53dc3e4165cf1b3649903005c7e",
-        "sha256": "7f3219160ba6f107e58d5e34ca72ba50faf2f4500e37e1e86f515f9c35e1e257"
+        "bytes": 174,
+        "path": "workspace/targets/commonmark/.git/objects/d4/00f441f94642a37f8c9818bc9c73be9bbfd6df",
+        "sha256": "8dc40211955c7663b54adbcd91d1e43ef4f284094c6c6db44787da33aa1bbc96"
       },
       {
         "bytes": 53,
@@ -1902,34 +1837,19 @@
         "sha256": "5eaea4cedb0069bae70a8439455841bd6760716edca3b0bd63dff9cb7f0c14b5"
       },
       {
-        "bytes": 698,
-        "path": "workspace/targets/commonmark/.git/objects/d9/dae06937564ce07c3ea8d4a198cf599e34825f",
-        "sha256": "5403599a95953e6792f726a83e1ff0d66a9859662f33a2c47518391d81d24880"
+        "bytes": 173,
+        "path": "workspace/targets/commonmark/.git/objects/dc/2e945db090ebaa957aaa03e3a2ba10f672d28b",
+        "sha256": "5720d1b1f0c9b310c32daf3cf381a098423704d6d1d4c882b608b7e5d1553c12"
       },
       {
-        "bytes": 65522,
-        "path": "workspace/targets/commonmark/.git/objects/dc/0d86db03c4165b1d07343e809c96404675662b",
-        "sha256": "7c2df0e456e69f684313327475b3e66fadc70f02e7fdf418abc76e2db025f0c9"
+        "bytes": 293,
+        "path": "workspace/targets/commonmark/.git/objects/e2/8d437744fb66a95730086b1b3b3cd77328d741",
+        "sha256": "cc5148b420ec6f3fe533ac37349c3f9c93e0c36ba6b05cde8a7a0940353bd010"
       },
       {
-        "bytes": 698,
-        "path": "workspace/targets/commonmark/.git/objects/df/75c49b0af1032acb61d413d3189f380a865072",
-        "sha256": "6092cdaf4a1183f1f012c2b8d9bc8539dc1e205051ba32d1780cbb094f9ff077"
-      },
-      {
-        "bytes": 384,
-        "path": "workspace/targets/commonmark/.git/objects/e0/2ac51ce13eda47ff5a0af503c458376a43cc8a",
-        "sha256": "3dd6410a4baa70f11112c79bfc19f0c882bd9f1a28dac48f5e719b012283fd29"
-      },
-      {
-        "bytes": 212,
-        "path": "workspace/targets/commonmark/.git/objects/e2/5afbc0ac2a677c6161b5edfc1785ae7b2b46e0",
-        "sha256": "9fd6a8090d4868d4e5226a5cc8698a708669a2940b5f3a44d18f11b91a6436b3"
-      },
-      {
-        "bytes": 624,
-        "path": "workspace/targets/commonmark/.git/objects/e6/74331a4d24c32048fd14b8457fda419c410854",
-        "sha256": "1a5eda2fb19ba441c7cfad40b8f1e6dd865059ed53850b3777efad5bc81361ee"
+        "bytes": 161,
+        "path": "workspace/targets/commonmark/.git/objects/e5/4740e88f66d1debcef064d6c1b8993136841fa",
+        "sha256": "3cb7656594411a673fea877c5dddf8fa4552a35b5dbda58a0dc285772d052b80"
       },
       {
         "bytes": 15,
@@ -1937,9 +1857,19 @@
         "sha256": "164c5fa8067facf1a43f09ce3d0e35ebf53a7f5723ecbf15a8667cfc53c26f6c"
       },
       {
+        "bytes": 697,
+        "path": "workspace/targets/commonmark/.git/objects/e8/7f76e615d25c03a555f70bc9c01182d6182f88",
+        "sha256": "c14b39b6a6c93791aee472068c6684012794171c6834510f2a39e3169c456573"
+      },
+      {
         "bytes": 2454,
         "path": "workspace/targets/commonmark/.git/objects/eb/4f9eebed27fcb1191dec01026a6f1955b177b2",
         "sha256": "ff1f13997eb7527020ba6ab4005dd1a4cce13dc9a8aab1f5eda90afb9d0bfd38"
+      },
+      {
+        "bytes": 289394,
+        "path": "workspace/targets/commonmark/.git/objects/eb/8b76a0f344aad8f8c987a65a4e3fa5dfce5c63",
+        "sha256": "83c1b358123ff01cd23f05a739b0ed290f4868d9249caf38be4f6ca62ead1b32"
       },
       {
         "bytes": 1676,
@@ -1947,29 +1877,19 @@
         "sha256": "256241b92a02cef0e8dbe65442c6b8616dacf84eb55a66d2b1a2d3f46d3624fb"
       },
       {
+        "bytes": 290,
+        "path": "workspace/targets/commonmark/.git/objects/f0/078b4233b373dbea9fc1f9691cec86ca1af83e",
+        "sha256": "2f03f457b81dc948a45c45db9bcf99d71e9ebf1582ae90b47ed34eee65a81137"
+      },
+      {
         "bytes": 1282,
         "path": "workspace/targets/commonmark/.git/objects/f0/46cdef34338aa720ab9f529ab5570f76aa162f",
         "sha256": "b2dc69f403b3548019bbf7548fa0ed303ed4c3a2328d87a3b447cf9bcb6d01c4"
       },
       {
-        "bytes": 698,
-        "path": "workspace/targets/commonmark/.git/objects/f0/6459dc9e9c8da5b53d0d09f144d219b3ed156c",
-        "sha256": "0ef8d960aae7bf1368af261d9fc3e0ee360c1cba1665ecb5e15e719e28537379"
-      },
-      {
-        "bytes": 170,
-        "path": "workspace/targets/commonmark/.git/objects/f0/8221769f6c1a16aeb7206cf6ae8cc0a201725f",
-        "sha256": "39894e50b4bd44ee5ef5f09dff936d9d3e57a30bc26e6b560ded3f967d1c0141"
-      },
-      {
         "bytes": 752,
         "path": "workspace/targets/commonmark/.git/objects/f1/eb50720b7eb0ee3db8cd89917a45c2979c2515",
         "sha256": "cc96c56d0ec73160c7fc69664235aa16000f8066dcfe57319bfdd2e9d26ee565"
-      },
-      {
-        "bytes": 173,
-        "path": "workspace/targets/commonmark/.git/objects/f4/32c5b89d33eb51946782472ec1f8aa3b714bff",
-        "sha256": "89c21b01821a01122ec0b6bb2f9a3733686e8f16a5fa6ef014b886c7638001b9"
       },
       {
         "bytes": 291,
@@ -1982,6 +1902,11 @@
         "sha256": "577ccc7e59d0cd9d20f5b23f55634b422c3eb7f6a01ca990085299b09bec69b2"
       },
       {
+        "bytes": 146,
+        "path": "workspace/targets/commonmark/.git/objects/fa/068a4adef1f59ee8527e0ee474b77131e037d7",
+        "sha256": "d1b56f64eb96cc8fbd5b2a14d05bd3f50ed8ad08717225661dc296c3243e5e9e"
+      },
+      {
         "bytes": 134,
         "path": "workspace/targets/commonmark/.git/objects/ff/e73bdd78d5b10d0aa6398323f9c9b193cb6252",
         "sha256": "2fba0e2067d1707f3995d2ea9d85be4f2f67da2d3ed1d6881b590b86db022804"
@@ -1989,7 +1914,7 @@
       {
         "bytes": 41,
         "path": "workspace/targets/commonmark/.git/refs/heads/master",
-        "sha256": "a174b292546a5e31904baeb426d509cb7a72c50588090865664a8e221df936d7"
+        "sha256": "f5715b31bebdb0f046de04f21c23a405bfca111bfe4d81f3f3d96144ef9d14d9"
       },
       {
         "bytes": 57,
@@ -2009,12 +1934,12 @@
       {
         "bytes": 995,
         "path": "workspace/targets/commonmark/BLOCKERS.md",
-        "sha256": "2007203079b080b1b49fe1bb2f103bac7d87a8641ff8f8e85c28083fb01423bb"
+        "sha256": "dda3485886e27aceedd957b1a57a0e4f2b776f580da26b0b63ddfe2b004d226f"
       },
       {
-        "bytes": 935359,
+        "bytes": 1818464,
         "path": "workspace/targets/commonmark/BUILD_LINEAGE.jsonl",
-        "sha256": "58b13e52417d26bb82bbd6b77d01c28d7b98a21a2058c8b9277ca387a2a287bc"
+        "sha256": "0f1986164acd98aedd4845933ddb6a0af9ce3792cc15d2b1bb950c0e1f9eacbd"
       },
       {
         "bytes": 1848,
@@ -2029,7 +1954,7 @@
       {
         "bytes": 1262,
         "path": "workspace/targets/commonmark/ERRORS.md",
-        "sha256": "42c6a2690983b88378884c50130ef46d11268d4421e51dd04541dd8843e223cd"
+        "sha256": "67c7a3ad82c9d68bfd83077e7fde5507c45be984c49a8803e5f8aeb53bf3642f"
       },
       {
         "bytes": 162,
@@ -2059,12 +1984,12 @@
       {
         "bytes": 994,
         "path": "workspace/targets/commonmark/PROJECT_STATUS.jsonl",
-        "sha256": "1be2fafd2a28ac8b28f1106ee534ba994ff6880a20db666d02add7b07b396774"
+        "sha256": "326c7d7fad55e6245659dbcde9d3c36f7408ac81352180de671f5391144e3bfb"
       },
       {
-        "bytes": 17264,
+        "bytes": 17277,
         "path": "workspace/targets/commonmark/QuarterDeck/commanders_chair.html",
-        "sha256": "5d47dd6717868ff5e8c26091e80a010b8c572cf58ca2f70e4e9002ed64833585"
+        "sha256": "dcccd37e469c21d9d3b76577a0b7c54faa5833d56fd58ec1dad2ec7f88cbc7dd"
       },
       {
         "bytes": 6069,
@@ -2212,9 +2137,9 @@
         "sha256": "1628e03f6b4bf45be63046da4f07522446bd21d77aa5e24ababb68b0459dd4e0"
       },
       {
-        "bytes": 107937,
+        "bytes": 169604,
         "path": "workspace/targets/commonmark/evidence/block-2.md",
-        "sha256": "25350e2676fded7388f1dfd4bda06b488efc253a7a9f41d89c0c70bc61b11553"
+        "sha256": "8accd7a8a02c0d7d307fea926c784fd42fa0724618923fb11de7c6da8e443d5b"
       },
       {
         "bytes": 0,
@@ -2431,7 +2356,7 @@
         "--ready"
       ],
       "cwd": "workspace",
-      "elapsed_ms": 752,
+      "elapsed_ms": 2998,
       "label": "09-initial-ready",
       "returncode": 0,
       "sequence": 9,
@@ -2443,7 +2368,7 @@
       "stdout": {
         "bytes": 48,
         "path": "evidence/commands/09-initial-ready.stdout.log",
-        "sha256": "3df379ca0eb2a093323069edba1af517942fd5af0cd33ebaaea3d10042e89438"
+        "sha256": "984f6d315026424641084d4ea33ec11555d2c2d8153425f66ac483469e7af5d0"
       }
     },
     {
@@ -2455,10 +2380,10 @@
         "commonmark",
         "--override",
         "--repair-attempts",
-        "6"
+        "21"
       ],
       "cwd": "workspace",
-      "elapsed_ms": 5182617,
+      "elapsed_ms": 3881708,
       "label": "10-initial-build-1",
       "returncode": 1,
       "sequence": 10,
@@ -2468,9 +2393,9 @@
         "sha256": "3ff916d36b2a30821579dbf1cebb2c5772fe40a362c5b523c5627c004c45eee2"
       },
       "stdout": {
-        "bytes": 9662,
+        "bytes": 8275,
         "path": "evidence/commands/10-initial-build-1.stdout.log",
-        "sha256": "b89ce602be5515ab250fd6e05e16ea33e2de2f3387d6dd703c8fd83ae2bf9fe1"
+        "sha256": "52ad027b0a34c1cf78ad0f89e3d276d595df5d1a213c193e1745db80848b4cd1"
       }
     },
     {
@@ -2483,14 +2408,14 @@
         "commonmark"
       ],
       "cwd": "workspace",
-      "elapsed_ms": 674,
+      "elapsed_ms": 531,
       "label": "11-after-initial-build-build-status",
       "returncode": 1,
       "sequence": 11,
       "stderr": {
-        "bytes": 1331,
+        "bytes": 3943,
         "path": "evidence/commands/11-after-initial-build-build-status.stderr.log",
-        "sha256": "a981c17b9acb5386aad9648fbec9460295d5f68d6f30d3f0476178a2c4bb3228"
+        "sha256": "03cd1da107bae19eeb4e3d61bca0a436cb6e05a3f7686da7156b83003efef1fa"
       },
       "stdout": {
         "bytes": 73,
@@ -2502,7 +2427,7 @@
   "environment": {
     "drydock_version": "0.8.0",
     "effort": "",
-    "finished_at": "2026-10-25T04:00:57.792334Z",
+    "finished_at": "2026-10-25T17:02:29.596265Z",
     "git_commit": "6ee2a8524bb31026c46c582fa3d5edd5827ecbee",
     "model": "gpt-6-luna",
     "plan_model": "",
@@ -2510,7 +2435,7 @@
     "provider": "codex",
     "python_version": "3.12.13",
     "requested_model": "gpt-6-luna",
-    "started_at": "2026-10-25T02:32:12.063677Z"
+    "started_at": "2026-10-25T15:57:35.737858Z"
   },
   "llm_artifacts": [
     {
@@ -2616,6 +2541,42 @@
       "sha256": "ce2a94754cf04693780513f224ab7eb3a9ec5e9c5d625ec2bd6b814ba76bd131"
     },
     {
+      "bytes": 259138,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261025.064844.101Z_commonmark_build_codex.prompt.md",
+      "sha256": "9557800c39fba0bd22446787c04c5b6734350bd7b3b0806ca98e2631d276a402"
+    },
+    {
+      "bytes": 259138,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261025.160905.231Z_commonmark_build_codex.prompt.md",
+      "sha256": "9557800c39fba0bd22446787c04c5b6734350bd7b3b0806ca98e2631d276a402"
+    },
+    {
+      "bytes": 262000,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261025.161719.114Z_commonmark_build_codex.prompt.md",
+      "sha256": "b2851000e7aa59956c228357e9d5d21430c50edf9745fd6ecaeac151d4c7bea5"
+    },
+    {
+      "bytes": 264890,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261025.162829.901Z_commonmark_build_codex.prompt.md",
+      "sha256": "61963b668112aa487b3a969af624d988a024a1a50a18e4e9ecfcd5d35f9b8a0c"
+    },
+    {
+      "bytes": 266211,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261025.163226.481Z_commonmark_build_codex.prompt.md",
+      "sha256": "b7dbfa52b72370cb9d6c4cadec297bfe85d8d29cd0c991bb3cb96d2560f8e930"
+    },
+    {
+      "bytes": 269111,
+      "kind": "prompt",
+      "path": "evidence/prompts/20261025.164854.657Z_commonmark_build_codex.prompt.md",
+      "sha256": "9f58747bb2b4d4dd2549de8009574dcd4b51ec36985109bfafca7181cd7168fb"
+    },
+    {
       "bytes": 11047,
       "kind": "prompt_output",
       "path": "evidence/prompt_outputs/20261025.023226.160Z_commonmark_analyze_codex.output.txt",
@@ -2716,6 +2677,42 @@
       "kind": "prompt_output",
       "path": "evidence/prompt_outputs/20261025.034642.361Z_commonmark_build_codex.output.txt",
       "sha256": "01c1a862617b405ebb28e2ccb31c2e5f3ac52f5304259892721020e0b8e861e8"
+    },
+    {
+      "bytes": 754,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261025.064844.101Z_commonmark_build_codex.output.txt",
+      "sha256": "a6230c02ba15625dad3e78bdba3b35893c6a537ca2beedab68785233d100701f"
+    },
+    {
+      "bytes": 885,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261025.160905.231Z_commonmark_build_codex.output.txt",
+      "sha256": "7618f319b783bdd64cf71bf297a9c01e6ae8849031ce67475659cfc4ac63e689"
+    },
+    {
+      "bytes": 943,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261025.161719.114Z_commonmark_build_codex.output.txt",
+      "sha256": "abec6a4522dafbe0f42f3a8514c79e1fc34cd2a5bff0b2ec6816878d5df9f99e"
+    },
+    {
+      "bytes": 951,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261025.162829.901Z_commonmark_build_codex.output.txt",
+      "sha256": "19787fdc442c9e34b5911a516e13120843bfae25e544431320b1dc27d756c57e"
+    },
+    {
+      "bytes": 825,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261025.163226.481Z_commonmark_build_codex.output.txt",
+      "sha256": "acf7eae51a8a9f586aec0a9385e25be7ae8bcc5cba9e91d5e4e5306b45fa224f"
+    },
+    {
+      "bytes": 948,
+      "kind": "prompt_output",
+      "path": "evidence/prompt_outputs/20261025.164854.657Z_commonmark_build_codex.output.txt",
+      "sha256": "9b466d312c7e222cc08db52cd08f8278ba9e6de71b465b08005e65e4d35f931a"
     },
     {
       "bytes": 11644,
@@ -2820,6 +2817,42 @@
       "sha256": "66cfe28fa2dab2be78190bbfd565a0af4c529d6f760299b19b5af8166b1b82de"
     },
     {
+      "bytes": 29559,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261025.064844.101Z_commonmark_build_codex.raw.jsonl",
+      "sha256": "1b2b78b3ebc4dd6e1cf0890081db1e69e5fdcb4e839f9ef5ea4088edadf75cbd"
+    },
+    {
+      "bytes": 119835,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261025.160905.231Z_commonmark_build_codex.raw.jsonl",
+      "sha256": "02a4561ed2ca438c1f2c1a48e187691e3b1cc332be601ffa831c431805d55144"
+    },
+    {
+      "bytes": 139447,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261025.161719.114Z_commonmark_build_codex.raw.jsonl",
+      "sha256": "940a2391c7367a995073c4b8b06691e6fa9ce7ede710ae7c551fe55169b782b9"
+    },
+    {
+      "bytes": 93421,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261025.162829.901Z_commonmark_build_codex.raw.jsonl",
+      "sha256": "d4b7e012ff03e169d6a45817de5291194e8aec8cd8251d20b8dbdf441156d40c"
+    },
+    {
+      "bytes": 157229,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261025.163226.481Z_commonmark_build_codex.raw.jsonl",
+      "sha256": "e2e9c39f215014160147248d135446b30a59c219292d406a9ef2cacce7387c18"
+    },
+    {
+      "bytes": 94497,
+      "kind": "provider_raw",
+      "path": "evidence/provider_raw/20261025.164854.657Z_commonmark_build_codex.raw.jsonl",
+      "sha256": "b0563bfaf7d15b7029b0d493e42d7bc4b299ca9133cb87d47e0fcd665749d552"
+    },
+    {
       "bytes": 194,
       "kind": "llm_log",
       "path": "evidence/llm_logs/20261025.023226.160Z_commonmark_analyze_codex.llm.log",
@@ -2922,10 +2955,46 @@
       "sha256": "809ca089014994d0bb268e5642a10c07d54625982136bdcd8e0600ad0bb747c0"
     },
     {
-      "bytes": 108516,
+      "bytes": 200,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261025.064844.101Z_commonmark_build_codex.llm.log",
+      "sha256": "4d92ce4097bdc10af6cf4f5e8e4beb820aba569e2f9f76eb617e669bb5152256"
+    },
+    {
+      "bytes": 201,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261025.160905.231Z_commonmark_build_codex.llm.log",
+      "sha256": "401c858a929610cf5a4c62196a5210a1723eefe00253df9a584a7291f70d2ae1"
+    },
+    {
+      "bytes": 204,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261025.161719.114Z_commonmark_build_codex.llm.log",
+      "sha256": "ef538860d6483cafab5346412ea13b2b3b983a7c86167d64c4f2aaac34f75532"
+    },
+    {
+      "bytes": 205,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261025.162829.901Z_commonmark_build_codex.llm.log",
+      "sha256": "0b4825c0937561eaaae2e404378e33b95c6d3ce46ad485730bfd981e2a9c4684"
+    },
+    {
+      "bytes": 205,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261025.163226.481Z_commonmark_build_codex.llm.log",
+      "sha256": "ca232f62be32ad4457787e3bd4cca5b1e89186baad4a660599a8a4647d251c45"
+    },
+    {
+      "bytes": 202,
+      "kind": "llm_log",
+      "path": "evidence/llm_logs/20261025.164854.657Z_commonmark_build_codex.llm.log",
+      "sha256": "003a6dcd4cf0b64a32ffe9a811eba2692c806b7ebb6f97e02748b5da22999311"
+    },
+    {
+      "bytes": 160650,
       "kind": "llm_execution_records",
       "path": "evidence/llm.jsonl",
-      "sha256": "e1b0ecd0cb71ac34339a4821dac66b626d4879310f62dad480564e3fcc828b80"
+      "sha256": "0783e818663cc5e85c938cface6e8e9b474cca1d66ecab228ca14faaee7015ed"
     }
   ],
   "schema_version": 1

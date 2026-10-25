@@ -31,14 +31,19 @@ def _parse(lines, refs):
             refs.setdefault(_refkey(label), (dest[1:-1] if dest.startswith('<') else dest, title)); i+=1; continue
         if line.startswith('>') or re.match(r'^ {0,3}>',line):
             q=[]
-            while i<n and (not lines[i].strip() or re.match(r'^ {0,3}>',lines[i])):
+            while i<n and (re.match(r'^ {0,3}>',lines[i]) or
+                            (lines[i].strip() and q and q[-1].strip() and
+                             len(q[-1])-len(q[-1].lstrip(' ')) < 4 and
+                             not re.match(r'^ {0,3}(?:`{3,}|~{3,})', q[-1]) and
+                             not re.match(r'^ {0,3}(?:#|`{3,}|~{3,}|[-+*] |[0-9]{1,9}[.)] |>)(?:.*)$', lines[i])
+                             and not HR.match(lines[i])
+                             and not re.match(r'^ {0,3}(?:=+|-+)[ \t]*$', lines[i]))):
                 x=lines[i]
                 if re.match(r'^ {0,3}>',x): x=re.sub(r'^ {0,3}> ?', '',x, count=1)
-                elif not q: break
                 q.append(x); i+=1
             out.append(_node('quote', children=_parse(q,refs))); continue
         fm=FENCE.match(line)
-        if fm:
+        if fm and not (fm.group(1).startswith('`') and '`' in fm.group(2)):
             fence,info=fm.groups(); ch=fence[0]; j=i+1; body=[]
             while j<n and not re.match(r'^ {0,3}'+re.escape(ch)+'{'+str(len(fence))+r',}[ \t]*$',lines[j]): body.append(re.sub(r'^ {0,'+str(len(line)-len(line.lstrip()))+'}', '',lines[j])); j+=1
             lang=info.strip().split()[0] if info.strip() else ''
