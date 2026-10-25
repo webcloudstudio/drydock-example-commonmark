@@ -1,0 +1,58 @@
+[
+  {
+    "id": "build-architecture.md-executable-and-package-naming",
+    "type": "text",
+    "severity": "material",
+    "origin": "build",
+    "blueprint": "ARCHITECTURE.md",
+    "story": null,
+    "status": "recommended",
+    "archived": false,
+    "title": "Executable and package naming",
+    "description": "The required importable commonmark/ package occupies the same root path as a root executable named commonmark, so both cannot exist in this filesystem layout. I kept the package acceptance contract and added the commonmark console entry point plus bin/commonmark launcher.",
+    "options": [],
+    "system_choice": "The required importable commonmark/ package occupies the same root path as a root executable named commonmark, so both cannot exist in this filesystem layout. I kept the package acceptance contract and added the commonmark console entry point plus bin/commonmark launcher."
+  },
+  {
+    "id": "plan-001",
+    "type": "choice",
+    "severity": "material",
+    "origin": "plan",
+    "blueprint": "ARCHITECTURE.md",
+    "story": "foundation",
+    "status": "recommended",
+    "archived": false,
+    "title": "Use a self-contained parser implementation",
+    "description": "The stack selects Python 3 and the standard library, and Compass prohibits a public Markdown implementation. Use an in-house parser organized around block parsing, inline parsing, and HTML rendering.",
+    "options": [
+      {
+        "value": "self-contained",
+        "label": "Implement the parser in the project"
+      },
+      {
+        "value": "public-library",
+        "label": "Use a public Markdown implementation"
+      }
+    ],
+    "system_choice": "self-contained"
+  },
+  {
+    "id": "plan-002",
+    "type": "choice",
+    "severity": "low",
+    "origin": "plan",
+    "blueprint": "FEATURE-Executable.md",
+    "story": "executable",
+    "status": "recommended",
+    "archived": false,
+    "title": "Use the conventional CLI response contract",
+    "description": "The source requires UTF-8 input and HTML output but does not specify malformed input handling or other process failures. Use exit status zero for successful conversion and a nonzero exit status for input or execution errors, reporting errors on standard error.",
+    "options": [
+      {
+        "value": "conventional",
+        "label": "Return zero on success and nonzero on errors"
+      }
+    ],
+    "system_choice": "conventional"
+  }
+]

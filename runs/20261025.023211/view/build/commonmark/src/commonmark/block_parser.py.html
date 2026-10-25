@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/src/commonmark/block_parser.py</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/src/commonmark/block_parser.py</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../build/commonmark/src/commonmark/block_parser.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Block parsing and document-wide reference collection.&quot;&quot;&quot;
+import html
+import re
+from .model import Document
+
+REF = re.compile(r&#x27;^ {0,3}\[([^\]]+)\]:[ \t]*(&lt;[^&gt;]*&gt;|[^\s]+)(?:[ \t]+(?:&quot;([^\&quot;]*)&quot;|\&#x27;([^\&#x27;]*)\&#x27;|\(([^)]*)\)))?[ \t]*$&#x27;)
+FENCE = re.compile(r&#x27;^ {0,3}(`{3,}|~{3,})(.*)$&#x27;)
+LIST = re.compile(r&#x27;^( {0,3})([-+*]|[0-9]{1,9}[.)])(?:[ \t]+(.*)|[ \t]*)$&#x27;)
+HR = re.compile(r&#x27;^ {0,3}(?:(?:\*[ \t]*){3,}|(?:-[ \t]*){3,}|(?:_[ \t]*){3,})$&#x27;)
+ATX = re.compile(r&#x27;^ {0,3}(#{1,6})(?:[ \t]+(.*?)|[ \t]*)$&#x27;)
+
+def _refkey(s): return &#x27; &#x27;.join(s.split()).casefold()
+
+def _node(kind, **kw): return {&#x27;type&#x27;: kind, **kw}
+
+def parse_blocks(markdown: str) -&gt; Document:
+    source=markdown.replace(&#x27;\r\n&#x27;,&#x27;\n&#x27;).replace(&#x27;\r&#x27;,&#x27;\n&#x27;).replace(&#x27;\x00&#x27;,&#x27;\ufffd&#x27;)
+    lines=source.split(&#x27;\n&#x27;)
+    if lines and lines[-1]==&#x27;&#x27;: lines.pop()
+    doc=Document(); doc.blocks=_parse(lines, doc.references)
+    return doc
+
+def _parse(lines, refs):
+    out=[]; i=0; n=len(lines)
+    while i&lt;n:
+        line=lines[i]
+        if not line.strip(): i+=1; continue
+        m=REF.match(line)
+        if m:
+            label,dest,*titles=m.groups(); title=next((x for x in titles if x is not None),None)
+            refs.setdefault(_refkey(label), (dest[1:-1] if dest.startswith(&#x27;&lt;&#x27;) else dest, title)); i+=1; continue
+        if line.startswith(&#x27;&gt;&#x27;) or re.match(r&#x27;^ {0,3}&gt;&#x27;,line):
+            q=[]
+            while i&lt;n and (not lines[i].strip() or re.match(r&#x27;^ {0,3}&gt;&#x27;,lines[i])):
+                x=lines[i]
+                if re.match(r&#x27;^ {0,3}&gt;&#x27;,x): x=re.sub(r&#x27;^ {0,3}&gt; ?&#x27;, &#x27;&#x27;,x, count=1)
+                elif not q: break
+                q.append(x); i+=1
+            out.append(_node(&#x27;quote&#x27;, children=_parse(q,refs))); continue
+        fm=FENCE.match(line)
+        if fm:
+            fence,info=fm.groups(); ch=fence[0]; j=i+1; body=[]
+            while j&lt;n and not re.match(r&#x27;^ {0,3}&#x27;+re.escape(ch)+&#x27;{&#x27;+str(len(fence))+r&#x27;,}[ \t]*$&#x27;,lines[j]): body.append(re.sub(r&#x27;^ {0,&#x27;+str(len(line)-len(line.lstrip()))+&#x27;}&#x27;, &#x27;&#x27;,lines[j])); j+=1
+            lang=info.strip().split()[0] if info.strip() else &#x27;&#x27;
+            out.append(_node(&#x27;code&#x27;, text=&#x27;\n&#x27;.join(body)+ (&#x27;\n&#x27; if body else &#x27;&#x27;), lang=lang)); i=min(j+1,n); continue
+        if len(line)-len(line.lstrip(&#x27; &#x27;))&gt;=4:
+            body=[]
+            while i&lt;n and (lines[i].startswith(&#x27;    &#x27;) or not lines[i].strip()):
+                body.append(lines[i][4:] if lines[i].startswith(&#x27;    &#x27;) else &#x27;&#x27;); i+=1
+            while body and not body[-1]: body.pop()
+            out.append(_node(&#x27;code&#x27;,text=&#x27;\n&#x27;.join(body)+(&#x27;\n&#x27; if body else &#x27;&#x27;),lang=&#x27;&#x27;)); continue
+        if HR.match(line): out.append(_node(&#x27;hr&#x27;)); i+=1; continue
+        am=ATX.match(line)
+        if am:
+            text=(am.group(2) or &#x27;&#x27;)
+            # A closing hash run is recognized only when preceded by whitespace.
+            if re.fullmatch(r&#x27;#+[ \t]*&#x27;, text): text=&#x27;&#x27;
+            else: text=re.sub(r&#x27;[ \t]+#+[ \t]*$&#x27;,&#x27;&#x27;,text)
+            text=text.strip(&#x27; \t&#x27;); out.append(_node(&#x27;heading&#x27;,level=len(am.group(1)),text=text)); i+=1; continue
+        lm=LIST.match(line)
+        if HR.match(line):
+            out.append(_node(&#x27;hr&#x27;)); i+=1; continue
+        if lm:
+            indent,mark,first=lm.groups(); ordered=mark[0].isdigit(); delim=mark[-1]; items=[]; loose=False; start=int(mark[:-1]) if ordered else 1
+            while i&lt;n:
+                if HR.match(lines[i]): break
+                mm=LIST.match(lines[i])
+                if not mm or mm.group(2)[-1]!=delim or mm.group(2)[0].isdigit()!=ordered: break
+                content=mm.group(3) or &#x27;&#x27;; i+=1; item=[content] if content else []
+                while i&lt;n:
+                    # A thematic break is never a list item or list continuation.
+                    if HR.match(lines[i]): break
+                    if not lines[i].strip():
+                        if i+1&lt;n and LIST.match(lines[i+1]) and LIST.match(lines[i+1]).group(2)[-1]==delim: loose=True; i+=1; break
+                        if i+1&lt;n and (lines[i+1].startswith(&#x27;  &#x27;) or lines[i+1].startswith(&#x27;    &#x27;)): loose=True; item.append(&#x27;&#x27;); i+=1; continue
+                        break
+                    if LIST.match(lines[i]) and len(LIST.match(lines[i]).group(1))&lt;=len(indent): break
+                    if len(lines[i])-len(lines[i].lstrip(&#x27; &#x27;)) &gt;= 4 and item:
+                        item.append(lines[i][4:])
+                    elif lines[i].startswith(&#x27;  &#x27;): item.append(lines[i][min(2,len(lines[i])-len(lines[i].lstrip())):])
+                    else: item.append(lines[i])
+                    i+=1
+                items.append(_parse(item,refs))
+                if i&lt;n and not lines[i].strip(): i+=1
+            out.append(_node(&#x27;list&#x27;,ordered=ordered,start=start,loose=loose,items=items,delimiter=delim)); continue
+        # HTML block types 1-7. Types 1-5 have explicit terminators, type 6
+        # ends at a blank line, and type 7 is a complete standalone tag.
+        h = line.lstrip(&#x27; &#x27;)
+        kind = 0
+        endmark = None
+        if len(line)-len(h) &lt;= 3:
+            if re.match(r&#x27;(?i)^&lt;(pre|script|style|textarea)(?:[ \t&gt;]|$)&#x27;,h): kind=1; endmark=r&#x27;&lt;/(?:pre|script|style|textarea)\s*&gt;&#x27;
+            elif h.startswith(&#x27;&lt;!--&#x27;): kind=2; endmark=&#x27;--&gt;&#x27;
+            elif h.startswith(&#x27;&lt;?&#x27;): kind=3; endmark=r&#x27;\?&gt;&#x27;
+            elif re.match(r&#x27;^&lt;![A-Za-z]&#x27;,h): kind=4; endmark=&#x27;&gt;&#x27;
+            elif h.startswith(&#x27;&lt;![CDATA[&#x27;): kind=5; endmark=r&#x27;]]&gt;&#x27;
+            elif re.match(r&#x27;(?i)^&lt;/?(?:address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|nav|noframes|ol|optgroup|option|p|param|search|section|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul)(?:[ \t]|$|&gt;|/&gt;)&#x27;,h): kind=6
+            elif re.match(r&#x27;^&lt;/?[A-Za-z][A-Za-z0-9-]*(?:[ \t]+[^&lt;&gt;]*?)?[ \t]*/?&gt;[ \t]*$&#x27;,h): kind=7
+        if kind and not (kind == 7 and out and out[-1][&#x27;type&#x27;] == &#x27;paragraph&#x27;):
+            body=[]
+            while i&lt;n:
+                cur=lines[i]
+                if kind in (6,7) and not cur.strip(): break
+                body.append(cur); i+=1
+                if kind in (1,2,3,4,5) and re.search(endmark,cur,re.I if kind==1 else 0): break
+                if kind in (6,7) and (i&gt;=n or not lines[i].strip()): break
+            out.append(_node(&#x27;html&#x27;,text=&#x27;\n&#x27;.join(body)+&#x27;\n&#x27;)); continue
+        para=[line.lstrip(&#x27; \t&#x27;)]; i+=1
+        while i&lt;n and lines[i].strip():
+            if re.match(r&#x27;^ {0,3}(?:=+|-+)[ \t]*$&#x27;,lines[i]):
+                out.append(_node(&#x27;heading&#x27;,level=1 if &#x27;=&#x27; in lines[i] else 2,text=&#x27;\n&#x27;.join(para).strip(&#x27; \t&#x27;)))
+                i+=1; para=[]; break
+            if REF.match(lines[i]) or HR.match(lines[i]) or ATX.match(lines[i]) or FENCE.match(lines[i]) or re.match(r&#x27;^ {0,3}&gt;&#x27;,lines[i]): break
+            lm_next=LIST.match(lines[i])
+            if lm_next:
+                marker=lm_next.group(2)
+                if marker[0].isdigit():
+                    if marker[:-1]==&#x27;1&#x27; and lm_next.group(3): break
+                elif lm_next.group(3): break
+            # HTML block types 1-6 can interrupt a paragraph.
+            stripped=lines[i].lstrip(&#x27; &#x27;)
+            html_interrupt = (
+                re.match(r&#x27;(?i)^&lt;(pre|script|style|textarea)(?:[ \t&gt;]|$)&#x27;, stripped)
+                or stripped.startswith((&#x27;&lt;!--&#x27;, &#x27;&lt;?&#x27;, &#x27;&lt;![CDATA[&#x27;))
+                or re.match(r&#x27;^&lt;![A-Za-z]&#x27;, stripped)
+                or re.match(r&#x27;(?i)^&lt;/?(?:address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|nav|noframes|ol|optgroup|option|p|param|search|section|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul)(?:[ \t]|$|&gt;|/&gt;)&#x27;, stripped)
+            )
+            if len(lines[i])-len(stripped)&lt;=3 and html_interrupt: break
+            para.append(lines[i].lstrip(&#x27; \t&#x27;)); i+=1
+        # definitions at beginning of a closed paragraph are collected
+        joined=&#x27;\n&#x27;.join(para).strip(&#x27; \t&#x27;)
+        if para: out.append(_node(&#x27;paragraph&#x27;,text=joined))
+    return out
+</pre></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261025.023407.971Z_commonmark_lineage_attribute_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261025.023407.971Z_commonmark_lineage_attribute_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261025.023407.971Z_commonmark_lineage_attribute_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>&lt;requirement name=&quot;parse-arguments&quot; stories=&quot;executable&quot;&gt;
+    parser.add_argument(&#x27;-p&#x27;, &#x27;--program&#x27;, dest=&#x27;program&#x27;, nargs=&#x27;?&#x27;, default=None,
+            help=&#x27;program to test&#x27;)
+    parser.add_argument(&#x27;-s&#x27;, &#x27;--spec&#x27;, dest=&#x27;spec&#x27;, nargs=&#x27;?&#x27;, default=&#x27;spec.txt&#x27;,
+            help=&#x27;path to spec&#x27;)
+    parser.add_argument(&#x27;-P&#x27;, &#x27;--pattern&#x27;, dest=&#x27;pattern&#x27;, nargs=&#x27;?&#x27;,
+            default=None, help=&#x27;limit to sections matching regex pattern&#x27;)
+    parser.add_argument(&#x27;--library-dir&#x27;, dest=&#x27;library_dir&#x27;, nargs=&#x27;?&#x27;,
+            default=None, help=&#x27;directory containing dynamic library&#x27;)
+    parser.add_argument(&#x27;--no-normalize&#x27;, dest=&#x27;normalize&#x27;,
+            action=&#x27;store_const&#x27;, const=False, default=True,
+            help=&#x27;do not normalize HTML&#x27;)
+    parser.add_argument(&#x27;-d&#x27;, &#x27;--dump-tests&#x27;, dest=&#x27;dump_tests&#x27;,
+            action=&#x27;store_const&#x27;, const=True, default=False,
+            help=&#x27;dump tests in JSON format&#x27;)
+    parser.add_argument(&#x27;--debug-normalization&#x27;, dest=&#x27;debug_normalization&#x27;,
+            action=&#x27;store_const&#x27;, const=True,
+            default=False, help=&#x27;filter stdin through normalizer for testing&#x27;)
+    parser.add_argument(&#x27;-n&#x27;, &#x27;--number&#x27;, type=int, default=None,
+            help=&#x27;only consider the test with the given number&#x27;)
+    parser.add_argument(&#x27;--track&#x27;, metavar=&#x27;path&#x27;,
+            help=&#x27;track which test cases pass/fail in the given JSON file and only report changes&#x27;)
+&lt;/requirement&gt;
+&lt;requirement name=&quot;run-tests-and-report-results&quot; stories=&quot;full_conformance&quot;&gt;
+            cmark = CMark(prog=args.program, library_dir=args.library_dir)
+            result_counts = {&#x27;pass&#x27;: 0, &#x27;fail&#x27;: 0, &#x27;error&#x27;: 0, &#x27;skip&#x27;: skipped}
+
+            previous = {}
+
+            if args.track:
+                try:
+                    with open(args.track) as f:
+                        previous = json.load(f)
+                except FileNotFoundError:
+                    pass
+
+            results = {}
+
+            for test in tests:
+                result = do_test(test, args.normalize, previous.get(str(test[&#x27;example&#x27;])))
+                result_counts[result] += 1
+                results[test[&#x27;example&#x27;]] = result
+
+            if args.track:
+                with open(args.track, &#x27;w&#x27;) as f:
+                    json.dump(results, f)
+
+            out(&quot;{pass} passed, {fail} failed, {error} errored, {skip} skipped\n&quot;.format(**result_counts))
+            exit(result_counts[&#x27;fail&#x27;] + result_counts[&#x27;error&#x27;])
+&lt;/requirement&gt;
+&lt;requirement name=&quot;select-tests&quot; stories=&quot;full_conformance&quot;&gt;
+    all_tests = get_tests(args.spec)
+    if args.pattern:
+        pattern_re = re.compile(args.pattern, re.IGNORECASE)
+    else:
+        pattern_re = re.compile(&#x27;.&#x27;)
+    tests = [ test for test in all_tests if re.search(pattern_re, test[&#x27;section&#x27;]) and (not args.number or test[&#x27;example&#x27;] == args.number) ]
+    if args.dump_tests:
+        out(json.dumps(tests, ensure_ascii=False, indent=2))
+        exit(0)
+    else:
+        skipped = len(all_tests) - len(tests)
+&lt;/requirement&gt;
+&lt;requirement name=&quot;unattached-test-runner&quot; stories=&quot;foundation&quot;&gt;
+The source does not state a distinct requirement that clearly maps to this story.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;render-test-diffs&quot; stories=&quot;executable&quot;&gt;
+            print_test_header(test)
+            out(test[&#x27;markdown&#x27;] + &#x27;\n&#x27;)
+            expected_html_lines = expected_html.splitlines(True)
+            actual_html_lines = actual_html.splitlines(True)
+            for diffline in unified_diff(expected_html_lines, actual_html_lines,
+                            &quot;expected HTML&quot;, &quot;actual HTML&quot;):
+                out(diffline)
+&lt;/requirement&gt;
+&lt;requirement name=&quot;read-and-extract-spec-examples&quot; stories=&quot;block_parsing,full_conformance&quot;&gt;
+            l = line.strip()
+            if l == &quot;`&quot; * 32 + &quot; example&quot;:
+                state = 1
+            elif state == 2 and l == &quot;`&quot; * 32:
+                state = 0
+                example_number = example_number + 1
+                end_line = line_number
+                tests.append({
+                    &quot;markdown&quot;:&#x27;&#x27;.join(markdown_lines).replace(&#x27;→&#x27;,&quot;\t&quot;),
+                    &quot;html&quot;:&#x27;&#x27;.join(html_lines).replace(&#x27;→&#x27;,&quot;\t&quot;),
+                    &quot;example&quot;: example_number,
+                    &quot;start_line&quot;: start_line,
+                    &quot;end_line&quot;: end_line,
+                    &quot;section&quot;: headertext})
+                start_line = 0
+                markdown_lines = []
+                html_lines = []
+            elif l == &quot;.&quot;:
+                state = 2
+            elif state == 1:
+                if start_line == 0:
+                    start_line = line_number - 1
+                markdown_lines.append(line)
+            elif state == 2:
+                html_lines.append(line)
+            elif state == 0 and re.match(header_re, line):
+                headertext = header_re.sub(&#x27;&#x27;, line).strip()
+&lt;/requirement&gt;</pre></article>
+</main>
+</body>
+</html>

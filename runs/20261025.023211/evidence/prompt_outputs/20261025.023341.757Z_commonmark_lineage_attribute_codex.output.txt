@@ -1,0 +1,11 @@
+<requirement name="run-commonmark-executable" stories="executable">
+        if prog:
+            self.to_html = lambda x: pipe_through_prog(prog, x)
+</requirement>
+<requirement name="convert-markdown-to-html" stories="block_parsing,inline_parsing">
+            markdown = cmark.cmark_markdown_to_html
+            markdown.restype = c_char_p
+            markdown.argtypes = [c_char_p, c_long, c_int]
+</requirement>
+<unattached story="foundation"/>
+<unattached story="full_conformance"/>

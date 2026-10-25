@@ -1,0 +1,6 @@
+<requirement name="normalize-html-output" stories="block_parsing,inline_parsing">
+Return normalized HTML that collapses insignificant whitespace outside `pre` tags, removes whitespace surrounding block-level tags, converts self-closing tags to open tags, sorts and lowercases attributes, and converts references to Unicode except that `<`, `>`, `&`, and `"` are rendered using entities.
+</requirement>
+<unattached story="foundation"/>
+<unattached story="executable"/>
+<unattached story="full_conformance"/>

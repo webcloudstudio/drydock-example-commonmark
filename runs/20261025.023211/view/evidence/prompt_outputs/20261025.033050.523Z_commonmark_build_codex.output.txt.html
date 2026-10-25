@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261025.033050.523Z_commonmark_build_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261025.033050.523Z_commonmark_build_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261025.033050.523Z_commonmark_build_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>RESULT: FAILED
+
+FILES CHANGED:
+- src/commonmark/block_parser.py
+
+SUMMARY:
+Added handling for CommonMark HTML block types 1–7. `compileall` succeeded. The block slice finished with 229 passed and 57 failed; the inline slice had 248 passed and 108 failed; the full suite had 482 passed and 173 failed.
+
+BLOCKERS:
+- Block and inline parsing remain substantially nonconformant, including list continuation, reference definitions, inline parsing, and raw HTML handling.
+
+FAILURE_SUMMARY: CommonMark conformance checks still fail
+FAILURE_DETAIL: `sh sources/full_test.sh` completed with exit status 1: 173 examples failed. The scoped block and inline checks also failed. Repair the remaining general parsing behavior and rerun all three checks.</pre></article>
+</main>
+</body>
+</html>

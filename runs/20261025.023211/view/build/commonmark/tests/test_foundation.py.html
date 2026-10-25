@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_foundation.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_foundation.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_foundation.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Foundation contract checks for the parser package and phase flow.&quot;&quot;&quot;
+
+import importlib.util
+
+from commonmark.parser import parse
+
+
+def test_parser_is_an_importable_package():
+    spec = importlib.util.find_spec(&quot;commonmark&quot;)
+    assert spec is not None
+    assert spec.submodule_search_locations is not None
+
+
+def test_empty_document_flows_through_parser():
+    assert parse(&quot;&quot;) == &quot;&quot;
+</pre></article>
+</main>
+</body>
+</html>

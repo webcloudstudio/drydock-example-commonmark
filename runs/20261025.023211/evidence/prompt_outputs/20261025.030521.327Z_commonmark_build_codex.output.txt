@@ -1,0 +1,20 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- src/commonmark/block_parser.py
+- src/commonmark/inline_parser.py
+
+SUMMARY:
+Fixed quote escaping, paragraph trailing space handling for hard line breaks, and a reference decoding crash. The final conformance runs reported:
+
+- Block slice: 203 passed, 83 failed
+- Inline slice: 246 passed, 110 failed
+- Full suite: 454 passed, 201 failed, 0 errored
+
+`compileall` and a hard line break smoke check succeeded.
+
+BLOCKERS:
+- CommonMark 0.31.2 conformance remains incomplete across block structure, inline parsing, and HTML handling.
+
+FAILURE_SUMMARY: Conformance gates still fail
+FAILURE_DETAIL: The parser passes only part of the declared block and inline suites; the full suite reports 201 failures. Implement the remaining general parsing rules and rerun all three declared checks.

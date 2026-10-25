@@ -1,0 +1,49 @@
+<requirement name="commonmark-parser" stories="block_parsing,inline_parsing">
+Build a CommonMark 0.31.2 parser from the supplied specification.
+</requirement>
+<requirement name="stdin-stdout-interface" stories="executable">
+The parser reads Markdown from
+standard input and writes HTML to standard output.
+</requirement>
+<requirement name="root-executable" stories="executable">
+The deliverable is an executable named `commonmark` at the application root.
+</requirement>
+<requirement name="use-supplied-harness" stories="full_conformance">
+`sources/full_test.sh` is the single scoring entry point.
+</requirement>
+<requirement name="preserve-scoring-assets" stories="full_conformance">
+The scoring assets are read-only.
+</requirement>
+<requirement name="full-suite-conformance" stories="full_conformance">
+Build `./commonmark` so that the supplied entry point succeeds;
+changing the entry point is not a repair.
+</requirement>
+<requirement name="project-readme" stories="executable">
+Create a concise project `README.md` describing the standard-input/standard-output interface.
+</requirement>
+<requirement name="block-parse-order" stories="block_parsing">
+Implement in that order.
+</requirement>
+<requirement name="inline-parse-order" stories="inline_parsing">
+The specification text is normative and contains the algorithms.
+</requirement>
+<requirement name="appendix-strategy" stories="block_parsing,inline_parsing">
+The "Appendix: A parsing strategy" section describes the reference implementation's approach; follow it directly rather than reinventing the rules.
+</requirement>
+<requirement name="terminal-verification-story" stories="full_conformance">
+Create one terminal verification story that:
+</requirement>
+<requirement name="verification-dependencies" stories="full_conformance">
+- depends on every parser implementation story;
+</requirement>
+<requirement name="single-full-suite-check" stories="full_conformance">
+- contains the only `Suite: full` acceptance check;
+</requirement>
+<requirement name="run-full-test-harness" stories="full_conformance">
+- runs `sh sources/full_test.sh`, prints captured standard output and standard error, and asserts
+  only `result.returncode == 0`; and
+</requirement>
+<requirement name="sea-trials-id" stories="full_conformance">
+- carries `Sea Trials: st-001`.
+</requirement>
+<unattached story="foundation"/>

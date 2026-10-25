@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a170e8-5980-7541-bf8c-d66c1c0402c1"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"<requirement name=\"normalize-html-output\" stories=\"block_parsing,inline_parsing\">\nReturn normalized HTML that collapses insignificant whitespace outside `pre` tags, removes whitespace surrounding block-level tags, converts self-closing tags to open tags, sorts and lowercases attributes, and converts references to Unicode except that `<`, `>`, `&`, and `\"` are rendered using entities.\n</requirement>\n<unattached story=\"foundation\"/>\n<unattached story=\"executable\"/>\n<unattached story=\"full_conformance\"/>"}}
+{"type":"turn.completed","usage":{"input_tokens":16787,"cached_input_tokens":11520,"cache_write_input_tokens":0,"output_tokens":110,"reasoning_output_tokens":0}}

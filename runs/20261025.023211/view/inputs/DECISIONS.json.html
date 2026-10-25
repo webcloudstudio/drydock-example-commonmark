@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>inputs/DECISIONS.json</title>
+<link rel="stylesheet" href="../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>inputs/DECISIONS.json</h1><div class="filenav"><a href="../../index.html">&larr; Report</a><a href="../../inputs/DECISIONS.json">Raw file</a></div></header>
+<article class="doc"><pre>[
+  {
+    &quot;id&quot;: &quot;build-architecture.md-executable-and-package-naming&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;material&quot;,
+    &quot;origin&quot;: &quot;build&quot;,
+    &quot;blueprint&quot;: &quot;ARCHITECTURE.md&quot;,
+    &quot;story&quot;: null,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Executable and package naming&quot;,
+    &quot;description&quot;: &quot;The required importable commonmark/ package occupies the same root path as a root executable named commonmark, so both cannot exist in this filesystem layout. I kept the package acceptance contract and added the commonmark console entry point plus bin/commonmark launcher.&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;The required importable commonmark/ package occupies the same root path as a root executable named commonmark, so both cannot exist in this filesystem layout. I kept the package acceptance contract and added the commonmark console entry point plus bin/commonmark launcher.&quot;
+  },
+  {
+    &quot;id&quot;: &quot;plan-001&quot;,
+    &quot;type&quot;: &quot;choice&quot;,
+    &quot;severity&quot;: &quot;material&quot;,
+    &quot;origin&quot;: &quot;plan&quot;,
+    &quot;blueprint&quot;: &quot;ARCHITECTURE.md&quot;,
+    &quot;story&quot;: &quot;foundation&quot;,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Use a self-contained parser implementation&quot;,
+    &quot;description&quot;: &quot;The stack selects Python 3 and the standard library, and Compass prohibits a public Markdown implementation. Use an in-house parser organized around block parsing, inline parsing, and HTML rendering.&quot;,
+    &quot;options&quot;: [
+      {
+        &quot;value&quot;: &quot;self-contained&quot;,
+        &quot;label&quot;: &quot;Implement the parser in the project&quot;
+      },
+      {
+        &quot;value&quot;: &quot;public-library&quot;,
+        &quot;label&quot;: &quot;Use a public Markdown implementation&quot;
+      }
+    ],
+    &quot;system_choice&quot;: &quot;self-contained&quot;
+  },
+  {
+    &quot;id&quot;: &quot;plan-002&quot;,
+    &quot;type&quot;: &quot;choice&quot;,
+    &quot;severity&quot;: &quot;low&quot;,
+    &quot;origin&quot;: &quot;plan&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Executable.md&quot;,
+    &quot;story&quot;: &quot;executable&quot;,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Use the conventional CLI response contract&quot;,
+    &quot;description&quot;: &quot;The source requires UTF-8 input and HTML output but does not specify malformed input handling or other process failures. Use exit status zero for successful conversion and a nonzero exit status for input or execution errors, reporting errors on standard error.&quot;,
+    &quot;options&quot;: [
+      {
+        &quot;value&quot;: &quot;conventional&quot;,
+        &quot;label&quot;: &quot;Return zero on success and nonzero on errors&quot;
+      }
+    ],
+    &quot;system_choice&quot;: &quot;conventional&quot;
+  }
+]
+</pre></article>
+</main>
+</body>
+</html>

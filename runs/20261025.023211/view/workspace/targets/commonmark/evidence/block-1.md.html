@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-1.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-1.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-1.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 1 · Foundational (block-1)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-24</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 3782</li><li>execution id: 20261025.023455.117Z-2c95b885</li></ul>
+<h2>Stories built</h2>
+<ul><li>Establish the Python project tree, environment, and test runner. (foundation) [story]</li></ul>
+<h2>Reusable compacts</h2>
+<ul><li>ARCHITECTURE_compact.md</li></ul>
+<h2>Stacked context</h2>
+<ul><li>implements: python.md (SP 761)</li><li>compass: COMPASS.md (SP 462)</li><li>implements: ARCHITECTURE.md (SP 688)</li><li>stack: common.md (SP 1812)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>.gitignore</li><li>bin/commonmark</li><li>commonmark/<strong>init</strong>.py</li><li>commonmark/<strong>main</strong>.py</li><li>commonmark/block_parser.py</li><li>commonmark/cli.py</li><li>commonmark/inline_parser.py</li><li>commonmark/model.py</li><li>commonmark/parser.py</li><li>commonmark/renderer.py</li><li>commonmark.egg-info/PKG-INFO</li><li>commonmark.egg-info/SOURCES.txt</li><li>commonmark.egg-info/dependency_links.txt</li><li>commonmark.egg-info/entry_points.txt</li><li>commonmark.egg-info/top_level.txt</li><li>pyproject.toml</li><li>tests/test_foundation.py</li><li>uv.lock</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: parser-package-imports (ARCHITECTURE.md)</li></ul>
+<p>intent: The project exposes an importable Python package for the parser foundation. return code: 1 stderr: --- drydock: values at failure --- spec = None --- drydock: end values --- Traceback (most recent call last): File &quot;parser-package-imports.py&quot;, line 4, in &lt;module&gt; assert spec is not None ^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: parser-foundation-tests (ARCHITECTURE.md)</li></ul>
+<p>intent: The foundation&#x27;s declared pytest test command runs successfully. return code: 1 stdout: no tests ran in 0.15s stderr: --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;pytest&#x27;, &#x27;-q&#x27;], returncode=5, stdout=&#x27;\nno tests ran in 0.15s\n&#x27;, stderr=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;parser-foundation-tests.py&quot;, line 6, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: parser-package-imports (ARCHITECTURE.md)</li></ul>
+<p>intent: The project exposes an importable Python package for the parser foundation. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: parser-foundation-tests (ARCHITECTURE.md)</li></ul>
+<p>intent: The foundation&#x27;s declared pytest test command runs successfully. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python provisioning: not required return code: 0 stdout: ..                                                                       [100%] 2 passed in 0.08s</p>
+<h2>Build summary</h2>
+<p>&lt;reusable-compact filename=&quot;ARCHITECTURE.md&quot;&gt;</p>
+<ul><li>Provide an importable Python package named <code>commonmark</code>.</li><li>Keep parsing self-contained; do not depend on a public Markdown implementation.</li><li>Flow: block parser builds document structure and collects document-wide link references; inline parser processes content using that reference map; renderer emits HTML.</li><li>The CLI reads UTF-8 Markdown from stdin and writes HTML to stdout.</li><li>Boundaries: block parsing, inline parsing, HTML rendering, and CLI. No persistence, configuration, file store, or external service boundary.</li><li>Acceptance: <code>importlib.util.find_spec(&quot;commonmark&quot;)</code> must return a package spec with <code>submodule_search_locations</code>; <code>pytest -q</code> must succeed.</li></ul>
+<p>&lt;/reusable-compact&gt;</p>
+<p>&lt;blueprint-decisions&gt; [{&quot;spec&quot;:&quot;ARCHITECTURE.md&quot;,&quot;severity&quot;:&quot;Material&quot;,&quot;subject&quot;:&quot;Executable and package naming&quot;,&quot;decision&quot;:&quot;The required importable commonmark/ package occupies the same root path as a root executable named commonmark, so both cannot exist in this filesystem layout. I kept the package acceptance contract and added the commonmark console entry point plus bin/commonmark launcher.&quot;}] &lt;/blueprint-decisions&gt;</p>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>pyproject.toml</li><li>uv.lock</li><li>.gitignore</li><li>commonmark/<strong>init</strong>.py</li><li>commonmark/<strong>main</strong>.py</li><li>commonmark/model.py</li><li>commonmark/block_parser.py</li><li>commonmark/inline_parser.py</li><li>commonmark/renderer.py</li><li>commonmark/parser.py</li><li>commonmark/cli.py</li><li>bin/commonmark</li><li>tests/test_foundation.py</li></ul>
+<p>SUMMARY: Established the Python package, phase boundaries, CLI flow, uv environment and lockfile, and pytest configuration. <code>pytest -q</code> passed (2 tests); the installed console command ran successfully with empty input. Parsing non-empty documents remains for later implementation.</p>
+<p>BLOCKERS:</p>
+<ul><li>A root executable named <code>commonmark</code> conflicts with the required <code>commonmark/</code> package directory. The console entry point and <code>bin/commonmark</code> launcher provide the command meanwhile.</li></ul></article>
+</main>
+</body>
+</html>

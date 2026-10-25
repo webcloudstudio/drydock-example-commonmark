@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261025.025556.110Z_commonmark_build_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261025.025556.110Z_commonmark_build_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261025.025556.110Z_commonmark_build_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>RESULT: FAILED
+
+FILES CHANGED:
+- src/commonmark/block_parser.py
+
+SUMMARY:
+Reran the declared checks. Block parsing: 199 passed, 87 failed, 0 errored. Inline parsing: 233 passed, 122 failed, 1 errored. Full suite: 437 passed, 217 failed, 1 errored. The parser still has broad conformance gaps.
+
+BLOCKERS:
+- Block and inline acceptance checks remain failing; see the suite counts above.
+
+FAILURE_SUMMARY: CommonMark conformance checks fail
+FAILURE_DETAIL: The block parser change improved the block slice from 197 to 199 passing cases, but substantial failures remain across block and inline parsing. Fix the general parser behavior, then rerun all three declared checks.</pre></article>
+</main>
+</body>
+</html>

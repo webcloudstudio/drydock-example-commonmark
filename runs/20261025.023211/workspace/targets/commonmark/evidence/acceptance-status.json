@@ -1,0 +1,53 @@
+{
+  "criteria": {
+    "block-parsing-conformance": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "b5b039b73a172f69fcd749fd05ae5c05c6675e6be4eea50299b025c34a277359",
+      "updated_at": "2026-10-25T02:36:04+00:00",
+      "detail": ""
+    },
+    "executable-errors": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "e8244e7ee751b5816da386b66dbc0a60b5ecd1133543adcee5e6703c180b98ed",
+      "updated_at": "2026-10-25T02:36:04+00:00",
+      "detail": ""
+    },
+    "executable-stdin-stdout": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "a44525e9805fd82f5ea2ba100b3dbb7f7192c4279b796ece7d99574ca194462e",
+      "updated_at": "2026-10-25T02:36:04+00:00",
+      "detail": ""
+    },
+    "full-commonmark-suite": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "bc36394383bc8a4de74ecd784004988f488fcbf50df877adf80f7c6b5f8686e2",
+      "updated_at": "2026-10-25T02:36:04+00:00",
+      "detail": ""
+    },
+    "inline-parsing-conformance": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "de5e06e75ed705bad127a3c75ef7d6d24a767ff687ff60b49f8ae3b84fbd0bab",
+      "updated_at": "2026-10-25T02:36:04+00:00",
+      "detail": ""
+    },
+    "parser-foundation-tests": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "1adae9a8be309b8083aac5c41e3fcbcfcbb9d4c51bba40c58b355c6ec208dee5",
+      "updated_at": "2026-10-25T02:34:48+00:00",
+      "detail": ""
+    },
+    "parser-package-imports": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "3e8036d12ddaf97e2d40887862b9bfb10cf19e6c0d42c776432796ae1cc9ddd9",
+      "updated_at": "2026-10-25T02:34:48+00:00",
+      "detail": ""
+    }
+  }
+}

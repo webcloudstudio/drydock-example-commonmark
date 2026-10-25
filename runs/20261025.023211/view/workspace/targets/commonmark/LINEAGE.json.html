@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/LINEAGE.json</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/LINEAGE.json</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../workspace/targets/commonmark/LINEAGE.json">Raw file</a></div></header>
+<article class="doc"><pre>{
+  &quot;version&quot;: 1,
+  &quot;import&quot;: {
+    &quot;root&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/sources&quot;,
+    &quot;format&quot;: &quot;markdown&quot;
+  },
+  &quot;sources&quot;: {
+    &quot;INSTRUCTIONS.md&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;0dfbe33&quot;,
+          &quot;date&quot;: &quot;2026-10-24&quot;,
+          &quot;hash&quot;: &quot;10b172786a92ad4dc012e88358cf96fcead95bcd919f2677df3a03405782fb0a&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;commonmark-parser&quot;,
+              &quot;text&quot;: &quot;Build a CommonMark 0.31.2 parser from the supplied specification.&quot;,
+              &quot;stories&quot;: [
+                &quot;block_parsing&quot;,
+                &quot;inline_parsing&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;stdin-stdout-interface&quot;,
+              &quot;text&quot;: &quot;The parser reads Markdown from\nstandard input and writes HTML to standard output.&quot;,
+              &quot;stories&quot;: [
+                &quot;executable&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;root-executable&quot;,
+              &quot;text&quot;: &quot;The deliverable is an executable named `commonmark` at the application root.&quot;,
+              &quot;stories&quot;: [
+                &quot;executable&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;use-supplied-harness&quot;,
+              &quot;text&quot;: &quot;`sources/full_test.sh` is the single scoring entry point.&quot;,
+              &quot;stories&quot;: [
+                &quot;full_conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;preserve-scoring-assets&quot;,
+              &quot;text&quot;: &quot;The scoring assets are read-only.&quot;,
+              &quot;stories&quot;: [
+                &quot;full_conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;full-suite-conformance&quot;,
+              &quot;text&quot;: &quot;Build `./commonmark` so that the supplied entry point succeeds;\nchanging the entry point is not a repair.&quot;,
+              &quot;stories&quot;: [
+                &quot;full_conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;project-readme&quot;,
+              &quot;text&quot;: &quot;Create a concise project `README.md` describing the standard-input/standard-output interface.&quot;,
+              &quot;stories&quot;: [
+                &quot;executable&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;block-parse-order&quot;,
+              &quot;text&quot;: &quot;Implement in that order.&quot;,
+              &quot;stories&quot;: [
+                &quot;block_parsing&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;inline-parse-order&quot;,
+              &quot;text&quot;: &quot;The specification text is normative and contains the algorithms.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_parsing&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;appendix-strategy&quot;,
+              &quot;text&quot;: &quot;The \&quot;Appendix: A parsing strategy\&quot; section describes the reference implementation&#x27;s approach; follow it directly rather than reinventing the rules.&quot;,
+              &quot;stories&quot;: [
+                &quot;block_parsing&quot;,
+                &quot;inline_parsing&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;terminal-verification-story&quot;,
+              &quot;text&quot;: &quot;Create one terminal verification story that:&quot;,
+              &quot;stories&quot;: [
+                &quot;full_conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;verification-dependencies&quot;,
+              &quot;text&quot;: &quot;- depends on every parser implementation story;&quot;,
+              &quot;stories&quot;: [
+                &quot;full_conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;single-full-suite-check&quot;,
+              &quot;text&quot;: &quot;- contains the only `Suite: full` acceptance check;&quot;,
+              &quot;stories&quot;: [
+                &quot;full_conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;run-full-test-harness&quot;,
+              &quot;text&quot;: &quot;- runs `sh sources/full_test.sh`, prints captured standard output and standard error, and asserts\n  only `result.returncode == 0`; and&quot;,
+              &quot;stories&quot;: [
+                &quot;full_conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;sea-trials-id&quot;,
+              &quot;text&quot;: &quot;- carries `Sea Trials: st-001`.&quot;,
+              &quot;stories&quot;: [
+                &quot;full_conformance&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;cmark.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;0dfbe33&quot;,
+          &quot;date&quot;: &quot;2026-10-24&quot;,
+          &quot;hash&quot;: &quot;c5fb45e7c64fd7670b2a3c49a151e46f4af9d0ad3004bedb37ecf9cdc34d2f00&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;run-commonmark-executable&quot;,
+              &quot;text&quot;: &quot;if prog:\n            self.to_html = lambda x: pipe_through_prog(prog, x)&quot;,
+              &quot;stories&quot;: [
+                &quot;executable&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;convert-markdown-to-html&quot;,
+              &quot;text&quot;: &quot;markdown = cmark.cmark_markdown_to_html\n            markdown.restype = c_char_p\n            markdown.argtypes = [c_char_p, c_long, c_int]&quot;,
+              &quot;stories&quot;: [
+                &quot;block_parsing&quot;,
+                &quot;inline_parsing&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;full_test.sh&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;0dfbe33&quot;,
+          &quot;date&quot;: &quot;2026-10-24&quot;,
+          &quot;hash&quot;: &quot;5b634a1c78117313283acceda8faad9de02b594e54949439c73697b058941a93&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;provide-commonmark-executable&quot;,
+              &quot;text&quot;: &quot;The deliverable is an executable named commonmark that reads UTF-8 Markdown on stdin\nand writes HTML to stdout.&quot;,
+              &quot;stories&quot;: [
+                &quot;executable&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;pass-full-unfiltered-suite&quot;,
+              &quot;text&quot;: &quot;spec_tests.py exits with failed + errored, so exit 0 means the complete CommonMark 0.31.2 suite passed.&quot;,
+              &quot;stories&quot;: [
+                &quot;block_parsing&quot;,
+                &quot;inline_parsing&quot;,
+                &quot;full_conformance&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;normalize.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;0dfbe33&quot;,
+          &quot;date&quot;: &quot;2026-10-24&quot;,
+          &quot;hash&quot;: &quot;94a9dd253907e3dab7c02fc11e934f06112dcf0f3804255d09d732c8c7c4b5f4&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;normalize-html-output&quot;,
+              &quot;text&quot;: &quot;Return normalized HTML that collapses insignificant whitespace outside `pre` tags, removes whitespace surrounding block-level tags, converts self-closing tags to open tags, sorts and lowercases attributes, and converts references to Unicode except that `&lt;`, `&gt;`, `&amp;`, and `\&quot;` are rendered using entities.&quot;,
+              &quot;stories&quot;: [
+                &quot;block_parsing&quot;,
+                &quot;inline_parsing&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;spec.txt&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;0dfbe33&quot;,
+          &quot;date&quot;: &quot;2026-10-24&quot;,
+          &quot;hash&quot;: &quot;43fad3e0ac5190a3b0bc6a41f7b1a853201a26ec2e6b74871f5d96239a8c34cf&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;block-structure&quot;,
+              &quot;text&quot;: &quot;This document attempts to specify Markdown syntax unambiguously.&quot;,
+              &quot;stories&quot;: [
+                &quot;block_parsing&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;conformance-tests&quot;,
+              &quot;text&quot;: &quot;These are intended to double as conformance tests.&quot;,
+              &quot;stories&quot;: [
+                &quot;full_conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-into-ast&quot;,
+              &quot;text&quot;: &quot;Since this document describes how Markdown is to be parsed into\nan abstract syntax tree, it would have made sense to use an abstract\nrepresentation of the syntax tree instead of HTML.&quot;,
+              &quot;stories&quot;: [
+                &quot;block_parsing&quot;,
+                &quot;inline_parsing&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;html-rendering&quot;,
+              &quot;text&quot;: &quot;But HTML is capable of representing the structural distinctions we need\nto make, and the choice of HTML for the tests makes it possible to run the\ntests against an implementation without writing an abstract syntax tree renderer.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_parsing&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parser-executable&quot;,
+              &quot;text&quot;: &quot;An accompanying script `spec_tests.py` can be used to run the tests\nagainst any Markdown program:&quot;,
+              &quot;stories&quot;: [
+                &quot;executable&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-commonmark-blocks&quot;,
+              &quot;text&quot;: &quot;A sequence of non-blank lines that cannot be interpreted as other\nkinds of blocks forms a [paragraph](@).&quot;,
+              &quot;stories&quot;: [
+                &quot;block_parsing&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-commonmark-inlines&quot;,
+              &quot;text&quot;: &quot;Any characters not given an interpretation by the above rules will be\nparsed as plain textual content.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_parsing&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;spec_tests.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;0dfbe33&quot;,
+          &quot;date&quot;: &quot;2026-10-24&quot;,
+          &quot;hash&quot;: &quot;9db1ea4a3ee79c5ec74eebc09c5985eb252427e8d9d19ef45e5cc3f2ae410855&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;parse-arguments&quot;,
+              &quot;text&quot;: &quot;parser.add_argument(&#x27;-p&#x27;, &#x27;--program&#x27;, dest=&#x27;program&#x27;, nargs=&#x27;?&#x27;, default=None,\n            help=&#x27;program to test&#x27;)\n    parser.add_argument(&#x27;-s&#x27;, &#x27;--spec&#x27;, dest=&#x27;spec&#x27;, nargs=&#x27;?&#x27;, default=&#x27;spec.txt&#x27;,\n            help=&#x27;path to spec&#x27;)\n    parser.add_argument(&#x27;-P&#x27;, &#x27;--pattern&#x27;, dest=&#x27;pattern&#x27;, nargs=&#x27;?&#x27;,\n            default=None, help=&#x27;limit to sections matching regex pattern&#x27;)\n    parser.add_argument(&#x27;--library-dir&#x27;, dest=&#x27;library_dir&#x27;, nargs=&#x27;?&#x27;,\n            default=None, help=&#x27;directory containing dynamic library&#x27;)\n    parser.add_argument(&#x27;--no-normalize&#x27;, dest=&#x27;normalize&#x27;,\n            action=&#x27;store_const&#x27;, const=False, default=True,\n            help=&#x27;do not normalize HTML&#x27;)\n    parser.add_argument(&#x27;-d&#x27;, &#x27;--dump-tests&#x27;, dest=&#x27;dump_tests&#x27;,\n            action=&#x27;store_const&#x27;, const=True, default=False,\n            help=&#x27;dump tests in JSON format&#x27;)\n    parser.add_argument(&#x27;--debug-normalization&#x27;, dest=&#x27;debug_normalization&#x27;,\n            action=&#x27;store_const&#x27;, const=True,\n            default=False, help=&#x27;filter stdin through normalizer for testing&#x27;)\n    parser.add_argument(&#x27;-n&#x27;, &#x27;--number&#x27;, type=int, default=None,\n            help=&#x27;only consider the test with the given number&#x27;)\n    parser.add_argument(&#x27;--track&#x27;, metavar=&#x27;path&#x27;,\n            help=&#x27;track which test cases pass/fail in the given JSON file and only report changes&#x27;)&quot;,
+              &quot;stories&quot;: [
+                &quot;executable&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;run-tests-and-report-results&quot;,
+              &quot;text&quot;: &quot;cmark = CMark(prog=args.program, library_dir=args.library_dir)\n            result_counts = {&#x27;pass&#x27;: 0, &#x27;fail&#x27;: 0, &#x27;error&#x27;: 0, &#x27;skip&#x27;: skipped}\n\n            previous = {}\n\n            if args.track:\n                try:\n                    with open(args.track) as f:\n                        previous = json.load(f)\n                except FileNotFoundError:\n                    pass\n\n            results = {}\n\n            for test in tests:\n                result = do_test(test, args.normalize, previous.get(str(test[&#x27;example&#x27;])))\n                result_counts[result] += 1\n                results[test[&#x27;example&#x27;]] = result\n\n            if args.track:\n                with open(args.track, &#x27;w&#x27;) as f:\n                    json.dump(results, f)\n\n            out(\&quot;{pass} passed, {fail} failed, {error} errored, {skip} skipped\\n\&quot;.format(**result_counts))\n            exit(result_counts[&#x27;fail&#x27;] + result_counts[&#x27;error&#x27;])&quot;,
+              &quot;stories&quot;: [
+                &quot;full_conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;select-tests&quot;,
+              &quot;text&quot;: &quot;all_tests = get_tests(args.spec)\n    if args.pattern:\n        pattern_re = re.compile(args.pattern, re.IGNORECASE)\n    else:\n        pattern_re = re.compile(&#x27;.&#x27;)\n    tests = [ test for test in all_tests if re.search(pattern_re, test[&#x27;section&#x27;]) and (not args.number or test[&#x27;example&#x27;] == args.number) ]\n    if args.dump_tests:\n        out(json.dumps(tests, ensure_ascii=False, indent=2))\n        exit(0)\n    else:\n        skipped = len(all_tests) - len(tests)&quot;,
+              &quot;stories&quot;: [
+                &quot;full_conformance&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;unattached-test-runner&quot;,
+              &quot;text&quot;: &quot;The source does not state a distinct requirement that clearly maps to this story.&quot;,
+              &quot;stories&quot;: [
+                &quot;foundation&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;render-test-diffs&quot;,
+              &quot;text&quot;: &quot;print_test_header(test)\n            out(test[&#x27;markdown&#x27;] + &#x27;\\n&#x27;)\n            expected_html_lines = expected_html.splitlines(True)\n            actual_html_lines = actual_html.splitlines(True)\n            for diffline in unified_diff(expected_html_lines, actual_html_lines,\n                            \&quot;expected HTML\&quot;, \&quot;actual HTML\&quot;):\n                out(diffline)&quot;,
+              &quot;stories&quot;: [
+                &quot;executable&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;read-and-extract-spec-examples&quot;,
+              &quot;text&quot;: &quot;l = line.strip()\n            if l == \&quot;`\&quot; * 32 + \&quot; example\&quot;:\n                state = 1\n            elif state == 2 and l == \&quot;`\&quot; * 32:\n                state = 0\n                example_number = example_number + 1\n                end_line = line_number\n                tests.append({\n                    \&quot;markdown\&quot;:&#x27;&#x27;.join(markdown_lines).replace(&#x27;\u2192&#x27;,\&quot;\\t\&quot;),\n                    \&quot;html\&quot;:&#x27;&#x27;.join(html_lines).replace(&#x27;\u2192&#x27;,\&quot;\\t\&quot;),\n                    \&quot;example\&quot;: example_number,\n                    \&quot;start_line\&quot;: start_line,\n                    \&quot;end_line\&quot;: end_line,\n                    \&quot;section\&quot;: headertext})\n                start_line = 0\n                markdown_lines = []\n                html_lines = []\n            elif l == \&quot;.\&quot;:\n                state = 2\n            elif state == 1:\n                if start_line == 0:\n                    start_line = line_number - 1\n                markdown_lines.append(line)\n            elif state == 2:\n                html_lines.append(line)\n            elif state == 0 and re.match(header_re, line):\n                headertext = header_re.sub(&#x27;&#x27;, line).strip()&quot;,
+              &quot;stories&quot;: [
+                &quot;block_parsing&quot;,
+                &quot;full_conformance&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+</pre></article>
+</main>
+</body>
+</html>

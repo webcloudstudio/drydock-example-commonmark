@@ -1,0 +1,3 @@
+2026-10-25T03:23:15.072651Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/src/commonmark/block_parser.py:
+        if am:
+            text=re.sub(r'[ \t]+#+[ \t]*$','',am.group(2) or '').strip(' \t'); out.append(_node('heading',level=len(am.group(1)),text=text)); i+=1; continue

@@ -1,0 +1,13 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- src/commonmark/block_parser.py
+
+SUMMARY:
+Added handling for CommonMark HTML block types 1–7. `compileall` succeeded. The block slice finished with 229 passed and 57 failed; the inline slice had 248 passed and 108 failed; the full suite had 482 passed and 173 failed.
+
+BLOCKERS:
+- Block and inline parsing remain substantially nonconformant, including list continuation, reference definitions, inline parsing, and raw HTML handling.
+
+FAILURE_SUMMARY: CommonMark conformance checks still fail
+FAILURE_DETAIL: `sh sources/full_test.sh` completed with exit status 1: 173 examples failed. The scoped block and inline checks also failed. Repair the remaining general parsing behavior and rerun all three checks.

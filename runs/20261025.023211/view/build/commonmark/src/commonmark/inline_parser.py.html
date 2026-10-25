@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/src/commonmark/inline_parser.py</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/src/commonmark/inline_parser.py</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../build/commonmark/src/commonmark/inline_parser.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Inline parsing for block text, with document-wide references.&quot;&quot;&quot;
+import html, re, unicodedata
+from urllib.parse import quote
+from html.entities import html5
+from .model import Document
+
+ESC=set(&#x27;!&quot;#$%&amp;\&#x27;()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~&#x27;)
+ENTITY=re.compile(r&#x27;&amp;(?:#[xX][0-9A-Fa-f]{1,6}|#[0-9]{1,7}|[A-Za-z][A-Za-z0-9]+);&#x27;)
+_NAME = r&#x27;[A-Za-z][A-Za-z0-9-]*&#x27;
+_ATTR = r&#x27;&#x27;&#x27;[A-Za-z_:][A-Za-z0-9_.:-]*(?:[ \t\n]*=[ \t\n]*(?:[^\s&quot;&#x27;=&lt;&gt;`]+|&#x27;[^&#x27;]*&#x27;|&quot;[^&quot;]*&quot;))?&#x27;&#x27;&#x27;
+TAG=re.compile(
+    r&#x27;(?:&lt;!--(?:.|\n)*?--&gt;|&lt;!--&gt;|&lt;!---&gt;|&lt;\?(?:.|\n)*?\?&gt;|&#x27;
+    r&#x27;&lt;![A-Za-z](?:.|\n)*?&gt;|&lt;!\[CDATA\[(?:.|\n)*?\]\]&gt;|&#x27;
+    r&#x27;&lt;/&#x27;+_NAME+r&#x27;[ \t\n]*&gt;|&lt;&#x27;+_NAME+r&#x27;(?:[ \t\n]+&#x27;+_ATTR+r&#x27;)*[ \t\n]*/?&gt;)&#x27;
+)
+AUTO=re.compile(r&#x27;&lt;((?:[A-Za-z][A-Za-z0-9+.-]{1,31}:[^ &lt;&gt;\x00-\x20]*|[A-Za-z0-9.!#$%&amp;\&#x27;*+/=?^_`{|}~-]+@[A-Za-z0-9.-]+))&gt;&#x27;)
+
+def parse_inlines(document: Document) -&gt; Document:
+    def walk(blocks):
+        for b in blocks:
+            t=b[&#x27;type&#x27;]
+            if t in (&#x27;paragraph&#x27;,&#x27;heading&#x27;): b[&#x27;html&#x27;]=inline(b[&#x27;text&#x27;], document.references)
+            if t in (&#x27;quote&#x27;,): walk(b[&#x27;children&#x27;])
+            if t==&#x27;list&#x27;:
+                for item in b[&#x27;items&#x27;]: walk(item)
+    walk(document.blocks); return document
+
+def _dest(s):
+    # Destinations are decoded before HTML rendering; preserve valid URL syntax
+    # and percent-encode Unicode and otherwise unsafe characters as UTF-8.
+    s=html.unescape(s)
+    s=re.sub(r&#x27;\\([!&quot;#$%&amp;\&#x27;()*+,-./:;&lt;=&gt;?@\[\\\]^_`{|}~])&#x27;,r&#x27;\1&#x27;,s)
+    return quote(s, safe=&quot;;/?:@&amp;=+$,#-_.!~*&#x27;()%&quot;)
+def _esc(s): return html.escape(s, quote=False)
+def _label(s): return &#x27; &#x27;.join(s.split()).casefold()
+
+def inline(src, refs, depth=0):
+    if depth&gt;12: return _esc(src)
+    out=[]; i=0; n=len(src)
+    while i&lt;n:
+        if src[i]==&#x27;\\&#x27; and i+1&lt;n and src[i+1] in ESC:
+            out.append(html.escape(src[i+1], quote=True).replace(&#x27;&amp;#x27;&#x27;, &#x27;&amp;#39;&#x27;)); i+=2; continue
+        if src[i]==&#x27;\n&#x27;:
+            # two trailing spaces or slash introduce a hard break
+            trailing=0
+            for part in reversed(out):
+                if not part: continue
+                if part.isspace() and &#x27;\n&#x27; not in part: trailing += len(part); continue
+                break
+            if trailing &gt;= 2:
+                while out and out[-1].isspace() and &#x27;\n&#x27; not in out[-1]: out.pop()
+                out.append(&#x27;&lt;br /&gt;\n&#x27;)
+            elif out and out[-1].endswith(&#x27;\\&#x27;): out[-1]=out[-1][:-1]; out.append(&#x27;&lt;br /&gt;\n&#x27;)
+            else: out.append(&#x27;\n&#x27;)
+            i+=1
+            while i&lt;n and src[i] in &#x27; \t&#x27;: i+=1
+            continue
+        if src[i]==&#x27;`&#x27;:
+            m=re.match(r&#x27;`+&#x27;,src[i:]); run=m.group(); end=src.find(run,i+len(run))
+            while end&gt;=0 and ((end+len(run)&lt;n and src[end+len(run)]==&#x27;`&#x27;) or (end&gt;0 and src[end-1]==&#x27;`&#x27;)): end=src.find(run,end+len(run))
+            if end&gt;=0:
+                val=src[i+len(run):end].replace(&#x27;\n&#x27;,&#x27; &#x27;)
+                if val.startswith(&#x27; &#x27;) and val.endswith(&#x27; &#x27;) and val.strip(): val=val[1:-1]
+                out.append(&#x27;&lt;code&gt;&#x27;+html.escape(val,quote=False)+&#x27;&lt;/code&gt;&#x27;); i=end+len(run); continue
+        am=AUTO.match(src,i)
+        if am:
+            x=am.group(1); url=x if &#x27;:&#x27; in x else &#x27;mailto:&#x27;+x
+            auto_url=quote(url, safe=&quot;;/?:@&amp;=+$,#-_.!~*&#x27;()%&quot;)
+            out.append(&#x27;&lt;a href=&quot;&#x27;+html.escape(auto_url,quote=True)+&#x27;&quot;&gt;&#x27;+html.escape(x,quote=False)+&#x27;&lt;/a&gt;&#x27;); i=am.end(); continue
+        tm=TAG.match(src,i)
+        if tm: out.append(tm.group()); i=tm.end(); continue
+        em=ENTITY.match(src,i)
+        if em:
+            name=em.group()[1:-1]
+            try:
+                if name.startswith(&#x27;#x&#x27;) or name.startswith(&#x27;#X&#x27;): c=chr(int(name[2:],16))
+                elif name.startswith(&#x27;#&#x27;): c=chr(int(name[1:]))
+                else: c=html5.get(name+&#x27;;&#x27;)
+                if isinstance(c, tuple): c=&#x27;&#x27;.join(c)
+                if c is None: out.append(&#x27;&amp;amp;&#x27;+name+&#x27;;&#x27;)
+                else:
+                    if not c or any(ord(ch)==0 or ord(ch)&gt;0x10ffff or 0xd800&lt;=ord(ch)&lt;=0xdfff for ch in c): c=&#x27;�&#x27;
+                    out.append(html.escape(c,quote=True).replace(&#x27;&amp;#x27;&#x27;, &#x27;&amp;#39;&#x27;))
+            except (ValueError, OverflowError): out.append(&#x27;&amp;amp;&#x27;+name+&#x27;;&#x27;)
+            i=em.end(); continue
+        if src[i]==&#x27;[&#x27; or src.startswith(&#x27;![&#x27;,i):
+            image=src.startswith(&#x27;![&#x27;,i); st=i+2 if image else i+1
+            close=_closing_bracket(src,st)
+            if close&gt;=0:
+                label=src[st:close]; end=close+1; dest=title=None; nxt=end
+                if nxt&lt;len(src) and src[nxt]==&#x27;(&#x27;:
+                    parsed=_inline_target(src,nxt)
+                    if parsed: dest,title,end=parsed
+                if dest is None:
+                    ref_label=None
+                    if end&lt;len(src) and src[end]==&#x27;[&#x27;:
+                        cl=_closing_bracket(src,end+1)
+                        if cl&gt;=0:
+                            ref_label=src[end+1:cl] or label; end=cl+1
+                    else: ref_label=label
+                    if ref_label and _label(ref_label) in refs: dest,title=refs[_label(ref_label)]
+                if dest is not None:
+                    val=inline(label,refs,depth+1)
+                    attr=&#x27; src&#x27; if image else &#x27; href&#x27;
+                    tag=&#x27;img&#x27; if image else &#x27;a&#x27;
+                    attrs=attr+&#x27;=&quot;&#x27;+html.escape(_dest(dest),quote=True)+&#x27;&quot;&#x27;
+                    if image:
+                        plain=re.sub(r&#x27;&lt;[^&gt;]*&gt;|[*_~`]&#x27;,&#x27;&#x27;,label)
+                        attrs+=&#x27; alt=&quot;&#x27;+html.escape(html.unescape(plain),quote=True)+&#x27;&quot;&#x27;
+                    if title is not None: attrs+=&#x27; title=&quot;&#x27;+html.escape(html.unescape(title),quote=True)+&#x27;&quot;&#x27;
+                    out.append(&#x27;&lt;&#x27;+tag+attrs+&#x27; /&gt;&#x27; if image else &#x27;&lt;a&#x27;+attrs+&#x27;&gt;&#x27;+val+&#x27;&lt;/a&gt;&#x27;)
+                    i=end; continue
+        # emphasis: find a valid matching delimiter and recurse
+        if src[i] in &#x27;*_&#x27;:
+            ch=src[i]; run=re.match(re.escape(ch)+&#x27;+&#x27;,src[i:]).group(); length=len(run)
+            can_open=i+length&lt;n and not src[i+length].isspace() and (ch==&#x27;*&#x27; or i==0 or not src[i-1].isalnum())
+            if can_open:
+                close=_find_em(src,i+length,ch,length)
+                if close != -1:
+                    use=2 if length&gt;=2 and close[1]&gt;=2 else 1
+                    tag=&#x27;strong&#x27; if use==2 else &#x27;em&#x27;
+                    inner=src[i+use:close[0]]
+                    out.append(&#x27;&lt;&#x27;+tag+&#x27;&gt;&#x27;+inline(inner,refs,depth+1)+&#x27;&lt;/&#x27;+tag+&#x27;&gt;&#x27;); i=close[0]+use; continue
+        out.append(_esc(src[i])); i+=1
+    return &#x27;&#x27;.join(out)
+
+def _closing_bracket(s,start):
+    level=0; i=start
+    while i&lt;len(s):
+        if s[i]==&#x27;\\&#x27;: i+=2; continue
+        if s[i]==&#x27;`&#x27;:
+            m=re.match(r&#x27;`+&#x27;,s[i:]); e=s.find(m.group(),i+len(m.group()))
+            if e&gt;=0: i=e+len(m.group()); continue
+        if s[i]==&#x27;[&#x27;: level+=1
+        elif s[i]==&#x27;]&#x27;:
+            if level==0:return i
+            level-=1
+        i+=1
+    return -1
+
+def _inline_target(s,pos):
+    i=pos+1
+    while i&lt;len(s) and s[i] in &#x27; \t\n&#x27;: i+=1
+    if i&lt;len(s) and s[i]==&#x27;&lt;&#x27;:
+        e=i+1
+        while e&lt;len(s) and s[e]!=&#x27;&gt;&#x27; and s[e]!=&#x27;\n&#x27;: e+=1
+        if e&gt;=len(s) or s[e]!=&#x27;&gt;&#x27;:return None
+        dest=s[i+1:e]; i=e+1
+    else:
+        st=i; level=0
+        while i&lt;len(s):
+            if s[i]==&#x27;\\&#x27;:i+=2;continue
+            if s[i]==&#x27;(&#x27;:level+=1
+            elif s[i]==&#x27;)&#x27;:
+                if level==0:break
+                level-=1
+            elif s[i].isspace():break
+            i+=1
+        dest=s[st:i]
+    while i&lt;len(s) and s[i] in &#x27; \t\n&#x27;:i+=1
+    title=None
+    if i&lt;len(s) and s[i] in &#x27;&quot;\&#x27;(&#x27;:
+        close={&quot;\&quot;&quot;:&quot;\&quot;&quot;,&quot;&#x27;&quot;:&quot;&#x27;&quot;,&#x27;(&#x27;:&#x27;)&#x27;}[s[i]]; j=i+1
+        while j&lt;len(s):
+            if s[j]==&#x27;\\&#x27;:j+=2;continue
+            if s[j]==close:break
+            if s[j]==&#x27;\n\n&#x27;:return None
+            j+=1
+        if j&gt;=len(s):return None
+        title=s[i+1:j]; i=j+1
+        while i&lt;len(s) and s[i] in &#x27; \t\n&#x27;:i+=1
+    if i&lt;len(s) and s[i]==&#x27;)&#x27;:
+        dest=re.sub(r&#x27;\\([!&quot;#$%&amp;\&#x27;()*+,-./:;&lt;=&gt;?@\[\\\]^_`{|}~])&#x27;,r&#x27;\1&#x27;,dest)
+        title=re.sub(r&#x27;\\([!&quot;#$%&amp;\&#x27;()*+,-./:;&lt;=&gt;?@\[\\\]^_`{|}~])&#x27;,r&#x27;\1&#x27;,title) if title is not None else None
+        return dest,title,i+1
+    return None
+
+def _find_em(s,start,ch,length):
+    i=start
+    while i&lt;len(s):
+        if s[i]==&#x27;\\&#x27;:i+=2;continue
+        if s[i]==ch:
+            m=re.match(re.escape(ch)+&#x27;+&#x27;,s[i:]); r=len(m.group())
+            if i&gt;start and not s[i-1].isspace() and (i+r==len(s) or not s[i+r].isalnum()): return i,r
+            i+=r
+        else:i+=1
+    return -1
+</pre></article>
+</main>
+</body>
+</html>
