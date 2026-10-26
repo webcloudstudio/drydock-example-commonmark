@@ -1,0 +1,14 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- src/commonmark/block_parser.py
+- src/commonmark/inline_parser.py
+
+SUMMARY:
+Added leading tab expansion for block structure, improved reference definition parsing, adjusted list content indentation, and corrected code span escaping and delimiter handling. The block slice reported 265 passed and 21 failed; the inline slice reported 281 passed and 75 failed. The required full suite ran and reported 564 passed, 91 failed, 0 errored, 0 skipped. `PYTHONPATH=src pytest -q` passed (5 tests); executable checks and Python compilation passed.
+
+BLOCKERS:
+- Block parsing still fails on list nesting/looseness and reference definition edge cases. Inline parsing still fails on emphasis and link precedence cases.
+
+FAILURE_SUMMARY: CommonMark conformance checks remain failing.
+FAILURE_DETAIL: The declared block and inline slices and the full suite completed, but their assertions failed on parser behavior. The current recursive delimiter matching and list handling do not cover the required nested cases. A rerun needs general stack-based inline delimiter/link parsing and more complete list continuation and looseness handling.

@@ -1,0 +1,115 @@
+Example 275 (lines 4511-4527) List items
+1.     indented code
+
+   paragraph
+
+       more code
+
+--- expected HTML
++++ actual HTML
+@@ -1,3 +1,2 @@
+ <ol><li><pre><code>indented code
+-</code></pre><p>paragraph</p><pre><code>more code
+-</code></pre></li></ol>
++</code></pre><p>graph</p><p>more code</p></li></ol>
+
+Example 276 (lines 4533-4549) List items
+1.      indented code
+
+   paragraph
+
+       more code
+
+--- expected HTML
++++ actual HTML
+@@ -1,3 +1,2 @@
+ <ol><li><pre><code> indented code
+-</code></pre><p>paragraph</p><pre><code>more code
+-</code></pre></li></ol>
++</code></pre><p>raph</p><p>ore code</p></li></ol>
+
+Example 280 (lines 4614-4635) List items
+-
+  foo
+-
+  ```
+  bar
+  ```
+-
+      baz
+
+--- expected HTML
++++ actual HTML
+@@ -1,3 +1,3 @@
+ <ul><li>foo</li><li><pre><code>bar
+-</code></pre></li><li><pre><code>baz
++</code></pre></li><li><pre><code>  baz
+ </code></pre></li></ul>
+
+Example 302 (lines 5035-5049) List items
+- # Foo
+- Bar
+  ---
+  baz
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-<ul><li><h1>Foo</h1></li><li><h2>Bar</h2>baz</li></ul>
++<ul><li><h1>Foo</h1></li><li>Bar</li></ul><hr><p>baz</p>
+
+Example 309 (lines 5427-5449) Lists
+- foo
+  - bar
+    - baz
+
+
+      bim
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-<ul><li>foo<ul><li>bar<ul><li><p>baz</p><p>bim</p></li></ul></li></ul></li></ul>
++<ul><li><p>foo</p><ul><li><p>bar</p><ul><li><p>baz</p><p>bim</p></li></ul></li></ul></li></ul>
+
+Example 314 (lines 5554-5568) Lists
+- a
+ - b
+  - c
+   - d
+    - e
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-<ul><li>a</li><li>b</li><li>c</li><li>d - e</li></ul>
++<ul><li>a</li><li>b</li><li>c</li><li>d<ul><li>e</li></ul></li></ul>
+
+Example 321 (lines 5712-5730) Lists
+- a
+  - b
+
+    c
+- d
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-<ul><li>a<ul><li><p>b</p><p>c</p></li></ul></li><li>d</li></ul>
++<ul><li><p>a</p><ul><li><p>b</p><p>c</p></li></ul></li><li><p>d</p></li></ul>
+
+279 passed, 7 failed, 0 errored, 369 skipped
+
+--- stderr ---
+
+--- drydock: progress ---
+cases: pass=279 fail=7 error=0 skip=369 total=655 from=result.stdout
+--- drydock: end progress ---
+--- drydock: values at failure ---
+  result = CompletedProcess(args=['/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/.venv/bin/python', 'sources/spec_tests.py', '--program', './commonmark', '--spec', 'sources/spec.txt', '--pattern', 'Thematic breaks|ATX headings|Setext headings|Indented code blocks|Fenced code blocks|HTML blocks|Link reference definitions|Paragraphs|Blank lines|Block quotes|List items… (+2096 chars)
+--- drydock: end values ---
+Traceback (most recent call last):
+  File "block-parsing-conformance.py", line 18, in <module>
+    assert result.returncode == 0
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

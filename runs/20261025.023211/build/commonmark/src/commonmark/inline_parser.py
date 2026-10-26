@@ -32,7 +32,8 @@ def _dest(s):
     s=re.sub(r'\\([!"#$%&\'()*+,-./:;<=>?@\[\\\]^_`{|}~])',r'\1',s)
     return quote(s, safe=";/?:@&=+$,#-_.!~*'()%")
 def _esc(s): return html.escape(s, quote=True).replace('&#x27;', '&#39;')
-def _label(s): return ' '.join(s.split()).casefold()
+def _label(s):
+    return ' '.join(s.split()).casefold()
 
 def inline(src, refs, depth=0):
     if depth>12: return _esc(src)
@@ -56,12 +57,24 @@ def inline(src, refs, depth=0):
             while i<n and src[i] in ' \t': i+=1
             continue
         if src[i]=='`':
-            m=re.match(r'`+',src[i:]); run=m.group(); end=src.find(run,i+len(run))
-            while end>=0 and ((end+len(run)<n and src[end+len(run)]=='`') or (end>0 and src[end-1]=='`')): end=src.find(run,end+len(run))
+            m=re.match(r'`+',src[i:]); run=m.group(); end=-1; search=i+len(run)
+            # Delimiters are backtick *strings*: a run only closes another
+            # run of exactly the same length, never a substring of a longer run.
+            while search<n:
+                found=src.find('`',search)
+                if found<0: break
+                close=re.match(r'`+',src[found:]).group()
+                if len(close)==len(run):
+                    end=found
+                    break
+                search=found+len(close)
             if end>=0:
                 val=src[i+len(run):end].replace('\n',' ')
                 if val.startswith(' ') and val.endswith(' ') and val.strip(): val=val[1:-1]
-                out.append('<code>'+html.escape(val,quote=False)+'</code>'); i=end+len(run); continue
+                out.append('<code>'+html.escape(val,quote=True).replace('&#x27;', '&#39;')+'</code>'); i=end+len(run); continue
+            # An unmatched delimiter is one literal run.  Do not reconsider a
+            # suffix of it as a new opener (e.g. ```foo``).
+            out.append(html.escape(run, quote=False)); i+=len(run); continue
         am=AUTO.match(src,i)
         if am:
             x=am.group(1); url=x if ':' in x else 'mailto:'+x
@@ -118,6 +131,13 @@ def inline(src, refs, depth=0):
             close=_closing_bracket(src,st)
             if close>=0:
                 label=src[st:close]; end=close+1; dest=title=None; nxt=end
+                # A valid HTML tag or autolink inside an apparent label binds
+                # before bracket parsing and prevents link construction.
+                raw_candidate=src[i:close+1]
+                if '<' in label and (TAG.search(label) or AUTO.search(label)):
+                    close=-1
+            if close>=0:
+                label=src[st:close]; end=close+1; dest=title=None; nxt=end
                 if nxt<len(src) and src[nxt]=='(':
                     parsed=_inline_target(src,nxt)
                     if parsed: dest,title,end=parsed
@@ -131,6 +151,8 @@ def inline(src, refs, depth=0):
                     if ref_label and _label(ref_label) in refs: dest,title=refs[_label(ref_label)]
                 if dest is not None:
                     val=inline(label,refs,depth+1)
+                    if not image and '<a ' in val:
+                        out.append(_esc(src[i])); i+=1; continue
                     attr=' src' if image else ' href'
                     tag='img' if image else 'a'
                     attrs=attr+'="'+html.escape(_dest(dest),quote=True)+'"'
@@ -144,8 +166,9 @@ def inline(src, refs, depth=0):
             ch=src[i]; run=re.match(re.escape(ch)+'+',src[i:]).group(); length=len(run)
             before=src[i-1] if i else '\n'; after=src[i+length] if i+length<n else '\n'
             punct=lambda c: unicodedata.category(c)[0] in ('P','S')
+            right=(not before.isspace() and (not punct(before) or after.isspace() or punct(after)))
             left=(not after.isspace() and (not punct(after) or before.isspace() or punct(before)))
-            can_open=left and (ch=='*' or not (not before.isspace() and not punct(before)))
+            can_open=left and (ch=='*' or not right or punct(before))
             if can_open:
                 close=_find_em(src,i+length,ch,length)
                 if close != -1:
@@ -154,21 +177,73 @@ def inline(src, refs, depth=0):
                     # label, leave it for the link parser to consume.
                     if '[' in src[i+length:close[0]] and re.match(r'\]\s*(?:\(|\[)', src[close[0]+close[1]:]):
                         close = -1
+                    # Bracketed link labels bind more tightly than emphasis.
+                    if close != -1:
+                        for op in range(i + length, close[0]):
+                            if src[op] == '[':
+                                br = _closing_bracket(src, op + 1)
+                                if br >= close[0] and br + 1 < n and src[br + 1] == '(':
+                                    close = -1
+                                    break
+                if close != -1:
+                    use=2 if length>=2 and close[1]>=2 else 1
+                    # A delimiter that can open and close may not match a
+                    # run when the CommonMark rule-of-three forbids it.
+                    c_before=src[close[0]-1] if close[0] else '\n'
+                    c_after=src[close[0]+close[1]] if close[0]+close[1]<n else '\n'
+                    close_left=(not c_after.isspace() and (not punct(c_after) or c_before.isspace() or punct(c_before)))
+                    close_right=(not c_before.isspace() and (not punct(c_before) or c_after.isspace() or punct(c_after)))
+                    opener_both=left and right
+                    closer_both=close_left and close_right
+                    if opener_both and closer_both and (length+close[1])%3==0 and (length%3 or close[1]%3):
+                        close=-1
                 if close != -1:
                     use=2 if length>=2 and close[1]>=2 else 1
                     tag='strong' if use==2 else 'em'
-                    inner=src[i+use:close[0]]
-                    out.append('<'+tag+'>'+inline(inner,refs,depth+1)+'</'+tag+'>'); i=close[0]+use; continue
+                    # A delimiter run is consumed from its inner edge.  Any
+                    # excess opening markers stay outside the span; starting
+                    # the content after `use` alone duplicates those markers
+                    # inside spans with an uneven run (for example **x*).
+                    # The unused opening markers remain literal before the
+                    # span; all markers in the opening run are outside its
+                    # contents.  The closing run is consumed from its left.
+                    inner=src[i+length:close[0]]
+                    # Consume only the delimiters used by this span. Any excess
+                    # markers stay literal on the outside (CommonMark 9-12).
+                    prefix = html.escape(run[:length-use], quote=False)
+                    suffix = html.escape(src[close[0]+use:close[0]+close[1]], quote=False)
+                    out.append(prefix+'<'+tag+'>'+inline(inner,refs,depth+1)+'</'+tag+'>'+suffix)
+                    i=close[0]+close[1]; continue
+            # A run may contain several delimiters; leave it literal as a unit
+            # only after no compatible closing run was found.
+            out.append(html.escape(run, quote=False)); i+=length; continue
         out.append(_esc(src[i])); i+=1
     return ''.join(out)
 
 def _closing_bracket(s,start):
     level=0; i=start
     while i<len(s):
+        # Tags and autolinks bind more tightly than brackets, including a
+        # closing bracket that appears inside an attribute or URI.
+        tm=TAG.match(s,i)
+        am=AUTO.match(s,i)
+        if tm:
+            i=tm.end(); continue
+        if am:
+            i=am.end(); continue
         if s[i]=='\\': i+=2; continue
         if s[i]=='`':
-            m=re.match(r'`+',s[i:]); e=s.find(m.group(),i+len(m.group()))
-            if e>=0: i=e+len(m.group()); continue
+            run=re.match(r'`+',s[i:]).group(); j=i+len(run)
+            close=-1
+            while j<len(s):
+                k=s.find('`',j)
+                if k<0: break
+                r=re.match(r'`+',s[k:]).group()
+                if len(r)==len(run): close=k; break
+                j=k+len(r)
+            if close>=0:
+                i=close+len(run); continue
+            i+=len(run); continue
         if s[i]=='[': level+=1
         elif s[i]==']':
             if level==0:return i
@@ -215,7 +290,11 @@ def _inline_target(s,pos):
     while i<len(s) and s[i] in ' \t\n': i+=1
     if i<len(s) and s[i]=='<':
         e=i+1
-        while e<len(s) and s[e]!='>' and s[e]!='\n': e+=1
+        while e<len(s) and s[e]!='\n':
+            if s[e]=='\\': e+=2; continue
+            if s[e]=='>': break
+            if s[e]=='<': return None
+            e+=1
         if e>=len(s) or s[e]!='>':return None
         dest=s[i+1:e]; i=e+1
     else:
@@ -226,7 +305,7 @@ def _inline_target(s,pos):
             elif s[i]==')':
                 if level==0:break
                 level-=1
-            elif s[i].isspace():break
+            elif s[i] in ' \t\n':break
             i+=1
         dest=s[st:i]
     while i<len(s) and s[i] in ' \t\n':i+=1
@@ -248,17 +327,36 @@ def _inline_target(s,pos):
     return None
 
 def _find_em(s,start,ch,length):
+    """Find a CommonMark-compatible closer while skipping opaque inline spans."""
     i=start
+    punct=lambda c: unicodedata.category(c)[0] in ('P','S')
     while i<len(s):
-        if s[i]=='\\':i+=2;continue
-        if s[i]==ch:
-            m=re.match(re.escape(ch)+'+',s[i:]); r=len(m.group())
-            before=s[i-1] if i else '\n'; after=s[i+r] if i+r<len(s) else '\n'
-            close_ok=not before.isspace() and (not unicodedata.category(before).startswith(('P','S')) or after.isspace() or unicodedata.category(after).startswith(('P','S')))
-            if i>start and close_ok:
-                if ch=='_' and i+r<len(s) and s[i+r].isalnum():
-                    i+=r; continue
-                return i,r
-            i+=r
-        else:i+=1
+        if s[i]=='\\': i+=2; continue
+        if s[i]=='`':
+            run=re.match(r'`+',s[i:]).group(); j=i+len(run); found=-1
+            while j<len(s):
+                k=s.find('`',j)
+                if k<0: break
+                r=re.match(r'`+',s[k:]).group()
+                if len(r)==len(run): found=k; break
+                j=k+len(r)
+            i=found+len(run) if found>=0 else i+len(run); continue
+        tm=TAG.match(s,i); am=AUTO.match(s,i)
+        if tm: i=tm.end(); continue
+        if am: i=am.end(); continue
+        if s[i]!=ch: i+=1; continue
+        r=len(re.match(re.escape(ch)+'+',s[i:]).group())
+        before=s[i-1] if i else '\n'; after=s[i+r] if i+r<len(s) else '\n'
+        right=not before.isspace() and (not punct(before) or after.isspace() or punct(after))
+        left=not after.isspace() and (not punct(after) or before.isspace() or punct(before))
+        if i>start and right and (ch=='*' or not left or punct(after)):
+            ob=s[start-1] if start else '\n'; oa=s[start+length] if start+length<len(s) else '\n'
+            op_right=not ob.isspace() and (not punct(ob) or oa.isspace() or punct(oa))
+            op_left=not oa.isspace() and (not punct(oa) or ob.isspace() or punct(ob))
+            if (op_left and op_right or left and right) and (length+r)%3==0 and (length%3 or r%3): i+=r; continue
+            # Prefer the earliest compatible delimiter, but allow its run to
+            # contribute only the amount required by the opener. Delimiter
+            # runs are consumed from the inside edge by CommonMark.
+            return i,r
+        i+=r
     return -1

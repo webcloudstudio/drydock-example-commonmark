@@ -1,7 +1,7 @@
 # Blockers: Uat Stage
 - target: commonmark
 - source: drydock uat CommonMark
-- declared: 2026-10-25T16:32:35-04:00
+- declared: 2026-10-25T23:19:58-04:00
 
 <!-- drydock-state: {"owner": "uat commonmark", "execution": "", "attempts": 1} -->
 

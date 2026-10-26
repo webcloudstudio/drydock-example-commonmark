@@ -12,7 +12,7 @@ def _render(b, tight=False):
     if t=='hr': return '<hr />\n'
     if t=='code':
         lang=b.get('lang',''); attr=' class="language-'+html.escape(lang,quote=True)+'"' if lang else ''
-        return '<pre><code'+attr+'>'+html.escape(b['text'],quote=False)+'</code></pre>\n'
+        return '<pre><code'+attr+'>'+html.escape(b['text'],quote=True).replace('&#x27;', '&#39;')+'</code></pre>\n'
     if t=='html': return b['text']
     if t=='quote': return '<blockquote>\n'+''.join(_render(x) for x in b['children'])+'</blockquote>\n'
     if t=='list':

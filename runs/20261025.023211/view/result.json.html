@@ -19,7 +19,7 @@
     &quot;unverified&quot;: 0
   },
   &quot;attestations&quot;: [],
-  &quot;build_passes&quot;: 3,
+  &quot;build_passes&quot;: 4,
   &quot;commands&quot;: [
     {
       &quot;argv&quot;: [
@@ -175,7 +175,7 @@
         &quot;--ready&quot;
       ],
       &quot;cwd&quot;: &quot;workspace&quot;,
-      &quot;elapsed_ms&quot;: 6139,
+      &quot;elapsed_ms&quot;: 12001,
       &quot;label&quot;: &quot;09-initial-ready&quot;,
       &quot;llm_executions&quot;: [],
       &quot;returncode&quot;: 0,
@@ -194,18 +194,27 @@
         &quot;21&quot;
       ],
       &quot;cwd&quot;: &quot;workspace&quot;,
-      &quot;elapsed_ms&quot;: 10455068,
+      &quot;elapsed_ms&quot;: 16083611,
       &quot;label&quot;: &quot;10-initial-build-1&quot;,
       &quot;llm_executions&quot;: [
-        &quot;20261025.175921.642Z-fbba13da&quot;,
-        &quot;20261025.181124.359Z-7b214157&quot;,
-        &quot;20261025.182504.140Z-45c03c49&quot;,
-        &quot;20261025.183758.644Z-694e6542&quot;,
-        &quot;20261025.185551.038Z-2714a319&quot;,
-        &quot;20261025.191400.391Z-c5e52921&quot;,
-        &quot;20261025.193600.121Z-0d91b7b7&quot;,
-        &quot;20261025.195518.212Z-5134d595&quot;,
-        &quot;20261025.201222.574Z-df20ce13&quot;
+        &quot;20261025.231635.360Z-8bdca560&quot;,
+        &quot;20261025.233944.935Z-682a0c3c&quot;,
+        &quot;20261025.234817.122Z-b1b4b259&quot;,
+        &quot;20261025.235929.910Z-6b0fd2b9&quot;,
+        &quot;20261026.001253.519Z-cb6ec433&quot;,
+        &quot;20261026.002327.627Z-55227a35&quot;,
+        &quot;20261026.003549.865Z-691b1e90&quot;,
+        &quot;20261026.010231.120Z-fdf733ce&quot;,
+        &quot;20261026.011712.578Z-28553c28&quot;,
+        &quot;20261026.013031.273Z-2feb984e&quot;,
+        &quot;20261026.015254.570Z-53c0cd22&quot;,
+        &quot;20261026.020713.988Z-215afa70&quot;,
+        &quot;20261026.022146.064Z-e60e1b09&quot;,
+        &quot;20261026.023429.175Z-b828faf4&quot;,
+        &quot;20261026.024530.106Z-c2488782&quot;,
+        &quot;20261026.025412.666Z-a805167f&quot;,
+        &quot;20261026.030243.192Z-6b4906da&quot;,
+        &quot;20261026.031051.579Z-45f91dd8&quot;
       ],
       &quot;returncode&quot;: 1,
       &quot;stderr_path&quot;: &quot;evidence/commands/10-initial-build-1.stderr.log&quot;,
@@ -221,7 +230,7 @@
         &quot;commonmark&quot;
       ],
       &quot;cwd&quot;: &quot;workspace&quot;,
-      &quot;elapsed_ms&quot;: 1021,
+      &quot;elapsed_ms&quot;: 1367,
       &quot;label&quot;: &quot;11-after-initial-build-build-status&quot;,
       &quot;llm_executions&quot;: [],
       &quot;returncode&quot;: 1,
@@ -232,19 +241,19 @@
   &quot;degraded&quot;: [
     &quot;initial-build-1 exited 1&quot;
   ],
-  &quot;elapsed_ms&quot;: 10476764,
+  &quot;elapsed_ms&quot;: 16121713,
   &quot;environment&quot;: {
     &quot;drydock_version&quot;: &quot;0.8.0&quot;,
     &quot;effort&quot;: &quot;&quot;,
-    &quot;finished_at&quot;: &quot;2026-10-25T20:32:49.648553Z&quot;,
-    &quot;git_commit&quot;: &quot;1f448a3d04acd527299b0309ca2d43f70128e7bb&quot;,
+    &quot;finished_at&quot;: &quot;2026-10-26T03:20:23.660254Z&quot;,
+    &quot;git_commit&quot;: &quot;f36e85fb09470e0eb14b85fbd3542c4442989d60&quot;,
     &quot;model&quot;: &quot;gpt-6-luna&quot;,
     &quot;plan_model&quot;: &quot;&quot;,
     &quot;platform&quot;: &quot;Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.35&quot;,
     &quot;provider&quot;: &quot;codex&quot;,
     &quot;python_version&quot;: &quot;3.12.13&quot;,
     &quot;requested_model&quot;: &quot;gpt-6-luna&quot;,
-    &quot;started_at&quot;: &quot;2026-10-25T17:38:12.745057Z&quot;
+    &quot;started_at&quot;: &quot;2026-10-25T22:51:41.880712Z&quot;
   },
   &quot;error&quot;: &quot;CommonMark: stopped at initial-build-1: drydock build commonmark exited 1.\n\nstderr:\nerror: build failed for commonmark: 4 step(s)\n  block_parsing \u2014 closed/failed: programmatic acceptance failed: block-parsing-conformance, inline-parsing-conformance, full-commonmark-suite\n\nEvidence:\n  stderr: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/evidence/commands/10-initial-build-1.stderr.log\n  stdout: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/evidence/commands/10-initial-build-1.stdout.log&quot;,
   &quot;evidence_dir&quot;: &quot;evidence&quot;,
@@ -260,13 +269,13 @@
   &quot;status&quot;: &quot;failed&quot;,
   &quot;target&quot;: &quot;commonmark&quot;,
   &quot;usage&quot;: {
-    &quot;cached_input_tokens&quot;: 54457856,
-    &quot;calls&quot;: 32,
-    &quot;fresh_input_tokens&quot;: 3961441,
-    &quot;input_tokens&quot;: 58419297,
+    &quot;cached_input_tokens&quot;: 91892480,
+    &quot;calls&quot;: 50,
+    &quot;fresh_input_tokens&quot;: 7033895,
+    &quot;input_tokens&quot;: 98926375,
     &quot;invalid_records&quot;: 0,
-    &quot;llm_elapsed_ms&quot;: 9049464,
-    &quot;output_tokens&quot;: 104400
+    &quot;llm_elapsed_ms&quot;: 13881457,
+    &quot;output_tokens&quot;: 179166
   }
 }
 </pre></article>

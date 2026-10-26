@@ -1,0 +1,14 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- src/commonmark/inline_parser.py
+- src/commonmark/block_parser.py
+
+SUMMARY:
+Fixed the `*[foo*](/url)` link precedence case and adjusted setext handling inside list items. The full conformance run did not complete; it produced no output after 90 seconds and was interrupted. The parser still has unresolved conformance failures.
+
+BLOCKERS:
+- Scoped and full conformance checks are not passing.
+
+FAILURE_SUMMARY: CommonMark conformance remains incomplete
+FAILURE_DETAIL: The saved logs show unresolved list tightness and indentation failures, plus inline delimiter failures. The full suite produced no output after 90 seconds and was interrupted. Further parser repairs are needed before rerunning the declared checks.

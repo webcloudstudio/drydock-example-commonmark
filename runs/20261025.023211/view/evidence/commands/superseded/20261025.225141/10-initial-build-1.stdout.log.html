@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/commands/superseded/20261025.225141/10-initial-build-1.stdout.log</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/commands/superseded/20261025.225141/10-initial-build-1.stdout.log</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../evidence/commands/superseded/20261025.225141/10-initial-build-1.stdout.log">Raw file</a></div></header>
+<article class="doc"><pre>Drydock 0.8.0  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Target - setup project workspace git store
+Target - committed project workspace git store
+Build: commonmark
+scope: entire project
+frontier: resume block-2
+git: baseline commonmark da29094aaa7a
+git: baseline commonmark b9f05c089102
+
+BLOCK block-2  name=&quot;Block 2 · Service&quot;  calls_max=22
+  story=block_parsing  &quot;Parse CommonMark block structure and collect link reference definitions.&quot;
+  story=inline_parsing  &quot;Parse CommonMark inline syntax and render inline HTML.&quot;
+  story=executable  &quot;Provide the commonmark stdin/stdout executable.&quot;
+  story=full_conformance  &quot;Verify the completed parser against the full CommonMark suite.&quot;
+
+  [call 1/22]  kind=resume  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261025.175921.642Z-fbba13da
+    status  2/5  block-parsing-conformance(248/286 +0),inline-parsing-conformance(267/356 +0),full-commonmark-suite(520/655 +0)
+git: block-2 | FEATURE-Block-Parsing.md, FEATURE-Inline-Parsing.md, FEATURE-Executable.md, VERIFICATION.md | call=1 | app=b1e328fd2ef4 target=680e3bbcdbdf
+
+  [call 2/22]  kind=repair(1/21)  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261025.181124.359Z-7b214157
+    status  2/5  block-parsing-conformance(248/286 +0),inline-parsing-conformance(270/356 +3),full-commonmark-suite(523/655 +3)
+git: block-2 | FEATURE-Block-Parsing.md, FEATURE-Inline-Parsing.md, FEATURE-Executable.md, VERIFICATION.md | call=2 | app=059b5f163b64 target=cd92f91249c8
+
+  [call 3/22]  kind=repair(2/21)  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261025.182504.140Z-45c03c49
+    status  2/5  block-parsing-conformance(249/286 +1),inline-parsing-conformance(270/356 +0),full-commonmark-suite(524/655 +1)
+git: block-2 | FEATURE-Block-Parsing.md, FEATURE-Inline-Parsing.md, FEATURE-Executable.md, VERIFICATION.md | call=3 | app=b6bb2ea95875 target=d6815edc291a
+
+  [call 4/22]  kind=repair(3/21)  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261025.183758.644Z-694e6542
+    status  2/5  block-parsing-conformance(249/286 +0),inline-parsing-conformance(272/356 +2),full-commonmark-suite(526/655 +2)
+git: block-2 | FEATURE-Block-Parsing.md, FEATURE-Inline-Parsing.md, FEATURE-Executable.md, VERIFICATION.md | call=4 | app=ad1f03573e8d target=3c5d59a57935
+
+  [call 5/22]  kind=repair(4/21)  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261025.185551.038Z-2714a319
+    status  2/5  block-parsing-conformance(249/286 +0),inline-parsing-conformance(273/356 +1),full-commonmark-suite(527/655 +1)
+git: block-2 | FEATURE-Block-Parsing.md, FEATURE-Inline-Parsing.md, FEATURE-Executable.md, VERIFICATION.md | call=5 | app=2c9e9db6b099 target=d02d54c2f8d8
+
+  [call 6/22]  kind=repair(5/21)  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261025.191400.391Z-c5e52921
+    status  2/5  block-parsing-conformance(249/286 +0),inline-parsing-conformance(275/356 +2),full-commonmark-suite(529/655 +2)
+git: block-2 | FEATURE-Block-Parsing.md, FEATURE-Inline-Parsing.md, FEATURE-Executable.md, VERIFICATION.md | call=6 | app=728ff9eb5bb8 target=ffdd59a29f1b
+
+  [call 7/22]  kind=repair(6/21)  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261025.193600.121Z-0d91b7b7
+    status  2/5  block-parsing-conformance(249/286 +0),inline-parsing-conformance(279/356 +4),full-commonmark-suite(533/655 +4)
+git: block-2 | FEATURE-Block-Parsing.md, FEATURE-Inline-Parsing.md, FEATURE-Executable.md, VERIFICATION.md | call=7 | app=d3da29d7ed3d target=7c6565eab16c
+
+  [call 8/22]  kind=repair(7/21)  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261025.195518.212Z-5134d595
+    status  2/5  block-parsing-conformance(249/286 +0),inline-parsing-conformance(279/356 +0),full-commonmark-suite(533/655 +0)
+git: block-2 | FEATURE-Block-Parsing.md, FEATURE-Inline-Parsing.md, FEATURE-Executable.md, VERIFICATION.md | call=8 | app=unchanged target=c2deb0b69db0
+
+  [call 9/22]  kind=repair(8/21)  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261025.201222.574Z-df20ce13
+    status  2/5  block-parsing-conformance(249/286 +0),inline-parsing-conformance(279/356 +0),full-commonmark-suite(533/655 +0)
+  STOP  reason=stall  flat_calls=2
+git: block-2 | FEATURE-Block-Parsing.md, FEATURE-Inline-Parsing.md, FEATURE-Executable.md, VERIFICATION.md | call=9 | app=6ea74a32db03 target=0cfac872a09f
+
+  FAILED  story=block_parsing  state=closed/failed  execution=20261025.201222.574Z-df20ce13  elapsed=2h53m19s
+git: block-2 | FEATURE-Block-Parsing.md, FEATURE-Inline-Parsing.md, FEATURE-Executable.md, VERIFICATION.md | step_completed | app=unchanged target=77c469a440aa
+
+result: 0 built, 4 failed, 0 unchanged
+elapsed: 2 hours 53 minutes 57 seconds
+
+BUILD STALLED — 4 block(s) outstanding and none could advance:
+  block_parsing
+  inline_parsing
+  executable
+  full_conformance
+
+========================================================================
+BUILD FAILED: commonmark  (1 step)
+========================================================================
+
+  Failure
+    Provenance
+      Target: commonmark
+      Block: Block 2 · Service [block-2]
+      Story: Parse CommonMark block structure and collect link reference definitions. [block_parsing]
+    Cause: programmatic acceptance failed: block-parsing-conformance, inline-parsing-conformance, full-commonmark-suite
+    agent summary:
+      - Corrected the list-item indentation handling for a first
+      block that is indented code. - The inline conformance slice
+      completed with 279 passed and 77 failed. The block slice
+      completed before the fix with 74 passed and 25 failed. - `sh
+      sources/full_test.sh` did not finish; it was still running
+      after several minutes and was interrupted.
+    stopped early: 9 of 22 calls · deterministic acceptance score did not improve on 2 consecutive calls
+    acceptance: 2/5 passing · baseline 2/5 · unchanged
+    block-parsing-conformance: 249 passed, 37 failed · change +1 passed, -1 failed
+    inline-parsing-conformance: 279 passed, 77 failed · change +12 passed, -12 failed
+    full-commonmark-suite: 533 passed, 122 failed · change +13 passed, -13 failed
+    Acceptance checks:
+      AC FAILED  block-parsing-conformance  249/286 passed (37 failed)
+        Intent: All supplied cases in the block parsing sections pass (the complete block capability slice).
+        Source: FEATURE-Block-Parsing.md
+      AC FAILED  inline-parsing-conformance  279/356 passed (77 failed)
+        Intent: All supplied cases in the inline parsing sections pass (the complete inline capability slice).
+        Source: FEATURE-Inline-Parsing.md
+      AC FAILED  full-commonmark-suite  533/655 passed (122 failed)
+        Intent: The supplied full CommonMark conformance suite completes successfully.
+        Source: VERIFICATION.md
+    Recovery
+      Run: drydock build commonmark
+        to continue the build. This story resumes where it left off and is
+        retried against the checks it failed.
+    agent blockers:
+      - The parser still has substantial block and inline
+      conformance failures. The full suite result is unknown.
+    execution: 20261025.201222.574Z-df20ce13
+    evidence: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/workspace/targets/commonmark/evidence/block-2.md
+
+  Next
+    Run: drydock build commonmark
+      to continue the build. This story resumes where it left off and is
+      retried against the checks it failed.
+========================================================================
+
+========================================================================
+POST-LLM FAILURE  ·  build  ·  programmatic acceptance failed: block-parsing-conformance, inline-parsing-conformance, full-commonmark-suite
+========================================================================
+
+  Block &quot;Block 2 · Service&quot; [block-2] failed its acceptance criteria.
+    Story &quot;Parse CommonMark block structure and collect link reference definitions.&quot; [block_parsing] does not meet its own acceptance criteria:
+      - AC block-parsing-conformance — All supplied cases in the block parsing sections pass (the complete block capability slice).
+          assertion: assert result.returncode == 0 → AssertionError
+          cases: pass=249 fail=37 error=0 skip=369 total=655 from=result.stdout
+          raised at: block-parsing-conformance.py:18
+          process exit code: 1
+          values at failure:
+  … (77 more lines truncated)
+
+  Recovery
+    Run: drydock build commonmark
+      to continue the build. This story resumes where it left off and is retried against the checks it failed.
+
+========================================================================
+Target - committed project workspace git store
+</pre></article>
+</main>
+</body>
+</html>

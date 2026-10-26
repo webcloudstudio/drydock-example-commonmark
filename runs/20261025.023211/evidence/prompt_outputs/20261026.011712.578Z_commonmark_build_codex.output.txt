@@ -1,0 +1,15 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- src/commonmark/inline_parser.py
+
+SUMMARY:
+Attempted a focused inline delimiter fix. The scoped conformance checks did not complete within the command wait period, and the known block and inline failures remain unresolved. The required full suite was not rerun.
+
+BLOCKERS:
+- List looseness and list-item parsing still fail the reported cases.
+- Inline emphasis and link precedence still fail the reported cases.
+- Tab handling remains uncorrected.
+
+FAILURE_SUMMARY: Conformance failures remain
+FAILURE_DETAIL: The inline parser change did not resolve the known failures; scoped runs did not finish within the 30-second command window, and the required full suite was not verified. Repair list tightness, inline delimiter matching and link precedence, and tab indentation, then rerun both scoped criteria and `sh sources/full_test.sh`.

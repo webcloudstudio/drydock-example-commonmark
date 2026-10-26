@@ -15,20 +15,86 @@ def _node(kind, **kw): return {'type': kind, **kw}
 
 def parse_blocks(markdown: str) -> Document:
     source=markdown.replace('\r\n','\n').replace('\r','\n').replace('\x00','\ufffd')
+    # Preserve tabs in code contents; indentation-sensitive productions
+    # expand tabs as needed by their own column calculations.
+    source='\n'.join(_expand_indent(line) for line in source.split('\n'))
     lines=source.split('\n')
     if lines and lines[-1]=='': lines.pop()
     doc=Document(); doc.blocks=_parse(lines, doc.references)
     return doc
+
+def _expand_indent(line):
+    # Expand tabs in structural whitespace after quote/list markers as well
+    # as at the start of a line, using the current visual column.
+    out=[]; col=0; structural=True
+    for ch in line:
+        if structural and ch=='\t':
+            count=4-col%4; out.append(' '*count); col+=count
+        else:
+            out.append(ch); col+=1
+            if ch not in ' >-*+0123456789.)': structural=False
+    return ''.join(out)
+
+def _parse_reference(lines, start):
+    """Parse one reference definition, allowing its destination/title to wrap."""
+    if start >= len(lines): return None
+    first=lines[start]
+    m=re.match(r'^ {0,3}(\[)',first)
+    if not m: return None
+    # Labels can span lines and may contain escaped brackets.
+    source=''; close=-1; j=start
+    while j<len(lines) and j-start<8:
+        source += ('\n' if j>start else '') + lines[j].lstrip(' ')
+        k=0
+        while k<len(source):
+            if source[k]=='\\': k+=2; continue
+            if source[k]==']': close=k; break
+            k+=1
+        if close>=0: break
+        j+=1
+    if close<0 or close==1 or close-1>999 or close+1>=len(source) or source[close+1]!=':': return None
+    label=source[:close+1]
+    tail=source[close+2:]
+    if not label[1:-1].strip(' \t\n'): return None
+    parts=[tail.strip(' \t')]
+    consumed=j-start+1
+    # A destination or title may occupy following indented lines. A blank
+    # line terminates the candidate.
+    while consumed < 8 and start+consumed < len(lines) and lines[start+consumed].strip():
+        nxt=lines[start+consumed]
+        prev=' '.join(parts)
+        # A following quoted line continues only an unfinished title or a
+        # definition with no destination. Otherwise it starts ordinary text.
+        unfinished=bool(re.search(r'\s["\'(][^"\')]*$', prev))
+        separated_title = bool(re.match(r'^\s*["\'(].*["\')][ \t]*$', nxt))
+        if not (not prev.strip() or unfinished or separated_title): break
+        trial=parts+[nxt.strip(' \t')]
+        trial_text='\n'.join(trial)
+        # A quoted line is a title only when the whole definition remains valid.
+        if separated_title:
+            check=re.match(r'^(<(?:(?:\\.)|[^<>\\\n])*>|(?:\\.|[^\s])*)[ \t\n]+(?:"((?:\\.|[^"])*)"|\'((?:\\.|[^\'])*)\'|\(((?:\\.|[^)])*)\))[ \t\n]*$','\n'.join(p for p in trial if p))
+            if not check: break
+        parts=trial; consumed+=1
+    candidate='\n'.join(p for p in parts if p)
+    m=re.match(r'^(<(?:(?:\\.)|[^<>\\\n])*>|(?:\\.|[^\s])*)(?:[ \t\n]+(?:"((?:\\.|[^"])*)"|\'((?:\\.|[^\'])*)\'|\(((?:\\.|[^)])*)\)))?[ \t\n]*$',candidate)
+    if not m or not m.group(1): return None
+    dest=m.group(1)
+    if dest.startswith('<'):
+        if not dest.endswith('>'): return None
+        dest=dest[1:-1]
+    title=next((x for x in m.groups()[1:] if x is not None),None)
+    unescape=lambda s: re.sub(r'\\([!"#$%&\'()*+,-./:;<=>?@\[\\\]^_`{|}~])',r'\1',s) if s is not None else None
+    return _refkey(label[1:-1]), unescape(dest), unescape(title), max(consumed, j-start+1)
 
 def _parse(lines, refs):
     out=[]; i=0; n=len(lines)
     while i<n:
         line=lines[i]
         if not line.strip(): i+=1; continue
-        m=REF.match(line)
-        if m:
-            label,dest,*titles=m.groups(); title=next((x for x in titles if x is not None),None)
-            refs.setdefault(_refkey(label), (dest[1:-1] if dest.startswith('<') else dest, title)); i+=1; continue
+        parsed_ref=_parse_reference(lines, i)
+        if parsed_ref:
+            key,dest,title,consumed=parsed_ref
+            refs.setdefault(key,(dest,title)); i+=consumed; continue
         if line.startswith('>') or re.match(r'^ {0,3}>',line):
             q=[]
             while i<n and (re.match(r'^ {0,3}>',lines[i]) or
@@ -41,12 +107,18 @@ def _parse(lines, refs):
                 x=lines[i]
                 if re.match(r'^ {0,3}>',x): x=re.sub(r'^ {0,3}> ?', '',x, count=1)
                 q.append(x); i+=1
+            # An unmarked lazy continuation line cannot supply a setext
+            # underline inside a quote; preserve it as paragraph text.
+            if len(q) >= 2 and re.match(r'^ {0,3}(?:=+|-+)[ \t]*$', q[-1]):
+                q[-1] = '\\' + q[-1].lstrip(' ')
             out.append(_node('quote', children=_parse(q,refs))); continue
         fm=FENCE.match(line)
         if fm and not (fm.group(1).startswith('`') and '`' in fm.group(2)):
             fence,info=fm.groups(); ch=fence[0]; j=i+1; body=[]
             while j<n and not re.match(r'^ {0,3}'+re.escape(ch)+'{'+str(len(fence))+r',}[ \t]*$',lines[j]): body.append(re.sub(r'^ {0,'+str(len(line)-len(line.lstrip()))+'}', '',lines[j])); j+=1
             lang=info.strip().split()[0] if info.strip() else ''
+            lang=re.sub(r'\\([!"#$%&\'()*+,-./:;<=>?@\[\\\]^_`{|}~])',r'\1',lang)
+            lang=html.unescape(lang)
             out.append(_node('code', text='\n'.join(body)+ ('\n' if body else ''), lang=lang)); i=min(j+1,n); continue
         if len(line)-len(line.lstrip(' '))>=4:
             body=[]
@@ -74,10 +146,13 @@ def _parse(lines, refs):
                 content=mm.group(3) or ''
                 marker_end=len(mm.group(1))+len(mm.group(2))
                 raw_spaces=len(lines[i][marker_end:])-len(lines[i][marker_end:].lstrip(' \t'))
-                if raw_spaces >= 2:
-                    # The first separator is structural.  For a first block
-                    # that is indented code, the remaining indentation is
-                    # measured from the list item's content edge.
+                # Up to four columns after the marker establish the content
+                # edge. Extra indentation is part of the first block (code).
+                content_indent=len(mm.group(1))+len(mm.group(2))+min(raw_spaces,4)
+                if raw_spaces > 4:
+                    content=lines[i][marker_end+1:]
+                    content_indent=marker_end+1
+                elif raw_spaces:
                     content=lines[i][marker_end+raw_spaces:]
                 i+=1
                 # When the first block is indented code, the list marker's
@@ -87,19 +162,64 @@ def _parse(lines, refs):
                 item=[content] if content else []
                 while i<n:
                     # A thematic break is never a list item or list continuation.
-                    if HR.match(lines[i]): break
-                    if not lines[i].strip():
-                        if i+1<n and LIST.match(lines[i+1]) and LIST.match(lines[i+1]).group(2)[-1]==delim: loose=True; i+=1; break
-                        if i+1<n and (lines[i+1].startswith('  ') or lines[i+1].startswith('    ')): loose=True; item.append(''); i+=1; continue
+                    # A thematic break interrupts a list item even when its
+                    # spelling could also underline a setext heading.  The
+                    # underline is only setext when it belongs to a paragraph
+                    # in the same block container.
+                    if HR.match(lines[i]):
                         break
-                    if LIST.match(lines[i]) and len(LIST.match(lines[i]).group(1))<=len(indent): break
-                    if len(lines[i])-len(lines[i].lstrip(' ')) >= 4 and item:
-                        item.append(lines[i][4:])
-                    elif lines[i].startswith('  '): item.append(lines[i][min(2,len(lines[i])-len(lines[i].lstrip())):])
+                    if not lines[i].strip():
+                        blank_end=i
+                        while blank_end<n and not lines[blank_end].strip(): blank_end+=1
+                        if blank_end<n and LIST.match(lines[blank_end]) and LIST.match(lines[blank_end]).group(2)[-1]==delim and LIST.match(lines[blank_end]).group(2)[0].isdigit()==ordered and len(LIST.match(lines[blank_end]).group(1)) <= 3:
+                            # A blank between nested list items loosens that
+                            # nested list only. It loosens this list only when
+                            # the next marker is at this item's list level.
+                            if len(LIST.match(lines[blank_end]).group(1)) <= len(indent):
+                                loose=True
+                            i=blank_end
+                            break
+                        # A blank line before a properly indented continuation
+                        # separates blocks in this item.  It is not part of a
+                        # nested list's looseness unless the next block is itself
+                        # a direct continuation of this item.
+                        if item and blank_end<n and len(lines[blank_end])-len(lines[blank_end].lstrip(' ')) >= content_indent:
+                            # Preserve all intervening blank lines for literal
+                            # code blocks; they also make direct item blocks loose.
+                            open_fences = 0
+                            for prior in item:
+                                fm_prior = FENCE.match(prior)
+                                if fm_prior:
+                                    open_fences = 0 if open_fences else 1
+                            if not open_fences:
+                                loose=True
+                            item.extend([''] * (blank_end-i)); i=blank_end; continue
+                        break
+                    next_list=LIST.match(lines[i])
+                    if next_list and (len(next_list.group(1)) < content_indent or next_list.group(2)[-1]!=delim or next_list.group(2)[0].isdigit()!=ordered) : break
+                    leading=len(lines[i])-len(lines[i].lstrip(' '))
+                    if leading >= content_indent and item:
+                        # For list items beginning with a blank marker line,
+                        # the marker contributes one structural column; the
+                        # following four columns are the code block indent.
+                        # Subsequent lines are measured from the content
+                        # column; for a first paragraph, this is the exact
+                        # marker plus separator width (not the raw source
+                        # indentation of the list marker).
+                        trim = content_indent
+                        if first and raw_spaces > 4:
+                            # Rule 2: an item beginning with indented code
+                            # has one structural separator column, then the
+                            # normal four columns of code indentation.
+                            trim = marker_end + 5
+                        item.append(lines[i][min(trim, len(lines[i])):])
+                    elif item and lines[i].strip() and leading < content_indent and not re.match(r'^ {0,3}(?:[-+*]|[0-9]{1,9}[.)])(?:[ \t]|$)',lines[i]):
+                        item.append(lines[i].lstrip(' \t'))
                     else: item.append(lines[i])
                     i+=1
                 items.append(_parse(item,refs))
-                if i<n and not lines[i].strip(): i+=1
+                if i<n and not lines[i].strip():
+                    while i<n and not lines[i].strip(): i+=1
             out.append(_node('list',ordered=ordered,start=start,loose=loose,items=items,delimiter=delim)); continue
         # HTML block types 1-7. Types 1-5 have explicit terminators, type 6
         # ends at a blank line, and type 7 is a complete standalone tag.
@@ -132,11 +252,11 @@ def _parse(lines, refs):
                     para.append(lines[i].lstrip(' \t')); i+=1
                     if i<n and re.match(r'^ {0,3}(?:=+|-+)[ \t]*$', lines[i]):
                         para.append(lines[i].lstrip(' \t')); i+=1
-                    out[-1]['children'].append(_node('paragraph', text='\n'.join(para).strip(' \t')))
+                    out[-1]['children'].append(_node('paragraph', text='\n'.join(para).strip(' \t') + '\n' + lines[i-1].lstrip(' \t')))
                     para=[]; break
                 out.append(_node('heading',level=1 if '=' in lines[i] else 2,text='\n'.join(para).strip(' \t')))
                 i+=1; para=[]; break
-            if REF.match(lines[i]) or HR.match(lines[i]) or ATX.match(lines[i]) or FENCE.match(lines[i]) or re.match(r'^ {0,3}>',lines[i]): break
+            if HR.match(lines[i]) or ATX.match(lines[i]) or FENCE.match(lines[i]) or re.match(r'^ {0,3}>',lines[i]): break
             lm_next=LIST.match(lines[i])
             if lm_next:
                 marker=lm_next.group(2)

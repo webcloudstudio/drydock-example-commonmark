@@ -23,7 +23,7 @@ def _render(b, tight=False):
     if t==&#x27;hr&#x27;: return &#x27;&lt;hr /&gt;\n&#x27;
     if t==&#x27;code&#x27;:
         lang=b.get(&#x27;lang&#x27;,&#x27;&#x27;); attr=&#x27; class=&quot;language-&#x27;+html.escape(lang,quote=True)+&#x27;&quot;&#x27; if lang else &#x27;&#x27;
-        return &#x27;&lt;pre&gt;&lt;code&#x27;+attr+&#x27;&gt;&#x27;+html.escape(b[&#x27;text&#x27;],quote=False)+&#x27;&lt;/code&gt;&lt;/pre&gt;\n&#x27;
+        return &#x27;&lt;pre&gt;&lt;code&#x27;+attr+&#x27;&gt;&#x27;+html.escape(b[&#x27;text&#x27;],quote=True).replace(&#x27;&amp;#x27;&#x27;, &#x27;&amp;#39;&#x27;)+&#x27;&lt;/code&gt;&lt;/pre&gt;\n&#x27;
     if t==&#x27;html&#x27;: return b[&#x27;text&#x27;]
     if t==&#x27;quote&#x27;: return &#x27;&lt;blockquote&gt;\n&#x27;+&#x27;&#x27;.join(_render(x) for x in b[&#x27;children&#x27;])+&#x27;&lt;/blockquote&gt;\n&#x27;
     if t==&#x27;list&#x27;:

@@ -1,0 +1,14 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- src/commonmark/block_parser.py
+- src/commonmark/inline_parser.py
+
+SUMMARY:
+Expanded structural tabs, adjusted reference-label and link parsing, and began correcting list handling. The required full suite finished with 600 passed and 55 failed. The scoped block run had 280 passed and 6 failed; the scoped inline run had 191 passed and 50 failed. `pytest -q` also failed during collection because the system Python could not import `commonmark`; `.venv/bin/pytest` was unavailable.
+
+BLOCKERS:
+- Emphasis delimiter pairing and link precedence still fail many conformance examples; list parsing also has unresolved cases.
+
+FAILURE_SUMMARY: CommonMark conformance remains incomplete
+FAILURE_DETAIL: `sh sources/full_test.sh` exited 1 with 55 failures, mainly emphasis and link parsing, plus list cases. Complete delimiter-stack handling and resolve the remaining list parsing cases before rerunning the scoped checks and full suite.
