@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-LinksAndImages.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-LinksAndImages.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-LinksAndImages.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Links and Images</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261026 V1</td></tr><tr><td>Description</td><td>Parses inline links, reference links, and images.</td></tr><tr><td>Depends On</td><td>FEATURE-CommandLine.md, FEATURE-LinkReferenceDefinitions.md</td></tr><tr><td>Provides</td><td>inline links, reference links, and images</td></tr><tr><td>Consumes</td><td>commonmark executable, document-wide link reference definitions</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Parse CommonMark inline links, reference links, and images using the resolved document-wide definitions.</p>
+<h2>Behavior</h2>
+<ul><li>Support inline links and full, collapsed, and shortcut reference links, with matching based on normalized labels and the first matching definition.</li><li>Parse link text and image descriptions with balanced brackets and inline content. Links cannot contain links; image descriptions may contain them.</li><li>Parse destinations and optional titles in angle-bracket and bare forms, honoring escapes, balanced parentheses, whitespace, and line-ending rules.</li><li>Render link destinations and titles with the required HTML and URL escaping. Render image descriptions as plain text in the <code>alt</code> attribute.</li><li>Use link reference definitions collected during block parsing, including definitions inside block containers.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC links-and-images-conformance ===<br>Intent: The executable passes every supplied Links and Images example.<br>Suite: scoped<br>Probe: --dump-tests<br>Probe Count: json</p>
+<p>import json import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;^(Links|Images)$&quot;, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC links-and-images-conformance ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not modify the supplied conformance assets.</li><li>Resolve block structure and reference definitions before inline parsing.</li><li>Do not allow links to contain links.</li></ul></article>
+</main>
+</body>
+</html>

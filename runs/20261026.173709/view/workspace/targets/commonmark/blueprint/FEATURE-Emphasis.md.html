@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Emphasis.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Emphasis.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Emphasis.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Emphasis</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261026 V1</td></tr><tr><td>Description</td><td>Parses CommonMark emphasis and strong emphasis.</td></tr><tr><td>Depends On</td><td>FEATURE-CommandLine.md</td></tr><tr><td>Provides</td><td>emphasis and strong emphasis parsing</td></tr><tr><td>Consumes</td><td>commonmark executable</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Parse emphasis and strong emphasis according to the CommonMark 0.31.2 delimiter-run algorithm.</p>
+<h2>Behavior</h2>
+<ul><li>Identify delimiter runs of <code>*</code> and <code>_</code>, and determine their left- and right-flanking status using Unicode whitespace and punctuation.</li><li>Apply the distinct opening and closing rules for <code>*</code> and <code>_</code>, including the restriction on intraword underscore emphasis.</li><li>Match delimiters according to the rule of three, consume one delimiter for emphasis or two for strong emphasis, and leave unused delimiters as literal text.</li><li>Resolve nesting and overlapping spans according to the specification’s ambiguity rules. Code spans, links, images, and HTML tags bind more tightly than emphasis.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC emphasis-conformance ===<br>Intent: The executable passes every supplied emphasis and strong emphasis example.<br>Suite: scoped<br>Probe: --dump-tests<br>Probe Count: json</p>
+<p>import json import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;^Emphasis and strong emphasis$&quot;, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC emphasis-conformance ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not replace the delimiter-run algorithm with simple delimiter pairing.</li><li>Resolve block structure before inline structure.</li><li>Do not modify the supplied conformance assets.</li></ul></article>
+</main>
+</body>
+</html>

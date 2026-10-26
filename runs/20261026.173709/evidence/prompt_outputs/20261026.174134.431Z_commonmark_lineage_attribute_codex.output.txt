@@ -1,0 +1,33 @@
+<requirement name="normalize-whitespace" stories="verify_001">
+Multiple inner whitespaces are collapsed to a single space (except
+    in pre tags):
+</requirement>
+<requirement name="trim-block-whitespace" stories="verify_001">
+Whitespace surrounding block-level tags is removed.
+</requirement>
+<requirement name="normalize-self-closing-tags" stories="verify_001">
+Self-closing tags are converted to open tags.
+</requirement>
+<requirement name="sort-lowercase-attributes" stories="verify_001">
+Attributes are sorted and lowercased.
+</requirement>
+<requirement name="decode-character-references" stories="verify_001">
+References are converted to unicode, except that '<', '>', '&', and
+      '"' are rendered using entities.
+</requirement>
+<unattached story="python-foundation"/>
+<unattached story="cli-001"/>
+<unattached story="blocks_001"/>
+<unattached story="inline_007"/>
+<unattached story="blocks_006"/>
+<unattached story="blocks_004"/>
+<unattached story="inline_002"/>
+<unattached story="blocks_007"/>
+<unattached story="inline_003"/>
+<unattached story="inline_001"/>
+<unattached story="blocks_005"/>
+<unattached story="inline_006"/>
+<unattached story="blocks_002"/>
+<unattached story="inline_005"/>
+<unattached story="blocks_003"/>
+<unattached story="inline_004"/>

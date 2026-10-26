@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-CommandLine.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-CommandLine.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-CommandLine.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Command Line</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261026 V1</td></tr><tr><td>Description</td><td>Provides the root-level executable for standard input and output parsing.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md</td></tr><tr><td>Provides</td><td>commonmark executable</td></tr><tr><td>Consumes</td><td>commonmark_core</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Deliver an executable named <code>commonmark</code> at the application root. It reads UTF-8 Markdown from standard input, invokes <code>commonmark_core</code>, and writes rendered HTML to standard output. It must be usable as a program by the supplied conformance runner.</p>
+<h2>Workflow</h2>
+<ol><li>Read the complete Markdown document from standard input as UTF-8.</li><li>Pass the document to the <code>commonmark_core</code> parser and renderer.</li><li>Write the rendered HTML to standard output.</li></ol>
+<p>Create a concise project <code>README.md</code> describing this standard input/output interface.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC cli-executable-interface ===<br>Intent: The root executable accepts Markdown on standard input and completes successfully.</p>
+<p>import subprocess</p>
+<p>payload = &quot;CommonMark command interface\n&quot; result = subprocess.run( [&quot;./commonmark&quot;], input=payload, capture_output=True, text=True, encoding=&quot;utf-8&quot;, ) print(result.stdout) print(result.stderr) assert result.returncode == 0 === END AC cli-executable-interface ===</p>
+<p>=== AC cli-empty-input-interface ===<br>Intent: The executable accepts an empty UTF-8 document and completes successfully.</p>
+<p>import subprocess</p>
+<p>result = subprocess.run( [&quot;./commonmark&quot;], input=&quot;&quot;, capture_output=True, text=True, encoding=&quot;utf-8&quot;, ) print(result.stdout) print(result.stderr) assert result.returncode == 0 === END AC cli-empty-input-interface ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>The executable must be located at the application root and read UTF-8 Markdown from standard input.</li><li>Write rendered HTML to standard output.</li><li>Do not use a public Markdown implementation.</li><li>Do not modify or replace supplied scoring assets.</li><li>The complete scoring command is <code>sh sources/full_test.sh</code>; only the terminal verification story runs it.</li></ul></article>
+</main>
+</body>
+</html>

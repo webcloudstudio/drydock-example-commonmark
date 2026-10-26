@@ -1,0 +1,656 @@
+{
+  "version": 1,
+  "import": {
+    "root": "/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261026.173709/sources",
+    "format": "markdown"
+  },
+  "sources": {
+    "INSTRUCTIONS.md": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "7674bd7",
+          "date": "2026-10-26",
+          "hash": "10b172786a92ad4dc012e88358cf96fcead95bcd919f2677df3a03405782fb0a",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "build-commonmark-parser",
+              "text": "Build a CommonMark 0.31.2 parser from the supplied specification.",
+              "stories": [
+                "python-foundation",
+                "blocks_001",
+                "blocks_002",
+                "blocks_003",
+                "blocks_004",
+                "blocks_005",
+                "blocks_006",
+                "blocks_007",
+                "inline_001",
+                "inline_002",
+                "inline_003",
+                "inline_004",
+                "inline_005",
+                "inline_006",
+                "inline_007"
+              ]
+            },
+            {
+              "name": "standard-input-output",
+              "text": "The parser reads Markdown from\nstandard input and writes HTML to standard output.",
+              "stories": [
+                "cli-001"
+              ]
+            },
+            {
+              "name": "avoid-public-markdown-implementation",
+              "text": "Do not use a public Markdown implementation.",
+              "stories": [
+                "blocks_001",
+                "blocks_002",
+                "blocks_003",
+                "blocks_004",
+                "blocks_005",
+                "blocks_006",
+                "blocks_007",
+                "inline_001",
+                "inline_002",
+                "inline_003",
+                "inline_004",
+                "inline_005",
+                "inline_006",
+                "inline_007"
+              ]
+            },
+            {
+              "name": "commonmark-executable",
+              "text": "The deliverable is an executable named `commonmark` at the application root.",
+              "stories": [
+                "cli-001"
+              ]
+            },
+            {
+              "name": "project-readme",
+              "text": "Create a concise project `README.md` describing the standard-input/standard-output interface.",
+              "stories": []
+            },
+            {
+              "name": "parse-blocks-first",
+              "text": "CommonMark parsing is two phases: resolve **block structure** first, then run **inline parsing**\nover the block contents. Implement in that order.",
+              "stories": [
+                "blocks_001",
+                "blocks_002",
+                "blocks_003",
+                "blocks_004",
+                "blocks_005",
+                "blocks_006",
+                "blocks_007"
+              ]
+            },
+            {
+              "name": "parse-block-constructs",
+              "text": "1. Blocks: paragraphs, thematic breaks, ATX headings, setext headings, indented code, fenced\n   code, HTML blocks, link reference definitions, block quotes, then lists \u2014 lists are the\n   hardest block construct, with lazy continuation, nesting, and tightness.",
+              "stories": [
+                "blocks_001",
+                "blocks_002",
+                "blocks_003",
+                "blocks_004",
+                "blocks_005",
+                "blocks_006",
+                "blocks_007"
+              ]
+            },
+            {
+              "name": "parse-inline-constructs",
+              "text": "2. Inlines: backslash escapes, entity and numeric references, code spans, emphasis and strong\n   emphasis (the delimiter-run algorithm), links and images, autolinks, raw HTML, hard breaks.",
+              "stories": [
+                "inline_001",
+                "inline_002",
+                "inline_003",
+                "inline_004",
+                "inline_005",
+                "inline_006",
+                "inline_007"
+              ]
+            },
+            {
+              "name": "follow-normative-specification",
+              "text": "The specification text is normative and contains the algorithms.",
+              "stories": [
+                "blocks_001",
+                "blocks_002",
+                "blocks_003",
+                "blocks_004",
+                "blocks_005",
+                "blocks_006",
+                "blocks_007",
+                "inline_001",
+                "inline_002",
+                "inline_003",
+                "inline_004",
+                "inline_005",
+                "inline_006",
+                "inline_007"
+              ]
+            },
+            {
+              "name": "follow-reference-parsing-strategy",
+              "text": "The \"Appendix: A parsing strategy\" section describes the reference implementation's approach; follow it directly rather than reinventing the rules.",
+              "stories": [
+                "blocks_001",
+                "blocks_002",
+                "blocks_003",
+                "blocks_004",
+                "blocks_005",
+                "blocks_006",
+                "blocks_007",
+                "inline_001",
+                "inline_002",
+                "inline_003",
+                "inline_004",
+                "inline_005",
+                "inline_006",
+                "inline_007"
+              ]
+            },
+            {
+              "name": "run-scoped-parser-checks",
+              "text": "Parser implementation stories may run `spec_tests.py` with explicit section selectors covering\nthe story's complete scope.",
+              "stories": [
+                "blocks_001",
+                "blocks_002",
+                "blocks_003",
+                "blocks_004",
+                "blocks_005",
+                "blocks_006",
+                "blocks_007",
+                "inline_001",
+                "inline_002",
+                "inline_003",
+                "inline_004",
+                "inline_005",
+                "inline_006",
+                "inline_007"
+              ]
+            },
+            {
+              "name": "select-example-owning-headings",
+              "text": "A selector must name headings that own examples, such as `ATX\nheadings` or `List items`.",
+              "stories": [
+                "blocks_001",
+                "blocks_002",
+                "blocks_003",
+                "blocks_004",
+                "blocks_005",
+                "blocks_006",
+                "blocks_007",
+                "inline_001",
+                "inline_002",
+                "inline_003",
+                "inline_004",
+                "inline_005",
+                "inline_006",
+                "inline_007"
+              ]
+            },
+            {
+              "name": "avoid-empty-chapter-selectors",
+              "text": "Chapter headings such as `Leaf blocks`, `Container blocks`, and `Characters and lines` own no examples; selecting them can exit zero without testing anything.",
+              "stories": [
+                "blocks_001",
+                "blocks_002",
+                "blocks_003",
+                "blocks_004",
+                "blocks_005",
+                "blocks_006",
+                "blocks_007",
+                "inline_001",
+                "inline_002",
+                "inline_003",
+                "inline_004",
+                "inline_005",
+                "inline_006",
+                "inline_007"
+              ]
+            },
+            {
+              "name": "create-full-suite-verification-story",
+              "text": "Create one terminal verification story that:",
+              "stories": [
+                "verify_001"
+              ]
+            },
+            {
+              "name": "verification-depends-on-parser-stories",
+              "text": "- depends on every parser implementation story;",
+              "stories": [
+                "verify_001"
+              ]
+            },
+            {
+              "name": "full-suite-check-only-in-verification",
+              "text": "- contains the only `Suite: full` acceptance check;",
+              "stories": [
+                "verify_001"
+              ]
+            },
+            {
+              "name": "run-supplied-suite-and-assert-success",
+              "text": "- runs `sh sources/full_test.sh`, prints captured standard output and standard error, and asserts\n  only `result.returncode == 0`; and",
+              "stories": [
+                "verify_001"
+              ]
+            },
+            {
+              "name": "carry-sea-trials-id",
+              "text": "- carries `Sea Trials: st-001`.",
+              "stories": [
+                "verify_001"
+              ]
+            },
+            {
+              "name": "do-not-author-full-test-harness",
+              "text": "Do not author `full_test.sh`; it is supplied.",
+              "stories": []
+            },
+            {
+              "name": "do-not-run-full-suite-from-scoped-checks",
+              "text": "Do not invoke it from scoped checks.",
+              "stories": [
+                "blocks_001",
+                "blocks_002",
+                "blocks_003",
+                "blocks_004",
+                "blocks_005",
+                "blocks_006",
+                "blocks_007",
+                "inline_001",
+                "inline_002",
+                "inline_003",
+                "inline_004",
+                "inline_005",
+                "inline_006",
+                "inline_007"
+              ]
+            },
+            {
+              "name": "no-file-presence-acceptance-checks",
+              "text": "Do not create file-presence or staged-asset acceptance checks, or additional verification stories.",
+              "stories": []
+            }
+          ]
+        }
+      ]
+    },
+    "cmark.py": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "7674bd7",
+          "date": "2026-10-26",
+          "hash": "c5fb45e7c64fd7670b2a3c49a151e46f4af9d0ad3004bedb37ecf9cdc34d2f00",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "convert-markdown-to-html",
+              "text": "def pipe_through_prog(prog, text):\n    p1 = Popen(prog.split(), stdout=PIPE, stdin=PIPE, stderr=PIPE)\n    [result, err] = p1.communicate(input=text.encode('utf-8'))\n    return [p1.returncode, result, err]\n\ndef use_library(lib, text):\n    textbytes = text.encode('utf-8')\n    textlen = len(textbytes)\n    return [0, lib(textbytes, textlen, 0), '']",
+              "stories": [
+                "cli-001",
+                "blocks_001",
+                "inline_007",
+                "blocks_006",
+                "blocks_004",
+                "inline_002",
+                "blocks_007",
+                "inline_003",
+                "inline_001",
+                "blocks_005",
+                "inline_006",
+                "blocks_002",
+                "inline_005",
+                "blocks_003",
+                "inline_004"
+              ]
+            },
+            {
+              "name": "use-system-library-filename",
+              "text": "if sysname == 'Darwin':\n                libname = \"libcmark.dylib\"\n            elif sysname == 'Windows':\n                libname = \"cmark.dll\"\n            else:\n                libname = \"libcmark.so\"",
+              "stories": [
+                "python-foundation"
+              ]
+            },
+            {
+              "name": "load-library-from-configured-path",
+              "text": "if library_dir:\n                libpath = os.path.join(library_dir, libname)\n            else:\n                libpath = os.path.join(\"build\", \"src\", libname)\n            cmark = CDLL(libpath)",
+              "stories": [
+                "python-foundation"
+              ]
+            },
+            {
+              "name": "bind-cmark-conversion-function",
+              "text": "markdown = cmark.cmark_markdown_to_html\n            markdown.restype = c_char_p\n            markdown.argtypes = [c_char_p, c_long, c_int]\n            self.to_html = lambda x: use_library(markdown, x)",
+              "stories": [
+                "python-foundation",
+                "blocks_001",
+                "inline_007",
+                "blocks_006",
+                "blocks_004",
+                "inline_002",
+                "blocks_007",
+                "inline_003",
+                "inline_001",
+                "blocks_005",
+                "inline_006",
+                "blocks_002",
+                "inline_005",
+                "blocks_003",
+                "inline_004"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "full_test.sh": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "7674bd7",
+          "date": "2026-10-26",
+          "hash": "5b634a1c78117313283acceda8faad9de02b594e54949439c73697b058941a93",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "commonmark-executable-interface",
+              "text": "The deliverable is an executable named commonmark that reads UTF-8 Markdown on stdin\nand writes HTML to stdout.",
+              "stories": [
+                "cli-001"
+              ]
+            },
+            {
+              "name": "complete-commonmark-conformance",
+              "text": "spec_tests.py exits with failed + errored, so exit 0 means the complete CommonMark 0.31.2 suite passed.",
+              "stories": [
+                "blocks_001",
+                "inline_007",
+                "blocks_006",
+                "blocks_004",
+                "inline_002",
+                "blocks_007",
+                "inline_003",
+                "inline_001",
+                "blocks_005",
+                "inline_006",
+                "blocks_002",
+                "inline_005",
+                "blocks_003",
+                "inline_004",
+                "verify_001"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "normalize.py": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "7674bd7",
+          "date": "2026-10-26",
+          "hash": "94a9dd253907e3dab7c02fc11e934f06112dcf0f3804255d09d732c8c7c4b5f4",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "normalize-whitespace",
+              "text": "Multiple inner whitespaces are collapsed to a single space (except\n    in pre tags):",
+              "stories": [
+                "verify_001"
+              ]
+            },
+            {
+              "name": "trim-block-whitespace",
+              "text": "Whitespace surrounding block-level tags is removed.",
+              "stories": [
+                "verify_001"
+              ]
+            },
+            {
+              "name": "normalize-self-closing-tags",
+              "text": "Self-closing tags are converted to open tags.",
+              "stories": [
+                "verify_001"
+              ]
+            },
+            {
+              "name": "sort-lowercase-attributes",
+              "text": "Attributes are sorted and lowercased.",
+              "stories": [
+                "verify_001"
+              ]
+            },
+            {
+              "name": "decode-character-references",
+              "text": "References are converted to unicode, except that '<', '>', '&', and\n      '\"' are rendered using entities.",
+              "stories": [
+                "verify_001"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "spec.txt": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "7674bd7",
+          "date": "2026-10-26",
+          "hash": "43fad3e0ac5190a3b0bc6a41f7b1a853201a26ec2e6b74871f5d96239a8c34cf",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "paragraphs-breaks-and-indentation",
+              "text": "A sequence of non-blank lines that cannot be interpreted as other kinds of blocks forms a [paragraph](@).",
+              "stories": [
+                "blocks_001"
+              ]
+            },
+            {
+              "name": "headings",
+              "text": "An [ATX heading](@)",
+              "stories": [
+                "blocks_002"
+              ]
+            },
+            {
+              "name": "code-blocks",
+              "text": "An [indented code block](@) is composed of one or more\n[indented chunks] separated by blank lines.",
+              "stories": [
+                "blocks_003"
+              ]
+            },
+            {
+              "name": "html-blocks",
+              "text": "An [HTML block](@) is a group of lines that is treated\nas raw HTML (and will not be escaped in HTML output).",
+              "stories": [
+                "blocks_004"
+              ]
+            },
+            {
+              "name": "link-reference-definitions",
+              "text": "A [link reference definition](@)",
+              "stories": [
+                "blocks_005"
+              ]
+            },
+            {
+              "name": "block-quotes",
+              "text": "The following rules define [block quotes]:",
+              "stories": [
+                "blocks_006"
+              ]
+            },
+            {
+              "name": "lists",
+              "text": "The following rules define [list items]:",
+              "stories": [
+                "blocks_007"
+              ]
+            },
+            {
+              "name": "backslash-escapes-and-character-references",
+              "text": "Any ASCII punctuation character may be backslash-escaped:",
+              "stories": [
+                "inline_001"
+              ]
+            },
+            {
+              "name": "code-spans",
+              "text": "A [code span](@) begins with a backtick string and ends with\na backtick string of equal length.",
+              "stories": [
+                "inline_002"
+              ]
+            },
+            {
+              "name": "emphasis",
+              "text": "The following rules define emphasis and strong emphasis:",
+              "stories": [
+                "inline_003"
+              ]
+            },
+            {
+              "name": "links-and-images",
+              "text": "A link contains [link text] (the visible text), a [link destination]\n(the URI that is the link destination), and optionally a [link title].",
+              "stories": [
+                "inline_004"
+              ]
+            },
+            {
+              "name": "autolinks-and-raw-html",
+              "text": "[Autolink](@)s are absolute URIs and email addresses inside\n`<` and `>`.",
+              "stories": [
+                "inline_005"
+              ]
+            },
+            {
+              "name": "line-breaks",
+              "text": "A line ending (not in a code span or HTML tag) that is preceded\nby two or more spaces and does not occur at the end of a block\nis parsed as a [hard line break](@) (rendered\nin HTML as a `<br />` tag):",
+              "stories": [
+                "inline_006"
+              ]
+            },
+            {
+              "name": "textual-content-and-inline-precedence",
+              "text": "Any characters not given an interpretation by the above rules will\nbe parsed as plain textual content.",
+              "stories": [
+                "inline_007"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "spec_tests.py": {
+      "state": "current",
+      "versions": [
+        {
+          "commit": "7674bd7",
+          "date": "2026-10-26",
+          "hash": "9db1ea4a3ee79c5ec74eebc09c5985eb252427e8d9d19ef45e5cc3f2ae410855",
+          "release": "",
+          "state": "consumed",
+          "via": "plan",
+          "ticket": null,
+          "requirements": [
+            {
+              "name": "select-program-and-library",
+              "text": "parser.add_argument('-p', '--program', dest='program', nargs='?', default=None,\n            help='program to test')\n    parser.add_argument('--library-dir', dest='library_dir', nargs='?',\n            default=None, help='directory containing dynamic library')",
+              "stories": [
+                "verify_001"
+              ]
+            },
+            {
+              "name": "select-spec-and-filter-tests",
+              "text": "parser.add_argument('-s', '--spec', dest='spec', nargs='?', default='spec.txt',\n            help='path to spec')\n    parser.add_argument('-P', '--pattern', dest='pattern', nargs='?',\n            default=None, help='limit to sections matching regex pattern')\n    parser.add_argument('-n', '--number', type=int, default=None,\n            help='only consider the test with the given number')",
+              "stories": [
+                "verify_001"
+              ]
+            },
+            {
+              "name": "control-html-normalization",
+              "text": "parser.add_argument('--no-normalize', dest='normalize',\n            action='store_const', const=False, default=True,\n            help='do not normalize HTML')",
+              "stories": [
+                "verify_001"
+              ]
+            },
+            {
+              "name": "dump-tests-as-json",
+              "text": "parser.add_argument('-d', '--dump-tests', dest='dump_tests',\n            action='store_const', const=True, default=False,\n            help='dump tests in JSON format')",
+              "stories": [
+                "verify_001"
+              ]
+            },
+            {
+              "name": "debug-html-normalization",
+              "text": "parser.add_argument('--debug-normalization', dest='debug_normalization',\n            action='store_const', const=True,\n            default=False, help='filter stdin through normalizer for testing')",
+              "stories": [
+                "verify_001"
+              ]
+            },
+            {
+              "name": "track-test-result-changes",
+              "text": "parser.add_argument('--track', metavar='path',\n            help='track which test cases pass/fail in the given JSON file and only report changes')",
+              "stories": [
+                "verify_001"
+              ]
+            },
+            {
+              "name": "parse-spec-examples-into-tests",
+              "text": "def get_tests(specfile):\n    line_number = 0\n    start_line = 0\n    end_line = 0\n    example_number = 0\n    markdown_lines = []\n    html_lines = []\n    state = 0  # 0 regular text, 1 markdown example, 2 html output\n    headertext = ''\n    tests = []\n\n    header_re = re.compile('#+ ')\n\n    with open(specfile, 'r', encoding='utf-8', newline='\\n') as specf:\n        for line in specf:\n            line_number = line_number + 1\n            l = line.strip()\n            if l == \"`\" * 32 + \" example\":\n                state = 1\n            elif state == 2 and l == \"`\" * 32:\n                state = 0\n                example_number = example_number + 1\n                end_line = line_number\n                tests.append({\n                    \"markdown\":''.join(markdown_lines).replace('\u2192',\"\\t\"),\n                    \"html\":''.join(html_lines).replace('\u2192',\"\\t\"),\n                    \"example\": example_number,\n                    \"start_line\": start_line,\n                    \"end_line\": end_line,\n                    \"section\": headertext})\n                start_line = 0\n                markdown_lines = []\n                html_lines = []\n            elif l == \".\":\n                state = 2\n            elif state == 1:\n                if start_line == 0:\n                    start_line = line_number - 1\n                markdown_lines.append(line)\n            elif state == 2:\n                html_lines.append(line)\n            elif state == 0 and re.match(header_re, line):\n                headertext = header_re.sub('', line).strip()\n    return tests",
+              "stories": [
+                "verify_001"
+              ]
+            },
+            {
+              "name": "execute-and-report-conformance-tests",
+              "text": "def do_test(test, normalize, prev_result):\n    [retcode, actual_html_bytes, err] = cmark.to_html(test['markdown'])\n    if retcode != 0:\n        if prev_result != 'error':\n            print_test_header(test)\n            out(\"program returned error code %d\\n\" % retcode)\n            sys.stdout.buffer.write(err)\n        return 'error'\n\n    expected_html = test['html']\n\n    try:\n        actual_html = actual_html_bytes.decode('utf-8')\n    except UnicodeDecodeError as e:\n        if prev_result != 'fail':\n            print_test_header(test)\n            out(test['markdown'] + '\\n')\n            out(\"Unicode error: \" + str(e) + '\\n')\n            out(\"Expected: \" + repr(expected_html) + '\\n')\n            out(\"Got:      \" + repr(actual_html_bytes) + '\\n')\n            out('\\n')\n        return 'fail'\n\n    if normalize:\n        actual_html = normalize_html(actual_html) + '\\n'\n        expected_html = normalize_html(expected_html) + '\\n'\n\n    if actual_html != expected_html:\n        if prev_result != 'fail':\n            print_test_header(test)\n            out(test['markdown'] + '\\n')\n            expected_html_lines = expected_html.splitlines(True)\n            actual_html_lines = actual_html.splitlines(True)\n            for diffline in unified_diff(expected_html_lines, actual_html_lines,\n                            \"expected HTML\", \"actual HTML\"):\n                out(diffline)\n            out('\\n')\n        return 'fail'\n\n    if prev_result and prev_result != 'pass':\n        print_test_header(test)\n        print('fixed!')\n\n    return 'pass'",
+              "stories": [
+                "verify_001"
+              ]
+            },
+            {
+              "name": "filter-stdin-through-normalizer",
+              "text": "if args.debug_normalization:\n        out(normalize_html(sys.stdin.read()))\n        exit(0)",
+              "stories": [
+                "verify_001"
+              ]
+            },
+            {
+              "name": "dump-or-run-selected-tests",
+              "text": "if args.dump_tests:\n        out(json.dumps(tests, ensure_ascii=False, indent=2))\n        exit(0)\n    else:\n        skipped = len(all_tests) - len(tests)\n        cmark = CMark(prog=args.program, library_dir=args.library_dir)\n        result_counts = {'pass': 0, 'fail': 0, 'error': 0, 'skip': skipped}\n\n        previous = {}\n\n        if args.track:\n            try:\n                with open(args.track) as f:\n                    previous = json.load(f)\n            except FileNotFoundError:\n                pass\n\n        results = {}\n\n        for test in tests:\n            result = do_test(test, args.normalize, previous.get(str(test['example'])))\n            result_counts[result] += 1\n            results[test['example']] = result\n\n        if args.track:\n            with open(args.track, 'w') as f:\n                json.dump(results, f)\n\n        out(\"{pass} passed, {fail} failed, {error} errored, {skip} skipped\\n\".format(**result_counts))\n        exit(result_counts['fail'] + result_counts['error'])",
+              "stories": [
+                "verify_001"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

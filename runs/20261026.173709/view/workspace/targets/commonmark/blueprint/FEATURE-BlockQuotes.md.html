@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-BlockQuotes.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-BlockQuotes.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-BlockQuotes.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Block Quotes</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261026 V1</td></tr><tr><td>Description</td><td>Parses block quotes, nesting, and lazy continuation.</td></tr><tr><td>Depends On</td><td>FEATURE-CommandLine.md</td></tr><tr><td>Provides</td><td>block quote parsing</td></tr><tr><td>Consumes</td><td>commonmark executable</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Parse CommonMark block quotes as containers whose contents are parsed using the ordinary block rules.</p>
+<h2>Behavior</h2>
+<ul><li>Recognize <code>&gt;</code> with up to three spaces of leading indentation; consume an optional following space. Support nested and empty quotes and preserve quote boundaries.</li><li>Consecutive quote-marked lines belong to one quote. A blank line separates adjacent quotes and preserves paragraph boundaries inside a quote.</li><li>Permit an unmarked lazy continuation only when it continues paragraph text inside the quote. Do not extend a quote with an unmarked line that starts another block construct or continues code.</li><li>Render the contained blocks within <code>&lt;blockquote&gt;</code> elements.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC block-quotes ===<br>Intent: The implementation passes all supplied block quote conformance examples.<br>Suite: scoped<br>Probe: --dump-tests<br>Probe Count: json</p>
+<p>import json import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Block quotes&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC block-quotes ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not modify supplied scoring assets or invoke <code>sources/full_test.sh</code> from this scoped check.</li></ul></article>
+</main>
+</body>
+</html>

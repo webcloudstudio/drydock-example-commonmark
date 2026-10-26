@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-AutolinksAndRawHTML.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-AutolinksAndRawHTML.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-AutolinksAndRawHTML.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Autolinks and Raw HTML</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261026 V1</td></tr><tr><td>Description</td><td>Parses URI and email autolinks and preserves recognized raw HTML.</td></tr><tr><td>Depends On</td><td>FEATURE-CommandLine.md</td></tr><tr><td>Provides</td><td>autolinks and raw inline HTML parsing</td></tr><tr><td>Consumes</td><td>commonmark executable</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Parse inline autolinks and raw HTML according to CommonMark 0.31.2. The command-line executable is the parser interface; these constructs are recognized during inline parsing after block structure is resolved.</p>
+<h2>Behavior</h2>
+<ul><li>Recognize URI autolinks in angle brackets when the scheme has 2–32 characters, starts with an ASCII letter, and continues with ASCII letters, digits, <code>+</code>, <code>.</code>, or <code>-</code>. The URI may contain no ASCII control characters, spaces, <code>&lt;</code>, or <code>&gt;</code>.</li><li>Recognize email autolinks in angle brackets using the email-address form specified in CommonMark 0.31.2, and render their destinations with the <code>mailto:</code> scheme.</li><li>Treat backslash escapes as inactive inside autolinks.</li><li>Recognize raw HTML open and closing tags, comments, processing instructions, declarations, and CDATA sections using the specification’s grammar. Preserve recognized raw HTML without Markdown escaping.</li><li>Leave text that does not meet an autolink or raw HTML form available for ordinary text rendering.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC inline-autolinks-raw-html ===<br>Intent: The executable passes the complete supplied conformance slice for autolinks and raw HTML.<br>Suite: scoped<br>Probe: --dump-tests<br>Probe Count: json</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [ sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, f&quot;{<strong>import</strong>(&#x27;os&#x27;).getcwd()}/commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Autolinks|Raw HTML&quot;, ], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC inline-autolinks-raw-html ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not use a public Markdown implementation.</li><li>Preserve the supplied scoring assets unchanged.</li><li>Resolve block structure before inline structure.</li></ul></article>
+</main>
+</body>
+</html>

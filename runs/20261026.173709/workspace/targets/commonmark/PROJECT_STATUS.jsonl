@@ -1,0 +1,6 @@
+{"label": "INITIALIZED", "result": "pass", "at": "2026-10-26T17:37:12.694+00:00", "detail": "", "command": "drydock init commonmark", "attempts": 1}
+{"label": "IMPORTED", "result": "pass", "at": "2026-10-26T17:37:19.888+00:00", "detail": "", "command": "drydock import commonmark", "attempts": 1}
+{"label": "ANALYZED", "result": "pass", "at": "2026-10-26T17:38:04.300+00:00", "detail": "", "command": "drydock analyze commonmark", "attempts": 1}
+{"label": "PLAN CREATED", "result": "fail", "at": "2026-10-26T17:43:19.669+00:00", "detail": "3 criteria cannot run", "command": "drydock plan verify commonmark", "attempts": 2}
+{"label": "PLAN REPAIRED", "result": "fail", "at": "2026-10-26T17:44:39.347+00:00", "detail": "3 criteria cannot run", "command": "drydock plan verify commonmark", "attempts": 2}
+{"state": "PLAN CREATED", "result": "fail", "at": "2026-10-26T17:43:19.669+00:00", "attempts": 2}

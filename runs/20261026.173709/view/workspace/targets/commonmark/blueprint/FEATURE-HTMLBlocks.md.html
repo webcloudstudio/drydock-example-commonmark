@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-HTMLBlocks.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-HTMLBlocks.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-HTMLBlocks.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: HTML Blocks</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261026 V1</td></tr><tr><td>Description</td><td>Parses the seven kinds of CommonMark HTML blocks.</td></tr><tr><td>Depends On</td><td>FEATURE-CommandLine.md</td></tr><tr><td>Provides</td><td>HTML block parsing</td></tr><tr><td>Consumes</td><td>commonmark executable</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Preserve raw HTML blocks in rendered output according to the seven start and end conditions in CommonMark 0.31.2.</p>
+<h2>Behavior</h2>
+<ul><li>Recognize type 1 blocks beginning with <code>pre</code>, <code>script</code>, <code>style</code>, or <code>textarea</code>; types 2–5 beginning with comments, processing instructions, declarations, or CDATA; type 6 beginning with a listed block tag; and type 7 containing a complete open or closing tag on a line by itself.</li><li>Apply each type’s end condition, including blank-line termination for types 6 and 7 and matching end markers for types 1–5. An unterminated block ends with its containing block or document.</li><li>Allow up to three leading spaces. Types 1–6 may interrupt paragraphs; type 7 may not. Pass block contents through as raw HTML.</li></ul>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC html-blocks ===<br>Intent: The implementation passes all supplied HTML block conformance examples.<br>Suite: scoped<br>Probe: --dump-tests<br>Probe Count: json</p>
+<p>import json import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;HTML blocks&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC html-blocks ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not escape or otherwise rewrite raw HTML block contents.</li><li>Do not modify supplied scoring assets.</li><li>Do not invoke <code>sources/full_test.sh</code> from this scoped check.</li></ul></article>
+</main>
+</body>
+</html>

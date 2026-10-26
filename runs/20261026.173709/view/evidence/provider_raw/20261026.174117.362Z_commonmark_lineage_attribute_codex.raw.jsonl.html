@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/provider_raw/20261026.174117.362Z_commonmark_lineage_attribute_codex.raw.jsonl</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/provider_raw/20261026.174117.362Z_commonmark_lineage_attribute_codex.raw.jsonl</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/provider_raw/20261026.174117.362Z_commonmark_lineage_attribute_codex.raw.jsonl">Raw file</a></div></header>
+<article class="doc"><pre>{&quot;type&quot;:&quot;thread.started&quot;,&quot;thread_id&quot;:&quot;01a1794d-64f0-7340-becb-56792647e857&quot;}
+{&quot;type&quot;:&quot;turn.started&quot;}
+{&quot;type&quot;:&quot;item.completed&quot;,&quot;item&quot;:{&quot;id&quot;:&quot;item_0&quot;,&quot;type&quot;:&quot;agent_message&quot;,&quot;text&quot;:&quot;&lt;requirement name=\&quot;convert-markdown-to-html\&quot; stories=\&quot;cli-001,blocks_001,inline_007,blocks_006,blocks_004,inline_002,blocks_007,inline_003,inline_001,blocks_005,inline_006,blocks_002,inline_005,blocks_003,inline_004\&quot;&gt;\ndef pipe_through_prog(prog, text):\n    p1 = Popen(prog.split(), stdout=PIPE, stdin=PIPE, stderr=PIPE)\n    [result, err] = p1.communicate(input=text.encode(&#x27;utf-8&#x27;))\n    return [p1.returncode, result, err]\n\ndef use_library(lib, text):\n    textbytes = text.encode(&#x27;utf-8&#x27;)\n    textlen = len(textbytes)\n    return [0, lib(textbytes, textlen, 0), &#x27;&#x27;]\n&lt;/requirement&gt;\n&lt;requirement name=\&quot;use-system-library-filename\&quot; stories=\&quot;python-foundation\&quot;&gt;\n            if sysname == &#x27;Darwin&#x27;:\n                libname = \&quot;libcmark.dylib\&quot;\n            elif sysname == &#x27;Windows&#x27;:\n                libname = \&quot;cmark.dll\&quot;\n            else:\n                libname = \&quot;libcmark.so\&quot;\n&lt;/requirement&gt;\n&lt;requirement name=\&quot;load-library-from-configured-path\&quot; stories=\&quot;python-foundation\&quot;&gt;\n            if library_dir:\n                libpath = os.path.join(library_dir, libname)\n            else:\n                libpath = os.path.join(\&quot;build\&quot;, \&quot;src\&quot;, libname)\n            cmark = CDLL(libpath)\n&lt;/requirement&gt;\n&lt;requirement name=\&quot;bind-cmark-conversion-function\&quot; stories=\&quot;python-foundation,blocks_001,inline_007,blocks_006,blocks_004,inline_002,blocks_007,inline_003,inline_001,blocks_005,inline_006,blocks_002,inline_005,blocks_003,inline_004\&quot;&gt;\n            markdown = cmark.cmark_markdown_to_html\n            markdown.restype = c_char_p\n            markdown.argtypes = [c_char_p, c_long, c_int]\n            self.to_html = lambda x: use_library(markdown, x)\n&lt;/requirement&gt;\n&lt;unattached story=\&quot;verify_001\&quot;/&gt;&quot;}}
+{&quot;type&quot;:&quot;turn.completed&quot;,&quot;usage&quot;:{&quot;input_tokens&quot;:14882,&quot;cached_input_tokens&quot;:11520,&quot;cache_write_input_tokens&quot;:0,&quot;output_tokens&quot;:467,&quot;reasoning_output_tokens&quot;:0}}
+</pre></article>
+</main>
+</body>
+</html>

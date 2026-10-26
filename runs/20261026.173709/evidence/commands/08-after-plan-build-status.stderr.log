@@ -1,0 +1,15 @@
+drydock build refused: commonmark is blocked.
+
+╭─ BLOCKED: commonmark  ·  2026-10-26T13:44:41-04:00 ──────────╮
+│ Uat Stage                                                    │
+│                                                              │
+│ plan-repair                                                  │
+│                                                              │
+│ Error                                                        │
+│   acceptance criteria still cannot run after one repair pass │
+│                                                              │
+│ Rerun after resolving the error: drydock uat CommonMark      │
+╰──────────────────────────────────────────────────────────────╯
+
+Blocker details: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261026.173709/workspace/targets/commonmark/BLOCKERS.md
+Resolve the reported error, then rerun the command shown above.

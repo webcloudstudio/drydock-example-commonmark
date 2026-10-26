@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/LINEAGE.json</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/LINEAGE.json</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../workspace/targets/commonmark/LINEAGE.json">Raw file</a></div></header>
+<article class="doc"><pre>{
+  &quot;version&quot;: 1,
+  &quot;import&quot;: {
+    &quot;root&quot;: &quot;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261026.173709/sources&quot;,
+    &quot;format&quot;: &quot;markdown&quot;
+  },
+  &quot;sources&quot;: {
+    &quot;INSTRUCTIONS.md&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;7674bd7&quot;,
+          &quot;date&quot;: &quot;2026-10-26&quot;,
+          &quot;hash&quot;: &quot;10b172786a92ad4dc012e88358cf96fcead95bcd919f2677df3a03405782fb0a&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;build-commonmark-parser&quot;,
+              &quot;text&quot;: &quot;Build a CommonMark 0.31.2 parser from the supplied specification.&quot;,
+              &quot;stories&quot;: [
+                &quot;python-foundation&quot;,
+                &quot;blocks_001&quot;,
+                &quot;blocks_002&quot;,
+                &quot;blocks_003&quot;,
+                &quot;blocks_004&quot;,
+                &quot;blocks_005&quot;,
+                &quot;blocks_006&quot;,
+                &quot;blocks_007&quot;,
+                &quot;inline_001&quot;,
+                &quot;inline_002&quot;,
+                &quot;inline_003&quot;,
+                &quot;inline_004&quot;,
+                &quot;inline_005&quot;,
+                &quot;inline_006&quot;,
+                &quot;inline_007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;standard-input-output&quot;,
+              &quot;text&quot;: &quot;The parser reads Markdown from\nstandard input and writes HTML to standard output.&quot;,
+              &quot;stories&quot;: [
+                &quot;cli-001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;avoid-public-markdown-implementation&quot;,
+              &quot;text&quot;: &quot;Do not use a public Markdown implementation.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_001&quot;,
+                &quot;blocks_002&quot;,
+                &quot;blocks_003&quot;,
+                &quot;blocks_004&quot;,
+                &quot;blocks_005&quot;,
+                &quot;blocks_006&quot;,
+                &quot;blocks_007&quot;,
+                &quot;inline_001&quot;,
+                &quot;inline_002&quot;,
+                &quot;inline_003&quot;,
+                &quot;inline_004&quot;,
+                &quot;inline_005&quot;,
+                &quot;inline_006&quot;,
+                &quot;inline_007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;commonmark-executable&quot;,
+              &quot;text&quot;: &quot;The deliverable is an executable named `commonmark` at the application root.&quot;,
+              &quot;stories&quot;: [
+                &quot;cli-001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;project-readme&quot;,
+              &quot;text&quot;: &quot;Create a concise project `README.md` describing the standard-input/standard-output interface.&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;parse-blocks-first&quot;,
+              &quot;text&quot;: &quot;CommonMark parsing is two phases: resolve **block structure** first, then run **inline parsing**\nover the block contents. Implement in that order.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_001&quot;,
+                &quot;blocks_002&quot;,
+                &quot;blocks_003&quot;,
+                &quot;blocks_004&quot;,
+                &quot;blocks_005&quot;,
+                &quot;blocks_006&quot;,
+                &quot;blocks_007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-block-constructs&quot;,
+              &quot;text&quot;: &quot;1. Blocks: paragraphs, thematic breaks, ATX headings, setext headings, indented code, fenced\n   code, HTML blocks, link reference definitions, block quotes, then lists \u2014 lists are the\n   hardest block construct, with lazy continuation, nesting, and tightness.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_001&quot;,
+                &quot;blocks_002&quot;,
+                &quot;blocks_003&quot;,
+                &quot;blocks_004&quot;,
+                &quot;blocks_005&quot;,
+                &quot;blocks_006&quot;,
+                &quot;blocks_007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-inline-constructs&quot;,
+              &quot;text&quot;: &quot;2. Inlines: backslash escapes, entity and numeric references, code spans, emphasis and strong\n   emphasis (the delimiter-run algorithm), links and images, autolinks, raw HTML, hard breaks.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_001&quot;,
+                &quot;inline_002&quot;,
+                &quot;inline_003&quot;,
+                &quot;inline_004&quot;,
+                &quot;inline_005&quot;,
+                &quot;inline_006&quot;,
+                &quot;inline_007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;follow-normative-specification&quot;,
+              &quot;text&quot;: &quot;The specification text is normative and contains the algorithms.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_001&quot;,
+                &quot;blocks_002&quot;,
+                &quot;blocks_003&quot;,
+                &quot;blocks_004&quot;,
+                &quot;blocks_005&quot;,
+                &quot;blocks_006&quot;,
+                &quot;blocks_007&quot;,
+                &quot;inline_001&quot;,
+                &quot;inline_002&quot;,
+                &quot;inline_003&quot;,
+                &quot;inline_004&quot;,
+                &quot;inline_005&quot;,
+                &quot;inline_006&quot;,
+                &quot;inline_007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;follow-reference-parsing-strategy&quot;,
+              &quot;text&quot;: &quot;The \&quot;Appendix: A parsing strategy\&quot; section describes the reference implementation&#x27;s approach; follow it directly rather than reinventing the rules.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_001&quot;,
+                &quot;blocks_002&quot;,
+                &quot;blocks_003&quot;,
+                &quot;blocks_004&quot;,
+                &quot;blocks_005&quot;,
+                &quot;blocks_006&quot;,
+                &quot;blocks_007&quot;,
+                &quot;inline_001&quot;,
+                &quot;inline_002&quot;,
+                &quot;inline_003&quot;,
+                &quot;inline_004&quot;,
+                &quot;inline_005&quot;,
+                &quot;inline_006&quot;,
+                &quot;inline_007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;run-scoped-parser-checks&quot;,
+              &quot;text&quot;: &quot;Parser implementation stories may run `spec_tests.py` with explicit section selectors covering\nthe story&#x27;s complete scope.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_001&quot;,
+                &quot;blocks_002&quot;,
+                &quot;blocks_003&quot;,
+                &quot;blocks_004&quot;,
+                &quot;blocks_005&quot;,
+                &quot;blocks_006&quot;,
+                &quot;blocks_007&quot;,
+                &quot;inline_001&quot;,
+                &quot;inline_002&quot;,
+                &quot;inline_003&quot;,
+                &quot;inline_004&quot;,
+                &quot;inline_005&quot;,
+                &quot;inline_006&quot;,
+                &quot;inline_007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;select-example-owning-headings&quot;,
+              &quot;text&quot;: &quot;A selector must name headings that own examples, such as `ATX\nheadings` or `List items`.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_001&quot;,
+                &quot;blocks_002&quot;,
+                &quot;blocks_003&quot;,
+                &quot;blocks_004&quot;,
+                &quot;blocks_005&quot;,
+                &quot;blocks_006&quot;,
+                &quot;blocks_007&quot;,
+                &quot;inline_001&quot;,
+                &quot;inline_002&quot;,
+                &quot;inline_003&quot;,
+                &quot;inline_004&quot;,
+                &quot;inline_005&quot;,
+                &quot;inline_006&quot;,
+                &quot;inline_007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;avoid-empty-chapter-selectors&quot;,
+              &quot;text&quot;: &quot;Chapter headings such as `Leaf blocks`, `Container blocks`, and `Characters and lines` own no examples; selecting them can exit zero without testing anything.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_001&quot;,
+                &quot;blocks_002&quot;,
+                &quot;blocks_003&quot;,
+                &quot;blocks_004&quot;,
+                &quot;blocks_005&quot;,
+                &quot;blocks_006&quot;,
+                &quot;blocks_007&quot;,
+                &quot;inline_001&quot;,
+                &quot;inline_002&quot;,
+                &quot;inline_003&quot;,
+                &quot;inline_004&quot;,
+                &quot;inline_005&quot;,
+                &quot;inline_006&quot;,
+                &quot;inline_007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;create-full-suite-verification-story&quot;,
+              &quot;text&quot;: &quot;Create one terminal verification story that:&quot;,
+              &quot;stories&quot;: [
+                &quot;verify_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;verification-depends-on-parser-stories&quot;,
+              &quot;text&quot;: &quot;- depends on every parser implementation story;&quot;,
+              &quot;stories&quot;: [
+                &quot;verify_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;full-suite-check-only-in-verification&quot;,
+              &quot;text&quot;: &quot;- contains the only `Suite: full` acceptance check;&quot;,
+              &quot;stories&quot;: [
+                &quot;verify_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;run-supplied-suite-and-assert-success&quot;,
+              &quot;text&quot;: &quot;- runs `sh sources/full_test.sh`, prints captured standard output and standard error, and asserts\n  only `result.returncode == 0`; and&quot;,
+              &quot;stories&quot;: [
+                &quot;verify_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;carry-sea-trials-id&quot;,
+              &quot;text&quot;: &quot;- carries `Sea Trials: st-001`.&quot;,
+              &quot;stories&quot;: [
+                &quot;verify_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;do-not-author-full-test-harness&quot;,
+              &quot;text&quot;: &quot;Do not author `full_test.sh`; it is supplied.&quot;,
+              &quot;stories&quot;: []
+            },
+            {
+              &quot;name&quot;: &quot;do-not-run-full-suite-from-scoped-checks&quot;,
+              &quot;text&quot;: &quot;Do not invoke it from scoped checks.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_001&quot;,
+                &quot;blocks_002&quot;,
+                &quot;blocks_003&quot;,
+                &quot;blocks_004&quot;,
+                &quot;blocks_005&quot;,
+                &quot;blocks_006&quot;,
+                &quot;blocks_007&quot;,
+                &quot;inline_001&quot;,
+                &quot;inline_002&quot;,
+                &quot;inline_003&quot;,
+                &quot;inline_004&quot;,
+                &quot;inline_005&quot;,
+                &quot;inline_006&quot;,
+                &quot;inline_007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;no-file-presence-acceptance-checks&quot;,
+              &quot;text&quot;: &quot;Do not create file-presence or staged-asset acceptance checks, or additional verification stories.&quot;,
+              &quot;stories&quot;: []
+            }
+          ]
+        }
+      ]
+    },
+    &quot;cmark.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;7674bd7&quot;,
+          &quot;date&quot;: &quot;2026-10-26&quot;,
+          &quot;hash&quot;: &quot;c5fb45e7c64fd7670b2a3c49a151e46f4af9d0ad3004bedb37ecf9cdc34d2f00&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;convert-markdown-to-html&quot;,
+              &quot;text&quot;: &quot;def pipe_through_prog(prog, text):\n    p1 = Popen(prog.split(), stdout=PIPE, stdin=PIPE, stderr=PIPE)\n    [result, err] = p1.communicate(input=text.encode(&#x27;utf-8&#x27;))\n    return [p1.returncode, result, err]\n\ndef use_library(lib, text):\n    textbytes = text.encode(&#x27;utf-8&#x27;)\n    textlen = len(textbytes)\n    return [0, lib(textbytes, textlen, 0), &#x27;&#x27;]&quot;,
+              &quot;stories&quot;: [
+                &quot;cli-001&quot;,
+                &quot;blocks_001&quot;,
+                &quot;inline_007&quot;,
+                &quot;blocks_006&quot;,
+                &quot;blocks_004&quot;,
+                &quot;inline_002&quot;,
+                &quot;blocks_007&quot;,
+                &quot;inline_003&quot;,
+                &quot;inline_001&quot;,
+                &quot;blocks_005&quot;,
+                &quot;inline_006&quot;,
+                &quot;blocks_002&quot;,
+                &quot;inline_005&quot;,
+                &quot;blocks_003&quot;,
+                &quot;inline_004&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;use-system-library-filename&quot;,
+              &quot;text&quot;: &quot;if sysname == &#x27;Darwin&#x27;:\n                libname = \&quot;libcmark.dylib\&quot;\n            elif sysname == &#x27;Windows&#x27;:\n                libname = \&quot;cmark.dll\&quot;\n            else:\n                libname = \&quot;libcmark.so\&quot;&quot;,
+              &quot;stories&quot;: [
+                &quot;python-foundation&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;load-library-from-configured-path&quot;,
+              &quot;text&quot;: &quot;if library_dir:\n                libpath = os.path.join(library_dir, libname)\n            else:\n                libpath = os.path.join(\&quot;build\&quot;, \&quot;src\&quot;, libname)\n            cmark = CDLL(libpath)&quot;,
+              &quot;stories&quot;: [
+                &quot;python-foundation&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;bind-cmark-conversion-function&quot;,
+              &quot;text&quot;: &quot;markdown = cmark.cmark_markdown_to_html\n            markdown.restype = c_char_p\n            markdown.argtypes = [c_char_p, c_long, c_int]\n            self.to_html = lambda x: use_library(markdown, x)&quot;,
+              &quot;stories&quot;: [
+                &quot;python-foundation&quot;,
+                &quot;blocks_001&quot;,
+                &quot;inline_007&quot;,
+                &quot;blocks_006&quot;,
+                &quot;blocks_004&quot;,
+                &quot;inline_002&quot;,
+                &quot;blocks_007&quot;,
+                &quot;inline_003&quot;,
+                &quot;inline_001&quot;,
+                &quot;blocks_005&quot;,
+                &quot;inline_006&quot;,
+                &quot;blocks_002&quot;,
+                &quot;inline_005&quot;,
+                &quot;blocks_003&quot;,
+                &quot;inline_004&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;full_test.sh&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;7674bd7&quot;,
+          &quot;date&quot;: &quot;2026-10-26&quot;,
+          &quot;hash&quot;: &quot;5b634a1c78117313283acceda8faad9de02b594e54949439c73697b058941a93&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;commonmark-executable-interface&quot;,
+              &quot;text&quot;: &quot;The deliverable is an executable named commonmark that reads UTF-8 Markdown on stdin\nand writes HTML to stdout.&quot;,
+              &quot;stories&quot;: [
+                &quot;cli-001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;complete-commonmark-conformance&quot;,
+              &quot;text&quot;: &quot;spec_tests.py exits with failed + errored, so exit 0 means the complete CommonMark 0.31.2 suite passed.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_001&quot;,
+                &quot;inline_007&quot;,
+                &quot;blocks_006&quot;,
+                &quot;blocks_004&quot;,
+                &quot;inline_002&quot;,
+                &quot;blocks_007&quot;,
+                &quot;inline_003&quot;,
+                &quot;inline_001&quot;,
+                &quot;blocks_005&quot;,
+                &quot;inline_006&quot;,
+                &quot;blocks_002&quot;,
+                &quot;inline_005&quot;,
+                &quot;blocks_003&quot;,
+                &quot;inline_004&quot;,
+                &quot;verify_001&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;normalize.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;7674bd7&quot;,
+          &quot;date&quot;: &quot;2026-10-26&quot;,
+          &quot;hash&quot;: &quot;94a9dd253907e3dab7c02fc11e934f06112dcf0f3804255d09d732c8c7c4b5f4&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;normalize-whitespace&quot;,
+              &quot;text&quot;: &quot;Multiple inner whitespaces are collapsed to a single space (except\n    in pre tags):&quot;,
+              &quot;stories&quot;: [
+                &quot;verify_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;trim-block-whitespace&quot;,
+              &quot;text&quot;: &quot;Whitespace surrounding block-level tags is removed.&quot;,
+              &quot;stories&quot;: [
+                &quot;verify_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;normalize-self-closing-tags&quot;,
+              &quot;text&quot;: &quot;Self-closing tags are converted to open tags.&quot;,
+              &quot;stories&quot;: [
+                &quot;verify_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;sort-lowercase-attributes&quot;,
+              &quot;text&quot;: &quot;Attributes are sorted and lowercased.&quot;,
+              &quot;stories&quot;: [
+                &quot;verify_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;decode-character-references&quot;,
+              &quot;text&quot;: &quot;References are converted to unicode, except that &#x27;&lt;&#x27;, &#x27;&gt;&#x27;, &#x27;&amp;&#x27;, and\n      &#x27;\&quot;&#x27; are rendered using entities.&quot;,
+              &quot;stories&quot;: [
+                &quot;verify_001&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;spec.txt&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;7674bd7&quot;,
+          &quot;date&quot;: &quot;2026-10-26&quot;,
+          &quot;hash&quot;: &quot;43fad3e0ac5190a3b0bc6a41f7b1a853201a26ec2e6b74871f5d96239a8c34cf&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;paragraphs-breaks-and-indentation&quot;,
+              &quot;text&quot;: &quot;A sequence of non-blank lines that cannot be interpreted as other kinds of blocks forms a [paragraph](@).&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;headings&quot;,
+              &quot;text&quot;: &quot;An [ATX heading](@)&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_002&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;code-blocks&quot;,
+              &quot;text&quot;: &quot;An [indented code block](@) is composed of one or more\n[indented chunks] separated by blank lines.&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_003&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;html-blocks&quot;,
+              &quot;text&quot;: &quot;An [HTML block](@) is a group of lines that is treated\nas raw HTML (and will not be escaped in HTML output).&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_004&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;link-reference-definitions&quot;,
+              &quot;text&quot;: &quot;A [link reference definition](@)&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_005&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;block-quotes&quot;,
+              &quot;text&quot;: &quot;The following rules define [block quotes]:&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_006&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;lists&quot;,
+              &quot;text&quot;: &quot;The following rules define [list items]:&quot;,
+              &quot;stories&quot;: [
+                &quot;blocks_007&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;backslash-escapes-and-character-references&quot;,
+              &quot;text&quot;: &quot;Any ASCII punctuation character may be backslash-escaped:&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;code-spans&quot;,
+              &quot;text&quot;: &quot;A [code span](@) begins with a backtick string and ends with\na backtick string of equal length.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_002&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;emphasis&quot;,
+              &quot;text&quot;: &quot;The following rules define emphasis and strong emphasis:&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_003&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;links-and-images&quot;,
+              &quot;text&quot;: &quot;A link contains [link text] (the visible text), a [link destination]\n(the URI that is the link destination), and optionally a [link title].&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_004&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;autolinks-and-raw-html&quot;,
+              &quot;text&quot;: &quot;[Autolink](@)s are absolute URIs and email addresses inside\n`&lt;` and `&gt;`.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_005&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;line-breaks&quot;,
+              &quot;text&quot;: &quot;A line ending (not in a code span or HTML tag) that is preceded\nby two or more spaces and does not occur at the end of a block\nis parsed as a [hard line break](@) (rendered\nin HTML as a `&lt;br /&gt;` tag):&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_006&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;textual-content-and-inline-precedence&quot;,
+              &quot;text&quot;: &quot;Any characters not given an interpretation by the above rules will\nbe parsed as plain textual content.&quot;,
+              &quot;stories&quot;: [
+                &quot;inline_007&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    &quot;spec_tests.py&quot;: {
+      &quot;state&quot;: &quot;current&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;commit&quot;: &quot;7674bd7&quot;,
+          &quot;date&quot;: &quot;2026-10-26&quot;,
+          &quot;hash&quot;: &quot;9db1ea4a3ee79c5ec74eebc09c5985eb252427e8d9d19ef45e5cc3f2ae410855&quot;,
+          &quot;release&quot;: &quot;&quot;,
+          &quot;state&quot;: &quot;consumed&quot;,
+          &quot;via&quot;: &quot;plan&quot;,
+          &quot;ticket&quot;: null,
+          &quot;requirements&quot;: [
+            {
+              &quot;name&quot;: &quot;select-program-and-library&quot;,
+              &quot;text&quot;: &quot;parser.add_argument(&#x27;-p&#x27;, &#x27;--program&#x27;, dest=&#x27;program&#x27;, nargs=&#x27;?&#x27;, default=None,\n            help=&#x27;program to test&#x27;)\n    parser.add_argument(&#x27;--library-dir&#x27;, dest=&#x27;library_dir&#x27;, nargs=&#x27;?&#x27;,\n            default=None, help=&#x27;directory containing dynamic library&#x27;)&quot;,
+              &quot;stories&quot;: [
+                &quot;verify_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;select-spec-and-filter-tests&quot;,
+              &quot;text&quot;: &quot;parser.add_argument(&#x27;-s&#x27;, &#x27;--spec&#x27;, dest=&#x27;spec&#x27;, nargs=&#x27;?&#x27;, default=&#x27;spec.txt&#x27;,\n            help=&#x27;path to spec&#x27;)\n    parser.add_argument(&#x27;-P&#x27;, &#x27;--pattern&#x27;, dest=&#x27;pattern&#x27;, nargs=&#x27;?&#x27;,\n            default=None, help=&#x27;limit to sections matching regex pattern&#x27;)\n    parser.add_argument(&#x27;-n&#x27;, &#x27;--number&#x27;, type=int, default=None,\n            help=&#x27;only consider the test with the given number&#x27;)&quot;,
+              &quot;stories&quot;: [
+                &quot;verify_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;control-html-normalization&quot;,
+              &quot;text&quot;: &quot;parser.add_argument(&#x27;--no-normalize&#x27;, dest=&#x27;normalize&#x27;,\n            action=&#x27;store_const&#x27;, const=False, default=True,\n            help=&#x27;do not normalize HTML&#x27;)&quot;,
+              &quot;stories&quot;: [
+                &quot;verify_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;dump-tests-as-json&quot;,
+              &quot;text&quot;: &quot;parser.add_argument(&#x27;-d&#x27;, &#x27;--dump-tests&#x27;, dest=&#x27;dump_tests&#x27;,\n            action=&#x27;store_const&#x27;, const=True, default=False,\n            help=&#x27;dump tests in JSON format&#x27;)&quot;,
+              &quot;stories&quot;: [
+                &quot;verify_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;debug-html-normalization&quot;,
+              &quot;text&quot;: &quot;parser.add_argument(&#x27;--debug-normalization&#x27;, dest=&#x27;debug_normalization&#x27;,\n            action=&#x27;store_const&#x27;, const=True,\n            default=False, help=&#x27;filter stdin through normalizer for testing&#x27;)&quot;,
+              &quot;stories&quot;: [
+                &quot;verify_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;track-test-result-changes&quot;,
+              &quot;text&quot;: &quot;parser.add_argument(&#x27;--track&#x27;, metavar=&#x27;path&#x27;,\n            help=&#x27;track which test cases pass/fail in the given JSON file and only report changes&#x27;)&quot;,
+              &quot;stories&quot;: [
+                &quot;verify_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;parse-spec-examples-into-tests&quot;,
+              &quot;text&quot;: &quot;def get_tests(specfile):\n    line_number = 0\n    start_line = 0\n    end_line = 0\n    example_number = 0\n    markdown_lines = []\n    html_lines = []\n    state = 0  # 0 regular text, 1 markdown example, 2 html output\n    headertext = &#x27;&#x27;\n    tests = []\n\n    header_re = re.compile(&#x27;#+ &#x27;)\n\n    with open(specfile, &#x27;r&#x27;, encoding=&#x27;utf-8&#x27;, newline=&#x27;\\n&#x27;) as specf:\n        for line in specf:\n            line_number = line_number + 1\n            l = line.strip()\n            if l == \&quot;`\&quot; * 32 + \&quot; example\&quot;:\n                state = 1\n            elif state == 2 and l == \&quot;`\&quot; * 32:\n                state = 0\n                example_number = example_number + 1\n                end_line = line_number\n                tests.append({\n                    \&quot;markdown\&quot;:&#x27;&#x27;.join(markdown_lines).replace(&#x27;\u2192&#x27;,\&quot;\\t\&quot;),\n                    \&quot;html\&quot;:&#x27;&#x27;.join(html_lines).replace(&#x27;\u2192&#x27;,\&quot;\\t\&quot;),\n                    \&quot;example\&quot;: example_number,\n                    \&quot;start_line\&quot;: start_line,\n                    \&quot;end_line\&quot;: end_line,\n                    \&quot;section\&quot;: headertext})\n                start_line = 0\n                markdown_lines = []\n                html_lines = []\n            elif l == \&quot;.\&quot;:\n                state = 2\n            elif state == 1:\n                if start_line == 0:\n                    start_line = line_number - 1\n                markdown_lines.append(line)\n            elif state == 2:\n                html_lines.append(line)\n            elif state == 0 and re.match(header_re, line):\n                headertext = header_re.sub(&#x27;&#x27;, line).strip()\n    return tests&quot;,
+              &quot;stories&quot;: [
+                &quot;verify_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;execute-and-report-conformance-tests&quot;,
+              &quot;text&quot;: &quot;def do_test(test, normalize, prev_result):\n    [retcode, actual_html_bytes, err] = cmark.to_html(test[&#x27;markdown&#x27;])\n    if retcode != 0:\n        if prev_result != &#x27;error&#x27;:\n            print_test_header(test)\n            out(\&quot;program returned error code %d\\n\&quot; % retcode)\n            sys.stdout.buffer.write(err)\n        return &#x27;error&#x27;\n\n    expected_html = test[&#x27;html&#x27;]\n\n    try:\n        actual_html = actual_html_bytes.decode(&#x27;utf-8&#x27;)\n    except UnicodeDecodeError as e:\n        if prev_result != &#x27;fail&#x27;:\n            print_test_header(test)\n            out(test[&#x27;markdown&#x27;] + &#x27;\\n&#x27;)\n            out(\&quot;Unicode error: \&quot; + str(e) + &#x27;\\n&#x27;)\n            out(\&quot;Expected: \&quot; + repr(expected_html) + &#x27;\\n&#x27;)\n            out(\&quot;Got:      \&quot; + repr(actual_html_bytes) + &#x27;\\n&#x27;)\n            out(&#x27;\\n&#x27;)\n        return &#x27;fail&#x27;\n\n    if normalize:\n        actual_html = normalize_html(actual_html) + &#x27;\\n&#x27;\n        expected_html = normalize_html(expected_html) + &#x27;\\n&#x27;\n\n    if actual_html != expected_html:\n        if prev_result != &#x27;fail&#x27;:\n            print_test_header(test)\n            out(test[&#x27;markdown&#x27;] + &#x27;\\n&#x27;)\n            expected_html_lines = expected_html.splitlines(True)\n            actual_html_lines = actual_html.splitlines(True)\n            for diffline in unified_diff(expected_html_lines, actual_html_lines,\n                            \&quot;expected HTML\&quot;, \&quot;actual HTML\&quot;):\n                out(diffline)\n            out(&#x27;\\n&#x27;)\n        return &#x27;fail&#x27;\n\n    if prev_result and prev_result != &#x27;pass&#x27;:\n        print_test_header(test)\n        print(&#x27;fixed!&#x27;)\n\n    return &#x27;pass&#x27;&quot;,
+              &quot;stories&quot;: [
+                &quot;verify_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;filter-stdin-through-normalizer&quot;,
+              &quot;text&quot;: &quot;if args.debug_normalization:\n        out(normalize_html(sys.stdin.read()))\n        exit(0)&quot;,
+              &quot;stories&quot;: [
+                &quot;verify_001&quot;
+              ]
+            },
+            {
+              &quot;name&quot;: &quot;dump-or-run-selected-tests&quot;,
+              &quot;text&quot;: &quot;if args.dump_tests:\n        out(json.dumps(tests, ensure_ascii=False, indent=2))\n        exit(0)\n    else:\n        skipped = len(all_tests) - len(tests)\n        cmark = CMark(prog=args.program, library_dir=args.library_dir)\n        result_counts = {&#x27;pass&#x27;: 0, &#x27;fail&#x27;: 0, &#x27;error&#x27;: 0, &#x27;skip&#x27;: skipped}\n\n        previous = {}\n\n        if args.track:\n            try:\n                with open(args.track) as f:\n                    previous = json.load(f)\n            except FileNotFoundError:\n                pass\n\n        results = {}\n\n        for test in tests:\n            result = do_test(test, args.normalize, previous.get(str(test[&#x27;example&#x27;])))\n            result_counts[result] += 1\n            results[test[&#x27;example&#x27;]] = result\n\n        if args.track:\n            with open(args.track, &#x27;w&#x27;) as f:\n                json.dump(results, f)\n\n        out(\&quot;{pass} passed, {fail} failed, {error} errored, {skip} skipped\\n\&quot;.format(**result_counts))\n        exit(result_counts[&#x27;fail&#x27;] + result_counts[&#x27;error&#x27;])&quot;,
+              &quot;stories&quot;: [
+                &quot;verify_001&quot;
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+</pre></article>
+</main>
+</body>
+</html>

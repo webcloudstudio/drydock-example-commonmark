@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261026.173930.491Z_commonmark_plan_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261026.173930.491Z_commonmark_plan_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261026.173930.491Z_commonmark_plan_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>=== BEGIN ARTIFACT FEATURE-HTMLBlocks.md ===
+# FEATURE: HTML Blocks
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261026 V1 |
+| Description | Parses the seven kinds of CommonMark HTML blocks. |
+| Depends On  | FEATURE-CommandLine.md |
+| Provides    | HTML block parsing |
+| Consumes    | commonmark executable |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Preserve raw HTML blocks in rendered output according to the seven start and end conditions in CommonMark 0.31.2.
+
+## Behavior
+
+- Recognize type 1 blocks beginning with `pre`, `script`, `style`, or `textarea`; types 2–5 beginning with comments, processing instructions, declarations, or CDATA; type 6 beginning with a listed block tag; and type 7 containing a complete open or closing tag on a line by itself.
+- Apply each type’s end condition, including blank-line termination for types 6 and 7 and matching end markers for types 1–5. An unterminated block ends with its containing block or document.
+- Allow up to three leading spaces. Types 1–6 may interrupt paragraphs; type 7 may not. Pass block contents through as raw HTML.
+
+## Programmatic Acceptance
+
+=== AC html-blocks ===
+Intent: The implementation passes all supplied HTML block conformance examples.
+Suite: scoped
+Probe: --dump-tests
+Probe Count: json
+
+import json
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;,
+     &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;HTML blocks&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC html-blocks ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Do not escape or otherwise rewrite raw HTML block contents.
+- Do not modify supplied scoring assets.
+- Do not invoke `sources/full_test.sh` from this scoped check.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-LinkReferenceDefinitions.md ===
+# FEATURE: Link Reference Definitions
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261026 V1 |
+| Description | Collects link reference definitions for document-wide inline resolution. |
+| Depends On  | FEATURE-CommandLine.md |
+| Provides    | document-wide link reference definitions |
+| Consumes    | commonmark executable |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Collect valid CommonMark link reference definitions during block parsing so inline links and images can resolve them anywhere in the document.
+
+## Behavior
+
+- Recognize definitions with up to three leading spaces, a nonempty label, a destination, and an optional properly separated title. Support the permitted line endings within destinations and titles.
+- Normalize labels by Unicode case folding, trimming surrounding spaces, tabs, and line endings, and collapsing internal runs of those characters to one space.
+- Keep the first definition for each normalized label. Definitions may occur in containers, apply document-wide, and render no block.
+- A definition cannot interrupt a paragraph. Invalid definition-like text remains paragraph content.
+
+## Programmatic Acceptance
+
+=== AC link-reference-definitions ===
+Intent: The implementation passes all supplied link reference definition conformance examples.
+Suite: scoped
+Probe: --dump-tests
+Probe Count: json
+
+import json
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;,
+     &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Link reference definitions&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC link-reference-definitions ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Resolve document structure before inline parsing so definitions later in the document are available.
+- Do not modify supplied scoring assets or invoke `sources/full_test.sh` from this scoped check.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-BlockQuotes.md ===
+# FEATURE: Block Quotes
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261026 V1 |
+| Description | Parses block quotes, nesting, and lazy continuation. |
+| Depends On  | FEATURE-CommandLine.md |
+| Provides    | block quote parsing |
+| Consumes    | commonmark executable |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Parse CommonMark block quotes as containers whose contents are parsed using the ordinary block rules.
+
+## Behavior
+
+- Recognize `&gt;` with up to three spaces of leading indentation; consume an optional following space. Support nested and empty quotes and preserve quote boundaries.
+- Consecutive quote-marked lines belong to one quote. A blank line separates adjacent quotes and preserves paragraph boundaries inside a quote.
+- Permit an unmarked lazy continuation only when it continues paragraph text inside the quote. Do not extend a quote with an unmarked line that starts another block construct or continues code.
+- Render the contained blocks within `&lt;blockquote&gt;` elements.
+
+## Programmatic Acceptance
+
+=== AC block-quotes ===
+Intent: The implementation passes all supplied block quote conformance examples.
+Suite: scoped
+Probe: --dump-tests
+Probe Count: json
+
+import json
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;,
+     &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Block quotes&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC block-quotes ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Do not modify supplied scoring assets or invoke `sources/full_test.sh` from this scoped check.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Lists.md ===
+# FEATURE: Lists
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261026 V1 |
+| Description | Parses CommonMark lists, their items, and tightness. |
+| Depends On  | FEATURE-CommandLine.md |
+| Provides    | list and list item parsing |
+| Consumes    | commonmark executable |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Parse bullet and ordered lists, including nesting and the relationship between blank lines and paragraph rendering.
+
+## Behavior
+
+- Recognize `-`, `+`, and `*` bullets and ordered markers of one to nine digits followed by `.` or `)`. Require separating whitespace or an empty item. Thematic breaks take precedence where applicable.
+- Determine continuation indentation from marker width and the one to four spaces after a marker. Support list items that start with indented code or a blank line, up to three spaces of marker indentation, lazy paragraph continuation, and nested lists.
+- Lists group only items with matching marker type and delimiter. An ordered list’s start value comes from its first item.
+- Mark a list loose when blank lines separate its items or separate directly contained blocks within an item; otherwise render it tight. Preserve empty items and render loose-list paragraphs with `&lt;p&gt;` tags.
+
+## Programmatic Acceptance
+
+=== AC lists ===
+Intent: The implementation passes all supplied list item and list conformance examples.
+Suite: scoped
+Probe: --dump-tests
+Probe Count: json
+
+import json
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;,
+     &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;List items|Lists&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC lists ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Do not modify supplied scoring assets or invoke `sources/full_test.sh` from this scoped check.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-EscapesAndCharacterReferences.md ===
+# FEATURE: Escapes and Character References
+
+| Field       | Value |
+|-------------|-------|
+| Version     | 20261026 V1 |
+| Description | Parses backslash escapes and valid HTML character references in inline content. |
+| Depends On  | FEATURE-CommandLine.md |
+| Provides    | inline escapes and character reference parsing |
+| Consumes    | commonmark executable |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Implement CommonMark inline backslash escapes and entity and numeric character references.
+
+## Behavior
+
+- Backslash-escape any ASCII punctuation character; preserve a backslash before other characters. A backslash before a line ending is a hard break, except at the end of a block.
+- Decode valid HTML5 named entities, decimal references of one to seven digits, and hexadecimal references of one to six digits. Require a terminating semicolon.
+- Replace invalid Unicode code points and U+0000 with U+FFFD. Escape decoded characters as required for safe HTML rendering.
+- Do not interpret escapes or references inside code spans or code blocks. Entity references cannot supply characters used as block-structure markers.
+
+## Programmatic Acceptance
+
+=== AC escapes-and-character-references ===
+Intent: The implementation passes all supplied backslash escape and character reference conformance examples.
+Suite: scoped
+Probe: --dump-tests
+Probe Count: json
+
+import json
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;,
+     &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;,
+     &quot;Backslash escapes|Entity and numeric character references&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC escapes-and-character-references ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Keep block parsing ahead of inline parsing.
+- Do not modify supplied scoring assets or invoke `sources/full_test.sh` from this scoped check.
+=== END ARTIFACT ===</pre></article>
+</main>
+</body>
+</html>
