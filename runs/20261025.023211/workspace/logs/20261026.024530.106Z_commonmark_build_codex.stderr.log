@@ -1,2 +1,0 @@
-2026-10-26T02:45:54.385591Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to read file to update /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/build/commonmark/src/commonmark/inline_parser.py: No such file or directory (os error 2)
-2026-10-26T02:46:37.325794Z ERROR codex_core::tools::router: error=write_stdin failed: Unknown process id 1343648485

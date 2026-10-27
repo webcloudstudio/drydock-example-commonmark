@@ -159,3 +159,38 @@ git: block-9 | FEATURE-Emphasis.md | call=1 | app=d49545412d68 target=063302c979
 git: block-9 | FEATURE-Emphasis.md | call=2 | app=bc7fd6d9e154 target=230b2aa245a3
 
   [call 3/22]  kind=repair(2/21)  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261027.025756.879Z-fcca2a90
+    status  1/1 checks passed
+      story=emphasis  1/1 checks passed
+        check=emphasis-conformance  PASS  cases=132/132 passed  change=+0
+      Case counts are per check; scopes may overlap and are not additive.
+git: block-9 | FEATURE-Emphasis.md | call=3 | app=d8b2f548d78f target=e746a07cb33f
+
+  DONE  story=emphasis  state=closed/implemented  execution=20261027.025756.879Z-fcca2a90  elapsed=12m02s
+git: block-9 | FEATURE-Emphasis.md | step_completed | app=unchanged target=106c26b41253
+
+BLOCK block-10  name="Block 10 · Service"  calls_max=22
+  story=links  "Parse inline and reference links."
+
+  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261027.030209.875Z-f370f157
+    status  0/1 checks passed
+      story=links  0/1 checks passed
+        check=links-conformance  FAIL  cases=87/117 passed
+      Case counts are per check; scopes may overlap and are not additive.
+git: block-10 | FEATURE-Links.md | call=1 | app=d3f12b668f65 target=8ddbe28c3560
+
+  [call 2/22]  kind=repair(1/21)  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261027.030534.018Z-28da1225
+    status  0/1 checks passed
+      story=links  0/1 checks passed
+        check=links-conformance  FAIL  cases=95/117 passed  change=+8
+      Case counts are per check; scopes may overlap and are not additive.
+git: block-10 | FEATURE-Links.md | call=2 | app=c18e2f2d241c target=8d82e9da6edb
+
+  [call 3/22]  kind=repair(2/21)  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261027.030854.040Z-64623b43
+    status  0/1 checks passed
+      story=links  0/1 checks passed
+        check=links-conformance  FAIL  cases=100/117 passed  change=+5
+      Case counts are per check; scopes may overlap and are not additive.

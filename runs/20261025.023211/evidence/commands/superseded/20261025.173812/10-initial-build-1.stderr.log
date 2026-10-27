@@ -1,2 +1,0 @@
-error: build failed for commonmark: 4 step(s)
-  block_parsing — closed/failed: programmatic acceptance failed: block-parsing-conformance, inline-parsing-conformance, full-commonmark-suite

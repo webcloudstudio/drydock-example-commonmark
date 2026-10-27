@@ -1,8 +1,0 @@
-<requirement name="commonmark-executable-interface" stories="cli-001">
-The deliverable is an executable named commonmark that reads UTF-8 Markdown on stdin
-and writes HTML to stdout.
-</requirement>
-<requirement name="complete-commonmark-conformance" stories="blocks_001,inline_007,blocks_006,blocks_004,inline_002,blocks_007,inline_003,inline_001,blocks_005,inline_006,blocks_002,inline_005,blocks_003,inline_004,verify_001">
-spec_tests.py exits with failed + errored, so exit 0 means the complete CommonMark 0.31.2 suite passed.
-</requirement>
-<unattached story="python-foundation"/>

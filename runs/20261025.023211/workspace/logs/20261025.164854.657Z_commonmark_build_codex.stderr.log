@@ -1,2 +1,0 @@
-2026-10-25T16:49:43.358397Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261025.023211/build/commonmark/src/commonmark/block_parser.py:
-                             and not re.match(r'^ {0,3}(?:#|`{3,}|~{3,}|[-+*] |[0-9]{1,9}[.)] |>)(?:.*)$', lines[i])

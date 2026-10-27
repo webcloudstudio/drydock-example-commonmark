@@ -1,4 +1,0 @@
-{"type":"thread.started","thread_id":"01a1794d-7b9d-7ab0-a082-ee2c6303d7c9"}
-{"type":"turn.started"}
-{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"<requirement name=\"commonmark-executable-interface\" stories=\"cli-001\">\nThe deliverable is an executable named commonmark that reads UTF-8 Markdown on stdin\nand writes HTML to stdout.\n</requirement>\n<requirement name=\"complete-commonmark-conformance\" stories=\"blocks_001,inline_007,blocks_006,blocks_004,inline_002,blocks_007,inline_003,inline_001,blocks_005,inline_006,blocks_002,inline_005,blocks_003,inline_004,verify_001\">\nspec_tests.py exits with failed + errored, so exit 0 means the complete CommonMark 0.31.2 suite passed.\n</requirement>\n<unattached story=\"python-foundation\"/>"}}
-{"type":"turn.completed","usage":{"input_tokens":15051,"cached_input_tokens":11520,"cache_write_input_tokens":0,"output_tokens":516,"reasoning_output_tokens":351}}
