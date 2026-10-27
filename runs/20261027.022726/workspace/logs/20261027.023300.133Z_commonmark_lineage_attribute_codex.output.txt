@@ -1,0 +1,46 @@
+<requirement name="run-spec-tests" stories="verification">
+    all_tests = get_tests(args.spec)
+    if args.pattern:
+        pattern_re = re.compile(args.pattern, re.IGNORECASE)
+    else:
+        pattern_re = re.compile('.')
+    tests = [ test for test in all_tests if re.search(pattern_re, test['section']) and (not args.number or test['example'] == args.number) ]
+</requirement>
+<requirement name="compare-html-output" stories="verification">
+    if normalize:
+        actual_html = normalize_html(actual_html) + '\n'
+        expected_html = normalize_html(expected_html) + '\n'
+
+    if actual_html != expected_html:
+        if prev_result != 'fail':
+            print_test_header(test)
+            out(test['markdown'] + '\n')
+            expected_html_lines = expected_html.splitlines(True)
+            actual_html_lines = actual_html.splitlines(True)
+            for diffline in unified_diff(expected_html_lines, actual_html_lines,
+                            "expected HTML", "actual HTML"):
+                out(diffline)
+            out('\n')
+        return 'fail'
+</requirement>
+<requirement name="report-test-results" stories="verification">
+        out("{pass} passed, {fail} failed, {error} errored, {skip} skipped\n".format(**result_counts))
+        exit(result_counts['fail'] + result_counts['error'])
+</requirement>
+<unattached story="foundation"/>
+<unattached story="cli"/>
+<unattached story="paragraphs"/>
+<unattached story="headings"/>
+<unattached story="code-blocks"/>
+<unattached story="references"/>
+<unattached story="html-blocks"/>
+<unattached story="block-quotes"/>
+<unattached story="lists"/>
+<unattached story="escapes"/>
+<unattached story="documentation"/>
+<unattached story="code-spans"/>
+<unattached story="emphasis"/>
+<unattached story="links"/>
+<unattached story="images"/>
+<unattached story="autolinks-html"/>
+<unattached story="line-breaks"/>

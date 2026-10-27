@@ -1,0 +1,333 @@
+=== BEGIN ARTIFACT TOPOLOGY.md ===
+## Declarations
+
+## story foundation
+summary: Establish the Python project and parser stage interfaces.
+type: foundational
+kind: capability
+phase: 1
+implements: ARCHITECTURE.md
+stack: common.md, python.md
+provides: parser foundation
+acceptance: yes
+instructions: |
+  Establish the Python project, environment, dependency manifest, lockfile, and test runner
+  described by the technology stack. Define the document tree and interfaces for block parsing,
+  document-wide reference definitions, inline parsing, and HTML rendering. The block phase
+  precedes the inline phase. Use the standard library and do not use a public Markdown
+  implementation. Keep the supplied conformance assets read-only.
+
+## story cli
+summary: Provide the root executable and standard streams interface.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-CommandLine.md
+covers: DELIVERY-001
+stack: common.md, python.md
+provides: commonmark
+consumes: parser foundation
+depends: foundation
+acceptance: yes
+instructions: |
+  Provide executable ./commonmark at the application root. Read UTF-8 Markdown from standard
+  input and write rendered HTML to standard output. Connect the parser stages as they become
+  available. Establish the executable interface before scoped conformance checks.
+
+## story paragraphs
+summary: Parse paragraphs, blank lines, and thematic breaks.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-ParagraphsAndBreaks.md
+covers: BLOCK-001
+stack: common.md, python.md
+provides: paragraph and thematic break blocks
+consumes: parser foundation, commonmark
+depends: foundation, cli
+acceptance: yes
+instructions: |
+  Implement paragraph accumulation, blank-line handling, and thematic-break recognition and
+  precedence as specified. Preserve raw inline content for the later inline phase. Account for
+  tab stops, line endings, replacement of null characters, and ordinary textual content.
+  Bind scoped acceptance to the relevant owning specification sections; defer examples requiring
+  later constructs to the integration checks that own those constructs.
+
+## story headings
+summary: Parse ATX and setext headings.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-Headings.md
+covers: BLOCK-002
+stack: common.md, python.md
+provides: heading blocks
+consumes: paragraph and thematic break blocks
+depends: paragraphs
+acceptance: yes
+instructions: |
+  Implement ATX opening and optional closing markers and setext underlines, including indentation,
+  interruption, and precedence rules. Preserve heading content for inline parsing. Exercise the
+  complete applicable heading sections after their required inline behavior is available.
+
+## story code-blocks
+summary: Parse indented and fenced code blocks.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-CodeBlocks.md
+covers: BLOCK-003
+stack: common.md, python.md
+provides: code blocks
+consumes: paragraph and thematic break blocks
+depends: paragraphs
+acceptance: yes
+instructions: |
+  Implement indented and fenced code blocks, their interruption and indentation rules, literal
+  content, matching fences, and info strings. Preserve literal code rather than parsing it as
+  inline Markdown. Exercise applicable scoped examples and retain cross-feature examples for
+  subsequent integration.
+
+## story html-blocks
+summary: Parse the seven types of HTML blocks.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-HtmlBlocks.md
+covers: BLOCK-004
+stack: common.md, python.md
+provides: HTML blocks
+consumes: paragraph and thematic break blocks
+depends: paragraphs
+acceptance: yes
+instructions: |
+  Implement all seven HTML block start and termination conditions, paragraph interruption,
+  container boundaries, and verbatim rendering. Exercise the applicable HTML block examples,
+  including interaction examples when their other constructs are available.
+
+## story references
+summary: Collect document-wide link reference definitions.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-ReferenceDefinitions.md
+covers: BLOCK-005
+stack: common.md, python.md
+provides: reference definition map
+consumes: paragraph and thematic break blocks
+depends: paragraphs
+acceptance: yes
+instructions: |
+  Detect definitions when closing paragraphs, including definitions inside containers. Normalize
+  labels using Unicode case folding and whitespace rules, retain the first matching definition,
+  and expose the document-wide map to inline parsing. Keep any remaining paragraph content.
+  Verify definition collection directly until reference links are implemented, then cover the
+  full reference-definition corpus in the relevant later integration.
+
+## story block-quotes
+summary: Parse nested block quotes and lazy continuations.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-BlockQuotes.md
+covers: BLOCK-006
+stack: common.md, python.md
+provides: block quote containers
+consumes: paragraph and thematic break blocks, heading blocks, code blocks, HTML blocks, reference definition map
+depends: headings, code-blocks, html-blocks, references
+acceptance: yes
+instructions: |
+  Implement block quote markers, continuation matching, laziness, separation, and nested block
+  content according to the block parsing strategy. Preserve document-wide reference collection.
+  Exercise the applicable block quote examples and defer examples requiring lists or later inline
+  features to their owning integration checks.
+
+## story lists
+summary: Parse list items and lists with nesting and tightness.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-Lists.md
+covers: BLOCK-007
+stack: common.md, python.md
+provides: list containers
+consumes: block quote containers, reference definition map, heading blocks, code blocks, HTML blocks
+depends: block-quotes, references, headings, code-blocks, html-blocks
+acceptance: yes
+instructions: |
+  Implement list markers, item indentation, continuation, laziness, nested containers, empty
+  items, ordered starts, and tight or loose rendering. Follow the specification's block-tree
+  algorithm and precedence rules. Exercise the List items and Lists sections when their inline
+  prerequisites are available; retain cross-feature coverage in later integration.
+
+## story escapes
+summary: Parse backslash escapes and character references.
+type: service
+kind: capability
+phase: 2
+implements: FEATURE-EscapesAndEntities.md
+covers: INLINE-001
+stack: common.md, python.md
+provides: inline escapes and character references
+consumes: list containers, reference definition map
+depends: lists
+acceptance: yes
+instructions: |
+  Implement ASCII punctuation escapes and valid HTML5 named and numeric character references,
+  including their context restrictions and invalid-code-point handling. Parse inline content only
+  after block structure and the reference map are complete. Exercise the owning specification
+  sections with cross-feature examples assigned to the later integration that supplies them.
+
+## story code-spans
+summary: Parse and normalize backtick code spans.
+type: service
+kind: capability
+phase: 2
+implements: FEATURE-CodeSpans.md
+covers: INLINE-002
+stack: common.md, python.md
+provides: code spans
+consumes: inline escapes and character references
+depends: escapes
+acceptance: yes
+instructions: |
+  Match equal-length backtick runs, normalize line endings and surrounding spaces as specified,
+  and render literal escaped code content. Preserve precedence with other inline constructs.
+  Exercise the Code spans section with cross-feature examples covered once their prerequisites exist.
+
+## story emphasis
+summary: Resolve emphasis and strong emphasis.
+type: service
+kind: capability
+phase: 2
+implements: FEATURE-Emphasis.md
+covers: INLINE-003
+stack: common.md, python.md
+provides: emphasis and strong emphasis
+consumes: code spans, inline escapes and character references
+depends: code-spans
+acceptance: yes
+instructions: |
+  Implement delimiter-run classification and the specification's delimiter-stack algorithm,
+  including flanking, Unicode punctuation and whitespace, the multiple-of-three rule, nesting,
+  and precedence. Cover the emphasis section and retain examples involving later links, images,
+  autolinks, or raw HTML for their integration.
+
+## story links
+summary: Parse inline and reference links.
+type: service
+kind: capability
+phase: 2
+implements: FEATURE-Links.md
+covers: INLINE-004
+stack: common.md, python.md
+provides: inline and reference links
+consumes: reference definition map, emphasis and strong emphasis, code spans
+depends: emphasis, references
+acceptance: yes
+instructions: |
+  Implement inline, full, collapsed, and shortcut links, including destination and title grammar,
+  label matching, precedence, and the prohibition on nested links. Use the completed reference
+  map and the specification's bracket and delimiter-stack procedure. Exercise the Links and
+  Link reference definitions sections, assigning image-dependent examples to the image integration.
+
+## story images
+summary: Parse inline and reference images.
+type: service
+kind: capability
+phase: 2
+implements: FEATURE-Images.md
+covers: INLINE-005
+stack: common.md, python.md
+provides: inline and reference images
+consumes: inline and reference links, reference definition map
+depends: links
+acceptance: yes
+instructions: |
+  Implement inline and reference image forms using the shared link grammar and reference map.
+  Render the plain textual content of the image description as escaped alt text, preserving
+  nesting and precedence rules. Exercise the Images section and link and reference examples that
+  require images.
+
+## story autolinks-html
+summary: Parse autolinks and raw inline HTML.
+type: service
+kind: capability
+phase: 2
+implements: FEATURE-AutolinksAndRawHtml.md
+covers: INLINE-006
+stack: common.md, python.md
+provides: autolinks and raw inline HTML
+consumes: inline and reference images, code spans
+depends: images
+acceptance: yes
+instructions: |
+  Implement URI and email autolinks and the specified inline HTML grammar, preserving raw HTML
+  and applying URL and attribute escaping as required by the examples. Exercise Autolinks and
+  Raw HTML, along with earlier precedence examples that require these constructs.
+
+## story line-breaks
+summary: Parse hard and soft inline line breaks.
+type: service
+kind: capability
+phase: 2
+implements: FEATURE-InlineLineBreaks.md
+covers: INLINE-007
+stack: common.md, python.md
+provides: inline line breaks
+consumes: autolinks and raw inline HTML, emphasis and strong emphasis
+depends: autolinks-html
+acceptance: yes
+instructions: |
+  Implement hard and soft breaks, including trailing-space and backslash forms, block-end rules,
+  whitespace handling, and code-span and HTML exclusions. Exercise the owning sections and
+  previously deferred cross-feature conformance examples now that all parser capabilities exist.
+
+## story documentation
+summary: Document the standard-stream command interface.
+type: service
+kind: capability
+phase: 2
+implements: FEATURE-Documentation.md
+covers: DELIVERY-002
+stack: common.md, python.md
+consumes: commonmark
+depends: cli
+acceptance: yes
+instructions: |
+  Create a concise application README describing invocation of ./commonmark and its UTF-8
+  standard-input and HTML standard-output interface. Verify the delivered documentation through
+  a suitable executable acceptance check without modifying conformance assets.
+
+## story verification
+summary: Verify the complete supplied conformance suite.
+type: service
+kind: test harness
+phase: 2
+implements: VERIFICATION.md
+covers: DELIVERY-003
+accepts: st-001
+stack: common.md, python.md
+consumes: commonmark, inline line breaks
+depends: line-breaks, documentation, cli, paragraphs, headings, code-blocks, html-blocks, references, block-quotes, lists, escapes, code-spans, emphasis, links, images, autolinks-html
+acceptance: yes
+instructions: |
+  Run the sole terminal Suite: full acceptance using sh sources/full_test.sh from the application
+  root. Print captured stdout and stderr and assert only that the process return code is zero.
+  Use the supplied unfiltered assets verbatim; do not alter the harness or its entry point.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT DECISIONS.json ===
+[
+  {
+    "id": "decision-cli-exit",
+    "type": "text",
+    "severity": "material",
+    "blueprint": "FEATURE-CommandLine.md",
+    "story": "cli",
+    "title": "Command exit behavior",
+    "description": "The sources specify standard streams but do not specify a failure response contract.",
+    "options": [],
+    "system_choice": "Exit zero after successful conversion; use a nonzero exit status for input or processing failures and report diagnostics on standard error."
+  }
+]
+=== END ARTIFACT ===

@@ -1,0 +1,12 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark_parser/lists.py
+- commonmark_parser/stages.py
+- tests/test_lists.py
+
+SUMMARY:
+Implemented list marker parsing, nested list nodes, ordered start numbers, and tight/loose list rendering. `pytest -q` passed: 34 tests. The staged full conformance suite completed with 307 passed and 348 failed; many failures concern inline parsing and other block features outside this lists step.
+
+BLOCKERS:
+- None

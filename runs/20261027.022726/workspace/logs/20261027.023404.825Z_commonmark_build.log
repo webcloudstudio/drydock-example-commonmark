@@ -1,0 +1,55 @@
+Drydock 0.8.0  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Next: drydock build commonmark
+
+Blueprint: commonmark
+Target: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.022726/workspace/targets/commonmark
+Rows: <state> <type>  <Name>  [<id>]   — pass [<id>] to --step
+
+Block: Build Block 1 · Foundational  [block-1]   — 0/1 stories complete
+  [pending] story  Establish the Python project and parser stage interfaces.  [foundation]  <- next
+
+Block: Build Block 2 · Service  [block-2]   — 0/1 stories complete
+  [pending] story  Provide the root executable and standard streams interface.  [cli]
+
+Block: Build Block 3 · Service  [block-3]   — 0/1 stories complete
+  [pending] story  Parse paragraphs, blank lines, and thematic breaks.  [paragraphs]
+
+Block: Build Block 4 · Service  [block-4]   — 0/4 stories complete
+  [pending] story  Parse ATX and setext headings.  [headings]
+  [pending] story  Parse indented and fenced code blocks.  [code-blocks]
+  [pending] story  Collect document-wide link reference definitions.  [references]
+  [pending] story  Parse the seven types of HTML blocks.  [html-blocks]
+
+Block: Build Block 5 · Service  [block-5]   — 0/1 stories complete
+  [pending] story  Parse nested block quotes and lazy continuations.  [block-quotes]
+
+Block: Build Block 6 · Service  [block-6]   — 0/1 stories complete
+  [pending] story  Parse list items and lists with nesting and tightness.  [lists]
+
+Block: Build Block 7 · Service  [block-7]   — 0/2 stories complete
+  [pending] story  Parse backslash escapes and character references.  [escapes]
+  [pending] story  Document the standard-stream command interface.  [documentation]
+
+Block: Build Block 8 · Service  [block-8]   — 0/1 stories complete
+  [pending] story  Parse and normalize backtick code spans.  [code-spans]
+
+Block: Build Block 9 · Service  [block-9]   — 0/1 stories complete
+  [pending] story  Resolve emphasis and strong emphasis.  [emphasis]
+
+Block: Build Block 10 · Service  [block-10]   — 0/1 stories complete
+  [pending] story  Parse inline and reference links.  [links]
+
+Block: Build Block 11 · Service  [block-11]   — 0/1 stories complete
+  [pending] story  Parse inline and reference images.  [images]
+
+Block: Build Block 12 · Service  [block-12]   — 0/1 stories complete
+  [pending] story  Parse autolinks and raw inline HTML.  [autolinks-html]
+
+Block: Build Block 13 · Service  [block-13]   — 0/1 stories complete
+  [pending] story  Parse hard and soft inline line breaks.  [line-breaks]
+
+Block: Build Block 14 · Service  [block-14]   — 0/1 stories complete
+  [pending] story  Verify the complete supplied conformance suite.  [verification]
+
+Steps: 18 total — 0 done, 0 built (await verify), 0 in review, 18 pending, 0 blocked by questions, 0 failed (0% complete)
+Buildable now: block-1

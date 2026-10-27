@@ -1,0 +1,20 @@
+<reusable-compact filename="ARCHITECTURE.md">
+`commonmark_parser` publishes `parse_blocks(markdown: str) -> Document`, `parse_inlines(document: Document) -> Document`, and `render_html(document: Document) -> str`. `Document` holds the block tree and document-wide reference-definition map; block parsing completes before inline parsing, and inline parsing can use definitions collected anywhere in the document. Block nodes retain type, children, and raw content. The root executable `commonmark` reads UTF-8 Markdown from stdin and writes HTML to stdout. Use Python 3.11+, the standard library, `.venv`, `uv`, committed `pyproject.toml` and `uv.lock`, and `pytest -q`. No public Markdown implementation or third-party runtime dependency.
+</reusable-compact>
+
+RESULT: SUCCESS
+
+FILES CHANGED:
+- pyproject.toml
+- uv.lock
+- commonmark
+- commonmark_parser/__init__.py
+- commonmark_parser/model.py
+- commonmark_parser/stages.py
+- tests/test_parser_foundation.py
+
+SUMMARY:
+Added the Python project metadata and lockfile, public parser stage interfaces with an empty-document path, and the executable stdin-to-stdout entry point. Added foundation tests; `pytest -q` passed (4 tests), and the executable returned successfully for empty input.
+
+BLOCKERS:
+- None

@@ -1,0 +1,161 @@
+Drydock 0.8.0  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Build: commonmark
+scope: entire project
+frontier: foundation
+git: baseline commonmark bafe909ea3bb
+git: baseline commonmark 5be612660956
+
+BLOCK block-1  name="Block 1 · Foundational"  calls_max=22
+  story=foundation  "Establish the Python project and parser stage interfaces."
+
+  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261027.023448.384Z-651e0f69
+    status  1/1 checks passed
+      story=foundation  1/1 checks passed
+        check=foundation-empty-document  PASS
+git: block-1 | python.md, ARCHITECTURE.md | call=1 | app=f1948187ec77 target=629606939f80
+
+  DONE  story=foundation  state=closed/implemented  execution=20261027.023448.384Z-651e0f69  elapsed=37.3s
+git: block-1 | python.md, ARCHITECTURE.md | step_completed | app=unchanged target=5c662453892d
+
+BLOCK block-2  name="Block 2 · Service"  calls_max=22
+  story=cli  "Provide the root executable and standard streams interface."
+
+  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261027.023526.878Z-e9dcbe15
+    status  1/1 checks passed
+      story=cli  1/1 checks passed
+        check=command-empty-input  PASS
+git: block-2 | FEATURE-CommandLine.md | call=1 | app=b621c1cd1811 target=f4aeb544e32d
+
+  DONE  story=cli  state=closed/implemented  execution=20261027.023526.878Z-e9dcbe15  elapsed=52.5s
+git: block-2 | FEATURE-CommandLine.md | step_completed | app=unchanged target=475c1a37ff98
+
+BLOCK block-3  name="Block 3 · Service"  calls_max=22
+  story=paragraphs  "Parse paragraphs, blank lines, and thematic breaks."
+
+  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261027.023622.325Z-48f011c1
+    status  2/2 checks passed
+      story=paragraphs  2/2 checks passed
+        check=paragraph-block-tree  PASS
+        check=thematic-break-block-tree  PASS
+git: block-3 | FEATURE-ParagraphsAndBreaks.md | call=1 | app=afd406c20e6d target=1fbd6c001e52
+
+  DONE  story=paragraphs  state=closed/implemented  execution=20261027.023622.325Z-48f011c1  elapsed=40.8s
+git: block-3 | FEATURE-ParagraphsAndBreaks.md | step_completed | app=unchanged target=8d03db1f03ae
+
+BLOCK block-4  name="Block 4 · Service"  calls_max=22
+  story=headings  "Parse ATX and setext headings."
+  story=code-blocks  "Parse indented and fenced code blocks."
+  story=references  "Collect document-wide link reference definitions."
+  story=html-blocks  "Parse the seven types of HTML blocks."
+
+  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261027.023711.000Z-f679c927
+    status  8/8 checks passed
+      story=headings  2/2 checks passed
+        check=atx-heading-block  PASS
+        check=setext-heading-block  PASS
+      story=code-blocks  2/2 checks passed
+        check=indented-code-block  PASS
+        check=fenced-code-block  PASS
+      story=references  2/2 checks passed
+        check=reference-first-definition  PASS
+        check=reference-remainder  PASS
+      story=html-blocks  2/2 checks passed
+        check=html-block-termination  PASS
+        check=html-block-paragraph-interruption  PASS
+git: block-4 | FEATURE-Headings.md, FEATURE-CodeBlocks.md, FEATURE-ReferenceDefinitions.md, FEATURE-HtmlBlocks.md | call=1 | app=5b3c18a00b1c target=7a651c9b02cf
+
+  DONE  story=headings  state=closed/implemented  execution=20261027.023711.000Z-f679c927  elapsed=2m15s
+git: block-4 | FEATURE-Headings.md, FEATURE-CodeBlocks.md, FEATURE-ReferenceDefinitions.md, FEATURE-HtmlBlocks.md | step_completed | app=unchanged target=3fe87d6daeb1
+
+BLOCK block-5  name="Block 5 · Service"  calls_max=22
+  story=block-quotes  "Parse nested block quotes and lazy continuations."
+
+  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261027.023926.507Z-3b94cc87
+    status  2/2 checks passed
+      story=block-quotes  2/2 checks passed
+        check=quote-markers  PASS
+        check=quote-lazy-continuation  PASS
+git: block-5 | FEATURE-BlockQuotes.md | call=1 | app=cc0fd00d4ffe target=f86ddfd75369
+
+  DONE  story=block-quotes  state=closed/implemented  execution=20261027.023926.507Z-3b94cc87  elapsed=53.8s
+git: block-5 | FEATURE-BlockQuotes.md | step_completed | app=unchanged target=bdc091169296
+
+BLOCK block-6  name="Block 6 · Service"  calls_max=22
+  story=lists  "Parse list items and lists with nesting and tightness."
+
+  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261027.024023.492Z-6d2bd12e
+    status  2/2 checks passed
+      story=lists  2/2 checks passed
+        check=list-marker  PASS
+        check=list-paragraph-interruption  PASS
+git: block-6 | FEATURE-Lists.md | call=1 | app=e657243be22e target=0ff165540b1a
+
+  DONE  story=lists  state=closed/implemented  execution=20261027.024023.492Z-6d2bd12e  elapsed=4m39s
+git: block-6 | FEATURE-Lists.md | step_completed | app=unchanged target=21253b15765d
+
+BLOCK block-7  name="Block 7 · Service"  calls_max=22
+  story=escapes  "Parse backslash escapes and character references."
+  story=documentation  "Document the standard-stream command interface."
+
+  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261027.024509.089Z-8c1e4cad
+    status  4/4 checks passed
+      story=escapes  3/3 checks passed
+        check=escaped-punctuation  PASS
+        check=unescaped-character  PASS
+        check=numeric-reference  PASS
+      story=documentation  1/1 checks passed
+        check=documentation-readable  PASS
+git: block-7 | FEATURE-EscapesAndEntities.md, FEATURE-Documentation.md | call=1 | app=cc415f2b527f target=b84cf531a88e
+
+  DONE  story=escapes  state=closed/implemented  execution=20261027.024509.089Z-8c1e4cad  elapsed=1m27s
+git: block-7 | FEATURE-EscapesAndEntities.md, FEATURE-Documentation.md | step_completed | app=unchanged target=3a43d87a3b73
+
+BLOCK block-8  name="Block 8 · Service"  calls_max=22
+  story=code-spans  "Parse and normalize backtick code spans."
+
+  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261027.024646.442Z-8a54751a
+    status  0/1 checks passed
+      story=code-spans  0/1 checks passed
+        check=code-spans-conformance  FAIL  cases=19/22 passed
+      Case counts are per check; scopes may overlap and are not additive.
+git: block-8 | FEATURE-CodeSpans.md | call=1 | app=50734792e356 target=7fbd73b31466
+
+  [call 2/22]  kind=repair(1/21)  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261027.024747.108Z-a4f84c25
+    status  1/1 checks passed
+      story=code-spans  1/1 checks passed
+        check=code-spans-conformance  PASS  cases=22/22 passed  change=+3
+      Case counts are per check; scopes may overlap and are not additive.
+git: block-8 | FEATURE-CodeSpans.md | call=2 | app=131a23427241 target=e19a2e1d43b8
+
+  DONE  story=code-spans  state=closed/implemented  execution=20261027.024747.108Z-a4f84c25  elapsed=2m33s
+git: block-8 | FEATURE-CodeSpans.md | step_completed | app=unchanged target=6d49c9ecdd53
+
+BLOCK block-9  name="Block 9 · Service"  calls_max=22
+  story=emphasis  "Resolve emphasis and strong emphasis."
+
+  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261027.025004.362Z-7346629c
+    status  0/1 checks passed
+      story=emphasis  0/1 checks passed
+        check=emphasis-conformance  FAIL  cases=118/132 passed
+      Case counts are per check; scopes may overlap and are not additive.
+git: block-9 | FEATURE-Emphasis.md | call=1 | app=d49545412d68 target=063302c97965
+
+  [call 2/22]  kind=repair(1/21)  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261027.025349.526Z-50c875db
+    status  1/1 checks passed
+      story=emphasis  1/1 checks passed
+        check=emphasis-conformance  PASS  cases=132/132 passed  change=+14
+      Case counts are per check; scopes may overlap and are not additive.
+git: block-9 | FEATURE-Emphasis.md | call=2 | app=bc7fd6d9e154 target=230b2aa245a3
+
+  [call 3/22]  kind=repair(2/21)  llm=codex/gpt-6-luna
