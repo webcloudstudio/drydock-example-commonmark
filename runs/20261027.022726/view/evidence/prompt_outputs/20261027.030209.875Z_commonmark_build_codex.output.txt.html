@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261027.030209.875Z_commonmark_build_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261027.030209.875Z_commonmark_build_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261027.030209.875Z_commonmark_build_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/inline.py
+- commonmark_parser/stages.py
+- tests/test_links.py
+
+SUMMARY:
+Added inline, full, collapsed, and shortcut reference link handling, reference-map propagation during rendering, URL encoding, and four link regression tests. The regression tests pass (4 passed). The declared scoped conformance suite failed: 87 passed and 30 failed.
+
+BLOCKERS:
+- Scoped conformance failures remain in reference-definition collection and link parsing, including balanced bracket precedence and nested links.
+
+FAILURE_SUMMARY: Scoped link conformance suite has 30 failures
+FAILURE_DETAIL: The declared Links and Link reference definitions suite completed with exit status 30 (87 passed, 30 failed, 0 errored). Failures include multiline reference definitions, link bracket precedence, and nested links; fix these behaviors and rerun the scoped suite before grading.</pre></article>
+</main>
+</body>
+</html>

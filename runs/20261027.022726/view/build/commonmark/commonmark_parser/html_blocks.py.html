@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/commonmark_parser/html_blocks.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/commonmark_parser/html_blocks.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/commonmark_parser/html_blocks.py">Raw file</a></div></header>
+<article class="doc"><pre>import re
+
+_TAGS = set(&#x27;address article aside base basefont blockquote body caption center col colgroup dd details dialog dir div dl dt fieldset figcaption figure footer form frame frameset h1 h2 h3 h4 h5 h6 head header hr html iframe legend li link main menu menuitem nav noframes ol optgroup option p param search section summary table tbody td tfoot th thead title tr track ul&#x27;.split())
+_SPECIAL = re.compile(r&#x27;^&lt;(pre|script|style|textarea)(?:[ \t&gt;]|$)&#x27;, re.I)
+_TAG = re.compile(r&#x27;^&lt;/?([A-Za-z][A-Za-z0-9-]*)(?:[ \t/&gt;]|$)&#x27;)
+
+
+def _start(line):
+    s = line.rstrip(&#x27;\n&#x27;)
+    s = re.sub(r&#x27;^ {0,3}&#x27;, &#x27;&#x27;, s)
+    if _SPECIAL.match(s): return 1
+    if s.startswith(&#x27;&lt;!--&#x27;): return 2
+    if s.startswith(&#x27;&lt;?&#x27;): return 3
+    if re.match(r&#x27;&lt;![A-Za-z]&#x27;, s): return 4
+    if s.startswith(&#x27;&lt;![CDATA[&#x27;): return 5
+    m = _TAG.match(s)
+    if m and m.group(1).lower() in _TAGS: return 6
+    if re.fullmatch(r&#x27;&lt;/?[A-Za-z][A-Za-z0-9-]*(?:\s+[^&lt;&gt;]*?)?\s*/?&gt;[ \t]*&#x27;, s) and not re.match(r&#x27;^&lt;(?:pre|script|style|textarea)(?:\s|&gt;|/)&#x27;, s, re.I): return 7
+    return 0
+
+
+def parse_html_block(lines, paragraph_open=False):
+    if not lines: return None
+    kind = _start(lines[0])
+    if not kind or (kind == 7 and paragraph_open): return None
+    consumed = 0
+    for line in lines:
+        consumed += 1
+        if kind == 1 and re.search(r&#x27;&lt;/(?:pre|script|style|textarea)\s*&gt;&#x27;, line, re.I): break
+        if kind == 2 and &#x27;--&gt;&#x27; in line: break
+        if kind == 3 and &#x27;?&gt;&#x27; in line: break
+        if kind == 4 and &#x27;&gt;&#x27; in line: break
+        if kind == 5 and &#x27;]]&gt;&#x27; in line: break
+        if kind in (6, 7) and (consumed == len(lines) or not lines[consumed].strip(&#x27; \t\r\n&#x27;)): break
+    return consumed, &#x27;&#x27;.join(lines[:consumed])
+</pre></article>
+</main>
+</body>
+</html>

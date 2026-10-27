@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Headings.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Headings.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Headings.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Headings</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Parses ATX and setext heading blocks and preserves their inline content.</td></tr><tr><td>Depends On</td><td>FEATURE-ParagraphsAndBreaks.md</td></tr><tr><td>Provides</td><td>heading blocks</td></tr><tr><td>Consumes</td><td>paragraph and thematic break blocks</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Recognize both CommonMark heading forms as block structure before parsing their contents as inlines.</p>
+<h2>Behavior</h2>
+<p>An ATX heading begins after at most three spaces of indentation with one to six unescaped <code>#</code> characters followed by whitespace or end of line. Its level is the opening run length. Remove leading and trailing spaces or tabs and an eligible closing <code>#</code> run preceded by whitespace. ATX headings may interrupt paragraphs and may be empty.</p>
+<p>A setext heading consists of paragraph-eligible lines followed by an underline of <code>=</code> or <code>-</code> characters, with at most three spaces of indentation and only trailing spaces or tabs. The underline determines level one or two. It converts the preceding paragraph content into a heading, takes precedence over a thematic break where both interpretations apply, and cannot be a lazy continuation in a container. Preserve the trimmed heading text for inline parsing.</p>
+<p>The heading sections include inline and other block interactions unavailable at this stage. The later line-break integration exercises the complete sections once all parser capabilities exist.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC atx-heading-block ===<br>Intent: Block parsing records an ATX heading&#x27;s level and raw content for the inline phase.</p>
+<p>from commonmark_parser import parse_blocks</p>
+<p>content = &quot;alpha&quot; document = parse_blocks(&quot;## &quot; + content + &quot;\n&quot;) assert len(document.children) == 1 assert document.children[0].type == &quot;heading&quot; assert document.children[0].level == 2 assert document.children[0].raw_content == content === END AC atx-heading-block ===</p>
+<p>=== AC setext-heading-block ===<br>Intent: A setext underline converts the preceding paragraph into a heading.</p>
+<p>from commonmark_parser import parse_blocks</p>
+<p>content = &quot;alpha&quot; document = parse_blocks(content + &quot;\n---\n&quot;) assert len(document.children) == 1 assert document.children[0].type == &quot;heading&quot; assert document.children[0].level == 2 assert document.children[0].raw_content == content === END AC setext-heading-block ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Parse heading contents as inlines only after block structure and reference definitions are complete.</li><li>Do not modify the supplied conformance assets.</li></ul></article>
+</main>
+</body>
+</html>

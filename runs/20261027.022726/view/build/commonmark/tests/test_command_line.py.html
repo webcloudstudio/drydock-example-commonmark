@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_command_line.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_command_line.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_command_line.py">Raw file</a></div></header>
+<article class="doc"><pre>import subprocess
+
+
+def run_commonmark(source: str) -&gt; subprocess.CompletedProcess[bytes]:
+    return subprocess.run(
+        [&quot;./commonmark&quot;],
+        input=source.encode(&quot;utf-8&quot;),
+        capture_output=True,
+        cwd=&quot;.&quot;,
+    )
+
+
+def test_empty_input_emits_empty_output_successfully():
+    result = run_commonmark(&quot;&quot;)
+
+    assert result.returncode == 0
+    assert result.stdout == b&quot;&quot;
+
+
+def test_non_ascii_input_is_accepted_as_utf8():
+    result = run_commonmark(&quot;café&quot;)
+
+    assert result.returncode == 0
+    assert result.stdout.decode(&quot;utf-8&quot;) == &quot;&lt;p&gt;café&lt;/p&gt;\n&quot;
+
+
+def test_invalid_utf8_input_fails():
+    result = subprocess.run(
+        [&quot;./commonmark&quot;], input=b&quot;\xff&quot;, capture_output=True, cwd=&quot;.&quot;
+    )
+
+    assert result.returncode != 0
+</pre></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/commonmark_parser/references.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/commonmark_parser/references.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/commonmark_parser/references.py">Raw file</a></div></header>
+<article class="doc"><pre>import re
+from .inline import decode_escapes_and_entities
+
+def normalize_label(label: str) -&gt; str:
+    return re.sub(r&#x27;[ \t\r\n]+&#x27;, &#x27; &#x27;, label.strip(&#x27; \t\r\n&#x27;)).casefold()
+
+def _title(text: str, pos: int):
+    if pos &gt;= len(text) or text[pos] not in &#x27;&quot;\&#x27;(&#x27;: return None
+    op = text[pos]; cl = &#x27;)&#x27; if op == &#x27;(&#x27; else op; out=[]; i=pos+1
+    while i &lt; len(text):
+        if text[i] == &#x27;\\&#x27; and i+1 &lt; len(text):
+            if text[i+1] not in &quot;!\&quot;#$%&amp;&#x27;()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~&quot;: out.append(&#x27;\\&#x27;)
+            out.append(text[i+1]); i += 2; continue
+        if text[i] == cl: return &#x27;&#x27;.join(out), i+1
+        if text[i] == &#x27;\n&#x27; and op == &#x27;(&#x27;: return None
+        out.append(text[i]); i += 1
+    return None
+
+def _definition(text: str):
+    m = re.match(r&#x27;^ {0,3}\[&#x27;, text)
+    if not m: return None
+    i=m.end(); label=[]
+    while i&lt;len(text):
+        if text[i]==&#x27;\\&#x27; and i+1&lt;len(text): label.extend((text[i],text[i+1])); i+=2; continue
+        if text[i]==&#x27;]&#x27;: break
+        if text[i]==&#x27;[&#x27;: return None
+        label.append(text[i]); i+=1
+    if i&gt;=len(text) or not &#x27;&#x27;.join(label).strip(): return None
+    i+=1
+    if i&gt;=len(text) or text[i]!=&#x27;:&#x27;: return None
+    i+=1
+    label=&#x27;&#x27;.join(label)
+    while i&lt;len(text) and text[i] in &#x27; \t&#x27;: i+=1
+    # Up to one newline may separate the colon from the destination.
+    if i &lt; len(text) and text[i] == &#x27;\n&#x27;: i += 1
+    if i &gt;= len(text): return None
+    if text[i] == &#x27;&lt;&#x27;:
+        j=i+1; dest=[]
+        while j&lt;len(text) and text[j] != &#x27;&gt;&#x27;:
+            if text[j]==&#x27;\\&#x27; and j+1&lt;len(text):
+                if text[j+1] not in &quot;!\&quot;#$%&amp;&#x27;()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~&quot;: dest.append(&#x27;\\&#x27;)
+                dest.append(text[j+1]); j+=2; continue
+            if text[j] in &#x27;&lt;\n&#x27;: return None
+            dest.append(text[j]); j+=1
+        if j==len(text): return None
+        destination=&#x27;&#x27;.join(dest); i=j+1
+    else:
+        dest=[]; depth=0; j=i
+        while j&lt;len(text):
+            c=text[j]
+            if c==&#x27;\\&#x27; and j+1&lt;len(text):
+                if text[j+1] not in &#x27;!&quot;#$%&amp;\&#x27;()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~&#x27;: dest.append(&#x27;\\&#x27;)
+                dest.append(text[j+1]); j+=2; continue
+            if c==&#x27;(&#x27;:
+                depth+=1
+                if depth&gt;32:return None
+            elif c==&#x27;)&#x27;:
+                if not depth: break
+                depth-=1
+            if c.isspace() and depth==0: break
+            dest.append(c); j+=1
+        if not dest:return None
+        destination=&#x27;&#x27;.join(dest); i=j
+    had_space = i &lt; len(text) and text[i] in &#x27; \t\n&#x27;
+    while i&lt;len(text) and text[i] in &#x27; \t&#x27;:i+=1
+    if i&lt;len(text) and text[i]==&#x27;\n&#x27;:
+        i += 1
+        if i &gt;= len(text) or text[i] not in &#x27;&quot;\&#x27;(&#x27;:
+            # The newline belongs to the following block line when no title
+            # begins there.
+            i += 1
+            return normalize_label(label), decode_escapes_and_entities(destination), None, i
+        had_space = True
+    title_start = i
+    title=None; parsed=_title(text,i) if had_space else None
+    if parsed:
+        title,i=parsed
+        if &#x27;\n\n&#x27; in title: return None
+        while i&lt;len(text) and text[i] in &#x27; \t&#x27;:i+=1
+    # A definition ends at the end of its physical line. Consecutive
+    # definitions are parsed by collect_definitions one line at a time.
+    if i&lt;len(text) and text[i]==&#x27;\n&#x27;: i+=1
+    elif i&lt;len(text) and text[i] not in &#x27; \t&#x27;:
+        return None
+    return normalize_label(label), decode_escapes_and_entities(destination), decode_escapes_and_entities(title) if title is not None else None, i
+
+def collect_definitions(text: str, definitions: dict) -&gt; str:
+    # A block may begin with several definitions. Parse from the start of
+    # the remaining text so a definition may span its label/destination/title.
+    lines = text.splitlines(keepends=True)
+    # A definition cannot interrupt an open paragraph. A block parser calls
+    # this function when closing the paragraph, so only definitions at its
+    # beginning are eligible; subsequent lines remain paragraph text.
+    kept = []
+    i = 0
+    paragraph_started = False
+    while i &lt; len(lines):
+        if paragraph_started:
+            kept.extend(lines[i:])
+            break
+        parsed = _definition(&#x27;&#x27;.join(lines[i:]))
+        if parsed:
+            label, destination, title, end = parsed
+            if label not in definitions:
+                definitions[label] = (destination, title)
+            consumed = &#x27;&#x27;.join(lines[i:])[:end].count(&#x27;\n&#x27;)
+            i += max(1, consumed)
+        else:
+            kept.append(lines[i]); i += 1
+            if lines[i-1].strip():
+                paragraph_started = True
+    return &#x27;&#x27;.join(kept)
+</pre></article>
+</main>
+</body>
+</html>

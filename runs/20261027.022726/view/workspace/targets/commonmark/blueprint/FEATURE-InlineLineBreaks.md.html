@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-InlineLineBreaks.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-InlineLineBreaks.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-InlineLineBreaks.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Inline Line Breaks</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Parse and render hard and soft line breaks in inline content.</td></tr><tr><td>Depends On</td><td>FEATURE-AutolinksAndRawHtml.md, FEATURE-Emphasis.md</td></tr><tr><td>Provides</td><td>inline line breaks</td></tr><tr><td>Consumes</td><td>autolinks and raw inline HTML, emphasis and strong emphasis</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Convert line endings within inline content to hard or soft breaks after block parsing has completed.</p>
+<h2>Behavior</h2>
+<p>A line ending preceded by two or more spaces or by a backslash produces a hard break, except at the end of a block. Other inline line endings produce soft breaks. Remove spaces at the end of a soft-break line and indentation at the start of the next line. Ignore indentation at the start of a line following a hard break.</p>
+<p>Do not interpret line endings inside code spans or HTML tags as breaks. Apply these rules inside inline constructs that permit inline content. Render hard breaks as HTML break tags and soft breaks as line endings or spaces, consistent with the supplied examples.</p>
+<p>With all parser capabilities available, run the previously deferred cross-feature examples as well as the complete sections owned by this story. The scoped patterns below cover the remaining specification sections without invoking the full-suite entry point.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC inline-line-breaks-sections ===<br>Intent: The parser passes the complete hard and soft line break examples, including their interactions with inline constructs.<br>Suite: scoped<br>Requires: executable=python3; scope=test<br>Probe: --dump-tests<br>Probe Count: json</p>
+<p>import os import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.path.abspath(&quot;commonmark&quot;), &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;^(Hard line breaks|Soft line breaks)$&quot;], capture_output=True, text=True, encoding=&quot;utf-8&quot;, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC inline-line-breaks-sections ===</p>
+<p>=== AC deferred-cross-feature-sections ===<br>Intent: The completed parser passes earlier examples that combine block and inline capabilities, including tabs and ordinary textual content.<br>Suite: scoped<br>Requires: executable=python3; scope=test<br>Probe: --dump-tests<br>Probe Count: json</p>
+<p>import os import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.path.abspath(&quot;commonmark&quot;), &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;^(Tabs|Precedence|Thematic breaks|Paragraphs|Blank lines|ATX headings|Setext headings|Indented code blocks|Fenced code blocks|HTML blocks|Link reference definitions|Block quotes|List items|Lists|Backslash escapes|Entity and numeric character references|Code spans|Emphasis and strong emphasis|Links|Images|Autolinks|Raw HTML|Textual content)$&quot;], capture_output=True, text=True, encoding=&quot;utf-8&quot;, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC deferred-cross-feature-sections ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Parse blocks and collect reference definitions before parsing inline content.</li><li>Do not use a public Markdown implementation or modify the supplied conformance assets.</li></ul></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,14 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/inline.py
+- commonmark_parser/references.py
+
+SUMMARY:
+Fixed some link parsing behavior, and `tests/test_links.py` passes. The scoped conformance suite still reports 14 failures, including reference definition parsing, image links, and autolink precedence.
+
+BLOCKERS:
+- The declared `links-conformance` check remains failing: 103 passed, 14 failed, 0 errored, 538 skipped.
+
+FAILURE_SUMMARY: Scoped link conformance still fails
+FAILURE_DETAIL: The scoped Links and Link reference definitions suite completed with 14 failures after the repair. Remaining failures include multiline and malformed reference definitions, image integration, and autolink precedence. Fix those parser behaviors and rerun the scoped suite.

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Images.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Images.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Images.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Images</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Parse inline and reference images and render their descriptions as alt text.</td></tr><tr><td>Depends On</td><td>FEATURE-Links.md, FEATURE-ReferenceDefinitions.md</td></tr><tr><td>Provides</td><td>inline and reference images</td></tr><tr><td>Consumes</td><td>inline and reference links, reference definition map</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Support images in inline content using the link grammar and document-wide reference definitions.</p>
+<h2>Behavior</h2>
+<p>Recognize inline, full, collapsed, and shortcut image forms beginning with <code>![</code>. Apply the destination, title, label matching, and precedence rules shared with links. Image descriptions may contain links and nested images. Render the plain textual content of the parsed description as the escaped HTML <code>alt</code> attribute, without its formatting tags; render the destination and optional title according to the supplied examples.</p>
+<p>Resolve brackets and emphasis using the specification&#x27;s delimiter-stack procedure. Preserve the distinction between an image opener and a link opener so that image descriptions can contain links.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC images-conformance ===<br>Intent: The parser passes the authoritative image examples, including nested descriptions and reference forms.<br>Suite: scoped<br>Requires: executable=python3; scope=test<br>Probe: --dump-tests<br>Probe Count: json</p>
+<p>import os import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.path.abspath(&quot;commonmark&quot;), &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;^Images$&quot;], capture_output=True, text=True, encoding=&quot;utf-8&quot;, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC images-conformance ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not use a public Markdown implementation.</li><li>Do not modify the supplied conformance assets.</li></ul></article>
+</main>
+</body>
+</html>

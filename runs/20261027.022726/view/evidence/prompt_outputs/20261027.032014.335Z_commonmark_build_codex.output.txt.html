@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261027.032014.335Z_commonmark_build_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261027.032014.335Z_commonmark_build_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261027.032014.335Z_commonmark_build_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/inline.py
+
+SUMMARY:
+Changed inline link destination encoding so square brackets are percent encoded. The scoped conformance run still showed failures involving multiline reference definitions, setext handling, malformed angle destinations, nested image alt text, and autolink URL escaping. The run did not complete with a passing result.
+
+BLOCKERS:
+- The links conformance suite remains failing; the remaining parsing behaviors need repair.
+
+FAILURE_SUMMARY: Scoped links conformance still fails
+FAILURE_DETAIL: The scoped suite reported failures in cases 212, 218, 495, 496, 522, and 528 before the command stopped returning output. Repair those parser behaviors, then rerun the scoped suite to completion.</pre></article>
+</main>
+</body>
+</html>

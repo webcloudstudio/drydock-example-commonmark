@@ -1,0 +1,12 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark_parser/model.py
+- commonmark_parser/stages.py
+- tests/test_parser_foundation.py
+
+SUMMARY:
+Implemented paragraph accumulation, blank-line separation, thematic-break recognition, line-ending normalization, null replacement, and raw content access. Added focused parser tests. `pytest -q tests/test_parser_foundation.py` passed: 9 tests.
+
+BLOCKERS:
+- None

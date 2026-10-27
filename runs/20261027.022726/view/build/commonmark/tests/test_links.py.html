@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_links.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_links.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_links.py">Raw file</a></div></header>
+<article class="doc"><pre>from commonmark_parser import parse_blocks, render_html
+
+
+def render(markdown: str) -&gt; str:
+    return render_html(parse_blocks(markdown))
+
+
+def test_inline_link_with_title_and_emphasis():
+    assert render(&#x27;[a *link*](https://example.com &quot;title&quot;)&#x27;) == (
+        &#x27;&lt;p&gt;&lt;a href=&quot;https://example.com&quot; title=&quot;title&quot;&gt;a &lt;em&gt;link&lt;/em&gt;&lt;/a&gt;&lt;/p&gt;\n&#x27;
+    )
+
+
+def test_reference_full_collapsed_and_shortcut_forms():
+    assert render(&#x27;[one][x] [x][] [x]\n\n[x]: /target&#x27;) == (
+        &#x27;&lt;p&gt;&lt;a href=&quot;/target&quot;&gt;one&lt;/a&gt; &lt;a href=&quot;/target&quot;&gt;x&lt;/a&gt; &#x27;
+        &#x27;&lt;a href=&quot;/target&quot;&gt;x&lt;/a&gt;&lt;/p&gt;\n&#x27;
+    )
+
+
+def test_link_destination_escapes_and_unicode_are_encoded():
+    assert render(r&#x27;[x](&lt;/café&gt;)&#x27;) == &#x27;&lt;p&gt;&lt;a href=&quot;/caf%C3%A9&quot;&gt;x&lt;/a&gt;&lt;/p&gt;\n&#x27;
+
+
+def test_links_do_not_accept_whitespace_before_destination_parenthesis():
+    assert render(&#x27;[x] (/target)&#x27;) == &#x27;&lt;p&gt;[x] (/target)&lt;/p&gt;\n&#x27;
+</pre></article>
+</main>
+</body>
+</html>

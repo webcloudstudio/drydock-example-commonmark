@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261027.032209.085Z_commonmark_build_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261027.032209.085Z_commonmark_build_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261027.032209.085Z_commonmark_build_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/stages.py
+
+SUMMARY:
+Adjusted setext handling when a paragraph contains only a reference definition. The scoped conformance suite still has failures, so this repair is incomplete.
+
+BLOCKERS:
+- Link reference definitions with a title on the following line and setext underline handling still fail. Several link parsing cases also remain unresolved.
+
+FAILURE_SUMMARY: Scoped link conformance still fails
+FAILURE_DETAIL: After the setext change, cases 212, 218, 495, 496, 522, 528, and 540 remain failing. Fix the shared reference collection and link bracket/autolink parsing behavior, then rerun the scoped conformance suite.</pre></article>
+</main>
+</body>
+</html>

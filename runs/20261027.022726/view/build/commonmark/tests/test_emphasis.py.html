@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_emphasis.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_emphasis.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_emphasis.py">Raw file</a></div></header>
+<article class="doc"><pre>from commonmark_parser import parse_blocks, parse_inlines, render_html
+
+
+def rendered(source: str) -&gt; str:
+    return render_html(parse_inlines(parse_blocks(source)))
+
+
+def test_emphasis_and_strong_emphasis_nest():
+    assert rendered(&quot;*a **b** c*&quot;) == &quot;&lt;p&gt;&lt;em&gt;a &lt;strong&gt;b&lt;/strong&gt; c&lt;/em&gt;&lt;/p&gt;\n&quot;
+
+
+def test_unmatched_delimiters_remain_literal():
+    assert rendered(&quot;a * b ** c&quot;) == &quot;&lt;p&gt;a * b ** c&lt;/p&gt;\n&quot;
+
+
+def test_underscore_does_not_open_inside_a_word():
+    assert rendered(&quot;a_b_c&quot;) == &quot;&lt;p&gt;a_b_c&lt;/p&gt;\n&quot;
+
+
+def test_unicode_symbols_count_as_punctuation_for_flanking():
+    assert rendered(&quot;*$*alpha.&quot;) == &quot;&lt;p&gt;*$*alpha.&lt;/p&gt;\n&quot;
+</pre></article>
+</main>
+</body>
+</html>

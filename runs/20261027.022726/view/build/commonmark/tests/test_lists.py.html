@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_lists.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_lists.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_lists.py">Raw file</a></div></header>
+<article class="doc"><pre>from commonmark_parser import parse_blocks, render_html
+from commonmark_parser.lists import parse_list_marker
+
+
+def test_ordered_marker_reports_start_and_content_indent():
+    result = parse_list_marker(&quot;7.  item\n&quot;)
+    assert result == {&quot;kind&quot;: &quot;ordered&quot;, &quot;marker&quot;: &quot;7.&quot;, &quot;start&quot;: 7, &quot;content_indent&quot;: 4}
+
+
+def test_paragraph_interruption_rules_for_ordered_and_empty_markers():
+    assert parse_list_marker(&quot;1. item\n&quot;, paragraph_open=True) is not None
+    assert parse_list_marker(&quot;2. item\n&quot;, paragraph_open=True) is None
+    assert parse_list_marker(&quot;-\n&quot;, paragraph_open=True) is None
+
+
+def test_tight_bullet_list_renders_direct_paragraph_without_paragraph_tags():
+    document = parse_blocks(&quot;- alpha\n- beta\n&quot;)
+    assert render_html(document) == &quot;&lt;ul&gt;\n&lt;li&gt;alpha\n&lt;/li&gt;\n&lt;li&gt;beta\n&lt;/li&gt;\n&lt;/ul&gt;\n&quot;
+
+
+def test_ordered_list_preserves_non_one_start():
+    document = parse_blocks(&quot;3. alpha\n4. beta\n&quot;)
+    assert render_html(document) == &#x27;&lt;ol start=&quot;3&quot;&gt;\n&lt;li&gt;alpha\n&lt;/li&gt;\n&lt;li&gt;beta\n&lt;/li&gt;\n&lt;/ol&gt;\n&#x27;
+
+
+def test_nested_list_and_blank_separated_items_render_recursively():
+    document = parse_blocks(&quot;- outer\n  - inner\n\n- second\n&quot;)
+    rendered = render_html(document)
+    assert rendered == &quot;&lt;ul&gt;\n&lt;li&gt;&lt;p&gt;outer&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;inner\n&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;li&gt;&lt;p&gt;second&lt;/p&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&quot;
+
+
+def test_thematic_break_precedes_bullet_marker():
+    assert render_html(parse_blocks(&quot;---\n&quot;)) == &quot;&lt;hr /&gt;\n&quot;
+</pre></article>
+</main>
+</body>
+</html>

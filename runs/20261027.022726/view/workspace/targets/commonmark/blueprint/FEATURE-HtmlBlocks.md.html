@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-HtmlBlocks.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-HtmlBlocks.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-HtmlBlocks.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: HTML Blocks</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Recognize and preserve CommonMark HTML blocks.</td></tr><tr><td>Depends On</td><td>FEATURE-ParagraphsAndBreaks.md</td></tr><tr><td>Provides</td><td>HTML blocks</td></tr><tr><td>Consumes</td><td>paragraph and thematic break blocks</td></tr></tbody></table></div>
+<h2>Purpose and behavior</h2>
+<p>The block parser recognizes HTML blocks after at most three spaces of indentation. It preserves their source lines as raw HTML without inline parsing. A block ends at the end of its containing block or document if its specific end condition is not reached.</p>
+<p>Recognize the seven types defined in <code>sources/spec.txt</code>, “HTML blocks”:</p>
+<ol><li>A <code>pre</code>, <code>script</code>, <code>style</code>, or <code>textarea</code> opening begins a block ending on a line containing any of their closing tags, case-insensitively.</li><li><code>&lt;!--</code> begins a block ending on a line containing <code>--&gt;</code>.</li><li><code>&lt;?</code> begins a block ending on a line containing <code>?&gt;</code>.</li><li><code>&lt;!</code> followed by an ASCII letter begins a block ending on a line containing <code>&gt;</code>.</li><li><code>&lt;![CDATA[</code> begins a block ending on a line containing <code>]]&gt;</code>.</li><li>A specified block-level HTML tag begins a block ending before a blank line.</li><li>A complete open or closing tag on a line by itself begins a block ending before a blank line.</li></ol>
+<p>Types 1–6 can interrupt paragraphs; type 7 cannot. A start and end condition can occur on the same line, and the entire ending line belongs to the block. HTML inside an open block does not change its termination rule.</p>
+<p>Expose <code>parse_html_block(lines, paragraph_open=False)</code> from <code>commonmark_parser.html_blocks</code>. It accepts a sequence of source lines and returns either <code>None</code> when no block starts or a pair <code>(consumed, raw)</code> containing the number of lines consumed and their unchanged concatenated text. The caller supplies only lines within the current container.</p>
+<p>Cross-feature examples involving later inline constructs remain covered when those constructs are integrated.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC html-block-termination ===<br>Intent: A comment block retains its source through the line containing its end marker and leaves later lines unconsumed.</p>
+<p>from commonmark_parser.html_blocks import parse_html_block</p>
+<p>lines = [&quot;&lt;!-- start\n&quot;, &quot;\n&quot;, &quot;end --&gt; trailing\n&quot;, &quot;after\n&quot;] consumed, raw = parse_html_block(lines) assert consumed == 3 assert raw == &quot;&quot;.join(lines[:consumed]) === END AC html-block-termination ===</p>
+<p>=== AC html-block-paragraph-interruption ===<br>Intent: A complete non-block tag cannot interrupt a paragraph but can begin a type 7 HTML block outside one.</p>
+<p>from commonmark_parser.html_blocks import parse_html_block</p>
+<p>lines = [&quot;&lt;custom&gt;\n&quot;, &quot;content\n&quot;, &quot;\n&quot;] assert parse_html_block(lines, paragraph_open=True) is None consumed, raw = parse_html_block(lines, paragraph_open=False) assert consumed == 2 assert raw == &quot;&quot;.join(lines[:consumed]) === END AC html-block-paragraph-interruption ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not modify the supplied specification or conformance assets.</li><li>Preserve raw HTML rather than interpreting its contents as Markdown.</li></ul></article>
+</main>
+</body>
+</html>

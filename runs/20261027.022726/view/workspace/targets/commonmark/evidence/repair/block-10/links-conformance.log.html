@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/repair/block-10/links-conformance.log</title>
+<link rel="stylesheet" href="../../../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/repair/block-10/links-conformance.log</h1><div class="filenav"><a href="../../../../../../../index.html">&larr; Report</a><a href="../../../../../../../workspace/targets/commonmark/evidence/repair/block-10/links-conformance.log">Raw file</a></div></header>
+<article class="doc"><pre>Example 212 (lines 3415-3420) Link reference definitions
+[foo]: /url
+&quot;title&quot; ok
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-&lt;p&gt;&amp;quot;title&amp;quot; ok&lt;/p&gt;
++&lt;p&gt;[foo]: /url &amp;quot;title&amp;quot; ok&lt;/p&gt;
+
+Example 218 (lines 3491-3498) Link reference definitions
+[foo]: /url
+===
+[foo]
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-&lt;p&gt;=== &lt;a href=&quot;/url&quot;&gt;foo&lt;/a&gt;&lt;/p&gt;
++&lt;p&gt;&lt;a href=&quot;/url&quot;&gt;foo&lt;/a&gt;&lt;/p&gt;
+
+Example 495 (lines 7652-7656) Links
+[link](&lt;foo\&gt;)
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-&lt;p&gt;[link](&amp;lt;foo&amp;gt;)&lt;/p&gt;
++&lt;p&gt;[link](&lt;foo\&gt;)&lt;/p&gt;
+
+Example 496 (lines 7661-7669) Links
+[a](&lt;b)c
+[a](&lt;b)c&gt;
+[a](&lt;b&gt;c)
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-&lt;p&gt;[a](&amp;lt;b)c [a](&amp;lt;b)c&amp;gt; [a](&lt;b&gt;c)&lt;/p&gt;
++&lt;p&gt;[a](&amp;lt;b)c [a](&lt;b)c&gt; [a](&lt;b&gt;c)&lt;/p&gt;
+
+Example 522 (lines 7925-7929) Links
+![[[foo](uri1)](uri2)](uri3)
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-&lt;p&gt;&lt;img alt=&quot;[foo](uri2)&quot; src=&quot;uri3&quot;&gt;&lt;/p&gt;
++&lt;p&gt;&lt;img alt=&quot;[[foo](uri1)](uri2)&quot; src=&quot;uri3&quot;&gt;&lt;/p&gt;
+
+Example 528 (lines 7976-7980) Links
+[foo&lt;https://example.com/?search=](uri)&gt;
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-&lt;p&gt;[foo&lt;a href=&quot;https://example.com/?search=%5D(uri)&quot;&gt;https://example.com/?search=](uri)&lt;/a&gt;&lt;/p&gt;
++&lt;p&gt;[foo&lt;a href=&quot;https://example.com/?search=](uri)&quot;&gt;https://example.com/?search=](uri)&lt;/a&gt;&lt;/p&gt;
+
+Example 540 (lines 8132-8138) Links
+[foo&lt;https://example.com/?search=][ref]&gt;
+
+[ref]: /uri
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-&lt;p&gt;[foo&lt;a href=&quot;https://example.com/?search=%5D%5Bref%5D&quot;&gt;https://example.com/?search=][ref]&lt;/a&gt;&lt;/p&gt;
++&lt;p&gt;[foo&lt;a href=&quot;https://example.com/?search=][ref]&quot;&gt;https://example.com/?search=][ref]&lt;/a&gt;&lt;/p&gt;
+
+110 passed, 7 failed, 0 errored, 538 skipped
+
+--- stderr ---
+
+--- drydock: progress ---
+cases: pass=110 fail=7 error=0 skip=538 total=655 from=result.stdout
+--- drydock: end progress ---
+--- drydock: values at failure ---
+  result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.022726/build/commonmark/commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;^(Links|Link reference definitions)$&#x27;], returncode=7, stdout=&#x27;Example 212 (lines 3415-3420) Link reference definitions\n[foo]: /url\n&quot;ti… (+1659 chars)
+--- drydock: end values ---
+Traceback (most recent call last):
+  File &quot;links-conformance.py&quot;, line 12, in &lt;module&gt;
+    assert result.returncode == 0
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+</pre></article>
+</main>
+</body>
+</html>

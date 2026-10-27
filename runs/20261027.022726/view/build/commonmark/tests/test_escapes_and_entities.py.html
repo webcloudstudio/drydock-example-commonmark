@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_escapes_and_entities.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_escapes_and_entities.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_escapes_and_entities.py">Raw file</a></div></header>
+<article class="doc"><pre>from commonmark_parser import parse_blocks, parse_inlines, render_html
+from commonmark_parser.inline import decode_escapes_and_entities
+
+
+def test_ascii_punctuation_escape():
+    assert decode_escapes_and_entities(r&quot;\*&quot;) == &quot;*&quot;
+
+
+def test_non_punctuation_backslash_remains_literal():
+    assert decode_escapes_and_entities(r&quot;\a&quot;) == r&quot;\a&quot;
+
+
+def test_named_reference_requires_semicolon():
+    assert decode_escapes_and_entities(&quot;&amp;amp; &amp;amp&quot;) == &quot;&amp; &amp;amp&quot;
+
+
+def test_numeric_references_and_invalid_codepoints():
+    assert decode_escapes_and_entities(&quot;&amp;#65; &amp;#x41; &amp;#0; &amp;#xD800;&quot;) == &quot;A A \ufffd \ufffd&quot;
+
+
+def test_rendered_paragraph_decodes_then_html_escapes():
+    document = parse_inlines(parse_blocks(r&quot;A \* &amp;amp; &lt;&quot;))
+    assert render_html(document) == &quot;&lt;p&gt;A * &amp;amp; &amp;lt;&lt;/p&gt;\n&quot;
+
+
+def test_code_and_raw_html_keep_literal_content():
+    document = parse_blocks(&quot;`&amp;amp;`\n\n&lt;div&gt;&amp;amp;&lt;/div&gt;\n&quot;)
+    assert render_html(document) == &quot;&lt;p&gt;&lt;code&gt;&amp;amp;amp;&lt;/code&gt;&lt;/p&gt;\n&lt;div&gt;&amp;amp;&lt;/div&gt;\n&quot;
+
+
+def test_code_spans_preserve_entities_escapes_and_escape_html():
+    document = parse_inlines(parse_blocks(r&quot;`&amp;amp; \* &lt;tag&gt;`&quot;))
+    assert render_html(document) == &quot;&lt;p&gt;&lt;code&gt;&amp;amp;amp; \\* &amp;lt;tag&amp;gt;&lt;/code&gt;&lt;/p&gt;\n&quot;
+
+
+def test_code_span_matches_equal_maximal_backtick_run():
+    document = parse_blocks(&quot;`` a ` b ``&quot;)
+    assert render_html(document) == &quot;&lt;p&gt;&lt;code&gt;a ` b&lt;/code&gt;&lt;/p&gt;\n&quot;
+
+
+def test_code_span_normalizes_newlines_and_one_edge_space():
+    document = parse_blocks(&quot;`  a\nb  `&quot;)
+    assert render_html(document) == &quot;&lt;p&gt;&lt;code&gt; a b &lt;/code&gt;&lt;/p&gt;\n&quot;
+
+
+def test_unmatched_backtick_runs_remain_literal():
+    document = parse_blocks(&quot;x `` y ` z&quot;)
+    assert render_html(document) == &quot;&lt;p&gt;x `` y ` z&lt;/p&gt;\n&quot;
+
+
+def test_readme_describes_standard_streams():
+    from pathlib import Path
+
+    content = Path(&quot;README.md&quot;).read_text(encoding=&quot;utf-8&quot;)
+    assert content.strip()
+    assert &quot;./commonmark&quot; in content
+    assert &quot;standard input&quot; in content
+    assert &quot;standard output&quot; in content
+    assert &quot;UTF-8&quot; in content
+</pre></article>
+</main>
+</body>
+</html>

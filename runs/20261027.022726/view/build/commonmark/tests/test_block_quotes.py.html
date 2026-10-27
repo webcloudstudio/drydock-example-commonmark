@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_block_quotes.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_block_quotes.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_block_quotes.py">Raw file</a></div></header>
+<article class="doc"><pre>from commonmark_parser import parse_blocks, render_html
+from commonmark_parser.block_quotes import parse_block_quote
+
+
+def test_consecutive_marked_lines_extract_contents():
+    lines = [&quot;&gt; alpha\n&quot;, &quot;&gt; beta\n&quot;, &quot;\n&quot;]
+    assert parse_block_quote(lines) == (2, [&quot;alpha\n&quot;, &quot;beta\n&quot;])
+
+
+def test_lazy_paragraph_continuation_stops_at_blank():
+    lines = [&quot;&gt; alpha\n&quot;, &quot;beta\n&quot;, &quot;\n&quot;, &quot;outside\n&quot;]
+    assert parse_block_quote(lines) == (2, [&quot;alpha\n&quot;, &quot;beta\n&quot;])
+
+
+def test_nested_quotes_and_leaf_blocks_render_recursively():
+    document = parse_blocks(&quot;&gt; outer\n&gt; &gt; inner\n&gt;\n&gt; # title\n&quot;)
+    assert render_html(document) == (
+        &quot;&lt;blockquote&gt;\n&lt;p&gt;outer&lt;/p&gt;\n&lt;blockquote&gt;\n&lt;p&gt;inner&lt;/p&gt;\n&quot;
+        &quot;&lt;/blockquote&gt;\n&lt;h1&gt;title&lt;/h1&gt;\n&lt;/blockquote&gt;\n&quot;
+    )
+
+
+def test_quote_definition_is_added_to_document_map():
+    document = parse_blocks(&quot;&gt; [ref]: /target\n\ntext\n&quot;)
+    assert document.references == {&quot;ref&quot;: (&quot;/target&quot;, None)}
+</pre></article>
+</main>
+</body>
+</html>

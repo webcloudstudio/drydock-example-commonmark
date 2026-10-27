@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-CodeBlocks.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-CodeBlocks.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-CodeBlocks.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Code Blocks</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Parses indented and fenced code blocks as literal block content.</td></tr><tr><td>Depends On</td><td>FEATURE-ParagraphsAndBreaks.md</td></tr><tr><td>Provides</td><td>code blocks</td></tr><tr><td>Consumes</td><td>paragraph and thematic break blocks</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Recognize indented and fenced code blocks during block parsing and preserve their literal content for HTML rendering.</p>
+<h2>Behavior</h2>
+<p>An indented code block consists of nonblank lines indented at least four columns, with intervening blank lines. Remove four columns of indentation, retain remaining content and interior blank lines, and exclude leading and trailing blank lines. An indented code block cannot interrupt a paragraph.</p>
+<p>A fenced code block starts with at least three consecutive backticks or tildes after at most three spaces of indentation. A backtick fence&#x27;s info string cannot contain backticks. Trim the info string; the examples render its first word as the language class after processing applicable escapes and character references. A closing fence uses the same character, has at least the opening length, allows at most three spaces of indentation, and contains only trailing spaces or tabs. Remove up to the opening indentation from each content line. An unclosed fence ends at the containing block or document end. Fenced blocks can interrupt paragraphs.</p>
+<p>Do not parse code content as inline Markdown. Escape literal content appropriately when rendering HTML. The complete code-block sections include interactions with later containers and inline constructs; the later line-break integration exercises those sections after all providers exist.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC indented-code-block ===<br>Intent: Block parsing removes the required indentation and preserves the literal code content.</p>
+<p>from commonmark_parser import parse_blocks</p>
+<p>content = &quot;alpha * beta\n&quot; document = parse_blocks(&quot;    &quot; + content) assert len(document.children) == 1 assert document.children[0].type == &quot;code_block&quot; assert document.children[0].literal == content === END AC indented-code-block ===</p>
+<p>=== AC fenced-code-block ===<br>Intent: Matching fences form a code block whose content remains literal.</p>
+<p>from commonmark_parser import parse_blocks</p>
+<p>content = &quot;alpha * beta\n&quot; document = parse_blocks(&quot;<code>\n&quot; + content + &quot;</code>\n&quot;) assert len(document.children) == 1 assert document.children[0].type == &quot;code_block&quot; assert document.children[0].literal == content === END AC fenced-code-block ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Code block content is literal and is never parsed as inline Markdown.</li><li>Do not modify the supplied conformance assets.</li></ul></article>
+</main>
+</body>
+</html>

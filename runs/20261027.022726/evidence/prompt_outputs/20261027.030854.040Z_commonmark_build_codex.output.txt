@@ -1,0 +1,15 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/inline.py
+- commonmark_parser/references.py
+
+SUMMARY:
+Adjusted shortcut-reference fallback, link parsing around backticks, and reference-definition escapes. The scoped conformance run still has 17 failures (100 passed); `pytest -q` reports 4 failures and 49 passes.
+
+BLOCKERS:
+- Link conformance remains incomplete, including reference-definition handling, bracket precedence, and image integration.
+- The project test failures are in block rendering and escape/entity behavior.
+
+FAILURE_SUMMARY: Scoped link conformance still fails
+FAILURE_DETAIL: The scoped Links and Link reference definitions suite completed with 17 failures after the changes. Additional parser work is needed for definition collection, bracket precedence, and image integration; `pytest -q` also completed with four failures in block rendering and escape/entity behavior.

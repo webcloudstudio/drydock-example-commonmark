@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261027.023300.133Z_commonmark_lineage_attribute_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261027.023300.133Z_commonmark_lineage_attribute_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261027.023300.133Z_commonmark_lineage_attribute_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>&lt;requirement name=&quot;run-spec-tests&quot; stories=&quot;verification&quot;&gt;
+    all_tests = get_tests(args.spec)
+    if args.pattern:
+        pattern_re = re.compile(args.pattern, re.IGNORECASE)
+    else:
+        pattern_re = re.compile(&#x27;.&#x27;)
+    tests = [ test for test in all_tests if re.search(pattern_re, test[&#x27;section&#x27;]) and (not args.number or test[&#x27;example&#x27;] == args.number) ]
+&lt;/requirement&gt;
+&lt;requirement name=&quot;compare-html-output&quot; stories=&quot;verification&quot;&gt;
+    if normalize:
+        actual_html = normalize_html(actual_html) + &#x27;\n&#x27;
+        expected_html = normalize_html(expected_html) + &#x27;\n&#x27;
+
+    if actual_html != expected_html:
+        if prev_result != &#x27;fail&#x27;:
+            print_test_header(test)
+            out(test[&#x27;markdown&#x27;] + &#x27;\n&#x27;)
+            expected_html_lines = expected_html.splitlines(True)
+            actual_html_lines = actual_html.splitlines(True)
+            for diffline in unified_diff(expected_html_lines, actual_html_lines,
+                            &quot;expected HTML&quot;, &quot;actual HTML&quot;):
+                out(diffline)
+            out(&#x27;\n&#x27;)
+        return &#x27;fail&#x27;
+&lt;/requirement&gt;
+&lt;requirement name=&quot;report-test-results&quot; stories=&quot;verification&quot;&gt;
+        out(&quot;{pass} passed, {fail} failed, {error} errored, {skip} skipped\n&quot;.format(**result_counts))
+        exit(result_counts[&#x27;fail&#x27;] + result_counts[&#x27;error&#x27;])
+&lt;/requirement&gt;
+&lt;unattached story=&quot;foundation&quot;/&gt;
+&lt;unattached story=&quot;cli&quot;/&gt;
+&lt;unattached story=&quot;paragraphs&quot;/&gt;
+&lt;unattached story=&quot;headings&quot;/&gt;
+&lt;unattached story=&quot;code-blocks&quot;/&gt;
+&lt;unattached story=&quot;references&quot;/&gt;
+&lt;unattached story=&quot;html-blocks&quot;/&gt;
+&lt;unattached story=&quot;block-quotes&quot;/&gt;
+&lt;unattached story=&quot;lists&quot;/&gt;
+&lt;unattached story=&quot;escapes&quot;/&gt;
+&lt;unattached story=&quot;documentation&quot;/&gt;
+&lt;unattached story=&quot;code-spans&quot;/&gt;
+&lt;unattached story=&quot;emphasis&quot;/&gt;
+&lt;unattached story=&quot;links&quot;/&gt;
+&lt;unattached story=&quot;images&quot;/&gt;
+&lt;unattached story=&quot;autolinks-html&quot;/&gt;
+&lt;unattached story=&quot;line-breaks&quot;/&gt;</pre></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_parser_foundation.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_parser_foundation.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_parser_foundation.py">Raw file</a></div></header>
+<article class="doc"><pre>from commonmark_parser import Document, Node, parse_blocks, parse_inlines, render_html
+
+
+def test_empty_document_runs_all_stages_without_content():
+    source = &quot;&quot;
+    document = parse_blocks(source)
+    document = parse_inlines(document)
+    assert render_html(document) == source
+
+
+def test_document_exposes_block_tree_and_reference_map():
+    document = Document(children=[Node(&quot;paragraph&quot;, raw=&quot;text&quot;)])
+    assert document.children[0].type == &quot;paragraph&quot;
+    assert document.references == {}
+
+
+def test_inline_stage_returns_the_shared_document():
+    document = parse_blocks(&quot;&quot;)
+    assert parse_inlines(document) is document
+
+
+def test_empty_rendering_is_idempotent():
+    document = parse_inlines(parse_blocks(&quot;&quot;))
+    assert render_html(document) == render_html(document) == &quot;&quot;
+
+
+def test_paragraph_block_tree_separates_blank_lines_and_preserves_content():
+    document = parse_blocks(&quot;alpha\n\nbeta\n&quot;)
+
+    assert [(node.type, node.raw_content) for node in document.children] == [
+        (&quot;paragraph&quot;, &quot;alpha&quot;),
+        (&quot;paragraph&quot;, &quot;beta&quot;),
+    ]
+
+
+def test_paragraph_accumulates_continuation_lines_and_normalizes_endings():
+    document = parse_blocks(&quot;  alpha\r\n  beta\r&quot;)
+
+    assert len(document.children) == 1
+    assert document.children[0].raw_content == &quot;alpha\nbeta&quot;
+
+
+def test_paragraph_replaces_null_characters():
+    document = parse_blocks(&quot;a\x00b&quot;)
+
+    assert document.children[0].raw_content == &quot;a\ufffdb&quot;
+
+
+def test_thematic_break_interrupts_paragraph():
+    document = parse_blocks(&quot;alpha\n* * *\n&quot;)
+
+    assert [node.type for node in document.children] == [&quot;paragraph&quot;, &quot;thematic_break&quot;]
+
+
+def test_thematic_break_variants_and_indent_limit():
+    document = parse_blocks(&quot;   ---\n\t***\n __ __ __&quot;)
+
+    assert [node.type for node in document.children] == [
+        &quot;thematic_break&quot;, &quot;code_block&quot;, &quot;thematic_break&quot;
+    ]
+</pre></article>
+</main>
+</body>
+</html>

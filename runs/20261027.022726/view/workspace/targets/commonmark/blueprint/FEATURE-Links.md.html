@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Links.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Links.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Links.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Links</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Parse inline and reference links using document-wide definitions.</td></tr><tr><td>Depends On</td><td>FEATURE-Emphasis.md, FEATURE-ReferenceDefinitions.md</td></tr><tr><td>Provides</td><td>inline and reference links</td></tr><tr><td>Consumes</td><td>reference definition map, emphasis and strong emphasis, code spans</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Turn valid inline and reference link syntax into HTML links using the definitions collected during block parsing.</p>
+<h2>Behavior</h2>
+<p>Recognize inline links and full, collapsed, and shortcut references. Parse destinations and optional titles according to the specification, including balanced or escaped parentheses, angle-delimited destinations, permitted whitespace, and escaped characters and character references. Render destinations and titles with the escaping required by the supplied examples.</p>
+<p>Match reference labels using the document-wide normalized definition map; the first matching definition wins. Apply the specified precedence among inline, full, collapsed, and shortcut forms. Link text can contain inline content and balanced brackets, but links cannot contain links. Use the appendix&#x27;s bracket and delimiter-stack procedure: resolve emphasis within a successful link and deactivate earlier link openers when a link is formed. Code spans, autolinks, and raw HTML bind more tightly than link brackets.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC links-conformance ===<br>Intent: The completed parser passes the authoritative link and link-reference-definition examples.<br>Suite: scoped<br>Requires: executable=python3; scope=test<br>Probe: --dump-tests<br>Probe Count: json</p>
+<p>import os import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.path.abspath(&quot;commonmark&quot;), &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;^(Links|Link reference definitions)$&quot;], capture_output=True, text=True, encoding=&quot;utf-8&quot;, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC links-conformance ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not use a public Markdown implementation.</li><li>Do not modify the supplied conformance assets.</li></ul></article>
+</main>
+</body>
+</html>

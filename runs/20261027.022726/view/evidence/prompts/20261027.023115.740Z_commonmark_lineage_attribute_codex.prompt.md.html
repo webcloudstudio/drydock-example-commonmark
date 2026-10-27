@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompts/20261027.023115.740Z_commonmark_lineage_attribute_codex.prompt.md</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompts/20261027.023115.740Z_commonmark_lineage_attribute_codex.prompt.md</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompts/20261027.023115.740Z_commonmark_lineage_attribute_codex.prompt.md">Raw file</a></div></header>
+<article class="doc"><h1>Attribute Stories to Source Requirements</h1>
+<p>You are the lineage attribution agent. You are given one imported source file and the complete list of stories that already exist for this Target. Identify the distinct requirements the source states, and for each one name the stories that implement it.</p>
+<p>This is a matching task against a closed set. Every story you may name is listed in <code>&lt;stories&gt;</code>. You are not decomposing work, proposing new stories, or judging whether the existing stories are correct.</p>
+<h2>Method</h2>
+<ol><li>Read the source and identify each distinct requirement it states. A requirement is a thing the</li></ol>
+<p>system must do, at whatever granularity the author wrote it. One sentence may state one requirement that several stories implement — for example &quot;add a table and show it on screen&quot; is one requirement implemented by a schema story, a route story, and a view story. Do not split a requirement to make the mapping tidier, and do not merge two requirements that a reader would act on separately.</p>
+<ol><li>Give each requirement a short kebab-case name that describes it. The name is an identifier, not</li></ol>
+<p>a summary: <code>mark-book-read</code>, not <code>the-reader-can-mark-a-book-as-read</code>.</p>
+<ol><li>For each requirement, list every story that implements any part of it. A story may implement</li></ol>
+<p>more than one requirement; a requirement may need more than one story.</p>
+<ol><li>List any story that implements no requirement in the source as <code>&lt;unattached&gt;</code>. This is expected</li></ol>
+<p>and correct for foundational work — application scaffolding, configuration, shared UI framing, test harnesses — that the author never asked for by name. Do not force such a story onto an unrelated requirement.</p>
+<h2>Rules</h2>
+<ul><li>Copy story ids byte-for-byte from <code>&lt;stories&gt;</code>, preserving underscores, hyphens, and case; never invent or normalize one.</li><li>Every story appears in one or more requirement <code>stories</code> attributes, or once as <code>&lt;unattached&gt;</code>, never both.</li><li>Quote the requirement text verbatim from the source in the tag body. Do not paraphrase it.</li><li>Emit nothing but the tags below. No preamble, no commentary, no explanation.</li></ul>
+<h2>Output</h2>
+<pre><code>&lt;requirement name=&quot;add-remove-books&quot; stories=&quot;add-book,remove-book,database&quot;&gt;
+The reader can add a book with a title and author, view the books in the order added, and remove a book.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;reject-empty-fields&quot; stories=&quot;validate-book&quot;&gt;
+An empty title or author is rejected with a clear error message.
+&lt;/requirement&gt;
+&lt;unattached story=&quot;architecture&quot;/&gt;
+&lt;unattached story=&quot;ui-general&quot;/&gt;</code></pre>
+<h1>Attribution job</h1>
+<p>&lt;source name=&quot;cmark.py&quot;&gt; #!/usr/bin/env python3</p>
+<h1>-<em>- coding: utf-8 -</em>-</h1>
+<p>from ctypes import CDLL, c_char_p, c_long, c_int from subprocess import * import platform import os</p>
+<p>def pipe_through_prog(prog, text): p1 = Popen(prog.split(), stdout=PIPE, stdin=PIPE, stderr=PIPE) [result, err] = p1.communicate(input=text.encode(&#x27;utf-8&#x27;)) return [p1.returncode, result, err]</p>
+<p>def use_library(lib, text): textbytes = text.encode(&#x27;utf-8&#x27;) textlen = len(textbytes) return [0, lib(textbytes, textlen, 0), &#x27;&#x27;]</p>
+<p>class CMark: def <strong>init</strong>(self, prog=None, library_dir=None): self.prog = prog if prog: self.to_html = lambda x: pipe_through_prog(prog, x) else: sysname = platform.system() if sysname == &#x27;Darwin&#x27;: libname = &quot;libcmark.dylib&quot; elif sysname == &#x27;Windows&#x27;: libname = &quot;cmark.dll&quot; else: libname = &quot;libcmark.so&quot; if library_dir: libpath = os.path.join(library_dir, libname) else: libpath = os.path.join(&quot;build&quot;, &quot;src&quot;, libname) cmark = CDLL(libpath) markdown = cmark.cmark_markdown_to_html markdown.restype = c_char_p markdown.argtypes = [c_char_p, c_long, c_int] self.to_html = lambda x: use_library(markdown, x) &lt;/source&gt;</p>
+<p>&lt;stories&gt; &lt;story id=&quot;foundation&quot; implements=&quot;ARCHITECTURE.md&quot;&gt;Establish the Python project and parser stage interfaces.&lt;/story&gt; &lt;story id=&quot;cli&quot; implements=&quot;FEATURE-CommandLine.md&quot;&gt;Provide the root executable and standard streams interface.&lt;/story&gt; &lt;story id=&quot;paragraphs&quot; implements=&quot;FEATURE-ParagraphsAndBreaks.md&quot;&gt;Parse paragraphs, blank lines, and thematic breaks.&lt;/story&gt; &lt;story id=&quot;headings&quot; implements=&quot;FEATURE-Headings.md&quot;&gt;Parse ATX and setext headings.&lt;/story&gt; &lt;story id=&quot;code-blocks&quot; implements=&quot;FEATURE-CodeBlocks.md&quot;&gt;Parse indented and fenced code blocks.&lt;/story&gt; &lt;story id=&quot;references&quot; implements=&quot;FEATURE-ReferenceDefinitions.md&quot;&gt;Collect document-wide link reference definitions.&lt;/story&gt; &lt;story id=&quot;html-blocks&quot; implements=&quot;FEATURE-HtmlBlocks.md&quot;&gt;Parse the seven types of HTML blocks.&lt;/story&gt; &lt;story id=&quot;block-quotes&quot; implements=&quot;FEATURE-BlockQuotes.md&quot;&gt;Parse nested block quotes and lazy continuations.&lt;/story&gt; &lt;story id=&quot;lists&quot; implements=&quot;FEATURE-Lists.md&quot;&gt;Parse list items and lists with nesting and tightness.&lt;/story&gt; &lt;story id=&quot;escapes&quot; implements=&quot;FEATURE-EscapesAndEntities.md&quot;&gt;Parse backslash escapes and character references.&lt;/story&gt; &lt;story id=&quot;documentation&quot; implements=&quot;FEATURE-Documentation.md&quot;&gt;Document the standard-stream command interface.&lt;/story&gt; &lt;story id=&quot;code-spans&quot; implements=&quot;FEATURE-CodeSpans.md&quot;&gt;Parse and normalize backtick code spans.&lt;/story&gt; &lt;story id=&quot;emphasis&quot; implements=&quot;FEATURE-Emphasis.md&quot;&gt;Resolve emphasis and strong emphasis.&lt;/story&gt; &lt;story id=&quot;links&quot; implements=&quot;FEATURE-Links.md&quot;&gt;Parse inline and reference links.&lt;/story&gt; &lt;story id=&quot;images&quot; implements=&quot;FEATURE-Images.md&quot;&gt;Parse inline and reference images.&lt;/story&gt; &lt;story id=&quot;autolinks-html&quot; implements=&quot;FEATURE-AutolinksAndRawHtml.md&quot;&gt;Parse autolinks and raw inline HTML.&lt;/story&gt; &lt;story id=&quot;line-breaks&quot; implements=&quot;FEATURE-InlineLineBreaks.md&quot;&gt;Parse hard and soft inline line breaks.&lt;/story&gt; &lt;story id=&quot;verification&quot; implements=&quot;VERIFICATION.md&quot;&gt;Verify the complete supplied conformance suite.&lt;/story&gt; &lt;/stories&gt;</p></article>
+</main>
+</body>
+</html>

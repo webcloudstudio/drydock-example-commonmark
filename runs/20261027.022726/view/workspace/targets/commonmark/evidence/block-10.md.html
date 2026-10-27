@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-10.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-10.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-10.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 10 · Service (block-10)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-26</li><li>resulting state: closed/failed</li><li>story points (combined assembled cost): 3047</li><li>execution id: 20261027.032209.085Z-31db92e4</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse inline and reference links. (links) [story]</li></ul>
+<h2>Acceptance tooling authorization</h2>
+<ul><li>FEATURE-Links.md#links-conformance: executable=python3; scope=test; authorization=existing Target environment</li></ul>
+<h2>Stacked context</h2>
+<ul><li>stack: python_compact.md (SP 601)</li><li>compass: COMPASS.md (SP 512)</li><li>implements: FEATURE-Links.md (SP 550)</li><li>context: ARCHITECTURE_compact.md (SP 211)</li><li>stack: common_compact.md (SP 1079)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>commonmark_parser/inline.py</li><li>commonmark_parser/references.py</li><li>commonmark_parser/stages.py</li><li>tests/test_links.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: links-conformance (FEATURE-Links.md)</li></ul>
+<p>intent: The completed parser passes the authoritative link and link-reference-definition examples. return code: 1 stdout: Example 194 (lines 3201-3207) Link reference definitions [foo]: /url &quot;title&quot;</p>
+<p>[foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot;title&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 195 (lines 3210-3218) Link reference definitions [foo]: /url &#x27;the title&#x27;</p>
+<p>[foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot;the title&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo]: /url &#x27;the title&#x27;&lt;/p&gt;&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 196 (lines 3221-3227) Link reference definitions [Foo*bar\]]:my_(url) &#x27;title (with parens)&#x27;</p>
+<p>[Foo*bar\]]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;my_(url)&quot; title=&quot;title (with parens)&quot;&gt;Foo*bar]&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[Foo*bar]]:my_(url) &#x27;title (with parens)&#x27;&lt;/p&gt;&lt;p&gt;[Foo*bar]]&lt;/p&gt;</p>
+<p>Example 197 (lines 3230-3238) Link reference definitions [Foo bar]: &lt;my url&gt; &#x27;title&#x27;</p>
+<p>[Foo bar]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;my%20url&quot; title=&quot;title&quot;&gt;Foo bar&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[Foo bar]: &lt;my url&gt; &#x27;title&#x27;&lt;/p&gt;&lt;p&gt;[Foo bar]&lt;/p&gt;</p>
+<p>Example 198 (lines 3243-3257) Link reference definitions [foo]: /url &#x27; title line1 line2 &#x27;</p>
+<p>[foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1,5 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot; -title -line1 -line2 -&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo]: /url &#x27; title line1 line2 &#x27;&lt;/p&gt;&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 200 (lines 3277-3284) Link reference definitions [foo]: /url</p>
+<p>[foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo]: /url&lt;/p&gt;&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 202 (lines 3301-3307) Link reference definitions [foo]: &lt;&gt;</p>
+<p>[foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 203 (lines 3312-3319) Link reference definitions [foo]: &lt;bar&gt;(baz)</p>
+<p>[foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo]: &lt;bar&gt;(baz)&lt;/p&gt;&lt;p&gt;[foo]&lt;/p&gt; +&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 204 (lines 3325-3331) Link reference definitions [foo]: /url\bar\*baz &quot;foo\&quot;bar\baz&quot;</p>
+<p>[foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url%5Cbar*baz&quot; title=&quot;foo&amp;quot;bar\baz&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo]: /url\bar*baz &amp;quot;foo&amp;quot;bar\baz&amp;quot;&lt;/p&gt;&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 205 (lines 3336-3342) Link reference definitions [foo]</p>
+<p>[foo]: url</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;url&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 206 (lines 3348-3355) Link reference definitions [foo]</p>
+<p>[foo]: first [foo]: second</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;first&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 207 (lines 3361-3367) Link reference definitions [FOO]: /url</p>
+<p>[Foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot;&gt;Foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[Foo]&lt;/p&gt;</p>
+<p>Example 208 (lines 3370-3376) Link reference definitions [ΑΓΩ]: /φου</p>
+<p>[αγω]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/%CF%86%CE%BF%CF%85&quot;&gt;αγω&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[αγω]&lt;/p&gt;</p>
+<p>Example 210 (lines 3393-3400) Link reference definitions [ foo ]: /url bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;bar&lt;/p&gt; +&lt;p&gt;[ foo ]: /url bar&lt;/p&gt;</p>
+<p>Example 216 (lines 3470-3479) Link reference definitions # [Foo] [foo]: /url &gt; bar</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;h1&gt;&lt;a href=&quot;/url&quot;&gt;Foo&lt;/a&gt;&lt;/h1&gt;&lt;blockquote&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/blockquote&gt; +&lt;h1&gt;[Foo]&lt;/h1&gt;&lt;blockquote&gt;&lt;p&gt;bar&lt;/p&gt;&lt;/blockquote&gt;</p>
+<p>Example 217 (lines 3481-3489) Link reference definitions [foo]: /url bar === [foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;h1&gt;bar&lt;/h1&gt;&lt;p&gt;&lt;a href=&quot;/url&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;h1&gt;bar&lt;/h1&gt;&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 218 (lines 3491-3498) Link reference definitions [foo]: /url === [foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;=== &lt;a href=&quot;/url&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 219 (lines 3504-3517) Link reference definitions [foo]: /foo-url &quot;foo&quot; [bar]: /bar-url &quot;bar&quot; [baz]: /baz-url</p>
+<p>[foo], [bar], [baz]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/foo-url&quot; title=&quot;foo&quot;&gt;foo&lt;/a&gt;, &lt;a href=&quot;/bar-url&quot; title=&quot;bar&quot;&gt;bar&lt;/a&gt;, &lt;a href=&quot;/baz-url&quot;&gt;baz&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&amp;quot;bar&amp;quot; [baz]: /baz-url&lt;/p&gt;&lt;p&gt;[foo], [bar], [baz]&lt;/p&gt;</p>
+<p>Example 220 (lines 3525-3533) Link reference definitions [foo]</p>
+<p>&gt; [foo]: /url</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot;&gt;foo&lt;/a&gt;&lt;/p&gt;&lt;blockquote&gt;&lt;/blockquote&gt; +&lt;p&gt;[foo]&lt;/p&gt;&lt;blockquote&gt;&lt;/blockquote&gt;</p>
+<p>Example 486 (lines 7580-7584) Links <a href="./target.md"></a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;./target.md&quot;&gt;&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;<a href="./target.md"></a>&lt;/p&gt;</p>
+<p>Example 488 (lines 7594-7598) Links <a href="&amp;lt;&amp;gt;">link</a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;&quot;&gt;link&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;&amp;lt;&amp;gt;&quot;&gt;link&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 489 (lines 7601-7605) Links []()</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[]()&lt;/p&gt;</p>
+<p>Example 491 (lines 7616-7620) Links [link](&lt;/my uri&gt;)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/my%20uri&quot;&gt;link&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;<a href="&amp;lt;/my&amp;gt;">link</a>&lt;/p&gt;</p>
+<p>Example 494 (lines 7644-7648) Links <a href="&amp;lt;b">a</a>c&gt;)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;b)c&quot;&gt;a&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;&amp;lt;b&quot;&gt;a&lt;/a&gt;c&amp;gt;)&lt;/p&gt;</p>
+<p>Example 495 (lines 7652-7656) Links <a href="&amp;lt;foo\&amp;gt;">link</a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="&amp;amp;lt;foo&amp;amp;gt;">link</a>&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;&amp;lt;foo&amp;gt;&quot;&gt;link&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 496 (lines 7661-7669) Links <a href="&amp;lt;b">a</a>c <a href="&amp;lt;b">a</a>c&gt; <a href="&amp;lt;b&amp;gt;c">a</a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="&amp;amp;lt;b">a</a>c <a href="&amp;amp;lt;b">a</a>c&amp;gt; <a href="&amp;lt;b&amp;gt;c">a</a>&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;&amp;lt;b&quot;&gt;a&lt;/a&gt;c &lt;a href=&quot;&amp;lt;b&quot;&gt;a&lt;/a&gt;c&amp;gt; &lt;a href=&quot;&amp;lt;b&amp;gt;c&quot;&gt;a&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 497 (lines 7673-7677) Links <a href="\(foo\">link</a>)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;(foo)&quot;&gt;link&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;(foo\&quot;&gt;link&lt;/a&gt;)&lt;/p&gt;</p>
+<p>Example 498 (lines 7682-7686) Links <a href="foo(and(bar">link</a>))</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;foo(and(bar))&quot;&gt;link&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;foo(and(bar&quot;&gt;link&lt;/a&gt;))&lt;/p&gt;</p>
+<p>Example 499 (lines 7691-7695) Links <a href="foo(and(bar">link</a>)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="foo(and(bar">link</a>)&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;foo(and(bar&quot;&gt;link&lt;/a&gt;)&lt;/p&gt;</p>
+<p>Example 500 (lines 7698-7702) Links <a href="foo\(and\(bar\">link</a>)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;foo(and(bar)&quot;&gt;link&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;foo(and(bar\&quot;&gt;link&lt;/a&gt;)&lt;/p&gt;</p>
+<p>Example 501 (lines 7705-7709) Links <a href="&amp;lt;foo(and(bar">link</a>&gt;)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;foo(and(bar)&quot;&gt;link&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;&amp;lt;foo(and(bar&quot;&gt;link&lt;/a&gt;&amp;gt;)&lt;/p&gt;</p>
+<p>Example 502 (lines 7715-7719) Links <a href="foo\">link</a>\:)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;foo):&quot;&gt;link&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;foo\&quot;&gt;link&lt;/a&gt;:)&lt;/p&gt;</p>
+<p>Example 504 (lines 7740-7744) Links <a href="foo\bar">link</a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;foo%5Cbar&quot;&gt;link&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;foo\bar&quot;&gt;link&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 505 (lines 7756-7760) Links <a href="foo%20b&amp;amp;auml;">link</a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;foo%20b%C3%A4&quot;&gt;link&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;foo%20bä&quot;&gt;link&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 506 (lines 7767-7771) Links <a href="&amp;quot;title&amp;quot;">link</a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;%22title%22&quot;&gt;link&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;&amp;quot;title&amp;quot;&quot;&gt;link&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 507 (lines 7776-7784) Links [link](/url &quot;title&quot;) [link](/url &#x27;title&#x27;) [link](/url (title))</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot;title&quot;&gt;link&lt;/a&gt; &lt;a href=&quot;/url&quot; title=&quot;title&quot;&gt;link&lt;/a&gt; &lt;a href=&quot;/url&quot; title=&quot;title&quot;&gt;link&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot;title&quot;&gt;link&lt;/a&gt; &lt;a href=&quot;/url&quot; title=&quot;title&quot;&gt;link&lt;/a&gt; [link](/url (title))&lt;/p&gt;</p>
+<p>Example 508 (lines 7790-7794) Links [link](/url &quot;title \&quot;&amp;quot;&quot;)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot;title &amp;quot;&amp;quot;&quot;&gt;link&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[link](/url &amp;quot;title &amp;quot;&amp;amp;quot;&amp;quot;)&lt;/p&gt;</p>
+<p>Example 509 (lines 7801-7805) Links [link](/url &quot;title&quot;)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url%C2%A0%22title%22&quot;&gt;link&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[link](/url &amp;quot;title&amp;quot;)&lt;/p&gt;</p>
+<p>Example 512 (lines 7844-7849) Links [link](   /uri &quot;title&quot;  )</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/uri&quot; title=&quot;title&quot;&gt;link&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[link]( /uri &amp;quot;title&amp;quot; )&lt;/p&gt;</p>
+<p>Example 514 (lines 7865-7869) Links [link [foo [bar]]](/uri)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;link [foo [bar]]&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[link [foo [bar]]](/uri)&lt;/p&gt;</p>
+<p>Example 516 (lines 7879-7883) Links <a href="/uri">link [bar</a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[link &lt;a href=&quot;/uri&quot;&gt;bar&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;link [bar&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 518 (lines 7895-7899) Links <a href="/uri">link <em>foo <strong>bar</strong> <code>#</code></em></a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;link &lt;em&gt;foo &lt;strong&gt;bar&lt;/strong&gt; &lt;code&gt;#&lt;/code&gt;&lt;/em&gt;&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;<a href="/uri">link &lt;em&gt;foo &lt;strong&gt;bar&lt;/strong&gt; &lt;code&gt;#&lt;/code&gt;&lt;/em&gt;</a>&lt;/p&gt;</p>
+<p>Example 519 (lines 7902-7906) Links <a href="moon.jpg">![moon</a>](/uri)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;&lt;img alt=&quot;moon&quot; src=&quot;moon.jpg&quot;&gt;&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;moon.jpg&quot;&gt;!<a href="/uri">moon&lt;/a&gt;</a>&lt;/p&gt;</p>
+<p>Example 520 (lines 7911-7915) Links <a href="/uri">foo [bar</a>](/uri)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="/uri">foo &lt;a href=&quot;/uri&quot;&gt;bar&lt;/a&gt;</a>&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;foo <a href="/uri">bar&lt;/a&gt;</a>&lt;/p&gt;</p>
+<p>Example 521 (lines 7918-7922) Links <a href="/uri">foo <em>[bar [baz</a>](/uri)</em>](/uri)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="/uri">foo &lt;em&gt;[bar &lt;a href=&quot;/uri&quot;&gt;baz&lt;/a&gt;</a>&lt;/em&gt;](/uri)&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;foo <em><a href="/uri">bar [baz&lt;/a&gt;</a></em>](/uri)&lt;/p&gt;</p>
+<p>Example 522 (lines 7925-7929) Links !<a href="uri1">[[foo</a>](uri2)](uri3)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;<a href="uri2">foo</a>&quot; src=&quot;uri3&quot;&gt;&lt;/p&gt; +&lt;p&gt;!&lt;a href=&quot;uri1&quot;&gt;<a href="uri2">[foo&lt;/a&gt;</a>](uri3)&lt;/p&gt;</p>
+<p>Example 526 (lines 7962-7966) Links <a href="baz">foo &lt;bar attr=&quot;</a>&quot;&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="baz">foo &lt;bar attr=&quot;</a>&quot;&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;baz&quot;&gt;foo &amp;lt;bar attr=&amp;quot;&lt;/a&gt;&amp;quot;&amp;gt;&lt;/p&gt;</p>
+<p>Example 528 (lines 7976-7980) Links <a href="uri">foo&lt;https://example.com/?search=</a>&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="uri">foo&lt;a href=&quot;https://example.com/?search=%5D(uri)&quot;&gt;https://example.com/?search=</a>&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;uri&quot;&gt;foo&amp;lt;https://example.com/?search=&lt;/a&gt;&amp;gt;&lt;/p&gt;</p>
+<p>Example 529 (lines 8014-8020) Links [foo][bar]</p>
+<p>[bar]: /url &quot;title&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot;title&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo][bar]&lt;/p&gt;</p>
+<p>Example 530 (lines 8029-8035) Links [link [foo [bar]]][ref]</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;link [foo [bar]]&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[link [foo [bar]]][ref]&lt;/p&gt;</p>
+<p>Example 531 (lines 8038-8044) Links [link \[bar][ref]</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;link [bar&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[link [bar][ref]&lt;/p&gt;</p>
+<p>Example 532 (lines 8049-8055) Links [link <em>foo <strong>bar</strong> <code>#</code></em>][ref]</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;link &lt;em&gt;foo &lt;strong&gt;bar&lt;/strong&gt; &lt;code&gt;#&lt;/code&gt;&lt;/em&gt;&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[link &lt;em&gt;foo &lt;strong&gt;bar&lt;/strong&gt; &lt;code&gt;#&lt;/code&gt;&lt;/em&gt;][ref]&lt;/p&gt;</p>
+<p>Example 533 (lines 8058-8064) Links <a href="moon.jpg">![moon</a>][ref]</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;&lt;img alt=&quot;moon&quot; src=&quot;moon.jpg&quot;&gt;&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;moon.jpg&quot;&gt;![moon&lt;/a&gt;][ref]&lt;/p&gt;</p>
+<p>Example 534 (lines 8069-8075) Links <a href="/uri">foo [bar</a>][ref]</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo &lt;a href=&quot;/uri&quot;&gt;bar&lt;/a&gt;]&lt;a href=&quot;/uri&quot;&gt;ref&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;foo [bar&lt;/a&gt;][ref]&lt;/p&gt;</p>
+<p>Example 535 (lines 8078-8084) Links [foo <em>bar [baz][ref]</em>][ref]</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo &lt;em&gt;bar &lt;a href=&quot;/uri&quot;&gt;baz&lt;/a&gt;&lt;/em&gt;]&lt;a href=&quot;/uri&quot;&gt;ref&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo &lt;em&gt;bar [baz][ref]&lt;/em&gt;][ref]&lt;/p&gt;</p>
+<p>Example 536 (lines 8093-8099) Links <em>[foo</em>][ref]</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>&lt;a href=&quot;/uri&quot;&gt;foo</em>&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;[foo&lt;/em&gt;][ref]&lt;/p&gt;</p>
+<p>Example 537 (lines 8102-8108) Links [foo <em>bar][ref]</em></p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;foo <em>bar&lt;/a&gt;</em>&lt;/p&gt; +&lt;p&gt;[foo &lt;em&gt;bar][ref]&lt;/em&gt;&lt;/p&gt;</p>
+<p>Example 540 (lines 8132-8138) Links [foo&lt;https://example.com/?search=][ref]&gt;</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo&lt;a href=&quot;https://example.com/?search=%5D%5Bref%5D&quot;&gt;https://example.com/?search=][ref]&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo&lt;a href=&quot;https://example.com/?search=][ref]&quot;&gt;https://example.com/?search=][ref]&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 541 (lines 8143-8149) Links [foo][BaR]</p>
+<p>[bar]: /url &quot;title&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot;title&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo][BaR]&lt;/p&gt;</p>
+<p>Example 542 (lines 8154-8160) Links [ẞ]</p>
+<p>[SS]: /url</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot;&gt;ẞ&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[ẞ]&lt;/p&gt;</p>
+<p>Example 543 (lines 8166-8173) Links [Foo bar]: /url</p>
+<p>[Baz][Foo bar]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot;&gt;Baz&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[Foo bar]: /url&lt;/p&gt;&lt;p&gt;[Baz][Foo bar]&lt;/p&gt;</p>
+<p>Example 544 (lines 8179-8185) Links [foo] [bar]</p>
+<p>[bar]: /url &quot;title&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo] &lt;a href=&quot;/url&quot; title=&quot;title&quot;&gt;bar&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo] [bar]&lt;/p&gt;</p>
+<p>Example 545 (lines 8188-8196) Links [foo] [bar]</p>
+<p>[bar]: /url &quot;title&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo] &lt;a href=&quot;/url&quot; title=&quot;title&quot;&gt;bar&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo] [bar]&lt;/p&gt;</p>
+<p>Example 546 (lines 8229-8237) Links [foo]: /url1</p>
+<p>[foo]: /url2</p>
+<p>[bar][foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url1&quot;&gt;bar&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[bar][foo]&lt;/p&gt;</p>
+<p>Example 548 (lines 8256-8263) Links [foo][ref[]</p>
+<p>[ref[]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo][ref[]&lt;/p&gt;&lt;p&gt;[ref[]: /uri&lt;/p&gt; +&lt;p&gt;[foo][ref[]&lt;/p&gt;</p>
+<p>Example 551 (lines 8286-8292) Links [foo][ref\[]</p>
+<p>[ref\[]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo][ref[]&lt;/p&gt;</p>
+<p>Example 552 (lines 8297-8303) Links [bar\\]: /uri</p>
+<p>[bar\\]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;bar\&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[bar\]&lt;/p&gt;</p>
+<p>Example 555 (lines 8342-8348) Links [foo][]</p>
+<p>[foo]: /url &quot;title&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot;title&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo][]&lt;/p&gt;</p>
+<p>Example 556 (lines 8351-8357) Links [<em>foo</em> bar][]</p>
+<p>[<em>foo</em> bar]: /url &quot;title&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot;title&quot;&gt;&lt;em&gt;foo&lt;/em&gt; bar&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[&lt;em&gt;foo&lt;/em&gt; bar][]&lt;/p&gt;</p>
+<p>Example 557 (lines 8362-8368) Links [Foo][]</p>
+<p>[foo]: /url &quot;title&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot;title&quot;&gt;Foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[Foo][]&lt;/p&gt;</p>
+<p>Example 558 (lines 8375-8383) Links [foo] []</p>
+<p>[foo]: /url &quot;title&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot;title&quot;&gt;foo&lt;/a&gt; []&lt;/p&gt; +&lt;p&gt;[foo] []&lt;/p&gt;</p>
+<p>Example 559 (lines 8395-8401) Links [foo]</p>
+<p>[foo]: /url &quot;title&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot;title&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo]&lt;/p&gt;</p>
+<p>Example 560 (lines 8404-8410) Links [<em>foo</em> bar]</p>
+<p>[<em>foo</em> bar]: /url &quot;title&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot;title&quot;&gt;&lt;em&gt;foo&lt;/em&gt; bar&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[&lt;em&gt;foo&lt;/em&gt; bar]&lt;/p&gt;</p>
+<p>Example 561 (lines 8413-8419) Links [[<em>foo</em> bar]]</p>
+<p>[<em>foo</em> bar]: /url &quot;title&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[&lt;a href=&quot;/url&quot; title=&quot;title&quot;&gt;&lt;em&gt;foo&lt;/em&gt; bar&lt;/a&gt;]&lt;/p&gt; +&lt;p&gt;[[&lt;em&gt;foo&lt;/em&gt; bar]]&lt;/p&gt;</p>
+<p>Example 562 (lines 8422-8428) Links [[bar [foo]</p>
+<p>[foo]: /url</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[[bar &lt;a href=&quot;/url&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[[bar [foo]&lt;/p&gt;</p>
+<p>Example 563 (lines 8433-8439) Links [Foo]</p>
+<p>[foo]: /url &quot;title&quot;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot;title&quot;&gt;Foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[Foo]&lt;/p&gt;</p>
+<p>Example 564 (lines 8444-8450) Links [foo] bar</p>
+<p>[foo]: /url</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url&quot;&gt;foo&lt;/a&gt; bar&lt;/p&gt; +&lt;p&gt;[foo] bar&lt;/p&gt;</p>
+<p>Example 566 (lines 8468-8474) Links [foo*]: /url</p>
+<p><em>[foo</em>]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>&lt;a href=&quot;/url&quot;&gt;foo</em>&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;&lt;em&gt;[foo&lt;/em&gt;]&lt;/p&gt;</p>
+<p>Example 567 (lines 8480-8487) Links [foo][bar]</p>
+<p>[foo]: /url1 [bar]: /url2</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url2&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo][bar]&lt;/p&gt;</p>
+<p>Example 568 (lines 8489-8495) Links [foo][]</p>
+<p>[foo]: /url1</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url1&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo][]&lt;/p&gt;</p>
+<p>Example 570 (lines 8507-8513) Links [foo](not a link)</p>
+<p>[foo]: /url1</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url1&quot;&gt;foo&lt;/a&gt;(not a link)&lt;/p&gt; +&lt;p&gt;[foo](not a link)&lt;/p&gt;</p>
+<p>Example 571 (lines 8518-8524) Links [foo][bar][baz]</p>
+<p>[baz]: /url</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo]&lt;a href=&quot;/url&quot;&gt;bar&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo][bar][baz]&lt;/p&gt;</p>
+<p>Example 572 (lines 8530-8537) Links [foo][bar][baz]</p>
+<p>[baz]: /url1 [bar]: /url2</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;/url2&quot;&gt;foo&lt;/a&gt;&lt;a href=&quot;/url1&quot;&gt;baz&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo][bar][baz]&lt;/p&gt;</p>
+<p>Example 573 (lines 8543-8550) Links [foo][bar][baz]</p>
+<p>[baz]: /url1 [foo]: /url2</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo]&lt;a href=&quot;/url1&quot;&gt;bar&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo][bar][baz]&lt;/p&gt;</p>
+<p>33 passed, 84 failed, 0 errored, 538 skipped stderr: --- drydock: progress --- cases: pass=33 fail=84 error=0 skip=538 total=655 from=result.stdout --- drydock: end progress --- --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.022726/build/commonmark/commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;^(Links|Link reference definitions)$&#x27;], returncode=84, stdout=&#x27;Example 194 (lines 3201-3207) Link reference definitions\n[foo]: /url &quot;ti… (+17681 chars) --- drydock: end values --- Traceback (most recent call last): File &quot;links-conformance.py&quot;, line 12, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>FAIL: links-conformance (FEATURE-Links.md)</li></ul>
+<p>intent: The completed parser passes the authoritative link and link-reference-definition examples. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python provisioning: not required return code: 1 stdout: Example 212 (lines 3415-3420) Link reference definitions [foo]: /url &quot;title&quot; ok</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&amp;quot;title&amp;quot; ok&lt;/p&gt; +&lt;p&gt;[foo]: /url &amp;quot;title&amp;quot; ok&lt;/p&gt;</p>
+<p>Example 218 (lines 3491-3498) Link reference definitions [foo]: /url === [foo]</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;=== &lt;a href=&quot;/url&quot;&gt;foo&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;===&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;/url&quot;&gt;foo&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 495 (lines 7652-7656) Links <a href="&amp;lt;foo\&amp;gt;">link</a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="&amp;amp;lt;foo&amp;amp;gt;">link</a>&lt;/p&gt; +&lt;p&gt;<a href="&amp;lt;foo\&amp;gt;">link</a>&lt;/p&gt;</p>
+<p>Example 496 (lines 7661-7669) Links <a href="&amp;lt;b">a</a>c <a href="&amp;lt;b">a</a>c&gt; <a href="&amp;lt;b&amp;gt;c">a</a></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="&amp;amp;lt;b">a</a>c <a href="&amp;amp;lt;b">a</a>c&amp;gt; <a href="&amp;lt;b&amp;gt;c">a</a>&lt;/p&gt; +&lt;p&gt;<a href="&amp;amp;lt;b">a</a>c <a href="&amp;lt;b">a</a>c&gt; <a href="&amp;lt;b&amp;gt;c">a</a>&lt;/p&gt;</p>
+<p>Example 522 (lines 7925-7929) Links !<a href="uri1">[[foo</a>](uri2)](uri3)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;img alt=&quot;<a href="uri2">foo</a>&quot; src=&quot;uri3&quot;&gt;&lt;/p&gt; +&lt;p&gt;&lt;img alt=&quot;<a href="uri1">[foo</a>](uri2)&quot; src=&quot;uri3&quot;&gt;&lt;/p&gt;</p>
+<p>Example 528 (lines 7976-7980) Links <a href="uri">foo&lt;https://example.com/?search=</a>&gt;</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="uri">foo&lt;a href=&quot;https://example.com/?search=%5D(uri)&quot;&gt;https://example.com/?search=</a>&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;<a href="uri">foo&lt;a href=&quot;https://example.com/?search=</a>&quot;&gt;https://example.com/?search=](uri)&lt;/a&gt;&lt;/p&gt;</p>
+<p>Example 540 (lines 8132-8138) Links [foo&lt;https://example.com/?search=][ref]&gt;</p>
+<p>[ref]: /uri</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo&lt;a href=&quot;https://example.com/?search=%5D%5Bref%5D&quot;&gt;https://example.com/?search=][ref]&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo&lt;a href=&quot;https://example.com/?search=][ref]&quot;&gt;https://example.com/?search=][ref]&lt;/a&gt;&lt;/p&gt;</p>
+<p>110 passed, 7 failed, 0 errored, 538 skipped stderr: --- drydock: progress --- cases: pass=110 fail=7 error=0 skip=538 total=655 from=result.stdout --- drydock: end progress --- --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.022726/build/commonmark/commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;^(Links|Link reference definitions)$&#x27;], returncode=7, stdout=&#x27;Example 212 (lines 3415-3420) Link reference definitions\n[foo]: /url\n&quot;ti… (+1669 chars) --- drydock: end values --- Traceback (most recent call last): File &quot;links-conformance.py&quot;, line 12, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<h2>Repair attempts</h2>
+<ul><li>attempt 0 (initial build): failed; 0/1 checks; 87/117 cases model=gpt-6-luna; execution 20261027.030209.875Z-f370f157; reason: programmatic acceptance failed: links-conformance</li><li>attempt 1 (repair 1): failed; 0/1 checks; 95/117 cases model=gpt-6-luna; execution 20261027.030534.018Z-28da1225; reason: programmatic acceptance failed: links-conformance</li><li>attempt 2 (repair 2): failed; 0/1 checks; 100/117 cases model=gpt-6-luna; execution 20261027.030854.040Z-64623b43; reason: programmatic acceptance failed: links-conformance</li><li>attempt 3 (repair 3): failed; 0/1 checks; 103/117 cases model=gpt-6-luna; execution 20261027.031259.938Z-aaad97d1; reason: programmatic acceptance failed: links-conformance</li><li>attempt 4 (repair 4): failed; 0/1 checks; 110/117 cases model=gpt-6-luna; execution 20261027.031617.935Z-e0b98fc8; reason: programmatic acceptance failed: links-conformance</li><li>attempt 5 (repair 5): failed; 0/1 checks; 110/117 cases model=gpt-6-luna; execution 20261027.032014.335Z-4510e086; reason: programmatic acceptance failed: links-conformance</li><li>attempt 6 (repair 6): failed; 0/1 checks; 110/117 cases model=gpt-6-luna; execution 20261027.032209.085Z-31db92e4; stopped: deterministic acceptance score did not improve on 2 consecutive calls; reason: programmatic acceptance failed: links-conformance</li></ul>
+<h2>Agent self-report (advisory)</h2>
+<p>The build agent declared a failure. This report is advisory; Drydock&#x27;s execution and deterministic checks determine the block&#x27;s outcome.</p>
+<ul><li>summary: Scoped link conformance still fails</li><li>detail:</li></ul>
+<p>After the setext change, cases 212, 218, 495, 496, 522, 528, and 540 remain failing. Fix the shared reference collection and link bracket/autolink parsing behavior, then rerun the scoped conformance suite.</p>
+<h2>Failure</h2>
+<ul><li>summary: programmatic acceptance failed: links-conformance</li><li>detail:</li></ul>
+<p>Block &quot;Block 10 · Service&quot; [block-10] failed its acceptance criteria. Story &quot;Parse inline and reference links.&quot; [links] does not meet its own acceptance criteria:</p>
+<ul><li>AC links-conformance — The completed parser passes the authoritative link and link-reference-definition examples.</li></ul>
+<p>assertion: assert result.returncode == 0 → AssertionError cases: pass=110 fail=7 error=0 skip=538 total=655 from=result.stdout raised at: links-conformance.py:12 process exit code: 1 values at failure: result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.022726/build/commonmark/commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;^(Links|Link reference definitions)$&#x27;], returncode=7, stdout=&#x27;Example 212 (lines 3415-3420) Link reference definitions\n[foo]: /url\n&quot;ti… (+1669 chars) observed output: @@ -1 +1 @@ -&lt;p&gt;<a href="uri">foo&lt;a href=&quot;https://example.com/?search=%5D(uri)&quot;&gt;https://example.com/?search=</a>&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;<a href="uri">foo&lt;a href=&quot;https://example.com/?search=</a>&quot;&gt;https://example.com/?search=](uri)&lt;/a&gt;&lt;/p&gt; Example 540 (lines 8132-8138) Links [foo&lt;https://example.com/?search=][ref]&gt; [ref]: /uri --- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;[foo&lt;a href=&quot;https://example.com/?search=%5D%5Bref%5D&quot;&gt;https://example.com/?search=][ref]&lt;/a&gt;&lt;/p&gt; +&lt;p&gt;[foo&lt;a href=&quot;https://example.com/?search=][ref]&quot;&gt;https://example.com/?search=][ref]&lt;/a&gt;&lt;/p&gt; 110 passed, 7 failed, 0 errored, 538 skipped … 44 earlier line(s) omitted, --full for all check stderr: Traceback (most recent call last): File &quot;links-conformance.py&quot;, line 12, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<h2>Build summary</h2>
+<p>RESULT: FAILED</p>
+<p>FILES CHANGED:</p>
+<ul><li>commonmark_parser/stages.py</li></ul>
+<p>SUMMARY: Adjusted setext handling when a paragraph contains only a reference definition. The scoped conformance suite still has failures, so this repair is incomplete.</p>
+<p>BLOCKERS:</p>
+<ul><li>Link reference definitions with a title on the following line and setext underline handling still fail. Several link parsing cases also remain unresolved.</li></ul>
+<p>FAILURE_SUMMARY: Scoped link conformance still fails<br>FAILURE_DETAIL: After the setext change, cases 212, 218, 495, 496, 522, 528, and 540 remain failing. Fix the shared reference collection and link bracket/autolink parsing behavior, then rerun the scoped conformance suite.</p></article>
+</main>
+</body>
+</html>

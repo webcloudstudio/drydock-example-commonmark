@@ -194,3 +194,112 @@ git: block-10 | FEATURE-Links.md | call=2 | app=c18e2f2d241c target=8d82e9da6edb
       story=links  0/1 checks passed
         check=links-conformance  FAIL  cases=100/117 passed  change=+5
       Case counts are per check; scopes may overlap and are not additive.
+git: block-10 | FEATURE-Links.md | call=3 | app=a241acf30584 target=53c3f480eb73
+
+  [call 4/22]  kind=repair(3/21)  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261027.031259.938Z-aaad97d1
+    status  0/1 checks passed
+      story=links  0/1 checks passed
+        check=links-conformance  FAIL  cases=103/117 passed  change=+3
+      Case counts are per check; scopes may overlap and are not additive.
+    agent reports defective (recorded, not accepted): links-conformance — in FEATURE-Links.md
+git: block-10 | FEATURE-Links.md | call=4 | app=509495aecaf6 target=7e5ca0f8cd81
+
+  [call 5/22]  kind=repair(4/21)  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261027.031617.935Z-e0b98fc8
+    status  0/1 checks passed
+      story=links  0/1 checks passed
+        check=links-conformance  FAIL  cases=110/117 passed  change=+7
+      Case counts are per check; scopes may overlap and are not additive.
+git: block-10 | FEATURE-Links.md | call=5 | app=f7e384d1b426 target=dcecfa5abb02
+
+  [call 6/22]  kind=repair(5/21)  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261027.032014.335Z-4510e086
+    status  0/1 checks passed
+      story=links  0/1 checks passed
+        check=links-conformance  FAIL  cases=110/117 passed  change=+0
+      Case counts are per check; scopes may overlap and are not additive.
+git: block-10 | FEATURE-Links.md | call=6 | app=90458badda4d target=26291b61d9a9
+
+  [call 7/22]  kind=repair(6/21)  llm=codex/gpt-6-luna
+    result=ok  rc=0  execution=20261027.032209.085Z-31db92e4
+    status  0/1 checks passed
+      story=links  0/1 checks passed
+        check=links-conformance  FAIL  cases=110/117 passed  change=+0
+      Case counts are per check; scopes may overlap and are not additive.
+  STOP  reason=stall  flat_calls=2
+git: block-10 | FEATURE-Links.md | call=7 | app=cddfff8aa74c target=71df288e1e41
+
+  FAILED  story=links  state=closed/failed  execution=20261027.032209.085Z-31db92e4  elapsed=22m20s
+git: block-10 | FEATURE-Links.md | step_completed | app=unchanged target=a425cd344bbd
+
+result: 13 built, 1 failed, 0 unchanged
+elapsed: 49 minutes 27 seconds
+
+========================================================================
+BUILD FAILED: commonmark  (1 step)
+========================================================================
+
+  Failure
+    Provenance
+      Target: commonmark
+      Block: Block 10 · Service [block-10]
+      Story: Parse inline and reference links. [links]
+    Cause: programmatic acceptance failed: links-conformance
+    agent summary:
+      Adjusted setext handling when a paragraph contains only a
+      reference definition. The scoped conformance suite still has
+      failures, so this repair is incomplete.
+    stopped early: 7 of 22 calls · deterministic acceptance score did not improve on 2 consecutive calls
+    acceptance: 0/1 passing · baseline 0/1 · unchanged
+    links-conformance: 110 passed, 7 failed · change +77 passed, -77 failed
+    Acceptance checks:
+      AC FAILED  links-conformance  110/117 passed (7 failed)
+        Intent: The completed parser passes the authoritative link and link-reference-definition examples.
+        Source: FEATURE-Links.md
+    Recovery
+      The agent disputes failing acceptance criteria; the claim is unverified.
+      Run: drydock plan verify commonmark
+        Inspect the criteria and evidence before rebuilding.
+      Run: drydock plan repair commonmark
+        Repair confirmed mechanical defects, then verify before rebuilding.
+    agent blockers:
+      - Link reference definitions with a title on the following
+      line and setext underline handling still fail. Several link
+      parsing cases also remain unresolved.
+    execution: 20261027.032209.085Z-31db92e4
+    evidence: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.022726/workspace/targets/commonmark/evidence/block-10.md
+
+  Next
+    The agent disputes failing acceptance criteria; the claim is unverified.
+    Run: drydock plan verify commonmark
+      Inspect the criteria and evidence before rebuilding.
+    Run: drydock plan repair commonmark
+      Repair confirmed mechanical defects, then verify before rebuilding.
+========================================================================
+
+========================================================================
+POST-LLM FAILURE  ·  build  ·  programmatic acceptance failed: links-conformance
+========================================================================
+
+  Block "Block 10 · Service" [block-10] failed its acceptance
+  criteria.
+    Story "Parse inline and reference links." [links] does not meet its own acceptance criteria:
+      - AC links-conformance — The completed parser passes the authoritative link and link-reference-definition examples.
+          assertion: assert result.returncode == 0 → AssertionError
+          cases: pass=110 fail=7 error=0 skip=538 total=655 from=result.stdout
+          raised at: links-conformance.py:12
+          process exit code: 1
+          values at failure:
+  … (21 more lines truncated)
+
+  Recovery
+    The agent disputes failing acceptance criteria; the claim is
+    unverified.
+    Run: drydock plan verify commonmark
+      Inspect the criteria and evidence before rebuilding.
+    Run: drydock plan repair commonmark
+      Repair confirmed mechanical defects, then verify before rebuilding.
+
+========================================================================
+Target - committed project workspace git store

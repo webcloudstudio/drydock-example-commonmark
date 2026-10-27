@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261027.023135.163Z_commonmark_lineage_attribute_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261027.023135.163Z_commonmark_lineage_attribute_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261027.023135.163Z_commonmark_lineage_attribute_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>&lt;requirement name=&quot;accept-documents&quot; stories=&quot;paragraphs,headings,code-blocks,references,html-blocks,block-quotes,lists,escapes,code-spans,emphasis,links,images,autolinks-html,line-breaks&quot;&gt;
+Any sequence of [characters] is a valid CommonMark
+document.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;handle-tabs&quot; stories=&quot;paragraphs,headings,code-blocks,html-blocks,block-quotes,lists&quot;&gt;
+Tabs in lines are not expanded to [spaces].  However,
+in contexts where spaces help to define block structure,
+tabs behave as if they were replaced by spaces with a tab stop
+of 4 characters.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;replace-null&quot; stories=&quot;escapes&quot;&gt;
+For security reasons, the Unicode character `U+0000` must be replaced
+with the REPLACEMENT CHARACTER (`U+FFFD`).
+&lt;/requirement&gt;
+&lt;requirement name=&quot;escape-punctuation&quot; stories=&quot;escapes&quot;&gt;
+Any ASCII punctuation character may be backslash-escaped:
+&lt;/requirement&gt;
+&lt;requirement name=&quot;literal-backslashes&quot; stories=&quot;escapes&quot;&gt;
+Backslashes before other characters are treated as literal
+backslashes:
+&lt;/requirement&gt;
+&lt;requirement name=&quot;escaped-characters&quot; stories=&quot;escapes&quot;&gt;
+Escaped characters are treated as regular characters and do
+not have their usual Markdown meanings:
+&lt;/requirement&gt;
+&lt;requirement name=&quot;escaped-backslashes&quot; stories=&quot;escapes&quot;&gt;
+If a backslash is itself escaped, the following character is not:
+&lt;/requirement&gt;
+&lt;requirement name=&quot;backslash-line-break&quot; stories=&quot;escapes,line-breaks&quot;&gt;
+A backslash at the end of the line is a [hard line break]:
+&lt;/requirement&gt;
+&lt;requirement name=&quot;escape-contexts&quot; stories=&quot;escapes,code-blocks,code-spans,autolinks-html,links,references&quot;&gt;
+Backslash escapes do not work in code blocks, code spans, autolinks, or
+raw HTML:
+&lt;/requirement&gt;
+&lt;requirement name=&quot;other-escape-contexts&quot; stories=&quot;escapes,links,references,code-blocks&quot;&gt;
+But they work in all other contexts, including URLs and link titles,
+link references, and [info strings] in [fenced code blocks]:
+&lt;/requirement&gt;
+&lt;requirement name=&quot;character-references&quot; stories=&quot;escapes,code-blocks,code-spans&quot;&gt;
+Valid HTML entity references and numeric character references
+can be used in place of the corresponding Unicode character,
+with the following exceptions:
+
+- Entity and character references are not recognized in code
+  blocks and code spans.
+
+- Entity and character references cannot stand in place of
+  special characters that define structural elements in
+  CommonMark.  For example, although `&amp;#42;` can be used
+  in place of a literal `*` character, `&amp;#42;` cannot replace
+  `*` in emphasis delimiters, bullet list markers, or thematic
+  breaks.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;named-entities&quot; stories=&quot;escapes&quot;&gt;
+[Entity references](@) consist of `&amp;` + any of the valid
+HTML5 entity names + `;`. The
+document &lt;https://html.spec.whatwg.org/entities.json&gt;
+is used as an authoritative source for the valid entity
+references and their corresponding code points.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;decimal-references&quot; stories=&quot;escapes&quot;&gt;
+[Decimal numeric character
+references](@)
+consist of `&amp;#` + a string of 1--7 arabic digits + `;`. A
+numeric character reference is parsed as the corresponding
+Unicode character. Invalid Unicode code points will be replaced by
+the REPLACEMENT CHARACTER (`U+FFFD`).  For security reasons,
+the code point `U+0000` will also be replaced by `U+FFFD`.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;hexadecimal-references&quot; stories=&quot;escapes&quot;&gt;
+[Hexadecimal numeric character
+references](@) consist of `&amp;#` +
+either `X` or `x` + a string of 1-6 hexadecimal digits + `;`.
+They too are parsed as the corresponding Unicode character (this
+time specified with a hexadecimal numeral instead of decimal).
+&lt;/requirement&gt;
+&lt;requirement name=&quot;block-precedence&quot; stories=&quot;paragraphs,headings,code-blocks,html-blocks,block-quotes,lists,code-spans,emphasis,links,images,autolinks-html&quot;&gt;
+Indicators of block structure always take precedence over indicators
+of inline structure.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;thematic-breaks&quot; stories=&quot;paragraphs&quot;&gt;
+A line consisting of optionally up to three spaces of indentation, followed by a
+sequence of three or more matching `-`, `_`, or `*` characters, each followed
+optionally by any number of spaces or tabs, forms a
+[thematic break](@).
+&lt;/requirement&gt;
+&lt;requirement name=&quot;thematic-break-interruption&quot; stories=&quot;paragraphs&quot;&gt;
+Thematic breaks can interrupt a paragraph:
+&lt;/requirement&gt;
+&lt;requirement name=&quot;setext-break-precedence&quot; stories=&quot;paragraphs,headings&quot;&gt;
+If a line of dashes that meets the above conditions for being a
+thematic break could also be interpreted as the underline of a [setext
+heading], the interpretation as a
+[setext heading] takes precedence.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;break-list-precedence&quot; stories=&quot;paragraphs,lists&quot;&gt;
+When both a thematic break and a list item are possible
+interpretations of a line, the thematic break takes precedence:
+&lt;/requirement&gt;
+&lt;requirement name=&quot;atx-headings&quot; stories=&quot;headings&quot;&gt;
+An [ATX heading](@)
+consists of a string of characters, parsed as inline content, between an
+opening sequence of 1--6 unescaped `#` characters and an optional
+closing sequence of any number of unescaped `#` characters.
+The opening sequence of `#` characters must be followed by spaces or tabs, or
+by the end of line. The optional closing sequence of `#`s must be preceded by
+spaces or tabs and may be followed by spaces or tabs only.  The opening
+`#` character may be preceded by up to three spaces of indentation.  The raw
+contents of the heading are stripped of leading and trailing space or tabs
+before being parsed as inline content.  The heading level is equal to the number
+of `#` characters in the opening sequence.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;atx-heading-interruption&quot; stories=&quot;headings,paragraphs&quot;&gt;
+ATX headings need not be separated from surrounding content by blank
+lines, and they can interrupt paragraphs:
+&lt;/requirement&gt;
+&lt;requirement name=&quot;empty-atx-heading&quot; stories=&quot;headings&quot;&gt;
+ATX headings can be empty:
+&lt;/requirement&gt;
+&lt;requirement name=&quot;setext-headings&quot; stories=&quot;headings,paragraphs&quot;&gt;
+A [setext heading](@) consists of one or more
+lines of text, not interrupted by a blank line, of which the first line does not
+have more than 3 spaces of indentation, followed by
+a [setext heading underline].  The lines of text must be such
+that, were they not followed by the setext heading underline,
+they would be interpreted as a paragraph:  they cannot be
+interpretable as a [code fence], [ATX heading][ATX headings],
+[block quote][block quotes], [thematic break][thematic breaks],
+[list item][list items], or [HTML block][HTML blocks].
+
+A [setext heading underline](@) is a sequence of
+`=` characters or a sequence of `-` characters, with no more than 3
+spaces of indentation and any number of trailing spaces or tabs.
+
+The heading is a level 1 heading if `=` characters are used in
+the [setext heading underline], and a level 2 heading if `-`
+characters are used.  The contents of the heading are the result
+of parsing the preceding lines of text as CommonMark inline
+content.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;setext-heading-spacing&quot; stories=&quot;headings,paragraphs&quot;&gt;
+In general, a setext heading need not be preceded or followed by a
+blank line.  However, it cannot interrupt a paragraph, so when a
+setext heading comes after a paragraph, a blank line is needed between
+them.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;setext-lazy-underline&quot; stories=&quot;headings,block-quotes,lists&quot;&gt;
+The setext heading underline cannot be a [lazy continuation
+line] in a list item or block quote:
+&lt;/requirement&gt;
+&lt;requirement name=&quot;indented-code&quot; stories=&quot;code-blocks&quot;&gt;
+An [indented code block](@) is composed of one or more
+[indented chunks] separated by blank lines.
+An [indented chunk](@) is a sequence of non-blank lines,
+each preceded by four or more spaces of indentation. The contents of the code
+block are the literal contents of the lines, including trailing
+[line endings], minus four spaces of indentation.
+An indented code block has no [info string].
+&lt;/requirement&gt;
+&lt;requirement name=&quot;indented-code-interruption&quot; stories=&quot;code-blocks,paragraphs&quot;&gt;
+An indented code block cannot interrupt a paragraph, so there must be
+a blank line between a paragraph and a following indented code block.
+(A blank line is not needed, however, between a code block and a following
+paragraph.)
+&lt;/requirement&gt;
+&lt;requirement name=&quot;list-indentation-precedence&quot; stories=&quot;code-blocks,lists&quot;&gt;
+If there is any ambiguity between an interpretation of indentation
+as a code block and as indicating that material belongs to a [list
+item][list items], the list item interpretation takes precedence:
+&lt;/requirement&gt;
+&lt;requirement name=&quot;fenced-code&quot; stories=&quot;code-blocks&quot;&gt;
+A [code fence](@) is a sequence
+of at least three consecutive backtick characters (`` ` ``) or
+tildes (`~`).  (Tildes and backticks cannot be mixed.)
+A [fenced code block](@)
+begins with a code fence, preceded by up to three spaces of indentation.
+
+The line with the opening code fence may optionally contain some text
+following the code fence; this is trimmed of leading and trailing
+spaces or tabs and called the [info string](@). If the [info string] comes
+after a backtick fence, it must not contain any backtick
+characters.  (The reason for this restriction is that otherwise
+some inline code would be incorrectly interpreted as the
+beginning of a fenced code block.)
+
+The content of the code block consists of all subsequent lines, until
+a closing [code fence] of the same type as the code block
+began with (backticks or tildes), and with at least as many backticks
+or tildes as the opening code fence.  If the leading code fence is
+preceded by N spaces of indentation, then up to N spaces of indentation are
+removed from each line of the content (if present).  (If a content line is not
+indented, it is preserved unchanged.  If it is indented N spaces or less, all
+of the indentation is removed.)
+
+The closing code fence may be preceded by up to three spaces of indentation, and
+may be followed only by spaces or tabs, which are ignored.  If the end of the
+containing block (or document) is reached and no closing code fence
+has been found, the code block contains all of the lines after the
+opening code fence until the end of the containing block (or
+document).  (An alternative spec would require backtracking in the
+event that a closing code fence is not found.  But this makes parsing
+much less efficient, and there seems to be no real downside to the
+behavior described here.)
+&lt;/requirement&gt;
+&lt;requirement name=&quot;fenced-code-interruption&quot; stories=&quot;code-blocks,paragraphs&quot;&gt;
+A fenced code block may interrupt a paragraph, and does not require
+a blank line either before or after.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;literal-fenced-code&quot; stories=&quot;code-blocks&quot;&gt;
+The content of a code fence is treated as literal text, not parsed
+as inlines.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;html-blocks&quot; stories=&quot;html-blocks&quot;&gt;
+An [HTML block](@) is a group of lines that is treated
+as raw HTML (and will not be escaped in HTML output).
+
+There are seven kinds of [HTML block], which can be defined by their
+start and end conditions.  The block begins with a line that meets a
+[start condition](@) (after up to three optional spaces of indentation).
+It ends with the first subsequent line that meets a matching
+[end condition](@), or the last line of the document, or the last line of
+the [container block](#container-blocks) containing the current HTML
+block, if no line is encountered that meets the [end condition].  If
+the first line meets both the [start condition] and the [end
+condition], the block will contain just that line.
+
+1.  **Start condition:**  line begins with the string `&lt;pre`,
+`&lt;script`, `&lt;style`, or `&lt;textarea` (case-insensitive), followed by a space,
+a tab, the string `&gt;`, or the end of the line.\
+**End condition:**  line contains an end tag
+`&lt;/pre&gt;`, `&lt;/script&gt;`, `&lt;/style&gt;`, or `&lt;/textarea&gt;` (case-insensitive; it
+need not match the start tag).
+
+2.  **Start condition:** line begins with the string `&lt;!--`.\
+**End condition:**  line contains the string `--&gt;`.
+
+3.  **Start condition:** line begins with the string `&lt;?`.\
+**End condition:** line contains the string `?&gt;`.
+
+4.  **Start condition:** line begins with the string `&lt;!`
+followed by an ASCII letter.\
+**End condition:** line contains the character `&gt;`.
+
+5.  **Start condition:** line begins with the string
+`&lt;![CDATA[`.\
+**End condition:** line contains the string `]]&gt;`.
+
+6.  **Start condition:** line begins with the string `&lt;` or `&lt;/`
+followed by one of the strings (case-insensitive) `address`,
+`article`, `aside`, `base`, `basefont`, `blockquote`, `body`,
+`caption`, `center`, `col`, `colgroup`, `dd`, `details`, `dialog`,
+`dir`, `div`, `dl`, `dt`, `fieldset`, `figcaption`, `figure`,
+`footer`, `form`, `frame`, `frameset`,
+`h1`, `h2`, `h3`, `h4`, `h5`, `h6`, `head`, `header`, `hr`,
+`html`, `iframe`, `legend`, `li`, `link`, `main`, `menu`, `menuitem`,
+`nav`, `noframes`, `ol`, `optgroup`, `option`, `p`, `param`,
+`search`, `section`, `summary`, `table`, `tbody`, `td`,
+`tfoot`, `th`, `thead`, `title`, `tr`, `track`, `ul`, followed
+by a space, a tab, the end of the line, the string `&gt;`, or
+the string `/&gt;`.\
+**End condition:** line is followed by a [blank line].
+
+7.  **Start condition:**  line begins with a complete [open tag]
+(with any [tag name] other than `pre`, `script`,
+`style`, or `textarea`) or a complete [closing tag],
+all on a single line, followed by zero or more spaces and tabs,
+followed by the end of the line.\
+**End condition:** line is followed by a [blank line].
+&lt;/requirement&gt;
+&lt;requirement name=&quot;html-block-interruption&quot; stories=&quot;html-blocks,paragraphs&quot;&gt;
+All types of [HTML blocks] except type 7 may interrupt
+a paragraph.  Blocks of type 7 cannot interrupt a paragraph.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;reference-definitions&quot; stories=&quot;references,links,images&quot;&gt;
+A [link reference definition](@)
+consists of a [link label], optionally preceded by up to three spaces of
+indentation, followed
+by a colon (`:`), optional spaces or tabs (including up to one
+[line ending]), a [link destination],
+optional spaces or tabs (including up to one
+[line ending]), and an optional [link
+title], which if it is present must be separated
+from the [link destination] by spaces or tabs.
+No further character may occur.
+
+A [link reference definition]
+does not correspond to a structural element of a document.  Instead, it
+defines a label which can be used in [reference links]
+and reference-style [images] elsewhere in the document.  [Link
+reference definitions] can come either before or after the links that use
+them.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;first-reference-definition&quot; stories=&quot;references,links,images&quot;&gt;
+If there are several matching definitions, the first one takes
+precedence:
+&lt;/requirement&gt;
+&lt;requirement name=&quot;reference-definition-interruption&quot; stories=&quot;references,paragraphs&quot;&gt;
+A [link reference definition] cannot interrupt a paragraph.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;container-reference-definitions&quot; stories=&quot;references,block-quotes,lists&quot;&gt;
+[Link reference definitions] can occur
+inside block containers, like lists and block quotations.  They
+affect the entire document, not just the container in which they
+are defined:
+&lt;/requirement&gt;
+&lt;requirement name=&quot;paragraphs&quot; stories=&quot;paragraphs&quot;&gt;
+A sequence of non-blank lines that cannot be interpreted as other
+kinds of blocks forms a [paragraph](@).
+The contents of the paragraph are the result of parsing the
+paragraph&#x27;s raw content as inlines.  The paragraph&#x27;s raw content
+is formed by concatenating the lines and removing initial and final
+spaces or tabs.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;blank-lines&quot; stories=&quot;paragraphs,lists&quot;&gt;
+[Blank lines] between block-level elements are ignored,
+except for the role they play in determining whether a [list]
+is [tight] or [loose].
+
+Blank lines at the beginning and end of the document are also ignored.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;block-quotes&quot; stories=&quot;block-quotes&quot;&gt;
+A [block quote marker](@),
+optionally preceded by up to three spaces of indentation,
+consists of (a) the character `&gt;` together with a following space of
+indentation, or (b) a single character `&gt;` not followed by a space of
+indentation.
+
+The following rules define [block quotes]:
+
+1.  **Basic case.**  If a string of lines *Ls* constitute a sequence
+    of blocks *Bs*, then the result of prepending a [block quote
+    marker] to the beginning of each line in *Ls*
+    is a [block quote](#block-quotes) containing *Bs*.
+
+2.  **Laziness.**  If a string of lines *Ls* constitute a [block
+    quote](#block-quotes) with contents *Bs*, then the result of deleting
+    the initial [block quote marker] from one or
+    more lines in which the next character other than a space or tab after the
+    [block quote marker] is [paragraph continuation
+    text] is a block quote with *Bs* as its content.
+    [Paragraph continuation text](@) is text
+    that will be parsed as part of the content of a paragraph, but does
+    not occur at the beginning of the paragraph.
+
+3.  **Consecutiveness.**  A document cannot contain two [block
+    quotes] in a row unless there is a [blank line] between them.
+
+Nothing else counts as a [block quote](#block-quotes).
+&lt;/requirement&gt;
+&lt;requirement name=&quot;block-quote-interruption&quot; stories=&quot;block-quotes,paragraphs&quot;&gt;
+Block quotes can interrupt paragraphs:
+&lt;/requirement&gt;
+&lt;requirement name=&quot;list-markers&quot; stories=&quot;lists&quot;&gt;
+A [list marker](@) is a
+[bullet list marker] or an [ordered list marker].
+
+A [bullet list marker](@)
+is a `-`, `+`, or `*` character.
+
+An [ordered list marker](@)
+is a sequence of 1--9 arabic digits (`0-9`), followed by either a
+`.` character or a `)` character.  (The reason for the length
+limit is that with 10 digits we start seeing integer overflows
+in some browsers.)
+&lt;/requirement&gt;
+&lt;requirement name=&quot;list-items&quot; stories=&quot;lists,paragraphs,code-blocks&quot;&gt;
+The following rules define [list items]:
+
+1.  **Basic case.**  If a sequence of lines *Ls* constitute a sequence of
+    blocks *Bs* starting with a character other than a space or tab, and *M* is
+    a list marker of width *W* followed by 1 ≤ *N* ≤ 4 spaces of indentation,
+    then the result of prepending *M* and the following spaces to the first line
+    of *Ls*, and indenting subsequent lines of *Ls* by *W + N* spaces, is a
+    list item with *Bs* as its contents.  The type of the list item
+    (bullet or ordered) is determined by the type of its list marker.
+    If the list item is ordered, then it is also assigned a start
+    number, based on the ordered list marker.
+
+    Exceptions:
+
+    1. When the first list item in a [list] interrupts
+       a paragraph---that is, when it starts on a line that would
+       otherwise count as [paragraph continuation text]---then (a)
+       the lines *Ls* must not begin with a blank line, and (b) if
+       the list item is ordered, the start number must be 1.
+    2. If any line is a [thematic break][thematic breaks] then
+       that line is not a list item.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;list-item-indented-code&quot; stories=&quot;lists,code-blocks&quot;&gt;
+2.  **Item starting with indented code.**  If a sequence of lines *Ls*
+    constitute a sequence of blocks *Bs* starting with an indented code
+    block, and *M* is a list marker of width *W* followed by
+    one space of indentation, then the result of prepending *M* and the
+    following space to the first line of *Ls*, and indenting subsequent lines
+    of *Ls* by *W + 1* spaces, is a list item with *Bs* as its contents.
+    If a line is empty, then it need not be indented.  The type of the
+    list item (bullet or ordered) is determined by the type of its list
+    marker.  If the list item is ordered, then it is also assigned a
+    start number, based on the ordered list marker.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;list-item-blank-start&quot; stories=&quot;lists&quot;&gt;
+3.  **Item starting with a blank line.**  If a sequence of lines *Ls*
+    starting with a single [blank line] constitute a (possibly empty)
+    sequence of blocks *Bs*, and *M* is a list marker of width *W*,
+    then the result of prepending *M* to the first line of *Ls*, and
+    preceding subsequent lines of *Ls* by *W + 1* spaces of indentation, is a
+    list item with *Bs* as its contents.
+    If a line is empty, then it need not be indented.  The type of the
+    list item (bullet or ordered) is determined by the type of its list
+    marker.  If the list item is ordered, then it is also assigned a
+    start number, based on the ordered list marker.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;list-item-indentation&quot; stories=&quot;lists&quot;&gt;
+4.  **Indentation.**  If a sequence of lines *Ls* constitutes a list item
+    according to rule #1, #2, or #3, then the result of preceding each line
+    of *Ls* by up to three spaces of indentation (the same for each line) also
+    constitutes a list item with the same contents and attributes.  If a line is
+    empty, then it need not be indented.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;list-item-laziness&quot; stories=&quot;lists&quot;&gt;
+5.  **Laziness.**  If a string of lines *Ls* constitute a [list
+    item](#list-items) with contents *Bs*, then the result of deleting
+    some or all of the indentation from one or more lines in which the
+    next character other than a space or tab after the indentation is
+    [paragraph continuation text] is a
+    list item with the same contents and attributes.  The unindented
+    lines are called
+    [lazy continuation line](@)s.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;lists&quot; stories=&quot;lists&quot;&gt;
+A [list](@) is a sequence of one or more
+list items [of the same type].  The list items
+may be separated by any number of blank lines.
+
+Two list items are [of the same type](@)
+if they begin with a [list marker] of the same type.
+Two list markers are of the
+same type if (a) they are bullet list markers using the same character
+(`-`, `+`, or `*`) or (b) they are ordered list numbers with the same
+delimiter (either `.` or `)`).
+
+A list is an [ordered list](@)
+if its constituent list items begin with
+[ordered list markers], and a
+[bullet list](@) if its constituent list
+items begin with [bullet list markers].
+
+The [start number](@)
+of an [ordered list] is determined by the list number of
+its initial list item.  The numbers of subsequent list items are
+disregarded.
+
+A list is [loose](@) if any of its constituent
+list items are separated by blank lines, or if any of its constituent
+list items directly contain two block-level elements with a blank line
+between them.  Otherwise a list is [tight](@).
+(The difference in HTML output is that paragraphs in a loose list are
+wrapped in `&lt;p&gt;` tags, while paragraphs in a tight list are not.)
+&lt;/requirement&gt;
+&lt;requirement name=&quot;code-spans&quot; stories=&quot;code-spans&quot;&gt;
+A [backtick string](@)
+is a string of one or more backtick characters (`` ` ``) that is neither
+preceded nor followed by a backtick.
+
+A [code span](@) begins with a backtick string and ends with
+a backtick string of equal length.  The contents of the code span are
+the characters between these two backtick strings, normalized in the
+following ways:
+
+- First, [line endings] are converted to [spaces].
+- If the resulting string both begins *and* ends with a [space]
+  character, but does not consist entirely of [space]
+  characters, a single [space] character is removed from the
+  front and back.  This allows you to include code that begins
+  or ends with backtick characters, which must be separated by
+  whitespace from the opening or closing backtick strings.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;code-span-precedence&quot; stories=&quot;code-spans,emphasis,links,images,autolinks-html&quot;&gt;
+Code span backticks have higher precedence than any other inline
+constructs except HTML tags and autolinks.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;unclosed-code-spans&quot; stories=&quot;code-spans&quot;&gt;
+When a backtick string is not closed by a matching backtick string,
+we just have literal backticks:
+&lt;/requirement&gt;
+&lt;requirement name=&quot;emphasis&quot; stories=&quot;emphasis&quot;&gt;
+The following rules define emphasis and strong emphasis:
+
+1.  A single `*` character [can open emphasis](@)
+    iff (if and only if) it is part of a [left-flanking delimiter run].
+
+2.  A single `_` character [can open emphasis] iff
+    it is part of a [left-flanking delimiter run]
+    and either (a) not part of a [right-flanking delimiter run]
+    or (b) part of a [right-flanking delimiter run]
+    preceded by a [Unicode punctuation character].
+
+3.  A single `*` character [can close emphasis](@)
+    iff it is part of a [right-flanking delimiter run].
+
+4.  A single `_` character [can close emphasis] iff
+    it is part of a [right-flanking delimiter run]
+    and either (a) not part of a [left-flanking delimiter run]
+    or (b) part of a [left-flanking delimiter run]
+    followed by a [Unicode punctuation character].
+
+5.  A double `**` [can open strong emphasis](@)
+    iff it is part of a [left-flanking delimiter run].
+
+6.  A double `__` [can open strong emphasis] iff
+    it is part of a [left-flanking delimiter run]
+    and either (a) not part of a [right-flanking delimiter run]
+    or (b) part of a [right-flanking delimiter run]
+    preceded by a [Unicode punctuation character].
+
+7.  A double `**` [can close strong emphasis](@)
+    iff it is part of a [right-flanking delimiter run].
+
+8.  A double `__` [can close strong emphasis] iff
+    it is part of a [right-flanking delimiter run]
+    and either (a) not part of a [left-flanking delimiter run]
+    or (b) part of a [left-flanking delimiter run]
+    followed by a [Unicode punctuation character].
+
+9.  Emphasis begins with a delimiter that [can open emphasis] and ends
+    with a delimiter that [can close emphasis], and that uses the same
+    character (`_` or `*`) as the opening delimiter.  The
+    opening and closing delimiters must belong to separate
+    [delimiter runs].  If one of the delimiters can both
+    open and close emphasis, then the sum of the lengths of the
+    delimiter runs containing the opening and closing delimiters
+    must not be a multiple of 3 unless both lengths are
+    multiples of 3.
+
+10. Strong emphasis begins with a delimiter that
+    [can open strong emphasis] and ends with a delimiter that
+    [can close strong emphasis], and that uses the same character
+    (`_` or `*`) as the opening delimiter.  The
+    opening and closing delimiters must belong to separate
+    [delimiter runs].  If one of the delimiters can both open
+    and close strong emphasis, then the sum of the lengths of
+    the delimiter runs containing the opening and closing
+    delimiters must not be a multiple of 3 unless both lengths
+    are multiples of 3.
+
+11. A literal `*` character cannot occur at the beginning or end of
+    `*`-delimited emphasis or `**`-delimited strong emphasis, unless it
+    is backslash-escaped.
+
+12. A literal `_` character cannot occur at the beginning or end of
+    `_`-delimited emphasis or `__`-delimited strong emphasis, unless it
+    is backslash-escaped.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;emphasis-ambiguity&quot; stories=&quot;emphasis,code-spans,links,images,autolinks-html&quot;&gt;
+Where rules 1--12 above are compatible with multiple parsings,
+the following principles resolve ambiguity:
+
+13. The number of nestings should be minimized. Thus, for example,
+    an interpretation `&lt;strong&gt;...&lt;/strong&gt;` is always preferred to
+    `&lt;em&gt;&lt;em&gt;...&lt;/em&gt;&lt;/em&gt;`.
+
+14. An interpretation `&lt;em&gt;&lt;strong&gt;...&lt;/strong&gt;&lt;/em&gt;` is always
+    preferred to `&lt;strong&gt;&lt;em&gt;...&lt;/em&gt;&lt;/strong&gt;`.
+
+15. When two potential emphasis or strong emphasis spans overlap,
+    so that the second begins before the first ends and ends after
+    the first ends, the first takes precedence. Thus, for example,
+    `*foo _bar* baz_` is parsed as `&lt;em&gt;foo _bar&lt;/em&gt; baz_` rather
+    than `*foo &lt;em&gt;bar* baz&lt;/em&gt;`.
+
+16. When there are two potential emphasis or strong emphasis spans
+    with the same closing delimiter, the shorter one (the one that
+    opens later) takes precedence. Thus, for example,
+    `**foo **bar baz**` is parsed as `**foo &lt;strong&gt;bar baz&lt;/strong&gt;`
+    rather than `&lt;strong&gt;foo **bar baz&lt;/strong&gt;`.
+
+17. Inline code spans, links, images, and HTML tags group more tightly
+    than emphasis.  So, when there is a choice between an interpretation
+    that contains one of these elements and one that does not, the
+    former always wins.  Thus, for example, `*[foo*](bar)` is
+    parsed as `*&lt;a href=&quot;bar&quot;&gt;foo*&lt;/a&gt;` rather than as
+    `&lt;em&gt;[foo&lt;/em&gt;](bar)`.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;link-text&quot; stories=&quot;links,images,code-spans,autolinks-html,emphasis&quot;&gt;
+A [link text](@) consists of a sequence of zero or more
+inline elements enclosed by square brackets (`[` and `]`).  The
+following rules apply:
+
+- Links cannot contain other links, at any level of nesting. If
+  multiple otherwise valid link definitions appear nested inside each
+  other, the inner-most definition is used.
+
+- Brackets are allowed in the [link text] only if (a) they
+  are backslash-escaped or (b) they appear as a matched pair of brackets,
+  with an open bracket `[`, a sequence of zero or more inlines, and
+  a close bracket `]`.
+
+- Backtick [code spans], [autolinks], and raw [HTML tags] bind more tightly
+  than the brackets in link text.  Thus, for example,
+  `` [foo`]` `` could not be a link text, since the second `]`
+  is part of a code span.
+
+- The brackets in link text bind more tightly than markers for
+  [emphasis and strong emphasis]. Thus, for example, `*[foo*](url)` is a link.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;link-destinations&quot; stories=&quot;links,images,references&quot;&gt;
+A [link destination](@) consists of either
+
+- a sequence of zero or more characters between an opening `&lt;` and a
+  closing `&gt;` that contains no line endings or unescaped
+  `&lt;` or `&gt;` characters, or
+
+- a nonempty sequence of characters that does not start with `&lt;`,
+  does not include [ASCII control characters][ASCII control character]
+  or [space] character, and includes parentheses only if (a) they are
+  backslash-escaped or (b) they are part of a balanced pair of
+  unescaped parentheses.
+  (Implementations may impose limits on parentheses nesting to
+  avoid performance issues, but at least three levels of nesting
+  should be supported.)
+&lt;/requirement&gt;
+&lt;requirement name=&quot;link-titles&quot; stories=&quot;links,images,references&quot;&gt;
+A [link title](@)  consists of either
+
+- a sequence of zero or more characters between straight double-quote
+  characters (`&quot;`), including a `&quot;` character only if it is
+  backslash-escaped, or
+
+- a sequence of zero or more characters between straight single-quote
+  characters (`&#x27;`), including a `&#x27;` character only if it is
+  backslash-escaped, or
+
+- a sequence of zero or more characters between matching parentheses
+  (`(...)`), including a `(` or `)` character only if it is
+  backslash-escaped.
+
+Although [link titles] may span multiple lines, they must not contain
+a [blank line].
+&lt;/requirement&gt;
+&lt;requirement name=&quot;inline-links&quot; stories=&quot;links,images&quot;&gt;
+An [inline link](@) consists of a [link text] followed immediately
+by a left parenthesis `(`, an optional [link destination], an optional
+[link title], and a right parenthesis `)`.
+These four components may be separated by spaces, tabs, and up to one line
+ending.
+If both [link destination] and [link title] are present, they *must* be
+separated by spaces, tabs, and up to one line ending.
+
+The link&#x27;s text consists of the inlines contained
+in the [link text] (excluding the enclosing square brackets).
+The link&#x27;s URI consists of the link destination, excluding enclosing
+`&lt;...&gt;` if present, with backslash-escapes in effect as described
+above.  The link&#x27;s title consists of the link title, excluding its
+enclosing delimiters, with backslash-escapes in effect as described
+above.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;reference-labels&quot; stories=&quot;references,links,images&quot;&gt;
+A [link label](@)  begins with a left bracket (`[`) and ends
+with the first right bracket (`]`) that is not backslash-escaped.
+Between these brackets there must be at least one character that is not a space,
+tab, or line ending.
+Unescaped square bracket characters are not allowed inside the
+opening and closing square brackets of [link labels].  A link
+label can have at most 999 characters inside the square
+brackets.
+
+One label [matches](@)
+another just in case their normalized forms are equal.  To normalize a
+label, strip off the opening and closing brackets,
+perform the *Unicode case fold*, strip leading and trailing
+spaces, tabs, and line endings, and collapse consecutive internal
+spaces, tabs, and line endings to a single space.  If there are multiple
+matching reference link definitions, the one that comes first in the
+document is used.  (It is desirable in such cases to emit a warning.)
+&lt;/requirement&gt;
+&lt;requirement name=&quot;full-reference-links&quot; stories=&quot;links,references,images&quot;&gt;
+A [full reference link](@)
+consists of a [link text] immediately followed by a [link label]
+that [matches] a [link reference definition] elsewhere in the document.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;collapsed-reference-links&quot; stories=&quot;links,references,images&quot;&gt;
+A [collapsed reference link](@)
+consists of a [link label] that [matches] a
+[link reference definition] elsewhere in the
+document, followed by the string `[]`.
+The contents of the link label are parsed as inlines,
+which are used as the link&#x27;s text.  The link&#x27;s URI and title are
+provided by the matching reference link definition.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;shortcut-reference-links&quot; stories=&quot;links,references,images&quot;&gt;
+A [shortcut reference link](@)
+consists of a [link label] that [matches] a
+[link reference definition] elsewhere in the
+document and is not followed by `[]` or a link label.
+The contents of the link label are parsed as inlines,
+which are used as the link&#x27;s text.  The link&#x27;s URI and title
+are provided by the matching link reference definition.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;images&quot; stories=&quot;images,links&quot;&gt;
+Syntax for images is like the syntax for links, with one
+difference. Instead of [link text], we have an
+[image description](@).  The rules for this are the
+same as for [link text], except that (a) an
+image description starts with `![` rather than `[`, and
+(b) an image description may contain links.
+An image description has inline elements
+as its contents.  When an image is rendered to HTML,
+this is standardly used as the image&#x27;s `alt` attribute.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;uri-autolinks&quot; stories=&quot;autolinks-html&quot;&gt;
+A [URI autolink](@) consists of `&lt;`, followed by an
+[absolute URI] followed by `&gt;`.  It is parsed as
+a link to the URI, with the URI as the link&#x27;s label.
+
+An [absolute URI](@),
+for these purposes, consists of a [scheme] followed by a colon (`:`)
+followed by zero or more characters other than [ASCII control
+characters][ASCII control character], [space], `&lt;`, and `&gt;`.
+If the URI includes these characters, they must be percent-encoded
+(e.g. `%20` for a space).
+
+For purposes of this spec, a [scheme](@) is any sequence
+of 2--32 characters beginning with an ASCII letter and followed
+by any combination of ASCII letters, digits, or the symbols plus
+(&quot;+&quot;), period (&quot;.&quot;), or hyphen (&quot;-&quot;).
+&lt;/requirement&gt;
+&lt;requirement name=&quot;email-autolinks&quot; stories=&quot;autolinks-html&quot;&gt;
+An [email autolink](@)
+consists of `&lt;`, followed by an [email address],
+followed by `&gt;`.  The link&#x27;s label is the email address,
+and the URL is `mailto:` followed by the email address.
+
+An [email address](@),
+for these purposes, is anything that matches
+the [non-normative regex from the HTML5
+spec](https://html.spec.whatwg.org/multipage/forms.html#e-mail-state-(type=email)):
+
+    /^[a-zA-Z0-9.!#$%&amp;&#x27;*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?
+    (?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+&lt;/requirement&gt;
+&lt;requirement name=&quot;raw-html&quot; stories=&quot;autolinks-html&quot;&gt;
+Text between `&lt;` and `&gt;` that looks like an HTML tag is parsed as a
+raw HTML tag and will be rendered in HTML without escaping.
+Tag and attribute names are not limited to current HTML tags,
+so custom tags (and even, say, DocBook tags) may be used.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;hard-line-breaks&quot; stories=&quot;line-breaks&quot;&gt;
+A line ending (not in a code span or HTML tag) that is preceded
+by two or more spaces and does not occur at the end of a block
+is parsed as a [hard line break](@) (rendered
+in HTML as a `&lt;br /&gt;` tag):
+&lt;/requirement&gt;
+&lt;requirement name=&quot;soft-line-breaks&quot; stories=&quot;line-breaks&quot;&gt;
+A regular line ending (not in a code span or HTML tag) that is not
+preceded by two or more spaces or a backslash is parsed as a
+[softbreak](@).  (A soft line break may be rendered in HTML either as a
+[line ending] or as a space. The result will be the same in
+browsers. In the examples here, a [line ending] will be used.)
+&lt;/requirement&gt;
+&lt;requirement name=&quot;plain-text&quot; stories=&quot;paragraphs,code-spans,emphasis,links,images,autolinks-html,line-breaks&quot;&gt;
+Any characters not given an interpretation by the above rules will
+be parsed as plain textual content.
+&lt;/requirement&gt;
+&lt;requirement name=&quot;preserve-internal-spaces&quot; stories=&quot;paragraphs&quot;&gt;
+Internal spaces are preserved verbatim:
+&lt;/requirement&gt;
+&lt;requirement name=&quot;conformance-examples&quot; stories=&quot;verification&quot;&gt;
+It contains many examples with side-by-side Markdown and
+HTML.  These are intended to double as conformance tests.
+&lt;/requirement&gt;
+&lt;unattached story=&quot;foundation&quot;/&gt;
+&lt;unattached story=&quot;cli&quot;/&gt;
+&lt;unattached story=&quot;documentation&quot;/&gt;</pre></article>
+</main>
+</body>
+</html>

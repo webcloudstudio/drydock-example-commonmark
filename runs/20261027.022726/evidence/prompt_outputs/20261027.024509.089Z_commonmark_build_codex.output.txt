@@ -1,0 +1,14 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- README.md
+- commonmark_parser/inline.py
+- commonmark_parser/references.py
+- commonmark_parser/stages.py
+- tests/test_escapes_and_entities.py
+
+SUMMARY:
+Added ASCII punctuation escape and HTML5 named/numeric reference decoding, applied decoding to paragraph, heading, fenced-code info, and reference-definition text, and documented the standard-stream CLI. `pytest -q` passed (41 tests); the declared decoder and README assertions passed.
+
+BLOCKERS:
+- None

@@ -1,0 +1,13 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/inline.py
+
+SUMMARY:
+Changed inline link destination encoding so square brackets are percent encoded. The scoped conformance run still showed failures involving multiline reference definitions, setext handling, malformed angle destinations, nested image alt text, and autolink URL escaping. The run did not complete with a passing result.
+
+BLOCKERS:
+- The links conformance suite remains failing; the remaining parsing behaviors need repair.
+
+FAILURE_SUMMARY: Scoped links conformance still fails
+FAILURE_DETAIL: The scoped suite reported failures in cases 212, 218, 495, 496, 522, and 528 before the command stopped returning output. Repair those parser behaviors, then rerun the scoped suite to completion.

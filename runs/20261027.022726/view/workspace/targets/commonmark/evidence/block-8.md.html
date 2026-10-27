@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-8.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-8.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-8.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 8 · Service (block-8)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-26</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 2952</li><li>execution id: 20261027.024747.108Z-a4f84c25</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse and normalize backtick code spans. (code-spans) [story]</li></ul>
+<h2>Acceptance tooling authorization</h2>
+<ul><li>FEATURE-CodeSpans.md#code-spans-conformance: executable=python3; scope=test; authorization=existing Target environment</li></ul>
+<h2>Stacked context</h2>
+<ul><li>stack: python_compact.md (SP 601)</li><li>compass: COMPASS.md (SP 512)</li><li>implements: FEATURE-CodeSpans.md (SP 478)</li><li>context: ARCHITECTURE_compact.md (SP 211)</li><li>stack: common_compact.md (SP 1079)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>commonmark_parser/inline.py</li><li>commonmark_parser/stages.py</li><li>tests/test_escapes_and_entities.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: code-spans-conformance (FEATURE-CodeSpans.md)</li></ul>
+<p>intent: The completed inline parser passes every authoritative code-span example, including precedence interactions. return code: 1 stdout: Example 330 (lines 5908-5912) Code spans <code>foo</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;foo&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;<code>foo</code>&lt;/p&gt;</p>
+<p>Example 331 (lines 5919-5923) Code spans <code>foo ` bar</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;foo <code>bar&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;</code><code>foo</code> bar ``&lt;/p&gt;</p>
+<p>Example 332 (lines 5929-5933) Code spans <code></code><code></code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;<code>&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;`</code> `&lt;/p&gt;</p>
+<p>Example 333 (lines 5937-5941) Code spans <code></code><code></code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt; <code>&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;`</code> `&lt;/p&gt;</p>
+<p>Example 334 (lines 5946-5950) Code spans <code>a</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt; a&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;<code>a</code>&lt;/p&gt;</p>
+<p>Example 335 (lines 5955-5959) Code spans <code>b</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt; b &lt;/code&gt;&lt;/p&gt; +&lt;p&gt;<code>b</code>&lt;/p&gt;</p>
+<p>Example 336 (lines 5963-5969) Code spans <code></code> <code></code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt; &lt;/code&gt; &lt;code&gt; &lt;/code&gt;&lt;/p&gt; +&lt;p&gt;<code></code> <code></code>&lt;/p&gt;</p>
+<p>Example 337 (lines 5974-5982) Code spans <code>foo bar baz</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;foo bar baz&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;<code>foo bar baz</code>&lt;/p&gt;</p>
+<p>Example 338 (lines 5984-5990) Code spans <code>foo</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;foo &lt;/code&gt;&lt;/p&gt; +&lt;p&gt;<code>foo</code>&lt;/p&gt;</p>
+<p>Example 339 (lines 5995-6000) Code spans <code>foo   bar baz</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;foo bar baz&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;<code>foo bar baz</code>&lt;/p&gt;</p>
+<p>Example 340 (lines 6012-6016) Code spans <code>foo\</code>bar`</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;foo\&lt;/code&gt;bar<code>&lt;/p&gt; +&lt;p&gt;</code>foo<code>bar</code>&lt;/p&gt;</p>
+<p>Example 341 (lines 6023-6027) Code spans <code>foo`bar</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;foo<code>bar&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;</code><code>foo</code>bar``&lt;/p&gt;</p>
+<p>Example 342 (lines 6029-6033) Code spans <code>foo</code><code>bar</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;foo <code>bar&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;` foo</code> bar `&lt;/p&gt;</p>
+<p>Example 343 (lines 6041-6045) Code spans *foo<code>*</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<em>foo&lt;code&gt;</em>&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;*foo<code>*</code>&lt;/p&gt;</p>
+<p>Example 344 (lines 6050-6054) Code spans [not a <code>link](/foo</code>)</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<a href="/foo&amp;lt;/code&amp;gt;">not a &lt;code&gt;link</a>&lt;/p&gt; +&lt;p&gt;[not a <code>link](/foo</code>)&lt;/p&gt;</p>
+<p>Example 345 (lines 6060-6064) Code spans <code>&lt;a href=&quot;</code>&quot;&gt;`</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;&amp;lt;a href=&amp;quot;&lt;/code&gt;&amp;quot;&amp;gt;<code>&lt;/p&gt; +&lt;p&gt;</code>&amp;lt;a href=&amp;quot;<code>&amp;quot;&amp;gt;</code>&lt;/p&gt;</p>
+<p>Example 346 (lines 6069-6073) Code spans &lt;a href=&quot;<code>&quot;&gt;</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;<code>&quot;&gt;</code>&lt;/p&gt; +&lt;p&gt;&amp;lt;a href=&amp;quot;<code>&amp;quot;&amp;gt;</code>&lt;/p&gt;</p>
+<p>Example 347 (lines 6078-6082) Code spans <code>&lt;https://foo.bar.</code>baz&gt;`</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;code&gt;&amp;lt;https://foo.bar.&lt;/code&gt;baz&amp;gt;<code>&lt;/p&gt; +&lt;p&gt;</code>&amp;lt;https://foo.bar.<code>baz&amp;gt;</code>&lt;/p&gt;</p>
+<p>Example 348 (lines 6087-6091) Code spans &lt;https://foo.bar.<code>baz&gt;</code></p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;&lt;a href=&quot;https://foo.bar.%60baz&quot;&gt;https://foo.bar.<code>baz&lt;/a&gt;</code>&lt;/p&gt; +&lt;p&gt;&amp;lt;https://foo.bar.<code>baz&amp;gt;</code>&lt;/p&gt;</p>
+<p>Example 351 (lines 6113-6117) Code spans <code>foo</code><code>bar</code>`</p>
+<p>--- expected HTML +++ actual HTML @@ -1 +1 @@ -&lt;p&gt;<code>foo&lt;code&gt;bar&lt;/code&gt;&lt;/p&gt; +&lt;p&gt;</code>foo<code>bar</code>&lt;/p&gt;</p>
+<p>2 passed, 20 failed, 0 errored, 633 skipped stderr: --- drydock: progress --- cases: pass=2 fail=20 error=0 skip=633 total=655 from=result.stdout --- drydock: end progress --- --- drydock: values at failure --- result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.022726/build/commonmark/commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;^Code spans$&#x27;], returncode=20, stdout=&#x27;Example 330 (lines 5908-5912) Code spans\n<code>foo</code>\n\n--- expected HTML\n+++ actual HTML\n@@ -1 +1 @… (+3321 chars) --- drydock: end values --- Traceback (most recent call last): File &quot;code-spans-conformance.py&quot;, line 12, in &lt;module&gt; assert result.returncode == 0 ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: code-spans-conformance (FEATURE-CodeSpans.md)</li></ul>
+<p>intent: The completed inline parser passes every authoritative code-span example, including precedence interactions. target interpreter: /mnt/c/Users/barlo/projects/drydock/.venv/bin/python provisioning: not required return code: 0 stdout: 22 passed, 0 failed, 0 errored, 633 skipped</p>
+<h2>Repair attempts</h2>
+<ul><li>attempt 0 (initial build): failed; 0/1 checks; 19/22 cases model=gpt-6-luna; execution 20261027.024646.442Z-8a54751a; reason: programmatic acceptance failed: code-spans-conformance</li><li>attempt 1 (repair 1): built; 1/1 checks; 22/22 cases model=gpt-6-luna; execution 20261027.024747.108Z-a4f84c25</li></ul>
+<h2>Build summary</h2>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>commonmark_parser/inline.py</li><li>commonmark_parser/stages.py</li></ul>
+<p>SUMMARY: Preserved trailing paragraph spaces needed by code spans and added left to right handling for inline HTML tags and autolinks. Scoped Code spans conformance passed: 22 passed, 0 failed. Related tests passed: 20 passed.</p>
+<p>BLOCKERS:</p>
+<ul><li>None</li></ul></article>
+</main>
+</body>
+</html>

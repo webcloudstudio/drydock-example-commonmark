@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/repair/block-8/code-spans-conformance.log</title>
+<link rel="stylesheet" href="../../../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/repair/block-8/code-spans-conformance.log</h1><div class="filenav"><a href="../../../../../../../index.html">&larr; Report</a><a href="../../../../../../../workspace/targets/commonmark/evidence/repair/block-8/code-spans-conformance.log">Raw file</a></div></header>
+<article class="doc"><pre>Example 338 (lines 5984-5990) Code spans
+``
+foo 
+``
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-&lt;p&gt;&lt;code&gt;foo &lt;/code&gt;&lt;/p&gt;
++&lt;p&gt;&lt;code&gt;foo&lt;/code&gt;&lt;/p&gt;
+
+Example 346 (lines 6069-6073) Code spans
+&lt;a href=&quot;`&quot;&gt;`
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-&lt;p&gt;&lt;a href=&quot;`&quot;&gt;`&lt;/p&gt;
++&lt;p&gt;&amp;lt;a href=&amp;quot;&lt;code&gt;&amp;quot;&amp;gt;&lt;/code&gt;&lt;/p&gt;
+
+Example 348 (lines 6087-6091) Code spans
+&lt;https://foo.bar.`baz&gt;`
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-&lt;p&gt;&lt;a href=&quot;https://foo.bar.%60baz&quot;&gt;https://foo.bar.`baz&lt;/a&gt;`&lt;/p&gt;
++&lt;p&gt;&amp;lt;https://foo.bar.&lt;code&gt;baz&amp;gt;&lt;/code&gt;&lt;/p&gt;
+
+19 passed, 3 failed, 0 errored, 633 skipped
+
+--- stderr ---
+
+--- drydock: progress ---
+cases: pass=19 fail=3 error=0 skip=633 total=655 from=result.stdout
+--- drydock: end progress ---
+--- drydock: values at failure ---
+  result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.022726/build/commonmark/commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;^Code spans$&#x27;], returncode=3, stdout=&#x27;Example 338 (lines 5984-5990) Code spans\n``\nfoo \n``\n\n--- expected HTML\n+++ actual HTML\n@@ -… (+543 chars)
+--- drydock: end values ---
+Traceback (most recent call last):
+  File &quot;code-spans-conformance.py&quot;, line 12, in &lt;module&gt;
+    assert result.returncode == 0
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+</pre></article>
+</main>
+</body>
+</html>

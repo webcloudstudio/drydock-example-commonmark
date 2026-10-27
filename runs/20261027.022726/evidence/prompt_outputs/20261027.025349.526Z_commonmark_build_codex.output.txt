@@ -1,0 +1,10 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark_parser/inline.py
+
+SUMMARY:
+Updated inline parsing so emphasis can span code spans and inline constructs, while escaped punctuation stays literal during delimiter resolution. Fixed overlapping delimiters that caused crossing emphasis. The scoped conformance suite passed: 132 passed, 0 failed.
+
+BLOCKERS:
+- None

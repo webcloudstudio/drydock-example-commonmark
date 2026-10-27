@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/commonmark_parser/block_quotes.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/commonmark_parser/block_quotes.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/commonmark_parser/block_quotes.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Block quote marker extraction.&quot;&quot;&quot;
+
+import re
+
+_MARKER = re.compile(r&#x27;^ {0,3}&gt; ?&#x27;)
+
+
+def parse_block_quote(lines: list[str]):
+    &quot;&quot;&quot;Return consumed lines and quote content, including paragraph laziness.&quot;&quot;&quot;
+    if not lines or not _MARKER.match(lines[0].rstrip(&#x27;\n&#x27;)):
+        return None
+    content: list[str] = []
+    consumed = 0
+    paragraph_open = False
+    for line in lines:
+        body = line.rstrip(&#x27;\n&#x27;)
+        marker = _MARKER.match(body)
+        if marker:
+            text = body[marker.end():]
+            content.append(text + (&#x27;\n&#x27; if line.endswith(&#x27;\n&#x27;) else &#x27;&#x27;))
+            consumed += 1
+            if not text.strip():
+                paragraph_open = False
+            elif not paragraph_open:
+                paragraph_open = True
+            continue
+        if (not body.strip() or not paragraph_open or
+                re.match(r&#x27;^ {0,3}(?:#{1,6}(?:[ \t]|$)|(?:\*\s*){3,}$|(?:-\s*){3,}$|(?:_\s*){3,}$|`{3,}|~{3,})&#x27;, body)):
+            break
+        content.append(line)
+        consumed += 1
+    return consumed, content
+</pre></article>
+</main>
+</body>
+</html>

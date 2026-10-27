@@ -1,0 +1,12 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark_parser/block_quotes.py
+- commonmark_parser/stages.py
+- tests/test_block_quotes.py
+
+SUMMARY:
+Added block quote marker extraction, lazy paragraph continuation, recursive nested block parsing, HTML rendering, and reference definition collection. `pytest -q` passed: 28 tests.
+
+BLOCKERS:
+- None

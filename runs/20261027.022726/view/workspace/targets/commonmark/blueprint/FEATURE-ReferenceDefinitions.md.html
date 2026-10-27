@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-ReferenceDefinitions.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-ReferenceDefinitions.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-ReferenceDefinitions.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Reference Definitions</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Collect document-wide link reference definitions during block parsing.</td></tr><tr><td>Depends On</td><td>FEATURE-ParagraphsAndBreaks.md</td></tr><tr><td>Provides</td><td>reference definition map</td></tr><tr><td>Consumes</td><td>paragraph and thematic break blocks</td></tr></tbody></table></div>
+<h2>Purpose and behavior</h2>
+<p>When a paragraph closes, parse consecutive definitions at its beginning and retain any remaining paragraph text. Definitions do not interrupt an existing paragraph. Apply the specification&#x27;s label, destination, title, whitespace, indentation, and line-ending grammar. A definition can occur in a container and affects the entire document.</p>
+<p>Normalize labels by Unicode case folding, trimming spaces, tabs, and line endings, and collapsing internal runs of those characters to one space. Preserve the first definition for each normalized label. Destinations and titles use the specified escape and character-reference rules.</p>
+<p>Expose <code>collect_definitions(text, definitions)</code> from <code>commonmark_parser.references</code>. It updates the supplied document-wide dictionary in place and returns the unconsumed paragraph text. Dictionary values are <code>(destination, title)</code> pairs, with <code>None</code> for an omitted title. The caller invokes it when closing a paragraph in document order.</p>
+<p>The later link and image stories exercise the reference-definition examples through the executable, including definitions inside containers and definitions appearing after uses.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC reference-first-definition ===<br>Intent: Matching labels share one document-wide entry and the earliest definition wins.</p>
+<p>from commonmark_parser.references import collect_definitions</p>
+<p>first = &quot;/first&quot; second = &quot;/second&quot; definitions = {} collect_definitions(&quot;[Foo Bar]: &quot; + first + &quot;\n&quot;, definitions) collect_definitions(&quot;[foo  bar]: &quot; + second + &quot;\n&quot;, definitions) assert len(definitions) == 1 assert next(iter(definitions.values())) == (first, None) === END AC reference-first-definition ===</p>
+<p>=== AC reference-remainder ===<br>Intent: Closing a paragraph removes its initial definition while retaining subsequent paragraph content.</p>
+<p>from commonmark_parser.references import collect_definitions</p>
+<p>destination = &quot;/target&quot; remainder = &quot;ordinary content\n&quot; definitions = {} observed = collect_definitions(&quot;[label]: &quot; + destination + &quot;\n&quot; + remainder, definitions) assert observed == remainder assert len(definitions) == 1 assert next(iter(definitions.values())) == (destination, None) === END AC reference-remainder ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Definitions are document-wide and the first matching definition takes precedence.</li><li>Do not modify the supplied specification or conformance assets.</li></ul></article>
+</main>
+</body>
+</html>

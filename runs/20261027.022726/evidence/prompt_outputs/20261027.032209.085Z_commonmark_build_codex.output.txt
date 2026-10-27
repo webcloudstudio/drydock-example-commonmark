@@ -1,0 +1,13 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/stages.py
+
+SUMMARY:
+Adjusted setext handling when a paragraph contains only a reference definition. The scoped conformance suite still has failures, so this repair is incomplete.
+
+BLOCKERS:
+- Link reference definitions with a title on the following line and setext underline handling still fail. Several link parsing cases also remain unresolved.
+
+FAILURE_SUMMARY: Scoped link conformance still fails
+FAILURE_DETAIL: After the setext change, cases 212, 218, 495, 496, 522, 528, and 540 remain failing. Fix the shared reference collection and link bracket/autolink parsing behavior, then rerun the scoped conformance suite.
