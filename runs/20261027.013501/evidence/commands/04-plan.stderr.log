@@ -1,0 +1,12 @@
+========================================================================
+POST-LLM FAILURE  ·  plan  ·  model artifact contract failed
+========================================================================
+
+  Stage 1 correction exhausted: TOPOLOGY.md: missing closing artifact
+  marker
+
+  Recovery
+    Inspect the topology retry evidence, then run: drydock plan
+    commonmark
+
+========================================================================

@@ -1,0 +1,123 @@
+{
+  "acceptance_status": "NOT_RUN",
+  "assertions": {
+    "defect_ownership_undetermined": 0,
+    "failed": 0,
+    "passed": 0,
+    "unverified": 0
+  },
+  "attestations": [],
+  "build_passes": 0,
+  "commands": [
+    {
+      "argv": [
+        "/mnt/c/Users/barlo/projects/drydock/.venv/bin/python",
+        "-m",
+        "drydock",
+        "init",
+        "commonmark"
+      ],
+      "cwd": "workspace",
+      "elapsed_ms": 2835,
+      "label": "01-init",
+      "llm_executions": [],
+      "returncode": 0,
+      "stderr_path": "evidence/commands/01-init.stderr.log",
+      "stdout_path": "evidence/commands/01-init.stdout.log"
+    },
+    {
+      "argv": [
+        "/mnt/c/Users/barlo/projects/drydock/.venv/bin/python",
+        "-m",
+        "drydock",
+        "import",
+        "commonmark",
+        "sources",
+        "--format",
+        "markdown"
+      ],
+      "cwd": "workspace",
+      "elapsed_ms": 6324,
+      "label": "02-import-sources",
+      "llm_executions": [],
+      "returncode": 0,
+      "stderr_path": "evidence/commands/02-import-sources.stderr.log",
+      "stdout_path": "evidence/commands/02-import-sources.stdout.log"
+    },
+    {
+      "argv": [
+        "/mnt/c/Users/barlo/projects/drydock/.venv/bin/python",
+        "-m",
+        "drydock",
+        "analyze",
+        "commonmark"
+      ],
+      "cwd": "workspace",
+      "elapsed_ms": 34712,
+      "label": "03-analyze",
+      "llm_executions": [
+        "20261027.013514.025Z-b7a8673d"
+      ],
+      "returncode": 0,
+      "stderr_path": "evidence/commands/03-analyze.stderr.log",
+      "stdout_path": "evidence/commands/03-analyze.stdout.log"
+    },
+    {
+      "argv": [
+        "/mnt/c/Users/barlo/projects/drydock/.venv/bin/python",
+        "-m",
+        "drydock",
+        "plan",
+        "commonmark",
+        "--override"
+      ],
+      "cwd": "workspace",
+      "elapsed_ms": 53685,
+      "label": "04-plan",
+      "llm_executions": [
+        "20261027.013551.484Z-0e517ffd",
+        "20261027.013608.189Z-8721be32"
+      ],
+      "returncode": 1,
+      "stderr_path": "evidence/commands/04-plan.stderr.log",
+      "stdout_path": "evidence/commands/04-plan.stdout.log"
+    }
+  ],
+  "degraded": [],
+  "elapsed_ms": 99629,
+  "environment": {
+    "drydock_version": "0.8.0",
+    "effort": "",
+    "finished_at": "2026-10-27T01:36:41.702318Z",
+    "git_commit": "1b234d7695897805c50309266b81bffd6f862e31",
+    "model": "gpt-6-luna",
+    "plan_model": "",
+    "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+    "provider": "codex",
+    "python_version": "3.12.13",
+    "requested_model": "gpt-6-luna",
+    "started_at": "2026-10-27T01:35:01.945913Z"
+  },
+  "error": "CommonMark: plan exited 1",
+  "evidence_dir": "evidence",
+  "execution_status": "ERROR",
+  "expected_verdict": "PASSED",
+  "fixture": "CommonMark",
+  "observed_verdict": "ERROR",
+  "output_dir": ".",
+  "release_verdict": "",
+  "resumed_from": "",
+  "run_id": "20261027.013501",
+  "score_exit_codes": {},
+  "status": "failed",
+  "target": "commonmark",
+  "usage": {
+    "cached_input_tokens": 34560,
+    "calls": 3,
+    "fresh_input_tokens": 318580,
+    "input_tokens": 353140,
+    "invalid_records": 0,
+    "llm_elapsed_ms": 77390,
+    "output_tokens": 9224
+  }
+}

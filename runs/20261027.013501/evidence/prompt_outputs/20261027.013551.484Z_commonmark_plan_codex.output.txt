@@ -1,0 +1,160 @@
+=== BEGIN ARTIFACT TOPOLOGY.md ===
+## Declarations
+
+## story cli_entrypoint
+summary:      Provide the root CommonMark command-line executable.
+type:         foundational
+kind:         capability
+phase:        1
+implements:   FEATURE-CLI.md
+covers:       CLI-001
+stack:        common.md, python.md
+provides:     commonmark executable, standard-input/standard-output parser interface
+acceptance:   yes
+instructions: |
+  Deliver an executable named `commonmark` at the application root. It reads UTF-8 Markdown from
+  standard input and writes rendered HTML to standard output. Include a concise README describing
+  this interface. Do not use a public Markdown implementation.
+
+## story block_parsing
+summary:      Parse CommonMark block structure and collect link reference definitions.
+type:         service
+kind:         capability
+phase:        1
+implements:   FEATURE-BlockParsing.md
+covers:       BLOCK-001, BLOCK-002, BLOCK-003, BLOCK-004, BLOCK-005, BLOCK-006, BLOCK-007
+context:      sources/spec.txt, sources/spec_tests.py, sources/cmark.py, sources/normalize.py
+context_roles: |
+  FEATURE-BlockParsing.md: capability specification
+  sources/spec.txt: normative specification and conformance test suite
+  sources/spec_tests.py: conformance test harness
+  sources/cmark.py: reference implementation context
+  sources/normalize.py: test helper
+stack:        common.md, python.md
+consumes:     commonmark executable
+provides:     block parsing, link reference collection, block rendering
+depends:      cli_entrypoint
+acceptance:   yes
+instructions: |
+  Implement block parsing before inline parsing, using the supplied specification and its appendix
+  parsing strategy. Process lines in sequence into block structure; preserve block boundaries,
+  container nesting, literal code and raw HTML, and collect reference definitions document-wide
+  before inline resolution. Implement thematic breaks, ATX and setext headings, paragraphs, blank
+  lines, indented and fenced code, all seven HTML block types, link reference definitions, block
+  quotes (including lazy continuation), and lists (including indentation, nesting, continuation,
+  tightness, and ordered-list attributes). Blocks always take precedence over inline syntax.
+
+## story inline_parsing
+summary:      Parse inline content and render CommonMark HTML.
+type:         service
+kind:         capability
+phase:        1
+implements:   FEATURE-InlineParsing.md
+covers:       INLINE-001, INLINE-002, INLINE-003, INLINE-004, INLINE-005, INLINE-006
+context:      sources/spec.txt, sources/spec_tests.py, sources/cmark.py, sources/normalize.py
+context_roles: |
+  FEATURE-InlineParsing.md: capability specification
+  sources/spec.txt: normative specification and conformance test suite
+  sources/spec_tests.py: conformance test harness
+  sources/cmark.py: reference implementation context
+  sources/normalize.py: test helper
+stack:        common.md, python.md
+consumes:     block parsing, link reference collection
+provides:     inline parsing, HTML rendering
+depends:      block_parsing
+acceptance:   yes
+instructions: |
+  Parse inline text only after block structure and document-wide link reference collection are
+  complete. Implement escapes and character references; code spans and hard and soft breaks;
+  emphasis delimiter runs and precedence; inline, reference, collapsed and shortcut links and
+  images; autolinks; raw HTML; and remaining text. Preserve the supplied specification's
+  precedence and rendering rules. Link reference matching uses normalized, case-folded labels and
+  the first definition wins.
+
+## story conformance_verification
+summary:      Verify the completed parser with the complete supplied conformance suite.
+type:         service
+kind:         test harness
+phase:        1
+implements:   VERIFICATION.md
+covers:       VERIFY-001
+accepts:      st-001
+context:      sources/full_test.sh, sources/spec_tests.py, sources/spec.txt, sources/cmark.py, sources/normalize.py
+context_roles: |
+  VERIFICATION.md: project acceptance specification
+  sources/full_test.sh: conformance scoring entry point
+  sources/spec_tests.py: conformance test harness
+  sources/spec.txt: normative specification and conformance test suite
+  sources/cmark.py: reference implementation context
+  sources/normalize.py: test helper
+stack:        common.md, python.md
+consumes:     commonmark executable, block parsing, inline parsing
+depends:      cli_entrypoint, block_parsing, inline_parsing
+acceptance:   yes
+instructions: |
+  Run `sh sources/full_test.sh` as the sole unfiltered acceptance check after every parser
+  implementation story has completed. Preserve the supplied scoring assets unchanged.
+
+=== BEGIN ARTIFACT DECISIONS.json ===
+[
+  {
+    "id": "D-001",
+    "type": "choice",
+    "severity": "material",
+    "blueprint": "FEATURE-BlockParsing.md",
+    "story": "block_parsing",
+    "title": "Combine the analyzed block parser scopes",
+    "description": "The analyzed block stories name distinct block constructs, but this plan uses one governed block-parsing capability because those constructs participate in one line-oriented container and leaf-block algorithm. A combined block suite slice provides an integrated check of their shared boundaries and dependencies.",
+    "options": [
+      {
+        "value": "separate",
+        "label": "Keep one story per analyzed block scope"
+      },
+      {
+        "value": "combined",
+        "label": "Implement block structure as one capability"
+      }
+    ],
+    "system_choice": "combined"
+  },
+  {
+    "id": "D-002",
+    "type": "choice",
+    "severity": "material",
+    "blueprint": "FEATURE-InlineParsing.md",
+    "story": "inline_parsing",
+    "title": "Combine the analyzed inline parser scopes",
+    "description": "The inline constructs share a sequential parser and delimiter stack, and inline rendering depends on the document-wide reference map produced during block parsing. This plan assigns them to one inline capability story to preserve that algorithm and its required prerequisite.",
+    "options": [
+      {
+        "value": "separate",
+        "label": "Keep one story per analyzed inline scope"
+      },
+      {
+        "value": "combined",
+        "label": "Implement inline structure as one capability"
+      }
+    ],
+    "system_choice": "combined"
+  },
+  {
+    "id": "D-003",
+    "type": "choice",
+    "severity": "material",
+    "blueprint": "FEATURE-CLI.md",
+    "story": "cli_entrypoint",
+    "title": "Treat the executable interface as foundational",
+    "description": "The root executable is the interface used by every conformance slice, so it must exist before parser behaviors can be exercised through it.",
+    "options": [
+      {
+        "value": "service",
+        "label": "Build the CLI as an application service"
+      },
+      {
+        "value": "foundational",
+        "label": "Build the CLI interface as the foundation"
+      }
+    ],
+    "system_choice": "foundational"
+  }
+]

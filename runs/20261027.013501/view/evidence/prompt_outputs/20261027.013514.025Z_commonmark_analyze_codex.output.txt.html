@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261027.013514.025Z_commonmark_analyze_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261027.013514.025Z_commonmark_analyze_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261027.013514.025Z_commonmark_analyze_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>=== BEGIN ARTIFACT ANALYSIS.md ===
+# Blueprint Analysis: CommonMark
+
+## Commander Expectations
+
+- assert the parser implements CommonMark 0.31.2 and reads Markdown from standard input, writing HTML to standard output
+- assert the supplied complete conformance suite passes
+- assert the deliverable is an executable named `commonmark` at the application root
+
+## Crew
+
+| Crew | Charge |
+|---|---|
+| Commander | Defines intent and decides what done means. |
+| Team Lead | Confirms epic completeness and stakeholder expectations. |
+| Planning Crew | Authors atomic specifications and the ordered Manifest. |
+| Shipyard Crew | Builds the tickets without synchronous Commander access. |
+
+## Story List
+
+### Feature: Command-Line Interface
+
+| ID | Story | High-level AC |
+|---|---|---|
+| CLI-001 | Deliver the standard-input parser executable | The root-level `commonmark` executable reads UTF-8 Markdown from stdin and writes rendered HTML to stdout. Include the concise interface README. |
+
+### Feature: Block Parsing
+
+| ID | Story | High-level AC |
+|---|---|---|
+| BLOCK-001 | Parse thematic breaks and ATX headings | Thematic breaks and ATX headings follow their CommonMark rules. |
+| BLOCK-002 | Parse setext headings and paragraphs | Setext headings and paragraphs preserve the specified boundaries and inline source text. |
+| BLOCK-003 | Parse indented and fenced code blocks | Code blocks preserve literal content and apply the specified indentation, fence, and info-string rules. |
+| BLOCK-004 | Parse HTML blocks | The seven HTML block types follow their start and end conditions and preserve raw content. |
+| BLOCK-005 | Parse link reference definitions | Definitions are collected across the document, with the first matching definition taking precedence. |
+| BLOCK-006 | Parse block quotes | Block quotes support markers, laziness, blank lines, and nested content as specified. |
+| BLOCK-007 | Parse list items and lists | Lists support item boundaries, nesting, continuation, tightness, and ordered-list attributes as specified. |
+
+### Feature: Inline Parsing
+
+| ID | Story | High-level AC |
+|---|---|---|
+| INLINE-001 | Parse escapes and character references | Escapes and valid entity and numeric references render according to their contexts. |
+| INLINE-002 | Parse code spans and line breaks | Code spans normalize content as specified; hard and soft line breaks follow their respective rules. |
+| INLINE-003 | Parse emphasis and strong emphasis | Delimiter runs follow CommonMark flanking, matching, nesting, and precedence rules. |
+| INLINE-004 | Parse links and images | Inline, reference, and image forms resolve destinations, titles, labels, and nesting as specified. |
+| INLINE-005 | Parse autolinks and raw HTML | URI and email autolinks are rendered as links; valid raw HTML tags remain unescaped. |
+| INLINE-006 | Render remaining textual content | Uninterpreted characters render as text, with internal spaces preserved. |
+
+### Feature: Conformance Verification
+
+| ID | Story | High-level AC |
+|---|---|---|
+| VERIFY-001 | Pass the complete supplied conformance suite | After all parser stories are complete, the supplied unfiltered suite exits successfully. This is the only full-suite acceptance check. |
+
+## Surfaced Acceptance Criteria
+
+None.
+
+## Relationship Model
+
+| Source or group | Relationship type | Related source or group | Evidence | Delivery implication |
+|---|---|---|---|---|
+| `sources/INSTRUCTIONS.md` | instruction-to-test | `sources/full_test.sh`, `sources/spec_tests.py` | Requires one terminal complete-suite story and scoped implementation checks. | Keep focused story checks separate from the single final full-suite gate. |
+| `sources/spec.txt` | test-kit-to-implementation | Block parsing stories | Spec chapters define block behavior and contain conformance examples. | Implement block structure before inline parsing. |
+| `sources/spec.txt` | test-kit-to-implementation | Inline parsing stories | Inline chapters define inline behavior and contain conformance examples. | Parse inline content after block structure and reference collection. |
+| `sources/full_test.sh` | dependency | `sources/spec_tests.py`, `sources/cmark.py`, `sources/normalize.py`, `sources/spec.txt` | Harness invokes the test runner; the runner imports sibling modules and reads the spec. | Stage the harness, runner, helper modules, and spec so the final gate can run. |
+| `sources/INSTRUCTIONS.md` | dependency | `CLI-001` | Requires a root executable named `commonmark` and a concise README. | Deliver the executable interface and README with the CLI story. |
+
+## Source Roles
+
+| Path | Role | Plan disposition | Build disposition |
+|---|---|---|---|
+| `sources/INSTRUCTIONS.md` | author intent | prompt-only | none |
+| `sources/cmark.py` | reference implementation | context | stage |
+| `sources/full_test.sh` | conformance harness | context | stage |
+| `sources/normalize.py` | test helper | context | stage |
+| `sources/spec.txt` | normative specification and conformance test suite | context | stage |
+| `sources/spec_tests.py` | conformance harness | context | stage |
+
+## Planning Instructions
+
+### Delivery Shape
+
+Build a command-line CommonMark 0.31.2 parser. It accepts Markdown on standard input and emits HTML on standard output. Parse block structure first, collecting link reference definitions, then parse inline content using those definitions. The root-level executable is exercised by the supplied conformance harness.
+
+### Story Realization Map
+
+| Story ID | Durable Blueprint scope | Evidence | Related files | Requires |
+|---|---|---|---|---|
+| CLI-001 | Executable interface and concise README | `sources/INSTRUCTIONS.md` | `sources/full_test.sh` | Capability |
+| BLOCK-001 | Thematic breaks; ATX headings | `sources/spec.txt` headings | `sources/spec_tests.py` | Capability |
+| BLOCK-002 | Setext headings; paragraphs; blank lines | `sources/spec.txt` headings | `sources/spec_tests.py` | Capability |
+| BLOCK-003 | Indented code blocks; fenced code blocks | `sources/spec.txt` headings | `sources/spec_tests.py` | Capability |
+| BLOCK-004 | HTML blocks | `sources/spec.txt` heading | `sources/spec_tests.py` | Capability |
+| BLOCK-005 | Link reference definitions | `sources/spec.txt` heading | `sources/spec_tests.py` | Capability |
+| BLOCK-006 | Block quotes | `sources/spec.txt` heading | `sources/spec_tests.py` | Capability |
+| BLOCK-007 | List items; lists | `sources/spec.txt` headings | `sources/spec_tests.py` | Capability |
+| INLINE-001 | Backslash escapes; entity and numeric references | `sources/spec.txt` headings | `sources/spec_tests.py` | Capability |
+| INLINE-002 | Code spans; hard and soft line breaks | `sources/spec.txt` headings | `sources/spec_tests.py` | Capability |
+| INLINE-003 | Emphasis and strong emphasis | `sources/spec.txt` heading | `sources/spec_tests.py` | Capability |
+| INLINE-004 | Links; images | `sources/spec.txt` headings | `sources/spec_tests.py` | Capability |
+| INLINE-005 | Autolinks; raw HTML | `sources/spec.txt` headings | `sources/spec_tests.py` | Capability |
+| INLINE-006 | Textual content | `sources/spec.txt` heading | `sources/spec_tests.py` | Capability |
+| VERIFY-001 | Complete supplied suite | `sources/INSTRUCTIONS.md` | `sources/full_test.sh`, `sources/spec_tests.py`, `sources/cmark.py`, `sources/normalize.py`, `sources/spec.txt` | Test harness and acceptance contract |
+
+### Test and Acceptance Strategy
+
+Implementation stories use `spec_tests.py` with selectors for the example-owning headings within each story’s scope. Do not run the full harness from scoped checks. VERIFY-001 depends on every implementation story and is the only story with `Suite: full`; it runs `sh sources/full_test.sh`, prints captured stdout and stderr, and asserts only `result.returncode == 0`. Sea Trial `st-001` records the same complete-suite requirement.
+
+### Sequencing and Dependencies
+
+Implement the CLI entry point, then block parsing in source order, followed by inline parsing. Reference definitions collected during block parsing are needed by inline links and images. Stage all supplied scoring assets unchanged. The terminal verification story follows every parser implementation story.
+
+### Source Conflicts and Gaps
+
+No unresolved source conflicts or blockers. Unattended UAT policy prohibits questionnaires and open questions; identity is derived as CommonMark and described as a command-line CommonMark 0.31.2 parser.
+
+## Analysis Notes
+
+generated: 2026-10-26
+blueprint: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.013501/workspace/targets/commonmark/blueprint
+
+Quality: Ready
+  blockers: 0
+  questions: 0
+  features: 4
+  stories: 15
+  stack: Python
+  display_name: CommonMark
+  short_description: A command-line CommonMark 0.31.2 parser that reads Markdown from standard input and writes HTML to standard output.
+
+None.
+=== END ARTIFACT ===
+
+=== BEGIN ARTIFACT SEA_TRIALS.md ===
+# Sea Trials: CommonMark
+
+## st-001: The complete conformance suite passes
+
+Type: technical
+Required: yes
+Criterion: The parser shall pass every test run by `sh sources/full_test.sh`.
+Verification: proof
+Pattern: ubiquitous
+Command: [&quot;sh&quot;, &quot;sources/full_test.sh&quot;]
+=== END ARTIFACT ===
+
+=== BEGIN ARTIFACT TECHNOLOGY_STACK.md ===
+# Technology Stack
+
+| Technology | Rigging | Notes |
+|---|---|---|
+| Python | `python.md` | The parser executable and supplied conformance runner use Python 3. |
+| POSIX shell | `common.md` | The supplied complete-suite entry point runs with `sh`. |
+=== END ARTIFACT ===
+
+=== BEGIN ARTIFACT COMPASS.md ===
+# COMPASS: CommonMark
+
+## Compass
+CommonMark is a command-line parser for converting Markdown into HTML. It serves callers that provide Markdown on standard input and expect rendered HTML on standard output, with behavior conforming to CommonMark 0.31.2.
+
+## Constraints
+- Deliver an executable named `commonmark` at the application root.
+- Read UTF-8 Markdown from standard input and write HTML to standard output.
+- Keep the supplied conformance assets unchanged; they are hash-verified and restored before grading.
+- Include a concise project README describing the standard-input/standard-output interface.
+
+## Guardrails
+- Do not use a public Markdown implementation.
+- Do not modify or replace the supplied scoring entry point.
+- Do not modify the supplied conformance suite, helpers, or specification.
+- The final acceptance run must use the complete unfiltered supplied suite.
+=== END ARTIFACT ===
+
+=== BEGIN ARTIFACT STORY_GUIDANCE.json ===
+{
+  &quot;stories&quot;: [
+    {
+      &quot;id&quot;: &quot;CLI-001&quot;,
+      &quot;note&quot;: &quot;Build Instructions: executable and standard-input/standard-output interface&quot;
+    },
+    {
+      &quot;id&quot;: &quot;BLOCK-001&quot;,
+      &quot;gate&quot;: [&quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Thematic breaks|ATX headings&quot;],
+      &quot;note&quot;: &quot;Thematic breaks; ATX headings&quot;
+    },
+    {
+      &quot;id&quot;: &quot;BLOCK-002&quot;,
+      &quot;gate&quot;: [&quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Setext headings|Paragraphs|Blank lines&quot;],
+      &quot;note&quot;: &quot;Setext headings; paragraphs; blank lines&quot;
+    },
+    {
+      &quot;id&quot;: &quot;BLOCK-003&quot;,
+      &quot;gate&quot;: [&quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Indented code blocks|Fenced code blocks&quot;],
+      &quot;note&quot;: &quot;Indented and fenced code blocks&quot;
+    },
+    {
+      &quot;id&quot;: &quot;BLOCK-004&quot;,
+      &quot;gate&quot;: [&quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;HTML blocks&quot;],
+      &quot;note&quot;: &quot;HTML blocks&quot;
+    },
+    {
+      &quot;id&quot;: &quot;BLOCK-005&quot;,
+      &quot;gate&quot;: [&quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Link reference definitions&quot;],
+      &quot;note&quot;: &quot;Link reference definitions&quot;
+    },
+    {
+      &quot;id&quot;: &quot;BLOCK-006&quot;,
+      &quot;gate&quot;: [&quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Block quotes&quot;],
+      &quot;note&quot;: &quot;Block quotes&quot;
+    },
+    {
+      &quot;id&quot;: &quot;BLOCK-007&quot;,
+      &quot;gate&quot;: [&quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;List items|Lists&quot;],
+      &quot;note&quot;: &quot;List items and lists&quot;
+    },
+    {
+      &quot;id&quot;: &quot;INLINE-001&quot;,
+      &quot;gate&quot;: [&quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Backslash escapes|Entity and numeric character references&quot;],
+      &quot;note&quot;: &quot;Escapes and character references&quot;
+    },
+    {
+      &quot;id&quot;: &quot;INLINE-002&quot;,
+      &quot;gate&quot;: [&quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Code spans|Hard line breaks|Soft line breaks&quot;],
+      &quot;note&quot;: &quot;Code spans and line breaks&quot;
+    },
+    {
+      &quot;id&quot;: &quot;INLINE-003&quot;,
+      &quot;gate&quot;: [&quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Emphasis and strong emphasis&quot;],
+      &quot;note&quot;: &quot;Emphasis and strong emphasis&quot;
+    },
+    {
+      &quot;id&quot;: &quot;INLINE-004&quot;,
+      &quot;gate&quot;: [&quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Links|Images&quot;],
+      &quot;note&quot;: &quot;Links and images&quot;
+    },
+    {
+      &quot;id&quot;: &quot;INLINE-005&quot;,
+      &quot;gate&quot;: [&quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Autolinks|Raw HTML&quot;],
+      &quot;note&quot;: &quot;Autolinks and raw HTML&quot;
+    },
+    {
+      &quot;id&quot;: &quot;INLINE-006&quot;,
+      &quot;gate&quot;: [&quot;python3&quot;, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, &quot;./commonmark&quot;, &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;Textual content&quot;],
+      &quot;note&quot;: &quot;Textual content&quot;
+    },
+    {
+      &quot;id&quot;: &quot;VERIFY-001&quot;,
+      &quot;note&quot;: &quot;Terminal verification: complete unfiltered supplied suite; depends on all parser implementation stories&quot;
+    }
+  ]
+}
+=== END ARTIFACT ===</pre></article>
+</main>
+</body>
+</html>

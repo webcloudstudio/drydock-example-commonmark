@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/STORY_GUIDANCE.json</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/STORY_GUIDANCE.json</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../workspace/targets/commonmark/STORY_GUIDANCE.json">Raw file</a></div></header>
+<article class="doc"><pre>{
+  &quot;stories&quot;: [
+    {
+      &quot;id&quot;: &quot;CLI-001&quot;,
+      &quot;provenance&quot;: &quot;plan&quot;,
+      &quot;note&quot;: &quot;Build Instructions: executable and standard-input/standard-output interface&quot;
+    },
+    {
+      &quot;id&quot;: &quot;BLOCK-001&quot;,
+      &quot;provenance&quot;: &quot;plan&quot;,
+      &quot;gate&quot;: [
+        &quot;python3&quot;,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;,
+        &quot;./commonmark&quot;,
+        &quot;--spec&quot;,
+        &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;,
+        &quot;Thematic breaks|ATX headings&quot;
+      ],
+      &quot;note&quot;: &quot;Thematic breaks; ATX headings&quot;
+    },
+    {
+      &quot;id&quot;: &quot;BLOCK-002&quot;,
+      &quot;provenance&quot;: &quot;plan&quot;,
+      &quot;gate&quot;: [
+        &quot;python3&quot;,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;,
+        &quot;./commonmark&quot;,
+        &quot;--spec&quot;,
+        &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;,
+        &quot;Setext headings|Paragraphs|Blank lines&quot;
+      ],
+      &quot;note&quot;: &quot;Setext headings; paragraphs; blank lines&quot;
+    },
+    {
+      &quot;id&quot;: &quot;BLOCK-003&quot;,
+      &quot;provenance&quot;: &quot;plan&quot;,
+      &quot;gate&quot;: [
+        &quot;python3&quot;,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;,
+        &quot;./commonmark&quot;,
+        &quot;--spec&quot;,
+        &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;,
+        &quot;Indented code blocks|Fenced code blocks&quot;
+      ],
+      &quot;note&quot;: &quot;Indented and fenced code blocks&quot;
+    },
+    {
+      &quot;id&quot;: &quot;BLOCK-004&quot;,
+      &quot;provenance&quot;: &quot;plan&quot;,
+      &quot;gate&quot;: [
+        &quot;python3&quot;,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;,
+        &quot;./commonmark&quot;,
+        &quot;--spec&quot;,
+        &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;,
+        &quot;HTML blocks&quot;
+      ],
+      &quot;note&quot;: &quot;HTML blocks&quot;
+    },
+    {
+      &quot;id&quot;: &quot;BLOCK-005&quot;,
+      &quot;provenance&quot;: &quot;plan&quot;,
+      &quot;gate&quot;: [
+        &quot;python3&quot;,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;,
+        &quot;./commonmark&quot;,
+        &quot;--spec&quot;,
+        &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;,
+        &quot;Link reference definitions&quot;
+      ],
+      &quot;note&quot;: &quot;Link reference definitions&quot;
+    },
+    {
+      &quot;id&quot;: &quot;BLOCK-006&quot;,
+      &quot;provenance&quot;: &quot;plan&quot;,
+      &quot;gate&quot;: [
+        &quot;python3&quot;,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;,
+        &quot;./commonmark&quot;,
+        &quot;--spec&quot;,
+        &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;,
+        &quot;Block quotes&quot;
+      ],
+      &quot;note&quot;: &quot;Block quotes&quot;
+    },
+    {
+      &quot;id&quot;: &quot;BLOCK-007&quot;,
+      &quot;provenance&quot;: &quot;plan&quot;,
+      &quot;gate&quot;: [
+        &quot;python3&quot;,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;,
+        &quot;./commonmark&quot;,
+        &quot;--spec&quot;,
+        &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;,
+        &quot;List items|Lists&quot;
+      ],
+      &quot;note&quot;: &quot;List items and lists&quot;
+    },
+    {
+      &quot;id&quot;: &quot;INLINE-001&quot;,
+      &quot;provenance&quot;: &quot;plan&quot;,
+      &quot;gate&quot;: [
+        &quot;python3&quot;,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;,
+        &quot;./commonmark&quot;,
+        &quot;--spec&quot;,
+        &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;,
+        &quot;Backslash escapes|Entity and numeric character references&quot;
+      ],
+      &quot;note&quot;: &quot;Escapes and character references&quot;
+    },
+    {
+      &quot;id&quot;: &quot;INLINE-002&quot;,
+      &quot;provenance&quot;: &quot;plan&quot;,
+      &quot;gate&quot;: [
+        &quot;python3&quot;,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;,
+        &quot;./commonmark&quot;,
+        &quot;--spec&quot;,
+        &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;,
+        &quot;Code spans|Hard line breaks|Soft line breaks&quot;
+      ],
+      &quot;note&quot;: &quot;Code spans and line breaks&quot;
+    },
+    {
+      &quot;id&quot;: &quot;INLINE-003&quot;,
+      &quot;provenance&quot;: &quot;plan&quot;,
+      &quot;gate&quot;: [
+        &quot;python3&quot;,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;,
+        &quot;./commonmark&quot;,
+        &quot;--spec&quot;,
+        &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;,
+        &quot;Emphasis and strong emphasis&quot;
+      ],
+      &quot;note&quot;: &quot;Emphasis and strong emphasis&quot;
+    },
+    {
+      &quot;id&quot;: &quot;INLINE-004&quot;,
+      &quot;provenance&quot;: &quot;plan&quot;,
+      &quot;gate&quot;: [
+        &quot;python3&quot;,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;,
+        &quot;./commonmark&quot;,
+        &quot;--spec&quot;,
+        &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;,
+        &quot;Links|Images&quot;
+      ],
+      &quot;note&quot;: &quot;Links and images&quot;
+    },
+    {
+      &quot;id&quot;: &quot;INLINE-005&quot;,
+      &quot;provenance&quot;: &quot;plan&quot;,
+      &quot;gate&quot;: [
+        &quot;python3&quot;,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;,
+        &quot;./commonmark&quot;,
+        &quot;--spec&quot;,
+        &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;,
+        &quot;Autolinks|Raw HTML&quot;
+      ],
+      &quot;note&quot;: &quot;Autolinks and raw HTML&quot;
+    },
+    {
+      &quot;id&quot;: &quot;INLINE-006&quot;,
+      &quot;provenance&quot;: &quot;plan&quot;,
+      &quot;gate&quot;: [
+        &quot;python3&quot;,
+        &quot;sources/spec_tests.py&quot;,
+        &quot;--program&quot;,
+        &quot;./commonmark&quot;,
+        &quot;--spec&quot;,
+        &quot;sources/spec.txt&quot;,
+        &quot;--pattern&quot;,
+        &quot;Textual content&quot;
+      ],
+      &quot;note&quot;: &quot;Textual content&quot;
+    },
+    {
+      &quot;id&quot;: &quot;VERIFY-001&quot;,
+      &quot;provenance&quot;: &quot;plan&quot;,
+      &quot;note&quot;: &quot;Terminal verification: complete unfiltered supplied suite; depends on all parser implementation stories&quot;
+    }
+  ]
+}
+</pre></article>
+</main>
+</body>
+</html>
