@@ -25,7 +25,8 @@ def _start(line: str):
     tag = re.match(r"</?([A-Za-z][A-Za-z0-9-]*)(?=[\s/>]|$)", text)
     if tag and tag.group(1).lower() in _BLOCK:
         return 6, None
-    if re.fullmatch(r"</?[A-Za-z][A-Za-z0-9-]*(?:[ \t]+[^<>]*)?/?>[ \t]*", text):
+    from .inline_html_breaks import _TAG
+    if _TAG.fullmatch(text.rstrip(" \t")):
         return 7, None
     return None
 

@@ -1,0 +1,34 @@
+Drydock 0.8.0  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Next: (no actionable steps — all done or blocked)
+
+Blueprint: commonmark
+Target: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/workspace/targets/commonmark
+Rows: <state> <type>  <Name>  [<id>]   — pass [<id>] to --step
+Block: Build Block 1 · Foundational  [block-1]   — [built] story Establish the Python project and parser integration boundaries.  [foundation] — complete
+Block: Build Block 2 · Service  [block-2]   — [built] story Provide the standard-stream executable.  [delivery] — complete
+Block: Build Block 3 · Service  [block-3]   — [built] story Form paragraphs and handle blank lines.  [paragraphs] — complete
+
+Block: Build Block 4 · Service  [block-4]   — 6/6 stories complete
+  [built]   story  Recognize thematic breaks with block precedence.  [thematic-breaks]
+  [built]   story  Parse indented code blocks.  [indented-code]
+  [built]   story  Parse ATX headings.  [atx-headings]
+  [built]   story  Parse raw HTML blocks.  [html-blocks]
+  [built]   story  Parse fenced code blocks.  [fenced-code]
+  [built]   story  Collect document-wide link reference definitions.  [reference-definitions]
+Block: Build Block 5 · Service  [block-5]   — [built] story Parse setext headings.  [setext-headings] — complete
+Block: Build Block 6 · Service  [block-6]   — [built] story Parse block quote containers.  [block-quotes] — complete
+Block: Build Block 7 · Service  [block-7]   — [built] story Parse list items and lists.  [lists] — complete
+Block: Build Block 8 · Service  [block-8]   — [built] story Parse escapes, character references, and text line breaks.  [inline-text] — complete
+Block: Build Block 9 · Service  [block-9]   — [built] story Parse inline code spans.  [code-spans] — complete
+
+Block: Build Block 10 · Service  [block-10]   — 3/3 stories complete
+  [built]   story  Parse emphasis and strong emphasis.  [emphasis]
+  [built]   story  Parse URI and email autolinks.  [autolinks]
+  [built]   story  Parse raw inline HTML and hard line breaks.  [inline-html-breaks]
+Block: Build Block 11 · Service  [block-11]   — [built] story Parse inline and reference links.  [links] — complete
+Block: Build Block 12 · Service  [block-12]   — [built] story Parse inline and reference images.  [images] — complete
+Block: Build Block 13 · Service  [block-13]   — [built] story Exercise all scoped CommonMark examples against the integrated parser.  [conformance-integration] — complete
+Block: Build Block 14 · Service  [block-14]   — [built] story Verify the complete supplied conformance suite.  [verification] — complete
+
+Steps: 21 total — 0 done, 21 built (await verify), 0 in review, 0 pending, 0 blocked by questions, 0 failed (0% complete)
+Buildable now: (none)

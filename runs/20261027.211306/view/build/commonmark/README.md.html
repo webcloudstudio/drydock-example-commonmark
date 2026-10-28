@@ -9,11 +9,25 @@
 <body>
 <main>
 <header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/README.md</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../build/commonmark/README.md">Raw file</a></div></header>
-<article class="doc"><h1>CommonMark</h1>
-<p><code>commonmark</code> converts Markdown from standard input to HTML on standard output.</p>
-<p>Run it from the project root:</p>
-<pre><code>./commonmark &lt; input.md</code></pre>
-<p>The executable reads the complete document as UTF-8 and writes the rendered HTML to standard output. Operational errors are reported on standard error with a nonzero exit status.</p></article>
+<article class="doc"><h1>commonmark</h1>
+<p>A command-line parser that converts CommonMark Markdown from standard input to HTML on standard output.</p>
+<h2>Intent</h2>
+<p>CommonMark is a command-line parser for users who need Markdown converted to HTML. It implements the supplied CommonMark 0.31.2 specification and reads UTF-8 Markdown from standard input, writing HTML to standard output through the root executable <code>commonmark</code>.</p>
+<h2>What It Does</h2>
+<p>Parse fenced code as a literal block, including its optional info string, for subsequent HTML rendering.</p>
+<p>Identify raw HTML blocks during block parsing and preserve their input without inline interpretation.</p>
+<p>Identify indented code chunks during block parsing and retain their literal content for HTML rendering.</p>
+<p>Extract definitions from closing paragraphs and make the resulting map available after block parsing, before inline parsing begins.</p>
+<p>Recognize a setext underline following eligible paragraph content and retain the heading&#x27;s raw text for the later inline phase.</p>
+<h2>Setup and Running</h2>
+<p><strong>Before first run:</strong></p>
+<ul><li>Confirm the repository has the expected remote with <code>git remote -v</code>; add <code>origin</code> if the startup guard requires it.</li><li>Run <code>git status --short</code> and commit or intentionally stash local changes before deployment-oriented runs.</li></ul>
+<p><strong>Install dependencies:</strong></p>
+<pre><code>uv sync</code></pre>
+<h2>Verification</h2>
+<pre><code>python -m pytest</code></pre>
+<h2>Next Steps</h2>
+<ul><li>Complete the first-run checks above.</li><li>Run <code>python -m pytest</code> before making release or deployment changes.</li></ul></article>
 </main>
 </body>
 </html>

@@ -1,0 +1,17 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark_parser/inlines.py
+- tests/test_inline_text.py
+
+SUMMARY:
+Restored escaped punctuation as public `text` nodes while preserving delimiter handling.
+
+- Escape reproduction failed before the fix; `pytest -q tests/test_inline_text.py tests/test_render_integration.py` passed afterward: 34 tests.
+- `pytest -q` passed: 109 tests.
+- The scoped inline conformance selector passed: 356 examples.
+- The scoped JSON selection probe completed successfully.
+- The preliminaries, blocks, and containers conformance selectors were not rerun in this repair pass.
+
+BLOCKERS:
+- None.

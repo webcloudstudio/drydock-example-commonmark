@@ -3,7 +3,7 @@
 import html
 import re
 
-_LABEL = re.compile(r"^ {0,3}\[([^\[\]]+)\]:[ \t]*(.*)$")
+_LABEL = re.compile(r"^ {0,3}\[((?:\\.|[^\[\]\\])+)\]:[ \t]*(.*)$", re.S)
 
 
 def _unescape(value: str) -> str:
@@ -20,9 +20,14 @@ def extract_definitions(text: str, references: dict) -> str:
     offset = 0
     while offset < len(lines):
         current = lines[offset].rstrip("\r\n")
+        label_end = offset
+        while current.lstrip().startswith("[") and not _LABEL.match(current) and label_end + 1 < len(lines):
+            label_end += 1
+            current += "\n" + lines[label_end].rstrip("\r\n")
         match = _LABEL.match(current)
-        if not match or not match.group(1).strip(" \t"):
+        if not match or not match.group(1).strip():
             break
+        offset = label_end
         key = _label(match.group(1))
         first_definition = key not in references
         rest = match.group(2).strip(" \t")
@@ -38,6 +43,22 @@ def extract_definitions(text: str, references: dict) -> str:
             if candidate:
                 rest += " " + candidate
                 offset += 1
+        # A title can span multiple nonblank lines; consume it only when closed.
+        title_start = re.search(r"(?:^|[ \t])([\"'(])", rest)
+        if title_start:
+            opener = title_start.group(1)
+            closer = ")" if opener == "(" else opener
+            start = title_start.end()
+            if closer not in rest[start:]:
+                end_offset = offset
+                extra = ""
+                while end_offset + 1 < len(lines) and lines[end_offset + 1].strip():
+                    end_offset += 1
+                    extra += "\n" + lines[end_offset].rstrip("\r\n").strip(" \t")
+                    if closer in extra:
+                        rest += extra
+                        offset = end_offset
+                        break
         destination = None
         title = None
         if rest.startswith("<"):

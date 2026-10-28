@@ -1,0 +1,3 @@
+  Completed CODEX/gpt-6.1-terra (build)  rc=0
+    elapsed=3m 36.2s   cached=239,488 (88% hit)   uncached=31,728   out=901   tps=4.2
+  tokens: cached=239,488 (88% hit) · uncached=31,728 · out=901

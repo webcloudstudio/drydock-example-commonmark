@@ -10,528 +10,71 @@
 <main>
 <header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/commands/10-initial-build-1.stdout.log</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/commands/10-initial-build-1.stdout.log">Raw file</a></div></header>
 <article class="doc"><pre>Drydock 0.8.0  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Target - setup project workspace git store
+Target - committed project workspace git store
 Build: commonmark
 scope: entire project
-frontier: foundation
-git: baseline commonmark da82f27e08f0
-git: baseline commonmark 22773e120af6
+frontier: resume block-13
+git: baseline commonmark b949659044ec
+git: baseline commonmark c0ceba7d6805
 
-BLOCK block-1  name=&quot;Block 1 · Foundational&quot;  calls_max=22
-  story=foundation  &quot;Establish the Python project and parser integration boundaries.&quot;
-
-  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.212136.170Z-f219a077
-    status  3/3 checks passed
-      story=foundation  3/3 checks passed
-        check=foundation-integration  PASS
-        check=foundation-block-boundary  PASS
-        check=foundation-inline-boundary  PASS
-git: block-1 | python.md, ARCHITECTURE.md | call=1 | app=bac83d8b02b0 target=8fb97ec1ea30
-
-  DONE  story=foundation  state=closed/implemented  execution=20261027.212136.170Z-f219a077  elapsed=53.8s
-git: block-1 | python.md, ARCHITECTURE.md | step_completed | app=unchanged target=c9f07203da2e
-
-BLOCK block-2  name=&quot;Block 2 · Service&quot;  calls_max=22
-  story=delivery  &quot;Provide the standard-stream executable.&quot;
-
-  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.212230.188Z-a55fa78c
-    status  1/1 checks passed
-      story=delivery  1/1 checks passed
-        check=executable-empty-document  PASS
-git: block-2 | FEATURE-Executable.md | call=1 | app=b6024f9cf849 target=16e2a30b5382
-
-  DONE  story=delivery  state=closed/implemented  execution=20261027.212230.188Z-a55fa78c  elapsed=29.9s
-git: block-2 | FEATURE-Executable.md | step_completed | app=unchanged target=a17e731afa8e
-
-BLOCK block-3  name=&quot;Block 3 · Service&quot;  calls_max=22
-  story=paragraphs  &quot;Form paragraphs and handle blank lines.&quot;
-
-  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.212303.580Z-58ebcddd
-    status  2/2 checks passed
-      story=paragraphs  2/2 checks passed
-        check=paragraph-blocks  PASS
-        check=paragraph-whitespace  PASS
-git: block-3 | FEATURE-Paragraphs.md | call=1 | app=daa4b8d31be7 target=72f416c663fc
-
-  DONE  story=paragraphs  state=closed/implemented  execution=20261027.212303.580Z-58ebcddd  elapsed=45.0s
-git: block-3 | FEATURE-Paragraphs.md | step_completed | app=unchanged target=f1fad75f91c7
-
-BLOCK block-4  name=&quot;Block 4 · Service&quot;  calls_max=22
-  story=thematic-breaks  &quot;Recognize thematic breaks with block precedence.&quot;
-  story=indented-code  &quot;Parse indented code blocks.&quot;
-  story=atx-headings  &quot;Parse ATX headings.&quot;
-  story=html-blocks  &quot;Parse raw HTML blocks.&quot;
-  story=fenced-code  &quot;Parse fenced code blocks.&quot;
-  story=reference-definitions  &quot;Collect document-wide link reference definitions.&quot;
-
-  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.212400.806Z-88e20c49
-    status  12/12 checks passed
-      story=thematic-breaks  2/2 checks passed
-        check=thematic-break-recognition  PASS
-        check=thematic-break-invalid  PASS
-      story=indented-code  2/2 checks passed
-        check=indented-code-content  PASS
-        check=indented-code-interruption  PASS
-      story=atx-headings  2/2 checks passed
-        check=atx-heading-level  PASS
-        check=atx-heading-interruption  PASS
-      story=html-blocks  2/2 checks passed
-        check=html-block-termination  PASS
-        check=html-block-paragraph  PASS
-      story=fenced-code  2/2 checks passed
-        check=fenced-code-matching  PASS
-        check=fenced-code-unclosed  PASS
-      story=reference-definitions  2/2 checks passed
-        check=references-first-definition  PASS
-        check=references-remainder  PASS
-git: block-4 | FEATURE-ThematicBreaks.md, FEATURE-IndentedCode.md, FEATURE-ATXHeadings.md, FEATURE-HTMLBlocks.md, FEATURE-FencedCode.md, FEATURE-ReferenceDefinitions.md | call=1 | app=dea2dbae62af target=9e3dfb0697a9
-
-  DONE  story=thematic-breaks  state=closed/implemented  execution=20261027.212400.806Z-88e20c49  elapsed=2m44s
-git: block-4 | FEATURE-ThematicBreaks.md, FEATURE-IndentedCode.md, FEATURE-ATXHeadings.md, FEATURE-HTMLBlocks.md, FEATURE-FencedCode.md, FEATURE-ReferenceDefinitions.md | step_completed | app=unchanged target=3e1332d93db6
-
-BLOCK block-5  name=&quot;Block 5 · Service&quot;  calls_max=22
-  story=setext-headings  &quot;Parse setext headings.&quot;
-
-  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.212642.183Z-6ea2d22c
-    status  2/2 checks passed
-      story=setext-headings  2/2 checks passed
-        check=setext-valid  PASS
-        check=setext-invalid  PASS
-git: block-5 | FEATURE-SetextHeadings.md | call=1 | app=dc291e278fa0 target=a54645923a87
-
-  DONE  story=setext-headings  state=closed/implemented  execution=20261027.212642.183Z-6ea2d22c  elapsed=46.6s
-git: block-5 | FEATURE-SetextHeadings.md | step_completed | app=unchanged target=e594e08eb901
-
-BLOCK block-6  name=&quot;Block 6 · Service&quot;  calls_max=22
-  story=block-quotes  &quot;Parse block quote containers.&quot;
-
-  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.212732.438Z-fe4fa9c3
-    status  2/2 checks passed
-      story=block-quotes  2/2 checks passed
-        check=block-quote-lazy  PASS
-        check=block-quote-nesting  PASS
-git: block-6 | FEATURE-BlockQuotes.md | call=1 | app=6f7d17bfdc91 target=6987abeb8e25
-
-  DONE  story=block-quotes  state=closed/implemented  execution=20261027.212732.438Z-fe4fa9c3  elapsed=58.2s
-git: block-6 | FEATURE-BlockQuotes.md | step_completed | app=unchanged target=b573948909a4
-
-BLOCK block-7  name=&quot;Block 7 · Service&quot;  calls_max=22
-  story=lists  &quot;Parse list items and lists.&quot;
-
-  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.212834.286Z-b90fd7eb
-    status  2/2 checks passed
-      story=lists  2/2 checks passed
-        check=list-items  PASS
-        check=list-start-and-looseness  PASS
-git: block-7 | FEATURE-Lists.md | call=1 | app=3c8c2647e789 target=c7d177a46c97
-
-  DONE  story=lists  state=closed/implemented  execution=20261027.212834.286Z-b90fd7eb  elapsed=1m05s
-git: block-7 | FEATURE-Lists.md | step_completed | app=unchanged target=ef0839a32ccb
-
-BLOCK block-8  name=&quot;Block 8 · Service&quot;  calls_max=22
-  story=inline-text  &quot;Parse escapes, character references, and text line breaks.&quot;
-
-  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.212943.897Z-4276dc89
-    status  3/3 checks passed
-      story=inline-text  3/3 checks passed
-        check=inline-escape  PASS
-        check=inline-soft-break  PASS
-        check=inline-numeric-reference  PASS
-git: block-8 | FEATURE-InlineText.md | call=1 | app=8c1b7aacc1fb target=f440d977bf9d
-
-  DONE  story=inline-text  state=closed/implemented  execution=20261027.212943.897Z-4276dc89  elapsed=53.4s
-git: block-8 | FEATURE-InlineText.md | step_completed | app=unchanged target=af8ee8fa7389
-
-BLOCK block-9  name=&quot;Block 9 · Service&quot;  calls_max=22
-  story=code-spans  &quot;Parse inline code spans.&quot;
-
-  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.213041.126Z-a9181387
-    status  3/3 checks passed
-      story=code-spans  3/3 checks passed
-        check=code-span-literal  PASS
-        check=code-span-normalization  PASS
-        check=code-span-unmatched  PASS
-git: block-9 | FEATURE-CodeSpans.md | call=1 | app=e21945844b2e target=214522303a67
-
-  DONE  story=code-spans  state=closed/implemented  execution=20261027.213041.126Z-a9181387  elapsed=1m00s
-git: block-9 | FEATURE-CodeSpans.md | step_completed | app=unchanged target=f21168e0f374
-
-BLOCK block-10  name=&quot;Block 10 · Service&quot;  calls_max=22
-  story=emphasis  &quot;Parse emphasis and strong emphasis.&quot;
-  story=autolinks  &quot;Parse URI and email autolinks.&quot;
-  story=inline-html-breaks  &quot;Parse raw inline HTML and hard line breaks.&quot;
-
-  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.213148.636Z-1bae04d1
-    status  7/7 checks passed
-      story=emphasis  3/3 checks passed
-        check=emphasis-basic  PASS
-        check=emphasis-strong  PASS
-        check=emphasis-intraword-underscore  PASS
-      story=autolinks  2/2 checks passed
-        check=autolinks-uri  PASS
-        check=autolinks-email-and-invalid  PASS
-      story=inline-html-breaks  2/2 checks passed
-        check=inline-html-raw  PASS
-        check=inline-hard-breaks  PASS
-git: block-10 | FEATURE-Emphasis.md, FEATURE-Autolinks.md, FEATURE-InlineHTMLBreaks.md | call=1 | app=0469df1a5f3b target=366a39248421
-
-  DONE  story=emphasis  state=closed/implemented  execution=20261027.213148.636Z-1bae04d1  elapsed=1m39s
-git: block-10 | FEATURE-Emphasis.md, FEATURE-Autolinks.md, FEATURE-InlineHTMLBreaks.md | step_completed | app=unchanged target=8639dbdc9c73
-
-BLOCK block-11  name=&quot;Block 11 · Service&quot;  calls_max=22
-  story=links  &quot;Parse inline and reference links.&quot;
-
-  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.213328.256Z-55fc0c59
-    status  2/2 checks passed
-      story=links  2/2 checks passed
-        check=links-inline  PASS
-        check=links-reference  PASS
-git: block-11 | FEATURE-Links.md | call=1 | app=ec792f996900 target=17a93691d716
-
-  DONE  story=links  state=closed/implemented  execution=20261027.213328.256Z-55fc0c59  elapsed=1m25s
-git: block-11 | FEATURE-Links.md | step_completed | app=unchanged target=bd95c10d9de3
-
-BLOCK block-12  name=&quot;Block 12 · Service&quot;  calls_max=22
-  story=images  &quot;Parse inline and reference images.&quot;
-
-  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.213456.967Z-29b1441b
-    status  2/2 checks passed
-      story=images  2/2 checks passed
-        check=images-inline  PASS
-        check=images-reference  PASS
-git: block-12 | FEATURE-Images.md | call=1 | app=514867664ebc target=534b69e663dc
-
-  DONE  story=images  state=closed/implemented  execution=20261027.213456.967Z-29b1441b  elapsed=1m15s
-git: block-12 | FEATURE-Images.md | step_completed | app=unchanged target=a66b6c4849bf
-
-BLOCK block-13  name=&quot;Block 13 · Service&quot;  calls_max=22
+BLOCK block-13  name=&quot;Block 13 · Service&quot;  calls_max=7
   story=conformance-integration  &quot;Exercise all scoped CommonMark examples against the integrated parser.&quot;
 
-  [call 1/22]  kind=initial  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.214041.152Z-e0b02b41
-    status  0/4 checks passed
-      story=conformance-integration  0/4 checks passed
-        check=conformance-preliminaries  FAIL  cases=7/12 passed
-        check=conformance-blocks  FAIL  cases=143/187 passed
-        check=conformance-containers  FAIL  cases=78/99 passed
-        check=conformance-inlines  FAIL  cases=227/356 passed
-      Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=1 | app=706a8d2106f9 target=7c5e15d8aa63
-
-  [call 2/22]  kind=repair(1/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.215141.573Z-12306cc0
-    status  0/4 checks passed
-      story=conformance-integration  0/4 checks passed
-        check=conformance-preliminaries  FAIL  cases=9/12 passed  change=+2
-        check=conformance-blocks  FAIL  cases=143/187 passed  change=+0
-        check=conformance-containers  FAIL  cases=78/99 passed  change=+0
-        check=conformance-inlines  FAIL  cases=227/356 passed  change=+0
-      Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=2 | app=a444069c26c8 target=1ebd7adf75c9
-
-  [call 3/22]  kind=repair(2/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.215758.604Z-9b352a29
-    status  0/4 checks passed
-      story=conformance-integration  0/4 checks passed
-        check=conformance-preliminaries  FAIL  cases=10/12 passed  change=+1
-        check=conformance-blocks  FAIL  cases=143/187 passed  change=+0
-        check=conformance-containers  FAIL  cases=78/99 passed  change=+0
-        check=conformance-inlines  FAIL  cases=227/356 passed  change=+0
-      Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=3 | app=59796e19831a target=6176712a714c
-
-  [call 4/22]  kind=repair(3/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.220435.183Z-10a1b99b
-    status  0/4 checks passed
-      story=conformance-integration  0/4 checks passed
-        check=conformance-preliminaries  FAIL  cases=11/12 passed  change=+1
-        check=conformance-blocks  FAIL  cases=143/187 passed  change=+0
-        check=conformance-containers  FAIL  cases=78/99 passed  change=+0
-        check=conformance-inlines  FAIL  cases=227/356 passed  change=+0
-      Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=4 | app=2184230395e2 target=0e196570b122
-
-  [call 5/22]  kind=repair(4/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.221052.921Z-c2aa11a1
-    status  1/4 checks passed
-      story=conformance-integration  1/4 checks passed
-        check=conformance-preliminaries  PASS  cases=12/12 passed  change=+1
-        check=conformance-blocks  FAIL  cases=143/187 passed  change=+0
-        check=conformance-containers  FAIL  cases=78/99 passed  change=+0
-        check=conformance-inlines  FAIL  cases=227/356 passed  change=+0
-      Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=5 | app=d65d5e5f8d85 target=4751b4d53585
-
-  [call 6/22]  kind=repair(5/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.221721.508Z-00266f46
-    status  1/4 checks passed
-      story=conformance-integration  1/4 checks passed
+  [call 1/7]  kind=resume  llm=codex/gpt-6.1-terra
+    result=ok  rc=0  execution=20261028.021500.992Z-f67c91b1
+    status  3/4 checks passed
+      story=conformance-integration  3/4 checks passed
         check=conformance-preliminaries  PASS  cases=12/12 passed  change=+0
-        check=conformance-blocks  FAIL  cases=144/187 passed  change=+1
-        check=conformance-containers  FAIL  cases=79/99 passed  change=+1
-        check=conformance-inlines  FAIL  cases=227/356 passed  change=+0
-      Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=6 | app=32f8f16008ce target=d69a3f0eb407
-
-  [call 7/22]  kind=repair(6/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.222333.407Z-bb94d2af
-    status  1/4 checks passed
-      story=conformance-integration  1/4 checks passed
-        check=conformance-preliminaries  PASS  cases=12/12 passed  change=+0
-        check=conformance-blocks  FAIL  cases=149/187 passed  change=+5
-        check=conformance-containers  FAIL  cases=79/99 passed  change=+0
-        check=conformance-inlines  FAIL  cases=238/356 passed  change=+11
-      Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=7 | app=bb6e674aa898 target=44f6336b7470
-
-  [call 8/22]  kind=repair(7/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.223003.829Z-584b4ebc
-    status  1/4 checks passed
-      story=conformance-integration  1/4 checks passed
-        check=conformance-preliminaries  PASS  cases=12/12 passed  change=+0
-        check=conformance-blocks  FAIL  cases=151/187 passed  change=+2
-        check=conformance-containers  FAIL  cases=79/99 passed  change=+0
-        check=conformance-inlines  FAIL  cases=239/356 passed  change=+1
-      Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=8 | app=bcaaccb4abcc target=537b2335e734
-
-  [call 9/22]  kind=repair(8/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.223755.609Z-1ffd60d1
-    status  1/4 checks passed
-      story=conformance-integration  1/4 checks passed
-        check=conformance-preliminaries  PASS  cases=12/12 passed  change=+0
-        check=conformance-blocks  FAIL  cases=153/187 passed  change=+2
-        check=conformance-containers  FAIL  cases=79/99 passed  change=+0
-        check=conformance-inlines  FAIL  cases=241/356 passed  change=+2
-      Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=9 | app=e1b244934a57 target=575c027bbb42
-
-  [call 10/22]  kind=repair(9/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.224405.804Z-d128a5ec
-    status  1/4 checks passed
-      story=conformance-integration  1/4 checks passed
-        check=conformance-preliminaries  PASS  cases=12/12 passed  change=+0
-        check=conformance-blocks  FAIL  cases=154/187 passed  change=+1
-        check=conformance-containers  FAIL  cases=79/99 passed  change=+0
-        check=conformance-inlines  FAIL  cases=241/356 passed  change=+0
-      Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=10 | app=c82b5f1aff3f target=8dc2f684e35b
-
-  [call 11/22]  kind=repair(10/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.225013.563Z-275e7bc1
-    status  1/4 checks passed
-      story=conformance-integration  1/4 checks passed
-        check=conformance-preliminaries  PASS  cases=12/12 passed  change=+0
-        check=conformance-blocks  FAIL  cases=155/187 passed  change=+1
-        check=conformance-containers  FAIL  cases=79/99 passed  change=+0
-        check=conformance-inlines  FAIL  cases=241/356 passed  change=+0
-      Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=11 | app=ad2e7f2a18dd target=136f82a4d688
-
-  [call 12/22]  kind=repair(11/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.225636.219Z-4495cc75
-    status  1/4 checks passed
-      story=conformance-integration  1/4 checks passed
-        check=conformance-preliminaries  PASS  cases=12/12 passed  change=+0
-        check=conformance-blocks  FAIL  cases=159/187 passed  change=+4
-        check=conformance-containers  FAIL  cases=79/99 passed  change=+0
-        check=conformance-inlines  FAIL  cases=241/356 passed  change=+0
-      Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=12 | app=769ed75e0bbb target=ace5aeda44de
-
-  [call 13/22]  kind=repair(12/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.230244.943Z-668c9082
-    status  1/4 checks passed
-      story=conformance-integration  1/4 checks passed
-        check=conformance-preliminaries  PASS  cases=12/12 passed  change=+0
-        check=conformance-blocks  FAIL  cases=171/187 passed  change=+12
-        check=conformance-containers  FAIL  cases=79/99 passed  change=+0
-        check=conformance-inlines  FAIL  cases=241/356 passed  change=+0
-      Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=13 | app=3fb5175e3f76 target=ad637c6e600f
-
-  [call 14/22]  kind=repair(13/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.230841.955Z-f5e414d2
-    status  1/4 checks passed
-      story=conformance-integration  1/4 checks passed
-        check=conformance-preliminaries  PASS  cases=12/12 passed  change=+0
-        check=conformance-blocks  FAIL  cases=175/187 passed  change=+4
-        check=conformance-containers  FAIL  cases=76/99 passed  change=-3
-        check=conformance-inlines  FAIL  cases=251/356 passed  change=+10
-      Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=14 | app=78e292fdef07 target=482fbcad835f
-
-  [call 15/22]  kind=repair(14/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.231816.873Z-3a7606a2
-    status  1/4 checks passed
-      story=conformance-integration  1/4 checks passed
-        check=conformance-preliminaries  PASS  cases=12/12 passed  change=+0
-        check=conformance-blocks  FAIL  cases=175/187 passed  change=+0
-        check=conformance-containers  FAIL  cases=78/99 passed  change=+2
-        check=conformance-inlines  FAIL  cases=251/356 passed  change=+0
-      Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=15 | app=d26584dc4b71 target=676e2b3f22a2
-
-  [call 16/22]  kind=repair(15/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.232420.880Z-86d4b0ae
-    status  1/4 checks passed
-      story=conformance-integration  1/4 checks passed
-        check=conformance-preliminaries  PASS  cases=12/12 passed  change=+0
-        check=conformance-blocks  FAIL  cases=178/187 passed  change=+3
-        check=conformance-containers  FAIL  cases=82/99 passed  change=+4
-        check=conformance-inlines  FAIL  cases=261/356 passed  change=+10
-      Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=16 | app=ddaa0de23e98 target=e9327a8adedd
-
-  [call 17/22]  kind=repair(16/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.233350.892Z-9ef6a2c5
-    status  2/4 checks passed
-      story=conformance-integration  2/4 checks passed
-        check=conformance-preliminaries  PASS  cases=12/12 passed  change=+0
-        check=conformance-blocks  FAIL  cases=183/187 passed  change=+5
-        check=conformance-containers  PASS  cases=99/99 passed  change=+17
-        check=conformance-inlines  FAIL  cases=267/356 passed  change=+6
-      Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=17 | app=209b9bfaa68b target=3c52d6ea4201
-
-  [call 18/22]  kind=repair(17/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.235013.184Z-ad447d68
-    status  1/4 checks passed
-      story=conformance-integration  1/4 checks passed
-        check=conformance-preliminaries  PASS  cases=12/12 passed  change=+0
-        check=conformance-blocks  FAIL  cases=184/187 passed  change=+1
-        check=conformance-containers  FAIL  cases=97/99 passed  change=-2
-        check=conformance-inlines  FAIL  cases=268/356 passed  change=+1
-      Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=18 | app=7fe3c7648f79 target=05a94c8416b5
-
-  [call 19/22]  kind=repair(18/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261027.235859.179Z-e95527d0
-    status  2/4 checks passed
-      story=conformance-integration  2/4 checks passed
-        check=conformance-preliminaries  PASS  cases=12/12 passed  change=+0
-        check=conformance-blocks  FAIL  cases=183/187 passed  change=-1
-        check=conformance-containers  PASS  cases=99/99 passed  change=+2
-        check=conformance-inlines  FAIL  cases=268/356 passed  change=+0
-      Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=19 | app=ce2b7406206f target=5d9160155f92
-
-  [call 20/22]  kind=repair(19/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261028.000242.550Z-037c88aa
-    status  2/4 checks passed
-      story=conformance-integration  2/4 checks passed
-        check=conformance-preliminaries  PASS  cases=12/12 passed  change=+0
-        check=conformance-blocks  FAIL  cases=183/187 passed  change=+0
+        check=conformance-blocks  PASS  cases=187/187 passed  change=+3
         check=conformance-containers  PASS  cases=99/99 passed  change=+0
-        check=conformance-inlines  FAIL  cases=271/356 passed  change=+3
+        check=conformance-inlines  FAIL  cases=318/356 passed  change=+45
       Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=20 | app=97f7f83a8f8b target=82449fe02409
+git: block-13 | FEATURE-ConformanceIntegration.md | call=1 | app=21b9fd6949ba target=278671d3a6f7
 
-  [call 21/22]  kind=repair(20/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261028.000834.048Z-36ed2d30
-    status  2/4 checks passed
-      story=conformance-integration  2/4 checks passed
+  [call 2/7]  kind=repair(1/6)  llm=codex/gpt-6.1-terra
+    result=ok  rc=0  execution=20261028.022034.143Z-4de320c1
+    status  4/4 checks passed
+      story=conformance-integration  4/4 checks passed
         check=conformance-preliminaries  PASS  cases=12/12 passed  change=+0
-        check=conformance-blocks  FAIL  cases=184/187 passed  change=+1
+        check=conformance-blocks  PASS  cases=187/187 passed  change=+0
         check=conformance-containers  PASS  cases=99/99 passed  change=+0
-        check=conformance-inlines  FAIL  cases=272/356 passed  change=+1
+        check=conformance-inlines  PASS  cases=356/356 passed  change=+38
       Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=21 | app=bd9da17f732a target=95916e1d6cda
+git: block-13 | FEATURE-ConformanceIntegration.md | call=2 | app=f13f7ee041bd target=6537ec3c20d5
 
-  [call 22/22]  kind=repair(21/21)  llm=codex/gpt-6-luna
-    result=ok  rc=0  execution=20261028.001809.125Z-549378e5
-    status  2/4 checks passed
-      story=conformance-integration  2/4 checks passed
+  [call 3/7]  kind=repair(2/6)  llm=codex/gpt-6.1-terra
+    result=ok  rc=0  execution=20261028.022711.708Z-054d2a6b
+    status  4/4 checks passed
+      story=conformance-integration  4/4 checks passed
         check=conformance-preliminaries  PASS  cases=12/12 passed  change=+0
-        check=conformance-blocks  FAIL  cases=184/187 passed  change=+0
+        check=conformance-blocks  PASS  cases=187/187 passed  change=+0
         check=conformance-containers  PASS  cases=99/99 passed  change=+0
-        check=conformance-inlines  FAIL  cases=273/356 passed  change=+1
+        check=conformance-inlines  PASS  cases=356/356 passed  change=+0
       Case counts are per check; scopes may overlap and are not additive.
-git: block-13 | FEATURE-ConformanceIntegration.md | call=22 | app=d2a36484e7ce target=6b3cdef47666
+git: block-13 | FEATURE-ConformanceIntegration.md | call=3 | app=6261ab8cbee9 target=7892e12db9d6
 
-  FAILED  story=conformance-integration  state=closed/failed  execution=20261028.001809.125Z-549378e5  elapsed=2h47m45s
-git: block-13 | FEATURE-ConformanceIntegration.md | step_completed | app=unchanged target=f5ddd3a2ef32
+  DONE  story=conformance-integration  state=closed/implemented  execution=20261028.022711.708Z-054d2a6b  elapsed=23m21s
+git: block-13 | FEATURE-ConformanceIntegration.md | step_completed | app=unchanged target=7e8fce1bd331
 
-result: 19 built, 1 failed, 0 unchanged
-elapsed: 3 hours 3 minutes 22 seconds
+BLOCK block-14  name=&quot;Block 14 · Service&quot;  calls_max=7
+  story=verification  &quot;Verify the complete supplied conformance suite.&quot;
 
-========================================================================
-BUILD FAILED: commonmark  (1 step)
-========================================================================
+  [call 1/7]  kind=initial  llm=codex/gpt-6.1-terra
+    result=ok  rc=0  execution=20261028.023530.374Z-2ac3c3fc
+    status  1/1 checks passed
+      story=verification  1/1 checks passed
+        check=complete-conformance  PASS  cases=655/655 passed
+      Case counts are per check; scopes may overlap and are not additive.
+git: block-14 | VERIFICATION.md | call=1 | app=unchanged target=33adca8cd682
 
-  Failure
-    Provenance
-      Target: commonmark
-      Block: Block 13 · Service [block-13]
-      Story: Exercise all scoped CommonMark examples against the integrated parser. [conformance-integration]
-    Cause: programmatic acceptance failed: conformance-blocks, conformance-inlines
-    agent summary:
-      Fixed Unicode symbol flanking for emphasis and added a
-      regression for the representative currency symbol case. The
-      focused regression and conformance examples 356 and 357
-      pass; `pytest -q` passes (103 tests).
-    acceptance: 2/4 passing · baseline 0/4 · improved
-    conformance-preliminaries: 12 passed, 0 failed · change +12 passed, -12 failed
-    conformance-blocks: 184 passed, 3 failed · change +183 passed, -183 failed
-    conformance-containers: 99 passed, 0 failed · change +99 passed, -99 failed
-    conformance-inlines: 273 passed, 83 failed · change +273 passed, -235 failed
-    Acceptance checks:
-      AC FAILED  conformance-blocks  184/187 passed (3 failed)
-        Intent: The integrated parser passes every example in the supplied leaf block sections.
-        Source: FEATURE-ConformanceIntegration.md
-      AC FAILED  conformance-inlines  273/356 passed (83 failed)
-        Intent: The integrated parser passes every example in the supplied inline and text sections.
-        Source: FEATURE-ConformanceIntegration.md
-    Recovery
-      Run: drydock build commonmark
-        to continue the build. This story resumes where it left off and is
-        retried against the checks it failed.
-    agent blockers:
-      - The saved failures show broader unresolved reference
-      definition, delimiter, link, image, and HTML parsing
-      failures. The focused emphasis section still fails on other
-      examples; the declared conformance checks are not yet
-      satisfied.
-    execution: 20261028.001809.125Z-549378e5
-    evidence: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/workspace/targets/commonmark/evidence/block-13.md
+  DONE  story=verification  state=closed/implemented  execution=20261028.023530.374Z-2ac3c3fc  elapsed=12m50s
+git: block-14 | VERIFICATION.md | step_completed | app=unchanged target=55f1b45bcb0b
+git: build complete commonmark 57cfa8992ad7
+git: build complete commonmark ed2b085caedc
 
-  Next
-    Run: drydock build commonmark
-      to continue the build. This story resumes where it left off and is
-      retried against the checks it failed.
-========================================================================
-
-========================================================================
-POST-LLM FAILURE  ·  build  ·  programmatic acceptance failed: conformance-blocks, conformance-inlines
-========================================================================
-
-  Block &quot;Block 13 · Service&quot; [block-13] failed its acceptance
-  criteria.
-    Story &quot;Exercise all scoped CommonMark examples against the integrated parser.&quot; [conformance-integration] does not meet its own acceptance criteria:
-      - AC conformance-blocks — The integrated parser passes every example in the supplied leaf block sections.
-          assertion: assert result.returncode == 0 → AssertionError
-          cases: pass=184 fail=3 error=0 skip=468 total=655 from=result.stdout
-          raised at: conformance-blocks.py:12
-          process exit code: 1
-          values at failure:
-  … (48 more lines truncated)
-
-  Recovery
-    Run: drydock build commonmark
-      to continue the build. This story resumes where it left off and is retried against the checks it failed.
-
-========================================================================
+result: 2 built, 0 failed, 0 unchanged
+elapsed: 36 minutes 43 seconds
 Target - committed project workspace git store
 </pre></article>
 </main>

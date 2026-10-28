@@ -31,26 +31,92 @@ def render(markdown: str) -&gt; str:
 
 def _render_inlines(source: str, references: dict) -&gt; str:
     &quot;&quot;&quot;Render inline constructs, keeping code and raw HTML opaque.&quot;&quot;&quot;
-    pieces: list[str] = []
-    for token in parse_inline_html_breaks(source):
-        if token.type == &quot;hardbreak&quot;:
-            pieces.append(&quot;&lt;br /&gt;\n&quot;)
-            continue
-        if token.type == &quot;html&quot;:
-            pieces.append(token.literal)
-            continue
-        # First resolve links and images against the document-wide definition map.
-        links = parse_links(token.literal, references)
-        for item in links:
-            if item.type == &quot;link&quot;:
-                label = &quot;&quot;.join(_render_inline_node(n, references) for n in (item.children or []))
-                title = f&#x27; title=&quot;{escape(item.title, quote=True)}&quot;&#x27; if item.title is not None else &quot;&quot;
-                destination = quote(item.destination, safe=&quot;/:?#@!$&amp;&#x27;()*+,;=%-._~&quot;)
-                pieces.append(f&#x27;&lt;a href=&quot;{escape(destination, quote=True)}&quot;{title}&gt;{label}&lt;/a&gt;&#x27;)
-            else:
-                # Image syntax is a distinct provider; preserve all intervening text.
-                pieces.extend(_render_text_with_images(item.literal, references))
-    return &quot;&quot;.join(pieces)
+    from .links import _bracket_end, _destination_and_title, _normalize_label
+    from .inline_html_breaks import _html_at
+    from .inlines import _ASCII_PUNCTUATION
+
+    opaque = []
+    def protect(value):
+        marker = chr(0xF0000 + len(opaque))
+        opaque.append((marker, value))
+        return marker
+
+    out = []
+    i = 0
+    while i &lt; len(source):
+        c = source[i]
+        if c == &quot;\\&quot; and i + 1 &lt; len(source):
+            if source[i + 1] == &quot;\n&quot;:
+                out.append(protect(&quot;&lt;br /&gt;\n&quot;)); i += 2; continue
+            if source[i + 1] in _ASCII_PUNCTUATION:
+                out.append(protect(escape(source[i + 1], quote=True))); i += 2; continue
+        if c == &quot;`&quot;:
+            j = i + 1
+            while j &lt; len(source) and source[j] == &quot;`&quot;: j += 1
+            run = source[i:j]
+            k = j
+            matched = False
+            while k &lt; len(source):
+                k = source.find(&quot;`&quot;, k)
+                if k &lt; 0: break
+                e = k + 1
+                while e &lt; len(source) and source[e] == &quot;`&quot;: e += 1
+                if e - k == len(run):
+                    out.append(protect(_render_plain(source[i:e], references))); i = e; matched = True; break
+                k = e
+            if matched: continue
+            out.append(run); i = j; continue
+        if c == &quot;&lt;&quot;:
+            e = source.find(&quot;&gt;&quot;, i + 1)
+            if e &gt;= 0:
+                candidate = source[i:e + 1]
+                auto = parse_autolinks(candidate)
+                if len(auto) == 1 and auto[0].type == &quot;link&quot;:
+                    out.append(protect(_render_plain(candidate, references))); i = e + 1; continue
+            e = _html_at(source, i)
+            if e is not None:
+                out.append(protect(source[i:e])); i = e; continue
+        image = source.startswith(&quot;![&quot;, i)
+        if c == &quot;[&quot; or image:
+            opening = i + 1 if image else i
+            close = _bracket_end(source, opening)
+            if close is not None:
+                label = source[opening + 1:close]
+                after = close + 1
+                parsed = _destination_and_title(source, after + 1) if after &lt; len(source) and source[after] == &quot;(&quot; else None
+                if parsed:
+                    dest, title, end = parsed
+                else:
+                    ref, end = label, after
+                    if after &lt; len(source) and source[after] == &quot;[&quot;:
+                        rc = _bracket_end(source, after)
+                        if rc is not None:
+                            ref = source[after + 1:rc] or label; end = rc + 1
+                    entry = references.get(_normalize_label(ref)) if ref.strip() else None
+                    if entry is None:
+                        parsed = None
+                    else:
+                        dest, title = (entry.get(&quot;destination&quot;, &quot;&quot;), entry.get(&quot;title&quot;)) if isinstance(entry, dict) else (entry[0], entry[1] if len(entry) &gt; 1 else None)
+                        parsed = (dest, title, end)
+                if parsed:
+                    body = _render_inlines(label, references)
+                    # Links cannot contain another link; images can contain links.
+                    if image or &quot;&lt;a href=&quot; not in body:
+                        url = escape(quote(dest, safe=&quot;/:?#@!$&amp;&#x27;()*+,;=%-._~&quot;), quote=True)
+                        attr = f&#x27; title=&quot;{escape(title, quote=True)}&quot;&#x27; if title is not None else &quot;&quot;
+                        value = f&#x27;&lt;img src=&quot;{url}&quot; alt=&quot;{escape(_plain_alt(label, references), quote=True)}&quot;{attr} /&gt;&#x27; if image else f&#x27;&lt;a href=&quot;{url}&quot;{attr}&gt;{body}&lt;/a&gt;&#x27;
+                        out.append(protect(value)); i = end; continue
+        if c == &quot;\n&quot;:
+            spaces = 0
+            while out and out[-1] == &quot; &quot;: out.pop(); spaces += 1
+            if spaces &gt;= 2:
+                out.append(protect(&quot;&lt;br /&gt;\n&quot;)); i += 1; continue
+            out.extend(&quot; &quot; * spaces)
+        out.append(c); i += 1
+    result = &quot;&quot;.join(_render_inline_node(n, references) for n in parse_inlines(&quot;&quot;.join(out), references))
+    for marker, value in opaque:
+        result = result.replace(marker, value)
+    return result
 
 
 def _render_text_with_images(source: str, references: dict) -&gt; list[str]:
@@ -76,7 +142,7 @@ def _render_text_with_images(source: str, references: dict) -&gt; list[str]:
                     rc = _bracket_end(source, after)
                     if rc is not None:
                         ref = source[after + 1:rc] or alt; end = rc + 1
-                entry = references.get(_normalize_label(_decode(ref)))
+                entry = references.get(_normalize_label(ref))
                 if entry is not None:
                     dest, title = (entry.get(&quot;destination&quot;, &quot;&quot;), entry.get(&quot;title&quot;)) if isinstance(entry, dict) else (entry[0], entry[1] if len(entry) &gt; 1 else None)
                     title_attr = f&#x27; title=&quot;{escape(title, quote=True)}&quot;&#x27; if title is not None else &quot;&quot;
@@ -90,8 +156,27 @@ def _render_text_with_images(source: str, references: dict) -&gt; list[str]:
 
 
 def _plain_alt(source: str, references: dict) -&gt; str:
-    from .images import _plain_description
-    return _plain_description(source, references)
+    from html.parser import HTMLParser
+
+    class TextCollector(HTMLParser):
+        def __init__(self):
+            super().__init__(convert_charrefs=True)
+            self.parts = []
+
+        def handle_data(self, data):
+            self.parts.append(data)
+
+        def handle_starttag(self, tag, attrs):
+            if tag == &quot;img&quot;:
+                self.parts.append(dict(attrs).get(&quot;alt&quot;, &quot;&quot;))
+            elif tag == &quot;br&quot;:
+                self.parts.append(&quot;\n&quot;)
+
+        handle_startendtag = handle_starttag
+
+    collector = TextCollector()
+    collector.feed(_render_inlines(source, references))
+    return &quot;&quot;.join(collector.parts)
 
 
 def _render_plain(source: str, references: dict) -&gt; str:

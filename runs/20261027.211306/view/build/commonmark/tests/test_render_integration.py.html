@@ -88,6 +88,30 @@ def test_escaped_punctuation_and_angle_bracket_remain_literal():
     assert render(&quot;\\*not emphasized*\n\\&lt;br/&gt; not a tag&quot;) == (
         &quot;&lt;p&gt;*not emphasized*\n&amp;lt;br/&amp;gt; not a tag&lt;/p&gt;\n&quot;
     )
+
+
+def test_reference_definition_with_escaped_bracket():
+    assert render(&quot;[a\\]]: /url\n\n[a\\]]\n&quot;) == &#x27;&lt;p&gt;&lt;a href=&quot;/url&quot;&gt;a]&lt;/a&gt;&lt;/p&gt;\n&#x27;
+
+
+def test_reference_definition_with_multiline_label_and_title():
+    assert render(&quot;[a\nb]: /url &#x27;first\nsecond&#x27;\n\n[a b]\n&quot;) == &#x27;&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot;first\nsecond&quot;&gt;a b&lt;/a&gt;&lt;/p&gt;\n&#x27;
+
+
+def test_nested_emphasis_resolves_innermost_delimiters():
+    assert render(&#x27;*(*foo*)*\n&#x27;) == &#x27;&lt;p&gt;&lt;em&gt;(&lt;em&gt;foo&lt;/em&gt;)&lt;/em&gt;&lt;/p&gt;\n&#x27;
+
+
+def test_emphasis_preserves_unmatched_closing_delimiters():
+    assert render(&#x27;*foo****\n&#x27;) == &#x27;&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;***&lt;/p&gt;\n&#x27;
+
+
+def test_emphasis_wraps_link_and_escaped_delimiter():
+    assert render(&#x27;*a [link](/url) and \\**&#x27;) == &#x27;&lt;p&gt;&lt;em&gt;a &lt;a href=&quot;/url&quot;&gt;link&lt;/a&gt; and *&lt;/em&gt;&lt;/p&gt;\n&#x27;
+
+
+def test_image_inside_link():
+    assert render(&#x27;[![moon](moon.jpg)](/uri)&#x27;) == &#x27;&lt;p&gt;&lt;a href=&quot;/uri&quot;&gt;&lt;img src=&quot;moon.jpg&quot; alt=&quot;moon&quot; /&gt;&lt;/a&gt;&lt;/p&gt;\n&#x27;
 </pre></article>
 </main>
 </body>

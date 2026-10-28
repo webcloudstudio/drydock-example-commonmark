@@ -3,13 +3,13 @@ from commonmark_parser.inlines import parse_inlines
 
 def test_ascii_punctuation_escape_removes_marker():
     nodes = parse_inlines("\\!", {})
-    assert [(node.type, node.literal) for node in nodes] == [("escaped", "!")]
+    assert [(node.type, node.literal) for node in nodes] == [("text", "!")]
 
 
 def test_escaped_emphasis_delimiter_stays_literal():
     nodes = parse_inlines(r"\*not emphasized*", {})
     assert [(node.type, node.literal) for node in nodes] == [
-        ("escaped", "*"), ("text", "not emphasized*")
+        ("text", "*"), ("text", "not emphasized*")
     ]
 
 

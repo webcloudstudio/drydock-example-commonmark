@@ -1,0 +1,11 @@
+
+
+--- stderr ---
+--- drydock: values at failure ---
+  nodes = [Inline(type='escaped', literal='!', destination='', label='', children=None)]
+--- drydock: end values ---
+Traceback (most recent call last):
+  File "inline-escape.py", line 6, in <module>
+    assert nodes[0].type == "text"
+           ^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

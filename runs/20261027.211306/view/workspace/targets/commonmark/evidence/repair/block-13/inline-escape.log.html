@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/repair/block-13/inline-escape.log</title>
+<link rel="stylesheet" href="../../../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/repair/block-13/inline-escape.log</h1><div class="filenav"><a href="../../../../../../../index.html">&larr; Report</a><a href="../../../../../../../workspace/targets/commonmark/evidence/repair/block-13/inline-escape.log">Raw file</a></div></header>
+<article class="doc"><pre>
+
+--- stderr ---
+--- drydock: values at failure ---
+  nodes = [Inline(type=&#x27;escaped&#x27;, literal=&#x27;!&#x27;, destination=&#x27;&#x27;, label=&#x27;&#x27;, children=None)]
+--- drydock: end values ---
+Traceback (most recent call last):
+  File &quot;inline-escape.py&quot;, line 6, in &lt;module&gt;
+    assert nodes[0].type == &quot;text&quot;
+           ^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+</pre></article>
+</main>
+</body>
+</html>

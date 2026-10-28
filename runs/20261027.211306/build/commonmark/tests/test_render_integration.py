@@ -77,3 +77,27 @@ def test_escaped_punctuation_and_angle_bracket_remain_literal():
     assert render("\\*not emphasized*\n\\<br/> not a tag") == (
         "<p>*not emphasized*\n&lt;br/&gt; not a tag</p>\n"
     )
+
+
+def test_reference_definition_with_escaped_bracket():
+    assert render("[a\\]]: /url\n\n[a\\]]\n") == '<p><a href="/url">a]</a></p>\n'
+
+
+def test_reference_definition_with_multiline_label_and_title():
+    assert render("[a\nb]: /url 'first\nsecond'\n\n[a b]\n") == '<p><a href="/url" title="first\nsecond">a b</a></p>\n'
+
+
+def test_nested_emphasis_resolves_innermost_delimiters():
+    assert render('*(*foo*)*\n') == '<p><em>(<em>foo</em>)</em></p>\n'
+
+
+def test_emphasis_preserves_unmatched_closing_delimiters():
+    assert render('*foo****\n') == '<p><em>foo</em>***</p>\n'
+
+
+def test_emphasis_wraps_link_and_escaped_delimiter():
+    assert render('*a [link](/url) and \\**') == '<p><em>a <a href="/url">link</a> and *</em></p>\n'
+
+
+def test_image_inside_link():
+    assert render('[![moon](moon.jpg)](/uri)') == '<p><a href="/uri"><img src="moon.jpg" alt="moon" /></a></p>\n'

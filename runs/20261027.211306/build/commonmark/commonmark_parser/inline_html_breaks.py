@@ -10,22 +10,20 @@ class InlineNode:
     literal: str = ""
 
 
-_TAG = re.compile(r"</?[A-Za-z][A-Za-z0-9-]*(?:[ \t\n]+(?:[^<>\"']|'[^']*'|\"[^\"]*\")*)?[ \t]*/?>")
+_TAG_NAME = r"[A-Za-z][A-Za-z0-9-]*"
+_ATTR_NAME = r"[A-Za-z_:][A-Za-z0-9_.:-]*"
+_VALUE = r'''(?:[^\s"'=<>`]+|'[^']*'|"[^"]*")'''
+_TAG = re.compile(r"<(?:" + _TAG_NAME + r"(?:[ \t\n\r]+" + _ATTR_NAME + r"(?:[ \t\n\r]*=[ \t\n\r]*" + _VALUE + r")?)*[ \t\n\r]*/?|/" + _TAG_NAME + r"[ \t\n\r]*)>")
 _COMMENT = re.compile(r"<!--(?:>|->|--!?>|(?:(?!-->|--!>).)*?(?:-->|--!>))", re.S)
-_HTML = re.compile(r"<(?:[!?](?:[^<>]|'[^']*'|\"[^\"]*\")+|\[CDATA\[.*?\]\]|/?[A-Za-z][^<>]*)>", re.S)
+_SPECIAL = re.compile(r"(?:<\?.*?\?>|<![A-Z]+\s+[^>]*>|<!\[CDATA\[.*?\]\]>)", re.S)
 
 
 def _html_at(source: str, start: int) -> int | None:
-    comment = _COMMENT.match(source, start)
-    if comment:
-        return comment.end()
-    match = _HTML.match(source, start)
-    if not match:
-        return None
-    token = match.group()
-    if token.startswith("<![CDATA[") or token.startswith("<!--") or token.startswith("<?") or token.startswith("<!"):
-        return match.end()
-    return match.end() if _TAG.fullmatch(token) else None
+    for pattern in (_COMMENT, _SPECIAL, _TAG):
+        match = pattern.match(source, start)
+        if match:
+            return match.end()
+    return None
 
 
 def parse_inline_html_breaks(source: str) -> list[InlineNode]:

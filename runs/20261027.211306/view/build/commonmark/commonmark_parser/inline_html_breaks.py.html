@@ -21,22 +21,20 @@ class InlineNode:
     literal: str = &quot;&quot;
 
 
-_TAG = re.compile(r&quot;&lt;/?[A-Za-z][A-Za-z0-9-]*(?:[ \t\n]+(?:[^&lt;&gt;\&quot;&#x27;]|&#x27;[^&#x27;]*&#x27;|\&quot;[^\&quot;]*\&quot;)*)?[ \t]*/?&gt;&quot;)
+_TAG_NAME = r&quot;[A-Za-z][A-Za-z0-9-]*&quot;
+_ATTR_NAME = r&quot;[A-Za-z_:][A-Za-z0-9_.:-]*&quot;
+_VALUE = r&#x27;&#x27;&#x27;(?:[^\s&quot;&#x27;=&lt;&gt;`]+|&#x27;[^&#x27;]*&#x27;|&quot;[^&quot;]*&quot;)&#x27;&#x27;&#x27;
+_TAG = re.compile(r&quot;&lt;(?:&quot; + _TAG_NAME + r&quot;(?:[ \t\n\r]+&quot; + _ATTR_NAME + r&quot;(?:[ \t\n\r]*=[ \t\n\r]*&quot; + _VALUE + r&quot;)?)*[ \t\n\r]*/?|/&quot; + _TAG_NAME + r&quot;[ \t\n\r]*)&gt;&quot;)
 _COMMENT = re.compile(r&quot;&lt;!--(?:&gt;|-&gt;|--!?&gt;|(?:(?!--&gt;|--!&gt;).)*?(?:--&gt;|--!&gt;))&quot;, re.S)
-_HTML = re.compile(r&quot;&lt;(?:[!?](?:[^&lt;&gt;]|&#x27;[^&#x27;]*&#x27;|\&quot;[^\&quot;]*\&quot;)+|\[CDATA\[.*?\]\]|/?[A-Za-z][^&lt;&gt;]*)&gt;&quot;, re.S)
+_SPECIAL = re.compile(r&quot;(?:&lt;\?.*?\?&gt;|&lt;![A-Z]+\s+[^&gt;]*&gt;|&lt;!\[CDATA\[.*?\]\]&gt;)&quot;, re.S)
 
 
 def _html_at(source: str, start: int) -&gt; int | None:
-    comment = _COMMENT.match(source, start)
-    if comment:
-        return comment.end()
-    match = _HTML.match(source, start)
-    if not match:
-        return None
-    token = match.group()
-    if token.startswith(&quot;&lt;![CDATA[&quot;) or token.startswith(&quot;&lt;!--&quot;) or token.startswith(&quot;&lt;?&quot;) or token.startswith(&quot;&lt;!&quot;):
-        return match.end()
-    return match.end() if _TAG.fullmatch(token) else None
+    for pattern in (_COMMENT, _SPECIAL, _TAG):
+        match = pattern.match(source, start)
+        if match:
+            return match.end()
+    return None
 
 
 def parse_inline_html_breaks(source: str) -&gt; list[InlineNode]:

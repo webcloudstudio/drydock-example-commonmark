@@ -1,0 +1,13 @@
+{
+  "criteria": [
+    {
+      "id": "st-001",
+      "verdict": "MET",
+      "rationale": "The governed full conformance gate passed with 655 tests passed and no failures, errors, or skips.",
+      "evidence": [
+        "sh sources/full_test.sh: exit code 0; 655 passed, 0 failed, 0 errored, 0 skipped"
+      ]
+    }
+  ],
+  "improvements": []
+}

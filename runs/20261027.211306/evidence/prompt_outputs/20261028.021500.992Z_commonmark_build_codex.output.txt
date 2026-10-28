@@ -1,0 +1,23 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/__init__.py
+- commonmark_parser/images.py
+- commonmark_parser/inlines.py
+- commonmark_parser/links.py
+- commonmark_parser/references.py
+- tests/test_render_integration.py
+
+SUMMARY:
+Fixed escaped and multiline reference definitions and improved nested emphasis delimiter matching. Added regression tests.
+
+- `python3 sources/spec_tests.py --program "$PWD/commonmark" --spec sources/spec.txt --pattern '^Link reference definitions$'`: 27 passed; previously 24 passed and 3 failed.
+- `python3 sources/spec_tests.py --program "$PWD/commonmark" --spec sources/spec.txt --pattern '^Emphasis and strong emphasis$'`: 122 passed and 10 failed.
+- `python3 -m pytest -q`: 107 passed.
+- The complete acceptance selectors were not rerun.
+
+BLOCKERS:
+- Inline conformance remains incomplete, including emphasis spanning links, code spans and escapes, as well as the other inline failures identified in the repair log.
+
+FAILURE_SUMMARY: Inline conformance remains incomplete.
+FAILURE_DETAIL: The inline pipeline splits constructs before resolving emphasis across them; 10 emphasis examples still fail. The remaining link, image, raw HTML, and hard-break failure clusters also require repair and scoped verification before rerunning acceptance.

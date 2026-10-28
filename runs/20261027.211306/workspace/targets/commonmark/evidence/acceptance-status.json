@@ -63,6 +63,13 @@
       "updated_at": "2026-10-27T21:30:37+00:00",
       "detail": ""
     },
+    "complete-conformance": {
+      "status": "VALID",
+      "error_code": "existing-behavior",
+      "code_sha256": "ed5913c70d55bfeb1f0b33d21c3aa81d5a0fce60f617ad1aaac9fdc13bed562e",
+      "updated_at": "2026-10-28T02:35:28+00:00",
+      "detail": ""
+    },
     "conformance-blocks": {
       "status": "VALID",
       "error_code": "baseline-red",

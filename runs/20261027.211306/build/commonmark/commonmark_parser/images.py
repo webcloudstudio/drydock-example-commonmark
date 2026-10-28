@@ -45,7 +45,7 @@ def _plain_description(source: str, references: dict) -> str:
                     if ref_close is not None:
                         ref_label = source[after + 1:ref_close] or label
                         end = ref_close + 1
-                if _normalize_label(_decode(ref_label)) in references:
+                if _normalize_label(ref_label) in references:
                     out.append(_plain_description(label, references)); i = end; continue
         out.append(source[i]); i += 1
     plain = "".join(out)
@@ -93,7 +93,7 @@ def parse_images(source: str, references: dict) -> list[ImageNode]:
                 if ref_close is not None:
                     ref_label = source[after + 1:ref_close] or label
                     end = ref_close + 1
-            entry = references.get(_normalize_label(_decode(ref_label)))
+            entry = references.get(_normalize_label(ref_label))
             if entry is None:
                 i += 1; continue
             if isinstance(entry, dict):

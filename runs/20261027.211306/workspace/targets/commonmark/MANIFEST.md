@@ -5,11 +5,12 @@ blocks:      14
 
 applied_specs: |
   ARCHITECTURE.md sha256=0b53aaf9ed367aeab2084f4d0882095e4f24e6cda2057bcc6212d6fb00b1c1b1 commit=ed4b0b752a3b4c4d213f004a9bd00827a0b7033c applied_by=block-1 applied_at=2026-10-27T21:22:21+00:00 build_sha256=0b53aaf9ed367aeab2084f4d0882095e4f24e6cda2057bcc6212d6fb00b1c1b1
-  ARCHITECTURE_compact.md sha256=df38f91009dbc116c4d94efe853419a597d97670ea5c86e3fe71c739fc483f18 commit=c9f07203da2edaa94d92e9ef9b3f0b65ab88954a applied_by=block-12 applied_at=2026-10-27T21:36:03+00:00 build_sha256=df38f91009dbc116c4d94efe853419a597d97670ea5c86e3fe71c739fc483f18
+  ARCHITECTURE_compact.md sha256=df38f91009dbc116c4d94efe853419a597d97670ea5c86e3fe71c739fc483f18 commit=409d80169dccb26cdb8405c5e3a7e117cbbae39d applied_by=block-13 applied_at=2026-10-28T02:32:30+00:00 build_sha256=df38f91009dbc116c4d94efe853419a597d97670ea5c86e3fe71c739fc483f18
   FEATURE-ATXHeadings.md sha256=17bdc8d5974d4c7c72fd44d99c733d82ca645a2bef6e4f5486e74eceab33c638 commit=ed4b0b752a3b4c4d213f004a9bd00827a0b7033c applied_by=block-4 applied_at=2026-10-27T21:26:27+00:00 build_sha256=67fe65b14de1bbaaaa20e75462862fac729fe5f952d9309c1c9b70387354c9ec
   FEATURE-Autolinks.md sha256=91dcd85dbdd0356fb7a2beb23fbfe3d20e81bb88a1b65dd0ee647e8128367a0c commit=ed4b0b752a3b4c4d213f004a9bd00827a0b7033c applied_by=block-10 applied_at=2026-10-27T21:33:13+00:00 build_sha256=8edc82fdb9c590c22d891c2d9083749e9a1dce4e16c86c8e5d334f1c477ef4b3
   FEATURE-BlockQuotes.md sha256=64586550d7266f020bca9243b992066121e493550c54e55a71aa697e12a2260a commit=ed4b0b752a3b4c4d213f004a9bd00827a0b7033c applied_by=block-6 applied_at=2026-10-27T21:28:24+00:00 build_sha256=46f32b7ffdf7160a5dff0aeb85c744e648dce59fd52ec3946cf5685b769a2691
   FEATURE-CodeSpans.md sha256=42b953f8a97e78258ee2cc9a98428eecfc1418949a4f859afeea781e75baed10 commit=ed4b0b752a3b4c4d213f004a9bd00827a0b7033c applied_by=block-9 applied_at=2026-10-27T21:31:33+00:00 build_sha256=a8ad1e11d314925df62a594487f8c16c1cf9542d07e9871511ec4705e74f0ae4
+  FEATURE-ConformanceIntegration.md sha256=57706353c7784bda04425e9b3c772933dac359fc70781e069e031c0d561cb613 commit=409d80169dccb26cdb8405c5e3a7e117cbbae39d applied_by=block-13 applied_at=2026-10-28T02:32:30+00:00 build_sha256=12238f2ac8ff5e2286f8a0579e27e09d03d4ccdf19e3067aa5e25af2d911425d
   FEATURE-Emphasis.md sha256=4537a08a16622c3c6a3517987b7077dfedc1cd42262139d81b9d6bf251af39d3 commit=ed4b0b752a3b4c4d213f004a9bd00827a0b7033c applied_by=block-10 applied_at=2026-10-27T21:33:13+00:00 build_sha256=0c993187a5343243f3d5d373a1b601966adb831cd91bd65418a6b91da15f83df
   FEATURE-Executable.md sha256=e143a1fdc2172d438bc6f85caa6f81bf2c9ac2c7bbb3e86c6cb1a422c0b51219 commit=ed4b0b752a3b4c4d213f004a9bd00827a0b7033c applied_by=block-2 applied_at=2026-10-27T21:22:54+00:00 build_sha256=c8e5b672e1bc2245aac5434625d8d817fd43d492b69d3dcf8c47665c76334e1d
   FEATURE-FencedCode.md sha256=e202d95cbaf0f75d5d92e12498938f8aa9941bb8cf1a7eaa5c4fb13863a14df2 commit=ed4b0b752a3b4c4d213f004a9bd00827a0b7033c applied_by=block-4 applied_at=2026-10-27T21:26:27+00:00 build_sha256=f67aca8aa18fd324eaeaf7d736017fa158e11a5b41add0cbaf052bc8d15b4898
@@ -24,7 +25,7 @@ applied_specs: |
   FEATURE-ReferenceDefinitions.md sha256=9df9fcdf61b642dd29ef29f3a93c84c57eae8bbd4f973e46d39214d78574f12d commit=ed4b0b752a3b4c4d213f004a9bd00827a0b7033c applied_by=block-4 applied_at=2026-10-27T21:26:27+00:00 build_sha256=3c2c089689e3133f586616c4f1b9139b4734e65c6d250539f6ff556b5e95b955
   FEATURE-SetextHeadings.md sha256=2f9b4baf75c6bcaeeb59608de4e7d8437d243509f6c9df47bc9735b7c1859d5c commit=ed4b0b752a3b4c4d213f004a9bd00827a0b7033c applied_by=block-5 applied_at=2026-10-27T21:27:22+00:00 build_sha256=eb03fcc38e2a671c0fe9106f5fdc1f09d8454f068125a2c8829666fa603cde90
   FEATURE-ThematicBreaks.md sha256=0d04f457405bd17a795e6a7d96146386eaaf3eb260c38354e32fc2bae71aabe2 commit=ed4b0b752a3b4c4d213f004a9bd00827a0b7033c applied_by=block-4 applied_at=2026-10-27T21:26:27+00:00 build_sha256=e0fe26072d54e7e0317dd3af1fc945543883307231727c5e7a9a7c4c64341af4
-
+  VERIFICATION.md sha256=fe05b831e9e7e1d6daae5af09590bc801105d1875164f194537fae02114ea4bc commit=409d80169dccb26cdb8405c5e3a7e117cbbae39d applied_by=block-14 applied_at=2026-10-28T02:45:22+00:00 build_sha256=23ea7c11ced255e600ca8ef929e88355923569ed21ba726149b2915e1cb14ab3
 ## story 1: Establish the Python project and parser integration boundaries.
 id:           foundation
 finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
@@ -506,7 +507,7 @@ state: closed/implemented
 
 ## story 20: Exercise all scoped CommonMark examples against the integrated parser.
 id: conformance-integration
-finding: programmatic acceptance failed: conformance-blocks, conformance-inlines: AssertionError
+finding: ADVISORY: implemented, not verified — no governed acceptance command covers this story. Declare one in ACCEPTANCE.json to gate it.
 evidence: evidence/block-13.md
 summary: Exercise all scoped CommonMark examples against the integrated parser.
 type: service
@@ -528,10 +529,12 @@ instructions: |
   cover its complete section and never invoke full_test.sh. Preserve the staged assets verbatim.
 acceptance: yes
 depends: delivery, lists, images, autolinks, inline-html-breaks
-state: closed/failed
+state: closed/implemented
 
 ## story 21: Verify the complete supplied conformance suite.
 id:           verification
+finding: ADVISORY: implemented, not verified — every binding criterion this story passed was already green before the story built, so none measured the work. Repair the criteria in the Blueprint to exercise this story and rebuild to obtain a verdict.
+evidence: evidence/block-14.md
 summary:      Verify the complete supplied conformance suite.
 type:         service
 kind:         test harness
@@ -550,4 +553,4 @@ size:         2685
 consumes:     integrated CommonMark parser
 depends:      conformance-integration
 acceptance:   yes
-state:        pending
+state: closed/implemented

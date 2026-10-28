@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/commands/18-score-build-report.stdout.log</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/commands/18-score-build-report.stdout.log</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/commands/18-score-build-report.stdout.log">Raw file</a></div></header>
+<article class="doc"><pre>Drydock 0.8.0  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+
+Build report: commonmark
+  evidence: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/workspace/targets/commonmark/evidence
+  usage:    /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/workspace/logs/llm.jsonl
+
+  Blueprint acceptance (last `score ac`): PASS 41  FAIL 0  UNVERIFIED 0  PREPASSED 5  (46 AC)
+
+  Block                     Build AC  Calls     Cached  Uncached    Hit  Output     Time
+  ──────────────────────────────────────────────────────────────────────────────────────
+  ✓ Block 1 · Foundational       3/3      1    108,544    25,629  80.9%   2,353      36s
+  ✓ Block 2 · Service            1/1      1     56,064    20,565  73.2%     767      13s
+  ✓ Block 3 · Service            2/2      1    139,264    23,169  85.7%   2,068      27s
+  ✓ Block 4 · Service          12/12      1    366,592    34,247  91.5%   6,403   2m 10s
+  ✓ Block 5 · Service            2/2      1    132,096    13,325  90.8%   1,757      24s
+  ✓ Block 6 · Service            2/2      1    125,568    47,606  72.5%   2,201      32s
+  ✓ Block 7 · Service            2/2      1     87,552    54,071  61.8%   3,015      37s
+  ✓ Block 8 · Service            3/3      1    147,584    24,912  85.6%   2,262      27s
+  ✓ Block 9 · Service            3/3      1    123,520    46,027  72.9%   2,024      27s
+  ✓ Block 10 · Service           7/7      1    206,848    20,942  90.8%   4,752      59s
+  ✓ Block 11 · Service           2/2      1    162,560    28,482  85.1%   4,217      47s
+  ✓ Block 12 · Service           2/2      1    152,448    18,209  89.3%   2,698      36s
+  ✓ Block 13 · Service           4/4      3  2,752,128   133,027  95.4%  11,422   7m 25s
+  ✓ Block 14 · Service           1/1      1    239,488    31,728  88.3%     901   3m 36s
+  ──────────────────────────────────────────────────────────────────────────────────────
+  TOTAL                        46/46     16  4,800,256   521,939  90.2%  46,840  19m 23s
+
+  Blocks: 14/14 verified · 13 on first call · 1 repaired
+  Model:  gpt-6-luna, gpt-6.1-terra
+  Tokens: 4,800,256 cached · 521,939 uncached · 46,840 out
+
+  Repairs
+    Block 13 · Service [block-13]
+      initial build  incomplete 3/4 AC · 616/654 cases · 944,724 in · 94.8% hit · 2m 28s
+                     not yet passing: conformance-inlines
+      repair 1       incomplete 4/4 AC · 654/654 cases · 1,521,098 in · 96.7% hit · 3m 03s
+                     not yet passing: inline-escape
+      repair 2       built      4/4 AC · 654/654 cases · 419,333 in · 92.0% hit · 1m 53s
+
+</pre></article>
+</main>
+</body>
+</html>

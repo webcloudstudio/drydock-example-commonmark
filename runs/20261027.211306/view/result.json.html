@@ -10,15 +10,15 @@
 <main>
 <header class="fileheader"><div class="kind">Run artifact</div><h1>result.json</h1><div class="filenav"><a href="../index.html">&larr; Report</a><a href="../result.json">Raw file</a></div></header>
 <article class="doc"><pre>{
-  &quot;acceptance_status&quot;: &quot;NOT_RUN&quot;,
+  &quot;acceptance_status&quot;: &quot;PASS&quot;,
   &quot;assertions&quot;: {
-    &quot;defect_ownership_undetermined&quot;: 2,
-    &quot;failed&quot;: 2,
-    &quot;passed&quot;: 43,
+    &quot;defect_ownership_undetermined&quot;: 0,
+    &quot;failed&quot;: 0,
+    &quot;passed&quot;: 46,
     &quot;unverified&quot;: 0
   },
   &quot;attestations&quot;: [],
-  &quot;build_passes&quot;: 1,
+  &quot;build_passes&quot;: 2,
   &quot;commands&quot;: [
     {
       &quot;argv&quot;: [
@@ -184,7 +184,7 @@
         &quot;--ready&quot;
       ],
       &quot;cwd&quot;: &quot;workspace&quot;,
-      &quot;elapsed_ms&quot;: 4142,
+      &quot;elapsed_ms&quot;: 1708,
       &quot;label&quot;: &quot;09-initial-ready&quot;,
       &quot;llm_executions&quot;: [],
       &quot;returncode&quot;: 0,
@@ -200,50 +200,54 @@
         &quot;commonmark&quot;,
         &quot;--override&quot;,
         &quot;--repair-attempts&quot;,
-        &quot;21&quot;
+        &quot;6&quot;
       ],
       &quot;cwd&quot;: &quot;workspace&quot;,
-      &quot;elapsed_ms&quot;: 11006809,
+      &quot;elapsed_ms&quot;: 2211235,
       &quot;label&quot;: &quot;10-initial-build-1&quot;,
       &quot;llm_executions&quot;: [
-        &quot;20261027.212136.170Z-f219a077&quot;,
-        &quot;20261027.212230.188Z-a55fa78c&quot;,
-        &quot;20261027.212303.580Z-58ebcddd&quot;,
-        &quot;20261027.212400.806Z-88e20c49&quot;,
-        &quot;20261027.212642.183Z-6ea2d22c&quot;,
-        &quot;20261027.212732.438Z-fe4fa9c3&quot;,
-        &quot;20261027.212834.286Z-b90fd7eb&quot;,
-        &quot;20261027.212943.897Z-4276dc89&quot;,
-        &quot;20261027.213041.126Z-a9181387&quot;,
-        &quot;20261027.213148.636Z-1bae04d1&quot;,
-        &quot;20261027.213328.256Z-55fc0c59&quot;,
-        &quot;20261027.213456.967Z-29b1441b&quot;,
-        &quot;20261027.214041.152Z-e0b02b41&quot;,
-        &quot;20261027.215141.573Z-12306cc0&quot;,
-        &quot;20261027.215758.604Z-9b352a29&quot;,
-        &quot;20261027.220435.183Z-10a1b99b&quot;,
-        &quot;20261027.221052.921Z-c2aa11a1&quot;,
-        &quot;20261027.221721.508Z-00266f46&quot;,
-        &quot;20261027.222333.407Z-bb94d2af&quot;,
-        &quot;20261027.223003.829Z-584b4ebc&quot;,
-        &quot;20261027.223755.609Z-1ffd60d1&quot;,
-        &quot;20261027.224405.804Z-d128a5ec&quot;,
-        &quot;20261027.225013.563Z-275e7bc1&quot;,
-        &quot;20261027.225636.219Z-4495cc75&quot;,
-        &quot;20261027.230244.943Z-668c9082&quot;,
-        &quot;20261027.230841.955Z-f5e414d2&quot;,
-        &quot;20261027.231816.873Z-3a7606a2&quot;,
-        &quot;20261027.232420.880Z-86d4b0ae&quot;,
-        &quot;20261027.233350.892Z-9ef6a2c5&quot;,
-        &quot;20261027.235013.184Z-ad447d68&quot;,
-        &quot;20261027.235859.179Z-e95527d0&quot;,
-        &quot;20261028.000242.550Z-037c88aa&quot;,
-        &quot;20261028.000834.048Z-36ed2d30&quot;,
-        &quot;20261028.001809.125Z-549378e5&quot;
+        &quot;20261028.021500.992Z-f67c91b1&quot;,
+        &quot;20261028.022034.143Z-4de320c1&quot;,
+        &quot;20261028.022711.708Z-054d2a6b&quot;,
+        &quot;20261028.023530.374Z-2ac3c3fc&quot;
       ],
-      &quot;returncode&quot;: 1,
+      &quot;returncode&quot;: 0,
       &quot;stderr_path&quot;: &quot;evidence/commands/10-initial-build-1.stderr.log&quot;,
       &quot;stdout_path&quot;: &quot;evidence/commands/10-initial-build-1.stdout.log&quot;
+    },
+    {
+      &quot;argv&quot;: [
+        &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python&quot;,
+        &quot;-m&quot;,
+        &quot;drydock&quot;,
+        &quot;status&quot;,
+        &quot;commonmark&quot;,
+        &quot;--ready&quot;
+      ],
+      &quot;cwd&quot;: &quot;workspace&quot;,
+      &quot;elapsed_ms&quot;: 3573,
+      &quot;label&quot;: &quot;11-initial-ready&quot;,
+      &quot;llm_executions&quot;: [],
+      &quot;returncode&quot;: 1,
+      &quot;stderr_path&quot;: &quot;evidence/commands/11-initial-ready.stderr.log&quot;,
+      &quot;stdout_path&quot;: &quot;evidence/commands/11-initial-ready.stdout.log&quot;
+    },
+    {
+      &quot;argv&quot;: [
+        &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python&quot;,
+        &quot;-m&quot;,
+        &quot;drydock&quot;,
+        &quot;status&quot;,
+        &quot;commonmark&quot;,
+        &quot;--check&quot;
+      ],
+      &quot;cwd&quot;: &quot;workspace&quot;,
+      &quot;elapsed_ms&quot;: 1668,
+      &quot;label&quot;: &quot;12-initial-complete&quot;,
+      &quot;llm_executions&quot;: [],
+      &quot;returncode&quot;: 1,
+      &quot;stderr_path&quot;: &quot;evidence/commands/12-initial-complete.stderr.log&quot;,
+      &quot;stdout_path&quot;: &quot;evidence/commands/12-initial-complete.stdout.log&quot;
     },
     {
       &quot;argv&quot;: [
@@ -255,52 +259,151 @@
         &quot;commonmark&quot;
       ],
       &quot;cwd&quot;: &quot;workspace&quot;,
-      &quot;elapsed_ms&quot;: 1166,
-      &quot;label&quot;: &quot;11-after-initial-build-build-status&quot;,
+      &quot;elapsed_ms&quot;: 1889,
+      &quot;label&quot;: &quot;13-after-initial-build-build-status&quot;,
       &quot;llm_executions&quot;: [],
-      &quot;returncode&quot;: 1,
-      &quot;stderr_path&quot;: &quot;evidence/commands/11-after-initial-build-build-status.stderr.log&quot;,
-      &quot;stdout_path&quot;: &quot;evidence/commands/11-after-initial-build-build-status.stdout.log&quot;
+      &quot;returncode&quot;: 0,
+      &quot;stderr_path&quot;: &quot;evidence/commands/13-after-initial-build-build-status.stderr.log&quot;,
+      &quot;stdout_path&quot;: &quot;evidence/commands/13-after-initial-build-build-status.stdout.log&quot;
+    },
+    {
+      &quot;argv&quot;: [
+        &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python&quot;,
+        &quot;-m&quot;,
+        &quot;drydock&quot;,
+        &quot;status&quot;,
+        &quot;commonmark&quot;
+      ],
+      &quot;cwd&quot;: &quot;workspace&quot;,
+      &quot;elapsed_ms&quot;: 1691,
+      &quot;label&quot;: &quot;14-after-initial-build-target-status&quot;,
+      &quot;llm_executions&quot;: [],
+      &quot;returncode&quot;: 0,
+      &quot;stderr_path&quot;: &quot;evidence/commands/14-after-initial-build-target-status.stderr.log&quot;,
+      &quot;stdout_path&quot;: &quot;evidence/commands/14-after-initial-build-target-status.stdout.log&quot;
+    },
+    {
+      &quot;argv&quot;: [
+        &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python&quot;,
+        &quot;-m&quot;,
+        &quot;drydock&quot;,
+        &quot;status&quot;
+      ],
+      &quot;cwd&quot;: &quot;workspace&quot;,
+      &quot;elapsed_ms&quot;: 797,
+      &quot;label&quot;: &quot;15-after-initial-build-workspace-status&quot;,
+      &quot;llm_executions&quot;: [],
+      &quot;returncode&quot;: 0,
+      &quot;stderr_path&quot;: &quot;evidence/commands/15-after-initial-build-workspace-status.stderr.log&quot;,
+      &quot;stdout_path&quot;: &quot;evidence/commands/15-after-initial-build-workspace-status.stdout.log&quot;
+    },
+    {
+      &quot;argv&quot;: [
+        &quot;sh&quot;,
+        &quot;sources/full_test.sh&quot;
+      ],
+      &quot;cwd&quot;: &quot;build/commonmark&quot;,
+      &quot;elapsed_ms&quot;: 181251,
+      &quot;label&quot;: &quot;16-test&quot;,
+      &quot;llm_executions&quot;: [],
+      &quot;returncode&quot;: 0,
+      &quot;stderr_path&quot;: &quot;evidence/commands/16-test.stderr.log&quot;,
+      &quot;stdout_path&quot;: &quot;evidence/commands/16-test.stdout.log&quot;
+    },
+    {
+      &quot;argv&quot;: [
+        &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python&quot;,
+        &quot;-m&quot;,
+        &quot;drydock&quot;,
+        &quot;score&quot;,
+        &quot;ac&quot;,
+        &quot;commonmark&quot;
+      ],
+      &quot;cwd&quot;: &quot;workspace&quot;,
+      &quot;elapsed_ms&quot;: 426135,
+      &quot;label&quot;: &quot;17-score-acceptance&quot;,
+      &quot;llm_executions&quot;: [],
+      &quot;returncode&quot;: 0,
+      &quot;stderr_path&quot;: &quot;evidence/commands/17-score-acceptance.stderr.log&quot;,
+      &quot;stdout_path&quot;: &quot;evidence/commands/17-score-acceptance.stdout.log&quot;
+    },
+    {
+      &quot;argv&quot;: [
+        &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python&quot;,
+        &quot;-m&quot;,
+        &quot;drydock&quot;,
+        &quot;score&quot;,
+        &quot;build&quot;,
+        &quot;commonmark&quot;
+      ],
+      &quot;cwd&quot;: &quot;workspace&quot;,
+      &quot;elapsed_ms&quot;: 984,
+      &quot;label&quot;: &quot;18-score-build-report&quot;,
+      &quot;llm_executions&quot;: [],
+      &quot;returncode&quot;: 0,
+      &quot;stderr_path&quot;: &quot;evidence/commands/18-score-build-report.stderr.log&quot;,
+      &quot;stdout_path&quot;: &quot;evidence/commands/18-score-build-report.stdout.log&quot;
+    },
+    {
+      &quot;argv&quot;: [
+        &quot;/mnt/c/Users/barlo/projects/drydock/.venv/bin/python&quot;,
+        &quot;-m&quot;,
+        &quot;drydock&quot;,
+        &quot;score&quot;,
+        &quot;release&quot;,
+        &quot;commonmark&quot;
+      ],
+      &quot;cwd&quot;: &quot;workspace&quot;,
+      &quot;elapsed_ms&quot;: 207817,
+      &quot;label&quot;: &quot;19-score-release&quot;,
+      &quot;llm_executions&quot;: [
+        &quot;20261028.025910.528Z-a8eb8cde&quot;
+      ],
+      &quot;returncode&quot;: 0,
+      &quot;stderr_path&quot;: &quot;evidence/commands/19-score-release.stderr.log&quot;,
+      &quot;stdout_path&quot;: &quot;evidence/commands/19-score-release.stdout.log&quot;
     }
   ],
-  &quot;degraded&quot;: [
-    &quot;initial-build-1 exited 1&quot;
-  ],
-  &quot;elapsed_ms&quot;: 11473679,
+  &quot;degraded&quot;: [],
+  &quot;elapsed_ms&quot;: 3063567,
   &quot;environment&quot;: {
     &quot;drydock_version&quot;: &quot;0.8.0&quot;,
     &quot;effort&quot;: &quot;&quot;,
-    &quot;finished_at&quot;: &quot;2026-10-28T00:24:20.743466Z&quot;,
-    &quot;git_commit&quot;: &quot;0f7d802d6d9132ea0240da97e69bf4ed39e703f8&quot;,
+    &quot;finished_at&quot;: &quot;2026-10-28T02:59:43.125107Z&quot;,
+    &quot;git_commit&quot;: &quot;fb04bcf36f3f02291505ab836953347cc1938a09&quot;,
     &quot;model&quot;: &quot;gpt-6-luna, gpt-6.1-terra&quot;,
-    &quot;plan_model&quot;: &quot;terra&quot;,
+    &quot;plan_model&quot;: &quot;&quot;,
     &quot;platform&quot;: &quot;Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.35&quot;,
     &quot;provider&quot;: &quot;codex&quot;,
     &quot;python_version&quot;: &quot;3.12.13&quot;,
-    &quot;requested_model&quot;: &quot;gpt-6-luna&quot;,
-    &quot;started_at&quot;: &quot;2026-10-27T21:13:06.845983Z&quot;
+    &quot;requested_model&quot;: &quot;gpt-6.1-terra&quot;,
+    &quot;started_at&quot;: &quot;2026-10-28T02:08:39.288514Z&quot;
   },
-  &quot;error&quot;: &quot;CommonMark: stopped at initial-build-1: drydock build commonmark exited 1.\n\nstderr:\nerror: build failed for commonmark: 1 step(s)\n  conformance-integration \u2014 closed/failed: programmatic acceptance failed: conformance-blocks, conformance-inlines\n\nEvidence:\n  stderr: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/evidence/commands/10-initial-build-1.stderr.log\n  stdout: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/evidence/commands/10-initial-build-1.stdout.log&quot;,
+  &quot;error&quot;: &quot;&quot;,
   &quot;evidence_dir&quot;: &quot;evidence&quot;,
-  &quot;execution_status&quot;: &quot;ERROR&quot;,
+  &quot;execution_status&quot;: &quot;PASS&quot;,
   &quot;expected_verdict&quot;: &quot;PASSED&quot;,
   &quot;fixture&quot;: &quot;CommonMark&quot;,
-  &quot;observed_verdict&quot;: &quot;ERROR&quot;,
+  &quot;observed_verdict&quot;: &quot;PASSED&quot;,
   &quot;output_dir&quot;: &quot;.&quot;,
-  &quot;release_verdict&quot;: &quot;&quot;,
-  &quot;resumed_from&quot;: &quot;&quot;,
+  &quot;release_verdict&quot;: &quot;PASSED&quot;,
+  &quot;resumed_from&quot;: &quot;build&quot;,
   &quot;run_id&quot;: &quot;20261027.211306&quot;,
-  &quot;score_exit_codes&quot;: {},
-  &quot;status&quot;: &quot;failed&quot;,
+  &quot;score_exit_codes&quot;: {
+    &quot;acceptance&quot;: 0,
+    &quot;build-report&quot;: 0,
+    &quot;release&quot;: 0
+  },
+  &quot;status&quot;: &quot;passed&quot;,
   &quot;target&quot;: &quot;commonmark&quot;,
   &quot;usage&quot;: {
-    &quot;cached_input_tokens&quot;: 19791744,
-    &quot;calls&quot;: 49,
-    &quot;fresh_input_tokens&quot;: 2636279,
-    &quot;input_tokens&quot;: 22428023,
+    &quot;cached_input_tokens&quot;: 22794112,
+    &quot;calls&quot;: 54,
+    &quot;fresh_input_tokens&quot;: 2804129,
+    &quot;input_tokens&quot;: 25598241,
     &quot;invalid_records&quot;: 0,
-    &quot;llm_elapsed_ms&quot;: 3769337,
-    &quot;output_tokens&quot;: 161644
+    &quot;llm_elapsed_ms&quot;: 4436141,
+    &quot;output_tokens&quot;: 174072
   }
 }
 </pre></article>

@@ -148,9 +148,18 @@ def parse_inlines(source: str, references: dict) -&gt; list[Inline]:
         else:
             joined.append(Inline(node.type, node.literal, children=node.children))
     resolved = _parse_emphasis(joined)
-    if any(_contains_emphasis_newline(node) for node in resolved):
-        return resolved
-    return _parse_emphasis(nodes)
+    if not any(_contains_emphasis_newline(node) for node in resolved):
+        resolved = _parse_emphasis(nodes)
+    # Escapes must remain opaque while resolving delimiters, but the public
+    # inline interface exposes their resulting characters as ordinary text.
+    def expose_text(items: list[Inline]) -&gt; None:
+        for item in items:
+            if item.type == &quot;escaped&quot;:
+                item.type = &quot;text&quot;
+            if item.children:
+                expose_text(item.children)
+    expose_text(resolved)
+    return resolved
 
 
 def _contains_emphasis_newline(node: Inline) -&gt; bool:
@@ -161,75 +170,67 @@ def _contains_emphasis_newline(node: Inline) -&gt; bool:
 
 
 def _parse_emphasis(nodes: list[Inline]) -&gt; list[Inline]:
-    &quot;&quot;&quot;Resolve delimiter runs in text nodes, leaving code spans opaque.&quot;&quot;&quot;
-    result: list[Inline] = []
+    &quot;&quot;&quot;Resolve flanking delimiter runs, pairing each closer with the nearest opener.&quot;&quot;&quot;
+    result = []
     for node in nodes:
         if node.type != &quot;text&quot;:
             result.append(node)
             continue
         source = node.literal
-        # Match valid flanking pairs from the inside out. The pass only handles
-        # delimiter characters; punctuation and Unicode whitespace use the
-        # same flanking predicates as the CommonMark delimiter rules.
-        chunks: list[Inline] = []
+        parts = []
         i = 0
-        plain = 0
         while i &lt; len(source):
             if source[i] not in &quot;*_&quot;:
-                i += 1
+                j = i + 1
+                while j &lt; len(source) and source[j] not in &quot;*_&quot;:
+                    j += 1
+                parts.append([Inline(&quot;text&quot;, source[i:j]), False, False])
+                i = j
                 continue
-            end = i + 1
-            while end &lt; len(source) and source[end] == source[i]:
-                end += 1
-            marker, length = source[i], end - i
+            j = i + 1
+            while j &lt; len(source) and source[j] == source[i]:
+                j += 1
             before = source[i - 1] if i else &quot;\n&quot;
-            after = source[end] if end &lt; len(source) else &quot;\n&quot;
-            opener = not after.isspace() and (not _punct(after) or before.isspace() or _punct(before))
-            closer = not before.isspace() and (not _punct(before) or after.isspace() or _punct(after))
-            if marker == &quot;_&quot;:
-                opener = opener and (not closer or _punct(before))
-                closer = closer and (not opener or _punct(after))
-            if not opener:
-                i = end
+            after = source[j] if j &lt; len(source) else &quot;\n&quot;
+            left = not after.isspace() and (not _punct(after) or before.isspace() or _punct(before))
+            right = not before.isspace() and (not _punct(before) or after.isspace() or _punct(after))
+            op = left and (source[i] == &quot;*&quot; or not right or _punct(before))
+            cl = right and (source[i] == &quot;*&quot; or not left or _punct(after))
+            parts.append([Inline(&quot;text&quot;, source[i:j]), op, cl])
+            i = j
+        closer = 0
+        while closer &lt; len(parts):
+            current, _, can_close = parts[closer]
+            if not can_close or not current.literal:
+                closer += 1
                 continue
-            close = end
-            found = None
-            while close &lt; len(source):
-                candidate = source.find(marker, close)
-                if candidate &lt; 0:
-                    break
-                ce = candidate + 1
-                while ce &lt; len(source) and source[ce] == marker:
-                    ce += 1
-                cb = source[candidate - 1] if candidate else &quot;\n&quot;
-                ca = source[ce] if ce &lt; len(source) else &quot;\n&quot;
-                can_close = not cb.isspace() and (not _punct(cb) or ca.isspace() or _punct(ca))
-                if marker == &quot;_&quot;:
-                    # Intraword underscores cannot close emphasis (the opener
-                    # check already applies the corresponding left-flanking rule).
-                    can_close = can_close and not (cb.isalnum() and ca.isalnum())
-                use = 2 if length &gt;= 2 and ce - candidate &gt;= 2 else 1
-                if can_close and candidate &gt; end and not (marker == &quot;_&quot; and before.isalnum() and ca.isalnum()):
-                    found = (candidate, ce, use)
-                    break
-                close = ce
-            if found is None:
-                i = end
+            marker = current.literal[0]
+            opener = closer - 1
+            while opener &gt;= 0:
+                candidate, can_open, candidate_closes = parts[opener]
+                if can_open and candidate.literal and candidate.literal[0] == marker:
+                    n, m = len(candidate.literal), len(current.literal)
+                    if not ((candidate_closes or parts[closer][1]) and (n + m) % 3 == 0 and (n % 3 or m % 3)):
+                        break
+                opener -= 1
+            if opener &lt; 0:
+                closer += 1
                 continue
-            a, b, use = found
-            prefix = source[plain:i] + marker * (length - use)
-            if prefix:
-                chunks.append(Inline(&quot;text&quot;, prefix))
-            inner = _parse_emphasis([Inline(&quot;text&quot;, source[end:a])])
-            chunks.append(Inline(&quot;strong&quot; if use == 2 else &quot;em&quot;, children=inner))
-            source = source[:i] + source[end:a] + source[b:]
-            i = i + (a - end)
-            plain = i
-        tail = source[plain:]
-        if tail:
-            chunks.append(Inline(&quot;text&quot;, tail))
-        result.extend(chunks or [node])
-    return result
+            use = 2 if len(parts[opener][0].literal) &gt;= 2 and len(current.literal) &gt;= 2 else 1
+            parts[opener][0].literal = parts[opener][0].literal[:-use]
+            current.literal = current.literal[use:]
+            children = [part[0] for part in parts[opener + 1:closer] if part[0].type != &quot;text&quot; or part[0].literal]
+            wrapped = Inline(&quot;strong&quot; if use == 2 else &quot;em&quot;, children=children)
+            parts[opener + 1:closer] = [[wrapped, False, False]]
+            closer = opener + 2
+        result.extend(part[0] for part in parts if part[0].type != &quot;text&quot; or part[0].literal)
+    merged: list[Inline] = []
+    for item in result:
+        if item.type == &quot;text&quot; and merged and merged[-1].type == &quot;text&quot;:
+            merged[-1].literal += item.literal
+        else:
+            merged.append(item)
+    return merged
 
 
 def _punct(char: str) -&gt; bool:

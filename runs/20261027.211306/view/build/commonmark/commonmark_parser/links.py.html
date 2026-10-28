@@ -109,6 +109,17 @@ def _destination_and_title(source: str, start: int) -&gt; tuple[str, str | None,
 def _bracket_end(source: str, opening: int) -&gt; int | None:
     depth, i = 1, opening + 1
     while i &lt; len(source):
+        if source[i] == &quot;&lt;&quot;:
+            from .inline_html_breaks import _html_at
+            from .autolinks import parse_autolinks
+            end = _html_at(source, i)
+            if end is None:
+                close = source.find(&quot;&gt;&quot;, i + 1)
+                if close &gt;= 0 and any(n.type == &quot;link&quot; for n in parse_autolinks(source[i:close + 1])):
+                    end = close + 1
+            if end is not None:
+                i = end
+                continue
         if source[i] == &quot;`&quot;:
             run_end = i + 1
             while run_end &lt; len(source) and source[run_end] == &quot;`&quot;:
@@ -175,7 +186,7 @@ def parse_links(source: str, references: dict) -&gt; list[Inline | LinkNode]:
                 if ref_close is not None:
                     reference_label = source[after + 1:ref_close] or label_source
                     end = ref_close + 1
-            entry = references.get(_normalize_label(_decode(reference_label)))
+            entry = references.get(_normalize_label(reference_label))
             if entry is None:
                 text.append(source[i]); i += 1; continue
             if isinstance(entry, dict):

@@ -14,13 +14,13 @@
 
 def test_ascii_punctuation_escape_removes_marker():
     nodes = parse_inlines(&quot;\\!&quot;, {})
-    assert [(node.type, node.literal) for node in nodes] == [(&quot;escaped&quot;, &quot;!&quot;)]
+    assert [(node.type, node.literal) for node in nodes] == [(&quot;text&quot;, &quot;!&quot;)]
 
 
 def test_escaped_emphasis_delimiter_stays_literal():
     nodes = parse_inlines(r&quot;\*not emphasized*&quot;, {})
     assert [(node.type, node.literal) for node in nodes] == [
-        (&quot;escaped&quot;, &quot;*&quot;), (&quot;text&quot;, &quot;not emphasized*&quot;)
+        (&quot;text&quot;, &quot;*&quot;), (&quot;text&quot;, &quot;not emphasized*&quot;)
     ]
 
 

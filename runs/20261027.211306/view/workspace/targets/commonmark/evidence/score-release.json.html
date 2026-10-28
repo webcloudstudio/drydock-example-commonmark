@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/score-release.json</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/score-release.json</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/score-release.json">Raw file</a></div></header>
+<article class="doc"><pre>{
+  &quot;schema_version&quot;: 5,
+  &quot;recorded_at&quot;: &quot;2026-10-28T02:59:15+00:00&quot;,
+  &quot;target&quot;: &quot;commonmark&quot;,
+  &quot;verdict&quot;: &quot;PASSED&quot;,
+  &quot;verdict_line&quot;: &quot;commonmark: PASSED \u2014 1 of 1&quot;,
+  &quot;statement&quot;: &quot;commonmark: PASSED \u2014 1 of 1\n\n  st-001  MET       sh sources/full_test.sh: exit code 0; 655 passed, 0 failed, 0 errored, 0 skipped&quot;,
+  &quot;complete&quot;: true,
+  &quot;governed_gate&quot;: {
+    &quot;name&quot;: &quot;full&quot;,
+    &quot;outcome&quot;: &quot;PASS&quot;,
+    &quot;argv&quot;: [
+      &quot;sh&quot;,
+      &quot;sources/full_test.sh&quot;
+    ],
+    &quot;return_code&quot;: 0,
+    &quot;duration_ms&quot;: 196669,
+    &quot;detail&quot;: &quot;&quot;,
+    &quot;timed_out&quot;: false,
+    &quot;build_identity&quot;: &quot;ff3b638cfd2a8542&quot;,
+    &quot;stdout&quot;: &quot;655 passed, 0 failed, 0 errored, 0 skipped\n&quot;,
+    &quot;stderr&quot;: &quot;&quot;
+  },
+  &quot;criteria&quot;: [
+    {
+      &quot;criterion_id&quot;: &quot;st-001&quot;,
+      &quot;verdict&quot;: &quot;MET&quot;,
+      &quot;rationale&quot;: &quot;The governed full conformance gate passed with 655 tests passed and no failures, errors, or skips.&quot;,
+      &quot;evidence&quot;: [
+        &quot;sh sources/full_test.sh: exit code 0; 655 passed, 0 failed, 0 errored, 0 skipped&quot;
+      ]
+    }
+  ],
+  &quot;guardrail_ids&quot;: [],
+  &quot;observations&quot;: [],
+  &quot;blockers&quot;: [],
+  &quot;attestations&quot;: [],
+  &quot;kit_faults&quot;: [],
+  &quot;warnings&quot;: [],
+  &quot;improvements&quot;: [],
+  &quot;identities&quot;: {
+    &quot;code&quot;: &quot;57cfa8992ad78fbb8b02c0c34946152f43782743&quot;,
+    &quot;sea_trials&quot;: &quot;0bec2486b8d5c48ca1077f9320bc1686045d3e380a44a4bcc777ea6d77ab9d2a&quot;,
+    &quot;blueprint&quot;: {
+      &quot;ARCHITECTURE.md&quot;: &quot;0b53aaf9ed367aeab2084f4d0882095e4f24e6cda2057bcc6212d6fb00b1c1b1&quot;,
+      &quot;ARCHITECTURE_compact.md&quot;: &quot;df38f91009dbc116c4d94efe853419a597d97670ea5c86e3fe71c739fc483f18&quot;,
+      &quot;FEATURE-ATXHeadings.md&quot;: &quot;17bdc8d5974d4c7c72fd44d99c733d82ca645a2bef6e4f5486e74eceab33c638&quot;,
+      &quot;FEATURE-Autolinks.md&quot;: &quot;91dcd85dbdd0356fb7a2beb23fbfe3d20e81bb88a1b65dd0ee647e8128367a0c&quot;,
+      &quot;FEATURE-BlockQuotes.md&quot;: &quot;64586550d7266f020bca9243b992066121e493550c54e55a71aa697e12a2260a&quot;,
+      &quot;FEATURE-CodeSpans.md&quot;: &quot;42b953f8a97e78258ee2cc9a98428eecfc1418949a4f859afeea781e75baed10&quot;,
+      &quot;FEATURE-ConformanceIntegration.md&quot;: &quot;57706353c7784bda04425e9b3c772933dac359fc70781e069e031c0d561cb613&quot;,
+      &quot;FEATURE-Emphasis.md&quot;: &quot;4537a08a16622c3c6a3517987b7077dfedc1cd42262139d81b9d6bf251af39d3&quot;,
+      &quot;FEATURE-Executable.md&quot;: &quot;e143a1fdc2172d438bc6f85caa6f81bf2c9ac2c7bbb3e86c6cb1a422c0b51219&quot;,
+      &quot;FEATURE-FencedCode.md&quot;: &quot;e202d95cbaf0f75d5d92e12498938f8aa9941bb8cf1a7eaa5c4fb13863a14df2&quot;,
+      &quot;FEATURE-HTMLBlocks.md&quot;: &quot;9f7c3a7afa8ac97cdacf5089ab2cd175db0bf107b3f4260dfca1f440ff3eb340&quot;,
+      &quot;FEATURE-Images.md&quot;: &quot;4ab04f25b4acd705e0a0f6bc47c74d377ae5ff31e6a9092d5eae5780c7db8a62&quot;,
+      &quot;FEATURE-IndentedCode.md&quot;: &quot;cc98097055b2520efe45fcbe976c8f1e8894c3aebb1ee64884b0c7847263d08b&quot;,
+      &quot;FEATURE-InlineHTMLBreaks.md&quot;: &quot;f95366d07ceef0070340d09c180805de4ef37ac99dcde2bad9edb010dad5bed8&quot;,
+      &quot;FEATURE-InlineText.md&quot;: &quot;5eb5d524348105ef915e13aa9535d72acfb8b403645a1479ac343d67c3ea1fe8&quot;,
+      &quot;FEATURE-Links.md&quot;: &quot;4ac2b520f6e5fed9f8575ccce720264cb07d3a0caeaedfe29b69cd0f5c47009b&quot;,
+      &quot;FEATURE-Lists.md&quot;: &quot;99d2a298dc499826bfe649fd79c7159bc64662d1ae17df8897f4e0756ce4c858&quot;,
+      &quot;FEATURE-Paragraphs.md&quot;: &quot;3fb407135ab084cb87c9e4e6fea3995ec1dfc106a07862e8440fbaad63661426&quot;,
+      &quot;FEATURE-ReferenceDefinitions.md&quot;: &quot;9df9fcdf61b642dd29ef29f3a93c84c57eae8bbd4f973e46d39214d78574f12d&quot;,
+      &quot;FEATURE-SetextHeadings.md&quot;: &quot;2f9b4baf75c6bcaeeb59608de4e7d8437d243509f6c9df47bc9735b7c1859d5c&quot;,
+      &quot;FEATURE-ThematicBreaks.md&quot;: &quot;0d04f457405bd17a795e6a7d96146386eaaf3eb260c38354e32fc2bae71aabe2&quot;,
+      &quot;VERIFICATION.md&quot;: &quot;fe05b831e9e7e1d6daae5af09590bc801105d1875164f194537fae02114ea4bc&quot;
+    }
+  },
+  &quot;execution_id&quot;: &quot;20261028.025910.528Z-a8eb8cde&quot;
+}
+</pre></article>
+</main>
+</body>
+</html>

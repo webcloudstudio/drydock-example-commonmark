@@ -1,0 +1,11 @@
+Drydock 0.8.0  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+2026-10-27 22:59:10 EDT  Calling CODEX/gpt-6.1-terra (score release)...
+  Completed CODEX/gpt-6.1-terra (score release)  rc=0
+
+commonmark: PASSED — 1 of 1
+
+  st-001  MET       sh sources/full_test.sh: exit code 0; 655 passed, 0 failed, 0 errored, 0 skipped
+
+Scorecard: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/workspace/targets/commonmark/SCORECARD.md
+Evidence: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/workspace/targets/commonmark/evidence/score-release.json
+Target - committed project workspace git store

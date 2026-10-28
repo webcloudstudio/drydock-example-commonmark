@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a18072-8472-7d53-a8a0-a6e7f7995eb4"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\n  \"criteria\": [\n    {\n      \"id\": \"st-001\",\n      \"verdict\": \"MET\",\n      \"rationale\": \"The governed full conformance gate passed with 655 tests passed and no failures, errors, or skips.\",\n      \"evidence\": [\n        \"sh sources/full_test.sh: exit code 0; 655 passed, 0 failed, 0 errored, 0 skipped\"\n      ]\n    }\n  ],\n  \"improvements\": []\n}"}}
+{"type":"turn.completed","usage":{"input_tokens":13847,"cached_input_tokens":10752,"cache_write_input_tokens":0,"output_tokens":105,"reasoning_output_tokens":0}}
