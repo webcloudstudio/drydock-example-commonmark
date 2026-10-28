@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-ATXHeadings.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-ATXHeadings.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-ATXHeadings.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: ATX Headings</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Recognizes ATX heading blocks and retains their inline source.</td></tr><tr><td>Depends On</td><td>FEATURE-Paragraphs.md</td></tr><tr><td>Provides</td><td>ATX heading parsing</td></tr><tr><td>Consumes</td><td>paragraph block parsing</td></tr></tbody></table></div>
+<h2>Behavior</h2>
+<p>Extend <code>commonmark_parser.blocks.parse_blocks</code> to produce <code>heading</code> nodes with a numeric <code>level</code> and raw inline content in <code>literal</code>. An opening run contains one through six unescaped <code>#</code> characters, preceded by at most three spaces and followed by whitespace or the end of the line. The level is the opening run&#x27;s length. Remove leading and trailing spaces or tabs from the content. An optional closing run of unescaped <code>#</code> characters is removed only when preceded by whitespace and followed solely by whitespace or the end of the line. Headings may be empty and may interrupt paragraphs.</p>
+<p>Retain heading content for the subsequent inline phase. The complete ATX headings section runs in the later conformance integration story after interacting providers exist.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC atx-heading-level ===<br>Intent: A valid opening run produces the corresponding heading level and retains its content for inline parsing.</p>
+<p>from commonmark_parser.blocks import parse_blocks</p>
+<p>content = &quot;alpha&quot; document = parse_blocks(&quot;### &quot; + content + &quot; ###\n&quot;) assert len(document.children) == 1 assert document.children[0].kind == &quot;heading&quot; assert document.children[0].level == 3 assert document.children[0].literal == content === END AC atx-heading-level ===</p>
+<p>=== AC atx-heading-interruption ===<br>Intent: An ATX heading interrupts a paragraph and a marker without required separating whitespace stays in paragraph content.</p>
+<p>from commonmark_parser.blocks import parse_blocks</p>
+<p>first = &quot;alpha&quot; heading = &quot;beta&quot; invalid = &quot;#gamma&quot; document = parse_blocks(first + &quot;\n# &quot; + heading + &quot;\n&quot; + invalid + &quot;\n&quot;) assert len(document.children) == 3 assert document.children[0].kind == &quot;paragraph&quot; assert document.children[0].literal.strip() == first assert document.children[1].kind == &quot;heading&quot; assert document.children[1].level == 1 assert document.children[1].literal == heading assert document.children[2].kind == &quot;paragraph&quot; assert document.children[2].literal.strip() == invalid === END AC atx-heading-interruption ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Preserve heading content for inline parsing.</li><li>Do not run the full-suite entry point in this story.</li></ul></article>
+</main>
+</body>
+</html>

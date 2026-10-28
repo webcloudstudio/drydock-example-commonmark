@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-InlineText.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-InlineText.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-InlineText.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Inline Text</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Parse ordinary inline text, escapes, character references, and soft line breaks.</td></tr><tr><td>Depends On</td><td>FEATURE-Lists.md</td></tr><tr><td>Provides</td><td>inline text parsing</td></tr><tr><td>Consumes</td><td>list block parsing, document reference map</td></tr></tbody></table></div>
+<h2>Purpose and workflow</h2>
+<p>After the document block tree and reference map are complete, parse paragraph and heading text as inlines. A backslash escapes an ASCII punctuation character; otherwise it remains literal. Decode valid semicolon-terminated HTML5 named entities and valid decimal or hexadecimal numeric references under the specification&#x27;s length and code-point rules. Replace invalid Unicode scalar values and U+0000 with U+FFFD. Unrecognized references remain text.</p>
+<p>Represent ordinary text and soft line breaks in sequence. Remove spaces at the end of a soft-breaking line and at the beginning of the next line. Preserve the distinction between text parsing and literal contexts: escapes and references are not interpreted inside code spans, code blocks, autolinks, or raw HTML where the specification excludes them.</p>
+<p>Expose <code>parse_inlines(source, references)</code> from <code>commonmark_parser.inlines</code>. It returns ordered inline nodes with <code>type</code> and, for text nodes, <code>literal</code>; a soft break has type <code>softbreak</code>. The reference map is supplied after block parsing, even where this increment does not use it.</p>
+<p>Conformance integration executes the complete Backslash escapes, Entity and numeric character references, Soft line breaks, and Textual content sections after interacting inline capabilities exist.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC inline-escape ===<br>Intent: Escaped ASCII punctuation becomes literal text without retaining the escape marker.</p>
+<p>from commonmark_parser.inlines import parse_inlines</p>
+<p>punctuation = &quot;!&quot; nodes = parse_inlines(&quot;\\&quot; + punctuation, {}) assert len(nodes) == 1 assert nodes[0].type == &quot;text&quot; assert nodes[0].literal == punctuation === END AC inline-escape ===</p>
+<p>=== AC inline-soft-break ===<br>Intent: A regular line ending separates text nodes with a soft break while retaining their text.</p>
+<p>from commonmark_parser.inlines import parse_inlines</p>
+<p>first = &quot;alpha&quot; second = &quot;beta&quot; nodes = parse_inlines(first + &quot;\n&quot; + second, {}) assert [node.type for node in nodes] == [&quot;text&quot;, &quot;softbreak&quot;, &quot;text&quot;] assert nodes[0].literal == first assert nodes[2].literal == second === END AC inline-soft-break ===</p>
+<p>=== AC inline-numeric-reference ===<br>Intent: A valid numeric character reference decodes to the character designated by its input code point.</p>
+<p>from commonmark_parser.inlines import parse_inlines</p>
+<p>codepoint = 65 nodes = parse_inlines(f&quot;&amp;#{codepoint};&quot;, {}) assert len(nodes) == 1 assert nodes[0].type == &quot;text&quot; assert nodes[0].literal == chr(codepoint) === END AC inline-numeric-reference ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Complete block parsing and reference collection before inline parsing.</li><li>Preserve supplied conformance assets unchanged.</li><li>Do not invoke the full-suite entry point in this story&#x27;s checks.</li></ul></article>
+</main>
+</body>
+</html>

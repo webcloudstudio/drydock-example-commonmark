@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/ARCHITECTURE_compact.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/ARCHITECTURE_compact.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/ARCHITECTURE_compact.md">Raw file</a></div></header>
+<article class="doc"><p>&lt;!-- Compacted from ARCHITECTURE.md sha256=0b53aaf9ed367aeab2084f4d0882095e4f24e6cda2057bcc6212d6fb00b1c1b1 on 2026-10-27 by drydock build agent --&gt;</p>
+<ul><li>Python 3.11+; standard library only at runtime. Root owns <code>pyproject.toml</code>, committed <code>uv.lock</code>, <code>.venv</code>, launchers, and <code>pytest -q</code>.</li><li>Public interfaces: <code>commonmark_parser.render(markdown: str) -&gt; str</code>; <code>commonmark_parser.blocks.parse_blocks(markdown: str) -&gt; Document</code>; <code>commonmark_parser.inlines.parse_inlines(literal: str, references: dict) -&gt; list</code>.</li><li><code>Document</code> exposes ordered <code>children</code> and document-wide <code>references</code>. Block nodes expose <code>kind</code>, <code>children</code>, and <code>literal</code>; headings also expose <code>level</code>.</li><li>Parse block structure and collect references before parsing paragraph and heading inline content. Preserve raw inline source until that phase.</li><li>Root executable <code>commonmark</code> reads UTF-8 Markdown from stdin and writes HTML to stdout.</li><li>Keep <code>sources/spec.txt</code>, <code>spec_tests.py</code>, <code>cmark.py</code>, <code>normalize.py</code>, and <code>full_test.sh</code> verbatim under <code>sources/</code>. The runner imports sibling helpers and receives program and specification paths.</li><li>Do not use a public Markdown implementation or modify the supplied conformance assets and full-suite entry point.</li></ul></article>
+</main>
+</body>
+</html>

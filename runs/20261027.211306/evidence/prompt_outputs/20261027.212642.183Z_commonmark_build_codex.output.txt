@@ -1,0 +1,12 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark_parser/setext.py
+- commonmark_parser/blocks.py
+- tests/test_setext.py
+
+SUMMARY:
+Added `parse_setext(lines)` and integrated setext heading recognition into block parsing, preserving raw content for inline parsing. Focused tests passed: `pytest -q tests/test_setext.py tests/test_paragraphs.py tests/test_service_blocks.py` (21 passed).
+
+BLOCKERS:
+- None

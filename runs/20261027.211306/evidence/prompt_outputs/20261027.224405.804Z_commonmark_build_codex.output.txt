@@ -1,0 +1,21 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/blocks.py
+- tests/test_block_quotes.py
+
+SUMMARY:
+Fixed the reproduced block quote case where an unmarked lazy continuation line containing `===` incorrectly created a setext heading. Added a regression test. Before the fix, example 93 failed; afterward, examples 93 and 92 passed.
+
+Checks run:
+
+- `pytest -q tests/test_block_quotes.py tests/test_setext.py` — 16 passed.
+- `python3 sources/spec_tests.py --program "$PWD/commonmark" --spec sources/spec.txt --pattern '^Setext headings$' -n 93` — 1 passed.
+- Same command with `-n 92` — 1 passed.
+
+BLOCKERS:
+- The supplied repair logs show outstanding failures across conformance blocks, containers, and inlines. Those broader failures remain unresolved; the full scoped selectors were not rerun.
+
+FAILURE_SUMMARY: Multiple scoped conformance failures remain
+
+FAILURE_DETAIL: The targeted block quote repair passes its regression and neighboring example, but the existing logs still show 34 block failures, 20 container failures, and 115 inline failures. Repair the remaining failing parser branches and run their focused examples before rerunning the scoped checks.

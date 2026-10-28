@@ -1,0 +1,30 @@
+[
+  {
+    "id": "decision-cli-exit",
+    "type": "text",
+    "severity": "material",
+    "origin": "plan",
+    "blueprint": "FEATURE-Executable.md",
+    "story": "delivery",
+    "status": "recommended",
+    "archived": false,
+    "title": "Standard-stream execution result",
+    "description": "The sources specify the streams but do not state a successful process exit status or error channel.",
+    "options": [],
+    "system_choice": "Successful conversion exits zero; operational errors use a nonzero exit status and standard error."
+  },
+  {
+    "id": "decision-scoped-integration",
+    "type": "text",
+    "severity": "material",
+    "origin": "plan",
+    "blueprint": "FEATURE-ConformanceIntegration.md",
+    "story": "conformance-integration",
+    "status": "recommended",
+    "archived": false,
+    "title": "Mixed conformance section ownership",
+    "description": "The supplied section selectors include examples requiring multiple parser constructs, so early capability gates cannot execute their complete sections without future providers.",
+    "options": [],
+    "system_choice": "Gate early capabilities through their delivered parser interfaces, then execute every complete example-owning section in scoped integration checks after all providers exist."
+  }
+]

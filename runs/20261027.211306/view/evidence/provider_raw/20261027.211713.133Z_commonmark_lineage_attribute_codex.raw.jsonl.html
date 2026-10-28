@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/provider_raw/20261027.211713.133Z_commonmark_lineage_attribute_codex.raw.jsonl</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/provider_raw/20261027.211713.133Z_commonmark_lineage_attribute_codex.raw.jsonl</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/provider_raw/20261027.211713.133Z_commonmark_lineage_attribute_codex.raw.jsonl">Raw file</a></div></header>
+<article class="doc"><pre>{&quot;type&quot;:&quot;thread.started&quot;,&quot;thread_id&quot;:&quot;01a17f39-71aa-7f23-83a3-c6e9a52ad078&quot;}
+{&quot;type&quot;:&quot;turn.started&quot;}
+{&quot;type&quot;:&quot;item.completed&quot;,&quot;item&quot;:{&quot;id&quot;:&quot;item_0&quot;,&quot;type&quot;:&quot;agent_message&quot;,&quot;text&quot;:&quot;&lt;requirement name=\&quot;commonmark-parser\&quot; stories=\&quot;delivery,paragraphs,thematic-breaks,indented-code,atx-headings,html-blocks,fenced-code,reference-definitions,setext-headings,block-quotes,lists,inline-text,code-spans,emphasis,autolinks,inline-html-breaks,links,images\&quot;&gt;\nBuild a CommonMark 0.31.2 parser from the supplied specification. The parser reads Markdown from\nstandard input and writes HTML to standard output. Do not use a public Markdown implementation.\n&lt;/requirement&gt;\n&lt;requirement name=\&quot;executable\&quot; stories=\&quot;delivery\&quot;&gt;\nThe deliverable is an executable named `commonmark` at the application root.\n&lt;/requirement&gt;\n&lt;requirement name=\&quot;block-parsing\&quot; stories=\&quot;paragraphs,thematic-breaks,atx-headings,setext-headings,indented-code,fenced-code,html-blocks,reference-definitions,block-quotes,lists\&quot;&gt;\n1. Blocks: paragraphs, thematic breaks, ATX headings, setext headings, indented code, fenced\n   code, HTML blocks, link reference definitions, block quotes, then lists — lists are the\n   hardest block construct, with lazy continuation, nesting, and tightness.\n&lt;/requirement&gt;\n&lt;requirement name=\&quot;inline-parsing\&quot; stories=\&quot;inline-text,code-spans,emphasis,links,images,autolinks,inline-html-breaks\&quot;&gt;\n2. Inlines: backslash escapes, entity and numeric references, code spans, emphasis and strong\n   emphasis (the delimiter-run algorithm), links and images, autolinks, raw HTML, hard breaks.\n&lt;/requirement&gt;\n&lt;requirement name=\&quot;terminal-verification\&quot; stories=\&quot;verification\&quot;&gt;\nCreate one terminal verification story that:\n\n- depends on every parser implementation story;\n- contains the only `Suite: full` acceptance check;\n- runs `sh sources/full_test.sh`, prints captured standard output and standard error, and asserts\n  only `result.returncode == 0`; and\n- carries `Sea Trials: st-001`.\n&lt;/requirement&gt;\n&lt;unattached story=\&quot;foundation\&quot;/&gt;\n&lt;unattached story=\&quot;conformance-integration\&quot;/&gt;&quot;}}
+{&quot;type&quot;:&quot;turn.completed&quot;,&quot;usage&quot;:{&quot;input_tokens&quot;:15946,&quot;cached_input_tokens&quot;:12160,&quot;cache_write_input_tokens&quot;:0,&quot;output_tokens&quot;:446,&quot;reasoning_output_tokens&quot;:0}}
+</pre></article>
+</main>
+</body>
+</html>

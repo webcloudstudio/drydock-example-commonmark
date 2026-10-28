@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_images.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_images.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_images.py">Raw file</a></div></header>
+<article class="doc"><pre>from commonmark_parser.images import parse_images
+
+
+def test_inline_image_destination_title_and_alt():
+    nodes = parse_images(&#x27;![picture](/image &quot;caption&quot;)&#x27;, {})
+    assert len(nodes) == 1
+    image = nodes[0]
+    assert (image.type, image.destination, image.title, image.alt) == (
+        &quot;image&quot;, &quot;/image&quot;, &quot;caption&quot;, &quot;picture&quot;)
+
+
+def test_reference_image_omits_emphasis_from_alt():
+    refs = {&quot;picture&quot;: {&quot;destination&quot;: &quot;/image&quot;, &quot;title&quot;: None}}
+    nodes = parse_images(&quot;![*picture*][picture]&quot;, refs)
+    assert len(nodes) == 1
+    assert (nodes[0].type, nodes[0].destination, nodes[0].title, nodes[0].alt) == (
+        &quot;image&quot;, &quot;/image&quot;, None, &quot;picture&quot;)
+
+
+def test_collapsed_and_shortcut_reference_images():
+    refs = {&quot;picture&quot;: {&quot;destination&quot;: &quot;/image&quot;, &quot;title&quot;: &quot;caption&quot;}}
+    for source in (&quot;![picture][]&quot;, &quot;![picture]&quot;):
+        nodes = parse_images(source, refs)
+        assert [(node.destination, node.title, node.alt) for node in nodes] == [
+            (&quot;/image&quot;, &quot;caption&quot;, &quot;picture&quot;)]
+
+
+def test_image_alt_includes_link_text_and_nested_image_alt():
+    refs = {&quot;linked&quot;: {&quot;destination&quot;: &quot;/link&quot;, &quot;title&quot;: None}}
+    nodes = parse_images(&quot;![**bold** [linked](/link) ![inner](x)](outer)&quot;, refs)
+    assert len(nodes) == 1
+    assert nodes[0].alt == &quot;bold linked inner&quot;
+
+
+def test_unresolved_reference_is_ignored_and_many_images_keep_order():
+    nodes = parse_images(&quot;![missing][unknown] ![a](one) ![b](two)&quot;, {})
+    assert [(node.destination, node.alt) for node in nodes] == [(&quot;one&quot;, &quot;a&quot;), (&quot;two&quot;, &quot;b&quot;)]
+
+
+def test_inline_image_accepts_empty_alt_and_escaped_text():
+    nodes = parse_images(r&quot;![](x) ![a\*b](y)&quot;, {})
+    assert [(node.destination, node.alt) for node in nodes] == [(&quot;x&quot;, &quot;&quot;), (&quot;y&quot;, &quot;a*b&quot;)]
+</pre></article>
+</main>
+</body>
+</html>

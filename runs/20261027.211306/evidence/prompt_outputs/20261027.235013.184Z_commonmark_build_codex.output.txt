@@ -1,0 +1,26 @@
+RESULT: FAILED
+
+FILES CHANGED:
+
+- `commonmark_parser/blocks.py`
+- `commonmark_parser/inlines.py`
+- `commonmark_parser/__init__.py`
+- `tests/test_render_integration.py`
+
+SUMMARY:
+
+Fixed tightness detection for a blank line before a nested list and kept entity decoded emphasis delimiters literal. Added regressions for both.
+
+Checks run:
+
+- `pytest -q` — 98 passed.
+- Focused parser tests — 27 passed.
+- Block selector — 184 passed, 3 failed; reference-definition examples 196, 198, and 210 remain failing.
+- Inline selector — 268 passed, 88 failed; delimiter handling, links and images, raw HTML, and hard-break interactions remain failing.
+
+BLOCKERS:
+
+- The integrated parser does not yet pass the declared conformance selectors.
+
+FAILURE_SUMMARY: Scoped conformance checks still fail.
+FAILURE_DETAIL: The block selector has 3 reference-definition failures; the inline selector has 88 failures across delimiter handling, links and images, raw HTML, and hard-break interactions. Repair those parser branches and rerun the affected selectors.

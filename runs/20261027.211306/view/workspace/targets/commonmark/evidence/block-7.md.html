@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-7.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-7.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-7.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 7 · Service (block-7)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-27</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 3486</li><li>execution id: 20261027.212834.286Z-b90fd7eb</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse list items and lists. (lists) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>stack: python_compact.md (SP 654)</li><li>compass: COMPASS.md (SP 548)</li><li>implements: FEATURE-Lists.md (SP 829)</li><li>context: ARCHITECTURE_compact.md (SP 304)</li><li>stack: common_compact.md (SP 1079)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>commonmark_parser/blocks.py</li><li>tests/test_lists.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: list-items (FEATURE-Lists.md)</li></ul>
+<p>intent: Matching markers form one tight list with separate items whose paragraph text is preserved. return code: 1 stderr: --- drydock: values at failure --- listing = Block(kind=&#x27;paragraph&#x27;, children=[], literal=&#x27;- alpha\n- beta&#x27;, level=None, info=&#x27;&#x27;) --- drydock: end values --- Traceback (most recent call last): File &quot;list-items.py&quot;, line 8, in &lt;module&gt; assert listing.type == &quot;list&quot; ^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: list-start-and-looseness (FEATURE-Lists.md)</li></ul>
+<p>intent: An ordered list retains its initial number and blank lines between items make it loose. return code: 1 stderr: --- drydock: values at failure --- document = Document(children=[Block(kind=&#x27;paragraph&#x27;, children=[], literal=&#x27;4. first&#x27;, level=None, info=&#x27;&#x27;), Block(kind=&#x27;paragraph&#x27;, children=[], literal=&#x27;5. second&#x27;, level=None, info=&#x27;&#x27;)], references={}) --- drydock: end values --- Traceback (most recent call last): File &quot;list-start-and-looseness.py&quot;, line 7, in &lt;module&gt; assert len(document.children) == 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: list-items (FEATURE-Lists.md)</li></ul>
+<p>intent: Matching markers form one tight list with separate items whose paragraph text is preserved. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: list-start-and-looseness (FEATURE-Lists.md)</li></ul>
+<p>intent: An ordered list retains its initial number and blank lines between items make it loose. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<h2>Build summary</h2>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>commonmark_parser/blocks.py</li><li>tests/test_lists.py</li></ul>
+<p>SUMMARY: Added list and item block nodes with marker grouping, ordered start numbers, nesting, continuation handling, and tight or loose status. Added focused list tests. The targeted test command passed: <code>pytest -q tests/test_lists.py tests/test_block_quotes.py tests/test_paragraphs.py tests/test_setext.py tests/test_service_blocks.py tests/test_foundation.py</code> (37 passed). The full conformance suite was not run.</p>
+<p>BLOCKERS:</p>
+<ul><li>None</li></ul></article>
+</main>
+</body>
+</html>

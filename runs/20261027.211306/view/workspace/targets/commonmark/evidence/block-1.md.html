@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-1.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-1.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-1.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 1 · Foundational (block-1)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-27</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 4283</li><li>execution id: 20261027.212136.170Z-f219a077</li></ul>
+<h2>Stories built</h2>
+<ul><li>Establish the Python project and parser integration boundaries. (foundation) [story]</li></ul>
+<h2>Reusable compacts</h2>
+<ul><li>ARCHITECTURE_compact.md</li></ul>
+<h2>Stacked context</h2>
+<ul><li>implements: python.md (SP 814)</li><li>compass: COMPASS.md (SP 548)</li><li>implements: ARCHITECTURE.md (SP 993)</li><li>stack: common.md (SP 1812)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>.gitignore</li><li>commonmark</li><li>commonmark_parser/<strong>init</strong>.py</li><li>commonmark_parser/blocks.py</li><li>commonmark_parser/cli.py</li><li>commonmark_parser/inlines.py</li><li>pyproject.toml</li><li>tests/test_foundation.py</li><li>uv.lock</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: foundation-integration (ARCHITECTURE.md)</li></ul>
+<p>intent: The Python foundation exposes the parser integration callable before parser features are implemented. return code: 1 stderr: Traceback (most recent call last): File &quot;foundation-integration.py&quot;, line 1, in &lt;module&gt; import commonmark_parser<br>ModuleNotFoundError: No module named &#x27;commonmark_parser&#x27;</p>
+<ul><li>RED: foundation-block-boundary (ARCHITECTURE.md)</li></ul>
+<p>intent: The foundation exposes a callable block parser for later block capabilities. return code: 1 stderr: Traceback (most recent call last): File &quot;foundation-block-boundary.py&quot;, line 1, in &lt;module&gt; from commonmark_parser.blocks import parse_blocks<br>ModuleNotFoundError: No module named &#x27;commonmark_parser&#x27;</p>
+<ul><li>RED: foundation-inline-boundary (ARCHITECTURE.md)</li></ul>
+<p>intent: The foundation exposes a callable inline parser for the second parsing phase. return code: 1 stderr: Traceback (most recent call last): File &quot;foundation-inline-boundary.py&quot;, line 1, in &lt;module&gt; from commonmark_parser.inlines import parse_inlines<br>ModuleNotFoundError: No module named &#x27;commonmark_parser&#x27;</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: foundation-integration (ARCHITECTURE.md)</li></ul>
+<p>intent: The Python foundation exposes the parser integration callable before parser features are implemented. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: foundation-block-boundary (ARCHITECTURE.md)</li></ul>
+<p>intent: The foundation exposes a callable block parser for later block capabilities. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: foundation-inline-boundary (ARCHITECTURE.md)</li></ul>
+<p>intent: The foundation exposes a callable inline parser for the second parsing phase. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<h2>Build summary</h2>
+<p>&lt;reusable-compact filename=&quot;ARCHITECTURE.md&quot;&gt;</p>
+<ul><li>Python 3.11+; standard library only at runtime. Root owns <code>pyproject.toml</code>, committed <code>uv.lock</code>, <code>.venv</code>, launchers, and <code>pytest -q</code>.</li><li>Public interfaces: <code>commonmark_parser.render(markdown: str) -&gt; str</code>; <code>commonmark_parser.blocks.parse_blocks(markdown: str) -&gt; Document</code>; <code>commonmark_parser.inlines.parse_inlines(literal: str, references: dict) -&gt; list</code>.</li><li><code>Document</code> exposes ordered <code>children</code> and document-wide <code>references</code>. Block nodes expose <code>kind</code>, <code>children</code>, and <code>literal</code>; headings also expose <code>level</code>.</li><li>Parse block structure and collect references before parsing paragraph and heading inline content. Preserve raw inline source until that phase.</li><li>Root executable <code>commonmark</code> reads UTF-8 Markdown from stdin and writes HTML to stdout.</li><li>Keep <code>sources/spec.txt</code>, <code>spec_tests.py</code>, <code>cmark.py</code>, <code>normalize.py</code>, and <code>full_test.sh</code> verbatim under <code>sources/</code>. The runner imports sibling helpers and receives program and specification paths.</li><li>Do not use a public Markdown implementation or modify the supplied conformance assets and full-suite entry point.</li></ul>
+<p>&lt;/reusable-compact&gt;</p>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>.gitignore</li><li>commonmark</li><li>commonmark_parser/<strong>init</strong>.py</li><li>commonmark_parser/blocks.py</li><li>commonmark_parser/cli.py</li><li>commonmark_parser/inlines.py</li><li>pyproject.toml</li><li>tests/test_foundation.py</li><li>uv.lock</li></ul>
+<p>SUMMARY: Added the Python project metadata and lockfile, parser integration interfaces, and stdin/stdout executable. Added five focused foundation tests. <code>pytest -q</code> passed (5 tests); <code>printf &#x27;x&#x27; | ./commonmark</code> exited 0. The supplied conformance suite was not run.</p>
+<p>BLOCKERS:</p>
+<ul><li>None</li></ul></article>
+</main>
+</body>
+</html>

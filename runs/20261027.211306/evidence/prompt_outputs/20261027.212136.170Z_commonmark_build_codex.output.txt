@@ -1,0 +1,28 @@
+<reusable-compact filename="ARCHITECTURE.md">
+- Python 3.11+; standard library only at runtime. Root owns `pyproject.toml`, committed `uv.lock`, `.venv`, launchers, and `pytest -q`.
+- Public interfaces: `commonmark_parser.render(markdown: str) -> str`; `commonmark_parser.blocks.parse_blocks(markdown: str) -> Document`; `commonmark_parser.inlines.parse_inlines(literal: str, references: dict) -> list`.
+- `Document` exposes ordered `children` and document-wide `references`. Block nodes expose `kind`, `children`, and `literal`; headings also expose `level`.
+- Parse block structure and collect references before parsing paragraph and heading inline content. Preserve raw inline source until that phase.
+- Root executable `commonmark` reads UTF-8 Markdown from stdin and writes HTML to stdout.
+- Keep `sources/spec.txt`, `spec_tests.py`, `cmark.py`, `normalize.py`, and `full_test.sh` verbatim under `sources/`. The runner imports sibling helpers and receives program and specification paths.
+- Do not use a public Markdown implementation or modify the supplied conformance assets and full-suite entry point.
+</reusable-compact>
+
+RESULT: SUCCESS
+
+FILES CHANGED:
+- .gitignore
+- commonmark
+- commonmark_parser/__init__.py
+- commonmark_parser/blocks.py
+- commonmark_parser/cli.py
+- commonmark_parser/inlines.py
+- pyproject.toml
+- tests/test_foundation.py
+- uv.lock
+
+SUMMARY:
+Added the Python project metadata and lockfile, parser integration interfaces, and stdin/stdout executable. Added five focused foundation tests. `pytest -q` passed (5 tests); `printf 'x' | ./commonmark` exited 0. The supplied conformance suite was not run.
+
+BLOCKERS:
+- None

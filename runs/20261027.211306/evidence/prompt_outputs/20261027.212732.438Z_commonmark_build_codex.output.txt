@@ -1,0 +1,13 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark_parser/blocks.py
+- tests/test_block_quotes.py
+
+SUMMARY:
+Added recursive block quote parsing with nested containers, lazy paragraph continuation, explicit blank lines, and document-wide reference collection. Added a `type` alias for block nodes while preserving the existing `kind` interface.
+
+Ran `pytest -q tests/test_block_quotes.py tests/test_paragraphs.py tests/test_service_blocks.py tests/test_setext.py`: 26 passed. The full-suite entry point was not run.
+
+BLOCKERS:
+- None

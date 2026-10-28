@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261028.001809.125Z_commonmark_build_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261028.001809.125Z_commonmark_build_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261028.001809.125Z_commonmark_build_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/inlines.py
+- tests/test_inline_providers.py
+
+SUMMARY:
+Fixed Unicode symbol flanking for emphasis and added a regression for the representative currency symbol case. The focused regression and conformance examples 356 and 357 pass; `pytest -q` passes (103 tests).
+
+BLOCKERS:
+- The saved failures show broader unresolved reference definition, delimiter, link, image, and HTML parsing failures. The focused emphasis section still fails on other examples; the declared conformance checks are not yet satisfied.
+
+FAILURE_SUMMARY: Scoped CommonMark conformance remains incomplete
+FAILURE_DETAIL: The symbol-flanking fix resolves example 356, but the existing inline delimiter and reference parsing implementations still fail other staged examples. Repair those parser paths and rerun the affected scoped selectors before retrying this block.</pre></article>
+</main>
+</body>
+</html>

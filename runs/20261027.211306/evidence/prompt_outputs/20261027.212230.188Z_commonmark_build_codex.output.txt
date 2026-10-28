@@ -1,0 +1,10 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- README.md
+
+SUMMARY:
+Added concise usage documentation for the UTF-8 stdin to stdout interface. The empty-document acceptance check passed: exit status 0, empty stdout and stderr.
+
+BLOCKERS:
+- None.

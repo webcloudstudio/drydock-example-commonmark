@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261027.221052.921Z_commonmark_build_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261027.221052.921Z_commonmark_build_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261027.221052.921Z_commonmark_build_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/blocks.py
+- tests/test_service_blocks.py
+
+SUMMARY:
+Fixed the list-marker tab-stop calculation that caused Tabs example 7 to retain one extra space. Added a regression test. `python3 -m pytest -q tests/test_service_blocks.py` passed (11 tests); the scoped Tabs and Precedence command passed (12 passed, 0 failed). The remaining measured failures span block, container, and inline parsing and are not repaired in this pass. Their suites were not rerun.
+
+BLOCKERS:
+- The block, container, and inline conformance failures remain unresolved.
+
+FAILURE_SUMMARY: Most measured conformance failures remain
+FAILURE_DETAIL: The tab defect was traced to expanding marker whitespace from column zero; expanding from the marker’s original column fixed Tabs example 7 and its scoped suite now passes. The saved logs also show many independent failures in block parsing, containers, references, and inline parsing. Those fixes are needed before the remaining scoped acceptance checks can pass.</pre></article>
+</main>
+</body>
+</html>

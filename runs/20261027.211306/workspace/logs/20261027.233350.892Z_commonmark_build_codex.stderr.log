@@ -1,0 +1,1 @@
+2026-10-27T23:35:07.838813Z ERROR codex_core::tools::router: error=apply_patch verification failed: invalid patch: multiple operations target /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/commonmark_parser/__init__.py

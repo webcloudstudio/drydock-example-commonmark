@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-11.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-11.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-11.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 11 · Service (block-11)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-27</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 3417</li><li>execution id: 20261027.213328.256Z-55fc0c59</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse inline and reference links. (links) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>stack: python_compact.md (SP 654)</li><li>compass: COMPASS.md (SP 548)</li><li>implements: FEATURE-Links.md (SP 753)</li><li>context: ARCHITECTURE_compact.md (SP 304)</li><li>stack: common_compact.md (SP 1079)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>commonmark_parser/links.py</li><li>tests/test_links.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: links-inline (FEATURE-Links.md)</li></ul>
+<p>intent: Inline link parsing returns the supplied destination and title and retains the link text as children. return code: 1 stderr: Traceback (most recent call last): File &quot;links-inline.py&quot;, line 1, in &lt;module&gt; from commonmark_parser.links import parse_links<br>ModuleNotFoundError: No module named &#x27;commonmark_parser.links&#x27;</p>
+<ul><li>RED: links-reference (FEATURE-Links.md)</li></ul>
+<p>intent: Full, collapsed, and shortcut references resolve through the supplied normalized reference map. return code: 1 stderr: Traceback (most recent call last): File &quot;links-reference.py&quot;, line 1, in &lt;module&gt; from commonmark_parser.links import parse_links<br>ModuleNotFoundError: No module named &#x27;commonmark_parser.links&#x27;</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: links-inline (FEATURE-Links.md)</li></ul>
+<p>intent: Inline link parsing returns the supplied destination and title and retains the link text as children. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: links-reference (FEATURE-Links.md)</li></ul>
+<p>intent: Full, collapsed, and shortcut references resolve through the supplied normalized reference map. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<h2>Build summary</h2>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>commonmark_parser/links.py</li><li>tests/test_links.py</li></ul>
+<p>SUMMARY: Implemented inline, full, collapsed, and shortcut reference links with destination and title parsing, entity and escape decoding, balanced parentheses, and normalized reference lookup. Added six focused link tests.</p>
+<p>CHECKS:</p>
+<ul><li><code>pytest -q tests/test_links.py</code> — 6 passed.</li><li><code>pytest -q</code> — 62 passed.</li></ul>
+<p>BLOCKERS:</p>
+<ul><li>None</li></ul></article>
+</main>
+</body>
+</html>

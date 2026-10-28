@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_paragraphs.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_paragraphs.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_paragraphs.py">Raw file</a></div></header>
+<article class="doc"><pre>from commonmark_parser.blocks import parse_blocks
+
+
+def test_consecutive_lines_form_paragraphs_separated_by_blank_lines():
+    first, second, third = &quot;alpha&quot;, &quot;beta&quot;, &quot;gamma&quot;
+    document = parse_blocks(first + &quot;\n&quot; + second + &quot;\n\n&quot; + third + &quot;\n&quot;)
+
+    assert len(document.children) == 2
+    assert all(node.kind == &quot;paragraph&quot; for node in document.children)
+    assert document.children[0].literal.splitlines() == [first, second]
+    assert document.children[1].literal.strip() == third
+
+
+def test_boundary_blanks_are_ignored_and_continuation_indent_is_removed():
+    document = parse_blocks(&quot;\n  alpha\n    beta\n\n&quot;)
+
+    assert len(document.children) == 1
+    assert document.children[0].kind == &quot;paragraph&quot;
+    assert document.children[0].literal.splitlines() == [&quot;alpha&quot;, &quot;beta&quot;]
+
+
+def test_continuation_trailing_spaces_are_preserved_but_final_trailing_spaces_are_trimmed():
+    document = parse_blocks(&quot;alpha  \n  beta  \n\n&quot;)
+
+    assert document.children[0].literal == &quot;alpha  \nbeta&quot;
+
+
+def test_whitespace_only_lines_separate_paragraphs():
+    document = parse_blocks(&quot;one\n \t \ntwo&quot;)
+
+    assert [node.literal for node in document.children] == [&quot;one&quot;, &quot;two&quot;]
+
+
+def test_empty_and_blank_only_documents_have_no_paragraphs():
+    assert parse_blocks(&quot;&quot;).children == []
+    assert parse_blocks(&quot; \t\n\n&quot;).children == []
+</pre></article>
+</main>
+</body>
+</html>

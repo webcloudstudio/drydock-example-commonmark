@@ -1,0 +1,2 @@
+2026-10-28T00:11:35.728035Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/commonmark_parser/blocks.py:
+                        if not lines[look].strip(" \t"):

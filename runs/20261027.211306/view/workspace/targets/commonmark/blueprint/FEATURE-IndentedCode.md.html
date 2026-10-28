@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-IndentedCode.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-IndentedCode.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-IndentedCode.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Indented Code</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Recognize indented code blocks and preserve their literal content.</td></tr><tr><td>Depends On</td><td>FEATURE-Paragraphs.md</td></tr><tr><td>Provides</td><td>indented code block parsing</td></tr><tr><td>Consumes</td><td>paragraph block parsing</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Identify indented code chunks during block parsing and retain their literal content for HTML rendering.</p>
+<h2>Behavior</h2>
+<p>An indented code block consists of nonblank lines indented at least four columns, with intervening blank lines. Remove four columns of indentation from content lines, expanding tabs only as needed to determine indentation and preserving remaining content literally. Preserve interior blank lines and extra indentation; omit blank lines before or after the block. An indented code block cannot interrupt an open paragraph. A nonblank line with insufficient indentation ends the block.</p>
+<p>Expose <code>parse_indented_code(lines, paragraph_open=False)</code> from <code>commonmark_parser.indented_code</code>. It accepts lines without line endings and returns <code>(content, consumed)</code> for a recognized block, with content lines terminated by newline, or <code>None</code> when no block starts. <code>consumed</code> counts the input lines belonging to the block and excludes trailing blank lines.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC indented-code-content ===<br>Intent: Four-column indentation is removed while extra indentation and interior blank lines remain literal.</p>
+<p>from commonmark_parser.indented_code import parse_indented_code</p>
+<p>first = &quot;alpha&quot; second = &quot;  beta&quot; content, consumed = parse_indented_code([&quot;    &quot; + first, &quot;&quot;, &quot;    &quot; + second, &quot;&quot;]) assert content == first + &quot;\n\n&quot; + second + &quot;\n&quot; assert consumed == 3 === END AC indented-code-content ===</p>
+<p>=== AC indented-code-interruption ===<br>Intent: Indented code does not interrupt an open paragraph and ends before a less-indented nonblank line.</p>
+<p>from commonmark_parser.indented_code import parse_indented_code</p>
+<p>line = &quot;    literal&quot; assert parse_indented_code([line], paragraph_open=True) is None content, consumed = parse_indented_code([line, &quot;outside&quot;]) assert content == line[4:] + &quot;\n&quot; assert consumed == 1 === END AC indented-code-interruption ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Preserve literal code content; do not parse it as inline Markdown.</li><li>Complete mixed-feature section checks belong to the later conformance integration story.</li></ul></article>
+</main>
+</body>
+</html>

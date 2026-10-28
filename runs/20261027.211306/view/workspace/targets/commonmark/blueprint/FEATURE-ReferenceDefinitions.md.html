@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-ReferenceDefinitions.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-ReferenceDefinitions.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-ReferenceDefinitions.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Reference Definitions</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Collect link reference definitions for document-wide inline resolution.</td></tr><tr><td>Depends On</td><td>FEATURE-Paragraphs.md</td></tr><tr><td>Provides</td><td>document reference map</td></tr><tr><td>Consumes</td><td>paragraph block parsing</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Extract definitions from closing paragraphs and make the resulting map available after block parsing, before inline parsing begins.</p>
+<h2>Behavior</h2>
+<p>At paragraph closure, parse consecutive valid reference definitions at the beginning of the accumulated paragraph text. A definition has a valid nonempty label, colon, destination and optional title as specified in CommonMark 0.31.2, including allowed line endings, escapes and indentation. A definition cannot interrupt a paragraph. Remove recognized definitions from visible paragraph content; preserve any remaining text.</p>
+<p>Normalize labels by Unicode case folding, trimming leading and trailing spaces, tabs and line endings, and collapsing internal runs of those characters to one space. Match normalized source labels, not their parsed inline representation. Retain the first definition for each normalized label in document order. Definitions found within containers contribute to the same document-wide map.</p>
+<p>Expose <code>extract_definitions(text, references)</code> from <code>commonmark_parser.references</code>. It processes the beginning of a closing paragraph, updates the supplied mutable map in place, and returns remaining paragraph text. Map values are <code>(destination, title)</code>, with <code>None</code> for an absent title. Destination and title values have CommonMark escapes and character references resolved.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC references-first-definition ===<br>Intent: Definitions are removed from paragraph content, labels match case insensitively, and the first matching definition wins.</p>
+<p>from commonmark_parser.references import extract_definitions</p>
+<p>destination = &quot;/first&quot; references = {} remaining = extract_definitions(&quot;[Alpha]: &quot; + destination + &quot;\n[alpha]: /second\n&quot;, references) assert remaining == &quot;&quot; assert references[&quot;alpha&quot;] == (destination, None) === END AC references-first-definition ===</p>
+<p>=== AC references-remainder ===<br>Intent: A valid leading definition leaves subsequent paragraph text intact, while a malformed definition remains visible.</p>
+<p>from commonmark_parser.references import extract_definitions</p>
+<p>destination = &quot;/target&quot; visible = &quot;ordinary text\n&quot; references = {} remaining = extract_definitions(&quot;[Label]: &quot; + destination + &quot;\n&quot; + visible, references) assert remaining == visible assert references[&quot;label&quot;] == (destination, None) invalid = &quot;[missing]:\n&quot; assert extract_definitions(invalid, {}) == invalid === END AC references-remainder ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Collect definitions across the entire document before resolving inline references.</li><li>Complete mixed-feature section checks belong to the later conformance integration story.</li></ul></article>
+</main>
+</body>
+</html>

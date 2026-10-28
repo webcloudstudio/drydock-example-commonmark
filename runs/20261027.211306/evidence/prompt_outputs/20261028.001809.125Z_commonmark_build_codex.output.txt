@@ -1,0 +1,14 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/inlines.py
+- tests/test_inline_providers.py
+
+SUMMARY:
+Fixed Unicode symbol flanking for emphasis and added a regression for the representative currency symbol case. The focused regression and conformance examples 356 and 357 pass; `pytest -q` passes (103 tests).
+
+BLOCKERS:
+- The saved failures show broader unresolved reference definition, delimiter, link, image, and HTML parsing failures. The focused emphasis section still fails on other examples; the declared conformance checks are not yet satisfied.
+
+FAILURE_SUMMARY: Scoped CommonMark conformance remains incomplete
+FAILURE_DETAIL: The symbol-flanking fix resolves example 356, but the existing inline delimiter and reference parsing implementations still fail other staged examples. Repair those parser paths and rerun the affected scoped selectors before retrying this block.

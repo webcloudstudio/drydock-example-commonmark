@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-BlockQuotes.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-BlockQuotes.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-BlockQuotes.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Block Quotes</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Parse block quote containers and their continuation lines.</td></tr><tr><td>Depends On</td><td>FEATURE-Paragraphs.md, FEATURE-ThematicBreaks.md, FEATURE-ATXHeadings.md, FEATURE-SetextHeadings.md, FEATURE-IndentedCode.md, FEATURE-FencedCode.md, FEATURE-HTMLBlocks.md, FEATURE-ReferenceDefinitions.md</td></tr><tr><td>Provides</td><td>block quote parsing</td></tr><tr><td>Consumes</td><td>paragraph block parsing, thematic break parsing, ATX heading parsing, setext heading parsing, indented code block parsing, fenced code block parsing, HTML block parsing, document reference map</td></tr></tbody></table></div>
+<h2>Purpose and workflow</h2>
+<p>During block parsing, recognize a block quote marker after at most three spaces of indentation. The marker is <code>&gt;</code> with at most one following space of indentation consumed; handle tabs using the specification&#x27;s four-column tab stops. Add a block quote container to the document tree and parse its contents as blocks.</p>
+<p>Continue open quote containers when their markers are present. A missing marker is permitted only for paragraph continuation text under the specification&#x27;s laziness rule. A blank line without a marker closes the quote; an explicitly marked blank line remains inside it. Nest quotes recursively and close unmatched containers before starting a new block. Definitions found inside a quote contribute to the document-wide reference map.</p>
+<p>For direct verification, expose <code>parse_blocks(source)</code> from <code>commonmark_parser.blocks</code>. It returns a document node whose <code>children</code> are ordered block nodes. Nodes expose <code>type</code>, <code>children</code>, and, for paragraphs, <code>literal</code> containing their unparsed inline source. A quote node has type <code>block_quote</code>, and a paragraph node has type <code>paragraph</code>. This interface exposes the block tree before inline parsing.</p>
+<p>The complete Block quotes corpus section includes interactions with lists and inline parsing. The conformance integration story executes that complete section after those providers exist.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC block-quote-lazy ===<br>Intent: A marked paragraph and its unmarked continuation belong to the same quote and retain their source text.</p>
+<p>from commonmark_parser.blocks import parse_blocks</p>
+<p>first = &quot;alpha&quot; second = &quot;continuation&quot; document = parse_blocks(&quot;&gt; &quot; + first + &quot;\n&quot; + second + &quot;\n&quot;) assert len(document.children) == 1 quote = document.children[0] assert quote.type == &quot;block_quote&quot; assert len(quote.children) == 1 paragraph = quote.children[0] assert paragraph.type == &quot;paragraph&quot; assert paragraph.literal.splitlines() == [first, second] === END AC block-quote-lazy ===</p>
+<p>=== AC block-quote-nesting ===<br>Intent: Nested quote markers produce nested containers, and an unmarked blank line ends the quote.</p>
+<p>from commonmark_parser.blocks import parse_blocks</p>
+<p>inside = &quot;inside&quot; outside = &quot;outside&quot; document = parse_blocks(&quot;&gt; &gt; &quot; + inside + &quot;\n\n&quot; + outside + &quot;\n&quot;) assert len(document.children) == 2 outer, paragraph = document.children assert outer.type == &quot;block_quote&quot; assert len(outer.children) == 1 inner = outer.children[0] assert inner.type == &quot;block_quote&quot; assert inner.children[0].type == &quot;paragraph&quot; assert inner.children[0].literal == inside assert paragraph.type == &quot;paragraph&quot; assert paragraph.literal == outside === END AC block-quote-nesting ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Parse block structure before parsing inline content.</li><li>Preserve the supplied conformance assets unchanged.</li><li>Do not invoke the full-suite entry point in this story&#x27;s checks.</li></ul></article>
+</main>
+</body>
+</html>

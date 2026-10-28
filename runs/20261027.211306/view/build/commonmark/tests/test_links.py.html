@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_links.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_links.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_links.py">Raw file</a></div></header>
+<article class="doc"><pre>from commonmark_parser.links import parse_links
+
+
+def test_inline_link_destination_title_and_children():
+    nodes = parse_links(&#x27;[label](/destination &quot;caption&quot;)&#x27;, {})
+    assert len(nodes) == 1
+    link = nodes[0]
+    assert (link.type, link.destination, link.title) == (&quot;link&quot;, &quot;/destination&quot;, &quot;caption&quot;)
+    assert [(child.type, child.literal) for child in link.children] == [(&quot;text&quot;, &quot;label&quot;)]
+
+
+def test_full_collapsed_and_shortcut_references_normalize_labels():
+    refs = {&quot;reference&quot;: {&quot;destination&quot;: &quot;/target&quot;, &quot;title&quot;: None}}
+    for source in (&quot;[visible][REFERENCE]&quot;, &quot;[reference][]&quot;, &quot;[reference]&quot;):
+        nodes = parse_links(source, refs)
+        assert len(nodes) == 1
+        assert (nodes[0].type, nodes[0].destination, nodes[0].title) == (&quot;link&quot;, &quot;/target&quot;, None)
+
+
+def test_inline_destination_supports_balanced_parentheses_and_escapes():
+    nodes = parse_links(r&quot;[x](a_(b\)))&quot;, {})
+    assert nodes[0].destination == &quot;a_(b))&quot;
+
+
+def test_angle_destination_decodes_entities_and_title_quote_styles():
+    nodes = parse_links(&quot;[x](&lt;/a&amp;amp;b&gt; &#x27;a \\\&#x27;quote\\&#x27;&#x27;)&quot;, {})
+    assert nodes[0].destination == &quot;/a&amp;b&quot;
+    assert nodes[0].title == &quot;a &#x27;quote&#x27;&quot;
+
+
+def test_unresolved_reference_and_image_remain_text():
+    nodes = parse_links(&quot;[missing] ![image](src)&quot;, {})
+    assert [(node.type, node.literal) for node in nodes] == [(&quot;text&quot;, &quot;[missing] ![image](src)&quot;)]
+
+
+def test_links_are_parsed_in_order_and_unlinked_text_is_preserved():
+    nodes = parse_links(&quot;before [a](/a) middle [b](/b) after&quot;, {})
+    assert [(n.type, n.literal if n.type == &quot;text&quot; else n.destination) for n in nodes] == [
+        (&quot;text&quot;, &quot;before &quot;), (&quot;link&quot;, &quot;/a&quot;), (&quot;text&quot;, &quot; middle &quot;),
+        (&quot;link&quot;, &quot;/b&quot;), (&quot;text&quot;, &quot; after&quot;)]
+from commonmark_parser import render
+
+
+def test_brackets_inside_code_span_do_not_start_link():
+    assert render(&quot;[not a `link](/foo`)\n&quot;) == (
+        &quot;&lt;p&gt;[not a &lt;code&gt;link](/foo&lt;/code&gt;)&lt;/p&gt;\n&quot;
+    )
+</pre></article>
+</main>
+</body>
+</html>

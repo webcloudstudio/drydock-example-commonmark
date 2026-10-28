@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/commonmark_parser/inlines.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/commonmark_parser/inlines.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/commonmark_parser/inlines.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Inline text parsing for code spans, escapes, references, and soft breaks.&quot;&quot;&quot;
+
+from dataclasses import dataclass
+import html.entities
+import re
+
+
+@dataclass
+class Inline:
+    &quot;&quot;&quot;An inline text node or a soft line break.&quot;&quot;&quot;
+
+    type: str
+    literal: str = &quot;&quot;
+    destination: str = &quot;&quot;
+    label: str = &quot;&quot;
+    children: list[&quot;Inline&quot;] | None = None
+
+
+_ENTITY = re.compile(r&quot;&amp;(?:#[xX][0-9A-Fa-f]{1,6}|#[0-9]{1,7}|[A-Za-z][A-Za-z0-9]+);&quot;)
+_ASCII_PUNCTUATION = frozenset(&quot;!\&quot;#$%&amp;&#x27;()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~&quot;)
+_C1 = {
+    0x80: 0x20AC, 0x82: 0x201A, 0x83: 0x0192, 0x84: 0x201E,
+    0x85: 0x2026, 0x86: 0x2020, 0x87: 0x2021, 0x88: 0x02C6,
+    0x89: 0x2030, 0x8A: 0x0160, 0x8B: 0x2039, 0x8C: 0x0152,
+    0x8E: 0x017D, 0x91: 0x2018, 0x92: 0x2019, 0x93: 0x201C,
+    0x94: 0x201D, 0x95: 0x2022, 0x96: 0x2013, 0x97: 0x2014,
+    0x98: 0x02DC, 0x99: 0x2122, 0x9A: 0x0161, 0x9B: 0x203A,
+    0x9C: 0x0153, 0x9E: 0x017E, 0x9F: 0x0178,
+}
+
+
+def _reference(match: re.Match[str]) -&gt; str:
+    token = match.group()
+    if token.startswith(&quot;&amp;#&quot;):
+        body = token[2:-1]
+        try:
+            value = int(body[1:], 16) if body[:1] in &quot;xX&quot; else int(body, 10)
+        except ValueError:
+            return token
+        if value == 0 or value &gt; 0x10FFFF or 0xD800 &lt;= value &lt;= 0xDFFF:
+            value = 0xFFFD
+        else:
+            value = _C1.get(value, value)
+        return chr(value)
+    return html.entities.html5.get(token[1:], token)
+
+
+def parse_inlines(source: str, references: dict) -&gt; list[Inline]:
+    &quot;&quot;&quot;Parse code spans, ordinary text, punctuation escapes, references, and breaks.&quot;&quot;&quot;
+    del references  # Reserved for reference-link parsing in the inline pipeline.
+    nodes: list[Inline] = []
+    text: list[str] = []
+
+    def flush() -&gt; None:
+        if text:
+            value = &quot;&quot;.join(text)
+            if value:
+                nodes.append(Inline(&quot;text&quot;, value))
+            text.clear()
+
+    i = 0
+    while i &lt; len(source):
+        char = source[i]
+        if char == &quot;`&quot;:
+            run_end = i + 1
+            while run_end &lt; len(source) and source[run_end] == &quot;`&quot;:
+                run_end += 1
+            run_length = run_end - i
+            search = run_end
+            close_start = close_end = -1
+            while search &lt; len(source):
+                candidate = source.find(&quot;`&quot;, search)
+                if candidate &lt; 0:
+                    break
+                candidate_end = candidate + 1
+                while candidate_end &lt; len(source) and source[candidate_end] == &quot;`&quot;:
+                    candidate_end += 1
+                if candidate_end - candidate == run_length:
+                    close_start, close_end = candidate, candidate_end
+                    break
+                search = candidate_end
+            if close_start &gt;= 0:
+                flush()
+                literal = source[run_end:close_start].replace(&quot;\r\n&quot;, &quot;\n&quot;).replace(&quot;\r&quot;, &quot;\n&quot;).replace(&quot;\n&quot;, &quot; &quot;)
+                # CommonMark normalizes every whitespace run in code spans to
+                # one space before applying the surrounding-space rule.
+                literal = re.sub(r&quot;(?&lt;=\S)[ \t\n\r]+(?=\S)&quot;, &quot; &quot;, literal)
+                if len(literal) &gt;= 2 and literal.startswith(&quot; &quot;) and literal.endswith(&quot; &quot;) and literal.strip(&quot; &quot;):
+                    literal = literal[1:-1]
+                nodes.append(Inline(&quot;code&quot;, literal))
+                i = close_end
+            else:
+                text.append(source[i:run_end])
+                i = run_end
+        elif char == &quot;\\&quot; and i + 1 &lt; len(source) and source[i + 1] in _ASCII_PUNCTUATION:
+            flush()
+            # Keep escaped punctuation opaque to later delimiter processing.
+            nodes.append(Inline(&quot;escaped&quot;, source[i + 1]))
+            i += 2
+        elif char == &quot;&amp;&quot;:
+            match = _ENTITY.match(source, i)
+            if match:
+                decoded = _reference(match)
+                if any(delimiter in decoded for delimiter in &quot;*_&quot;):
+                    flush()
+                    nodes.append(Inline(&quot;entity&quot;, decoded))
+                else:
+                    text.append(decoded)
+                i = match.end()
+            else:
+                text.append(char)
+                i += 1
+        elif char == &quot;\n&quot;:
+            while text and text[-1] == &quot; &quot;:
+                text.pop()
+            while i + 1 &lt; len(source) and source[i + 1] == &quot; &quot;:
+                i += 1
+            flush()
+            nodes.append(Inline(&quot;softbreak&quot;))
+            i += 1
+        else:
+            text.append(char)
+            i += 1
+    flush()
+    # Delimiter runs may pair across a soft line break. Preserve the public
+    # softbreak nodes unless resolving the joined source proves the break is
+    # inside emphasis, in which case the newline belongs to that inline node.
+    joined: list[Inline] = []
+    for node in nodes:
+        if node.type == &quot;softbreak&quot;:
+            if joined and joined[-1].type == &quot;text&quot;:
+                joined[-1].literal += &quot;\n&quot;
+            else:
+                joined.append(Inline(&quot;text&quot;, &quot;\n&quot;))
+        elif node.type == &quot;text&quot; and joined and joined[-1].type == &quot;text&quot;:
+            joined[-1].literal += node.literal
+        else:
+            joined.append(Inline(node.type, node.literal, children=node.children))
+    resolved = _parse_emphasis(joined)
+    if any(_contains_emphasis_newline(node) for node in resolved):
+        return resolved
+    return _parse_emphasis(nodes)
+
+
+def _contains_emphasis_newline(node: Inline) -&gt; bool:
+    return node.type in {&quot;em&quot;, &quot;strong&quot;} and (
+        &quot;\n&quot; in node.literal or any(_contains_emphasis_newline(child) for child in node.children or [])
+        or any(child.type == &quot;text&quot; and &quot;\n&quot; in child.literal for child in node.children or [])
+    )
+
+
+def _parse_emphasis(nodes: list[Inline]) -&gt; list[Inline]:
+    &quot;&quot;&quot;Resolve delimiter runs in text nodes, leaving code spans opaque.&quot;&quot;&quot;
+    result: list[Inline] = []
+    for node in nodes:
+        if node.type != &quot;text&quot;:
+            result.append(node)
+            continue
+        source = node.literal
+        # Match valid flanking pairs from the inside out. The pass only handles
+        # delimiter characters; punctuation and Unicode whitespace use the
+        # same flanking predicates as the CommonMark delimiter rules.
+        chunks: list[Inline] = []
+        i = 0
+        plain = 0
+        while i &lt; len(source):
+            if source[i] not in &quot;*_&quot;:
+                i += 1
+                continue
+            end = i + 1
+            while end &lt; len(source) and source[end] == source[i]:
+                end += 1
+            marker, length = source[i], end - i
+            before = source[i - 1] if i else &quot;\n&quot;
+            after = source[end] if end &lt; len(source) else &quot;\n&quot;
+            opener = not after.isspace() and (not _punct(after) or before.isspace() or _punct(before))
+            closer = not before.isspace() and (not _punct(before) or after.isspace() or _punct(after))
+            if marker == &quot;_&quot;:
+                opener = opener and (not closer or _punct(before))
+                closer = closer and (not opener or _punct(after))
+            if not opener:
+                i = end
+                continue
+            close = end
+            found = None
+            while close &lt; len(source):
+                candidate = source.find(marker, close)
+                if candidate &lt; 0:
+                    break
+                ce = candidate + 1
+                while ce &lt; len(source) and source[ce] == marker:
+                    ce += 1
+                cb = source[candidate - 1] if candidate else &quot;\n&quot;
+                ca = source[ce] if ce &lt; len(source) else &quot;\n&quot;
+                can_close = not cb.isspace() and (not _punct(cb) or ca.isspace() or _punct(ca))
+                if marker == &quot;_&quot;:
+                    # Intraword underscores cannot close emphasis (the opener
+                    # check already applies the corresponding left-flanking rule).
+                    can_close = can_close and not (cb.isalnum() and ca.isalnum())
+                use = 2 if length &gt;= 2 and ce - candidate &gt;= 2 else 1
+                if can_close and candidate &gt; end and not (marker == &quot;_&quot; and before.isalnum() and ca.isalnum()):
+                    found = (candidate, ce, use)
+                    break
+                close = ce
+            if found is None:
+                i = end
+                continue
+            a, b, use = found
+            prefix = source[plain:i] + marker * (length - use)
+            if prefix:
+                chunks.append(Inline(&quot;text&quot;, prefix))
+            inner = _parse_emphasis([Inline(&quot;text&quot;, source[end:a])])
+            chunks.append(Inline(&quot;strong&quot; if use == 2 else &quot;em&quot;, children=inner))
+            source = source[:i] + source[end:a] + source[b:]
+            i = i + (a - end)
+            plain = i
+        tail = source[plain:]
+        if tail:
+            chunks.append(Inline(&quot;text&quot;, tail))
+        result.extend(chunks or [node])
+    return result
+
+
+def _punct(char: str) -&gt; bool:
+    # CommonMark delimiter flanking treats Unicode symbols like punctuation
+    # (for example currency symbols), even though their general category is S.
+    return bool(char) and (char in _ASCII_PUNCTUATION or __import__(&quot;unicodedata&quot;).category(char)[0] in &quot;PS&quot;)
+</pre></article>
+</main>
+</body>
+</html>

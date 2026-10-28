@@ -1,0 +1,17 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/autolinks.py
+- commonmark_parser/blocks.py
+- commonmark_parser/inline_html_breaks.py
+- tests/test_inline_providers.py
+- tests/test_render_integration.py
+
+SUMMARY:
+Fixed list tightness for a blank line before a nested list and code span/autolink precedence. All 102 project tests passed. Conformance examples 107, 109, and 347–349 passed; the saved broader conformance logs contain additional failures that remain unresolved.
+
+BLOCKERS:
+- Broader block failures include reference definition parsing. Inline failures include emphasis and delimiter matching, links and images, raw HTML, and hard breaks. Full scoped conformance suites were not rerun.
+
+FAILURE_SUMMARY: Scoped CommonMark conformance remains incomplete
+FAILURE_DETAIL: The focused regressions pass, but the saved conformance results show unrelated failures across reference definitions and inline parsing. Repair those parser behaviors and rerun the affected scoped selectors before retrying this block.

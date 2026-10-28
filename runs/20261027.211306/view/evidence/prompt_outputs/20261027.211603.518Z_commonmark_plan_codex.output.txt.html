@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261027.211603.518Z_commonmark_plan_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261027.211603.518Z_commonmark_plan_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261027.211603.518Z_commonmark_plan_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>=== BEGIN ARTIFACT FEATURE-Links.md ===
+# FEATURE: Links
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Parse inline and reference links using the completed document reference map. |
+| Depends On | FEATURE-Emphasis.md, FEATURE-ReferenceDefinitions.md |
+| Provides | link parsing |
+| Consumes | document reference map, inline text parsing, code span parsing, emphasis parsing |
+
+## Questions
+
+- None.
+
+## Purpose and workflow
+
+During the inline phase, recognize inline links and full, collapsed, and shortcut reference links. Resolve references against the completed document-wide map, using Unicode case folding and whitespace normalization for labels. The first matching definition wins.
+
+Parse destinations and optional titles according to the specification, including balanced parentheses, angle-delimited destinations, escapes, character references, and the permitted whitespace. Apply the delimiter-stack link procedure: find the nearest active bracket opener, process emphasis within the link text, and deactivate earlier link openers after forming a link. Links cannot contain links. Code spans and other higher-precedence constructs retain their specified precedence.
+
+For direct incremental acceptance, expose `parse_links(source, references)` from `commonmark_parser.links`. It returns a sequence of inline nodes. A link node exposes `type`, `destination`, `title`, and `children`; text nodes expose `type` and `literal`. The reference mapping uses normalized labels and values containing `destination` and `title`. This interface accepts already collected references and does not require later inline providers.
+
+## Programmatic Acceptance
+
+=== AC links-inline ===
+Intent: Inline link parsing returns the supplied destination and title and retains the link text as children.
+
+from commonmark_parser.links import parse_links
+
+label = &quot;label&quot;
+destination = &quot;/destination&quot;
+title = &quot;caption&quot;
+source = f&#x27;[{label}]({destination} &quot;{title}&quot;)&#x27;
+nodes = parse_links(source, {})
+assert len(nodes) == 1
+link = nodes[0]
+assert link.type == &quot;link&quot;
+assert link.destination == destination
+assert link.title == title
+assert len(link.children) == 1
+assert link.children[0].type == &quot;text&quot;
+assert link.children[0].literal == label
+=== END AC links-inline ===
+
+=== AC links-reference ===
+Intent: Full, collapsed, and shortcut references resolve through the supplied normalized reference map.
+
+from commonmark_parser.links import parse_links
+
+label = &quot;reference&quot;
+destination = &quot;/target&quot;
+references = {label: {&quot;destination&quot;: destination, &quot;title&quot;: None}}
+for source in (f&quot;[visible][{label.upper()}]&quot;, f&quot;[{label}][]&quot;, f&quot;[{label}]&quot;):
+    nodes = parse_links(source, references)
+    assert len(nodes) == 1
+    assert nodes[0].type == &quot;link&quot;
+    assert nodes[0].destination == destination
+    assert nodes[0].title is None
+=== END AC links-reference ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Follow CommonMark 0.31.2 and do not use a public Markdown implementation.
+- Complete mixed-section conformance checks belong to the later integration story.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Images.md ===
+# FEATURE: Images
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Parse inline and reference images and derive plain-text descriptions. |
+| Depends On | FEATURE-Links.md |
+| Provides | image parsing |
+| Consumes | link parsing |
+
+## Questions
+
+- None.
+
+## Purpose and workflow
+
+Recognize inline, full, collapsed, and shortcut reference images using the link destination, title, and reference rules. Image descriptions may contain links and nested images. Render the description&#x27;s plain textual content as the HTML `alt` attribute, without inline formatting tags; escape attribute values as required.
+
+For direct incremental acceptance, expose `parse_images(source, references)` from `commonmark_parser.images`. It returns inline nodes. An image node exposes `type`, `destination`, `title`, and `alt`, where `alt` is the plain text of its parsed description. Reference mappings use normalized labels and values containing `destination` and `title`.
+
+## Programmatic Acceptance
+
+=== AC images-inline ===
+Intent: An inline image retains its destination and title and extracts the plain text of its description.
+
+from commonmark_parser.images import parse_images
+
+label = &quot;picture&quot;
+destination = &quot;/image&quot;
+title = &quot;caption&quot;
+nodes = parse_images(f&#x27;![{label}]({destination} &quot;{title}&quot;)&#x27;, {})
+assert len(nodes) == 1
+image = nodes[0]
+assert image.type == &quot;image&quot;
+assert image.destination == destination
+assert image.title == title
+assert image.alt == label
+=== END AC images-inline ===
+
+=== AC images-reference ===
+Intent: Reference images resolve the supplied definition and omit emphasis markup from alt text.
+
+from commonmark_parser.images import parse_images
+
+label = &quot;picture&quot;
+destination = &quot;/image&quot;
+references = {label: {&quot;destination&quot;: destination, &quot;title&quot;: None}}
+nodes = parse_images(f&quot;![*{label}*][{label}]&quot;, references)
+assert len(nodes) == 1
+assert nodes[0].type == &quot;image&quot;
+assert nodes[0].destination == destination
+assert nodes[0].title is None
+assert nodes[0].alt == label
+=== END AC images-reference ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Follow CommonMark 0.31.2 and do not use a public Markdown implementation.
+- Complete mixed-section conformance checks belong to the later integration story.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Autolinks.md ===
+# FEATURE: Autolinks
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Recognize URI and email autolinks in inline content. |
+| Depends On | FEATURE-InlineText.md, FEATURE-CodeSpans.md |
+| Provides | autolink parsing |
+| Consumes | inline text parsing, code span parsing |
+
+## Questions
+
+- None.
+
+## Purpose and workflow
+
+Recognize angle-delimited absolute URI autolinks with a scheme of two to 32 permitted ASCII characters and no forbidden URI characters. Recognize email autolinks using the specification&#x27;s email grammar. The visible label is the enclosed text; an email destination adds the `mailto:` scheme. Backslash escapes do not operate inside an autolink. Encode destinations and escape HTML when rendering, and respect code-span precedence.
+
+For direct incremental acceptance, expose `parse_autolinks(source)` from `commonmark_parser.autolinks`. It returns inline nodes. An autolink node exposes `type`, `destination`, and `label`; ordinary text nodes expose `type` and `literal`.
+
+## Programmatic Acceptance
+
+=== AC autolinks-uri ===
+Intent: A valid angle-delimited URI becomes a link with the supplied URI as destination and label.
+
+from commonmark_parser.autolinks import parse_autolinks
+
+uri = &quot;https://example.test/path&quot;
+nodes = parse_autolinks(f&quot;&lt;{uri}&gt;&quot;)
+assert len(nodes) == 1
+assert nodes[0].type == &quot;link&quot;
+assert nodes[0].destination == uri
+assert nodes[0].label == uri
+=== END AC autolinks-uri ===
+
+=== AC autolinks-email-and-invalid ===
+Intent: An email autolink receives the mail scheme, while an angle-delimited URI containing a space remains text.
+
+from commonmark_parser.autolinks import parse_autolinks
+
+address = &quot;person@example.test&quot;
+nodes = parse_autolinks(f&quot;&lt;{address}&gt;&quot;)
+assert len(nodes) == 1
+assert nodes[0].type == &quot;link&quot;
+assert nodes[0].destination == &quot;mailto:&quot; + address
+assert nodes[0].label == address
+source = &quot;&lt;https://example.test/a b&gt;&quot;
+nodes = parse_autolinks(source)
+assert all(node.type == &quot;text&quot; for node in nodes)
+assert &quot;&quot;.join(node.literal for node in nodes) == source
+=== END AC autolinks-email-and-invalid ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Follow CommonMark 0.31.2 and do not use a public Markdown implementation.
+- Complete mixed-section conformance checks belong to the later integration story.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-InlineHTMLBreaks.md ===
+# FEATURE: Inline HTML and Hard Breaks
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Recognize raw inline HTML and hard line breaks. |
+| Depends On | FEATURE-InlineText.md, FEATURE-CodeSpans.md |
+| Provides | inline HTML and hard break parsing |
+| Consumes | inline text parsing, code span parsing |
+
+## Questions
+
+- None.
+
+## Purpose and workflow
+
+Recognize the specification&#x27;s open and closing tags, comments, processing instructions, declarations, and CDATA sections as raw inline HTML. Preserve valid raw HTML verbatim, including attribute contents. Text that does not match the grammar remains ordinary text.
+
+A line ending preceded by at least two spaces or an unescaped backslash forms a hard break within an inline block. Do not create hard breaks inside code spans or HTML tags, or at the end of a block.
+
+For direct incremental acceptance, expose `parse_inline_html_breaks(source)` from `commonmark_parser.inline_html_breaks`. It returns inline nodes. Raw HTML nodes expose `type` and `literal`; hard breaks have type `hardbreak`; ordinary text nodes expose `type` and `literal`.
+
+## Programmatic Acceptance
+
+=== AC inline-html-raw ===
+Intent: A valid inline tag is preserved as a raw HTML node with its original spelling.
+
+from commonmark_parser.inline_html_breaks import parse_inline_html_breaks
+
+tag = &#x27;&lt;custom data-value=&quot;sample&quot;&gt;&#x27;
+nodes = parse_inline_html_breaks(tag)
+assert len(nodes) == 1
+assert nodes[0].type == &quot;html&quot;
+assert nodes[0].literal == tag
+=== END AC inline-html-raw ===
+
+=== AC inline-hard-breaks ===
+Intent: Both specified hard-break forms create a break between text, while a trailing backslash remains text.
+
+from commonmark_parser.inline_html_breaks import parse_inline_html_breaks
+
+for source in (&quot;first  \nsecond&quot;, &quot;first\\\nsecond&quot;):
+    nodes = parse_inline_html_breaks(source)
+    assert sum(node.type == &quot;hardbreak&quot; for node in nodes) == 1
+source = &quot;ending\\&quot;
+nodes = parse_inline_html_breaks(source)
+assert all(node.type != &quot;hardbreak&quot; for node in nodes)
+assert &quot;&quot;.join(node.literal for node in nodes if node.type == &quot;text&quot;) == source
+=== END AC inline-hard-breaks ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Follow CommonMark 0.31.2 and do not use a public Markdown implementation.
+- Complete mixed-section conformance checks belong to the later integration story.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-ConformanceIntegration.md ===
+# FEATURE: Conformance Integration
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Integrate the parser stages and exercise all scoped specification examples. |
+| Depends On | FEATURE-Executable.md, FEATURE-Lists.md, FEATURE-Images.md, FEATURE-Autolinks.md, FEATURE-InlineHTMLBreaks.md |
+| Provides | integrated CommonMark parser |
+| Consumes | commonmark, list block parsing, image parsing, autolink parsing, inline HTML and hard break parsing |
+
+## Questions
+
+- None.
+
+## Purpose and workflow
+
+Assemble the standard-stream executable with block parsing, document-wide reference collection, inline parsing, and HTML rendering. Finish block structure and reference collection before parsing inline content. The integrated parser must support the interactions among all previously delivered constructs.
+
+Execute every example-owning section of the supplied corpus through its documented `--pattern` selector. The scoped checks below cover Tabs and Precedence as well as the complete block, container, and inline sections. The runner&#x27;s JSON dump is the selection probe; the acceptance execution itself runs the selected examples against the executable.
+
+## Programmatic Acceptance
+
+=== AC conformance-preliminaries ===
+Intent: The integrated parser passes every supplied Tabs and Precedence example.
+Suite: scoped
+Requires: executable=python3; scope=test
+Probe: --dump-tests
+Probe Count: json
+
+import os
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.path.abspath(&quot;commonmark&quot;),
+     &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;^(Tabs|Precedence)$&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC conformance-preliminaries ===
+
+=== AC conformance-blocks ===
+Intent: The integrated parser passes every example in the supplied leaf block sections.
+Suite: scoped
+Requires: executable=python3; scope=test
+Probe: --dump-tests
+Probe Count: json
+
+import os
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.path.abspath(&quot;commonmark&quot;),
+     &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;^(Thematic breaks|ATX headings|Setext headings|Indented code blocks|Fenced code blocks|HTML blocks|Link reference definitions|Paragraphs|Blank lines)$&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC conformance-blocks ===
+
+=== AC conformance-containers ===
+Intent: The integrated parser passes every supplied block quote, list item, and list example.
+Suite: scoped
+Requires: executable=python3; scope=test
+Probe: --dump-tests
+Probe Count: json
+
+import os
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.path.abspath(&quot;commonmark&quot;),
+     &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;^(Block quotes|List items|Lists)$&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC conformance-containers ===
+
+=== AC conformance-inlines ===
+Intent: The integrated parser passes every example in the supplied inline and text sections.
+Suite: scoped
+Requires: executable=python3; scope=test
+Probe: --dump-tests
+Probe Count: json
+
+import os
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.path.abspath(&quot;commonmark&quot;),
+     &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;^(Backslash escapes|Entity and numeric character references|Code spans|Emphasis and strong emphasis|Links|Images|Autolinks|Raw HTML|Hard line breaks|Soft line breaks|Textual content)$&quot;],
+    capture_output=True, text=True,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC conformance-inlines ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Preserve the supplied conformance assets verbatim under `sources/`.
+- Do not invoke `full_test.sh` from these scoped checks.
+- Do not use a public Markdown implementation.
+=== END ARTIFACT ===</pre></article>
+</main>
+</body>
+</html>

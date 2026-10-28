@@ -1,0 +1,19 @@
+Implemented thematic breaks, indented and fenced code blocks, ATX headings, raw HTML blocks, and document-wide reference definitions.
+
+`python -m pytest -q` passed: 19 tests. The staged full conformance suite was not run.
+
+RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark_parser/blocks.py
+- commonmark_parser/fenced_code.py
+- commonmark_parser/html_blocks.py
+- commonmark_parser/indented_code.py
+- commonmark_parser/references.py
+- tests/test_service_blocks.py
+
+SUMMARY:
+Added the specified block parsers and reference collection, with focused tests for their public interfaces and block integration.
+
+BLOCKERS:
+- None

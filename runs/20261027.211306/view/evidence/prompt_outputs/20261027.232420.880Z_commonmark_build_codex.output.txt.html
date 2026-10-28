@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261027.232420.880Z_commonmark_build_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261027.232420.880Z_commonmark_build_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261027.232420.880Z_commonmark_build_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/__init__.py
+- commonmark_parser/inline_html_breaks.py
+- commonmark_parser/inlines.py
+- tests/test_render_integration.py
+
+SUMMARY:
+Fixed code spans being split by hard-break parsing, encoded link and image destinations, and limited tight-list paragraph suppression to direct item paragraphs. Added integration regressions. `python3 -m pytest -q` passed: 92 tests.
+
+Scoped checks remain failing: blocks passed 178, failed 9; containers passed 82, failed 17; Code spans passed 20, failed 2. The remaining failures include reference-definition parsing, list grouping, HTML blocks, and link parsing across code spans.
+
+BLOCKERS:
+- Scoped CommonMark conformance is incomplete.
+
+FAILURE_SUMMARY: Scoped conformance checks still fail
+FAILURE_DETAIL: The parser still fails examples in the declared block, container, and inline scopes, including reference definitions, list grouping, HTML blocks, and links overlapping code spans. Repair those parser paths before rerunning the scoped selectors.</pre></article>
+</main>
+</body>
+</html>

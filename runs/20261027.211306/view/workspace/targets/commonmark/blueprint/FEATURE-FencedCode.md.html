@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-FencedCode.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-FencedCode.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-FencedCode.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Fenced Code</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Recognize fenced code blocks and their info strings.</td></tr><tr><td>Depends On</td><td>FEATURE-Paragraphs.md</td></tr><tr><td>Provides</td><td>fenced code block parsing</td></tr><tr><td>Consumes</td><td>paragraph block parsing</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Parse fenced code as a literal block, including its optional info string, for subsequent HTML rendering.</p>
+<h2>Behavior</h2>
+<p>An opening fence has at least three consecutive backticks or tildes and at most three spaces of indentation. A backtick fence&#x27;s info string cannot contain a backtick. Trim the info string&#x27;s outer spaces and tabs. A closing fence uses the same character, at least the opening length, at most three spaces of indentation, and only spaces or tabs after the fence. If none is found, the block continues to the end of its containing block or document. Remove up to the opening indentation from each content line. Fenced code may interrupt a paragraph.</p>
+<p>Preserve content literally. For HTML, decode applicable escapes and character references in the info string and use its first word as the <code>language-</code> class suffix; escape code and attribute content for HTML.</p>
+<p>Expose <code>parse_fenced_code(lines)</code> from <code>commonmark_parser.fenced_code</code>. It accepts lines without line endings and returns <code>(content, info, consumed)</code> for a recognized block, or <code>None</code> if the first line is not an opening fence. Content lines carry newline terminators; <code>info</code> is the trimmed raw info string.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC fenced-code-matching ===<br>Intent: A fence closes only with a sufficiently long matching delimiter and preserves intervening literal content.</p>
+<p>from commonmark_parser.fenced_code import parse_fenced_code</p>
+<p>literal = &quot;alpha * beta&quot; content, info, consumed = parse_fenced_code([&quot;<code>lang&quot;, literal, &quot;```&quot;, &quot;</code>&quot;, &quot;after&quot;]) assert content == literal + &quot;\n&quot; + &quot;<code>`</code>&quot; + &quot;\n&quot; assert info == &quot;lang&quot; assert consumed == 4 === END AC fenced-code-matching ===</p>
+<p>=== AC fenced-code-unclosed ===<br>Intent: An unclosed fence consumes the remaining input and removes the opening indentation from content.</p>
+<p>from commonmark_parser.fenced_code import parse_fenced_code</p>
+<p>literal = &quot;alpha&quot; content, info, consumed = parse_fenced_code([&quot;  ~~~&quot;, &quot;  &quot; + literal]) assert content == literal + &quot;\n&quot; assert info == &quot;&quot; assert consumed == 2 assert parse_fenced_code([&quot;<code>`</code> invalid ` info&quot;]) is None === END AC fenced-code-unclosed ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not interpret code block content as inline Markdown.</li><li>Complete mixed-feature section checks belong to the later conformance integration story.</li></ul></article>
+</main>
+</body>
+</html>

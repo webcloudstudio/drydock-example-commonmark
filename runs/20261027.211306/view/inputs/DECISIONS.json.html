@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>inputs/DECISIONS.json</title>
+<link rel="stylesheet" href="../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>inputs/DECISIONS.json</h1><div class="filenav"><a href="../../index.html">&larr; Report</a><a href="../../inputs/DECISIONS.json">Raw file</a></div></header>
+<article class="doc"><pre>[
+  {
+    &quot;id&quot;: &quot;decision-cli-exit&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;material&quot;,
+    &quot;origin&quot;: &quot;plan&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Executable.md&quot;,
+    &quot;story&quot;: &quot;delivery&quot;,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Standard-stream execution result&quot;,
+    &quot;description&quot;: &quot;The sources specify the streams but do not state a successful process exit status or error channel.&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;Successful conversion exits zero; operational errors use a nonzero exit status and standard error.&quot;
+  },
+  {
+    &quot;id&quot;: &quot;decision-scoped-integration&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;material&quot;,
+    &quot;origin&quot;: &quot;plan&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-ConformanceIntegration.md&quot;,
+    &quot;story&quot;: &quot;conformance-integration&quot;,
+    &quot;status&quot;: &quot;recommended&quot;,
+    &quot;archived&quot;: false,
+    &quot;title&quot;: &quot;Mixed conformance section ownership&quot;,
+    &quot;description&quot;: &quot;The supplied section selectors include examples requiring multiple parser constructs, so early capability gates cannot execute their complete sections without future providers.&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;Gate early capabilities through their delivered parser interfaces, then execute every complete example-owning section in scoped integration checks after all providers exist.&quot;
+  }
+]
+</pre></article>
+</main>
+</body>
+</html>

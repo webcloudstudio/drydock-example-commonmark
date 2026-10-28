@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/commonmark_parser/fenced_code.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/commonmark_parser/fenced_code.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/commonmark_parser/fenced_code.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Fenced code block recognition.&quot;&quot;&quot;
+
+import re
+
+_OPEN = re.compile(r&quot;^ {0,3}(`{3,}|~{3,})(.*)$&quot;)
+
+
+def _remove_indent(line: str, indent: int) -&gt; str:
+    return line[min(indent, len(line) - len(line.lstrip(&quot; &quot;))):]
+
+
+def parse_fenced_code(lines: list[str]):
+    if not lines:
+        return None
+    match = _OPEN.match(lines[0])
+    if not match:
+        return None
+    fence, info = match.groups()
+    if fence[0] == &quot;`&quot; and &quot;`&quot; in info:
+        return None
+    info = info.strip(&quot; \t&quot;)
+    indent = len(lines[0]) - len(lines[0].lstrip(&quot; &quot;))
+    close = re.compile(r&quot;^ {0,3}&quot; + re.escape(fence[0]) + r&quot;{&quot; + str(len(fence)) + r&quot;,}[ \t]*$&quot;)
+    content = []
+    for index, line in enumerate(lines[1:], 1):
+        if close.match(line):
+            return &quot;&quot;.join(_remove_indent(line, indent) + &quot;\n&quot; for line in content), info, index + 1
+        content.append(line)
+    return &quot;&quot;.join(_remove_indent(line, indent) + &quot;\n&quot; for line in content), info, len(lines)
+</pre></article>
+</main>
+</body>
+</html>

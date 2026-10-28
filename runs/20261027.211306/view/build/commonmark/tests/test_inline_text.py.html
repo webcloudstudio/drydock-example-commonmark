@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_inline_text.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_inline_text.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_inline_text.py">Raw file</a></div></header>
+<article class="doc"><pre>from commonmark_parser.inlines import parse_inlines
+
+
+def test_ascii_punctuation_escape_removes_marker():
+    nodes = parse_inlines(&quot;\\!&quot;, {})
+    assert [(node.type, node.literal) for node in nodes] == [(&quot;escaped&quot;, &quot;!&quot;)]
+
+
+def test_escaped_emphasis_delimiter_stays_literal():
+    nodes = parse_inlines(r&quot;\*not emphasized*&quot;, {})
+    assert [(node.type, node.literal) for node in nodes] == [
+        (&quot;escaped&quot;, &quot;*&quot;), (&quot;text&quot;, &quot;not emphasized*&quot;)
+    ]
+
+
+def test_non_punctuation_escape_keeps_backslash():
+    nodes = parse_inlines(&quot;\\a&quot;, {})
+    assert nodes[0].literal == &quot;\\a&quot;
+
+
+def test_named_and_numeric_references_decode():
+    nodes = parse_inlines(&quot;&amp;amp;&amp;#65;&amp;#x1F600;&quot;, {})
+    assert [(node.type, node.literal) for node in nodes] == [(&quot;text&quot;, &quot;&amp;A😀&quot;)]
+
+
+def test_unknown_or_unterminated_reference_remains_text():
+    nodes = parse_inlines(&quot;&amp;notARealEntity &amp;amp&quot;, {})
+    assert nodes[0].literal == &quot;&amp;notARealEntity &amp;amp&quot;
+
+
+def test_invalid_numeric_scalar_replaced():
+    nodes = parse_inlines(&quot;&amp;#0;&amp;#xD800;&amp;#x110000;&quot;, {})
+    assert nodes[0].literal == &quot;\uFFFD&quot; * 3
+
+
+def test_soft_break_trims_spaces_on_both_sides():
+    nodes = parse_inlines(&quot;alpha   \n  beta&quot;, {})
+    assert [(node.type, node.literal) for node in nodes] == [
+        (&quot;text&quot;, &quot;alpha&quot;), (&quot;softbreak&quot;, &quot;&quot;), (&quot;text&quot;, &quot;beta&quot;)
+    ]
+
+
+def test_empty_source_has_no_nodes():
+    assert parse_inlines(&quot;&quot;, {}) == []
+
+
+def test_code_span_preserves_entities_and_backslashes_literally():
+    source = r&quot;`literal &amp;amp; \* text`&quot;
+    nodes = parse_inlines(source, {})
+    assert [(node.type, node.literal) for node in nodes] == [(&quot;code&quot;, r&quot;literal &amp;amp; \* text&quot;)]
+
+
+def test_code_span_normalizes_line_endings_and_removes_one_paired_space():
+    nodes = parse_inlines(&quot;` alpha\r\nbeta `&quot;, {})
+    assert [(node.type, node.literal) for node in nodes] == [(&quot;code&quot;, &quot;alpha beta&quot;)]
+
+
+def test_code_span_matches_only_equal_length_runs():
+    nodes = parse_inlines(&quot;``a ` b``&quot;, {})
+    assert [(node.type, node.literal) for node in nodes] == [(&quot;code&quot;, &quot;a ` b&quot;)]
+
+
+def test_unmatched_code_span_delimiter_remains_text():
+    source = &quot;`unclosed&quot;
+    nodes = parse_inlines(source, {})
+    assert [(node.type, node.literal) for node in nodes] == [(&quot;text&quot;, source)]
+
+
+def test_all_space_code_content_keeps_its_spaces():
+    nodes = parse_inlines(&quot;`   `&quot;, {})
+    assert [(node.type, node.literal) for node in nodes] == [(&quot;code&quot;, &quot;   &quot;)]
+
+
+def test_code_span_splits_surrounding_text_into_ordered_nodes():
+    nodes = parse_inlines(&quot;before `code` after&quot;, {})
+    assert [(node.type, node.literal) for node in nodes] == [
+        (&quot;text&quot;, &quot;before &quot;), (&quot;code&quot;, &quot;code&quot;), (&quot;text&quot;, &quot; after&quot;)
+    ]
+</pre></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,25 @@
+Example 7 (lines 427-436) Tabs
+-		foo
+
+--- expected HTML
++++ actual HTML
+@@ -1,2 +1,2 @@
+-<ul><li><pre><code>  foo
++<ul><li><pre><code>   foo
+ </code></pre></li></ul>
+
+11 passed, 1 failed, 0 errored, 643 skipped
+
+--- stderr ---
+
+--- drydock: progress ---
+cases: pass=11 fail=1 error=0 skip=643 total=655 from=result.stdout
+--- drydock: end progress ---
+--- drydock: values at failure ---
+  result = CompletedProcess(args=['/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python', 'sources/spec_tests.py', '--program', '/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/commonmark', '--spec', 'sources/spec.txt', '--pattern', '^(Tabs|Precedence)$'], returncode=1, stdout='Example 7 (lines 427-436) Tabs\n-\t\tf… (+200 chars)
+--- drydock: end values ---
+Traceback (most recent call last):
+  File "conformance-preliminaries.py", line 12, in <module>
+    assert result.returncode == 0
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

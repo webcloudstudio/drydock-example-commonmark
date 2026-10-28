@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/repair/block-13/conformance-containers.log</title>
+<link rel="stylesheet" href="../../../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/repair/block-13/conformance-containers.log</h1><div class="filenav"><a href="../../../../../../../index.html">&larr; Report</a><a href="../../../../../../../workspace/targets/commonmark/evidence/repair/block-13/conformance-containers.log">Raw file</a></div></header>
+<article class="doc"><pre>Example 309 (lines 5427-5449) Lists
+- foo
+  - bar
+    - baz
+
+
+      bim
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-&lt;ul&gt;&lt;li&gt;foo&lt;ul&gt;&lt;li&gt;bar&lt;ul&gt;&lt;li&gt;&lt;p&gt;baz&lt;/p&gt;&lt;p&gt;bim&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;
++&lt;ul&gt;&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;bar&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;baz&lt;/p&gt;&lt;p&gt;bim&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;
+
+Example 321 (lines 5712-5730) Lists
+- a
+  - b
+
+    c
+- d
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-&lt;ul&gt;&lt;li&gt;a&lt;ul&gt;&lt;li&gt;&lt;p&gt;b&lt;/p&gt;&lt;p&gt;c&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;d&lt;/li&gt;&lt;/ul&gt;
++&lt;ul&gt;&lt;li&gt;&lt;p&gt;a&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;b&lt;/p&gt;&lt;p&gt;c&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;d&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;
+
+97 passed, 2 failed, 0 errored, 556 skipped
+
+--- stderr ---
+
+--- drydock: progress ---
+cases: pass=97 fail=2 error=0 skip=556 total=655 from=result.stdout
+--- drydock: end progress ---
+--- drydock: values at failure ---
+  result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;^(Block quotes|List items|Lists)$&#x27;], returncode=2, stdout=&#x27;Example 309 (lines 5427-… (+608 chars)
+--- drydock: end values ---
+Traceback (most recent call last):
+  File &quot;conformance-containers.py&quot;, line 12, in &lt;module&gt;
+    assert result.returncode == 0
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+</pre></article>
+</main>
+</body>
+</html>

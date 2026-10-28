@@ -1,0 +1,20 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/indented_code.py
+- tests/test_service_blocks.py
+
+SUMMARY:
+Reproduced the Tabs list case and fixed its tab-stop handling. The regression test passes, but the scoped Tabs and Precedence selector still fails on Tabs examples 6 and 7.
+
+Checks run:
+
+- `python3 -m pytest -q tests/test_service_blocks.py::test_tab_stops_remain_based_on_the_original_line_after_list_indent` — passed.
+- `python3 sources/spec_tests.py --program "$PWD/commonmark" --spec sources/spec.txt --pattern '^(Tabs|Precedence)$'` — 10 passed, 2 failed, 643 skipped.
+- `--dump-tests` selection probe for the same pattern — returned the 12 selected examples.
+
+BLOCKERS:
+- Tab positions are still lost when block quote and list markers are stripped before indented-code parsing; repair those paths before rerunning.
+
+FAILURE_SUMMARY: Tabs and Precedence conformance remains failing
+FAILURE_DETAIL: The indentation fix and regression cover Tabs example 5, but the scoped selector still fails examples 6 and 7, where quote and list marker removal affects tab stops. Carry the original visual column through those container parsing paths, then rerun the regression and scoped selector.

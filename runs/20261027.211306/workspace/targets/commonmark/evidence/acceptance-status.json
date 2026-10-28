@@ -1,0 +1,319 @@
+{
+  "criteria": {
+    "atx-heading-interruption": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "7994badde010fbc804af4717e14a984361af943c3ad7aa2ddec172ba8007dc02",
+      "updated_at": "2026-10-27T21:23:58+00:00",
+      "detail": ""
+    },
+    "atx-heading-level": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "23239de9e270b1d14231a732c682d68cd46ae0c46985430ce7d9f4633dd079f3",
+      "updated_at": "2026-10-27T21:23:58+00:00",
+      "detail": ""
+    },
+    "autolinks-email-and-invalid": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "9f9d7eb411b5fc9d5f6ba3517cec47f573ddec6524da589454262868c6eb2b83",
+      "updated_at": "2026-10-27T21:31:44+00:00",
+      "detail": ""
+    },
+    "autolinks-uri": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "49abbf06f1aecdacb460b5c0fec18596748b2bcb58cd73ff24b21529eed916db",
+      "updated_at": "2026-10-27T21:31:44+00:00",
+      "detail": ""
+    },
+    "block-quote-lazy": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "3479298d0ce6a0d3cd86dc9ceb4021b6d59336d9e5be7ef16eb3a9339aef9df1",
+      "updated_at": "2026-10-27T21:27:29+00:00",
+      "detail": ""
+    },
+    "block-quote-nesting": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "980f5175540c741aa131421b083a7a4d6c3cd889d275879844c458589e3d3dde",
+      "updated_at": "2026-10-27T21:27:29+00:00",
+      "detail": ""
+    },
+    "code-span-literal": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "3d99fa25acfbf5f287c6d33e8ea62708ac5e945453b4eec1e52a2ea2ec0d4c25",
+      "updated_at": "2026-10-27T21:30:37+00:00",
+      "detail": ""
+    },
+    "code-span-normalization": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "da2cba332bf4f8d79619906e0c1d643867c764f42ec7520006bdaddc1b7a81e6",
+      "updated_at": "2026-10-27T21:30:37+00:00",
+      "detail": ""
+    },
+    "code-span-unmatched": {
+      "status": "VALID",
+      "error_code": "existing-behavior",
+      "code_sha256": "aa2bf6d8cb566dd189af5ee99fadad28c269269cff53d21d2b7bf80eedc00967",
+      "updated_at": "2026-10-27T21:30:37+00:00",
+      "detail": ""
+    },
+    "conformance-blocks": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "f0173e375eed892dadd5e2b09e3d8fc52ac4a29bcd25807b5b10a72d5f788eb4",
+      "updated_at": "2026-10-27T21:40:37+00:00",
+      "detail": ""
+    },
+    "conformance-containers": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "434cded637c42b57e3b8298b0c3d5d4ef028a280d1fb1f6c8d522c720a3b685b",
+      "updated_at": "2026-10-27T21:40:37+00:00",
+      "detail": ""
+    },
+    "conformance-inlines": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "584a9b7165bbd5413464d1535500598012b4351f1250eb3d08b58b27e010b523",
+      "updated_at": "2026-10-27T21:40:37+00:00",
+      "detail": ""
+    },
+    "conformance-preliminaries": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "76fbb3612afed513c49893b9c92770122f4b1039d09132960cfcec318152ddd8",
+      "updated_at": "2026-10-27T21:40:37+00:00",
+      "detail": ""
+    },
+    "emphasis-basic": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "1012517dc5250dec0d91a1c41883738e0fdb213cbc1c413e75bb0a1d29414724",
+      "updated_at": "2026-10-27T21:31:44+00:00",
+      "detail": ""
+    },
+    "emphasis-intraword-underscore": {
+      "status": "VALID",
+      "error_code": "existing-behavior",
+      "code_sha256": "0167213f0fb27a535f773650321b5f387e4af3cb3228e2b7551a77c487024419",
+      "updated_at": "2026-10-27T21:31:44+00:00",
+      "detail": ""
+    },
+    "emphasis-strong": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "a8fe5264de649389096657efa71487a2ddb769411890e66e03427e5bc0dbbaa3",
+      "updated_at": "2026-10-27T21:31:44+00:00",
+      "detail": ""
+    },
+    "executable-empty-document": {
+      "status": "VALID",
+      "error_code": "existing-behavior",
+      "code_sha256": "626ca28b394c780d01526d7334c31c883ef57498aa5fe7f4b4257899eb1b82dd",
+      "updated_at": "2026-10-27T21:22:28+00:00",
+      "detail": ""
+    },
+    "fenced-code-matching": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "ff84781dcd1cc18270d4ec7028862c6e19d4dda8625d1bb66e51814c2c9bbe78",
+      "updated_at": "2026-10-27T21:23:58+00:00",
+      "detail": ""
+    },
+    "fenced-code-unclosed": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "5fad2f9d7d5656d06ce4b89c89ab5dd7ab11ec6556e1e10d3968b9106cc1d025",
+      "updated_at": "2026-10-27T21:23:58+00:00",
+      "detail": ""
+    },
+    "foundation-block-boundary": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "2f5b4942d81a066d55b253349e7245e86fd0e2f14223d8d20bd028f2f73cdeea",
+      "updated_at": "2026-10-27T21:21:31+00:00",
+      "detail": ""
+    },
+    "foundation-inline-boundary": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "1ea1ca70a7ae0aae5a6b03ad229de1711a5aae2680548ed2f6c6408606d34141",
+      "updated_at": "2026-10-27T21:21:31+00:00",
+      "detail": ""
+    },
+    "foundation-integration": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "224fab80490472800f9d346ba1c8382476b4ba5a9f5a1a00b118bac651cbfecc",
+      "updated_at": "2026-10-27T21:21:31+00:00",
+      "detail": ""
+    },
+    "html-block-paragraph": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "e961773831ee17eb91e8e6cee59f77fa7fde98419f6f6e2152f6a32b4d7819b8",
+      "updated_at": "2026-10-27T21:23:58+00:00",
+      "detail": ""
+    },
+    "html-block-termination": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "078c36acdea8e822db90932fad7a5193a70e89dd270460140eb358edd07e58bf",
+      "updated_at": "2026-10-27T21:23:58+00:00",
+      "detail": ""
+    },
+    "images-inline": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "5995a07bef29cd10cde52fd6e93e143ddad93dd24225b30388c41f200c336e3b",
+      "updated_at": "2026-10-27T21:34:53+00:00",
+      "detail": ""
+    },
+    "images-reference": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "21b1050651536e1914529e851aef68fce62e5b153253fca81e540eaf287a20eb",
+      "updated_at": "2026-10-27T21:34:53+00:00",
+      "detail": ""
+    },
+    "indented-code-content": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "63803074c79ef146bfb150bc65f4a498930f8cfde116b8f5fb6e9a6666b333a5",
+      "updated_at": "2026-10-27T21:23:58+00:00",
+      "detail": ""
+    },
+    "indented-code-interruption": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "044323d684a7092cc875efeee76879657ccc97efc5f2095cd88c075c9e721639",
+      "updated_at": "2026-10-27T21:23:58+00:00",
+      "detail": ""
+    },
+    "inline-escape": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "923d6ce13473fd1dc1920b5c69da4e6116a43a0597ead09c7d910e68865e6f68",
+      "updated_at": "2026-10-27T21:29:40+00:00",
+      "detail": ""
+    },
+    "inline-hard-breaks": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "face41dd7f09703b9032cfc21e5c829ac210434c44acb683bcc9276ed3be145d",
+      "updated_at": "2026-10-27T21:31:44+00:00",
+      "detail": ""
+    },
+    "inline-html-raw": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "3f9f40842ab998facd062afbf32cb57463ad78de74c9247f01ed7ba80dbaef95",
+      "updated_at": "2026-10-27T21:31:44+00:00",
+      "detail": ""
+    },
+    "inline-numeric-reference": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "4cfe495d7a23451436d994089f392fc3a6d1454ad196cf897f526d4a6a297f1b",
+      "updated_at": "2026-10-27T21:29:40+00:00",
+      "detail": ""
+    },
+    "inline-soft-break": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "9f71ffde61e93f4f7d50d582ea4063f6955f4cf5679b6c218062775b1d7b89e6",
+      "updated_at": "2026-10-27T21:29:40+00:00",
+      "detail": ""
+    },
+    "links-inline": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "8817f9052765cd82d24d4ba197f9cb9d5eabd6efff0e405a3d882925108a8716",
+      "updated_at": "2026-10-27T21:33:24+00:00",
+      "detail": ""
+    },
+    "links-reference": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "04d66c14fb9e57819744706b6b9b49d645a7bdae676577470de50eb2e23c365e",
+      "updated_at": "2026-10-27T21:33:24+00:00",
+      "detail": ""
+    },
+    "list-items": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "9dfdcc6e5396f5b25c49c30fa75c02b9429b4d3150b4461ae653995f5e5395ce",
+      "updated_at": "2026-10-27T21:28:31+00:00",
+      "detail": ""
+    },
+    "list-start-and-looseness": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "810218447d9b0990f9a3bc8f64ca59627d530c028d4a0286c043f008c24192b7",
+      "updated_at": "2026-10-27T21:28:31+00:00",
+      "detail": ""
+    },
+    "paragraph-blocks": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "f8c89dad04d5c2872f55f662d2807d18b10a1a35b7cc98684d070e481e5cf4dd",
+      "updated_at": "2026-10-27T21:23:01+00:00",
+      "detail": ""
+    },
+    "paragraph-whitespace": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "fc11b6246138d7d5c960128a247eb91e2fcd52805c59efdab648aa534104c1e0",
+      "updated_at": "2026-10-27T21:23:01+00:00",
+      "detail": ""
+    },
+    "references-first-definition": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "5f0e4ba34eb0e0cdc6d32246a15ae5cf77093b3c6940a5f17ff7ff37cfb806f8",
+      "updated_at": "2026-10-27T21:23:58+00:00",
+      "detail": ""
+    },
+    "references-remainder": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "06301a527457268bf38f0ad627d6c5c2a06f83390a1947108e0134e62916c759",
+      "updated_at": "2026-10-27T21:23:58+00:00",
+      "detail": ""
+    },
+    "setext-invalid": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "b948eb26302ac55b16b9f5bfee91e97213983872ee63aa4030a7520a35cf6ce6",
+      "updated_at": "2026-10-27T21:26:39+00:00",
+      "detail": ""
+    },
+    "setext-valid": {
+      "status": "VALID",
+      "error_code": "product-missing",
+      "code_sha256": "7aca1222e4d2d6927b4bf789bd6a23242e71d6cf90e91f97d265798a43fcd2f6",
+      "updated_at": "2026-10-27T21:26:39+00:00",
+      "detail": ""
+    },
+    "thematic-break-invalid": {
+      "status": "VALID",
+      "error_code": "existing-behavior",
+      "code_sha256": "7a9f7aaf2a75b75b53620aa54c6f67f24afad47383ffa28cf0512518b4607dfa",
+      "updated_at": "2026-10-27T21:23:58+00:00",
+      "detail": ""
+    },
+    "thematic-break-recognition": {
+      "status": "VALID",
+      "error_code": "baseline-red",
+      "code_sha256": "4ca754e28b57082bf21a59cef811e1a0bd4857537c1d391afc47174a1dea0256",
+      "updated_at": "2026-10-27T21:23:58+00:00",
+      "detail": ""
+    }
+  }
+}

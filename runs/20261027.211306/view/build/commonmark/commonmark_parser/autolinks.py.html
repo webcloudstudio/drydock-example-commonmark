@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/commonmark_parser/autolinks.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/commonmark_parser/autolinks.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/commonmark_parser/autolinks.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Recognition of CommonMark URI and email autolinks.&quot;&quot;&quot;
+
+from dataclasses import dataclass
+import re
+
+
+@dataclass
+class InlineNode:
+    type: str
+    literal: str = &quot;&quot;
+    destination: str = &quot;&quot;
+    label: str = &quot;&quot;
+
+
+_URI = re.compile(r&quot;[A-Za-z][A-Za-z0-9+.-]{1,31}:[^ &lt;&gt;\x00-\x20&lt;&gt;]*\Z&quot;)
+_EMAIL = re.compile(r&quot;[A-Za-z0-9.!#$%&amp;&#x27;*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*\Z&quot;)
+
+
+def parse_autolinks(source: str) -&gt; list[InlineNode]:
+    &quot;&quot;&quot;Split valid angle-delimited autolinks from ordinary text.&quot;&quot;&quot;
+    nodes: list[InlineNode] = []
+    pos = 0
+    code_spans: list[tuple[int, int]] = []
+    i = 0
+    while i &lt; len(source):
+        if source[i] != &quot;`&quot;:
+            i += 1
+            continue
+        end = i + 1
+        while end &lt; len(source) and source[end] == &quot;`&quot;:
+            end += 1
+        run = source[i:end]
+        search = end
+        matched = False
+        while search &lt; len(source):
+            candidate = source.find(&quot;`&quot;, search)
+            if candidate &lt; 0:
+                break
+            close_end = candidate + 1
+            while close_end &lt; len(source) and source[close_end] == &quot;`&quot;:
+                close_end += 1
+            if close_end - candidate == len(run):
+                code_spans.append((i, close_end))
+                i = close_end
+                matched = True
+                break
+            search = close_end
+        if not matched:
+            i = end
+    for match in re.finditer(r&quot;&lt;([^&lt;&gt;\n]*)&gt;&quot;, source):
+        # A code span opened before the angle token has precedence. Backticks
+        # that begin inside a candidate autolink belong to its URI text.
+        if any(start &lt; match.start() &lt; end for start, end in code_spans):
+            continue
+        body = match.group(1)
+        destination = body if _URI.fullmatch(body) else &quot;mailto:&quot; + body if _EMAIL.fullmatch(body) else &quot;&quot;
+        if not destination:
+            continue
+        if match.start() &gt; pos:
+            nodes.append(InlineNode(&quot;text&quot;, source[pos:match.start()]))
+        nodes.append(InlineNode(&quot;link&quot;, destination=destination, label=body))
+        pos = match.end()
+    if pos &lt; len(source):
+        nodes.append(InlineNode(&quot;text&quot;, source[pos:]))
+    return nodes
+</pre></article>
+</main>
+</body>
+</html>

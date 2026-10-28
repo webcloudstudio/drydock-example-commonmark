@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_inline_providers.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_inline_providers.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_inline_providers.py">Raw file</a></div></header>
+<article class="doc"><pre>from commonmark_parser.autolinks import parse_autolinks
+from commonmark_parser.inline_html_breaks import parse_inline_html_breaks
+from commonmark_parser.inlines import parse_inlines
+
+
+def test_emphasis_and_strong_nodes():
+    nodes = parse_inlines(&quot;*alpha* **beta**&quot;, {})
+    assert [(n.type, n.children[0].literal if n.children else n.literal) for n in nodes] == [
+        (&quot;em&quot;, &quot;alpha&quot;), (&quot;text&quot;, &quot; &quot;), (&quot;strong&quot;, &quot;beta&quot;)]
+
+
+def test_underscore_within_word_stays_literal():
+    source = &quot;alpha_beta_gamma&quot;
+    nodes = parse_inlines(source, {})
+    assert all(n.type == &quot;text&quot; for n in nodes)
+    assert &quot;&quot;.join(n.literal for n in nodes) == source
+
+
+def test_currency_symbol_flanking_does_not_create_emphasis():
+    from commonmark_parser import render
+
+    assert render(&quot;*$*alpha.\n\n*£*bravo.\n&quot;) == (
+        &quot;&lt;p&gt;*$*alpha.&lt;/p&gt;\n&lt;p&gt;*£*bravo.&lt;/p&gt;\n&quot;
+    )
+
+
+def test_autolinks_uri_email_and_invalid_uri():
+    uri = &quot;https://example.test/path&quot;
+    nodes = parse_autolinks(f&quot;&lt;{uri}&gt;&quot;)
+    assert [(n.type, n.destination, n.label) for n in nodes] == [(&quot;link&quot;, uri, uri)]
+    nodes = parse_autolinks(&quot;&lt;person@example.test&gt;&quot;)
+    assert [(n.type, n.destination, n.label) for n in nodes] == [(&quot;link&quot;, &quot;mailto:person@example.test&quot;, &quot;person@example.test&quot;)]
+    source = &quot;&lt;https://example.test/a b&gt;&quot;
+    nodes = parse_autolinks(source)
+    assert all(n.type == &quot;text&quot; for n in nodes)
+    assert &quot;&quot;.join(n.literal for n in nodes) == source
+
+
+def test_autolink_syntax_inside_code_span_stays_code():
+    from commonmark_parser import render
+
+    source = &quot;`&lt;https://foo.bar.`baz&gt;`&quot;
+    assert render(source) == &quot;&lt;p&gt;&lt;code&gt;&amp;lt;https://foo.bar.&lt;/code&gt;baz&amp;gt;`&lt;/p&gt;\n&quot;
+
+
+def test_inline_html_preserves_tag():
+    tag = &#x27;&lt;custom data-value=&quot;sample&quot;&gt;&#x27;
+    nodes = parse_inline_html_breaks(tag)
+    assert [(n.type, n.literal) for n in nodes] == [(&quot;html&quot;, tag)]
+
+
+def test_hard_breaks_for_spaces_and_backslash():
+    for source in (&quot;first  \nsecond&quot;, &quot;first\\\nsecond&quot;):
+        nodes = parse_inline_html_breaks(source)
+        assert sum(n.type == &quot;hardbreak&quot; for n in nodes) == 1
+    source = &quot;ending\\&quot;
+    nodes = parse_inline_html_breaks(source)
+    assert all(n.type != &quot;hardbreak&quot; for n in nodes)
+    assert &quot;&quot;.join(n.literal for n in nodes if n.type == &quot;text&quot;) == source
+
+
+def test_invalid_html_remains_text():
+    source = &quot;&lt;1not&gt;&quot;
+    nodes = parse_inline_html_breaks(source)
+    assert [(n.type, n.literal) for n in nodes] == [(&quot;text&quot;, source)]
+</pre></article>
+</main>
+</body>
+</html>

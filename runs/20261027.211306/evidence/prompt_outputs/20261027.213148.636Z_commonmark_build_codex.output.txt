@@ -1,0 +1,15 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark_parser/inlines.py
+- commonmark_parser/autolinks.py
+- commonmark_parser/inline_html_breaks.py
+- tests/test_inline_providers.py
+
+SUMMARY:
+Added emphasis parsing with Unicode punctuation flanking, URI and email autolink recognition, and inline HTML and hard-break parsing. Added focused provider tests.
+
+Checks run: `pytest -q tests/test_inline_text.py tests/test_inline_providers.py` — 19 passed. `pytest -q` — 56 passed.
+
+BLOCKERS:
+- Autolink and raw HTML nodes are exposed by their parsing APIs; HTML serialization is not covered here because the existing renderer is a stub.

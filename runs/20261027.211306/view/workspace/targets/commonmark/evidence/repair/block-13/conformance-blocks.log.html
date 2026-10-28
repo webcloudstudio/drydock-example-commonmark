@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/repair/block-13/conformance-blocks.log</title>
+<link rel="stylesheet" href="../../../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/repair/block-13/conformance-blocks.log</h1><div class="filenav"><a href="../../../../../../../index.html">&larr; Report</a><a href="../../../../../../../workspace/targets/commonmark/evidence/repair/block-13/conformance-blocks.log">Raw file</a></div></header>
+<article class="doc"><pre>Example 196 (lines 3221-3227) Link reference definitions
+[Foo*bar\]]:my_(url) &#x27;title (with parens)&#x27;
+
+[Foo*bar\]]
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-&lt;p&gt;&lt;a href=&quot;my_(url)&quot; title=&quot;title (with parens)&quot;&gt;Foo*bar]&lt;/a&gt;&lt;/p&gt;
++&lt;p&gt;[Foo*bar]]:my_(url) &#x27;title (with parens)&#x27;&lt;/p&gt;&lt;p&gt;[Foo*bar]]&lt;/p&gt;
+
+Example 198 (lines 3243-3257) Link reference definitions
+[foo]: /url &#x27;
+title
+line1
+line2
+&#x27;
+
+[foo]
+
+--- expected HTML
++++ actual HTML
+@@ -1,5 +1 @@
+-&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot;
+-title
+-line1
+-line2
+-&quot;&gt;foo&lt;/a&gt;&lt;/p&gt;
++&lt;p&gt;title line1 line2 &#x27;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;/url&quot; title=&quot;&quot;&gt;foo&lt;/a&gt;&lt;/p&gt;
+
+Example 210 (lines 3393-3400) Link reference definitions
+[
+foo
+]: /url
+bar
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-&lt;p&gt;bar&lt;/p&gt;
++&lt;p&gt;[ foo ]: /url bar&lt;/p&gt;
+
+184 passed, 3 failed, 0 errored, 468 skipped
+
+--- stderr ---
+
+--- drydock: progress ---
+cases: pass=184 fail=3 error=0 skip=468 total=655 from=result.stdout
+--- drydock: end progress ---
+--- drydock: values at failure ---
+  result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;^(Thematic breaks|ATX headings|Setext headings|Indented code blocks|Fenced code blo… (+937 chars)
+--- drydock: end values ---
+Traceback (most recent call last):
+  File &quot;conformance-blocks.py&quot;, line 12, in &lt;module&gt;
+    assert result.returncode == 0
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+</pre></article>
+</main>
+</body>
+</html>

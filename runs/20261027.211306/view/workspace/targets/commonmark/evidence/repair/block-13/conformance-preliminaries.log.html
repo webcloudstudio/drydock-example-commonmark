@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/repair/block-13/conformance-preliminaries.log</title>
+<link rel="stylesheet" href="../../../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/repair/block-13/conformance-preliminaries.log</h1><div class="filenav"><a href="../../../../../../../index.html">&larr; Report</a><a href="../../../../../../../workspace/targets/commonmark/evidence/repair/block-13/conformance-preliminaries.log">Raw file</a></div></header>
+<article class="doc"><pre>Example 7 (lines 427-436) Tabs
+-		foo
+
+--- expected HTML
++++ actual HTML
+@@ -1,2 +1,2 @@
+-&lt;ul&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt;  foo
++&lt;ul&gt;&lt;li&gt;&lt;pre&gt;&lt;code&gt;   foo
+ &lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;&lt;/ul&gt;
+
+11 passed, 1 failed, 0 errored, 643 skipped
+
+--- stderr ---
+
+--- drydock: progress ---
+cases: pass=11 fail=1 error=0 skip=643 total=655 from=result.stdout
+--- drydock: end progress ---
+--- drydock: values at failure ---
+  result = CompletedProcess(args=[&#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python&#x27;, &#x27;sources/spec_tests.py&#x27;, &#x27;--program&#x27;, &#x27;/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/commonmark&#x27;, &#x27;--spec&#x27;, &#x27;sources/spec.txt&#x27;, &#x27;--pattern&#x27;, &#x27;^(Tabs|Precedence)$&#x27;], returncode=1, stdout=&#x27;Example 7 (lines 427-436) Tabs\n-\t\tf… (+200 chars)
+--- drydock: end values ---
+Traceback (most recent call last):
+  File &quot;conformance-preliminaries.py&quot;, line 12, in &lt;module&gt;
+    assert result.returncode == 0
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+</pre></article>
+</main>
+</body>
+</html>

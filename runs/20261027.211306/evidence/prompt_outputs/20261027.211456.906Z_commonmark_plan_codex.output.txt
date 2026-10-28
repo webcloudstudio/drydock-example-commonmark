@@ -1,0 +1,307 @@
+=== BEGIN ARTIFACT FEATURE-SetextHeadings.md ===
+# FEATURE: Setext Headings
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Recognize setext headings in the block parsing phase. |
+| Depends On | FEATURE-Paragraphs.md, FEATURE-ThematicBreaks.md |
+| Provides | setext heading parsing |
+| Consumes | paragraph block parsing, thematic break parsing |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Recognize a setext underline following eligible paragraph content and retain the heading's raw text for the later inline phase.
+
+## Behavior
+
+A nonempty paragraph may become a heading when its following line consists of one or more `=` or `-` characters, preceded by at most three spaces and followed only by spaces or tabs. The level is 1 for `=` and 2 for `-`. The paragraph may span multiple lines. Strip initial and final spaces and tabs from its raw content; do not interpret that content as inlines during block parsing.
+
+An eligible underline takes precedence over a thematic break. An underline cannot turn a non-paragraph block or an empty paragraph into a heading. It cannot be a lazy continuation line of a containing block quote or list item. Four columns of indentation or internal whitespace disqualify an underline.
+
+Expose `parse_setext(lines)` from `commonmark_parser.setext`. It accepts a sequence of raw paragraph lines followed by a candidate underline and returns `(level, raw_content)` for a valid heading or `None` otherwise. Container parsing is responsible for withholding lazy continuation lines from this interface.
+
+## Programmatic Acceptance
+
+=== AC setext-valid ===
+Intent: Valid underlines convert nonempty multiline paragraph content into the corresponding heading while retaining its raw text.
+
+from commonmark_parser.setext import parse_setext
+
+first = "alpha"
+second = "beta"
+assert parse_setext([first, second, "==="]) == (1, first + "\n" + second)
+assert parse_setext([first, "---"]) == (2, first)
+=== END AC setext-valid ===
+
+=== AC setext-invalid ===
+Intent: An empty heading, excessive indentation, and internal underline whitespace do not form setext headings.
+
+from commonmark_parser.setext import parse_setext
+
+assert parse_setext(["", "==="]) is None
+assert parse_setext(["alpha", "    ---"]) is None
+assert parse_setext(["alpha", "= ="]) is None
+=== END AC setext-invalid ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Follow CommonMark 0.31.2 and preserve block precedence over inline parsing.
+- Complete mixed-feature section checks belong to the later conformance integration story.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-IndentedCode.md ===
+# FEATURE: Indented Code
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Recognize indented code blocks and preserve their literal content. |
+| Depends On | FEATURE-Paragraphs.md |
+| Provides | indented code block parsing |
+| Consumes | paragraph block parsing |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Identify indented code chunks during block parsing and retain their literal content for HTML rendering.
+
+## Behavior
+
+An indented code block consists of nonblank lines indented at least four columns, with intervening blank lines. Remove four columns of indentation from content lines, expanding tabs only as needed to determine indentation and preserving remaining content literally. Preserve interior blank lines and extra indentation; omit blank lines before or after the block. An indented code block cannot interrupt an open paragraph. A nonblank line with insufficient indentation ends the block.
+
+Expose `parse_indented_code(lines, paragraph_open=False)` from `commonmark_parser.indented_code`. It accepts lines without line endings and returns `(content, consumed)` for a recognized block, with content lines terminated by newline, or `None` when no block starts. `consumed` counts the input lines belonging to the block and excludes trailing blank lines.
+
+## Programmatic Acceptance
+
+=== AC indented-code-content ===
+Intent: Four-column indentation is removed while extra indentation and interior blank lines remain literal.
+
+from commonmark_parser.indented_code import parse_indented_code
+
+first = "alpha"
+second = "  beta"
+content, consumed = parse_indented_code(["    " + first, "", "    " + second, ""])
+assert content == first + "\n\n" + second + "\n"
+assert consumed == 3
+=== END AC indented-code-content ===
+
+=== AC indented-code-interruption ===
+Intent: Indented code does not interrupt an open paragraph and ends before a less-indented nonblank line.
+
+from commonmark_parser.indented_code import parse_indented_code
+
+line = "    literal"
+assert parse_indented_code([line], paragraph_open=True) is None
+content, consumed = parse_indented_code([line, "outside"])
+assert content == line[4:] + "\n"
+assert consumed == 1
+=== END AC indented-code-interruption ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Preserve literal code content; do not parse it as inline Markdown.
+- Complete mixed-feature section checks belong to the later conformance integration story.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-FencedCode.md ===
+# FEATURE: Fenced Code
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Recognize fenced code blocks and their info strings. |
+| Depends On | FEATURE-Paragraphs.md |
+| Provides | fenced code block parsing |
+| Consumes | paragraph block parsing |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Parse fenced code as a literal block, including its optional info string, for subsequent HTML rendering.
+
+## Behavior
+
+An opening fence has at least three consecutive backticks or tildes and at most three spaces of indentation. A backtick fence's info string cannot contain a backtick. Trim the info string's outer spaces and tabs. A closing fence uses the same character, at least the opening length, at most three spaces of indentation, and only spaces or tabs after the fence. If none is found, the block continues to the end of its containing block or document. Remove up to the opening indentation from each content line. Fenced code may interrupt a paragraph.
+
+Preserve content literally. For HTML, decode applicable escapes and character references in the info string and use its first word as the `language-` class suffix; escape code and attribute content for HTML.
+
+Expose `parse_fenced_code(lines)` from `commonmark_parser.fenced_code`. It accepts lines without line endings and returns `(content, info, consumed)` for a recognized block, or `None` if the first line is not an opening fence. Content lines carry newline terminators; `info` is the trimmed raw info string.
+
+## Programmatic Acceptance
+
+=== AC fenced-code-matching ===
+Intent: A fence closes only with a sufficiently long matching delimiter and preserves intervening literal content.
+
+from commonmark_parser.fenced_code import parse_fenced_code
+
+literal = "alpha * beta"
+content, info, consumed = parse_fenced_code(["```` lang", literal, "```", "````", "after"])
+assert content == literal + "\n" + "```" + "\n"
+assert info == "lang"
+assert consumed == 4
+=== END AC fenced-code-matching ===
+
+=== AC fenced-code-unclosed ===
+Intent: An unclosed fence consumes the remaining input and removes the opening indentation from content.
+
+from commonmark_parser.fenced_code import parse_fenced_code
+
+literal = "alpha"
+content, info, consumed = parse_fenced_code(["  ~~~", "  " + literal])
+assert content == literal + "\n"
+assert info == ""
+assert consumed == 2
+assert parse_fenced_code(["``` invalid ` info"]) is None
+=== END AC fenced-code-unclosed ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Do not interpret code block content as inline Markdown.
+- Complete mixed-feature section checks belong to the later conformance integration story.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-HTMLBlocks.md ===
+# FEATURE: HTML Blocks
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Recognize and preserve the seven kinds of raw HTML block. |
+| Depends On | FEATURE-Paragraphs.md |
+| Provides | HTML block parsing |
+| Consumes | paragraph block parsing |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Identify raw HTML blocks during block parsing and preserve their input without inline interpretation.
+
+## Behavior
+
+Recognize starts after at most three spaces of indentation using the seven CommonMark 0.31.2 categories: `pre`, `script`, `style`, or `textarea`; comments; processing instructions; declarations; CDATA; the specified block-level tag names; and complete standalone opening or closing tags. The first five categories end at their respective closing condition, including the entire closing line. The last two end before a blank line. All end at the containing block or document boundary if no earlier end applies. Category 7 cannot interrupt a paragraph; categories 1–6 can. Starts inside an already open HTML block do not change its end condition.
+
+Expose `parse_html_block(lines, paragraph_open=False)` from `commonmark_parser.html_blocks`. It accepts lines without line endings and returns `(raw_content, consumed)` for a recognized block, or `None` when no block starts. Each consumed input line is represented in `raw_content` with a newline terminator. The caller supplies only lines within the current container.
+
+## Programmatic Acceptance
+
+=== AC html-block-termination ===
+Intent: A comment block preserves its lines through the line containing its closing marker.
+
+from commonmark_parser.html_blocks import parse_html_block
+
+lines = ["<!-- alpha", "", "beta -->", "outside"]
+raw, consumed = parse_html_block(lines)
+assert raw == "\n".join(lines[:3]) + "\n"
+assert consumed == 3
+=== END AC html-block-termination ===
+
+=== AC html-block-paragraph ===
+Intent: A standalone custom tag cannot interrupt a paragraph, while a block-level tag can and ends before a blank line.
+
+from commonmark_parser.html_blocks import parse_html_block
+
+tag = "<custom>"
+assert parse_html_block([tag], paragraph_open=True) is None
+lines = ["<div>", "literal", "", "outside"]
+raw, consumed = parse_html_block(lines, paragraph_open=True)
+assert raw == "\n".join(lines[:2]) + "\n"
+assert consumed == 2
+=== END AC html-block-paragraph ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Preserve raw HTML block content without escaping or inline parsing.
+- Complete mixed-feature section checks belong to the later conformance integration story.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-ReferenceDefinitions.md ===
+# FEATURE: Reference Definitions
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Collect link reference definitions for document-wide inline resolution. |
+| Depends On | FEATURE-Paragraphs.md |
+| Provides | document reference map |
+| Consumes | paragraph block parsing |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Extract definitions from closing paragraphs and make the resulting map available after block parsing, before inline parsing begins.
+
+## Behavior
+
+At paragraph closure, parse consecutive valid reference definitions at the beginning of the accumulated paragraph text. A definition has a valid nonempty label, colon, destination and optional title as specified in CommonMark 0.31.2, including allowed line endings, escapes and indentation. A definition cannot interrupt a paragraph. Remove recognized definitions from visible paragraph content; preserve any remaining text.
+
+Normalize labels by Unicode case folding, trimming leading and trailing spaces, tabs and line endings, and collapsing internal runs of those characters to one space. Match normalized source labels, not their parsed inline representation. Retain the first definition for each normalized label in document order. Definitions found within containers contribute to the same document-wide map.
+
+Expose `extract_definitions(text, references)` from `commonmark_parser.references`. It processes the beginning of a closing paragraph, updates the supplied mutable map in place, and returns remaining paragraph text. Map values are `(destination, title)`, with `None` for an absent title. Destination and title values have CommonMark escapes and character references resolved.
+
+## Programmatic Acceptance
+
+=== AC references-first-definition ===
+Intent: Definitions are removed from paragraph content, labels match case insensitively, and the first matching definition wins.
+
+from commonmark_parser.references import extract_definitions
+
+destination = "/first"
+references = {}
+remaining = extract_definitions("[Alpha]: " + destination + "\n[alpha]: /second\n", references)
+assert remaining == ""
+assert references["alpha"] == (destination, None)
+=== END AC references-first-definition ===
+
+=== AC references-remainder ===
+Intent: A valid leading definition leaves subsequent paragraph text intact, while a malformed definition remains visible.
+
+from commonmark_parser.references import extract_definitions
+
+destination = "/target"
+visible = "ordinary text\n"
+references = {}
+remaining = extract_definitions("[Label]: " + destination + "\n" + visible, references)
+assert remaining == visible
+assert references["label"] == (destination, None)
+invalid = "[missing]:\n"
+assert extract_definitions(invalid, {}) == invalid
+=== END AC references-remainder ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Collect definitions across the entire document before resolving inline references.
+- Complete mixed-feature section checks belong to the later conformance integration story.
+=== END ARTIFACT ===

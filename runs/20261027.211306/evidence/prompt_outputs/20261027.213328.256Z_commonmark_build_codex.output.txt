@@ -1,0 +1,15 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark_parser/links.py
+- tests/test_links.py
+
+SUMMARY:
+Implemented inline, full, collapsed, and shortcut reference links with destination and title parsing, entity and escape decoding, balanced parentheses, and normalized reference lookup. Added six focused link tests.
+
+CHECKS:
+- `pytest -q tests/test_links.py` — 6 passed.
+- `pytest -q` — 62 passed.
+
+BLOCKERS:
+- None

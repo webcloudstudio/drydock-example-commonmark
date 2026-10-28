@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261027.223003.829Z_commonmark_build_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261027.223003.829Z_commonmark_build_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261027.223003.829Z_commonmark_build_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/__init__.py
+- commonmark_parser/blocks.py
+- commonmark_parser/inline_html_breaks.py
+- commonmark_parser/inlines.py
+- tests/test_inline_text.py
+- tests/test_render_integration.py
+- tests/test_service_blocks.py
+
+SUMMARY:
+Escaped punctuation now stays literal through emphasis parsing, and escaped HTML-like text is not treated as a tag. ATX headings containing only closing hashes now render with empty content.
+
+Checks run:
+- `python3 -m pytest -q tests/test_inline_text.py tests/test_render_integration.py tests/test_service_blocks.py` — 31 passed.
+- `python3 sources/spec_tests.py --program &quot;$PWD/commonmark&quot; --spec sources/spec.txt --pattern &#x27;^ATX headings$&#x27;` — 18 passed, 0 failed.
+- Before the fixes, reproduced the escaped emphasis defect; afterward, the heading renders as `*baz*`.
+
+BLOCKERS:
+- The complete scoped conformance suites remain failing. The prior repair logs show unresolved failures in blocks, containers, and inlines; this pass verified only the ATX section and focused regressions.
+
+FAILURE_SUMMARY: Scoped CommonMark conformance is not fully passing
+FAILURE_DETAIL: Escaped delimiter and ATX closing-hash defects are repaired, but the existing block, container, and inline failures recorded in the repair logs remain. Continue repairing those failing branches and rerun their scoped selectors.</pre></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-ConformanceIntegration.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-ConformanceIntegration.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-ConformanceIntegration.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Conformance Integration</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Integrate the parser stages and exercise all scoped specification examples.</td></tr><tr><td>Depends On</td><td>FEATURE-Executable.md, FEATURE-Lists.md, FEATURE-Images.md, FEATURE-Autolinks.md, FEATURE-InlineHTMLBreaks.md</td></tr><tr><td>Provides</td><td>integrated CommonMark parser</td></tr><tr><td>Consumes</td><td>commonmark, list block parsing, image parsing, autolink parsing, inline HTML and hard break parsing</td></tr></tbody></table></div>
+<h2>Purpose and workflow</h2>
+<p>Assemble the standard-stream executable with block parsing, document-wide reference collection, inline parsing, and HTML rendering. Finish block structure and reference collection before parsing inline content. The integrated parser must support the interactions among all previously delivered constructs.</p>
+<p>Execute every example-owning section of the supplied corpus through its documented <code>--pattern</code> selector. The scoped checks below cover Tabs and Precedence as well as the complete block, container, and inline sections. The runner&#x27;s JSON dump is the selection probe; the acceptance execution itself runs the selected examples against the executable.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC conformance-preliminaries ===<br>Intent: The integrated parser passes every supplied Tabs and Precedence example.<br>Suite: scoped<br>Requires: executable=python3; scope=test<br>Probe: --dump-tests<br>Probe Count: json</p>
+<p>import os import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.path.abspath(&quot;commonmark&quot;), &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;^(Tabs|Precedence)$&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC conformance-preliminaries ===</p>
+<p>=== AC conformance-blocks ===<br>Intent: The integrated parser passes every example in the supplied leaf block sections.<br>Suite: scoped<br>Requires: executable=python3; scope=test<br>Probe: --dump-tests<br>Probe Count: json</p>
+<p>import os import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.path.abspath(&quot;commonmark&quot;), &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;^(Thematic breaks|ATX headings|Setext headings|Indented code blocks|Fenced code blocks|HTML blocks|Link reference definitions|Paragraphs|Blank lines)$&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC conformance-blocks ===</p>
+<p>=== AC conformance-containers ===<br>Intent: The integrated parser passes every supplied block quote, list item, and list example.<br>Suite: scoped<br>Requires: executable=python3; scope=test<br>Probe: --dump-tests<br>Probe Count: json</p>
+<p>import os import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.path.abspath(&quot;commonmark&quot;), &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;^(Block quotes|List items|Lists)$&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC conformance-containers ===</p>
+<p>=== AC conformance-inlines ===<br>Intent: The integrated parser passes every example in the supplied inline and text sections.<br>Suite: scoped<br>Requires: executable=python3; scope=test<br>Probe: --dump-tests<br>Probe Count: json</p>
+<p>import os import subprocess import sys</p>
+<p>result = subprocess.run( [sys.executable, &quot;sources/spec_tests.py&quot;, &quot;--program&quot;, os.path.abspath(&quot;commonmark&quot;), &quot;--spec&quot;, &quot;sources/spec.txt&quot;, &quot;--pattern&quot;, &quot;^(Backslash escapes|Entity and numeric character references|Code spans|Emphasis and strong emphasis|Links|Images|Autolinks|Raw HTML|Hard line breaks|Soft line breaks|Textual content)$&quot;], capture_output=True, text=True, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC conformance-inlines ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Preserve the supplied conformance assets verbatim under <code>sources/</code>.</li><li>Do not invoke <code>full_test.sh</code> from these scoped checks.</li><li>Do not use a public Markdown implementation.</li></ul></article>
+</main>
+</body>
+</html>

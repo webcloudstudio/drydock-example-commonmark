@@ -1,0 +1,38 @@
+<requirement name="collapse-whitespace" stories="">
+Multiple inner whitespaces are collapsed to a single space (except
+    in pre tags):
+</requirement>
+<requirement name="remove-block-whitespace" stories="">
+* Whitespace surrounding block-level tags is removed.
+</requirement>
+<requirement name="convert-self-closing-tags" stories="">
+* Self-closing tags are converted to open tags.
+</requirement>
+<requirement name="normalize-attributes" stories="">
+* Attributes are sorted and lowercased.
+</requirement>
+<requirement name="normalize-references" stories="">
+* References are converted to unicode, except that '<', '>', '&', and
+      '"' are rendered using entities.
+</requirement>
+<unattached story="foundation"/>
+<unattached story="delivery"/>
+<unattached story="paragraphs"/>
+<unattached story="thematic-breaks"/>
+<unattached story="indented-code"/>
+<unattached story="atx-headings"/>
+<unattached story="html-blocks"/>
+<unattached story="fenced-code"/>
+<unattached story="reference-definitions"/>
+<unattached story="setext-headings"/>
+<unattached story="block-quotes"/>
+<unattached story="lists"/>
+<unattached story="inline-text"/>
+<unattached story="code-spans"/>
+<unattached story="emphasis"/>
+<unattached story="autolinks"/>
+<unattached story="inline-html-breaks"/>
+<unattached story="links"/>
+<unattached story="images"/>
+<unattached story="conformance-integration"/>
+<unattached story="verification"/>

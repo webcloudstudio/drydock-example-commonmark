@@ -1,0 +1,14 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/html_blocks.py
+
+SUMMARY:
+Adjusted HTML block recognition so block tags with multiline attributes are recognized, and added a regression reproduction. The named HTML block example still fails: the outer `<table>` block ends at its blank line, so the nested `<pre>` content is parsed separately. I did not run the remaining scoped checks or the project test suite.
+
+BLOCKERS:
+- The repair did not resolve the reported conformance failures. Link reference, container, and inline failures remain unaddressed.
+- `conformance-blocks` still fails on Example 148 after the change.
+
+FAILURE_SUMMARY: Scoped CommonMark conformance remains failing
+FAILURE_DETAIL: The reproduced Example 148 still differs from the expected HTML because type 6 HTML blocks end at a blank line inside the table. The HTML block rule and parser need a broader repair; the other reported link reference, container, and inline failures also remain unresolved.

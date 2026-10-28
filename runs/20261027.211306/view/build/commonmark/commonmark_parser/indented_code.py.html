@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/commonmark_parser/indented_code.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/commonmark_parser/indented_code.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/commonmark_parser/indented_code.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Indented code block recognition.&quot;&quot;&quot;
+
+
+def _strip_columns(line: str, columns: int) -&gt; tuple[str, int]:
+    # Tabs are positioned from the start of the source line. Expanding first
+    # matters when a list or quote has already removed part of the indentation:
+    # a later tab still lands on the original four-column tab stop.
+    expanded: list[str] = []
+    index = 0
+    column = 0
+    while index &lt; len(line) and line[index] in &quot; \t&quot;:
+        char = line[index]
+        width = 4 - column % 4 if char == &quot;\t&quot; else 1
+        expanded.append(&quot; &quot; * width)
+        column += width
+        index += 1
+    value = &quot;&quot;.join(expanded)
+    removed = min(columns, len(value))
+    return value[removed:] + line[index:], removed
+
+
+def parse_indented_code(lines: list[str], paragraph_open: bool = False):
+    leading = 0
+    for char in lines[0] if lines else &quot;&quot;:
+        if char == &quot; &quot;:
+            leading += 1
+        elif char == &quot;\t&quot;:
+            leading += 4 - leading % 4
+        else:
+            break
+    if paragraph_open or not lines or not lines[0].strip(&quot; \t&quot;) or leading &lt; 4:
+        return None
+    kept: list[str] = []
+    consumed = 0
+    pending_blanks: list[str] = []
+    for line in lines:
+        if not line.strip(&quot; \t&quot;):
+            # Blank lines inside an indented code block retain indentation
+            # that does not reach the four-column code indentation.
+            pending_blanks.append(line[4:] if len(line) &gt; 4 else &quot;&quot;)
+            consumed += 1
+            continue
+        rest, removed = _strip_columns(line, 4)
+        if removed &lt; 4:
+            break
+        kept.extend(pending_blanks)
+        pending_blanks.clear()
+        kept.append(rest)
+        consumed += 1
+    consumed -= len(pending_blanks)
+    if not kept:
+        return None
+    return &quot;&quot;.join(part + &quot;\n&quot; for part in kept), consumed
+</pre></article>
+</main>
+</body>
+</html>

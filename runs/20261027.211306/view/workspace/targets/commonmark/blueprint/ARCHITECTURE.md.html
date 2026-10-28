@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/ARCHITECTURE.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/ARCHITECTURE.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/ARCHITECTURE.md">Raw file</a></div></header>
+<article class="doc"><h1>ARCHITECTURE: CommonMark Parser</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Defines the Python project and the boundaries of the CommonMark parsing pipeline.</td></tr><tr><td>Provides</td><td>Python project foundation</td></tr></tbody></table></div>
+<h2>Structure and interfaces</h2>
+<p>The application root owns the Python project, <code>pyproject.toml</code>, committed <code>uv.lock</code>, the <code>.venv</code> environment created by <code>uv venv</code>, launchers in <code>bin/</code>, and the <code>pytest -q</code> test runner. Runtime code uses Python 3 and the standard library only.</p>
+<p>Provide a <code>commonmark_parser</code> package with these integration interfaces:</p>
+<ul><li><code>commonmark_parser.render(markdown: str) -&gt; str</code> accepts a complete document and returns HTML. The foundation supplies a callable integration point without claiming conformance.</li><li><code>commonmark_parser.blocks.parse_blocks(markdown: str) -&gt; Document</code> produces a document tree. A <code>Document</code> has an ordered <code>children</code> sequence and a document-wide <code>references</code> mapping. Block nodes expose <code>kind</code>, <code>children</code>, and <code>literal</code>; headings also expose <code>level</code>.</li><li><code>commonmark_parser.inlines.parse_inlines(literal: str, references: dict) -&gt; list</code> consumes raw paragraph or heading content and the completed reference map.</li></ul>
+<p>The block parser consumes lines in document order, maintains open container and leaf blocks, and collects reference definitions when paragraphs close. After the complete block tree and reference map exist, inline parsing processes the raw content of paragraphs and headings. Rendering walks the resulting structure to produce HTML. Preserve raw inline source until the inline phase. The later parser stories extend these interfaces.</p>
+<p>Stage the supplied <code>spec.txt</code>, <code>spec_tests.py</code>, <code>cmark.py</code>, <code>normalize.py</code>, and <code>full_test.sh</code> verbatim under <code>sources/</code>. The runner imports its sibling helpers and accepts the candidate program and specification paths. <code>sources/INSTRUCTIONS.md</code> is planning context and is not a runtime asset.</p>
+<h2>Technology Stack</h2>
+<p>Python 3 implements the parser and executable. The Python standard library supplies runtime facilities without third-party runtime dependencies. POSIX shell runs the supplied full-suite entry point.</p>
+<h2>Boundary ownership</h2>
+<div class="scroll"><table><thead><tr><th>Boundary</th><th>Owner</th><th>Access</th></tr></thead><tbody><tr><td>Standard streams and process entry point</td><td>Root executable</td><td>Reads stdin and writes stdout through the parser integration interface.</td></tr><tr><td>Block tree and document references</td><td><code>commonmark_parser.blocks</code></td><td>Owns block construction and the document reference map.</td></tr><tr><td>Inline parsing and rendering</td><td><code>commonmark_parser.inlines</code> and <code>commonmark_parser</code></td><td>Consume completed block contents and references; render HTML.</td></tr><tr><td>Conformance assets</td><td><code>sources/</code></td><td>Read-only supplied files; the runner invokes the root executable.</td></tr><tr><td>Persistence, configuration, external services</td><td>None</td><td>No persistent store or external service is required.</td></tr></tbody></table></div>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC foundation-integration ===<br>Intent: The Python foundation exposes the parser integration callable before parser features are implemented.</p>
+<p>import commonmark_parser</p>
+<p>assert callable(commonmark_parser.render) === END AC foundation-integration ===</p>
+<p>=== AC foundation-block-boundary ===<br>Intent: The foundation exposes a callable block parser for later block capabilities.</p>
+<p>from commonmark_parser.blocks import parse_blocks</p>
+<p>assert callable(parse_blocks) === END AC foundation-block-boundary ===</p>
+<p>=== AC foundation-inline-boundary ===<br>Intent: The foundation exposes a callable inline parser for the second parsing phase.</p>
+<p>from commonmark_parser.inlines import parse_inlines</p>
+<p>assert callable(parse_inlines) === END AC foundation-inline-boundary ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not use a public Markdown implementation.</li><li>Keep the supplied conformance assets unchanged and stage the five runtime assets verbatim.</li><li>Do not invoke the full-suite entry point from scoped implementation checks.</li><li>Do not add file-presence checks or additional verification stories.</li></ul></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Emphasis.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Emphasis.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Emphasis.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Emphasis</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Parse emphasis and strong emphasis using delimiter runs.</td></tr><tr><td>Depends On</td><td>FEATURE-InlineText.md, FEATURE-CodeSpans.md</td></tr><tr><td>Provides</td><td>emphasis parsing</td></tr><tr><td>Consumes</td><td>inline text parsing, code span parsing</td></tr></tbody></table></div>
+<h2>Purpose and workflow</h2>
+<p>Extend <code>commonmark_parser.inlines.parse_inlines(source, references)</code> to identify runs of <code>*</code> and <code>_</code> and classify potential openers and closers using the specification&#x27;s Unicode whitespace and punctuation flanking rules. Apply the underscore restrictions and the rule of three using the original run lengths.</p>
+<p>Use the appendix&#x27;s delimiter-stack process: scan potential closers in input order, search backward for the nearest valid opener above the applicable lower bound, create an emphasis or strong node, consume one or two delimiter characters on each side, and remove intervening delimiters from the stack. Continue with remaining delimiters and retain unmatched characters as text. Preserve the specified nesting and overlap precedence. Code spans bind more tightly; link, image, autolink, and raw HTML precedence is completed when those providers are integrated.</p>
+<p>Emphasis nodes have type <code>em</code>, strong emphasis nodes have type <code>strong</code>, and each exposes ordered <code>children</code>. Text children expose <code>literal</code>.</p>
+<p>The complete Emphasis and strong emphasis corpus section is executed by conformance integration after all interacting inline providers exist.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC emphasis-basic ===<br>Intent: A matching single delimiter pair produces an emphasis node containing the supplied text.</p>
+<p>from commonmark_parser.inlines import parse_inlines</p>
+<p>content = &quot;alpha&quot; nodes = parse_inlines(&quot;<em>&quot; + content + &quot;</em>&quot;, {}) assert len(nodes) == 1 assert nodes[0].type == &quot;em&quot; assert len(nodes[0].children) == 1 assert nodes[0].children[0].type == &quot;text&quot; assert nodes[0].children[0].literal == content === END AC emphasis-basic ===</p>
+<p>=== AC emphasis-strong ===<br>Intent: A matching double delimiter pair produces a strong node containing the supplied text.</p>
+<p>from commonmark_parser.inlines import parse_inlines</p>
+<p>content = &quot;beta&quot; nodes = parse_inlines(&quot;<strong>&quot; + content + &quot;</strong>&quot;, {}) assert len(nodes) == 1 assert nodes[0].type == &quot;strong&quot; assert len(nodes[0].children) == 1 assert nodes[0].children[0].literal == content === END AC emphasis-strong ===</p>
+<p>=== AC emphasis-intraword-underscore ===<br>Intent: Underscores within a word remain literal rather than creating emphasis.</p>
+<p>from commonmark_parser.inlines import parse_inlines</p>
+<p>source = &quot;alpha_beta_gamma&quot; nodes = parse_inlines(source, {}) assert all(node.type == &quot;text&quot; for node in nodes) assert &quot;&quot;.join(node.literal for node in nodes) == source === END AC emphasis-intraword-underscore ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Follow the supplied delimiter-stack and precedence rules.</li><li>Preserve supplied conformance assets unchanged.</li><li>Do not invoke the full-suite entry point in this story&#x27;s checks.</li></ul></article>
+</main>
+</body>
+</html>

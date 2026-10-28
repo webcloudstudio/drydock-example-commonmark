@@ -1,0 +1,11 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark_parser/blocks.py
+- tests/test_paragraphs.py
+
+SUMMARY:
+Implemented paragraph grouping with blank-line separation, ignored boundary blanks, removed continuation indentation, and preserved trailing spaces on continuing lines. Focused checks passed: `pytest -q tests/test_paragraphs.py tests/test_foundation.py` — 10 passed. The full conformance suite was not run.
+
+BLOCKERS:
+- None

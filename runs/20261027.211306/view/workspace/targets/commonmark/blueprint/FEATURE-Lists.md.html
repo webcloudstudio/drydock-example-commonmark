@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Lists.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Lists.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Lists.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Lists</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Parse list containers and their items.</td></tr><tr><td>Depends On</td><td>FEATURE-BlockQuotes.md</td></tr><tr><td>Provides</td><td>list block parsing</td></tr><tr><td>Consumes</td><td>block quote parsing, paragraph block parsing, thematic break parsing, ATX heading parsing, setext heading parsing, indented code block parsing, fenced code block parsing, HTML block parsing, document reference map</td></tr></tbody></table></div>
+<h2>Purpose and workflow</h2>
+<p>Recognize bullet markers <code>-</code>, <code>+</code>, and <code>*</code>, and ordered markers of one to nine digits followed by <code>.</code> or <code>)</code>. Apply the specification&#x27;s indentation rules, including marker width, one to four columns of following indentation, items starting with blank lines or indented code, tab stops, and lazy paragraph continuations. A thematic break takes precedence over a list item. An item interrupting a paragraph must be nonempty and an ordered list must start at one.</p>
+<p>Group adjacent items only when their marker types match, including the bullet character or ordered delimiter. Preserve an ordered list&#x27;s first start number. Parse nested block content and collect reference definitions document-wide. A list is loose when its items are separated by blank lines or an item directly contains blocks separated by a blank line; otherwise it is tight. The renderer uses that property to determine paragraph wrappers.</p>
+<p>Extend <code>commonmark_parser.blocks.parse_blocks(source)</code> to return list and item nodes in the block tree. A list node exposes <code>type</code> equal to <code>list</code>, ordered <code>children</code> of type <code>item</code>, <code>ordered</code> as a boolean, <code>start</code> as the ordered start number, and <code>tight</code> as a boolean. Paragraph children retain their unparsed <code>literal</code>.</p>
+<p>The complete List items and Lists corpus sections are executed by conformance integration after inline providers exist.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC list-items ===<br>Intent: Matching markers form one tight list with separate items whose paragraph text is preserved.</p>
+<p>from commonmark_parser.blocks import parse_blocks</p>
+<p>first = &quot;alpha&quot; second = &quot;beta&quot; document = parse_blocks(&quot;- &quot; + first + &quot;\n- &quot; + second + &quot;\n&quot;) assert len(document.children) == 1 listing = document.children[0] assert listing.type == &quot;list&quot; assert listing.ordered is False assert listing.tight is True assert len(listing.children) == 2 assert all(item.type == &quot;item&quot; for item in listing.children) assert [item.children[0].literal for item in listing.children] == [first, second] === END AC list-items ===</p>
+<p>=== AC list-start-and-looseness ===<br>Intent: An ordered list retains its initial number and blank lines between items make it loose.</p>
+<p>from commonmark_parser.blocks import parse_blocks</p>
+<p>start = 4 first = &quot;first&quot; second = &quot;second&quot; document = parse_blocks(f&quot;{start}. {first}\n\n5. {second}\n&quot;) assert len(document.children) == 1 listing = document.children[0] assert listing.type == &quot;list&quot; assert listing.ordered is True assert listing.start == start assert listing.tight is False assert [item.children[0].literal for item in listing.children] == [first, second] === END AC list-start-and-looseness ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Parse blocks before inline content and preserve document-wide references.</li><li>Preserve the supplied conformance assets unchanged.</li><li>Do not invoke the full-suite entry point in this story&#x27;s checks.</li></ul></article>
+</main>
+</body>
+</html>

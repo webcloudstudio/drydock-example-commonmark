@@ -1,0 +1,19 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/indented_code.py
+- tests/test_service_blocks.py
+
+SUMMARY:
+Fixed preservation of excess indentation on blank lines inside indented code blocks. Example 112 changed from failing to passing; the full Indented code blocks section passes. Added a regression test for the failing behavior.
+
+Checks run:
+
+- `python3 sources/spec_tests.py --program "$PWD/commonmark" --spec sources/spec.txt --pattern '^Indented code blocks$'` — 12 passed, 0 failed.
+- `pytest -q tests/test_service_blocks.py` — 14 passed.
+
+BLOCKERS:
+- The saved scoped results still show failures in other block sections, containers, and inline sections. These remain unverified after this focused repair.
+
+FAILURE_SUMMARY: Other scoped conformance failures remain unresolved
+FAILURE_DETAIL: The previous results show failures in fenced code, HTML blocks, reference definitions, containers, and inline parsing. This repair addressed only the reproduced indented-code failure. Repair those failing parser branches, then rerun the affected scoped selectors.

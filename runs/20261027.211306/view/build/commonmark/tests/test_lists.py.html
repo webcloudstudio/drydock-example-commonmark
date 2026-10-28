@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_lists.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_lists.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_lists.py">Raw file</a></div></header>
+<article class="doc"><pre>from commonmark_parser.blocks import parse_blocks
+
+
+def test_matching_bullets_form_tight_list_with_item_paragraphs():
+    document = parse_blocks(&quot;- alpha\n- beta\n&quot;)
+    listing = document.children[0]
+    assert len(document.children) == 1
+    assert (listing.type, listing.ordered, listing.tight) == (&quot;list&quot;, False, True)
+    assert [item.type for item in listing.children] == [&quot;item&quot;, &quot;item&quot;]
+    assert [item.children[0].literal for item in listing.children] == [&quot;alpha&quot;, &quot;beta&quot;]
+
+
+def test_ordered_start_and_blank_line_make_list_loose():
+    listing = parse_blocks(&quot;4. first\n\n5. second\n&quot;).children[0]
+    assert (listing.type, listing.ordered, listing.start, listing.tight) == (&quot;list&quot;, True, 4, False)
+    assert [item.children[0].literal for item in listing.children] == [&quot;first&quot;, &quot;second&quot;]
+
+
+def test_marker_kind_splits_adjacent_lists_and_thematic_break_wins():
+    nodes = parse_blocks(&quot;- a\n+ b\n\n---\n&quot;).children
+    assert [node.kind for node in nodes] == [&quot;list&quot;, &quot;list&quot;, &quot;thematic_break&quot;]
+    assert nodes[0].children[0].children[0].literal == &quot;a&quot;
+    assert nodes[1].children[0].children[0].literal == &quot;b&quot;
+
+
+def test_nested_list_and_lazy_continuation_are_kept_in_item():
+    listing = parse_blocks(&quot;- alpha\n  continuation\n  - nested\n&quot;).children[0]
+    item = listing.children[0]
+    assert item.children[0].literal == &quot;alpha\ncontinuation&quot;
+    assert item.children[1].kind == &quot;list&quot;
+    assert item.children[1].children[0].children[0].literal == &quot;nested&quot;
+
+
+def test_nonempty_item_can_start_with_indented_code_and_empty_item_is_retained():
+    listing = parse_blocks(&quot;-\n-     code\n&quot;).children[0]
+    assert len(listing.children) == 2
+    assert listing.children[0].children == []
+    assert listing.children[1].children[0].kind == &quot;indented_code&quot;
+
+
+def test_list_interrupts_paragraph_only_with_nonempty_marker_and_ordered_one():
+    nodes = parse_blocks(&quot;alpha\n-\n2. no\n1. yes\n&quot;).children
+    assert [node.kind for node in nodes] == [&quot;paragraph&quot;, &quot;list&quot;]
+    assert nodes[0].literal == &quot;alpha\n-\n2. no&quot;
+    assert nodes[1].children[0].children[0].literal == &quot;yes&quot;
+
+
+def test_tab_indented_blank_line_continuation_stays_inside_list_item():
+    listing = parse_blocks(&quot;- foo\n\n\tbar\n&quot;).children[0]
+    assert listing.kind == &quot;list&quot;
+    assert [child.literal for child in listing.children[0].children] == [&quot;foo&quot;, &quot;bar&quot;]
+
+
+def test_blank_before_outdented_paragraph_does_not_loosen_list():
+    document = parse_blocks(&quot;- one\n\n two\n&quot;)
+    listing = document.children[0]
+    assert listing.tight is True
+    assert [node.kind for node in document.children] == [&quot;list&quot;, &quot;paragraph&quot;]
+
+
+def test_list_code_block_does_not_absorb_less_indented_following_line():
+    from commonmark_parser import render
+
+    source = &quot;&lt;table&gt;\n\n  &lt;tr&gt;\n\n    &lt;td&gt;\n      Hi\n    &lt;/td&gt;\n\n  &lt;/tr&gt;\n\n&lt;/table&gt;\n&quot;
+    assert render(source) == (
+        &quot;&lt;table&gt;\n  &lt;tr&gt;\n&lt;pre&gt;&lt;code&gt;&amp;lt;td&amp;gt;\n  Hi\n&amp;lt;/td&amp;gt;\n&lt;/code&gt;&lt;/pre&gt;\n&quot;
+        &quot;  &lt;/tr&gt;\n&lt;/table&gt;\n&quot;
+    )
+
+
+def test_blank_between_items_with_nested_lists_makes_list_loose():
+    from commonmark_parser import render
+
+    source = &quot;- a\n  - b\n  - c\n\n- d\n  - e\n  - f\n&quot;
+    assert render(source) == (
+        &quot;&lt;ul&gt;\n&lt;li&gt;&lt;p&gt;a&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;b\n&lt;/li&gt;\n&lt;li&gt;c\n&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&quot;
+        &quot;&lt;li&gt;&lt;p&gt;d&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;e\n&lt;/li&gt;\n&lt;li&gt;f\n&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&quot;
+    )
+
+
+def test_blank_lines_inside_nested_list_do_not_loosen_parent_items():
+    from commonmark_parser import render
+
+    source = &quot;- foo\n  - bar\n    - baz\n\n\n      bim\n&quot;
+    assert render(source) == (
+        &quot;&lt;ul&gt;\n&lt;li&gt;foo\n&lt;ul&gt;\n&lt;li&gt;bar\n&lt;ul&gt;\n&quot;
+        &quot;&lt;li&gt;&lt;p&gt;baz&lt;/p&gt;\n&lt;p&gt;bim&lt;/p&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&quot;
+        &quot;&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&quot;
+    )
+</pre></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<requirement name="commonmark-parser" stories="delivery,paragraphs,thematic-breaks,indented-code,atx-headings,html-blocks,fenced-code,reference-definitions,setext-headings,block-quotes,lists,inline-text,code-spans,emphasis,autolinks,inline-html-breaks,links,images">
+Build a CommonMark 0.31.2 parser from the supplied specification. The parser reads Markdown from
+standard input and writes HTML to standard output. Do not use a public Markdown implementation.
+</requirement>
+<requirement name="executable" stories="delivery">
+The deliverable is an executable named `commonmark` at the application root.
+</requirement>
+<requirement name="block-parsing" stories="paragraphs,thematic-breaks,atx-headings,setext-headings,indented-code,fenced-code,html-blocks,reference-definitions,block-quotes,lists">
+1. Blocks: paragraphs, thematic breaks, ATX headings, setext headings, indented code, fenced
+   code, HTML blocks, link reference definitions, block quotes, then lists — lists are the
+   hardest block construct, with lazy continuation, nesting, and tightness.
+</requirement>
+<requirement name="inline-parsing" stories="inline-text,code-spans,emphasis,links,images,autolinks,inline-html-breaks">
+2. Inlines: backslash escapes, entity and numeric references, code spans, emphasis and strong
+   emphasis (the delimiter-run algorithm), links and images, autolinks, raw HTML, hard breaks.
+</requirement>
+<requirement name="terminal-verification" stories="verification">
+Create one terminal verification story that:
+
+- depends on every parser implementation story;
+- contains the only `Suite: full` acceptance check;
+- runs `sh sources/full_test.sh`, prints captured standard output and standard error, and asserts
+  only `result.returncode == 0`; and
+- carries `Sea Trials: st-001`.
+</requirement>
+<unattached story="foundation"/>
+<unattached story="conformance-integration"/>

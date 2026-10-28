@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/commonmark_parser/__init__.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/commonmark_parser/__init__.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/commonmark_parser/__init__.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;CommonMark parser integration interfaces.&quot;&quot;&quot;
+
+from .blocks import Document, parse_blocks
+from html import escape, unescape
+import re
+
+from .inlines import parse_inlines
+from .links import parse_links
+from .images import parse_images
+from .autolinks import parse_autolinks
+from .inline_html_breaks import parse_inline_html_breaks
+from urllib.parse import quote
+
+
+def render(markdown: str) -&gt; str:
+    &quot;&quot;&quot;Render a complete Markdown document to CommonMark HTML.&quot;&quot;&quot;
+    document = parse_blocks(markdown)
+    return &quot;&quot;.join(_render_block(block, document.references, tight=False) for block in document.children)
+
+
+def _render_inlines(source: str, references: dict) -&gt; str:
+    &quot;&quot;&quot;Render inline constructs, keeping code and raw HTML opaque.&quot;&quot;&quot;
+    pieces: list[str] = []
+    for token in parse_inline_html_breaks(source):
+        if token.type == &quot;hardbreak&quot;:
+            pieces.append(&quot;&lt;br /&gt;\n&quot;)
+            continue
+        if token.type == &quot;html&quot;:
+            pieces.append(token.literal)
+            continue
+        # First resolve links and images against the document-wide definition map.
+        links = parse_links(token.literal, references)
+        for item in links:
+            if item.type == &quot;link&quot;:
+                label = &quot;&quot;.join(_render_inline_node(n, references) for n in (item.children or []))
+                title = f&#x27; title=&quot;{escape(item.title, quote=True)}&quot;&#x27; if item.title is not None else &quot;&quot;
+                destination = quote(item.destination, safe=&quot;/:?#@!$&amp;&#x27;()*+,;=%-._~&quot;)
+                pieces.append(f&#x27;&lt;a href=&quot;{escape(destination, quote=True)}&quot;{title}&gt;{label}&lt;/a&gt;&#x27;)
+            else:
+                # Image syntax is a distinct provider; preserve all intervening text.
+                pieces.extend(_render_text_with_images(item.literal, references))
+    return &quot;&quot;.join(pieces)
+
+
+def _render_text_with_images(source: str, references: dict) -&gt; list[str]:
+    from .images import _bracket_end, _destination_and_title, _normalize_label, _decode
+    out: list[str] = []
+    i = 0
+    while i &lt; len(source):
+        if source.startswith(&quot;![&quot;, i):
+            close = _bracket_end(source, i + 1)
+            if close is not None:
+                alt = source[i + 2:close]
+                after = close + 1
+                parsed = _destination_and_title(source, after + 1) if after &lt; len(source) and source[after] == &quot;(&quot; else None
+                if parsed:
+                    dest, title, end = parsed
+                    title_attr = f&#x27; title=&quot;{escape(title, quote=True)}&quot;&#x27; if title is not None else &quot;&quot;
+                    dest = quote(dest, safe=&quot;/:?#@!$&amp;&#x27;()*+,;=%-._~&quot;)
+                    out.append(f&#x27;&lt;img src=&quot;{escape(dest, quote=True)}&quot; alt=&quot;{escape(_plain_alt(alt, references), quote=True)}&quot;{title_attr} /&gt;&#x27;)
+                    i = end; continue
+                ref = alt
+                end = after
+                if after &lt; len(source) and source[after] == &quot;[&quot;:
+                    rc = _bracket_end(source, after)
+                    if rc is not None:
+                        ref = source[after + 1:rc] or alt; end = rc + 1
+                entry = references.get(_normalize_label(_decode(ref)))
+                if entry is not None:
+                    dest, title = (entry.get(&quot;destination&quot;, &quot;&quot;), entry.get(&quot;title&quot;)) if isinstance(entry, dict) else (entry[0], entry[1] if len(entry) &gt; 1 else None)
+                    title_attr = f&#x27; title=&quot;{escape(title, quote=True)}&quot;&#x27; if title is not None else &quot;&quot;
+                    dest = quote(dest, safe=&quot;/:?#@!$&amp;&#x27;()*+,;=%-._~&quot;)
+                    out.append(f&#x27;&lt;img src=&quot;{escape(dest, quote=True)}&quot; alt=&quot;{escape(_plain_alt(alt, references), quote=True)}&quot;{title_attr} /&gt;&#x27;)
+                    i = end; continue
+        end = source.find(&quot;![&quot;, i + 1)
+        if end &lt; 0: end = len(source)
+        out.append(_render_plain(source[i:end], references)); i = end
+    return out
+
+
+def _plain_alt(source: str, references: dict) -&gt; str:
+    from .images import _plain_description
+    return _plain_description(source, references)
+
+
+def _render_plain(source: str, references: dict) -&gt; str:
+    # Recognize autolinks before escape processing. An escaped punctuation mark
+    # inside a URI is part of the URI source and must not split its token.
+    result: list[str] = []
+    for auto in parse_autolinks(source):
+        if auto.type == &quot;link&quot;:
+            destination = quote(auto.destination, safe=&quot;:/?#@!$&amp;&#x27;()*+,;=%-._~&quot;)
+            result.append(f&#x27;&lt;a href=&quot;{escape(destination, quote=True)}&quot;&gt;{escape(auto.label, quote=True)}&lt;/a&gt;&#x27;)
+        else:
+            result.append(&quot;&quot;.join(_render_inline_node(node, references) for node in parse_inlines(auto.literal, references)))
+    return &quot;&quot;.join(result)
+
+
+def _render_inline_node(node, references: dict) -&gt; str:
+    if node.type == &quot;text&quot;: return escape(node.literal, quote=True)
+    if node.type == &quot;escaped&quot;: return escape(node.literal, quote=True)
+    if node.type == &quot;entity&quot;: return escape(node.literal, quote=True)
+    if node.type == &quot;code&quot;: return f&quot;&lt;code&gt;{escape(node.literal, quote=True)}&lt;/code&gt;&quot;
+    if node.type == &quot;softbreak&quot;: return &quot;\n&quot;
+    if node.type == &quot;em&quot;: return &quot;&lt;em&gt;&quot; + &quot;&quot;.join(_render_inline_node(n, references) for n in node.children or []) + &quot;&lt;/em&gt;&quot;
+    if node.type == &quot;strong&quot;: return &quot;&lt;strong&gt;&quot; + &quot;&quot;.join(_render_inline_node(n, references) for n in node.children or []) + &quot;&lt;/strong&gt;&quot;
+    return escape(getattr(node, &quot;literal&quot;, &quot;&quot;), quote=False)
+
+
+def _render_block(block, references: dict, tight: bool) -&gt; str:
+    if block.kind == &quot;paragraph&quot;:
+        body = _render_inlines(block.literal, references)
+        return body + &quot;\n&quot; if tight else f&quot;&lt;p&gt;{body}&lt;/p&gt;\n&quot;
+    if block.kind == &quot;heading&quot;:
+        return f&quot;&lt;h{block.level}&gt;{_render_inlines(block.literal, references)}&lt;/h{block.level}&gt;\n&quot;
+    if block.kind == &quot;thematic_break&quot;: return &quot;&lt;hr /&gt;\n&quot;
+    if block.kind == &quot;fenced_code&quot;:
+        info = block.info.split(None, 1)[0] if block.info else &quot;&quot;
+        info = unescape(re.sub(r&quot;\\([!\&quot;#$%&amp;&#x27;()*+,\-./:;&lt;=&gt;?@\[\\\]^_`{|}~])&quot;, r&quot;\1&quot;, info))
+        cls = f&#x27; class=&quot;language-{escape(info, quote=True)}&quot;&#x27; if info else &quot;&quot;
+        return f&quot;&lt;pre&gt;&lt;code{cls}&gt;{escape(block.literal, quote=False)}&lt;/code&gt;&lt;/pre&gt;\n&quot;
+    if block.kind == &quot;indented_code&quot;: return f&quot;&lt;pre&gt;&lt;code&gt;{escape(block.literal, quote=True)}&lt;/code&gt;&lt;/pre&gt;\n&quot;
+    if block.kind == &quot;html_block&quot;: return block.literal
+    if block.kind == &quot;block_quote&quot;:
+        # Tightness suppresses only paragraphs that are direct list-item
+        # children; paragraphs inside a nested quote retain their tags.
+        inner = &quot;&quot;.join(_render_block(child, references, False) for child in block.children)
+        return &quot;&lt;blockquote&gt;\n&quot; + inner + &quot;&lt;/blockquote&gt;\n&quot;
+    if block.kind == &quot;list&quot;:
+        tag = &quot;ol&quot; if block.ordered else &quot;ul&quot;
+        attr = f&#x27; start=&quot;{block.start}&quot;&#x27; if block.ordered and block.start != 1 else &quot;&quot;
+        def render_item(item):
+            parts = []
+            for child in item.children:
+                if block.tight and child.kind == &quot;paragraph&quot;:
+                    parts.append(_render_inlines(child.literal, references) + &quot;\n&quot;)
+                else:
+                    parts.append(_render_block(child, references, False))
+            return &quot;&lt;li&gt;&quot; + &quot;&quot;.join(parts) + &quot;&lt;/li&gt;\n&quot;
+        body = &quot;&quot;.join(render_item(item) for item in block.children)
+        return f&quot;&lt;{tag}{attr}&gt;\n{body}&lt;/{tag}&gt;\n&quot;
+    return &quot;&quot;
+
+
+__all__ = [&quot;Document&quot;, &quot;parse_blocks&quot;, &quot;parse_inlines&quot;, &quot;render&quot;]
+</pre></article>
+</main>
+</body>
+</html>

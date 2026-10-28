@@ -1,0 +1,19 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark_parser/blocks.py
+- tests/test_lists.py
+
+SUMMARY:
+Fixed tightness detection so blank lines within nested lists do not make the parent list loose. Added a regression for Lists example 309.
+
+Checks run:
+
+- `python3 sources/spec_tests.py --program "$PWD/commonmark" --spec sources/spec.txt --pattern '^Lists$' --number 309` — passed before and after the fix.
+- Same command for example 321 — passed.
+- `python3 -m pytest -q tests/test_lists.py` — 11 passed.
+
+The prior block and inline failures were not repaired in this pass and remain unverified after the change.
+
+BLOCKERS:
+- Block and inline conformance failures remain.

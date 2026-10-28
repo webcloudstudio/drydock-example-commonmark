@@ -1,0 +1,21 @@
+Drydock 0.8.0  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Drydock status
+
+  Target          /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/workspace/targets/commonmark
+  Name            commonmark
+  Description     A command-line parser that converts CommonMark Markdown from standard input to HTML on standard
+                  output.
+  Phase           Implement
+  State           21 pending
+  Metadata        planned · approved
+  Sources         8 imported · 21 authored blueprint files
+  Analysis        Ready · 19 stories · 0 questions · 0 blockers
+  Blueprint       ✓  0 errors · 0 warnings
+  Plan            21 pending
+  Frontier        foundation: Establish the Python project and parser integration boundaries.
+  Workflow        4 steps
+                  Initialize         complete at 2026-10-27T21:13:09.845+00:00
+                  Import             complete at 2026-10-27T21:13:18.115+00:00
+                  Analyze            complete at 2026-10-27T21:13:53.361+00:00
+                  Plan               complete at 2026-10-27T21:19:29.522+00:00
+  Next step       drydock build commonmark  (frontier: Establish the Python project and parser integration boundaries.)

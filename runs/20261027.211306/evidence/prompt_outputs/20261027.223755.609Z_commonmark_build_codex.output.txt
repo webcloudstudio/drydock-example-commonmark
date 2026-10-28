@@ -1,0 +1,21 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/inlines.py
+- tests/test_setext.py
+
+SUMMARY:
+Fixed multiline emphasis in Setext headings and added regression tests. The reproduced example now renders correctly; the adjacent plain heading also passes.
+
+Executed checks:
+
+- `python3 -m pytest -q tests/test_setext.py` — 9 passed.
+- `printf 'Foo *bar\nbaz*\n====\n' | ./commonmark` — rendered the heading with emphasis across the line break.
+
+The recorded block, container, and inline conformance suites remain failing on multiple independent parser behaviors. They were not rerun during this repair.
+
+BLOCKERS:
+- The scoped conformance failures require additional repairs across block parsing, containers, references, and inline parsing.
+
+FAILURE_SUMMARY: Scoped conformance suites still have unresolved failures.
+FAILURE_DETAIL: The recorded logs show failures in Setext parsing, HTML and code blocks, lists, reference definitions, links, images, autolinks, and inline delimiter handling. This repair addressed only multiline emphasis in Setext headings; continue by reproducing and fixing those failing branches, then run the scoped checks.

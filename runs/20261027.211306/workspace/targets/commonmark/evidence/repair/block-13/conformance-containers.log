@@ -1,0 +1,42 @@
+Example 309 (lines 5427-5449) Lists
+- foo
+  - bar
+    - baz
+
+
+      bim
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-<ul><li>foo<ul><li>bar<ul><li><p>baz</p><p>bim</p></li></ul></li></ul></li></ul>
++<ul><li><p>foo</p><ul><li><p>bar</p><ul><li><p>baz</p><p>bim</p></li></ul></li></ul></li></ul>
+
+Example 321 (lines 5712-5730) Lists
+- a
+  - b
+
+    c
+- d
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-<ul><li>a<ul><li><p>b</p><p>c</p></li></ul></li><li>d</li></ul>
++<ul><li><p>a</p><ul><li><p>b</p><p>c</p></li></ul></li><li><p>d</p></li></ul>
+
+97 passed, 2 failed, 0 errored, 556 skipped
+
+--- stderr ---
+
+--- drydock: progress ---
+cases: pass=97 fail=2 error=0 skip=556 total=655 from=result.stdout
+--- drydock: end progress ---
+--- drydock: values at failure ---
+  result = CompletedProcess(args=['/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python', 'sources/spec_tests.py', '--program', '/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/commonmark', '--spec', 'sources/spec.txt', '--pattern', '^(Block quotes|List items|Lists)$'], returncode=2, stdout='Example 309 (lines 5427-… (+608 chars)
+--- drydock: end values ---
+Traceback (most recent call last):
+  File "conformance-containers.py", line 12, in <module>
+    assert result.returncode == 0
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

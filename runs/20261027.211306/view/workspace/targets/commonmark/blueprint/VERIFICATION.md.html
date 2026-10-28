@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/VERIFICATION.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/VERIFICATION.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/VERIFICATION.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Complete Conformance Verification</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Verify the integrated parser against the complete supplied CommonMark conformance suite.</td></tr><tr><td>Depends On</td><td>FEATURE-ConformanceIntegration.md</td></tr><tr><td>Consumes</td><td>integrated CommonMark parser</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Verify the completed parser through the supplied scoring entry point from the application root. The entry point checks the root executable and runs the complete, unfiltered CommonMark 0.31.2 suite.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC complete-conformance ===<br>Intent: The integrated parser passes the complete supplied conformance suite through its scoring entry point.<br>Suite: full<br>Requires: executable=sh; scope=test<br>Requires: executable=python3; scope=test</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [&quot;sh&quot;, &quot;sources/full_test.sh&quot;], capture_output=True, text=True, encoding=&quot;utf-8&quot;, ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC complete-conformance ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Preserve <code>sources/full_test.sh</code>, <code>sources/spec_tests.py</code>, <code>sources/cmark.py</code>, <code>sources/normalize.py</code>, and <code>sources/spec.txt</code> verbatim.</li><li>Do not filter, replace, or modify the supplied scoring entry point or its assets.</li><li>Do not use a public Markdown implementation.</li></ul></article>
+</main>
+</body>
+</html>

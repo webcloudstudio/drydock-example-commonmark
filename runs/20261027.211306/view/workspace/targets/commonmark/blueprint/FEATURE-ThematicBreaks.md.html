@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-ThematicBreaks.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-ThematicBreaks.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-ThematicBreaks.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Thematic Breaks</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Recognizes thematic break blocks and their precedence.</td></tr><tr><td>Depends On</td><td>FEATURE-Paragraphs.md</td></tr><tr><td>Provides</td><td>thematic break parsing</td></tr><tr><td>Consumes</td><td>paragraph block parsing</td></tr></tbody></table></div>
+<h2>Behavior</h2>
+<p>Extend <code>commonmark_parser.blocks.parse_blocks</code> to produce nodes whose <code>kind</code> is <code>thematic_break</code>. A thematic break has up to three spaces of indentation and at least three matching <code>-</code>, <code>_</code>, or <code>*</code> markers, with only spaces or tabs between and after them. Different marker characters or other content make the line ineligible.</p>
+<p>A thematic break may interrupt a paragraph. A valid setext underline takes precedence when it follows eligible paragraph content; a thematic break takes precedence over a list item interpretation. The setext and list stories complete those interactions. The complete Thematic breaks section runs in the later conformance integration story.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC thematic-break-recognition ===<br>Intent: Matching marker runs form thematic breaks and interrupt an existing paragraph.</p>
+<p>from commonmark_parser.blocks import parse_blocks</p>
+<p>text = &quot;alpha&quot; document = parse_blocks(text + &quot;\n* * *\n&quot;) assert len(document.children) == 2 assert document.children[0].kind == &quot;paragraph&quot; assert document.children[0].literal.strip() == text assert document.children[1].kind == &quot;thematic_break&quot; === END AC thematic-break-recognition ===</p>
+<p>=== AC thematic-break-invalid ===<br>Intent: A line with mixed markers remains paragraph content instead of forming a thematic break.</p>
+<p>from commonmark_parser.blocks import parse_blocks</p>
+<p>source = &quot;*-_&quot; document = parse_blocks(source + &quot;\n&quot;) assert len(document.children) == 1 assert document.children[0].kind == &quot;paragraph&quot; assert document.children[0].literal.strip() == source === END AC thematic-break-invalid ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not run the full-suite entry point in this story.</li></ul></article>
+</main>
+</body>
+</html>

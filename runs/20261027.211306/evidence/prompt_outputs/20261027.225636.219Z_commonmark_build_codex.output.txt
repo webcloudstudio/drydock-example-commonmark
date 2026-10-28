@@ -1,0 +1,19 @@
+RESULT: FAILED
+
+FILES CHANGED:
+
+- `commonmark_parser/fenced_code.py`
+- `tests/test_fenced_code_indent.py`
+
+SUMMARY:
+
+Reproduced Example 131 before editing: it failed because fenced code parsing removed a character from a content line with no indentation. Updated indentation removal to strip only leading spaces, up to the opening fence’s indentation, and added two regression tests.
+
+After the fix, Example 131 passed. The regression tests and passing-neighbor Example 132 were started, but their completion was not observed. The container and inline conformance failures remain unresolved.
+
+BLOCKERS:
+
+- The declared block, container, and inline conformance checks are not all passing. Repair the remaining failures shown in the supplied logs before rerunning the scoped checks.
+
+FAILURE_SUMMARY: Scoped conformance failures remain
+FAILURE_DETAIL: The fenced-code repair fixes Example 131, but the complete logs show additional failures across block, container, and inline parsing. The targeted verification command did not complete within the observed tool result; finish that verification and repair the remaining failing branches before rerunning the scoped checks.

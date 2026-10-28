@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261027.211635.341Z_commonmark_plan_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261027.211635.341Z_commonmark_plan_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261027.211635.341Z_commonmark_plan_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>=== BEGIN ARTIFACT VERIFICATION.md ===
+# FEATURE: Complete Conformance Verification
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Verify the integrated parser against the complete supplied CommonMark conformance suite. |
+| Depends On | FEATURE-ConformanceIntegration.md |
+| Consumes | integrated CommonMark parser |
+
+## Questions
+
+- None.
+
+## Purpose
+
+Verify the completed parser through the supplied scoring entry point from the application root. The entry point checks the root executable and runs the complete, unfiltered CommonMark 0.31.2 suite.
+
+## Programmatic Acceptance
+
+=== AC complete-conformance ===
+Intent: The integrated parser passes the complete supplied conformance suite through its scoring entry point.
+Suite: full
+Requires: executable=sh; scope=test
+Requires: executable=python3; scope=test
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [&quot;sh&quot;, &quot;sources/full_test.sh&quot;],
+    capture_output=True,
+    text=True,
+    encoding=&quot;utf-8&quot;,
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC complete-conformance ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Preserve `sources/full_test.sh`, `sources/spec_tests.py`, `sources/cmark.py`, `sources/normalize.py`, and `sources/spec.txt` verbatim.
+- Do not filter, replace, or modify the supplied scoring entry point or its assets.
+- Do not use a public Markdown implementation.
+=== END ARTIFACT ===</pre></article>
+</main>
+</body>
+</html>

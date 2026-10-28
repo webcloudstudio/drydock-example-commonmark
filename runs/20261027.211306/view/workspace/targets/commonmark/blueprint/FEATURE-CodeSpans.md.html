@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-CodeSpans.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-CodeSpans.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-CodeSpans.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Code Spans</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Parse literal inline code delimited by matching backtick runs.</td></tr><tr><td>Depends On</td><td>FEATURE-InlineText.md</td></tr><tr><td>Provides</td><td>code span parsing</td></tr><tr><td>Consumes</td><td>inline text parsing</td></tr></tbody></table></div>
+<h2>Purpose and workflow</h2>
+<p>Extend <code>commonmark_parser.inlines.parse_inlines(source, references)</code> to recognize an opening backtick run and the next closing run of exactly the same length. Unmatched runs remain ordinary text. Normalize line endings inside a matched span to spaces. If the normalized content begins and ends with a space and is not entirely spaces, remove exactly one space from each end. Preserve all other content literally, including backslashes and character reference syntax.</p>
+<p>Code spans bind more tightly than emphasis and link brackets. Their precedence relative to raw HTML and autolinks follows the specification when those providers are integrated. Return a node of type <code>code</code> with its normalized content in <code>literal</code>.</p>
+<p>The complete Code spans corpus section is executed by conformance integration after interacting inline providers exist.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC code-span-literal ===<br>Intent: Matching backtick runs yield a code node that preserves its literal content.</p>
+<p>from commonmark_parser.inlines import parse_inlines</p>
+<p>content = &quot;literal &amp;amp; text&quot; nodes = parse_inlines(&quot;<code>&quot; + content + &quot;</code>&quot;, {}) assert len(nodes) == 1 assert nodes[0].type == &quot;code&quot; assert nodes[0].literal == content === END AC code-span-literal ===</p>
+<p>=== AC code-span-normalization ===<br>Intent: A matched span converts its line ending to a space and removes one paired surrounding space.</p>
+<p>from commonmark_parser.inlines import parse_inlines</p>
+<p>first = &quot;alpha&quot; second = &quot;beta&quot; nodes = parse_inlines(&quot;<code>&quot; + first + &quot;\n&quot; + second + &quot;</code>&quot;, {}) assert len(nodes) == 1 assert nodes[0].type == &quot;code&quot; assert nodes[0].literal.split(&quot; &quot;) == [first, second] === END AC code-span-normalization ===</p>
+<p>=== AC code-span-unmatched ===<br>Intent: An unmatched opening run remains literal text.</p>
+<p>from commonmark_parser.inlines import parse_inlines</p>
+<p>source = &quot;`unclosed&quot; nodes = parse_inlines(source, {}) assert len(nodes) == 1 assert nodes[0].type == &quot;text&quot; assert nodes[0].literal == source === END AC code-span-unmatched ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Do not interpret escapes or character references inside code spans.</li><li>Preserve supplied conformance assets unchanged.</li><li>Do not invoke the full-suite entry point in this story&#x27;s checks.</li></ul></article>
+</main>
+</body>
+</html>

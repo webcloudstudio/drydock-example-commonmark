@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/commonmark_parser/links.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/commonmark_parser/links.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/commonmark_parser/links.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Inline and reference link parsing.&quot;&quot;&quot;
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+import html
+import re
+
+from .inlines import Inline, parse_inlines
+
+
+@dataclass
+class LinkNode:
+    type: str
+    literal: str = &quot;&quot;
+    destination: str = &quot;&quot;
+    title: str | None = None
+    children: list[Inline | &quot;LinkNode&quot;] | None = None
+
+
+_ESCAPE = re.compile(r&quot;\\([!\&quot;#$%&amp;&#x27;()*+,\-./:;&lt;=&gt;?@\[\\\]^_`{|}~])&quot;)
+_ENTITY = re.compile(r&quot;&amp;(?:#[xX][0-9A-Fa-f]{1,6}|#[0-9]{1,7}|[A-Za-z][A-Za-z0-9]+);&quot;)
+
+
+def _decode(value: str) -&gt; str:
+    value = _ESCAPE.sub(r&quot;\1&quot;, value)
+    return _ENTITY.sub(lambda m: html.unescape(m.group()), value)
+
+
+def _normalize_label(label: str) -&gt; str:
+    return &quot; &quot;.join(label.casefold().split())
+
+
+def _destination_and_title(source: str, start: int) -&gt; tuple[str, str | None, int] | None:
+    &quot;&quot;&quot;Parse the contents after an opening parenthesis; return end after &#x27;)&#x27; .&quot;&quot;&quot;
+    i, n = start, len(source)
+    while i &lt; n and source[i] in &quot; \t\n\r&quot;:
+        i += 1
+    destination = &quot;&quot;
+    if i &lt; n and source[i] == &quot;&lt;&quot;:
+        i += 1
+        part: list[str] = []
+        while i &lt; n:
+            if source[i] == &quot;\\&quot; and i + 1 &lt; n:
+                part.extend((source[i], source[i + 1])); i += 2; continue
+            if source[i] == &quot;&lt;&quot; or source[i] in &quot;\r\n&quot;:
+                return None
+            if source[i] == &quot;&gt;&quot;:
+                i += 1; destination = _decode(&quot;&quot;.join(part)); break
+            part.append(source[i]); i += 1
+        else:
+            return None
+    else:
+        depth, part = 0, []
+        while i &lt; n:
+            c = source[i]
+            if c == &quot;\\&quot; and i + 1 &lt; n:
+                part.extend((c, source[i + 1])); i += 2; continue
+            if c in &quot; \t\n\r&quot;:
+                break
+            if c == &quot;(&quot;:
+                depth += 1
+                if depth &gt; 32: return None
+            elif c == &quot;)&quot;:
+                if depth == 0: break
+                depth -= 1
+            part.append(c); i += 1
+        if depth:
+            return None
+        destination = _decode(&quot;&quot;.join(part))
+    whitespace = i
+    while i &lt; n and source[i] in &quot; \t\n\r&quot;:
+        i += 1
+    separated = i &gt; whitespace
+    title = None
+    if i &lt; n and source[i] in &quot;\&quot;&#x27;(&quot;:
+        opener = source[i]; closer = &quot;)&quot; if opener == &quot;(&quot; else opener
+        i += 1; part = []
+        while i &lt; n:
+            c = source[i]
+            if c == &quot;\\&quot; and i + 1 &lt; n:
+                part.extend((c, source[i + 1])); i += 2; continue
+            if c == closer:
+                title = _decode(&quot;&quot;.join(part)); i += 1; break
+            if c in &quot;\r\n&quot; and opener != &quot;(&quot;:
+                return None
+            part.append(c); i += 1
+        else:
+            return None
+        if not separated:  # title must be separated from destination
+            return None
+        while i &lt; n and source[i] in &quot; \t\n\r&quot;: i += 1
+    if i &gt;= n or source[i] != &quot;)&quot;:
+        return None
+    return destination, title, i + 1
+
+
+def _bracket_end(source: str, opening: int) -&gt; int | None:
+    depth, i = 1, opening + 1
+    while i &lt; len(source):
+        if source[i] == &quot;`&quot;:
+            run_end = i + 1
+            while run_end &lt; len(source) and source[run_end] == &quot;`&quot;:
+                run_end += 1
+            run = source[i:run_end]
+            close = source.find(run, run_end)
+            if close &gt;= 0:
+                i = close + len(run)
+                continue
+        if source[i] == &quot;\\&quot;:
+            i += 2; continue
+        if source[i] == &quot;[&quot;: depth += 1
+        elif source[i] == &quot;]&quot;:
+            depth -= 1
+            if depth == 0: return i
+        i += 1
+    return None
+
+
+def parse_links(source: str, references: dict) -&gt; list[Inline | LinkNode]:
+    &quot;&quot;&quot;Parse links from inline source using an already collected reference map.&quot;&quot;&quot;
+    result: list[Inline | LinkNode] = []
+    text: list[str] = []
+
+    def flush() -&gt; None:
+        if text:
+            result.append(Inline(&quot;text&quot;, &quot;&quot;.join(text)))
+            text.clear()
+
+    i = 0
+    while i &lt; len(source):
+        # Code spans have precedence over brackets, so their contents cannot
+        # start a link (nor can a bracket inside a link label close a span).
+        if source[i] == &quot;`&quot;:
+            run_end = i + 1
+            while run_end &lt; len(source) and source[run_end] == &quot;`&quot;:
+                run_end += 1
+            run = source[i:run_end]
+            close = source.find(run, run_end)
+            if close &gt;= 0:
+                end = close + len(run)
+                text.append(source[i:end])
+                i = end
+                continue
+        if source[i] == &quot;\\&quot; and i + 1 &lt; len(source):
+            text.extend(source[i:i + 2]); i += 2; continue
+        if source[i] != &quot;[&quot; or (i and source[i - 1] == &quot;!&quot;):
+            text.append(source[i]); i += 1; continue
+        close = _bracket_end(source, i)
+        if close is None:
+            text.append(source[i]); i += 1; continue
+        label_source = source[i + 1:close]
+        parsed: tuple[str, str | None, int] | None = None
+        after = close + 1
+        if after &lt; len(source) and source[after] == &quot;(&quot;:
+            parsed = _destination_and_title(source, after + 1)
+        if parsed is not None:
+            dest, title, end = parsed
+        else:
+            reference_label = label_source
+            end = after
+            if after &lt; len(source) and source[after] == &quot;[&quot;:
+                ref_close = _bracket_end(source, after)
+                if ref_close is not None:
+                    reference_label = source[after + 1:ref_close] or label_source
+                    end = ref_close + 1
+            entry = references.get(_normalize_label(_decode(reference_label)))
+            if entry is None:
+                text.append(source[i]); i += 1; continue
+            if isinstance(entry, dict):
+                dest, title = entry.get(&quot;destination&quot;, &quot;&quot;), entry.get(&quot;title&quot;)
+            else:
+                dest, title = entry[0], entry[1] if len(entry) &gt; 1 else None
+        flush()
+        result.append(LinkNode(&quot;link&quot;, destination=dest, title=title,
+                               children=parse_inlines(label_source, {})))
+        i = end
+    flush()
+    return result
+</pre></article>
+</main>
+</body>
+</html>

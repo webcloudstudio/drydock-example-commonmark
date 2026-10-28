@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_render_integration.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_render_integration.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_render_integration.py">Raw file</a></div></header>
+<article class="doc"><pre>import commonmark_parser
+
+
+def test_render_paragraph_and_heading_html():
+    assert commonmark_parser.render(&quot;# title\n\ntext\n&quot;) == &quot;&lt;h1&gt;title&lt;/h1&gt;\n&lt;p&gt;text&lt;/p&gt;\n&quot;
+
+
+def test_render_resolves_forward_reference_links():
+    source = &quot;[label]\n\n[label]: /target\n&quot;
+    assert commonmark_parser.render(source) == &#x27;&lt;p&gt;&lt;a href=&quot;/target&quot;&gt;label&lt;/a&gt;&lt;/p&gt;\n&#x27;
+
+
+def test_render_code_and_raw_html_blocks():
+    source = &quot;```\n&lt;a&gt;&amp;\n```\n\n&lt;!-- raw --&gt;\n&quot;
+    assert commonmark_parser.render(source) == &quot;&lt;pre&gt;&lt;code&gt;&amp;lt;a&amp;gt;&amp;amp;\n&lt;/code&gt;&lt;/pre&gt;\n&lt;!-- raw --&gt;\n&quot;
+
+
+def test_html_block_tag_name_can_end_at_line_boundary():
+    assert commonmark_parser.render(&quot;&lt;div\n&gt; text\n&quot;) == &quot;&lt;div\n&gt; text\n&quot;
+
+
+def test_tight_list_inside_quote_keeps_paragraphs_unwrapped():
+    assert commonmark_parser.render(&quot;&gt; - foo\n&quot;) == (
+        &quot;&lt;blockquote&gt;\n&lt;ul&gt;\n&lt;li&gt;foo\n&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/blockquote&gt;\n&quot;
+    )
+
+
+def test_uri_autolink_is_rendered_as_anchor():
+    assert commonmark_parser.render(&quot;&lt;https://example.com&gt;\n&quot;) == (
+        &#x27;&lt;p&gt;&lt;a href=&quot;https://example.com&quot;&gt;https://example.com&lt;/a&gt;&lt;/p&gt;\n&#x27;
+    )
+
+
+def test_uri_autolink_keeps_escaped_punctuation_inside_destination():
+    assert commonmark_parser.render(&quot;&lt;https://example.com?find=\\*&gt;\n&quot;) == (
+        &#x27;&lt;p&gt;&lt;a href=&quot;https://example.com?find=%5C*&quot;&gt;https://example.com?find=\\*&lt;/a&gt;&lt;/p&gt;\n&#x27;
+    )
+
+
+def test_code_span_newlines_are_not_split_as_hard_breaks():
+    source = &quot;``\nfoo\nbar  \nbaz\n``&quot;
+    assert commonmark_parser.render(source) == &quot;&lt;p&gt;&lt;code&gt;foo bar baz&lt;/code&gt;&lt;/p&gt;\n&quot;
+
+
+def test_link_destination_is_percent_encoded_after_entity_decoding():
+    source = &quot;[foo](/f&amp;ouml;)&quot;
+    assert commonmark_parser.render(source) == &#x27;&lt;p&gt;&lt;a href=&quot;/f%C3%B6&quot;&gt;foo&lt;/a&gt;&lt;/p&gt;\n&#x27;
+
+
+def test_tight_list_suppresses_only_direct_item_paragraph_tags():
+    source = &quot;- &gt; quoted\n&quot;
+    assert commonmark_parser.render(source) == (
+        &quot;&lt;ul&gt;\n&lt;li&gt;&lt;blockquote&gt;\n&lt;p&gt;quoted&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&quot;
+    )
+
+
+def test_blank_line_before_nested_list_makes_parent_list_loose():
+    source = &quot;1. foo\n\n    - bar\n&quot;
+    assert commonmark_parser.render(source) == (
+        &quot;&lt;ol&gt;\n&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;bar\n&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ol&gt;\n&quot;
+    )
+
+
+def test_blank_line_before_nested_list_with_two_space_ordered_marker_makes_parent_loose():
+    source = &quot;1.  foo\n\n    - bar\n&quot;
+    assert commonmark_parser.render(source) == (
+        &quot;&lt;ol&gt;\n&lt;li&gt;&lt;p&gt;foo&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;bar\n&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ol&gt;\n&quot;
+    )
+
+
+def test_entity_decoded_delimiters_stay_literal():
+    assert commonmark_parser.render(&quot;&amp;#42;foo&amp;#42;\n&quot;) == &quot;&lt;p&gt;*foo*&lt;/p&gt;\n&quot;
+from commonmark_parser import render
+
+
+def test_escaped_punctuation_and_angle_bracket_remain_literal():
+    assert render(&quot;\\*not emphasized*\n\\&lt;br/&gt; not a tag&quot;) == (
+        &quot;&lt;p&gt;*not emphasized*\n&amp;lt;br/&amp;gt; not a tag&lt;/p&gt;\n&quot;
+    )
+</pre></article>
+</main>
+</body>
+</html>

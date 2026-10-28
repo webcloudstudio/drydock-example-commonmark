@@ -1,0 +1,9 @@
+<requirement name="standard-stream-executable" stories="delivery">
+The deliverable is an executable named commonmark that reads UTF-8 Markdown on stdin
+and writes HTML to stdout.
+</requirement>
+<requirement name="pass-complete-commonmark-suite" stories="paragraphs,thematic-breaks,indented-code,atx-headings,html-blocks,fenced-code,reference-definitions,setext-headings,block-quotes,lists,inline-text,code-spans,emphasis,autolinks,inline-html-breaks,links,images,conformance-integration,verification">
+The suite runs unfiltered: no --pattern, no --number, no selector of any kind. spec_tests.py
+# exits with failed + errored, so exit 0 means the complete CommonMark 0.31.2 suite passed.
+</requirement>
+<unattached story="foundation"/>

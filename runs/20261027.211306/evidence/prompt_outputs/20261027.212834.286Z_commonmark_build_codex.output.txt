@@ -1,0 +1,11 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark_parser/blocks.py
+- tests/test_lists.py
+
+SUMMARY:
+Added list and item block nodes with marker grouping, ordered start numbers, nesting, continuation handling, and tight or loose status. Added focused list tests. The targeted test command passed: `pytest -q tests/test_lists.py tests/test_block_quotes.py tests/test_paragraphs.py tests/test_setext.py tests/test_service_blocks.py tests/test_foundation.py` (37 passed). The full conformance suite was not run.
+
+BLOCKERS:
+- None

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Executable.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Executable.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Executable.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Standard-stream Executable</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Exposes the CommonMark parser as a root executable using standard streams.</td></tr><tr><td>Depends On</td><td>ARCHITECTURE.md</td></tr><tr><td>Provides</td><td>commonmark</td></tr><tr><td>Consumes</td><td>Python project foundation</td></tr></tbody></table></div>
+<h2>Workflow</h2>
+<p>Run <code>./commonmark</code> from the application root. It reads a complete UTF-8 Markdown document from standard input, passes it to <code>commonmark_parser.render</code>, and writes the returned HTML to standard output. Successful conversion exits zero. Operational errors exit nonzero and use standard error.</p>
+<p>Provide a concise project <code>README.md</code> describing the standard-input and standard-output interface. The executable must be usable as the program argument to the supplied conformance runner. Parser conformance is established by later stories.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC executable-empty-document ===<br>Intent: The root executable accepts an empty UTF-8 document and completes successfully through the standard-stream interface.<br>Requires: executable=python3; scope=test</p>
+<p>import subprocess import sys</p>
+<p>result = subprocess.run( [&quot;./commonmark&quot;], input=&quot;&quot;, capture_output=True, text=True, encoding=&quot;utf-8&quot; ) print(result.stdout) print(result.stderr, file=sys.stderr) assert result.returncode == 0 === END AC executable-empty-document ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Preserve stdin and stdout as the conversion interface.</li><li>Do not use a public Markdown implementation.</li><li>Keep supplied conformance assets unchanged.</li></ul></article>
+</main>
+</body>
+</html>

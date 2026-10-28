@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/commonmark_parser/inline_html_breaks.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/commonmark_parser/inline_html_breaks.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/commonmark_parser/inline_html_breaks.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Recognition of inline HTML tokens and hard line breaks.&quot;&quot;&quot;
+
+from dataclasses import dataclass
+import re
+
+
+@dataclass
+class InlineNode:
+    type: str
+    literal: str = &quot;&quot;
+
+
+_TAG = re.compile(r&quot;&lt;/?[A-Za-z][A-Za-z0-9-]*(?:[ \t\n]+(?:[^&lt;&gt;\&quot;&#x27;]|&#x27;[^&#x27;]*&#x27;|\&quot;[^\&quot;]*\&quot;)*)?[ \t]*/?&gt;&quot;)
+_COMMENT = re.compile(r&quot;&lt;!--(?:&gt;|-&gt;|--!?&gt;|(?:(?!--&gt;|--!&gt;).)*?(?:--&gt;|--!&gt;))&quot;, re.S)
+_HTML = re.compile(r&quot;&lt;(?:[!?](?:[^&lt;&gt;]|&#x27;[^&#x27;]*&#x27;|\&quot;[^\&quot;]*\&quot;)+|\[CDATA\[.*?\]\]|/?[A-Za-z][^&lt;&gt;]*)&gt;&quot;, re.S)
+
+
+def _html_at(source: str, start: int) -&gt; int | None:
+    comment = _COMMENT.match(source, start)
+    if comment:
+        return comment.end()
+    match = _HTML.match(source, start)
+    if not match:
+        return None
+    token = match.group()
+    if token.startswith(&quot;&lt;![CDATA[&quot;) or token.startswith(&quot;&lt;!--&quot;) or token.startswith(&quot;&lt;?&quot;) or token.startswith(&quot;&lt;!&quot;):
+        return match.end()
+    return match.end() if _TAG.fullmatch(token) else None
+
+
+def parse_inline_html_breaks(source: str) -&gt; list[InlineNode]:
+    &quot;&quot;&quot;Split raw HTML and CommonMark hard breaks from source text.&quot;&quot;&quot;
+    result: list[InlineNode] = []
+    text: list[str] = []
+    def flush() -&gt; None:
+        if text:
+            result.append(InlineNode(&quot;text&quot;, &quot;&quot;.join(text)))
+            text.clear()
+    i = 0
+    while i &lt; len(source):
+        # Code spans take precedence over both HTML recognition and hard
+        # breaks. Keep a balanced backtick run in the text token so the inline
+        # parser can consume the complete span (including embedded newlines).
+        if source[i] == &quot;`&quot;:
+            run_end = i + 1
+            while run_end &lt; len(source) and source[run_end] == &quot;`&quot;:
+                run_end += 1
+            run_length = run_end - i
+            search = run_end
+            close_end = None
+            while search &lt; len(source):
+                candidate = source.find(&quot;`&quot;, search)
+                if candidate &lt; 0:
+                    break
+                end = candidate + 1
+                while end &lt; len(source) and source[end] == &quot;`&quot;:
+                    end += 1
+                if end - candidate == run_length:
+                    close_end = end
+                    break
+                search = end
+            if close_end is not None:
+                text.append(source[i:close_end])
+                i = close_end
+                continue
+        # A backslash escape makes the following punctuation ordinary text.
+        escaped = False
+        if source[i] == &quot;&lt;&quot;:
+            backslashes = 0
+            j = i - 1
+            while j &gt;= 0 and source[j] == &quot;\\&quot;:
+                backslashes += 1
+                j -= 1
+            escaped = backslashes % 2 == 1
+        if source[i] == &quot;&lt;&quot; and not escaped:
+            # A valid autolink owns its complete angle-delimited token before
+            # later backticks inside it can begin a code span.
+            end = source.find(&quot;&gt;&quot;, i + 1)
+            if end &gt;= 0:
+                from .autolinks import parse_autolinks
+                candidate = source[i:end + 1]
+                if any(node.type == &quot;link&quot; for node in parse_autolinks(candidate)):
+                    text.append(candidate)
+                    i = end + 1
+                    continue
+            end = _html_at(source, i)
+            if end is not None:
+                flush()
+                result.append(InlineNode(&quot;html&quot;, source[i:end]))
+                i = end
+                continue
+        if source[i] == &quot;\\&quot; and i + 1 &lt; len(source) and source[i + 1] in &quot;\r\n&quot;:
+            flush(); result.append(InlineNode(&quot;hardbreak&quot;)); i += 2
+            if source[i - 1] == &quot;\r&quot; and i &lt; len(source) and source[i] == &quot;\n&quot;: i += 1
+            continue
+        if source[i] in &quot;\r\n&quot;:
+            end = i
+            while end &gt; 0 and source[end - 1] == &quot; &quot;: end -= 1
+            if end &lt; i and i - end &gt;= 2:
+                while text and text[-1] == &quot; &quot;: text.pop()
+                flush(); result.append(InlineNode(&quot;hardbreak&quot;))
+            else:
+                text.append(&quot;\n&quot;)
+            i += 2 if source[i:i + 2] == &quot;\r\n&quot; else 1
+            continue
+        text.append(source[i]); i += 1
+    flush()
+    return result
+</pre></article>
+</main>
+</body>
+</html>

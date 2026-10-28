@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/commonmark_parser/html_blocks.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/commonmark_parser/html_blocks.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/commonmark_parser/html_blocks.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;CommonMark raw HTML block recognition.&quot;&quot;&quot;
+
+import re
+
+_BLOCK = set(&quot;address article aside base basefont blockquote body caption center col colgroup dd details dialog dir div dl dt fieldset figcaption figure footer form frame frameset h1 h2 h3 h4 h5 h6 head header hr html iframe legend li link main menu menuitem nav noframes ol optgroup option p param search section summary table tbody td tfoot th thead title tr track ul&quot;.split())
+
+
+def _start(line: str):
+    indent = len(line) - len(line.lstrip(&quot; &quot;))
+    if indent &gt; 3:
+        return None
+    text = line[indent:]
+    patterns = [
+        (1, re.compile(r&quot;&lt;(?:pre|script|style|textarea)(?:[ \t/&gt;]|$)&quot;, re.I), re.compile(r&quot;&lt;/(?:pre|script|style|textarea)\s*&gt;&quot;, re.I)),
+        (2, re.compile(r&quot;&lt;!--&quot;), re.compile(r&quot;--&gt;&quot;)),
+        (3, re.compile(r&quot;&lt;\?&quot;), re.compile(r&quot;\?&gt;&quot;)),
+        (4, re.compile(r&quot;&lt;![A-Z]&quot;), re.compile(r&quot;&gt;&quot;)),
+        (5, re.compile(r&quot;&lt;!\[CDATA\[&quot;), re.compile(r&quot;\]\]&gt;&quot;)),
+    ]
+    for kind, begin, end in patterns:
+        if begin.match(text):
+            return kind, end
+    # Type 6 blocks begin at a block tag even when its attributes or closing
+    # angle bracket continue on a later line. They end at a blank line.
+    tag = re.match(r&quot;&lt;/?([A-Za-z][A-Za-z0-9-]*)(?=[\s/&gt;]|$)&quot;, text)
+    if tag and tag.group(1).lower() in _BLOCK:
+        return 6, None
+    if re.fullmatch(r&quot;&lt;/?[A-Za-z][A-Za-z0-9-]*(?:[ \t]+[^&lt;&gt;]*)?/?&gt;[ \t]*&quot;, text):
+        return 7, None
+    return None
+
+
+def parse_html_block(lines: list[str], paragraph_open: bool = False):
+    if not lines:
+        return None
+    start = _start(lines[0])
+    if not start:
+        return None
+    kind, end = start
+    if kind == 7 and paragraph_open:
+        return None
+    consumed = 0
+    for line in lines:
+        if kind &gt;= 6 and not line.strip(&quot; \t&quot;):
+            break
+        consumed += 1
+        if end and end.search(line):
+            break
+    return &quot;&quot;.join(line + &quot;\n&quot; for line in lines[:consumed]), consumed
+</pre></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,15 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/links.py
+- tests/test_links.py
+
+SUMMARY:
+Updated link and bracket scanning so balanced code spans shield their contents from link parsing. The regression test and targeted link/list tests pass: `python3 -m pytest -q tests/test_links.py tests/test_lists.py` — 18 passed. The selected conformance run still fails: `python3 sources/spec_tests.py --program "$PWD/commonmark" --spec sources/spec.txt --pattern '^(Indented code blocks|Links)$'` — 85 passed, 17 failed. The code-span/link case passes; the reported nested-list failure and other link cases remain.
+
+BLOCKERS:
+- Inline conformance still has 88 reported failures, mainly emphasis and link parsing.
+- The list-tightness repair regressed an existing nested-list test and was reverted; the reported list case remains unresolved.
+
+FAILURE_SUMMARY: Scoped CommonMark conformance remains failing
+FAILURE_DETAIL: The targeted parser change fixes code-span precedence for one reproduced link case, but the selected conformance run still fails on list tightness and other link examples. The inline suite was not rerun; its prior measured result was 88 failures. Repair delimiter-run matching, remaining link parsing cases, and list tightness while preserving the existing nested-list regression.

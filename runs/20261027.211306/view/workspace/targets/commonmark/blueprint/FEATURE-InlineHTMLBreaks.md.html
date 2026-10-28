@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-InlineHTMLBreaks.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-InlineHTMLBreaks.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-InlineHTMLBreaks.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Inline HTML and Hard Breaks</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Recognize raw inline HTML and hard line breaks.</td></tr><tr><td>Depends On</td><td>FEATURE-InlineText.md, FEATURE-CodeSpans.md</td></tr><tr><td>Provides</td><td>inline HTML and hard break parsing</td></tr><tr><td>Consumes</td><td>inline text parsing, code span parsing</td></tr></tbody></table></div>
+<h2>Purpose and workflow</h2>
+<p>Recognize the specification&#x27;s open and closing tags, comments, processing instructions, declarations, and CDATA sections as raw inline HTML. Preserve valid raw HTML verbatim, including attribute contents. Text that does not match the grammar remains ordinary text.</p>
+<p>A line ending preceded by at least two spaces or an unescaped backslash forms a hard break within an inline block. Do not create hard breaks inside code spans or HTML tags, or at the end of a block.</p>
+<p>For direct incremental acceptance, expose <code>parse_inline_html_breaks(source)</code> from <code>commonmark_parser.inline_html_breaks</code>. It returns inline nodes. Raw HTML nodes expose <code>type</code> and <code>literal</code>; hard breaks have type <code>hardbreak</code>; ordinary text nodes expose <code>type</code> and <code>literal</code>.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC inline-html-raw ===<br>Intent: A valid inline tag is preserved as a raw HTML node with its original spelling.</p>
+<p>from commonmark_parser.inline_html_breaks import parse_inline_html_breaks</p>
+<p>tag = &#x27;&lt;custom data-value=&quot;sample&quot;&gt;&#x27; nodes = parse_inline_html_breaks(tag) assert len(nodes) == 1 assert nodes[0].type == &quot;html&quot; assert nodes[0].literal == tag === END AC inline-html-raw ===</p>
+<p>=== AC inline-hard-breaks ===<br>Intent: Both specified hard-break forms create a break between text, while a trailing backslash remains text.</p>
+<p>from commonmark_parser.inline_html_breaks import parse_inline_html_breaks</p>
+<p>for source in (&quot;first  \nsecond&quot;, &quot;first\\\nsecond&quot;): nodes = parse_inline_html_breaks(source) assert sum(node.type == &quot;hardbreak&quot; for node in nodes) == 1 source = &quot;ending\\&quot; nodes = parse_inline_html_breaks(source) assert all(node.type != &quot;hardbreak&quot; for node in nodes) assert &quot;&quot;.join(node.literal for node in nodes if node.type == &quot;text&quot;) == source === END AC inline-hard-breaks ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Follow CommonMark 0.31.2 and do not use a public Markdown implementation.</li><li>Complete mixed-section conformance checks belong to the later integration story.</li></ul></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_service_blocks.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_service_blocks.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_service_blocks.py">Raw file</a></div></header>
+<article class="doc"><pre>from commonmark_parser.blocks import parse_blocks
+from commonmark_parser.blocks import _atx
+from commonmark_parser.fenced_code import parse_fenced_code
+from commonmark_parser.html_blocks import parse_html_block
+from commonmark_parser.indented_code import parse_indented_code
+from commonmark_parser.references import extract_definitions
+
+
+def test_thematic_break_interrupts_paragraph_and_rejects_mixed_markers():
+    doc = parse_blocks(&quot;alpha\n* * *\n* - *\n&quot;)
+    assert [node.kind for node in doc.children] == [&quot;paragraph&quot;, &quot;thematic_break&quot;, &quot;paragraph&quot;]
+
+
+def test_thematic_break_can_be_the_content_of_a_list_item():
+    doc = parse_blocks(&quot;- Foo\n- * * *\n&quot;)
+    assert [child.kind for child in doc.children[0].children[1].children] == [&quot;thematic_break&quot;]
+
+
+def test_atx_heading_level_closing_markers_and_invalid_opening():
+    doc = parse_blocks(&quot;### alpha ###\n#gamma\n&quot;)
+    assert [(n.kind, n.level, n.literal.strip()) for n in doc.children] == [(&quot;heading&quot;, 3, &quot;alpha&quot;), (&quot;paragraph&quot;, None, &quot;#gamma&quot;)]
+
+
+def test_atx_heading_with_only_closing_hashes_has_empty_content():
+    assert _atx(&quot;### ###&quot;) == (3, &quot;&quot;)
+
+
+def test_indented_code_preserves_interior_blank_and_extra_indent():
+    assert parse_indented_code([&quot;    alpha&quot;, &quot;&quot;, &quot;      beta&quot;, &quot;&quot;]) == (&quot;alpha\n\n  beta\n&quot;, 3)
+
+
+def test_indented_code_preserves_spaces_on_interior_blank_line():
+    assert parse_indented_code([&quot;    chunk1&quot;, &quot;      &quot;, &quot;      chunk2&quot;]) == (
+        &quot;chunk1\n  \n  chunk2\n&quot;, 3
+    )
+
+
+def test_indented_code_does_not_interrupt_paragraph():
+    assert parse_indented_code([&quot;    alpha&quot;], paragraph_open=True) is None
+
+
+def test_tab_stops_remain_based_on_the_original_line_after_list_indent():
+    doc = parse_blocks(&quot;- foo\n\n\t\tbar\n&quot;)
+    item = doc.children[0].children[0]
+    assert [(child.kind, child.literal) for child in item.children] == [
+        (&quot;paragraph&quot;, &quot;foo&quot;),
+        (&quot;indented_code&quot;, &quot;  bar\n&quot;),
+    ]
+
+
+def test_tab_stops_after_list_marker_use_the_original_column():
+    doc = parse_blocks(&quot;-\t\tfoo\n&quot;)
+    code = doc.children[0].children[0].children[0]
+    assert code.kind == &quot;indented_code&quot;
+    assert code.literal == &quot;  foo\n&quot;
+
+
+def test_fenced_code_requires_matching_closer_and_removes_indent():
+    assert parse_fenced_code([&quot;  ~~~ py&quot;, &quot;  alpha&quot;, &quot;~~~~&quot;, &quot;tail&quot;]) == (&quot;alpha\n&quot;, &quot;py&quot;, 3)
+    assert parse_fenced_code([&quot;``` bad ` info&quot;]) is None
+
+
+def test_html_comment_runs_through_closing_line():
+    assert parse_html_block([&quot;&lt;!-- start&quot;, &quot;&quot;, &quot;finish --&gt;&quot;, &quot;tail&quot;]) == (&quot;&lt;!-- start\n\nfinish --&gt;\n&quot;, 3)
+
+
+def test_html_custom_standalone_tag_cannot_interrupt_paragraph():
+    assert parse_html_block([&quot;&lt;custom&gt;&quot;], paragraph_open=True) is None
+    assert parse_html_block([&quot;&lt;div&gt;&quot;, &quot;body&quot;, &quot;&quot;, &quot;tail&quot;], paragraph_open=True) == (&quot;&lt;div&gt;\nbody\n&quot;, 2)
+
+
+def test_reference_definitions_normalize_and_keep_first():
+    refs = {}
+    remaining = extract_definitions(&quot;[Alpha]: /first\n[alpha]: /second\n&quot;, refs)
+    assert remaining == &quot;&quot;
+    assert refs == {&quot;alpha&quot;: (&quot;/first&quot;, None)}
+
+
+def test_block_parser_collects_references_document_wide():
+    doc = parse_blocks(&quot;[Label]: /target\n\nvisible\n&quot;)
+    assert doc.references == {&quot;label&quot;: (&quot;/target&quot;, None)}
+    assert [node.literal for node in doc.children] == [&quot;visible&quot;]
+</pre></article>
+</main>
+</body>
+</html>

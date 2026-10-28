@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/commonmark_parser/setext.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/commonmark_parser/setext.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/commonmark_parser/setext.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Setext heading recognition for paragraph source lines.&quot;&quot;&quot;
+
+import re
+from collections.abc import Sequence
+
+_UNDERLINE = re.compile(r&quot;^ {0,3}(=+|-+)[ \t]*$&quot;)
+
+
+def parse_setext(lines: Sequence[str]) -&gt; tuple[int, str] | None:
+    &quot;&quot;&quot;Return a heading level and raw content for paragraph lines plus underline.&quot;&quot;&quot;
+    if len(lines) &lt; 2:
+        return None
+    match = _UNDERLINE.fullmatch(lines[-1])
+    if match is None:
+        return None
+    content = &quot;\n&quot;.join(lines[:-1]).strip(&quot; \t&quot;)
+    if not content:
+        return None
+    return (1 if match.group(1)[0] == &quot;=&quot; else 2), content
+</pre></article>
+</main>
+</body>
+</html>

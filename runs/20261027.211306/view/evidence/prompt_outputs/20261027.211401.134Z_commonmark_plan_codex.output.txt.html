@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261027.211401.134Z_commonmark_plan_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261027.211401.134Z_commonmark_plan_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261027.211401.134Z_commonmark_plan_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>=== BEGIN ARTIFACT TOPOLOGY.md ===
+## Declarations
+
+## story foundation
+summary: Establish the Python project and parser integration boundaries.
+type: foundational
+kind: capability
+phase: 1
+implements: ARCHITECTURE.md
+stack: common.md, python.md
+provides: Python project foundation
+acceptance: yes
+instructions: |
+  Establish the Python 3 project, standard-library-only runtime, environment and test runner
+  described by TECHNOLOGY_STACK.md. Define the document tree and parser integration boundaries.
+  Stage spec.txt, spec_tests.py, cmark.py, normalize.py, and full_test.sh verbatim under sources/.
+  Provide a runnable integration point for the executable without claiming parser conformance.
+  Preserve the supplied assets and follow the specification&#x27;s two-phase parsing strategy.
+
+## story delivery
+summary: Provide the standard-stream executable.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-Executable.md
+covers: DELIVERY-001
+stack: common.md, python.md
+provides: commonmark
+consumes: Python project foundation
+depends: foundation
+acceptance: yes
+instructions: |
+  Provide the executable ./commonmark at the application root. Read UTF-8 Markdown from
+  standard input and write rendered HTML to standard output through the parser integration point.
+  Create the concise project README required by the imported instructions. Establish the runner&#x27;s
+  program interface before scoped conformance checks.
+
+## story paragraphs
+summary: Form paragraphs and handle blank lines.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-Paragraphs.md
+covers: BLOCKS-008
+stack: common.md, python.md
+provides: paragraph block parsing
+consumes: commonmark
+depends: delivery
+acceptance: yes
+instructions: |
+  Implement paragraph formation, continuation, whitespace handling, and blank-line separation
+  according to the specification. Preserve raw inline content for the subsequent inline phase.
+  Gate the complete Paragraphs and Blank lines sections when their cross-feature prerequisites
+  are available; use a direct block interface check for this increment.
+
+## story thematic-breaks
+summary: Recognize thematic breaks with block precedence.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-ThematicBreaks.md
+covers: BLOCKS-001
+stack: common.md, python.md
+provides: thematic break parsing
+consumes: paragraph block parsing
+depends: paragraphs
+acceptance: yes
+instructions: |
+  Recognize matching runs of at least three permitted markers with the specified indentation
+  and whitespace. Apply paragraph interruption and precedence against setext underlines and list
+  items. Check the capability directly until the interacting block and inline providers exist.
+
+## story atx-headings
+summary: Parse ATX headings.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-ATXHeadings.md
+covers: BLOCKS-002
+stack: common.md, python.md
+provides: ATX heading parsing
+consumes: paragraph block parsing
+depends: paragraphs
+acceptance: yes
+instructions: |
+  Parse one through six opening markers, optional closing markers, indentation and whitespace,
+  retaining heading text for inline parsing. Check the block interface directly until interacting
+  code, inline and container capabilities exist.
+
+## story setext-headings
+summary: Parse setext headings.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-SetextHeadings.md
+covers: BLOCKS-003
+stack: common.md, python.md
+provides: setext heading parsing
+consumes: paragraph block parsing, thematic break parsing
+depends: paragraphs, thematic-breaks
+acceptance: yes
+instructions: |
+  Convert eligible paragraph lines followed by a valid underline into headings, observing
+  precedence, indentation, lazy continuation and nonempty-content rules. Retain text for inline
+  parsing and check the block interface directly until interacting providers exist.
+
+## story indented-code
+summary: Parse indented code blocks.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-IndentedCode.md
+covers: BLOCKS-004
+stack: common.md, python.md
+provides: indented code block parsing
+consumes: paragraph block parsing
+depends: paragraphs
+acceptance: yes
+instructions: |
+  Parse indented chunks and intervening blank lines, respecting four-column indentation,
+  paragraph interruption, literal content and trailing blank-line rules. Check the block
+  interface directly until interacting container and block providers exist.
+
+## story fenced-code
+summary: Parse fenced code blocks.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-FencedCode.md
+covers: BLOCKS-005
+stack: common.md, python.md
+provides: fenced code block parsing
+consumes: paragraph block parsing
+depends: paragraphs
+acceptance: yes
+instructions: |
+  Parse backtick and tilde fences, matching closing fences, indentation, unclosed blocks and
+  info strings. Preserve literal code and render the first info word as the language class.
+  Check the block interface directly until interacting inline and container providers exist.
+
+## story html-blocks
+summary: Parse raw HTML blocks.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-HTMLBlocks.md
+covers: BLOCKS-006
+stack: common.md, python.md
+provides: HTML block parsing
+consumes: paragraph block parsing
+depends: paragraphs
+acceptance: yes
+instructions: |
+  Implement the seven specified HTML block start and end conditions, interruption rules and
+  container termination, preserving block content as raw HTML. Check the block interface directly
+  until interacting inline and container providers exist.
+
+## story reference-definitions
+summary: Collect document-wide link reference definitions.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-ReferenceDefinitions.md
+covers: BLOCKS-007
+stack: common.md, python.md
+provides: document reference map
+consumes: paragraph block parsing
+depends: paragraphs
+acceptance: yes
+instructions: |
+  Extract valid definitions when paragraphs close, including definitions in containers, and
+  retain the first definition for each normalized label. Expose the completed document-wide map
+  to inline parsing. Check the definition interface directly until link and container providers
+  exist.
+
+## story block-quotes
+summary: Parse block quote containers.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-BlockQuotes.md
+covers: CONTAINERS-001
+stack: common.md, python.md
+provides: block quote parsing
+consumes: paragraph block parsing, thematic break parsing, ATX heading parsing, setext heading parsing, indented code block parsing, fenced code block parsing, HTML block parsing, document reference map
+depends: paragraphs, thematic-breaks, atx-headings, setext-headings, indented-code, fenced-code, html-blocks, reference-definitions
+acceptance: yes
+instructions: |
+  Extend the block tree with nested block quotes, continuation markers and valid lazy paragraph
+  continuations. Apply the specification&#x27;s container closure rules. Check the block interface
+  directly until lists and inline providers exist.
+
+## story lists
+summary: Parse list items and lists.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-Lists.md
+covers: CONTAINERS-002
+stack: common.md, python.md
+provides: list block parsing
+consumes: block quote parsing, paragraph block parsing, thematic break parsing, ATX heading parsing, setext heading parsing, indented code block parsing, fenced code block parsing, HTML block parsing, document reference map
+depends: block-quotes
+acceptance: yes
+instructions: |
+  Implement list marker classification, item indentation and continuation, nesting, empty items,
+  interruption, list grouping, start numbers and tight or loose rendering. Preserve the block
+  tree and document-wide references. Check the block interface directly until inline providers
+  exist.
+
+## story inline-text
+summary: Parse escapes, character references, and text line breaks.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-InlineText.md
+covers: INLINES-007
+stack: common.md, python.md
+provides: inline text parsing
+consumes: list block parsing, document reference map
+depends: lists
+acceptance: yes
+instructions: |
+  After block parsing and reference collection, handle ASCII punctuation escapes, valid named
+  and numeric references, ordinary text and soft breaks as specified. Preserve the literal
+  behavior of code and raw HTML contexts. Check the inline interface directly until interacting
+  inline constructs exist.
+
+## story code-spans
+summary: Parse inline code spans.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-CodeSpans.md
+covers: INLINES-001
+stack: common.md, python.md
+provides: code span parsing
+consumes: inline text parsing
+depends: inline-text
+acceptance: yes
+instructions: |
+  Match equal-length backtick runs, normalize line endings and the specified paired spaces,
+  preserve literal contents, and honor precedence against other inline constructs. Check the
+  inline interface directly until all interacting constructs exist.
+
+## story emphasis
+summary: Parse emphasis and strong emphasis.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-Emphasis.md
+covers: INLINES-002
+stack: common.md, python.md
+provides: emphasis parsing
+consumes: inline text parsing, code span parsing
+depends: code-spans
+acceptance: yes
+instructions: |
+  Implement the specification&#x27;s delimiter-stack algorithm, Unicode flanking rules, rule of
+  three, nesting and precedence for emphasis and strong emphasis. Check the inline interface
+  directly until link, image, autolink and raw HTML providers exist.
+
+## story links
+summary: Parse inline and reference links.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-Links.md
+covers: INLINES-003
+stack: common.md, python.md
+provides: link parsing
+consumes: document reference map, inline text parsing, code span parsing, emphasis parsing
+depends: emphasis, reference-definitions
+acceptance: yes
+instructions: |
+  Implement inline, full, collapsed and shortcut links, destination and title parsing, label
+  normalization and reference lookup. Use the specified delimiter-stack procedure and prevent
+  nested links while honoring inline precedence. Check the interface directly until the remaining
+  interacting inline providers exist.
+
+## story images
+summary: Parse inline and reference images.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-Images.md
+covers: INLINES-004
+stack: common.md, python.md
+provides: image parsing
+consumes: link parsing
+depends: links
+acceptance: yes
+instructions: |
+  Implement inline and reference image forms using the link parsing rules, allowing links and
+  images in descriptions and rendering their plain textual content as alt text. Check the
+  interface directly until the remaining interacting inline providers exist.
+
+## story autolinks
+summary: Parse URI and email autolinks.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-Autolinks.md
+covers: INLINES-005
+stack: common.md, python.md
+provides: autolink parsing
+consumes: inline text parsing, code span parsing
+depends: code-spans
+acceptance: yes
+instructions: |
+  Recognize the specified absolute URI schemes and email forms within angle brackets, apply
+  their literal and escaping rules, and render their destinations and labels. Check the inline
+  interface directly until all interacting inline providers exist.
+
+## story inline-html-breaks
+summary: Parse raw inline HTML and hard line breaks.
+type: service
+kind: capability
+phase: 1
+implements: FEATURE-InlineHTMLBreaks.md
+covers: INLINES-006
+stack: common.md, python.md
+provides: inline HTML and hard break parsing
+consumes: inline text parsing, code span parsing
+depends: code-spans
+acceptance: yes
+instructions: |
+  Recognize the specified inline HTML grammar and preserve valid raw tags. Render hard breaks
+  from the specified spaces or backslash before a line ending, excluding code spans, HTML tags
+  and block endings. Check the inline interface directly until all interacting providers exist.
+
+## story conformance-integration
+summary: Exercise all scoped CommonMark examples against the integrated parser.
+type: service
+kind: integration
+phase: 1
+implements: FEATURE-ConformanceIntegration.md
+stack: common.md, python.md
+provides: integrated CommonMark parser
+consumes: commonmark, list block parsing, image parsing, autolink parsing, inline HTML and hard break parsing
+depends: delivery, lists, images, autolinks, inline-html-breaks
+acceptance: yes
+instructions: |
+  Assemble block parsing, document-wide reference resolution, inline parsing and HTML rendering.
+  Run the supplied spec_tests.py using explicit --pattern selectors with --dump-tests as the
+  JSON probe. Execute every example-owning section in scoped checks, including Tabs and
+  Precedence, as well as all sections assigned to the parser capabilities. Each selector must
+  cover its complete section and never invoke full_test.sh. Preserve the staged assets verbatim.
+
+## story verification
+summary: Verify the complete supplied conformance suite.
+type: service
+kind: test harness
+phase: 1
+implements: VERIFICATION.md
+covers: VERIFICATION-001
+accepts: st-001
+stack: common.md, python.md
+consumes: integrated CommonMark parser
+depends: conformance-integration
+acceptance: yes
+instructions: |
+  Run the sole terminal Suite: full criterion with sh sources/full_test.sh. Print captured
+  stdout and stderr and assert only that its return code is zero. Do not modify the supplied
+  scoring entry point or its assets.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT DECISIONS.json ===
+[
+  {
+    &quot;id&quot;: &quot;decision-cli-exit&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;material&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-Executable.md&quot;,
+    &quot;story&quot;: &quot;delivery&quot;,
+    &quot;title&quot;: &quot;Standard-stream execution result&quot;,
+    &quot;description&quot;: &quot;The sources specify the streams but do not state a successful process exit status or error channel.&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;Successful conversion exits zero; operational errors use a nonzero exit status and standard error.&quot;
+  },
+  {
+    &quot;id&quot;: &quot;decision-scoped-integration&quot;,
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;severity&quot;: &quot;material&quot;,
+    &quot;blueprint&quot;: &quot;FEATURE-ConformanceIntegration.md&quot;,
+    &quot;story&quot;: &quot;conformance-integration&quot;,
+    &quot;title&quot;: &quot;Mixed conformance section ownership&quot;,
+    &quot;description&quot;: &quot;The supplied section selectors include examples requiring multiple parser constructs, so early capability gates cannot execute their complete sections without future providers.&quot;,
+    &quot;options&quot;: [],
+    &quot;system_choice&quot;: &quot;Gate early capabilities through their delivered parser interfaces, then execute every complete example-owning section in scoped integration checks after all providers exist.&quot;
+  }
+]
+=== END ARTIFACT ===</pre></article>
+</main>
+</body>
+</html>

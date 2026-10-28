@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-4.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-4.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-4.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 4 · Service (block-4)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-27</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 6701</li><li>execution id: 20261027.212400.806Z-88e20c49</li></ul>
+<h2>Stories built</h2>
+<ul><li>Recognize thematic breaks with block precedence. (thematic-breaks) [story]</li><li>Parse indented code blocks. (indented-code) [story]</li><li>Parse ATX headings. (atx-headings) [story]</li><li>Parse raw HTML blocks. (html-blocks) [story]</li><li>Parse fenced code blocks. (fenced-code) [story]</li><li>Collect document-wide link reference definitions. (reference-definitions) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>stack: python_compact.md (SP 654)</li><li>compass: COMPASS.md (SP 548)</li><li>implements: FEATURE-ThematicBreaks.md (SP 493)</li><li>context: ARCHITECTURE_compact.md (SP 304)</li><li>stack: common_compact.md (SP 1079)</li><li>implements: FEATURE-IndentedCode.md (SP 597)</li><li>implements: FEATURE-ATXHeadings.md (SP 613)</li><li>implements: FEATURE-HTMLBlocks.md (SP 633)</li><li>implements: FEATURE-FencedCode.md (SP 651)</li><li>implements: FEATURE-ReferenceDefinitions.md (SP 738)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>commonmark_parser/blocks.py</li><li>commonmark_parser/fenced_code.py</li><li>commonmark_parser/html_blocks.py</li><li>commonmark_parser/indented_code.py</li><li>commonmark_parser/references.py</li><li>tests/test_service_blocks.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: thematic-break-recognition (FEATURE-ThematicBreaks.md)</li></ul>
+<p>intent: Matching marker runs form thematic breaks and interrupt an existing paragraph. return code: 1 stderr: --- drydock: values at failure --- document = Document(children=[Block(kind=&#x27;paragraph&#x27;, children=[], literal=&#x27;alpha\n* * *&#x27;, level=None)], references={}) --- drydock: end values --- Traceback (most recent call last): File &quot;thematic-break-recognition.py&quot;, line 5, in &lt;module&gt; assert len(document.children) == 2 ^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>GREEN (prepassed): thematic-break-invalid (FEATURE-ThematicBreaks.md)</li></ul>
+<p>intent: A line with mixed markers remains paragraph content instead of forming a thematic break. return code: 0</p>
+<ul><li>RED: indented-code-content (FEATURE-IndentedCode.md)</li></ul>
+<p>intent: Four-column indentation is removed while extra indentation and interior blank lines remain literal. return code: 1 stderr: Traceback (most recent call last): File &quot;indented-code-content.py&quot;, line 1, in &lt;module&gt; from commonmark_parser.indented_code import parse_indented_code<br>ModuleNotFoundError: No module named &#x27;commonmark_parser.indented_code&#x27;</p>
+<ul><li>RED: indented-code-interruption (FEATURE-IndentedCode.md)</li></ul>
+<p>intent: Indented code does not interrupt an open paragraph and ends before a less-indented nonblank line. return code: 1 stderr: Traceback (most recent call last): File &quot;indented-code-interruption.py&quot;, line 1, in &lt;module&gt; from commonmark_parser.indented_code import parse_indented_code<br>ModuleNotFoundError: No module named &#x27;commonmark_parser.indented_code&#x27;</p>
+<ul><li>RED: atx-heading-level (FEATURE-ATXHeadings.md)</li></ul>
+<p>intent: A valid opening run produces the corresponding heading level and retains its content for inline parsing. return code: 1 stderr: --- drydock: values at failure --- document = Document(children=[Block(kind=&#x27;paragraph&#x27;, children=[], literal=&#x27;### alpha ###&#x27;, level=None)], references={}) --- drydock: end values --- Traceback (most recent call last): File &quot;atx-heading-level.py&quot;, line 6, in &lt;module&gt; assert document.children[0].kind == &quot;heading&quot; ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: atx-heading-interruption (FEATURE-ATXHeadings.md)</li></ul>
+<p>intent: An ATX heading interrupts a paragraph and a marker without required separating whitespace stays in paragraph content. return code: 1 stderr: --- drydock: values at failure --- document = Document(children=[Block(kind=&#x27;paragraph&#x27;, children=[], literal=&#x27;alpha\n# beta\n#gamma&#x27;, level=None)], references={}) --- drydock: end values --- Traceback (most recent call last): File &quot;atx-heading-interruption.py&quot;, line 7, in &lt;module&gt; assert len(document.children) == 3 ^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: html-block-termination (FEATURE-HTMLBlocks.md)</li></ul>
+<p>intent: A comment block preserves its lines through the line containing its closing marker. return code: 1 stderr: Traceback (most recent call last): File &quot;html-block-termination.py&quot;, line 1, in &lt;module&gt; from commonmark_parser.html_blocks import parse_html_block<br>ModuleNotFoundError: No module named &#x27;commonmark_parser.html_blocks&#x27;</p>
+<ul><li>RED: html-block-paragraph (FEATURE-HTMLBlocks.md)</li></ul>
+<p>intent: A standalone custom tag cannot interrupt a paragraph, while a block-level tag can and ends before a blank line. return code: 1 stderr: Traceback (most recent call last): File &quot;html-block-paragraph.py&quot;, line 1, in &lt;module&gt; from commonmark_parser.html_blocks import parse_html_block<br>ModuleNotFoundError: No module named &#x27;commonmark_parser.html_blocks&#x27;</p>
+<ul><li>RED: fenced-code-matching (FEATURE-FencedCode.md)</li></ul>
+<p>intent: A fence closes only with a sufficiently long matching delimiter and preserves intervening literal content. return code: 1 stderr: Traceback (most recent call last): File &quot;fenced-code-matching.py&quot;, line 1, in &lt;module&gt; from commonmark_parser.fenced_code import parse_fenced_code<br>ModuleNotFoundError: No module named &#x27;commonmark_parser.fenced_code&#x27;</p>
+<ul><li>RED: fenced-code-unclosed (FEATURE-FencedCode.md)</li></ul>
+<p>intent: An unclosed fence consumes the remaining input and removes the opening indentation from content. return code: 1 stderr: Traceback (most recent call last): File &quot;fenced-code-unclosed.py&quot;, line 1, in &lt;module&gt; from commonmark_parser.fenced_code import parse_fenced_code<br>ModuleNotFoundError: No module named &#x27;commonmark_parser.fenced_code&#x27;</p>
+<ul><li>RED: references-first-definition (FEATURE-ReferenceDefinitions.md)</li></ul>
+<p>intent: Definitions are removed from paragraph content, labels match case insensitively, and the first matching definition wins. return code: 1 stderr: Traceback (most recent call last): File &quot;references-first-definition.py&quot;, line 1, in &lt;module&gt; from commonmark_parser.references import extract_definitions<br>ModuleNotFoundError: No module named &#x27;commonmark_parser.references&#x27;</p>
+<ul><li>RED: references-remainder (FEATURE-ReferenceDefinitions.md)</li></ul>
+<p>intent: A valid leading definition leaves subsequent paragraph text intact, while a malformed definition remains visible. return code: 1 stderr: Traceback (most recent call last): File &quot;references-remainder.py&quot;, line 1, in &lt;module&gt; from commonmark_parser.references import extract_definitions<br>ModuleNotFoundError: No module named &#x27;commonmark_parser.references&#x27;</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: thematic-break-recognition (FEATURE-ThematicBreaks.md)</li></ul>
+<p>intent: Matching marker runs form thematic breaks and interrupt an existing paragraph. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: thematic-break-invalid (FEATURE-ThematicBreaks.md)</li></ul>
+<p>intent: A line with mixed markers remains paragraph content instead of forming a thematic break. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: indented-code-content (FEATURE-IndentedCode.md)</li></ul>
+<p>intent: Four-column indentation is removed while extra indentation and interior blank lines remain literal. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: indented-code-interruption (FEATURE-IndentedCode.md)</li></ul>
+<p>intent: Indented code does not interrupt an open paragraph and ends before a less-indented nonblank line. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: atx-heading-level (FEATURE-ATXHeadings.md)</li></ul>
+<p>intent: A valid opening run produces the corresponding heading level and retains its content for inline parsing. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: atx-heading-interruption (FEATURE-ATXHeadings.md)</li></ul>
+<p>intent: An ATX heading interrupts a paragraph and a marker without required separating whitespace stays in paragraph content. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: html-block-termination (FEATURE-HTMLBlocks.md)</li></ul>
+<p>intent: A comment block preserves its lines through the line containing its closing marker. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: html-block-paragraph (FEATURE-HTMLBlocks.md)</li></ul>
+<p>intent: A standalone custom tag cannot interrupt a paragraph, while a block-level tag can and ends before a blank line. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: fenced-code-matching (FEATURE-FencedCode.md)</li></ul>
+<p>intent: A fence closes only with a sufficiently long matching delimiter and preserves intervening literal content. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: fenced-code-unclosed (FEATURE-FencedCode.md)</li></ul>
+<p>intent: An unclosed fence consumes the remaining input and removes the opening indentation from content. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: references-first-definition (FEATURE-ReferenceDefinitions.md)</li></ul>
+<p>intent: Definitions are removed from paragraph content, labels match case insensitively, and the first matching definition wins. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: references-remainder (FEATURE-ReferenceDefinitions.md)</li></ul>
+<p>intent: A valid leading definition leaves subsequent paragraph text intact, while a malformed definition remains visible. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<h2>Build summary</h2>
+<p>Implemented thematic breaks, indented and fenced code blocks, ATX headings, raw HTML blocks, and document-wide reference definitions.</p>
+<p><code>python -m pytest -q</code> passed: 19 tests. The staged full conformance suite was not run.</p>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>commonmark_parser/blocks.py</li><li>commonmark_parser/fenced_code.py</li><li>commonmark_parser/html_blocks.py</li><li>commonmark_parser/indented_code.py</li><li>commonmark_parser/references.py</li><li>tests/test_service_blocks.py</li></ul>
+<p>SUMMARY: Added the specified block parsers and reference collection, with focused tests for their public interfaces and block integration.</p>
+<p>BLOCKERS:</p>
+<ul><li>None</li></ul></article>
+</main>
+</body>
+</html>

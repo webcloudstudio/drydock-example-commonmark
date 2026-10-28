@@ -1,0 +1,14 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark_parser/inlines.py
+- tests/test_inline_text.py
+
+SUMMARY:
+Added inline text parsing for ASCII punctuation escapes, named and numeric character references, invalid numeric scalar replacement, and soft breaks with surrounding spaces trimmed. Added focused tests for these behaviors and edge cases.
+
+CHECKS:
+- `pytest -q tests/test_inline_text.py tests/test_foundation.py` — 12 passed.
+
+BLOCKERS:
+- None

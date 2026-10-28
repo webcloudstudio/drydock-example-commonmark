@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Links.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Links.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Links.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Links</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Parse inline and reference links using the completed document reference map.</td></tr><tr><td>Depends On</td><td>FEATURE-Emphasis.md, FEATURE-ReferenceDefinitions.md</td></tr><tr><td>Provides</td><td>link parsing</td></tr><tr><td>Consumes</td><td>document reference map, inline text parsing, code span parsing, emphasis parsing</td></tr></tbody></table></div>
+<h2>Purpose and workflow</h2>
+<p>During the inline phase, recognize inline links and full, collapsed, and shortcut reference links. Resolve references against the completed document-wide map, using Unicode case folding and whitespace normalization for labels. The first matching definition wins.</p>
+<p>Parse destinations and optional titles according to the specification, including balanced parentheses, angle-delimited destinations, escapes, character references, and the permitted whitespace. Apply the delimiter-stack link procedure: find the nearest active bracket opener, process emphasis within the link text, and deactivate earlier link openers after forming a link. Links cannot contain links. Code spans and other higher-precedence constructs retain their specified precedence.</p>
+<p>For direct incremental acceptance, expose <code>parse_links(source, references)</code> from <code>commonmark_parser.links</code>. It returns a sequence of inline nodes. A link node exposes <code>type</code>, <code>destination</code>, <code>title</code>, and <code>children</code>; text nodes expose <code>type</code> and <code>literal</code>. The reference mapping uses normalized labels and values containing <code>destination</code> and <code>title</code>. This interface accepts already collected references and does not require later inline providers.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC links-inline ===<br>Intent: Inline link parsing returns the supplied destination and title and retains the link text as children.</p>
+<p>from commonmark_parser.links import parse_links</p>
+<p>label = &quot;label&quot; destination = &quot;/destination&quot; title = &quot;caption&quot; source = f&#x27;[{label}]({destination} &quot;{title}&quot;)&#x27; nodes = parse_links(source, {}) assert len(nodes) == 1 link = nodes[0] assert link.type == &quot;link&quot; assert link.destination == destination assert link.title == title assert len(link.children) == 1 assert link.children[0].type == &quot;text&quot; assert link.children[0].literal == label === END AC links-inline ===</p>
+<p>=== AC links-reference ===<br>Intent: Full, collapsed, and shortcut references resolve through the supplied normalized reference map.</p>
+<p>from commonmark_parser.links import parse_links</p>
+<p>label = &quot;reference&quot; destination = &quot;/target&quot; references = {label: {&quot;destination&quot;: destination, &quot;title&quot;: None}} for source in (f&quot;[visible][{label.upper()}]&quot;, f&quot;[{label}][]&quot;, f&quot;[{label}]&quot;): nodes = parse_links(source, references) assert len(nodes) == 1 assert nodes[0].type == &quot;link&quot; assert nodes[0].destination == destination assert nodes[0].title is None === END AC links-reference ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Follow CommonMark 0.31.2 and do not use a public Markdown implementation.</li><li>Complete mixed-section conformance checks belong to the later integration story.</li></ul></article>
+</main>
+</body>
+</html>

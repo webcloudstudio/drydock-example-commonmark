@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261027.211530.032Z_commonmark_plan_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261027.211530.032Z_commonmark_plan_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261027.211530.032Z_commonmark_plan_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>=== BEGIN ARTIFACT FEATURE-BlockQuotes.md ===
+# FEATURE: Block Quotes
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Parse block quote containers and their continuation lines. |
+| Depends On | FEATURE-Paragraphs.md, FEATURE-ThematicBreaks.md, FEATURE-ATXHeadings.md, FEATURE-SetextHeadings.md, FEATURE-IndentedCode.md, FEATURE-FencedCode.md, FEATURE-HTMLBlocks.md, FEATURE-ReferenceDefinitions.md |
+| Provides | block quote parsing |
+| Consumes | paragraph block parsing, thematic break parsing, ATX heading parsing, setext heading parsing, indented code block parsing, fenced code block parsing, HTML block parsing, document reference map |
+
+## Questions
+
+- None.
+
+## Purpose and workflow
+
+During block parsing, recognize a block quote marker after at most three spaces of indentation. The marker is `&gt;` with at most one following space of indentation consumed; handle tabs using the specification&#x27;s four-column tab stops. Add a block quote container to the document tree and parse its contents as blocks.
+
+Continue open quote containers when their markers are present. A missing marker is permitted only for paragraph continuation text under the specification&#x27;s laziness rule. A blank line without a marker closes the quote; an explicitly marked blank line remains inside it. Nest quotes recursively and close unmatched containers before starting a new block. Definitions found inside a quote contribute to the document-wide reference map.
+
+For direct verification, expose `parse_blocks(source)` from `commonmark_parser.blocks`. It returns a document node whose `children` are ordered block nodes. Nodes expose `type`, `children`, and, for paragraphs, `literal` containing their unparsed inline source. A quote node has type `block_quote`, and a paragraph node has type `paragraph`. This interface exposes the block tree before inline parsing.
+
+The complete Block quotes corpus section includes interactions with lists and inline parsing. The conformance integration story executes that complete section after those providers exist.
+
+## Programmatic Acceptance
+
+=== AC block-quote-lazy ===
+Intent: A marked paragraph and its unmarked continuation belong to the same quote and retain their source text.
+
+from commonmark_parser.blocks import parse_blocks
+
+first = &quot;alpha&quot;
+second = &quot;continuation&quot;
+document = parse_blocks(&quot;&gt; &quot; + first + &quot;\n&quot; + second + &quot;\n&quot;)
+assert len(document.children) == 1
+quote = document.children[0]
+assert quote.type == &quot;block_quote&quot;
+assert len(quote.children) == 1
+paragraph = quote.children[0]
+assert paragraph.type == &quot;paragraph&quot;
+assert paragraph.literal.splitlines() == [first, second]
+=== END AC block-quote-lazy ===
+
+=== AC block-quote-nesting ===
+Intent: Nested quote markers produce nested containers, and an unmarked blank line ends the quote.
+
+from commonmark_parser.blocks import parse_blocks
+
+inside = &quot;inside&quot;
+outside = &quot;outside&quot;
+document = parse_blocks(&quot;&gt; &gt; &quot; + inside + &quot;\n\n&quot; + outside + &quot;\n&quot;)
+assert len(document.children) == 2
+outer, paragraph = document.children
+assert outer.type == &quot;block_quote&quot;
+assert len(outer.children) == 1
+inner = outer.children[0]
+assert inner.type == &quot;block_quote&quot;
+assert inner.children[0].type == &quot;paragraph&quot;
+assert inner.children[0].literal == inside
+assert paragraph.type == &quot;paragraph&quot;
+assert paragraph.literal == outside
+=== END AC block-quote-nesting ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Parse block structure before parsing inline content.
+- Preserve the supplied conformance assets unchanged.
+- Do not invoke the full-suite entry point in this story&#x27;s checks.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Lists.md ===
+# FEATURE: Lists
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Parse list containers and their items. |
+| Depends On | FEATURE-BlockQuotes.md |
+| Provides | list block parsing |
+| Consumes | block quote parsing, paragraph block parsing, thematic break parsing, ATX heading parsing, setext heading parsing, indented code block parsing, fenced code block parsing, HTML block parsing, document reference map |
+
+## Questions
+
+- None.
+
+## Purpose and workflow
+
+Recognize bullet markers `-`, `+`, and `*`, and ordered markers of one to nine digits followed by `.` or `)`. Apply the specification&#x27;s indentation rules, including marker width, one to four columns of following indentation, items starting with blank lines or indented code, tab stops, and lazy paragraph continuations. A thematic break takes precedence over a list item. An item interrupting a paragraph must be nonempty and an ordered list must start at one.
+
+Group adjacent items only when their marker types match, including the bullet character or ordered delimiter. Preserve an ordered list&#x27;s first start number. Parse nested block content and collect reference definitions document-wide. A list is loose when its items are separated by blank lines or an item directly contains blocks separated by a blank line; otherwise it is tight. The renderer uses that property to determine paragraph wrappers.
+
+Extend `commonmark_parser.blocks.parse_blocks(source)` to return list and item nodes in the block tree. A list node exposes `type` equal to `list`, ordered `children` of type `item`, `ordered` as a boolean, `start` as the ordered start number, and `tight` as a boolean. Paragraph children retain their unparsed `literal`.
+
+The complete List items and Lists corpus sections are executed by conformance integration after inline providers exist.
+
+## Programmatic Acceptance
+
+=== AC list-items ===
+Intent: Matching markers form one tight list with separate items whose paragraph text is preserved.
+
+from commonmark_parser.blocks import parse_blocks
+
+first = &quot;alpha&quot;
+second = &quot;beta&quot;
+document = parse_blocks(&quot;- &quot; + first + &quot;\n- &quot; + second + &quot;\n&quot;)
+assert len(document.children) == 1
+listing = document.children[0]
+assert listing.type == &quot;list&quot;
+assert listing.ordered is False
+assert listing.tight is True
+assert len(listing.children) == 2
+assert all(item.type == &quot;item&quot; for item in listing.children)
+assert [item.children[0].literal for item in listing.children] == [first, second]
+=== END AC list-items ===
+
+=== AC list-start-and-looseness ===
+Intent: An ordered list retains its initial number and blank lines between items make it loose.
+
+from commonmark_parser.blocks import parse_blocks
+
+start = 4
+first = &quot;first&quot;
+second = &quot;second&quot;
+document = parse_blocks(f&quot;{start}. {first}\n\n5. {second}\n&quot;)
+assert len(document.children) == 1
+listing = document.children[0]
+assert listing.type == &quot;list&quot;
+assert listing.ordered is True
+assert listing.start == start
+assert listing.tight is False
+assert [item.children[0].literal for item in listing.children] == [first, second]
+=== END AC list-start-and-looseness ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Parse blocks before inline content and preserve document-wide references.
+- Preserve the supplied conformance assets unchanged.
+- Do not invoke the full-suite entry point in this story&#x27;s checks.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-InlineText.md ===
+# FEATURE: Inline Text
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Parse ordinary inline text, escapes, character references, and soft line breaks. |
+| Depends On | FEATURE-Lists.md |
+| Provides | inline text parsing |
+| Consumes | list block parsing, document reference map |
+
+## Questions
+
+- None.
+
+## Purpose and workflow
+
+After the document block tree and reference map are complete, parse paragraph and heading text as inlines. A backslash escapes an ASCII punctuation character; otherwise it remains literal. Decode valid semicolon-terminated HTML5 named entities and valid decimal or hexadecimal numeric references under the specification&#x27;s length and code-point rules. Replace invalid Unicode scalar values and U+0000 with U+FFFD. Unrecognized references remain text.
+
+Represent ordinary text and soft line breaks in sequence. Remove spaces at the end of a soft-breaking line and at the beginning of the next line. Preserve the distinction between text parsing and literal contexts: escapes and references are not interpreted inside code spans, code blocks, autolinks, or raw HTML where the specification excludes them.
+
+Expose `parse_inlines(source, references)` from `commonmark_parser.inlines`. It returns ordered inline nodes with `type` and, for text nodes, `literal`; a soft break has type `softbreak`. The reference map is supplied after block parsing, even where this increment does not use it.
+
+Conformance integration executes the complete Backslash escapes, Entity and numeric character references, Soft line breaks, and Textual content sections after interacting inline capabilities exist.
+
+## Programmatic Acceptance
+
+=== AC inline-escape ===
+Intent: Escaped ASCII punctuation becomes literal text without retaining the escape marker.
+
+from commonmark_parser.inlines import parse_inlines
+
+punctuation = &quot;!&quot;
+nodes = parse_inlines(&quot;\\&quot; + punctuation, {})
+assert len(nodes) == 1
+assert nodes[0].type == &quot;text&quot;
+assert nodes[0].literal == punctuation
+=== END AC inline-escape ===
+
+=== AC inline-soft-break ===
+Intent: A regular line ending separates text nodes with a soft break while retaining their text.
+
+from commonmark_parser.inlines import parse_inlines
+
+first = &quot;alpha&quot;
+second = &quot;beta&quot;
+nodes = parse_inlines(first + &quot;\n&quot; + second, {})
+assert [node.type for node in nodes] == [&quot;text&quot;, &quot;softbreak&quot;, &quot;text&quot;]
+assert nodes[0].literal == first
+assert nodes[2].literal == second
+=== END AC inline-soft-break ===
+
+=== AC inline-numeric-reference ===
+Intent: A valid numeric character reference decodes to the character designated by its input code point.
+
+from commonmark_parser.inlines import parse_inlines
+
+codepoint = 65
+nodes = parse_inlines(f&quot;&amp;#{codepoint};&quot;, {})
+assert len(nodes) == 1
+assert nodes[0].type == &quot;text&quot;
+assert nodes[0].literal == chr(codepoint)
+=== END AC inline-numeric-reference ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Complete block parsing and reference collection before inline parsing.
+- Preserve supplied conformance assets unchanged.
+- Do not invoke the full-suite entry point in this story&#x27;s checks.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-CodeSpans.md ===
+# FEATURE: Code Spans
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Parse literal inline code delimited by matching backtick runs. |
+| Depends On | FEATURE-InlineText.md |
+| Provides | code span parsing |
+| Consumes | inline text parsing |
+
+## Questions
+
+- None.
+
+## Purpose and workflow
+
+Extend `commonmark_parser.inlines.parse_inlines(source, references)` to recognize an opening backtick run and the next closing run of exactly the same length. Unmatched runs remain ordinary text. Normalize line endings inside a matched span to spaces. If the normalized content begins and ends with a space and is not entirely spaces, remove exactly one space from each end. Preserve all other content literally, including backslashes and character reference syntax.
+
+Code spans bind more tightly than emphasis and link brackets. Their precedence relative to raw HTML and autolinks follows the specification when those providers are integrated. Return a node of type `code` with its normalized content in `literal`.
+
+The complete Code spans corpus section is executed by conformance integration after interacting inline providers exist.
+
+## Programmatic Acceptance
+
+=== AC code-span-literal ===
+Intent: Matching backtick runs yield a code node that preserves its literal content.
+
+from commonmark_parser.inlines import parse_inlines
+
+content = &quot;literal &amp;amp; text&quot;
+nodes = parse_inlines(&quot;`&quot; + content + &quot;`&quot;, {})
+assert len(nodes) == 1
+assert nodes[0].type == &quot;code&quot;
+assert nodes[0].literal == content
+=== END AC code-span-literal ===
+
+=== AC code-span-normalization ===
+Intent: A matched span converts its line ending to a space and removes one paired surrounding space.
+
+from commonmark_parser.inlines import parse_inlines
+
+first = &quot;alpha&quot;
+second = &quot;beta&quot;
+nodes = parse_inlines(&quot;` &quot; + first + &quot;\n&quot; + second + &quot; `&quot;, {})
+assert len(nodes) == 1
+assert nodes[0].type == &quot;code&quot;
+assert nodes[0].literal.split(&quot; &quot;) == [first, second]
+=== END AC code-span-normalization ===
+
+=== AC code-span-unmatched ===
+Intent: An unmatched opening run remains literal text.
+
+from commonmark_parser.inlines import parse_inlines
+
+source = &quot;`unclosed&quot;
+nodes = parse_inlines(source, {})
+assert len(nodes) == 1
+assert nodes[0].type == &quot;text&quot;
+assert nodes[0].literal == source
+=== END AC code-span-unmatched ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Do not interpret escapes or character references inside code spans.
+- Preserve supplied conformance assets unchanged.
+- Do not invoke the full-suite entry point in this story&#x27;s checks.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Emphasis.md ===
+# FEATURE: Emphasis
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Parse emphasis and strong emphasis using delimiter runs. |
+| Depends On | FEATURE-InlineText.md, FEATURE-CodeSpans.md |
+| Provides | emphasis parsing |
+| Consumes | inline text parsing, code span parsing |
+
+## Questions
+
+- None.
+
+## Purpose and workflow
+
+Extend `commonmark_parser.inlines.parse_inlines(source, references)` to identify runs of `*` and `_` and classify potential openers and closers using the specification&#x27;s Unicode whitespace and punctuation flanking rules. Apply the underscore restrictions and the rule of three using the original run lengths.
+
+Use the appendix&#x27;s delimiter-stack process: scan potential closers in input order, search backward for the nearest valid opener above the applicable lower bound, create an emphasis or strong node, consume one or two delimiter characters on each side, and remove intervening delimiters from the stack. Continue with remaining delimiters and retain unmatched characters as text. Preserve the specified nesting and overlap precedence. Code spans bind more tightly; link, image, autolink, and raw HTML precedence is completed when those providers are integrated.
+
+Emphasis nodes have type `em`, strong emphasis nodes have type `strong`, and each exposes ordered `children`. Text children expose `literal`.
+
+The complete Emphasis and strong emphasis corpus section is executed by conformance integration after all interacting inline providers exist.
+
+## Programmatic Acceptance
+
+=== AC emphasis-basic ===
+Intent: A matching single delimiter pair produces an emphasis node containing the supplied text.
+
+from commonmark_parser.inlines import parse_inlines
+
+content = &quot;alpha&quot;
+nodes = parse_inlines(&quot;*&quot; + content + &quot;*&quot;, {})
+assert len(nodes) == 1
+assert nodes[0].type == &quot;em&quot;
+assert len(nodes[0].children) == 1
+assert nodes[0].children[0].type == &quot;text&quot;
+assert nodes[0].children[0].literal == content
+=== END AC emphasis-basic ===
+
+=== AC emphasis-strong ===
+Intent: A matching double delimiter pair produces a strong node containing the supplied text.
+
+from commonmark_parser.inlines import parse_inlines
+
+content = &quot;beta&quot;
+nodes = parse_inlines(&quot;**&quot; + content + &quot;**&quot;, {})
+assert len(nodes) == 1
+assert nodes[0].type == &quot;strong&quot;
+assert len(nodes[0].children) == 1
+assert nodes[0].children[0].literal == content
+=== END AC emphasis-strong ===
+
+=== AC emphasis-intraword-underscore ===
+Intent: Underscores within a word remain literal rather than creating emphasis.
+
+from commonmark_parser.inlines import parse_inlines
+
+source = &quot;alpha_beta_gamma&quot;
+nodes = parse_inlines(source, {})
+assert all(node.type == &quot;text&quot; for node in nodes)
+assert &quot;&quot;.join(node.literal for node in nodes) == source
+=== END AC emphasis-intraword-underscore ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Follow the supplied delimiter-stack and precedence rules.
+- Preserve supplied conformance assets unchanged.
+- Do not invoke the full-suite entry point in this story&#x27;s checks.
+=== END ARTIFACT ===</pre></article>
+</main>
+</body>
+</html>

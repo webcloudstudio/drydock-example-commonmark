@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Images.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Images.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Images.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Images</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Parse inline and reference images and derive plain-text descriptions.</td></tr><tr><td>Depends On</td><td>FEATURE-Links.md</td></tr><tr><td>Provides</td><td>image parsing</td></tr><tr><td>Consumes</td><td>link parsing</td></tr></tbody></table></div>
+<h2>Purpose and workflow</h2>
+<p>Recognize inline, full, collapsed, and shortcut reference images using the link destination, title, and reference rules. Image descriptions may contain links and nested images. Render the description&#x27;s plain textual content as the HTML <code>alt</code> attribute, without inline formatting tags; escape attribute values as required.</p>
+<p>For direct incremental acceptance, expose <code>parse_images(source, references)</code> from <code>commonmark_parser.images</code>. It returns inline nodes. An image node exposes <code>type</code>, <code>destination</code>, <code>title</code>, and <code>alt</code>, where <code>alt</code> is the plain text of its parsed description. Reference mappings use normalized labels and values containing <code>destination</code> and <code>title</code>.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC images-inline ===<br>Intent: An inline image retains its destination and title and extracts the plain text of its description.</p>
+<p>from commonmark_parser.images import parse_images</p>
+<p>label = &quot;picture&quot; destination = &quot;/image&quot; title = &quot;caption&quot; nodes = parse_images(f&#x27;![{label}]({destination} &quot;{title}&quot;)&#x27;, {}) assert len(nodes) == 1 image = nodes[0] assert image.type == &quot;image&quot; assert image.destination == destination assert image.title == title assert image.alt == label === END AC images-inline ===</p>
+<p>=== AC images-reference ===<br>Intent: Reference images resolve the supplied definition and omit emphasis markup from alt text.</p>
+<p>from commonmark_parser.images import parse_images</p>
+<p>label = &quot;picture&quot; destination = &quot;/image&quot; references = {label: {&quot;destination&quot;: destination, &quot;title&quot;: None}} nodes = parse_images(f&quot;![<em>{label}</em>][{label}]&quot;, references) assert len(nodes) == 1 assert nodes[0].type == &quot;image&quot; assert nodes[0].destination == destination assert nodes[0].title is None assert nodes[0].alt == label === END AC images-reference ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Follow CommonMark 0.31.2 and do not use a public Markdown implementation.</li><li>Complete mixed-section conformance checks belong to the later integration story.</li></ul></article>
+</main>
+</body>
+</html>

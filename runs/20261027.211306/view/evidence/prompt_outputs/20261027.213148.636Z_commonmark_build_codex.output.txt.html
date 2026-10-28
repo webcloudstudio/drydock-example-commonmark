@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261027.213148.636Z_commonmark_build_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261027.213148.636Z_commonmark_build_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261027.213148.636Z_commonmark_build_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark_parser/inlines.py
+- commonmark_parser/autolinks.py
+- commonmark_parser/inline_html_breaks.py
+- tests/test_inline_providers.py
+
+SUMMARY:
+Added emphasis parsing with Unicode punctuation flanking, URI and email autolink recognition, and inline HTML and hard-break parsing. Added focused provider tests.
+
+Checks run: `pytest -q tests/test_inline_text.py tests/test_inline_providers.py` — 19 passed. `pytest -q` — 56 passed.
+
+BLOCKERS:
+- Autolink and raw HTML nodes are exposed by their parsing APIs; HTML serialization is not covered here because the existing renderer is a stub.</pre></article>
+</main>
+</body>
+</html>

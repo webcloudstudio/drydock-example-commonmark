@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-5.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-5.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-5.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 5 · Service (block-5)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-27</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 3271</li><li>execution id: 20261027.212642.183Z-6ea2d22c</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse setext headings. (setext-headings) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>stack: python_compact.md (SP 654)</li><li>compass: COMPASS.md (SP 548)</li><li>implements: FEATURE-SetextHeadings.md (SP 620)</li><li>context: ARCHITECTURE_compact.md (SP 304)</li><li>stack: common_compact.md (SP 1079)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>commonmark_parser/blocks.py</li><li>commonmark_parser/setext.py</li><li>tests/test_setext.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: setext-valid (FEATURE-SetextHeadings.md)</li></ul>
+<p>intent: Valid underlines convert nonempty multiline paragraph content into the corresponding heading while retaining its raw text. return code: 1 stderr: Traceback (most recent call last): File &quot;setext-valid.py&quot;, line 1, in &lt;module&gt; from commonmark_parser.setext import parse_setext<br>ModuleNotFoundError: No module named &#x27;commonmark_parser.setext&#x27;</p>
+<ul><li>RED: setext-invalid (FEATURE-SetextHeadings.md)</li></ul>
+<p>intent: An empty heading, excessive indentation, and internal underline whitespace do not form setext headings. return code: 1 stderr: Traceback (most recent call last): File &quot;setext-invalid.py&quot;, line 1, in &lt;module&gt; from commonmark_parser.setext import parse_setext<br>ModuleNotFoundError: No module named &#x27;commonmark_parser.setext&#x27;</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: setext-valid (FEATURE-SetextHeadings.md)</li></ul>
+<p>intent: Valid underlines convert nonempty multiline paragraph content into the corresponding heading while retaining its raw text. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: setext-invalid (FEATURE-SetextHeadings.md)</li></ul>
+<p>intent: An empty heading, excessive indentation, and internal underline whitespace do not form setext headings. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<h2>Build summary</h2>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>commonmark_parser/setext.py</li><li>commonmark_parser/blocks.py</li><li>tests/test_setext.py</li></ul>
+<p>SUMMARY: Added <code>parse_setext(lines)</code> and integrated setext heading recognition into block parsing, preserving raw content for inline parsing. Focused tests passed: <code>pytest -q tests/test_setext.py tests/test_paragraphs.py tests/test_service_blocks.py</code> (21 passed).</p>
+<p>BLOCKERS:</p>
+<ul><li>None</li></ul></article>
+</main>
+</body>
+</html>

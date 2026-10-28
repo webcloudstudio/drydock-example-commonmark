@@ -1,0 +1,2 @@
+2026-10-27T21:52:05.481345Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to read file to update /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/build/commonmark/commonmark_parser/blocks.py: No such file or directory (os error 2)
+2026-10-27T21:52:10.498607Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to read file to update /mnt/c/Users/barlo/projects/drydock/uat/20261027.211306/build/commonmark/tests/test_lists.py: No such file or directory (os error 2)

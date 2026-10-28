@@ -1,0 +1,156 @@
+# Blueprint Analysis: CommonMark
+
+## Commander Expectations
+
+- assert the parser reads Markdown from standard input and writes HTML to standard output.
+- assert the executable is named `commonmark` and is located at the application root.
+- assert the parser conforms to CommonMark 0.31.2 and does not use a public Markdown implementation.
+
+## Crew
+
+| Crew | Charge |
+|---|---|
+| Commander | Defines intent and decides what done means. |
+| Team Lead | Confirms epic completeness and stakeholder expectations. |
+| Planning Crew | Authors atomic specifications and the ordered Manifest. |
+| Shipyard Crew | Builds the tickets without synchronous Commander access. |
+
+## Story List
+
+### Feature: Block Parsing
+
+| ID | Story | High-level AC |
+|---|---|---|
+| BLOCKS-001 | Parse thematic breaks | Thematic break examples render as `<hr />`; non-matching lines remain paragraphs or other applicable blocks. |
+| BLOCKS-002 | Parse ATX headings | ATX heading examples render with the correct heading level and inline content. |
+| BLOCKS-003 | Parse setext headings | Setext examples render with the correct heading level and inline content. |
+| BLOCKS-004 | Parse indented code blocks | Indented code examples preserve literal content and required indentation behavior. |
+| BLOCKS-005 | Parse fenced code blocks | Fenced code examples preserve literal content, fence behavior, and language class rendering. |
+| BLOCKS-006 | Parse HTML blocks | HTML block examples preserve raw HTML and end blocks according to their applicable conditions. |
+| BLOCKS-007 | Parse link reference definitions | Definitions are collected and resolved across the document, with the first matching definition taking precedence. |
+| BLOCKS-008 | Parse paragraphs and blank lines | Paragraph examples preserve inline source content and treat blank lines as block separators. |
+
+### Feature: Container and List Parsing
+
+| ID | Story | High-level AC |
+|---|---|---|
+| CONTAINERS-001 | Parse block quotes | Block quote examples render nested blocks, including valid lazy continuation behavior. |
+| CONTAINERS-002 | Parse list items and lists | List examples render marker types, nesting, continuation, empty items, and tight or loose paragraph treatment. |
+
+### Feature: Inline Parsing
+
+| ID | Story | High-level AC |
+|---|---|---|
+| INLINES-001 | Parse code spans | Code span examples match backtick delimiters and normalize content as specified. |
+| INLINES-002 | Parse emphasis and strong emphasis | Emphasis examples follow delimiter-run rules, nesting, and precedence. |
+| INLINES-003 | Parse links | Inline and reference link examples resolve destinations, titles, labels, and link precedence. |
+| INLINES-004 | Parse images | Inline and reference image examples render destinations, titles, and plain-text alt content. |
+| INLINES-005 | Parse autolinks | URI and email autolink examples render links only for valid forms. |
+| INLINES-006 | Parse raw HTML and hard line breaks | Inline HTML examples remain raw, and hard line break examples render `<br />` where required. |
+| INLINES-007 | Parse escapes, references, and soft line breaks | Escape, entity, numeric reference, and soft line break examples follow their specified text rules. |
+
+### Feature: Executable and Conformance
+
+| ID | Story | High-level AC |
+|---|---|---|
+| DELIVERY-001 | Provide the standard-stream executable | An executable `./commonmark` reads UTF-8 Markdown from stdin and writes HTML to stdout. |
+| VERIFICATION-001 | Pass the complete conformance suite | After all parser implementation stories, the supplied unfiltered suite passes with exit code zero. |
+
+## Story Guidance
+
+Named stories planning must produce. Authoritative record: `STORY_GUIDANCE.json`.
+
+None.
+
+## Surfaced Acceptance Criteria
+
+None.
+
+## Source Inventory
+
+| Path | Content kind | Disposition | Reason |
+|---|---|---|---|
+| `sources/INSTRUCTIONS.md` | markdown | analyzed | readable UTF-8 |
+| `sources/cmark.py` | code | analyzed | readable UTF-8 |
+| `sources/full_test.sh` | code | analyzed | readable UTF-8 |
+| `sources/normalize.py` | code | analyzed | readable UTF-8 |
+| `sources/spec.txt` | text | chunked | split into 18 bounded chunks |
+| `sources/spec_tests.py` | code | analyzed | readable UTF-8 |
+
+## Relationship Model
+
+| Source or group | Relationship type | Related source or group | Evidence | Delivery implication |
+|---|---|---|---|---|
+| `sources/INSTRUCTIONS.md` | instruction-to-test | `sources/full_test.sh`, `sources/spec_tests.py` | Requires a root executable, scoped story checks, and one terminal full-suite verification story. | Build the executable and keep scoped implementation checks separate from the single complete-suite gate. |
+| `sources/spec.txt` | reference-to-replacement | `sources/cmark.py` | Normative CommonMark 0.31.2 behavior and examples; `cmark.py` can call a program or library. | Implement the specified parser behavior; do not use a public Markdown implementation. |
+| `sources/spec_tests.py` | test-kit-to-implementation | `sources/commonmark` | Loads examples from `spec.txt`, invokes the supplied program, and compares normalized HTML. | Use section selectors for implementation story checks and the unfiltered suite only in terminal verification. |
+| `sources/full_test.sh` | dependency | `sources/spec_tests.py`, `sources/cmark.py`, `sources/normalize.py`, `sources/spec.txt` | Stages and invokes the runner and its sibling imports and specification corpus. | Stage all named runtime assets verbatim; the root executable must be runnable by the harness. |
+| `sources/normalize.py` | parser-to-normalizer | `sources/spec_tests.py` | Normalizes HTML output before comparisons. | Treat normalization as supplied test support, not parser behavior or an independently authored story. |
+
+## Source Roles
+
+| Path | Role | Plan disposition | Build disposition |
+|---|---|---|---|
+| `sources/INSTRUCTIONS.md` | author intent | context | prompt-only |
+| `sources/cmark.py` | reference implementation | context | stage |
+| `sources/full_test.sh` | conformance harness | context | stage |
+| `sources/normalize.py` | test helper | context | stage |
+| `sources/spec.txt` | normative specification and conformance test suite | context | stage |
+| `sources/spec_tests.py` | conformance harness | context | stage |
+
+## Planning Instructions
+
+### Delivery Shape
+
+Build a command-line CommonMark 0.31.2 parser. Its input is UTF-8 Markdown on standard input; its output is HTML on standard output. The required flow is: consume input, parse block structure, resolve link reference definitions, parse inline content, render HTML, and write the result. The supplied runner invokes the root `./commonmark` executable against the complete specification corpus.
+
+### Story Realization Map
+
+| Story ID | Blueprint scope and evidence | Related files | Delivery implication |
+|---|---|---|---|
+| BLOCKS-001 | `Thematic breaks`, `sources/spec.txt` | `sources/spec_tests.py` | Implement and scope checks to the `Thematic breaks` section. |
+| BLOCKS-002 | `ATX headings`, `sources/spec.txt` | `sources/spec_tests.py` | Implement and scope checks to `ATX headings`. |
+| BLOCKS-003 | `Setext headings`, `sources/spec.txt` | `sources/spec_tests.py` | Implement and scope checks to `Setext headings`. |
+| BLOCKS-004 | `Indented code blocks`, `sources/spec.txt` | `sources/spec_tests.py` | Implement and scope checks to `Indented code blocks`. |
+| BLOCKS-005 | `Fenced code blocks`, `sources/spec.txt` | `sources/spec_tests.py` | Implement and scope checks to `Fenced code blocks`. |
+| BLOCKS-006 | `HTML blocks`, `sources/spec.txt` | `sources/spec_tests.py` | Implement and scope checks to `HTML blocks`. |
+| BLOCKS-007 | `Link reference definitions`, `sources/spec.txt` | `sources/spec_tests.py` | Implement document-wide definition collection and scope checks to `Link reference definitions`. |
+| BLOCKS-008 | `Paragraphs` and `Blank lines`, `sources/spec.txt` | `sources/spec_tests.py` | Implement paragraph formation and scope checks to both example-owning sections. |
+| CONTAINERS-001 | `Block quotes`, `sources/spec.txt` | `sources/spec_tests.py` | Implement quote containers and lazy continuation; scope checks to `Block quotes`. |
+| CONTAINERS-002 | `List items` and `Lists`, `sources/spec.txt` | `sources/spec_tests.py` | Implement list parsing and tightness; scope checks to both example-owning sections. |
+| INLINES-001 | `Code spans`, `sources/spec.txt` | `sources/spec_tests.py` | Implement code span parsing and scope checks to `Code spans`. |
+| INLINES-002 | `Emphasis and strong emphasis`, `sources/spec.txt` | `sources/spec_tests.py` | Implement delimiter-run parsing and scope checks to `Emphasis and strong emphasis`. |
+| INLINES-003 | `Links`, `sources/spec.txt` | `sources/spec_tests.py` | Implement inline and reference links; scope checks to `Links`. |
+| INLINES-004 | `Images`, `sources/spec.txt` | `sources/spec_tests.py` | Implement inline and reference images; scope checks to `Images`. |
+| INLINES-005 | `Autolinks`, `sources/spec.txt` | `sources/spec_tests.py` | Implement URI and email autolinks; scope checks to `Autolinks`. |
+| INLINES-006 | `Raw HTML` and `Hard line breaks`, `sources/spec.txt` | `sources/spec_tests.py` | Implement inline HTML and hard breaks; scope checks to both example-owning sections. |
+| INLINES-007 | `Backslash escapes`, `Entity and numeric character references`, `Soft line breaks`, `Textual content`, `sources/spec.txt` | `sources/spec_tests.py` | Implement text-level inline rules; scope checks to each listed example-owning section. |
+| DELIVERY-001 | Root executable interface, `sources/INSTRUCTIONS.md`, `sources/full_test.sh` | `./commonmark` | Provide the required runnable stdin-to-stdout executable before conformance verification. |
+| VERIFICATION-001 | Complete supplied suite, `sources/INSTRUCTIONS.md`, `sources/full_test.sh` | All implementation stories; staged `sources/full_test.sh` and its dependencies | Terminal story depends on every parser implementation story and is the sole `Suite: full` acceptance check. |
+
+### Test and Acceptance Strategy
+
+Implementation stories run `spec_tests.py` with explicit selectors for their complete example-owning section scopes. Do not select chapter headings that own no examples, and do not invoke `full_test.sh` from scoped checks. The terminal verification story depends on all parser implementation stories, runs `sh sources/full_test.sh`, prints captured stdout and stderr, and asserts only that the result return code is zero. It carries Sea Trial `st-001` and is the only full-suite acceptance check.
+
+### Sequencing and Dependencies
+
+Build the root executable before scoped conformance checks. Implement block structure before inline parsing; collect link reference definitions during block parsing so inline links can resolve after document parsing. Implement containers and lists with block parsing. Stage the supplied harness, runner, normalizer, and specification corpus before verification. The terminal verification story follows all parser implementation stories.
+
+### Source Conflicts and Gaps
+
+No conflicting behavior definitions or unresolved product decisions appear in the supplied sources. The unattended UAT policy prohibits emitting questionnaires or blockers; project identity is derived as CommonMark, a command-line parser that converts Markdown input to HTML.
+
+## Analysis Notes
+generated: 2026-10-27
+blueprint: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/workspace/targets/commonmark/blueprint
+
+Quality: Ready
+  blockers: 0
+  questions: 0
+  features: 4
+  stories: 19
+  stack: Python command-line executable
+  display_name: CommonMark
+  short_description: A command-line parser that converts CommonMark Markdown from standard input to HTML on standard output.
+
+No ambiguous project type signals. Project type: cli. All runtime test dependencies named by the harness are staged. Identity is derived from source intent under unattended UAT policy.

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/tests/test_setext.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/tests/test_setext.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/tests/test_setext.py">Raw file</a></div></header>
+<article class="doc"><pre>from commonmark_parser.blocks import parse_blocks
+from commonmark_parser.setext import parse_setext
+from commonmark_parser import render
+
+
+def test_parse_setext_level_one_and_multiline_raw_content():
+    assert parse_setext([&quot;alpha&quot;, &quot;beta&quot;, &quot;===&quot;]) == (1, &quot;alpha\nbeta&quot;)
+
+
+def test_parse_setext_level_two():
+    assert parse_setext([&quot;alpha&quot;, &quot;---&quot;]) == (2, &quot;alpha&quot;)
+
+
+def test_parse_setext_rejects_empty_or_invalid_underline():
+    assert parse_setext([&quot;&quot;, &quot;===&quot;]) is None
+    assert parse_setext([&quot;alpha&quot;, &quot;    ---&quot;]) is None
+    assert parse_setext([&quot;alpha&quot;, &quot;= =&quot;]) is None
+
+
+def test_block_parser_setext_takes_precedence_over_thematic_break():
+    nodes = parse_blocks(&quot;alpha\n---\n&quot;).children
+    assert [(node.kind, node.level, node.literal) for node in nodes] == [(&quot;heading&quot;, 2, &quot;alpha&quot;)]
+
+
+def test_block_parser_preserves_multiline_content_and_trims_outer_whitespace():
+    nodes = parse_blocks(&quot;  alpha \n beta \t\n === \t\n&quot;).children
+    assert [(node.kind, node.level, node.literal) for node in nodes] == [(&quot;heading&quot;, 1, &quot;alpha \n beta&quot;)]
+
+
+def test_underline_without_paragraph_remains_thematic_break():
+    nodes = parse_blocks(&quot;---\n&quot;).children
+    assert [node.kind for node in nodes] == [&quot;thematic_break&quot;]
+
+
+def test_four_column_indented_underline_does_not_convert_paragraph():
+    nodes = parse_blocks(&quot;alpha\n    ---\n&quot;).children
+    assert [(node.kind, node.literal) for node in nodes] == [(&quot;paragraph&quot;, &quot;alpha\n---&quot;)]
+
+
+def test_multiline_setext_heading_resolves_emphasis_across_soft_break():
+    assert render(&quot;Foo *bar\nbaz*\n====\n&quot;) == &quot;&lt;h1&gt;Foo &lt;em&gt;bar\nbaz&lt;/em&gt;&lt;/h1&gt;\n&quot;
+
+
+def test_multiline_setext_heading_keeps_unemphasized_neighbor():
+    assert render(&quot;Foo bar\nbaz\n====\n&quot;) == &quot;&lt;h1&gt;Foo bar\nbaz&lt;/h1&gt;\n&quot;
+</pre></article>
+</main>
+</body>
+</html>

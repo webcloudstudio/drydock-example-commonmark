@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-9.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-9.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-9.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 9 · Service (block-9)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-27</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 3277</li><li>execution id: 20261027.213041.126Z-a9181387</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse inline code spans. (code-spans) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>stack: python_compact.md (SP 654)</li><li>compass: COMPASS.md (SP 548)</li><li>implements: FEATURE-CodeSpans.md (SP 630)</li><li>context: ARCHITECTURE_compact.md (SP 304)</li><li>stack: common_compact.md (SP 1079)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>commonmark_parser/inlines.py</li><li>tests/test_inline_text.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: code-span-literal (FEATURE-CodeSpans.md)</li></ul>
+<p>intent: Matching backtick runs yield a code node that preserves its literal content. return code: 1 stderr: --- drydock: values at failure --- nodes = [Inline(type=&#x27;text&#x27;, literal=&#x27;<code>literal &amp; text</code>&#x27;)] --- drydock: end values --- Traceback (most recent call last): File &quot;code-span-literal.py&quot;, line 6, in &lt;module&gt; assert nodes[0].type == &quot;code&quot; ^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: code-span-normalization (FEATURE-CodeSpans.md)</li></ul>
+<p>intent: A matched span converts its line ending to a space and removes one paired surrounding space. return code: 1 stderr: --- drydock: values at failure --- nodes = [Inline(type=&#x27;text&#x27;, literal=&#x27;<code>alpha&#x27;), Inline(type=&#x27;softbreak&#x27;, literal=&#x27;&#x27;), Inline(type=&#x27;text&#x27;, literal=&#x27;beta</code>&#x27;)] --- drydock: end values --- Traceback (most recent call last): File &quot;code-span-normalization.py&quot;, line 6, in &lt;module&gt; assert len(nodes) == 1 ^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>GREEN (prepassed): code-span-unmatched (FEATURE-CodeSpans.md)</li></ul>
+<p>intent: An unmatched opening run remains literal text. return code: 0</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: code-span-literal (FEATURE-CodeSpans.md)</li></ul>
+<p>intent: Matching backtick runs yield a code node that preserves its literal content. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: code-span-normalization (FEATURE-CodeSpans.md)</li></ul>
+<p>intent: A matched span converts its line ending to a space and removes one paired surrounding space. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: code-span-unmatched (FEATURE-CodeSpans.md)</li></ul>
+<p>intent: An unmatched opening run remains literal text. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<h2>Build summary</h2>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>commonmark_parser/inlines.py</li><li>tests/test_inline_text.py</li></ul>
+<p>SUMMARY: Implemented inline code spans with equal-length backtick matching, line-ending and paired-space normalization, and literal content preservation. Added focused coverage. <code>pytest -q tests/test_inline_text.py</code> passed: 13 tests.</p>
+<p>BLOCKERS:</p>
+<ul><li>None</li></ul></article>
+</main>
+</body>
+</html>

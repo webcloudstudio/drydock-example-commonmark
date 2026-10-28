@@ -1,0 +1,29 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/__init__.py
+- commonmark_parser/blocks.py
+- commonmark_parser/indented_code.py
+- commonmark_parser/references.py
+- tests/test_lists.py
+- tests/test_render_integration.py
+
+SUMMARY:
+Fixed escaped URI autolinks, indented code boundaries, list grouping and tightness, and reference-definition handling around setext headings. Added regression tests.
+
+Checks run:
+
+- `pytest -q` — 96 passed.
+- `python3 sources/spec_tests.py --program "$PWD/commonmark" --spec sources/spec.txt --pattern '^(List items|Lists)$'` — 74 passed.
+- HTML blocks selector — 46 passed.
+- Backslash escapes and Autolinks selector — 32 passed.
+- Link reference definitions selector — 24 passed, 3 failed.
+- Full inline selector — 267 passed, 89 failed.
+
+The scoped conformance work remains incomplete. Remaining failures include reference-label parsing, emphasis and link nesting, image integration, and raw HTML cases.
+
+BLOCKERS:
+- The integrated parser does not yet pass the scoped conformance examples.
+
+FAILURE_SUMMARY: Scoped conformance suites still have failing examples.
+FAILURE_DETAIL: The list selector passes, but the inline selector reports 89 failures and the link reference definitions selector reports 3. Repair inline delimiter and link/image integration, raw HTML tokenization, and escaped or multiline reference labels, then rerun the affected scoped selectors.

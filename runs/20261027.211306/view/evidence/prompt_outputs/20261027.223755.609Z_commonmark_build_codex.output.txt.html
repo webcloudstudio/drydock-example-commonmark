@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261027.223755.609Z_commonmark_build_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261027.223755.609Z_commonmark_build_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261027.223755.609Z_commonmark_build_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/inlines.py
+- tests/test_setext.py
+
+SUMMARY:
+Fixed multiline emphasis in Setext headings and added regression tests. The reproduced example now renders correctly; the adjacent plain heading also passes.
+
+Executed checks:
+
+- `python3 -m pytest -q tests/test_setext.py` — 9 passed.
+- `printf &#x27;Foo *bar\nbaz*\n====\n&#x27; | ./commonmark` — rendered the heading with emphasis across the line break.
+
+The recorded block, container, and inline conformance suites remain failing on multiple independent parser behaviors. They were not rerun during this repair.
+
+BLOCKERS:
+- The scoped conformance failures require additional repairs across block parsing, containers, references, and inline parsing.
+
+FAILURE_SUMMARY: Scoped conformance suites still have unresolved failures.
+FAILURE_DETAIL: The recorded logs show failures in Setext parsing, HTML and code blocks, lists, reference definitions, links, images, autolinks, and inline delimiter handling. This repair addressed only multiline emphasis in Setext headings; continue by reproducing and fixing those failing branches, then run the scoped checks.</pre></article>
+</main>
+</body>
+</html>

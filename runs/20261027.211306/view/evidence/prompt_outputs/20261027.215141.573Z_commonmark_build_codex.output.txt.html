@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261027.215141.573Z_commonmark_build_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261027.215141.573Z_commonmark_build_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261027.215141.573Z_commonmark_build_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/blocks.py
+- tests/test_lists.py
+
+SUMMARY:
+- Fixed list continuation parsing to measure tab indentation in visual columns and strip the item indent by columns.
+- Added a regression for a tab-indented continuation after a blank line.
+- `pytest -q tests/test_lists.py`: 7 passed.
+- `pytest -q`: 72 passed.
+- Reproduced Tabs with `--dump-tests`; running the Tabs selector still reports 3 failures. The saved acceptance logs also show failures in blocks, containers, and inlines.
+
+BLOCKERS:
+- The integrated parser still fails the declared conformance checks, including remaining tab handling and failures in other parser stages.
+
+FAILURE_SUMMARY: Scoped CommonMark conformance checks remain failing
+FAILURE_DETAIL: The fix resolves Tabs example 4, but Tabs examples 5–7 still fail due to tab stops after block markers. Saved block and container logs show additional failures in headings, HTML, references, and list handling; the inline log reports many inline failures. Address these parser issues before rerunning the scoped checks.</pre></article>
+</main>
+</body>
+</html>

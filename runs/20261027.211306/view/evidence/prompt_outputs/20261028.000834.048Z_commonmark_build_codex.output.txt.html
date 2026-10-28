@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261028.000834.048Z_commonmark_build_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261028.000834.048Z_commonmark_build_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261028.000834.048Z_commonmark_build_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/autolinks.py
+- commonmark_parser/blocks.py
+- commonmark_parser/inline_html_breaks.py
+- tests/test_inline_providers.py
+- tests/test_render_integration.py
+
+SUMMARY:
+Fixed list tightness for a blank line before a nested list and code span/autolink precedence. All 102 project tests passed. Conformance examples 107, 109, and 347–349 passed; the saved broader conformance logs contain additional failures that remain unresolved.
+
+BLOCKERS:
+- Broader block failures include reference definition parsing. Inline failures include emphasis and delimiter matching, links and images, raw HTML, and hard breaks. Full scoped conformance suites were not rerun.
+
+FAILURE_SUMMARY: Scoped CommonMark conformance remains incomplete
+FAILURE_DETAIL: The focused regressions pass, but the saved conformance results show unrelated failures across reference definitions and inline parsing. Repair those parser behaviors and rerun the affected scoped selectors before retrying this block.</pre></article>
+</main>
+</body>
+</html>

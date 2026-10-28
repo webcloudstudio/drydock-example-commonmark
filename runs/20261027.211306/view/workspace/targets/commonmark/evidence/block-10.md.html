@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-10.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-10.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-10.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 10 · Service (block-10)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-27</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 4675</li><li>execution id: 20261027.213148.636Z-1bae04d1</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse emphasis and strong emphasis. (emphasis) [story]</li><li>Parse URI and email autolinks. (autolinks) [story]</li><li>Parse raw inline HTML and hard line breaks. (inline-html-breaks) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>stack: python_compact.md (SP 654)</li><li>compass: COMPASS.md (SP 548)</li><li>implements: FEATURE-Emphasis.md (SP 747)</li><li>context: ARCHITECTURE_compact.md (SP 304)</li><li>stack: common_compact.md (SP 1079)</li><li>implements: FEATURE-Autolinks.md (SP 568)</li><li>implements: FEATURE-InlineHTMLBreaks.md (SP 581)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>commonmark_parser/autolinks.py</li><li>commonmark_parser/inline_html_breaks.py</li><li>commonmark_parser/inlines.py</li><li>tests/test_inline_providers.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: emphasis-basic (FEATURE-Emphasis.md)</li></ul>
+<p>intent: A matching single delimiter pair produces an emphasis node containing the supplied text. return code: 1 stderr: --- drydock: values at failure --- nodes = [Inline(type=&#x27;text&#x27;, literal=&#x27;<em>alpha</em>&#x27;)] --- drydock: end values --- Traceback (most recent call last): File &quot;emphasis-basic.py&quot;, line 6, in &lt;module&gt; assert nodes[0].type == &quot;em&quot; ^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: emphasis-strong (FEATURE-Emphasis.md)</li></ul>
+<p>intent: A matching double delimiter pair produces a strong node containing the supplied text. return code: 1 stderr: --- drydock: values at failure --- nodes = [Inline(type=&#x27;text&#x27;, literal=&#x27;<strong>beta</strong>&#x27;)] --- drydock: end values --- Traceback (most recent call last): File &quot;emphasis-strong.py&quot;, line 6, in &lt;module&gt; assert nodes[0].type == &quot;strong&quot; ^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>GREEN (prepassed): emphasis-intraword-underscore (FEATURE-Emphasis.md)</li></ul>
+<p>intent: Underscores within a word remain literal rather than creating emphasis. return code: 0</p>
+<ul><li>RED: autolinks-uri (FEATURE-Autolinks.md)</li></ul>
+<p>intent: A valid angle-delimited URI becomes a link with the supplied URI as destination and label. return code: 1 stderr: Traceback (most recent call last): File &quot;autolinks-uri.py&quot;, line 1, in &lt;module&gt; from commonmark_parser.autolinks import parse_autolinks<br>ModuleNotFoundError: No module named &#x27;commonmark_parser.autolinks&#x27;</p>
+<ul><li>RED: autolinks-email-and-invalid (FEATURE-Autolinks.md)</li></ul>
+<p>intent: An email autolink receives the mail scheme, while an angle-delimited URI containing a space remains text. return code: 1 stderr: Traceback (most recent call last): File &quot;autolinks-email-and-invalid.py&quot;, line 1, in &lt;module&gt; from commonmark_parser.autolinks import parse_autolinks<br>ModuleNotFoundError: No module named &#x27;commonmark_parser.autolinks&#x27;</p>
+<ul><li>RED: inline-html-raw (FEATURE-InlineHTMLBreaks.md)</li></ul>
+<p>intent: A valid inline tag is preserved as a raw HTML node with its original spelling. return code: 1 stderr: Traceback (most recent call last): File &quot;inline-html-raw.py&quot;, line 1, in &lt;module&gt; from commonmark_parser.inline_html_breaks import parse_inline_html_breaks<br>ModuleNotFoundError: No module named &#x27;commonmark_parser.inline_html_breaks&#x27;</p>
+<ul><li>RED: inline-hard-breaks (FEATURE-InlineHTMLBreaks.md)</li></ul>
+<p>intent: Both specified hard-break forms create a break between text, while a trailing backslash remains text. return code: 1 stderr: Traceback (most recent call last): File &quot;inline-hard-breaks.py&quot;, line 1, in &lt;module&gt; from commonmark_parser.inline_html_breaks import parse_inline_html_breaks<br>ModuleNotFoundError: No module named &#x27;commonmark_parser.inline_html_breaks&#x27;</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: emphasis-basic (FEATURE-Emphasis.md)</li></ul>
+<p>intent: A matching single delimiter pair produces an emphasis node containing the supplied text. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: emphasis-strong (FEATURE-Emphasis.md)</li></ul>
+<p>intent: A matching double delimiter pair produces a strong node containing the supplied text. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: emphasis-intraword-underscore (FEATURE-Emphasis.md)</li></ul>
+<p>intent: Underscores within a word remain literal rather than creating emphasis. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: autolinks-uri (FEATURE-Autolinks.md)</li></ul>
+<p>intent: A valid angle-delimited URI becomes a link with the supplied URI as destination and label. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: autolinks-email-and-invalid (FEATURE-Autolinks.md)</li></ul>
+<p>intent: An email autolink receives the mail scheme, while an angle-delimited URI containing a space remains text. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: inline-html-raw (FEATURE-InlineHTMLBreaks.md)</li></ul>
+<p>intent: A valid inline tag is preserved as a raw HTML node with its original spelling. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: inline-hard-breaks (FEATURE-InlineHTMLBreaks.md)</li></ul>
+<p>intent: Both specified hard-break forms create a break between text, while a trailing backslash remains text. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<h2>Build summary</h2>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>commonmark_parser/inlines.py</li><li>commonmark_parser/autolinks.py</li><li>commonmark_parser/inline_html_breaks.py</li><li>tests/test_inline_providers.py</li></ul>
+<p>SUMMARY: Added emphasis parsing with Unicode punctuation flanking, URI and email autolink recognition, and inline HTML and hard-break parsing. Added focused provider tests.</p>
+<p>Checks run: <code>pytest -q tests/test_inline_text.py tests/test_inline_providers.py</code> — 19 passed. <code>pytest -q</code> — 56 passed.</p>
+<p>BLOCKERS:</p>
+<ul><li>Autolink and raw HTML nodes are exposed by their parsing APIs; HTML serialization is not covered here because the existing renderer is a stub.</li></ul></article>
+</main>
+</body>
+</html>

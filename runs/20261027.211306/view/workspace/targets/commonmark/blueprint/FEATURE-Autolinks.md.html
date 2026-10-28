@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Autolinks.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Autolinks.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Autolinks.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Autolinks</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Recognize URI and email autolinks in inline content.</td></tr><tr><td>Depends On</td><td>FEATURE-InlineText.md, FEATURE-CodeSpans.md</td></tr><tr><td>Provides</td><td>autolink parsing</td></tr><tr><td>Consumes</td><td>inline text parsing, code span parsing</td></tr></tbody></table></div>
+<h2>Purpose and workflow</h2>
+<p>Recognize angle-delimited absolute URI autolinks with a scheme of two to 32 permitted ASCII characters and no forbidden URI characters. Recognize email autolinks using the specification&#x27;s email grammar. The visible label is the enclosed text; an email destination adds the <code>mailto:</code> scheme. Backslash escapes do not operate inside an autolink. Encode destinations and escape HTML when rendering, and respect code-span precedence.</p>
+<p>For direct incremental acceptance, expose <code>parse_autolinks(source)</code> from <code>commonmark_parser.autolinks</code>. It returns inline nodes. An autolink node exposes <code>type</code>, <code>destination</code>, and <code>label</code>; ordinary text nodes expose <code>type</code> and <code>literal</code>.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC autolinks-uri ===<br>Intent: A valid angle-delimited URI becomes a link with the supplied URI as destination and label.</p>
+<p>from commonmark_parser.autolinks import parse_autolinks</p>
+<p>uri = &quot;https://example.test/path&quot; nodes = parse_autolinks(f&quot;&lt;{uri}&gt;&quot;) assert len(nodes) == 1 assert nodes[0].type == &quot;link&quot; assert nodes[0].destination == uri assert nodes[0].label == uri === END AC autolinks-uri ===</p>
+<p>=== AC autolinks-email-and-invalid ===<br>Intent: An email autolink receives the mail scheme, while an angle-delimited URI containing a space remains text.</p>
+<p>from commonmark_parser.autolinks import parse_autolinks</p>
+<p>address = &quot;person@example.test&quot; nodes = parse_autolinks(f&quot;&lt;{address}&gt;&quot;) assert len(nodes) == 1 assert nodes[0].type == &quot;link&quot; assert nodes[0].destination == &quot;mailto:&quot; + address assert nodes[0].label == address source = &quot;&lt;https://example.test/a b&gt;&quot; nodes = parse_autolinks(source) assert all(node.type == &quot;text&quot; for node in nodes) assert &quot;&quot;.join(node.literal for node in nodes) == source === END AC autolinks-email-and-invalid ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Follow CommonMark 0.31.2 and do not use a public Markdown implementation.</li><li>Complete mixed-section conformance checks belong to the later integration story.</li></ul></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build/commonmark/commonmark_parser/references.py</title>
+<link rel="stylesheet" href="../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>build/commonmark/commonmark_parser/references.py</h1><div class="filenav"><a href="../../../../index.html">&larr; Report</a><a href="../../../../build/commonmark/commonmark_parser/references.py">Raw file</a></div></header>
+<article class="doc"><pre>&quot;&quot;&quot;Document-wide link reference definition extraction.&quot;&quot;&quot;
+
+import html
+import re
+
+_LABEL = re.compile(r&quot;^ {0,3}\[([^\[\]]+)\]:[ \t]*(.*)$&quot;)
+
+
+def _unescape(value: str) -&gt; str:
+    value = html.unescape(value)
+    return re.sub(r&quot;\\([!\&quot;#$%&amp;&#x27;()*+,\-./:;&lt;=&gt;?@\[\\\]^_`{|}~])&quot;, r&quot;\1&quot;, value)
+
+
+def _label(value: str) -&gt; str:
+    return &quot; &quot;.join(value.casefold().strip(&quot; \t\r\n&quot;).split())
+
+
+def extract_definitions(text: str, references: dict) -&gt; str:
+    lines = text.splitlines(keepends=True)
+    offset = 0
+    while offset &lt; len(lines):
+        current = lines[offset].rstrip(&quot;\r\n&quot;)
+        match = _LABEL.match(current)
+        if not match or not match.group(1).strip(&quot; \t&quot;):
+            break
+        key = _label(match.group(1))
+        first_definition = key not in references
+        rest = match.group(2).strip(&quot; \t&quot;)
+        # Destinations and titles may continue on following lines. Keep the
+        # original indentation available while applying the CommonMark limits.
+        if not rest and offset + 1 &lt; len(lines):
+            candidate = lines[offset + 1].strip(&quot; \t\r\n&quot;)
+            if candidate:
+                rest = candidate
+                offset += 1
+        if rest and rest[0] in &quot;\&quot;&#x27;(&quot; and rest[-1] != ({&#x27;&quot;&#x27;: &#x27;&quot;&#x27;, &quot;&#x27;&quot;: &quot;&#x27;&quot;, &quot;(&quot;: &quot;)&quot;}[rest[0]]) and offset + 1 &lt; len(lines):
+            candidate = lines[offset + 1].strip(&quot; \t\r\n&quot;)
+            if candidate:
+                rest += &quot; &quot; + candidate
+                offset += 1
+        destination = None
+        title = None
+        if rest.startswith(&quot;&lt;&quot;):
+            end = rest.find(&quot;&gt;&quot;)
+            if end &gt; 0 and &quot;\n&quot; not in rest[1:end]:
+                destination, tail = rest[1:end], rest[end + 1:].strip(&quot; \t&quot;)
+                separated = end + 1 == len(rest) or rest[end + 1].isspace()
+            else:
+                break
+        else:
+            dest_match = re.match(r&quot;((?:\\.|[^\s])*)&quot;, rest)
+            destination = dest_match.group(1) if dest_match else &quot;&quot;
+            tail = rest[len(destination):].strip(&quot; \t&quot;)
+            separated = len(destination) == len(rest) or rest[len(destination)].isspace()
+            if destination.count(&quot;(&quot;) - destination.count(&quot;)&quot;) &gt; 0:
+                break
+        if not destination and not (rest.startswith(&quot;&lt;&quot;) and rest.startswith(&quot;&lt;&gt;&quot;)):
+            break
+        if tail:
+            if not separated or tail[0] not in &quot;\&quot;&#x27;(&quot; or tail[-1] != ({&#x27;&quot;&#x27;: &#x27;&quot;&#x27;, &quot;&#x27;&quot;: &quot;&#x27;&quot;, &quot;(&quot;: &quot;)&quot;}[tail[0]]):
+                break
+            title = _unescape(tail[1:-1])
+        if first_definition:
+            references[key] = (_unescape(destination), title)
+        offset += 1
+        if offset &lt; len(lines) and lines[offset].lstrip(&quot; \t&quot;).startswith((&quot;\&quot;&quot;, &quot;&#x27;&quot;, &quot;(&quot;)) and title is None:
+            candidate = lines[offset].strip(&quot; \t\r\n&quot;)
+            if len(candidate) &gt;= 2 and candidate[0] in &quot;\&quot;&#x27;(&quot; and candidate[-1] == {&#x27;&quot;&#x27;: &#x27;&quot;&#x27;, &quot;&#x27;&quot;: &quot;&#x27;&quot;, &quot;(&quot;: &quot;)&quot;}[candidate[0]]:
+                if first_definition:
+                    references[key] = (_unescape(destination), _unescape(candidate[1:-1]))
+                offset += 1
+    return &quot;&quot;.join(lines[offset:])
+</pre></article>
+</main>
+</body>
+</html>

@@ -1,0 +1,102 @@
+Drydock 0.8.0  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+2026-10-27 17:14:01 EDT  Calling CODEX/gpt-6.1-terra (plan · topology)...
+  Completed CODEX/gpt-6.1-terra (plan · topology)  rc=0
+========================================================================
+PLAN PROGRESS  ·  STAGE 1 · TOPOLOGY
+========================================================================
+Topology Created:  True
+Blueprints Created: 0 / 21
+Manifest Created:  False
+Blueprints Remaining: 21
+Batch Result:       Topology accepted
+========================================================================
+2026-10-27 17:14:29 EDT  Calling CODEX/gpt-6.1-terra (plan · blueprint batch 1)...
+  Completed CODEX/gpt-6.1-terra (plan · blueprint batch 1)  rc=0
+========================================================================
+PLAN PROGRESS  ·  STAGE 2 · BLUEPRINT BATCH 1
+========================================================================
+Topology Created:  True
+Blueprints Created: 5 / 21
+Manifest Created:  False
+Blueprints Remaining: 16
+Batch Result:       Accepted 5 Blueprint(s)
+========================================================================
+2026-10-27 17:14:56 EDT  Calling CODEX/gpt-6.1-terra (plan · blueprint batch 2)...
+  Completed CODEX/gpt-6.1-terra (plan · blueprint batch 2)  rc=0
+========================================================================
+PLAN PROGRESS  ·  STAGE 2 · BLUEPRINT BATCH 2
+========================================================================
+Topology Created:  True
+Blueprints Created: 10 / 21
+Manifest Created:  False
+Blueprints Remaining: 11
+Batch Result:       Accepted 5 Blueprint(s)
+========================================================================
+2026-10-27 17:15:30 EDT  Calling CODEX/gpt-6.1-terra (plan · blueprint batch 3)...
+  Completed CODEX/gpt-6.1-terra (plan · blueprint batch 3)  rc=0
+========================================================================
+PLAN PROGRESS  ·  STAGE 2 · BLUEPRINT BATCH 3
+========================================================================
+Topology Created:  True
+Blueprints Created: 15 / 21
+Manifest Created:  False
+Blueprints Remaining: 6
+Batch Result:       Accepted 5 Blueprint(s)
+========================================================================
+2026-10-27 17:16:03 EDT  Calling CODEX/gpt-6.1-terra (plan · blueprint batch 4)...
+  Completed CODEX/gpt-6.1-terra (plan · blueprint batch 4)  rc=0
+========================================================================
+PLAN PROGRESS  ·  STAGE 2 · BLUEPRINT BATCH 4
+========================================================================
+Topology Created:  True
+Blueprints Created: 20 / 21
+Manifest Created:  False
+Blueprints Remaining: 1
+Batch Result:       Accepted 5 Blueprint(s)
+========================================================================
+2026-10-27 17:16:35 EDT  Calling CODEX/gpt-6.1-terra (plan · blueprint batch 5)...
+  Completed CODEX/gpt-6.1-terra (plan · blueprint batch 5)  rc=0
+========================================================================
+PLAN PROGRESS  ·  STAGE 2 · BLUEPRINT BATCH 5
+========================================================================
+Topology Created:  True
+Blueprints Created: 21 / 21
+Manifest Created:  False
+Blueprints Remaining: 0
+Batch Result:       Accepted 1 Blueprint(s)
+========================================================================
+========================================================================
+PLAN PROGRESS  ·  STAGE 3 · MANIFEST
+========================================================================
+Topology Created:  True
+Blueprints Created: 21 / 21
+Manifest Created:  True
+Blueprints Remaining: 0
+Batch Result:       Manifest validated and serialized
+========================================================================
+2026-10-27 17:17:13 EDT  Calling CODEX/gpt-6.1-terra (lineage_attribute)...
+  Completed CODEX/gpt-6.1-terra (lineage_attribute)  rc=0
+2026-10-27 17:17:19 EDT  Calling CODEX/gpt-6.1-terra (lineage_attribute)...
+  Completed CODEX/gpt-6.1-terra (lineage_attribute)  rc=0
+2026-10-27 17:17:24 EDT  Calling CODEX/gpt-6.1-terra (lineage_attribute)...
+  Completed CODEX/gpt-6.1-terra (lineage_attribute)  rc=0
+2026-10-27 17:17:31 EDT  Calling CODEX/gpt-6.1-terra (lineage_attribute)...
+  Completed CODEX/gpt-6.1-terra (lineage_attribute)  rc=0
+2026-10-27 17:17:39 EDT  Calling CODEX/gpt-6.1-terra (lineage_attribute)...
+  Completed CODEX/gpt-6.1-terra (lineage_attribute)  rc=0
+2026-10-27 17:17:43 EDT  Calling CODEX/gpt-6.1-terra (lineage_attribute)...
+  Completed CODEX/gpt-6.1-terra (lineage_attribute)  rc=0
+2026-10-27 17:17:51 EDT  Calling CODEX/gpt-6.1-terra (lineage_attribute)...
+  Completed CODEX/gpt-6.1-terra (lineage_attribute)  rc=0
+2026-10-27 17:18:38 EDT  Calling CODEX/gpt-6.1-terra (lineage_attribute)...
+  Completed CODEX/gpt-6.1-terra (lineage_attribute)  rc=0
+
+Mode: OVERWRITE (Blueprint specs regenerated from analysis)
+Provider: codex / gpt-6.1-terra
+Graph: 0 features, 21 stories, 0 spikes, 0 acceptance gates
+Warnings: 0
+Outcome: updated
+Execution: 20261027.211401.134Z-3fa1ce43
+Elapsed: 5 minutes 31 seconds
+Review: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/workspace/targets/commonmark/QuarterDeck
+Target - committed project workspace git store

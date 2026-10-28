@@ -1,0 +1,57 @@
+Example 196 (lines 3221-3227) Link reference definitions
+[Foo*bar\]]:my_(url) 'title (with parens)'
+
+[Foo*bar\]]
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-<p><a href="my_(url)" title="title (with parens)">Foo*bar]</a></p>
++<p>[Foo*bar]]:my_(url) 'title (with parens)'</p><p>[Foo*bar]]</p>
+
+Example 198 (lines 3243-3257) Link reference definitions
+[foo]: /url '
+title
+line1
+line2
+'
+
+[foo]
+
+--- expected HTML
++++ actual HTML
+@@ -1,5 +1 @@
+-<p><a href="/url" title="
+-title
+-line1
+-line2
+-">foo</a></p>
++<p>title line1 line2 '</p><p><a href="/url" title="">foo</a></p>
+
+Example 210 (lines 3393-3400) Link reference definitions
+[
+foo
+]: /url
+bar
+
+--- expected HTML
++++ actual HTML
+@@ -1 +1 @@
+-<p>bar</p>
++<p>[ foo ]: /url bar</p>
+
+184 passed, 3 failed, 0 errored, 468 skipped
+
+--- stderr ---
+
+--- drydock: progress ---
+cases: pass=184 fail=3 error=0 skip=468 total=655 from=result.stdout
+--- drydock: end progress ---
+--- drydock: values at failure ---
+  result = CompletedProcess(args=['/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python', 'sources/spec_tests.py', '--program', '/mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/commonmark', '--spec', 'sources/spec.txt', '--pattern', '^(Thematic breaks|ATX headings|Setext headings|Indented code blocks|Fenced code blo… (+937 chars)
+--- drydock: end values ---
+Traceback (most recent call last):
+  File "conformance-blocks.py", line 12, in <module>
+    assert result.returncode == 0
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/evidence/block-8.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/evidence/block-8.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/evidence/block-8.md">Raw file</a></div></header>
+<article class="doc"><h1>Evidence: Block 8 · Service (block-8)</h1>
+<ul><li>block type: block</li><li>date: 2026-10-27</li><li>resulting state: closed/verified</li><li>story points (combined assembled cost): 3427</li><li>execution id: 20261027.212943.897Z-4276dc89</li></ul>
+<h2>Stories built</h2>
+<ul><li>Parse escapes, character references, and text line breaks. (inline-text) [story]</li></ul>
+<h2>Stacked context</h2>
+<ul><li>stack: python_compact.md (SP 654)</li><li>compass: COMPASS.md (SP 548)</li><li>implements: FEATURE-InlineText.md (SP 767)</li><li>context: ARCHITECTURE_compact.md (SP 304)</li><li>stack: common_compact.md (SP 1079)</li></ul>
+<h2>Build directory changes</h2>
+<ul><li>commonmark_parser/inlines.py</li><li>tests/test_inline_text.py</li></ul>
+<h2>Pre-build acceptance observation</h2>
+<ul><li>RED: inline-escape (FEATURE-InlineText.md)</li></ul>
+<p>intent: Escaped ASCII punctuation becomes literal text without retaining the escape marker. return code: 1 stderr: --- drydock: values at failure --- nodes = [] --- drydock: end values --- Traceback (most recent call last): File &quot;inline-escape.py&quot;, line 5, in &lt;module&gt; assert len(nodes) == 1 ^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: inline-soft-break (FEATURE-InlineText.md)</li></ul>
+<p>intent: A regular line ending separates text nodes with a soft break while retaining their text. return code: 1 stderr: --- drydock: values at failure --- nodes = [] --- drydock: end values --- Traceback (most recent call last): File &quot;inline-soft-break.py&quot;, line 6, in &lt;module&gt; assert [node.type for node in nodes] == [&quot;text&quot;, &quot;softbreak&quot;, &quot;text&quot;] ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError</p>
+<ul><li>RED: inline-numeric-reference (FEATURE-InlineText.md)</li></ul>
+<p>intent: A valid numeric character reference decodes to the character designated by its input code point. return code: 1 stderr: --- drydock: values at failure --- nodes = [] --- drydock: end values --- Traceback (most recent call last): File &quot;inline-numeric-reference.py&quot;, line 5, in &lt;module&gt; assert len(nodes) == 1 ^^^^^^^^^^^^^^^ AssertionError</p>
+<h2>Post-build programmatic acceptance</h2>
+<ul><li>PASS: inline-escape (FEATURE-InlineText.md)</li></ul>
+<p>intent: Escaped ASCII punctuation becomes literal text without retaining the escape marker. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: inline-soft-break (FEATURE-InlineText.md)</li></ul>
+<p>intent: A regular line ending separates text nodes with a soft break while retaining their text. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<ul><li>PASS: inline-numeric-reference (FEATURE-InlineText.md)</li></ul>
+<p>intent: A valid numeric character reference decodes to the character designated by its input code point. target interpreter: /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/build/commonmark/.venv/bin/python provisioning: not required return code: 0</p>
+<h2>Build summary</h2>
+<p>RESULT: SUCCESS</p>
+<p>FILES CHANGED:</p>
+<ul><li>commonmark_parser/inlines.py</li><li>tests/test_inline_text.py</li></ul>
+<p>SUMMARY: Added inline text parsing for ASCII punctuation escapes, named and numeric character references, invalid numeric scalar replacement, and soft breaks with surrounding spaces trimmed. Added focused tests for these behaviors and edge cases.</p>
+<p>CHECKS:</p>
+<ul><li><code>pytest -q tests/test_inline_text.py tests/test_foundation.py</code> — 12 passed.</li></ul>
+<p>BLOCKERS:</p>
+<ul><li>None</li></ul></article>
+</main>
+</body>
+</html>

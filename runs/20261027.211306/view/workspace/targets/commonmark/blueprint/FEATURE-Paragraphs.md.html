@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-Paragraphs.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-Paragraphs.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-Paragraphs.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Paragraphs and Blank Lines</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Forms paragraph blocks and separates them with blank lines.</td></tr><tr><td>Depends On</td><td>FEATURE-Executable.md</td></tr><tr><td>Provides</td><td>paragraph block parsing</td></tr><tr><td>Consumes</td><td>commonmark</td></tr></tbody></table></div>
+<h2>Behavior</h2>
+<p><code>commonmark_parser.blocks.parse_blocks</code> returns a document whose paragraph nodes retain raw inline content in <code>literal</code>. A sequence of nonblank lines that does not start another block forms a paragraph. Remove initial and final spaces or tabs from the paragraph&#x27;s raw content; remove leading indentation on continuation lines while preserving line endings and meaningful trailing spaces within the paragraph for later inline parsing. An indented continuation cannot start an indented code block in the middle of a paragraph.</p>
+<p>Blank lines separate paragraphs and are ignored at document boundaries. Retain their role for later list tightness processing. The complete Paragraphs and Blank lines conformance sections run in the later conformance integration story once their interacting providers exist.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC paragraph-blocks ===<br>Intent: Consecutive lines form one paragraph and a blank line separates the next paragraph while raw content remains available.</p>
+<p>from commonmark_parser.blocks import parse_blocks</p>
+<p>first = &quot;alpha&quot; second = &quot;beta&quot; third = &quot;gamma&quot; document = parse_blocks(first + &quot;\n&quot; + second + &quot;\n\n&quot; + third + &quot;\n&quot;) assert len(document.children) == 2 assert all(node.kind == &quot;paragraph&quot; for node in document.children) assert document.children[0].literal.splitlines() == [first, second] assert document.children[1].literal.strip() == third === END AC paragraph-blocks ===</p>
+<p>=== AC paragraph-whitespace ===<br>Intent: Paragraph boundaries discard surrounding blank lines and retain the text of an indented continuation.</p>
+<p>from commonmark_parser.blocks import parse_blocks</p>
+<p>first = &quot;alpha&quot; second = &quot;beta&quot; document = parse_blocks(&quot;\n  &quot; + first + &quot;\n    &quot; + second + &quot;\n\n&quot;) assert len(document.children) == 1 assert document.children[0].kind == &quot;paragraph&quot; assert document.children[0].literal.splitlines() == [first, second] === END AC paragraph-whitespace ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Preserve raw inline content for the subsequent inline phase.</li><li>Do not run the full-suite entry point in this story.</li></ul></article>
+</main>
+</body>
+</html>

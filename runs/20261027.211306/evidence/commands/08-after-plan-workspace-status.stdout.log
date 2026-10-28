@@ -1,0 +1,16 @@
+Drydock 0.8.0  Copyright (c) 2026 Web Cloud Studio. All rights reserved.
+Drydock status — workspace
+
+Target: commonmark
+   Phase:     Implement
+   State:     21 pending
+   Detail:    8 imported · 21 authored · metadata planned
+   Analysis:  Ready · 19 stories · 0 questions · 0 blockers
+   Plan:      21 pending
+   Next Step: drydock build commonmark  (frontier: Establish the Python project and parser integration boundaries.)
+   10-27:     ✅  drydock build status commonmark
+   10-27:     ✅  drydock plan verify commonmark --plan-override-model terra
+   10-27:     ✅  drydock plan commonmark --override --plan-override-model terra
+   10-27:     ✅  drydock analyze commonmark
+   10-27:     ✅  drydock import commonmark /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/sources --format markdown
+

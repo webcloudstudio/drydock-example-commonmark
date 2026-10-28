@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evidence/prompt_outputs/20261027.211429.186Z_commonmark_plan_codex.output.txt</title>
+<link rel="stylesheet" href="../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>evidence/prompt_outputs/20261027.211429.186Z_commonmark_plan_codex.output.txt</h1><div class="filenav"><a href="../../../index.html">&larr; Report</a><a href="../../../evidence/prompt_outputs/20261027.211429.186Z_commonmark_plan_codex.output.txt">Raw file</a></div></header>
+<article class="doc"><pre>=== BEGIN ARTIFACT ARCHITECTURE.md ===
+# ARCHITECTURE: CommonMark Parser
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Defines the Python project and the boundaries of the CommonMark parsing pipeline. |
+| Provides | Python project foundation |
+
+## Questions
+
+- None.
+
+## Structure and interfaces
+
+The application root owns the Python project, `pyproject.toml`, committed `uv.lock`, the `.venv` environment created by `uv venv`, launchers in `bin/`, and the `pytest -q` test runner. Runtime code uses Python 3 and the standard library only.
+
+Provide a `commonmark_parser` package with these integration interfaces:
+
+- `commonmark_parser.render(markdown: str) -&gt; str` accepts a complete document and returns HTML. The foundation supplies a callable integration point without claiming conformance.
+- `commonmark_parser.blocks.parse_blocks(markdown: str) -&gt; Document` produces a document tree. A `Document` has an ordered `children` sequence and a document-wide `references` mapping. Block nodes expose `kind`, `children`, and `literal`; headings also expose `level`.
+- `commonmark_parser.inlines.parse_inlines(literal: str, references: dict) -&gt; list` consumes raw paragraph or heading content and the completed reference map.
+
+The block parser consumes lines in document order, maintains open container and leaf blocks, and collects reference definitions when paragraphs close. After the complete block tree and reference map exist, inline parsing processes the raw content of paragraphs and headings. Rendering walks the resulting structure to produce HTML. Preserve raw inline source until the inline phase. The later parser stories extend these interfaces.
+
+Stage the supplied `spec.txt`, `spec_tests.py`, `cmark.py`, `normalize.py`, and `full_test.sh` verbatim under `sources/`. The runner imports its sibling helpers and accepts the candidate program and specification paths. `sources/INSTRUCTIONS.md` is planning context and is not a runtime asset.
+
+## Technology Stack
+
+Python 3 implements the parser and executable. The Python standard library supplies runtime facilities without third-party runtime dependencies. POSIX shell runs the supplied full-suite entry point.
+
+## Boundary ownership
+
+| Boundary | Owner | Access |
+|----------|-------|--------|
+| Standard streams and process entry point | Root executable | Reads stdin and writes stdout through the parser integration interface. |
+| Block tree and document references | `commonmark_parser.blocks` | Owns block construction and the document reference map. |
+| Inline parsing and rendering | `commonmark_parser.inlines` and `commonmark_parser` | Consume completed block contents and references; render HTML. |
+| Conformance assets | `sources/` | Read-only supplied files; the runner invokes the root executable. |
+| Persistence, configuration, external services | None | No persistent store or external service is required. |
+
+## Programmatic Acceptance
+
+=== AC foundation-integration ===
+Intent: The Python foundation exposes the parser integration callable before parser features are implemented.
+
+import commonmark_parser
+
+assert callable(commonmark_parser.render)
+=== END AC foundation-integration ===
+
+=== AC foundation-block-boundary ===
+Intent: The foundation exposes a callable block parser for later block capabilities.
+
+from commonmark_parser.blocks import parse_blocks
+
+assert callable(parse_blocks)
+=== END AC foundation-block-boundary ===
+
+=== AC foundation-inline-boundary ===
+Intent: The foundation exposes a callable inline parser for the second parsing phase.
+
+from commonmark_parser.inlines import parse_inlines
+
+assert callable(parse_inlines)
+=== END AC foundation-inline-boundary ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Do not use a public Markdown implementation.
+- Keep the supplied conformance assets unchanged and stage the five runtime assets verbatim.
+- Do not invoke the full-suite entry point from scoped implementation checks.
+- Do not add file-presence checks or additional verification stories.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Executable.md ===
+# FEATURE: Standard-stream Executable
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Exposes the CommonMark parser as a root executable using standard streams. |
+| Depends On | ARCHITECTURE.md |
+| Provides | commonmark |
+| Consumes | Python project foundation |
+
+## Questions
+
+- None.
+
+## Workflow
+
+Run `./commonmark` from the application root. It reads a complete UTF-8 Markdown document from standard input, passes it to `commonmark_parser.render`, and writes the returned HTML to standard output. Successful conversion exits zero. Operational errors exit nonzero and use standard error.
+
+Provide a concise project `README.md` describing the standard-input and standard-output interface. The executable must be usable as the program argument to the supplied conformance runner. Parser conformance is established by later stories.
+
+## Programmatic Acceptance
+
+=== AC executable-empty-document ===
+Intent: The root executable accepts an empty UTF-8 document and completes successfully through the standard-stream interface.
+Requires: executable=python3; scope=test
+
+import subprocess
+import sys
+
+result = subprocess.run(
+    [&quot;./commonmark&quot;], input=&quot;&quot;, capture_output=True, text=True, encoding=&quot;utf-8&quot;
+)
+print(result.stdout)
+print(result.stderr, file=sys.stderr)
+assert result.returncode == 0
+=== END AC executable-empty-document ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Preserve stdin and stdout as the conversion interface.
+- Do not use a public Markdown implementation.
+- Keep supplied conformance assets unchanged.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-Paragraphs.md ===
+# FEATURE: Paragraphs and Blank Lines
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Forms paragraph blocks and separates them with blank lines. |
+| Depends On | FEATURE-Executable.md |
+| Provides | paragraph block parsing |
+| Consumes | commonmark |
+
+## Questions
+
+- None.
+
+## Behavior
+
+`commonmark_parser.blocks.parse_blocks` returns a document whose paragraph nodes retain raw inline content in `literal`. A sequence of nonblank lines that does not start another block forms a paragraph. Remove initial and final spaces or tabs from the paragraph&#x27;s raw content; remove leading indentation on continuation lines while preserving line endings and meaningful trailing spaces within the paragraph for later inline parsing. An indented continuation cannot start an indented code block in the middle of a paragraph.
+
+Blank lines separate paragraphs and are ignored at document boundaries. Retain their role for later list tightness processing. The complete Paragraphs and Blank lines conformance sections run in the later conformance integration story once their interacting providers exist.
+
+## Programmatic Acceptance
+
+=== AC paragraph-blocks ===
+Intent: Consecutive lines form one paragraph and a blank line separates the next paragraph while raw content remains available.
+
+from commonmark_parser.blocks import parse_blocks
+
+first = &quot;alpha&quot;
+second = &quot;beta&quot;
+third = &quot;gamma&quot;
+document = parse_blocks(first + &quot;\n&quot; + second + &quot;\n\n&quot; + third + &quot;\n&quot;)
+assert len(document.children) == 2
+assert all(node.kind == &quot;paragraph&quot; for node in document.children)
+assert document.children[0].literal.splitlines() == [first, second]
+assert document.children[1].literal.strip() == third
+=== END AC paragraph-blocks ===
+
+=== AC paragraph-whitespace ===
+Intent: Paragraph boundaries discard surrounding blank lines and retain the text of an indented continuation.
+
+from commonmark_parser.blocks import parse_blocks
+
+first = &quot;alpha&quot;
+second = &quot;beta&quot;
+document = parse_blocks(&quot;\n  &quot; + first + &quot;\n    &quot; + second + &quot;\n\n&quot;)
+assert len(document.children) == 1
+assert document.children[0].kind == &quot;paragraph&quot;
+assert document.children[0].literal.splitlines() == [first, second]
+=== END AC paragraph-whitespace ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Preserve raw inline content for the subsequent inline phase.
+- Do not run the full-suite entry point in this story.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-ThematicBreaks.md ===
+# FEATURE: Thematic Breaks
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Recognizes thematic break blocks and their precedence. |
+| Depends On | FEATURE-Paragraphs.md |
+| Provides | thematic break parsing |
+| Consumes | paragraph block parsing |
+
+## Questions
+
+- None.
+
+## Behavior
+
+Extend `commonmark_parser.blocks.parse_blocks` to produce nodes whose `kind` is `thematic_break`. A thematic break has up to three spaces of indentation and at least three matching `-`, `_`, or `*` markers, with only spaces or tabs between and after them. Different marker characters or other content make the line ineligible.
+
+A thematic break may interrupt a paragraph. A valid setext underline takes precedence when it follows eligible paragraph content; a thematic break takes precedence over a list item interpretation. The setext and list stories complete those interactions. The complete Thematic breaks section runs in the later conformance integration story.
+
+## Programmatic Acceptance
+
+=== AC thematic-break-recognition ===
+Intent: Matching marker runs form thematic breaks and interrupt an existing paragraph.
+
+from commonmark_parser.blocks import parse_blocks
+
+text = &quot;alpha&quot;
+document = parse_blocks(text + &quot;\n* * *\n&quot;)
+assert len(document.children) == 2
+assert document.children[0].kind == &quot;paragraph&quot;
+assert document.children[0].literal.strip() == text
+assert document.children[1].kind == &quot;thematic_break&quot;
+=== END AC thematic-break-recognition ===
+
+=== AC thematic-break-invalid ===
+Intent: A line with mixed markers remains paragraph content instead of forming a thematic break.
+
+from commonmark_parser.blocks import parse_blocks
+
+source = &quot;*-_&quot;
+document = parse_blocks(source + &quot;\n&quot;)
+assert len(document.children) == 1
+assert document.children[0].kind == &quot;paragraph&quot;
+assert document.children[0].literal.strip() == source
+=== END AC thematic-break-invalid ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Do not run the full-suite entry point in this story.
+=== END ARTIFACT ===
+=== BEGIN ARTIFACT FEATURE-ATXHeadings.md ===
+# FEATURE: ATX Headings
+
+| Field | Value |
+|-------|-------|
+| Version | 20261027 V1 |
+| Description | Recognizes ATX heading blocks and retains their inline source. |
+| Depends On | FEATURE-Paragraphs.md |
+| Provides | ATX heading parsing |
+| Consumes | paragraph block parsing |
+
+## Questions
+
+- None.
+
+## Behavior
+
+Extend `commonmark_parser.blocks.parse_blocks` to produce `heading` nodes with a numeric `level` and raw inline content in `literal`. An opening run contains one through six unescaped `#` characters, preceded by at most three spaces and followed by whitespace or the end of the line. The level is the opening run&#x27;s length. Remove leading and trailing spaces or tabs from the content. An optional closing run of unescaped `#` characters is removed only when preceded by whitespace and followed solely by whitespace or the end of the line. Headings may be empty and may interrupt paragraphs.
+
+Retain heading content for the subsequent inline phase. The complete ATX headings section runs in the later conformance integration story after interacting providers exist.
+
+## Programmatic Acceptance
+
+=== AC atx-heading-level ===
+Intent: A valid opening run produces the corresponding heading level and retains its content for inline parsing.
+
+from commonmark_parser.blocks import parse_blocks
+
+content = &quot;alpha&quot;
+document = parse_blocks(&quot;### &quot; + content + &quot; ###\n&quot;)
+assert len(document.children) == 1
+assert document.children[0].kind == &quot;heading&quot;
+assert document.children[0].level == 3
+assert document.children[0].literal == content
+=== END AC atx-heading-level ===
+
+=== AC atx-heading-interruption ===
+Intent: An ATX heading interrupts a paragraph and a marker without required separating whitespace stays in paragraph content.
+
+from commonmark_parser.blocks import parse_blocks
+
+first = &quot;alpha&quot;
+heading = &quot;beta&quot;
+invalid = &quot;#gamma&quot;
+document = parse_blocks(first + &quot;\n# &quot; + heading + &quot;\n&quot; + invalid + &quot;\n&quot;)
+assert len(document.children) == 3
+assert document.children[0].kind == &quot;paragraph&quot;
+assert document.children[0].literal.strip() == first
+assert document.children[1].kind == &quot;heading&quot;
+assert document.children[1].level == 1
+assert document.children[1].literal == heading
+assert document.children[2].kind == &quot;paragraph&quot;
+assert document.children[2].literal.strip() == invalid
+=== END AC atx-heading-interruption ===
+
+## User Acceptance
+
+- None.
+
+## Guardrails
+
+- Preserve heading content for inline parsing.
+- Do not run the full-suite entry point in this story.
+=== END ARTIFACT ===</pre></article>
+</main>
+</body>
+</html>

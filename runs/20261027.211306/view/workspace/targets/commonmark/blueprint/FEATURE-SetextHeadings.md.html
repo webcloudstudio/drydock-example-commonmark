@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>workspace/targets/commonmark/blueprint/FEATURE-SetextHeadings.md</title>
+<link rel="stylesheet" href="../../../../../assets/kit.css">
+</head>
+<body>
+<main>
+<header class="fileheader"><div class="kind">Run artifact</div><h1>workspace/targets/commonmark/blueprint/FEATURE-SetextHeadings.md</h1><div class="filenav"><a href="../../../../../index.html">&larr; Report</a><a href="../../../../../workspace/targets/commonmark/blueprint/FEATURE-SetextHeadings.md">Raw file</a></div></header>
+<article class="doc"><h1>FEATURE: Setext Headings</h1>
+<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Version</td><td>20261027 V1</td></tr><tr><td>Description</td><td>Recognize setext headings in the block parsing phase.</td></tr><tr><td>Depends On</td><td>FEATURE-Paragraphs.md, FEATURE-ThematicBreaks.md</td></tr><tr><td>Provides</td><td>setext heading parsing</td></tr><tr><td>Consumes</td><td>paragraph block parsing, thematic break parsing</td></tr></tbody></table></div>
+<h2>Purpose</h2>
+<p>Recognize a setext underline following eligible paragraph content and retain the heading&#x27;s raw text for the later inline phase.</p>
+<h2>Behavior</h2>
+<p>A nonempty paragraph may become a heading when its following line consists of one or more <code>=</code> or <code>-</code> characters, preceded by at most three spaces and followed only by spaces or tabs. The level is 1 for <code>=</code> and 2 for <code>-</code>. The paragraph may span multiple lines. Strip initial and final spaces and tabs from its raw content; do not interpret that content as inlines during block parsing.</p>
+<p>An eligible underline takes precedence over a thematic break. An underline cannot turn a non-paragraph block or an empty paragraph into a heading. It cannot be a lazy continuation line of a containing block quote or list item. Four columns of indentation or internal whitespace disqualify an underline.</p>
+<p>Expose <code>parse_setext(lines)</code> from <code>commonmark_parser.setext</code>. It accepts a sequence of raw paragraph lines followed by a candidate underline and returns <code>(level, raw_content)</code> for a valid heading or <code>None</code> otherwise. Container parsing is responsible for withholding lazy continuation lines from this interface.</p>
+<h2>Programmatic Acceptance</h2>
+<p>=== AC setext-valid ===<br>Intent: Valid underlines convert nonempty multiline paragraph content into the corresponding heading while retaining its raw text.</p>
+<p>from commonmark_parser.setext import parse_setext</p>
+<p>first = &quot;alpha&quot; second = &quot;beta&quot; assert parse_setext([first, second, &quot;===&quot;]) == (1, first + &quot;\n&quot; + second) assert parse_setext([first, &quot;---&quot;]) == (2, first) === END AC setext-valid ===</p>
+<p>=== AC setext-invalid ===<br>Intent: An empty heading, excessive indentation, and internal underline whitespace do not form setext headings.</p>
+<p>from commonmark_parser.setext import parse_setext</p>
+<p>assert parse_setext([&quot;&quot;, &quot;===&quot;]) is None assert parse_setext([&quot;alpha&quot;, &quot;    ---&quot;]) is None assert parse_setext([&quot;alpha&quot;, &quot;= =&quot;]) is None === END AC setext-invalid ===</p>
+<h2>User Acceptance</h2>
+<ul><li>None.</li></ul>
+<h2>Guardrails</h2>
+<ul><li>Follow CommonMark 0.31.2 and preserve block precedence over inline parsing.</li><li>Complete mixed-feature section checks belong to the later conformance integration story.</li></ul></article>
+</main>
+</body>
+</html>

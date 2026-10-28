@@ -1,0 +1,1 @@
+2026-10-27T22:31:31.886436Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to read file to update /mnt/c/Users/barlo/projects/drydock/uat/CommonMark/runs/20261027.211306/tests/test_service_blocks.py: No such file or directory (os error 2)

@@ -1,0 +1,13 @@
+RESULT: FAILED
+
+FILES CHANGED:
+- commonmark_parser/__init__.py
+
+SUMMARY:
+Updated text escaping and fenced code language class rendering. Reproduced ATX example 66; it still fails because escaped delimiter handling is not fixed. The scoped inline run found additional failures and did not finish within the command’s 30 second wait. The block and container selectors were not rerun.
+
+BLOCKERS:
+- Major failures remain in inline delimiter parsing, block parsing, references, and list handling. The repair is incomplete.
+
+FAILURE_SUMMARY: Scoped CommonMark conformance failures remain
+FAILURE_DETAIL: The inline selector was still running after 30 seconds, and the ATX regression reproduced with exit status 1. Fix the parser causes shown in the prior logs, then rerun the failing examples and scoped selectors.

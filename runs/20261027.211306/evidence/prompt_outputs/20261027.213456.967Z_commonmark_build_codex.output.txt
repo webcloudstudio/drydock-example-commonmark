@@ -1,0 +1,13 @@
+RESULT: SUCCESS
+
+FILES CHANGED:
+- commonmark_parser/images.py
+- tests/test_images.py
+
+SUMMARY:
+Added `parse_images(source, references)` with inline, full, collapsed, and shortcut reference support. Image alt text includes plain text from formatted descriptions, links, and nested images. Added six focused tests.
+
+Checks run: `pytest -q tests/test_images.py` — 6 passed; `pytest -q` — 68 passed.
+
+BLOCKERS:
+- None
