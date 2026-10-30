@@ -1,4 +1,0 @@
-{"type":"thread.started","thread_id":"01a17b32-6905-7d82-9229-95dec916d364"}
-{"type":"turn.started"}
-{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"<unattached story=\"foundation\"/>\n<unattached story=\"cli\"/>\n<unattached story=\"paragraphs\"/>\n<unattached story=\"headings\"/>\n<unattached story=\"code-blocks\"/>\n<unattached story=\"references\"/>\n<unattached story=\"html-blocks\"/>\n<unattached story=\"block-quotes\"/>\n<unattached story=\"lists\"/>\n<unattached story=\"escapes\"/>\n<unattached story=\"documentation\"/>\n<unattached story=\"code-spans\"/>\n<unattached story=\"emphasis\"/>\n<unattached story=\"links\"/>\n<unattached story=\"images\"/>\n<unattached story=\"autolinks-html\"/>\n<unattached story=\"line-breaks\"/>\n<unattached story=\"verification\"/>"}}
-{"type":"turn.completed","usage":{"input_tokens":16853,"cached_input_tokens":12160,"cache_write_input_tokens":0,"output_tokens":147,"reasoning_output_tokens":0}}

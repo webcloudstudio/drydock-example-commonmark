@@ -1,3 +1,0 @@
-2026-10-26 22:31:03 EDT  Calling CODEX/gpt-6.1-terra (lineage_attribute)...
-  Completed CODEX/gpt-6.1-terra (lineage_attribute)  rc=0
-    elapsed=6.5s   cached=12,160 (72% hit)   uncached=4,693   out=147   tps=22.5

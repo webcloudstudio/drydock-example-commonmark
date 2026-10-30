@@ -12,12 +12,12 @@
 | Lifecycle completed | PASS | 19 lifecycle commands executed; the run ended at 19-score-release. | [result.json](result.json) |
 | External conformance suite passed | PASS | sh sources/full_test.sh exited 0. | [evidence/commands/16-test.stdout.log](evidence/commands/16-test.stdout.log) |
 | Release score passed | PASS | drydock score release exited 0. | [evidence/commands/19-score-release.stdout.log](evidence/commands/19-score-release.stdout.log) |
-| Integrity verification passed | PASS | 1,564 files digested; verify with sha256sum -c SHA256SUMS. | [SHA256SUMS](SHA256SUMS) |
+| Integrity verification passed | PASS | 875 files digested; verify with sha256sum -c SHA256SUMS. | [SHA256SUMS](SHA256SUMS) |
 
 ## Run facts
 
 - Drydock: `0.2.0` (commit `6e4c58974a68e8dfecdc89cce2a2e5963ae4a7ed`)
-- Provider and model: `claude` / `claude-haiku-5-5`
+- Provider and model: `claude` / `claude-sonnet-5-5, claude-haiku-5-5`
 - Platform: `Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.35` on Python `3.12.13`
 - Run: `20261014.053711`
 - Elapsed: 12968.5s
